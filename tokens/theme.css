@@ -1,6 +1,9 @@
 /* 苹果毛玻璃主题（亮/暗） */
 :root{
   --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC",sans-serif;
+  --brand-cn:"Hiragino Sans GB","PingFang SC",sans-serif;
+  --brand-en:"Optima","Avenir Next",sans-serif;
+  --brand-grad:linear-gradient(90deg,#2563EB,#6D28D9);
   --blue:#007AFF;--green:#34C759;--orange:#FF9500;--red:#FF3B30;--purple:#AF52DE;--indigo:#5856D6;--teal:#30B0C7;
   --text:#1D1D1F;--text-2:rgba(29,29,31,.74);--text-3:rgba(29,29,31,.56);
   --glass:rgba(255,255,255,.52);--glass-2:rgba(255,255,255,.78);--stroke:rgba(255,255,255,.75);--hair:rgba(0,0,0,.07);
@@ -10,6 +13,7 @@
 }
 html.dark{
   --blue:#0A84FF;--green:#30D158;--orange:#FF9F0A;--red:#FF453A;--purple:#BF5AF2;--indigo:#5E5CE6;--teal:#40C8E0;
+  --brand-grad:linear-gradient(90deg,#7DD3FC,#C4B5FD);
   --text:#F5F5F7;--text-2:rgba(245,245,247,.76);--text-3:rgba(245,245,247,.56);
   --glass:rgba(36,38,50,.52);--glass-2:rgba(58,60,74,.66);--stroke:rgba(255,255,255,.13);--hair:rgba(255,255,255,.08);
   --fill:rgba(118,118,128,.26);--shadow:0 30px 60px -24px rgba(0,0,0,.7),0 2px 6px rgba(0,0,0,.3);

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AI 修复工作台 · 一期项目总览</title>
+<title>云匠 · CLOUDCRAFT · 一期项目总览</title>
 <style>
 :root{
   --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC",sans-serif;
@@ -35,8 +35,11 @@ code{font-family:"SF Mono",ui-monospace,monospace;font-size:.92em;padding:1px 5p
 .logo{position:relative;width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex:none;overflow:hidden;
   background:radial-gradient(90% 70% at 25% 0%,rgba(140,190,255,.9),transparent 60%),linear-gradient(155deg,#3478F6 0%,#4338CA 70%,#5B21B6 100%);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 6px 14px -6px rgba(67,56,202,.7)}
-.brand b{font-size:17px;font-weight:700;letter-spacing:.2px;display:block;line-height:1.2}
-.brand em{font-style:normal;font-size:12px;color:var(--text-3)}
+.brand b{font-family:"Hiragino Sans GB","PingFang SC",sans-serif;font-size:18px;font-weight:600;letter-spacing:1.2px;display:inline-flex;align-items:baseline;gap:8px;line-height:1.2}
+.brand .ben{font-family:"Optima","Avenir Next",sans-serif;font-size:11.5px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;background:linear-gradient(90deg,#2563EB,#6D28D9);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+html.dark .brand .ben{background:linear-gradient(90deg,#7DD3FC,#C4B5FD);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.brand .bsep{font-size:13px;font-weight:500;color:var(--text-3);letter-spacing:0}
+.brand em{font-style:normal;font-size:12px;color:var(--text-3);display:block;margin-top:2px}
 .seg{display:flex;padding:3px;border-radius:11px;background:var(--fill);gap:2px}
 .seg button{all:unset;cursor:pointer;height:28px;padding:0 12px;border-radius:8px;display:flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--text-2);white-space:nowrap}
 .seg button.on{background:var(--glass-2);color:var(--text);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.12)}
@@ -273,7 +276,7 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
     <div class="toprow">
       <div class="brand">
         <span class="logo"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7.2L3.6 12 8 16.8"/><path d="M16 7.2l4.4 4.8-4.4 4.8" opacity=".6"/><path d="M9.6 12.3l1.8 1.8 3.2-4"/></svg></span>
-        <span><b>AI 修复工作台 · 一期项目总览</b><em>统一文档与设计集合 · 需求 → 方案与链路 → 设计主题 → PC → 移动端 → 技术设计 → 决策与后续</em></span>
+        <span><b>云匠 <span class="ben">CloudCraft</span><span class="bsep">· 一期项目总览</span></b><em>统一文档与设计集合 · 需求 → 方案与链路 → 设计主题 → PC → 移动端 → 技术设计 → 决策与后续</em></span>
       </div>
       <span class="grow"></span>
       <div class="seg" role="group" aria-label="主题"><button data-theme="light">☀︎ 亮色</button><button data-theme="dark">☾ 暗色</button></div>
@@ -879,7 +882,7 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
     });
   }
   annotate('pcshot','pclegend',[
-    [1.7,3.6,'顶栏 · logo 和标题','44px 蓝紫渐变 logo，加两行标题「AI 修复工作台 / Fix Studio」；logo 和下方菜单竖直对齐'],
+    [1.7,3.6,'顶栏 · logo 和标题','44px 蓝紫渐变 logo，加两行标题「云匠 / CLOUDCRAFT」（冬青黑 + Optima 蓝紫渐变）；logo 和下方菜单竖直对齐'],
     [65.4,3.6,'顶栏 · 状态胶囊','Bot 在线数、Jira 最近采集时间、Tita 采集失败（橙色）。对应需求「采集失败要可见」'],
     [1.5,26,'Dock 菜单','只放图标的彩色 Dock：AI 助手 / 对话 / 发布 / 回滚 / Skills，设置在最底部。选中的放大加悬浮，红色数字角标'],
     [7.4,15.2,'工单列表 · 分组','按「等你做什么」分组：等你决定 → Bot 在问你 → Bot 修复中 → 待原平台确认 → 需要处理'],

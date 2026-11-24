@@ -27,7 +27,7 @@ def dock(sel):
 
 
 TOPBAR = f'''<div class="tbar">
-  <div class="br">{LOGO}<span class="tt"><b>AI 修复工作台</b><em>Fix Studio</em></span></div>
+  <div class="br">{LOGO}<span class="tt"><b>云匠</b><em>CloudCraft</em></span></div>
   <div class="grow row" style="justify-content:center"><div class="glass tsearch">{I("search",15)}<span class="f13 grow">搜索工单、MR、发布记录</span><span class="kbd" style="border-color:var(--hair)">⌘F</span></div></div>
   <div class="tright">
     <span class="pill glass tpill">{I("bot",13)}3 个 Bot 在线</span>

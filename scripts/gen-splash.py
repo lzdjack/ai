@@ -17,8 +17,9 @@ COMMON = '''
 .aura{position:absolute;border-radius:50%;background:conic-gradient(from 210deg,#4F8BFF,#9B5CFF,#FF5FA8,#FFB14A,#4FD1FF,#4F8BFF);filter:blur(70px);opacity:.42}
 html.dark .aura{opacity:.5}
 .ring{position:absolute;border-radius:50%;border:1px solid color-mix(in srgb,var(--text) 7%,transparent)}
-.nm{font-weight:800;letter-spacing:.6px;color:var(--text)}
-.sub{color:var(--text-3);letter-spacing:4px;text-transform:uppercase;font-weight:500}
+.nm{font-family:"Hiragino Sans GB","PingFang SC",sans-serif;font-weight:600;letter-spacing:3.2px;color:var(--text)}
+.sub{font-family:"Optima","Avenir Next",sans-serif;letter-spacing:3.6px;text-transform:uppercase;font-weight:700;background:linear-gradient(90deg,#2563EB,#6D28D9);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+html.dark .sub{background:linear-gradient(90deg,#7DD3FC,#C4B5FD);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .bar{border-radius:3px;background:color-mix(in srgb,var(--text) 9%,transparent);overflow:hidden}
 .bar i{display:block;height:100%;border-radius:3px;background:linear-gradient(90deg,#4F8BFF,#9B5CFF 60%,#FF5FA8)}
 .st{display:inline-flex;align-items:center;gap:8px;color:var(--text-2)}
@@ -43,8 +44,8 @@ pc = HEAD.format(t="闪屏 · PC", css="pc.css", style=pc_style) + '''<div class
   <span class="ver">v1.0 · 一期</span>
   <div class="stage">
     <img class="ic" src="logo.svg" alt="">
-    <div class="nm" style="font-size:40px;margin-top:6px">AI 修复工作台</div>
-    <div class="sub" style="font-size:15px;margin-top:8px">Fix Studio</div>
+    <div class="nm" style="font-size:42px;margin-top:6px">云匠</div>
+    <div class="sub" style="font-size:16px;margin-top:8px">CloudCraft</div>
     <div class="bar" style="width:260px;height:5px;margin-top:46px"><i style="width:68%"></i></div>
     <div class="st" style="font-size:13.5px;margin-top:14px"><span class="spin"></span>正在同步待办 · 已连接公司内网服务器</div>
   </div>
@@ -73,13 +74,13 @@ p1 = phone('''
 <div class="ring" style="width:440px;height:440px;left:-36px;top:122px"></div>
 <div class="aura" style="width:200px;height:200px;left:84px;top:242px"></div>
 <div class="mid" style="top:262px"><img src="logo.svg" width="160" height="160" style="position:relative" alt="">
-<div class="nm" style="font-size:26px;margin-top:2px">AI 修复工作台</div><div class="sub" style="font-size:12px;margin-top:6px">Fix Studio</div></div>
+<div class="nm" style="font-size:28px;margin-top:2px">云匠</div><div class="sub" style="font-size:12.5px;margin-top:6px">CloudCraft</div></div>
 <div class="mid" style="bottom:56px"><div class="f12 t3">关掉电脑，Bot 也会继续修</div></div>''')
 
 p2 = phone('''
 <div class="aura" style="width:170px;height:170px;left:99px;top:150px"></div>
 <div class="mid" style="top:156px"><img src="logo.svg" width="130" height="130" style="position:relative" alt="">
-<div class="nm" style="font-size:22px">AI 修复工作台</div>
+<div class="nm" style="font-size:24px">云匠</div>
 <div class="bar" style="width:180px;height:4px;margin-top:26px"><i style="width:72%"></i></div></div>
 <div class="mid" style="top:420px"><div class="col" style="gap:4px;width:250px">
   <div class="stp"><span class="ok">✓</span>已登录 · 公司账号</div>
