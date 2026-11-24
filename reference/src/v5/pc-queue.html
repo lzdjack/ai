@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>排队</title>
+<link rel="stylesheet" href="../v3/base.css"><link rel="stylesheet" href="../v4/apple.css"><link rel="stylesheet" href="pc.css">
+<script>(function(){var q=new URLSearchParams(location.search);if(q.get('mode')==='dark')document.documentElement.classList.add('dark')})()</script>
+<style>
+.eb{position:absolute;inset:0;padding:26px 30px 28px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:18px 22px}
+.et{display:flex;flex-direction:column;min-height:0}
+.el{display:flex;align-items:center;gap:10px;height:34px;flex:none;padding:0 4px}
+.el .no{width:22px;height:22px;border-radius:50%;background:var(--text);font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center}
+html.dark .el .no{color:#111}
+html:not(.dark) .el .no{color:#fff}
+.el b{font-size:16px;font-weight:700}
+.el em{font-style:normal;font-size:13px;color:var(--text-3)}
+.ep{flex:1;min-height:0;border-radius:22px;display:flex;overflow:hidden}
+.ml{width:200px;flex:none;border-right:1px solid var(--hair);padding:14px 10px 10px;display:flex;flex-direction:column}
+.ml .hd{display:flex;align-items:center;gap:6px;padding:0 6px 8px}
+.ml .hd b{font-size:16px;font-weight:700}
+.ph{border:1.5px dashed var(--hair);border-radius:12px;height:46px;margin:6px 4px 0}
+.ph.s{height:34px;opacity:.6}
+.bdj{width:18px;height:18px;border-radius:5px;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none}
+.ec{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;padding:0 26px}
+.eh{font-size:19px;font-weight:800;margin-top:12px}
+.kv2{display:flex;align-items:center;gap:8px;font-size:13px;padding:6px 0}
+.kv2+.kv2{border-top:1px solid var(--hair)}
+.chip{display:inline-flex;align-items:center;height:26px;padding:0 10px;border-radius:8px;background:var(--fill);font-size:12px;font-weight:600;color:var(--text-2);white-space:nowrap}
+.arr{color:var(--text-3);font-size:12px}
+.opt{flex:1;min-width:0;padding:12px;border-radius:14px;display:flex;flex-direction:column;gap:6px}
+
+.eb .thead{padding:12px 18px 10px}
+.eb .thead h1{font-size:16px}
+.ep.v{flex-direction:column}
+.qn{width:22px;height:22px;border-radius:50%;background:var(--fill);font-size:11.5px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none}
+.qx{display:flex;align-items:center;gap:10px;padding:8px 4px}
+.qr+.qx{border-top:1px solid var(--hair)}
+.stp{display:flex;align-items:center;border-radius:10px;background:var(--fill);height:32px}
+.stp span{width:34px;text-align:center;font-size:16px;color:var(--text-2)}
+.stp b{min-width:34px;text-align:center;font-size:15px}
+</style>
+</head><body><div class="root">
+<div class="eb"><div class="et"><div class="el"><span class="no">1</span><b>列表 · 有单在排队</b><em>Bot 都在忙时，列表多一组「排队中」</em></div><section class="glass ep"><div class="ml" style="width:290px"><div class="hd"><b>工单</b><span class="f13 t3 grow">11</span></div><div class="g10h" style="margin-top:0">排队中<span>3</span></div><div class="r10"><span class="av10" style="width:34px;height:34px;font-size:11px;background:linear-gradient(150deg,#FF9F94,#E5604F)">郑然<i style="background:var(--text-3)"></i></span><div class="grow" style="min-width:0"><div class="row g6"><span class="t10 ell grow">报表导出 500</span></div><div class="row g6" style="margin-top:3px"><span class="sc10 sc-j">Jira</span><span class="d10 ell">排第 1 · P1 先修</span></div></div></div><div class="r10"><span class="av10" style="width:34px;height:34px;font-size:11px;background:linear-gradient(150deg,#7FB2FF,#4C7DF0)">王芳<i style="background:var(--text-3)"></i></span><div class="grow" style="min-width:0"><div class="row g6"><span class="t10 ell grow">流程图节点不显示</span></div><div class="row g6" style="margin-top:3px"><span class="sc10 sc-t">Tita</span><span class="d10 ell">排第 2 · 打回重修 · 第 2 轮</span></div></div></div><div class="r10"><span class="av10" style="width:34px;height:34px;font-size:11px;background:linear-gradient(150deg,#FFC38A,#F08A5D)">陈晨<i style="background:var(--text-3)"></i></span><div class="grow" style="min-width:0"><div class="row g6"><span class="t10 ell grow">日程提醒重复</span></div><div class="row g6" style="margin-top:3px"><span class="sc10 sc-j">Jira</span><span class="d10 ell">排第 3 · 11:02 进来</span></div></div></div><span class="grow"></span><div class="f12 t3" style="padding:8px 6px 2px">「排队中」排在「Bot 修复中」下面</div></div><div class="ec" style="padding:0 22px">
+  <span class="pill glass" style="align-self:flex-start;height:30px;padding:0 12px"><i data-i="bot" data-s="13"></i>3 个 Bot 都在忙 · 3 张排队</span>
+  <div class="f12 t3" style="margin-top:6px">顶栏胶囊，点开是右边第 4 块</div>
+  <div class="card" style="padding:12px 14px;margin-top:14px">
+    <div class="f13 w7">排队顺序（固定）</div>
+    <div class="qx"><span class="qn">1</span><span class="f13 grow">P1 最先</span><span class="tag tg-r">P1</span></div>
+    <div class="qx"><span class="qn">2</span><span class="f13 grow">同级里打回重修的在前</span><span class="tag tg-o">打回重修</span></div>
+    <div class="qx"><span class="qn">3</span><span class="f13 grow">再按进来的先后</span><span class="tag tg-n">先来先到</span></div>
+  </div>
+  <div class="f12 t3" style="margin-top:10px;line-height:1.6">优先级取自原单；顺序不能手动拖。</div>
+</div></section></div><div class="et"><div class="el"><span class="no">2</span><b>工单 · 排队中</b><em>排队的单打开后</em></div><section class="glass ep v"><header class="thead"><div class="row g10"><span class="appic ic-tita" style="width:32px;height:32px;font-size:9px;border-radius:9px">TITA</span>
+<div class="col grow" style="min-width:0"><h1 class="ell">审批中心：流程图节点不显示</h1><div class="f12 t3 ell" style="margin-top:1px">TK-20880 · 修复人 王芳 · 第 2 轮</div></div><span class="pill p-gray" style="flex:none">排队中 · 第 2</span></div></header>
+<div class="col grow g10" style="padding:12px 18px 0;min-height:0">
+  <div class="divd" style="margin:0">第 1 轮 · 你 10:40 打回：「连线还是会错位」</div>
+  <div class="row g10" style="align-items:flex-start">
+    <span class="aid" style="margin-top:2px"><i data-i="clock" data-s="13"></i></span>
+    <div class="card col g8 grow" style="padding:12px 14px;min-width:0">
+      <div class="row g8"><span class="tag tg-n">排队中</span><span class="f14 w6">第 2 轮还没开始：3 个 Bot 都在忙</span></div>
+      <div class="f13 t2" style="line-height:1.65">前面还有 1 张（P1 · TK-20891）。打回重修排在同级新单前面，预计 <b style="color:var(--text)">15:40</b> 开始。</div>
+      <div class="row g8 f12 t2" style="padding:7px 10px;border-radius:10px;background:var(--fill)"><i data-i="bell" data-s="13" style="color:var(--text-3)"></i><span class="grow">轮到时自动开始，并通知你</span></div>
+    </div>
+  </div>
+  <span class="grow"></span>
+  <div class="f12 t3" style="margin:0 0 2px 34px">现在补充的资料，开始修时一起用</div>
+</div>
+<div class="row g8" style="margin:8px 14px 12px;height:40px;padding:0 6px 0 10px;border-radius:13px;background:var(--fill)"><span class="aid" style="width:20px;height:20px;border-radius:6px"><i data-i="spark" data-s="11"></i></span><span class="f12 w6">本单 AI</span><span class="mono f11 t3">TK-20880</span><span class="f13 t3 grow ell">补充资料，或问为什么还没开始…</span></div></section></div><div class="et"><div class="el"><span class="no">3</span><b>同时修几张</b><em>管理员在「设置 → 全局 AI」里配</em></div><section class="glass ep"><div class="ec" style="padding:0 26px">
+  <div class="row g8"><span class="f12 t3">设置 · 全局 AI</span><span class="tag tg-n">只有管理员能改</span></div>
+  <div class="card" style="padding:4px 14px;margin-top:10px">
+    <div class="qx" style="padding:10px 0"><div class="col grow"><span class="f14 w6">同时修几张</span><span class="f12 t3">多出来的单排队；现在 3 个 Bot 在线</span></div><div class="stp"><span>−</span><b>3</b><span>+</span></div></div>
+    <div class="qx" style="padding:10px 0"><div class="col grow"><span class="f14 w6">排队顺序</span><span class="f12 t3">P1 最先 → 打回重修 → 先来先到</span></div><span class="row g6 f12 t3"><i data-i="lock" data-s="12"></i>固定</span></div>
+    <div class="qx" style="padding:10px 0"><div class="col grow"><span class="f14 w6">收单</span><span class="f12 t3">每 2 分钟采一次，新单 5 分钟内开始修并通知</span></div></div>
+    <div class="qx" style="padding:10px 0"><div class="col grow"><span class="f14 w6">采集异常</span><span class="f12 t3">超过 15 分钟没采到：顶栏变橙，来源采集页标红</span></div></div>
+  </div>
+  <div class="f12 t3" style="margin-top:10px">改了从下一张单开始生效，正在修的不受影响</div>
+</div></section></div><div class="et"><div class="el"><span class="no">4</span><b>谁在修、谁在排</b><em>顶栏胶囊点开 / 全局 AI 运行情况</em></div><section class="glass ep"><div class="ec" style="padding:0 26px">
+  <div class="row g8"><span class="f12 t3">设置 · 全局 AI · 运行情况</span></div>
+  <div class="card" style="padding:4px 14px;margin-top:10px">
+    <div class="f12 w7 t2" style="padding:8px 0 2px">在修 3</div>
+    <div class="qx"><span class="ic-box" style="width:26px;height:26px;border-radius:8px;background:linear-gradient(160deg,#5FE0D0,#13A8A0)"><i data-i="bot" data-s="13" data-w="2"></i></span><span class="f13 w6" style="width:52px">Bot-01</span><span class="mono f12 t2">TK-20840</span><span class="f12 t2 grow ell">浏览器验证</span><span class="f12 num" style="color:var(--teal)">84%</span></div>
+    <div class="qx"><span class="ic-box" style="width:26px;height:26px;border-radius:8px;background:linear-gradient(160deg,#5FE0D0,#13A8A0)"><i data-i="bot" data-s="13" data-w="2"></i></span><span class="f13 w6" style="width:52px">Bot-02</span><span class="mono f12 t2">TK-20833</span><span class="f12 t2 grow ell">复现</span><span class="f12 num" style="color:var(--teal)">30%</span></div>
+    <div class="qx"><span class="ic-box" style="width:26px;height:26px;border-radius:8px;background:linear-gradient(160deg,#5FE0D0,#13A8A0)"><i data-i="bot" data-s="13" data-w="2"></i></span><span class="f13 w6" style="width:52px">Bot-03</span><span class="mono f12 t2">TK-20877</span><span class="f12 t2 grow ell">定位</span><span class="f12 num" style="color:var(--teal)">12%</span></div>
+  </div>
+  <div class="card" style="padding:4px 14px;margin-top:10px">
+    <div class="f12 w7 t2" style="padding:8px 0 2px">排队 3</div>
+    <div class="qx"><span class="qn">1</span><span class="mono f12 t2">TK-20891</span><span class="f13 grow ell">报表导出 500</span><span class="tag tg-r">P1</span><span class="f12 t3" style="width:44px;text-align:right">15:20</span></div>
+    <div class="qx"><span class="qn">2</span><span class="mono f12 t2">TK-20880</span><span class="f13 grow ell">流程图节点不显示</span><span class="tag tg-o">打回重修</span><span class="f12 t3" style="width:44px;text-align:right">15:40</span></div>
+    <div class="qx"><span class="qn">3</span><span class="mono f12 t2">TK-20884</span><span class="f13 grow ell">日程提醒重复</span><span class="tag tg-n">先来先到</span><span class="f12 t3" style="width:44px;text-align:right">16:05</span></div>
+  </div>
+</div></section></div></div>
+</div>
+<script src="../v3/shots.js"></script><script src="icons.js"></script>
+</body></html>

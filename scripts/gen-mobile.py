@@ -1,0 +1,218 @@
+import sys
+out=sys.argv[1]
+W='width="24" height="24" viewBox="0 0 24 24"'
+ai=f'<svg {W} fill="#fff"><path d="M10 3l1.9 5.6 5.6 1.9-5.6 1.9L10 18l-1.9-5.6L2.5 10.5l5.6-1.9z"/><path d="M18 13.5l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9z" opacity=".8"/></svg>'
+def chat(i): return f'<svg width="28" height="28" viewBox="0 0 24 24"><defs><linearGradient id="cb{i}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6CC4FF"/><stop offset="1" stop-color="#1673FF"/></linearGradient></defs><path d="M15 9.6c3.4 0 6.1 2.2 6.1 4.9 0 1.4-.7 2.6-1.8 3.5l.5 2.5-2.9-1.4c-.6.2-1.2.3-1.9.3-3.4 0-6.1-2.2-6.1-4.9s2.7-4.9 6.1-4.9z" fill="#B9DBFF"/><path d="M9.6 3.2c-4 0-7.2 2.6-7.2 5.8 0 1.7.9 3.2 2.3 4.2l-.6 3 3.5-1.7c.6.2 1.3.2 2 .2 4 0 7.2-2.6 7.2-5.8S13.6 3.2 9.6 3.2z" fill="url(#cb{i})"/><circle cx="6.8" cy="9" r="1" fill="#fff"/><circle cx="9.6" cy="9" r="1" fill="#fff"/><circle cx="12.4" cy="9" r="1" fill="#fff"/></svg>'
+pub=f'<svg {W}><path d="M12 2.6l8.4 4.7L12 12 3.6 7.3z" fill="#FFE2A8"/><path d="M3.6 7.3L12 12v9.4l-8.4-4.7z" fill="#fff" opacity=".95"/><path d="M20.4 7.3L12 12v9.4l8.4-4.7z" fill="#fff" opacity=".7"/><path d="M7.8 4.9l8.4 4.7v3.2" stroke="#FF8A00" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".7"/></svg>'
+rb=f'<svg {W} fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3.8 4.8v4.4h4.4"/><path d="M4.2 9.2A8.3 8.3 0 1 1 3.9 13.6"/><path d="M12 8v4.2l2.7 1.7"/></svg>'
+sk=f'<svg {W}><path d="M12 13.2l8.6-4.4L12 4.4 3.4 8.8z" fill="#fff"/><path d="M3.4 12.6L12 17l8.6-4.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".75"/><path d="M3.4 16.2L12 20.6l8.6-4.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".5"/></svg>'
+
+def tabbar(sel,i):
+    items=[('ai',ai,''),('chat',chat(i),'<b>4</b>'),('pub',pub,'<b>1</b>'),('rb',rb,''),('sk',sk,'')]
+    h=''.join(f'<span class="tb{" on" if k==sel else ""}"><span class="ap ap-{k}">{svg}</span>{bd}</span>' for k,svg,bd in items)
+    return f'<div class="tabbar glass">{h}</div>'
+
+status='''<div class="sbar"><span>9:41</span><span class="sbi"><svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M8 2.2c2.4 0 4.6.9 6.2 2.5l1.2-1.2A10.4 10.4 0 0 0 8 .5 10.4 10.4 0 0 0 .6 3.5l1.2 1.2A8.7 8.7 0 0 1 8 2.2zm0 3.4c1.5 0 2.8.6 3.8 1.5L13 5.9a7 7 0 0 0-10 0l1.2 1.2c1-.9 2.3-1.5 3.8-1.5zM8 9l2-2a2.9 2.9 0 0 0-4 0z"/></svg><svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="17" height="8" rx="2" fill="currentColor"/><rect x="23.5" y="4" width="1.5" height="4" rx=".75" fill="currentColor" opacity=".4"/></svg></span></div>'''
+
+def av(nm,gr,st,size=40):
+    return f'<span class="av2" style="width:{size}px;height:{size}px;background:linear-gradient(150deg,{gr})">{nm}<i style="background:var(--{st})"></i></span>'
+def row(nm,gr,st,title,src,sub,right='',subc='',prog=None,on=False):
+    pg=f'<span class="pg"><i style="width:{prog}%;background:var(--teal)"></i></span>' if prog else ''
+    return f'''<div class="lr{' on' if on else ''}">{av(nm,gr,st)}<div class="grow mn"><div class="row g6"><span class="lt ell grow">{title}</span>{right}</div><div class="row g6" style="margin-top:3px"><span class="sc sc-{src}">{'Tita' if src=='t' else 'Jira'}</span><span class="ls ell" {subc}>{sub}</span></div>{pg}</div></div>'''
+
+# ---------- Phone 1 列表 ----------
+p1=f'''<div class="phone"><div class="scr">{status}
+<div class="pad">
+  <div class="row" style="margin-top:6px"><div class="grow"><div class="cap">11月20日 周四</div><div class="lgt">工单</div></div><span class="me">林</span></div>
+  <div class="row g8" style="margin-top:12px">
+    <span class="chip glass"><span class="dt" style="background:var(--green)"></span>3 个 Bot 在线</span>
+    <span class="chip glass" style="color:var(--orange)"><span class="dt" style="background:var(--orange)"></span>Tita 采集重试中</span>
+  </div>
+  <div class="search glass"><i data-i="search" data-s="16"></i><span class="grow">搜索工单、MR、发布</span><i data-i="filter" data-s="16"></i></div>
+  <div class="stats">
+    <div class="stat glass on"><b>2</b><span>等你决定</span></div>
+    <div class="stat glass"><b style="color:var(--orange)">1</b><span>Bot 在问你</span></div>
+    <div class="stat glass"><b style="color:var(--teal)">2</b><span>修复中</span></div>
+  </div>
+  <div class="gh">等你决定<span>2</span><em>全部 8 ›</em></div>
+  <div class="grp glass">
+    {row('王芳','#7FB2FF,#4C7DF0','blue','点击分组后界面卡住','t','第 2 轮交付 · 验证 3/4','<span class="tm">8 分钟</span>',on=True)}
+    {row('陈晨','#FFC38A,#F08A5D','orange','进度条切换周期不刷新','j','验证受阻：账号进不去页面','<span class="ud"></span>')}
+  </div>
+  <div class="gh">Bot 在问你<span>1</span></div>
+  <div class="grp glass">
+    {row('李娜','#F5A3C7,#D96BA0','orange','考勤部门筛选失效','t','复现用哪个角色？','<span class="ud" style="background:var(--orange)"></span>','style="color:var(--orange)"')}
+  </div>
+  <div class="gh">Bot 修复中<span>2</span></div>
+  <div class="grp glass">
+    {row('赵磊','#8FD8C9,#3FAE9A','teal','考勤导出部门名乱码','t','浏览器验证中 · 84%',prog=84)}
+    {row('周婷','#C3A8FF,#8E6BEA','teal','看板拖拽后回弹','j','复现中 · 还有 1 张',prog=30)}
+  </div>
+</div>
+{tabbar('chat',1)}<div class="home"></div></div></div>'''
+
+# ---------- Phone 2 详情 ----------
+p2=f'''<div class="phone"><div class="scr">{status}
+<div class="nav"><span class="bk"><i data-i="chevr" data-s="20" style="transform:rotate(180deg)"></i>工单</span><span class="grow" style="text-align:center;font-weight:600;font-size:15px">TK-20871</span><span class="nb2 glass"><i data-i="more" data-s="18"></i></span></div>
+<div class="pad" style="padding-top:4px">
+  <div class="row g12" style="align-items:flex-start">
+    <span class="appic ic-tita" style="width:44px;height:44px;border-radius:12px;font-size:10px;font-weight:800">TITA</span>
+    <div class="grow"><div style="font-size:18px;font-weight:700;line-height:1.3">发起审批时点击分组，界面卡住</div>
+    <div class="row g6" style="margin-top:6px;flex-wrap:wrap"><span class="tg" style="color:var(--red);background:color-mix(in srgb,var(--red) 12%,transparent)">P1</span><span class="tg" style="color:var(--blue);background:color-mix(in srgb,var(--blue) 12%,transparent)">待我审核 · 第 2 轮</span><span class="f12 t3">Bot-01</span></div></div>
+  </div>
+  <div class="seg" style="margin-top:14px"><span class="on" style="flex:1;justify-content:center;white-space:nowrap;padding:0 4px">对话</span><span style="flex:1;justify-content:center;white-space:nowrap;padding:0 4px">改动 3</span><span style="flex:1;justify-content:center;white-space:nowrap;padding:0 4px">证据 4</span><span style="flex:1;justify-content:center;white-space:nowrap;padding:0 4px">日志</span><span style="flex:1;justify-content:center;white-space:nowrap;padding:0 4px">发布</span></div>
+  <div class="dv"><span>第 1 轮 · 昨天 22:40 · 你打回了</span></div>
+  <div class="row" style="justify-content:flex-end"><span class="ubub">第二个分组还是会卡，再看看。</span></div>
+  <div class="dv"><span>第 2 轮 · 今天 14:10</span></div>
+  <div class="steps glass"><span class="botav" style="width:26px;height:26px;border-radius:8px"><i data-i="bot" data-s="14"></i></span><span class="sp2"><b class="ok">✓</b>复现</span><span class="sp2"><b class="ok">✓</b>定位</span><span class="sp2"><b class="ok">✓</b>改代码</span><span class="sp2"><b class="ok">✓</b>验证</span></div>
+  <div class="dcard glass">
+    <div class="row"><span class="grow" style="font-size:15px;font-weight:700">第 2 轮交付：已修复</span><span class="f11 t3">14:52</span></div>
+    <div class="kv"><b>根因</b>切换分组时旧请求晚返回，覆盖新数据导致卡死。</div>
+    <div class="kv"><b>回应上轮</b>加了请求取消，复测分组 2、3 <span style="color:var(--green);font-weight:600">✓ 已处理</span></div>
+    <div class="row g8" style="margin-top:10px">
+      <div class="col g4 grow" style="min-width:0"><div class="shw"><div class="shot" data-s="before" style="width:230px;height:150px"></div></div><span class="f11 t3">修复前 · 已看</span></div>
+      <div class="col g4 grow" style="min-width:0"><div class="shw" style="box-shadow:0 0 0 2px var(--green)"><div class="shot" data-s="after" style="width:230px;height:150px"></div></div><span class="f11 t3">修复后 · <span style="color:var(--blue)">未看</span></span></div>
+    </div>
+    <div class="chk"><span class="ok2">✓</span>进入发起审批<span class="ok2" style="margin-left:10px">✓</span>点击分组 1、2、3</div>
+    <div class="chk" style="color:var(--orange)"><span class="ok2" style="background:var(--orange)">!</span>管理员角色未测 · 缺账号</div>
+    <div class="row g6 f12 t2" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--hair)"><i data-i="git" data-s="14"></i>3 个文件 <span style="color:var(--green)">+38</span><span style="color:var(--red)">−12</span><span class="grow"></span><span style="color:var(--blue)">看改动 ›</span></div>
+  </div>
+</div>
+<div class="dock2 glass">
+  <div class="row g8"><button class="abtn a-red" style="flex:1;height:44px;justify-content:center;border-radius:14px"><i data-i="undo" data-s="15"></i>打回</button><button class="abtn a-pri" style="flex:1.6;height:44px;justify-content:center;border-radius:14px"><i data-i="check" data-s="16" data-w="2.6"></i>审核通过</button></div>
+  <div class="cmp"><span class="aitag"><span class="aid"><i data-i="spark" data-s="11"></i></span>本单 AI</span><span class="grow t3 ell">问这张单，或让 Bot 再做点什么…</span><span class="snd"><i data-i="arrowup" data-s="15" data-w="2.4"></i></span></div>
+</div>
+<div class="home"></div></div></div>'''
+
+# ---------- Phone 3 AI 助手 ----------
+p3=f'''<div class="phone"><div class="scr">{status}
+<div class="pad">
+  <div class="row" style="margin-top:6px"><div class="grow"><div class="cap">全局 · 所有工单和发布</div><div class="lgt">AI 助手</div></div><span class="nb2 glass"><i data-i="clock" data-s="17"></i></span></div>
+  <div class="hero">
+    <span class="orb"><svg width="30" height="30" viewBox="0 0 24 24" fill="#fff"><path d="M10 3l1.9 5.6 5.6 1.9-5.6 1.9L10 18l-1.9-5.6L2.5 10.5l5.6-1.9z"/><path d="M18 13.5l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9z" opacity=".85"/></svg></span>
+    <div style="font-size:19px;font-weight:700;margin-top:12px">下午好，林某</div>
+    <div class="f13 t3" style="margin-top:4px">今天有 2 张单等你决定，1 张 Bot 在问你</div>
+  </div>
+  <div class="sugs"><span class="sug glass">我还有哪几张没复测？</span><span class="sug glass">今天 Tita 收单正常吗</span><span class="sug glass">本周发了哪些包</span></div>
+  <div class="row" style="justify-content:flex-end;margin-top:14px"><span class="ubub">现在有哪些单在等我？</span></div>
+  <div class="aians">
+    <div class="row g8"><span class="aid" style="width:22px;height:22px;border-radius:7px"><i data-i="spark" data-s="12"></i></span><span class="f12 t3">AI 助手 · 查了 8 张工单</span></div>
+    <div class="f14" style="margin:8px 0 10px;line-height:1.55">有 <b>2 张</b>等你审核，其中 TK-20871 已经是第 2 轮，建议先看：</div>
+    <div class="grp glass" style="margin:0">
+      {row('王芳','#7FB2FF,#4C7DF0','blue','点击分组后界面卡住','t','第 2 轮 · 验证 3/4','<span class="go">去审核</span>')}
+      {row('陈晨','#FFC38A,#F08A5D','orange','进度条切换周期不刷新','j','验证受阻 · 需补账号','<span class="go">处理</span>')}
+    </div>
+  </div>
+</div>
+<div class="aicmp glass"><span class="grow t3">问所有工单、发布、收单情况…</span><i data-i="paperclip" data-s="17" style="color:var(--text-3)"></i><span class="snd ai"><i data-i="arrowup" data-s="15" data-w="2.4"></i></span></div>
+{tabbar('ai',3)}<div class="home"></div></div></div>'''
+
+html=f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>移动端 · 苹果毛玻璃</title>
+<link rel="stylesheet" href="../v3/base.css"><link rel="stylesheet" href="apple.css">
+<style>
+body{{margin:0;background:#E6E9F0;font-family:var(--font);color:var(--text)}}
+html.dark body{{background:#05060C}}
+.board{{width:1440px;height:1000px;display:flex;align-items:center;justify-content:center;gap:56px;position:relative;
+  background:radial-gradient(700px 500px at 15% 20%,rgba(160,190,255,.45),transparent 60%),radial-gradient(700px 500px at 85% 80%,rgba(255,190,220,.4),transparent 60%)}}
+html.dark .board{{background:radial-gradient(700px 500px at 15% 20%,rgba(60,80,200,.35),transparent 60%),radial-gradient(700px 500px at 85% 80%,rgba(160,50,160,.25),transparent 60%)}}
+.col3{{display:flex;flex-direction:column;align-items:center;gap:18px}}
+.lbl{{font-size:15px;font-weight:600;color:var(--text-2)}}.lbl em{{font-style:normal;font-weight:400;color:var(--text-3);margin-left:8px;font-size:13px}}
+.phone{{width:390px;height:844px;border-radius:58px;padding:11px;background:#111;box-shadow:0 0 0 1.5px #3a3a3e,0 40px 80px -30px rgba(20,30,70,.55),inset 0 0 0 2px #2a2a2e}}
+.scr{{position:relative;width:100%;height:100%;border-radius:47px;overflow:hidden;background:var(--wall);background-size:cover}}
+.scr::before{{content:"";position:absolute;left:50%;top:11px;width:122px;height:35px;margin-left:-61px;border-radius:20px;background:#000;z-index:30}}
+.sbar{{height:50px;display:flex;align-items:center;justify-content:space-between;padding:6px 30px 0 34px;font-size:16px;font-weight:600;position:relative;z-index:20}}
+.sbi{{display:flex;gap:6px;align-items:center}}
+.home{{position:absolute;left:50%;bottom:8px;width:134px;height:5px;margin-left:-67px;border-radius:3px;background:var(--text);opacity:.85;z-index:40}}
+.pad{{padding:0 16px}}
+.grow{{flex:1}}.row{{display:flex;align-items:center}}.col{{display:flex;flex-direction:column}}
+.g4{{gap:4px}}.g6{{gap:6px}}.g8{{gap:8px}}.g12{{gap:12px}}
+.ell{{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.f11{{font-size:11px}}.f12{{font-size:12px}}.f13{{font-size:13px}}.f14{{font-size:14px}}.t2{{color:var(--text-2)}}.t3{{color:var(--text-3)}}
+.cap{{font-size:12.5px;color:var(--text-3);font-weight:600}}
+.lgt{{font-size:32px;font-weight:800;letter-spacing:.3px;line-height:1.15;margin-top:2px}}
+.me{{width:38px;height:38px;border-radius:50%;background:linear-gradient(160deg,#FFC9A8,#F08F7A);color:#5A2414;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}}
+.chip{{height:28px;padding:0 11px;border-radius:14px;display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--text-2);box-shadow:none}}
+.dt{{width:6px;height:6px;border-radius:50%}}
+.search{{margin-top:12px;height:40px;border-radius:12px;display:flex;align-items:center;gap:8px;padding:0 12px;color:var(--text-3);font-size:14.5px;box-shadow:none}}
+.stats{{display:flex;gap:8px;margin-top:12px}}
+.stat{{flex:1;border-radius:16px;padding:10px 12px;display:flex;flex-direction:column;box-shadow:none}}
+.stat b{{font-size:24px;font-weight:800;color:var(--blue);line-height:1.1}}.stat span{{font-size:12px;color:var(--text-2);margin-top:2px}}
+.stat.on{{background:var(--glass-2);box-shadow:0 8px 18px -10px rgba(20,40,110,.45)}}
+.gh{{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--text-3);padding:16px 6px 7px}}
+.gh span{{min-width:18px;height:16px;padding:0 5px;border-radius:8px;background:var(--fill);font-size:10.5px;display:inline-flex;align-items:center;justify-content:center;color:var(--text-2)}}
+.gh em{{margin-left:auto;font-style:normal;color:var(--blue);font-weight:500}}
+.grp{{border-radius:18px;padding:4px;box-shadow:none}}
+.lr{{display:flex;gap:11px;padding:10px 10px;border-radius:14px;align-items:center;position:relative}}
+.lr+.lr::after{{content:"";position:absolute;left:61px;right:10px;top:0;height:1px;background:var(--hair)}}
+.lr.on{{background:linear-gradient(180deg,#3B8BFF,#1F6FFF);box-shadow:0 8px 18px -10px rgba(31,111,255,.9)}}
+.lr.on+.lr::after{{display:none}}
+.lr.on .lt,.lr.on .ls,.lr.on .tm{{color:#fff!important}}.lr.on .ls,.lr.on .tm{{opacity:.85}}
+.lr.on .sc{{background:rgba(255,255,255,.22);color:#fff;box-shadow:none}}
+.lr.on .av2 i{{box-shadow:0 0 0 2px #fff}}.lr.on .av2{{box-shadow:0 0 0 2px rgba(255,255,255,.55)}}
+.mn{{min-width:0}}
+.lt{{font-size:15px;font-weight:600}}.ls{{font-size:12.5px;color:var(--text-3)}}.tm{{font-size:11.5px;color:var(--text-3);flex:none}}
+.av2{{position:relative;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;flex:none;white-space:nowrap}}
+.av2 i{{position:absolute;right:-1px;bottom:-1px;width:12px;height:12px;border-radius:50%;box-shadow:0 0 0 2.5px var(--glass-2)}}
+.sc{{flex:none;height:17px;padding:0 5px;border-radius:5px;font-size:10px;font-weight:700;display:inline-flex;align-items:center}}
+.sc-t{{background:color-mix(in srgb,#2F6BFF 13%,transparent);color:#2F6BFF}}
+.sc-j{{background:color-mix(in srgb,#0C66E4 10%,transparent);color:#0B5BD3;box-shadow:inset 0 0 0 1px color-mix(in srgb,#0C66E4 25%,transparent)}}
+html.dark .sc-t{{color:#7FA7FF}}html.dark .sc-j{{color:#6FA8FF}}
+.ud{{width:9px;height:9px;border-radius:50%;background:var(--blue);flex:none}}
+.pg{{display:block;height:3px;border-radius:2px;background:var(--fill);margin-top:7px;overflow:hidden}}.pg i{{display:block;height:100%;border-radius:2px}}
+.go{{flex:none;height:26px;padding:0 11px;border-radius:13px;background:var(--blue);color:#fff;font-size:12px;font-weight:600;display:inline-flex;align-items:center}}
+/* tab bar */
+.tabbar{{position:absolute;left:14px;right:14px;bottom:24px;height:70px;border-radius:26px;display:flex;align-items:center;justify-content:space-around;padding:0 10px;z-index:25}}
+.tb{{position:relative;width:46px;height:46px;display:flex;align-items:center;justify-content:center}}
+.ap{{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;transform:scale(.92);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -1px 1px rgba(0,0,0,.12),0 6px 14px -6px rgba(0,0,0,.4)}}
+.ap::before{{content:"";position:absolute;left:0;right:0;top:0;height:50%;background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,0))}}
+.ap svg{{position:relative;z-index:1;filter:drop-shadow(0 1.5px 1.5px rgba(0,0,0,.18))}}
+.tb.on{{z-index:2}}.tb.on .ap{{transform:scale(1.14) translateY(-3px);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 2px 4px rgba(0,0,0,.08),0 14px 24px -8px rgba(20,50,120,.55)}}
+html.dark .tb.on .ap{{box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 16px 26px -8px rgba(0,0,0,.8)}}
+.tb>b{{position:absolute;top:-4px;right:-5px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:#FF3B30;color:#fff;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;z-index:3;box-shadow:0 0 0 2px var(--glass-2)}}
+.ap-ai{{background:#141530}}.ap-ai::after{{content:"";position:absolute;inset:6px;border-radius:50%;background:conic-gradient(from 210deg,#4F8BFF,#9B5CFF,#FF5FA8,#FFB14A,#4FD1FF,#4F8BFF);filter:blur(5px)}}
+.ap-chat{{background:linear-gradient(180deg,#fff,#E8EEF7)}}html.dark .ap-chat{{background:linear-gradient(180deg,#3A4157,#262B3C)}}
+.ap-pub{{background:linear-gradient(160deg,#FFC54D,#FF9A1F 55%,#FF7A00)}}.ap-rb{{background:linear-gradient(160deg,#FF8A7A,#FF453A 55%,#E0281E)}}.ap-sk{{background:linear-gradient(160deg,#C58BFF,#8E5CFF 55%,#6A3DF0)}}
+/* detail */
+.nav{{height:46px;display:flex;align-items:center;padding:0 14px;gap:8px}}
+.bk{{display:flex;align-items:center;gap:2px;color:var(--blue);font-size:16px;width:90px}}
+.nb2{{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:none;color:var(--text-2)}}
+.nav .nb2{{margin-left:54px}}
+.tg{{height:22px;padding:0 8px;border-radius:7px;font-size:11.5px;font-weight:700;display:inline-flex;align-items:center}}
+.dv{{display:flex;align-items:center;gap:10px;margin:14px 0 10px;font-size:11.5px;color:var(--text-3)}}.dv::before,.dv::after{{content:"";flex:1;height:1px;background:var(--hair)}}
+.ubub{{max-width:78%;padding:9px 14px;border-radius:18px 18px 6px 18px;background:linear-gradient(180deg,#3B8BFF,#1F6FFF);color:#fff;font-size:14.5px;box-shadow:0 8px 18px -10px rgba(31,111,255,.9)}}
+.steps{{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:14px;box-shadow:none;font-size:12.5px;color:var(--text-2)}}
+.sp2{{display:inline-flex;align-items:center;gap:4px}}.ok{{width:15px;height:15px;border-radius:50%;background:var(--green);color:#fff;font-size:9px;display:inline-flex;align-items:center;justify-content:center}}
+.dcard{{margin-top:10px;border-radius:20px;padding:14px;background:var(--glass-2)}}
+.kv{{font-size:13px;color:var(--text-2);margin-top:7px;line-height:1.5}}.kv b{{color:var(--text);margin-right:8px}}
+.chk{{display:flex;align-items:center;gap:6px;font-size:12.5px;margin-top:9px}}
+.ok2{{width:16px;height:16px;border-radius:50%;background:var(--green);color:#fff;font-size:10px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex:none}}
+.dock2{{position:absolute;left:10px;right:10px;bottom:22px;border-radius:26px;padding:10px;display:flex;flex-direction:column;gap:8px;z-index:25}}
+.cmp,.aicmp{{height:44px;border-radius:14px;background:var(--fill);display:flex;align-items:center;gap:8px;padding:0 6px 0 6px;font-size:14px}}
+.aitag{{display:inline-flex;align-items:center;gap:5px;height:30px;padding:0 9px 0 4px;border-radius:10px;background:color-mix(in srgb,var(--purple) 12%,transparent);font-size:12.5px;font-weight:700;flex:none}}
+.aid{{width:22px;height:22px;border-radius:7px;background:linear-gradient(135deg,#5E8BFF,#B157F0);color:#fff;display:inline-flex;align-items:center;justify-content:center}}
+.snd{{width:34px;height:34px;border-radius:11px;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;flex:none}}
+.snd.ai{{background:linear-gradient(135deg,#4F8BFF,#9B5CFF 55%,#FF5FA8)}}
+.shw{{width:100%;height:96px;border-radius:10px;overflow:hidden;position:relative}}
+.shw .shot{{transform:scale(.64);transform-origin:0 0;border-radius:14px}}
+.botav{{background:linear-gradient(160deg,#5E8BFF,#B157F0);color:#fff;display:flex;align-items:center;justify-content:center;flex:none}}
+/* ai */
+.hero{{display:flex;flex-direction:column;align-items:center;text-align:center;margin-top:22px}}
+.orb{{width:68px;height:68px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.7) 0,rgba(255,255,255,0) 35%),conic-gradient(from 210deg,#4F8BFF,#9B5CFF,#FF5FA8,#FFB14A,#4FD1FF,#4F8BFF);box-shadow:0 12px 30px -8px rgba(155,92,255,.7),0 0 40px -6px rgba(255,95,168,.5)}}
+.sugs{{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:16px}}
+.sug{{height:32px;padding:0 13px;border-radius:16px;display:inline-flex;align-items:center;font-size:13px;color:var(--text-2);box-shadow:none}}
+.aians{{margin-top:12px}}
+.aicmp{{position:absolute;left:14px;right:14px;bottom:106px;height:50px;border-radius:18px;padding:0 7px 0 16px;z-index:24;font-size:14.5px;
+  background:var(--glass-2);box-shadow:0 0 0 1.5px transparent,0 10px 26px -12px rgba(120,80,220,.55)}}
+.aicmp::before{{content:"";position:absolute;inset:-1.5px;border-radius:19.5px;padding:1.5px;background:linear-gradient(90deg,#4F8BFF,#9B5CFF,#FF5FA8);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}}
+.aicmp .snd{{width:38px;height:38px;border-radius:13px}}
+</style>
+<script>(function(){{var q=new URLSearchParams(location.search);if(q.get('mode')==='dark')document.documentElement.classList.add('dark')}})()</script>
+</head><body><div class="board">
+<div class="col3">{p1}<div class="lbl">工单列表<em>首页 · 按「等你做什么」分组</em></div></div>
+<div class="col3">{p2}<div class="lbl">工单对话<em>看交付、审核、问本单 AI</em></div></div>
+<div class="col3">{p3}<div class="lbl">AI 助手<em>跨工单、发布、收单提问</em></div></div>
+</div>
+<script src="../v3/shots.js"></script><script src="../v3/icons.js"></script>
+</body></html>'''
+open(out,'w',encoding='utf-8').write(html)

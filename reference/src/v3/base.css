@@ -1,0 +1,76 @@
+/* v3 公共组件：所有主题共用，颜色由各主题的 :root 变量决定 */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:Inter,"PingFang SC","Noto Sans SC","Microsoft YaHei",system-ui,sans-serif;-webkit-font-smoothing:antialiased;color:var(--text);background:var(--bg);font-size:14px;line-height:1.55}
+h1,h2,h3,p{margin:0}
+button,input{font-family:inherit;font-size:inherit;color:inherit}
+.mono{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace}
+.row{display:flex;align-items:center}.col{display:flex;flex-direction:column}
+.grow{flex:1;min-width:0}.wrap{flex-wrap:wrap}
+.g2{gap:2px}.g4{gap:4px}.g6{gap:6px}.g8{gap:8px}.g10{gap:10px}.g12{gap:12px}.g14{gap:14px}.g16{gap:16px}.g20{gap:20px}.g24{gap:24px}
+.t2{color:var(--text-2)}.t3{color:var(--text-3)}
+.f11{font-size:11px}.f12{font-size:12px}.f13{font-size:13px}.f14{font-size:14px}.f15{font-size:15px}.f16{font-size:16px}.f18{font-size:18px}.f20{font-size:20px}
+.w5{font-weight:500}.w6{font-weight:600}.w7{font-weight:700}
+.ell{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.root{position:relative;width:1440px;height:900px;overflow:hidden;background:var(--bg);display:flex}
+
+/* 按钮 */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;height:34px;padding:0 14px;border-radius:var(--r-btn,8px);border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:13px;font-weight:600;white-space:nowrap;cursor:pointer}
+.btn.lg{height:40px;padding:0 18px;font-size:14px}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);box-shadow:var(--pri-shadow,none)}
+.btn.ok{background:var(--ok);border-color:var(--ok);color:var(--ok-ink,#fff)}
+.btn.danger{color:var(--bad);border-color:color-mix(in srgb,var(--bad) 40%,transparent);background:transparent}
+.btn.ghost{background:transparent;border-color:transparent;color:var(--text-2)}
+.btn.icon{width:34px;padding:0}
+
+/* 状态徽标：图标 + 文字，颜色语义固定 */
+.badge{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:600;white-space:nowrap}
+.b-review{color:var(--review);background:color-mix(in srgb,var(--review) 14%,transparent)}
+.b-run{color:var(--run);background:color-mix(in srgb,var(--run) 14%,transparent)}
+.b-help{color:var(--warn);background:color-mix(in srgb,var(--warn) 14%,transparent)}
+.b-ok{color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent)}
+.b-bad{color:var(--bad);background:color-mix(in srgb,var(--bad) 14%,transparent)}
+.b-wait{color:var(--text-2);background:color-mix(in srgb,var(--text-3) 16%,transparent)}
+.dot{width:8px;height:8px;border-radius:50%;flex:none;background:currentColor}
+.src{display:inline-flex;align-items:center;height:20px;padding:0 6px;border-radius:5px;font-size:11px;font-weight:700;letter-spacing:.02em}
+.src.t{color:#fff;background:#3370FF}
+.src.j{color:#fff;background:#1868DB}
+.av{width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex:none;color:#3A2418;background:#F5C7A9}
+.av.bot{background:var(--accent);color:var(--accent-ink)}
+.kbd{font-family:"JetBrains Mono",monospace;font-size:11px;padding:1px 6px;border-radius:4px;border:1px solid var(--border);color:var(--text-3)}
+
+/* 标签页 */
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--border)}
+.tab{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 12px;font-size:13px;font-weight:600;color:var(--text-3);border-bottom:2px solid transparent;margin-bottom:-1px}
+.tab.on{color:var(--text);border-bottom-color:var(--accent)}
+.tab .n{font-size:11px;padding:0 6px;border-radius:9px;background:var(--surface-2);color:var(--text-2)}
+
+/* 代码差异 */
+.diff{font-family:"JetBrains Mono",monospace;font-size:12px;line-height:21px;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--code-bg)}
+.diff .fh{display:flex;align-items:center;gap:8px;height:34px;padding:0 12px;border-bottom:1px solid var(--border);font-size:12px;background:var(--surface)}
+.dl{display:flex;white-space:pre}
+.dl .n{width:40px;text-align:right;padding-right:10px;color:var(--text-3);flex:none;opacity:.7}
+.dl .s{width:16px;flex:none;color:var(--text-3)}
+.dl.add{background:color-mix(in srgb,var(--ok) 12%,transparent)}.dl.add .s{color:var(--ok)}
+.dl.del{background:color-mix(in srgb,var(--bad) 12%,transparent)}.dl.del .s{color:var(--bad)}
+.kw{color:var(--syn-kw,#C792EA)}.fn{color:var(--syn-fn,#82AAFF)}.cm{color:var(--text-3);font-style:italic}.nu{color:var(--syn-nu,#F78C6C)}
+
+/* 被测页面截图 mock（浅色 Tita） */
+.shot{position:relative;border-radius:10px;overflow:hidden;background:#F5F6F8;border:1px solid var(--border)}
+.tita{position:absolute;inset:0;color:#1F2329;background:#F5F6F8;font-family:"PingFang SC",Inter,sans-serif}
+.tita .bar{height:30px;background:#fff;border-bottom:1px solid #E6E8EB;display:flex;align-items:center;padding:0 12px;gap:8px;font-size:11px;font-weight:600}
+.tita .bar i{width:12px;height:12px;border-radius:3px;background:#3370FF}
+.tita .modal{position:absolute;left:8%;right:8%;top:42px;bottom:10px;background:#fff;border-radius:8px;box-shadow:0 8px 24px rgba(31,35,41,.14);padding:12px 14px;display:flex;flex-direction:column;gap:9px}
+.tita .tb{display:flex;gap:14px;font-size:11px;color:#646A73;border-bottom:1px solid #EEF0F2}
+.tita .tb span{padding-bottom:6px;white-space:nowrap}.tita .tb .on{color:#3370FF;font-weight:600;border-bottom:2px solid #3370FF}
+.tita .p{display:flex;align-items:center;gap:8px;font-size:11px}
+.tita .pa{width:20px;height:20px;border-radius:50%;background:#DDE5FF;flex:none}
+.tita .ln{height:7px;border-radius:4px;background:#EDEFF2}
+.tita .frz{position:absolute;inset:0;background:rgba(245,246,248,.6);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;padding-top:30px}
+.tita .sp{width:24px;height:24px;border-radius:50%;border:3px solid #D0D5DD;border-top-color:#3370FF}
+.tita .msg{font-size:11px;color:#646A73;background:#fff;padding:3px 8px;border-radius:5px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.shot .tagx{position:absolute;left:8px;bottom:8px;display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 8px;border-radius:6px;font-size:11px;font-weight:600;background:rgba(17,17,20,.8);color:#fff}
+.shot .tagx.ok{background:#12A26A}
+.shot .playb{position:absolute;right:8px;bottom:8px;width:26px;height:26px;border-radius:50%;background:rgba(17,17,20,.75);color:#fff;display:flex;align-items:center;justify-content:center}

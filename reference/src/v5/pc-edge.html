@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>边界状态</title>
+<link rel="stylesheet" href="../v3/base.css"><link rel="stylesheet" href="../v4/apple.css"><link rel="stylesheet" href="pc.css">
+<script>(function(){var q=new URLSearchParams(location.search);if(q.get('mode')==='dark')document.documentElement.classList.add('dark')})()</script>
+<style>
+.eb{position:absolute;inset:0;padding:26px 30px 28px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:18px 22px}
+.et{display:flex;flex-direction:column;min-height:0}
+.el{display:flex;align-items:center;gap:10px;height:34px;flex:none;padding:0 4px}
+.el .no{width:22px;height:22px;border-radius:50%;background:var(--text);color:var(--bg,#fff);font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center}
+html.dark .el .no{color:#111}
+html:not(.dark) .el .no{color:#fff}
+.el b{font-size:16px;font-weight:700}
+.el em{font-style:normal;font-size:13px;color:var(--text-3)}
+.ep{flex:1;min-height:0;border-radius:22px;display:flex;flex-direction:column;overflow:hidden}
+.ein{height:40px;border-radius:11px;background:var(--fill);display:flex;align-items:center;gap:10px;padding:0 12px;font-size:14px}
+.ein.fo{box-shadow:0 0 0 2px color-mix(in srgb,var(--blue) 55%,transparent);background:var(--glass-2)}
+.bdj{width:18px;height:18px;border-radius:5px;background:linear-gradient(160deg,#4FA3FF,#1D6FE0);color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none}
+.dots{letter-spacing:3px;font-size:16px;line-height:1}
+.ebar{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:14px}
+.eb .thead{padding:12px 18px 10px}
+.eb .thead h1{font-size:16px}
+</style>
+</head><body><div class="root">
+<div class="eb"><div class="et"><div class="el"><span class="no">1</span><b>无权查看</b><em>换了账号，或项目权限被撤销</em></div><section class="glass ep"><div class="row grow" style="padding:0 34px;gap:34px;align-items:center">
+  <div class="col" style="width:270px;flex:none">
+    <span class="ic-box" style="width:60px;height:60px;border-radius:18px;background:linear-gradient(160deg,#FF7A70,#E5372C)"><i data-i="lock" data-s="28" data-w="2"></i></span>
+    <div style="font-size:20px;font-weight:800;margin-top:16px">当前账号无权查看这张工单</div>
+    <div class="f13 t2" style="margin-top:8px;line-height:1.65">可能换了账号登录，或项目权限已被撤销。<br>工单内容不会显示。</div>
+  </div>
+  <div class="col grow g12" style="min-width:0">
+    <div class="card" style="padding:12px 14px">
+      <div class="row g10"><span class="av" style="width:34px;height:34px;font-size:12px;background:linear-gradient(160deg,#FFC9A8,#F08F7A);color:#5A2414">林</span>
+        <div class="col grow"><span class="f12 t3">当前登录</span><span class="row g6" style="margin-top:2px"><span class="bdj">J</span><span class="f14 w6">linmo</span></span></div><span class="f13 lnk">换个账号</span></div>
+      <div style="height:1px;background:var(--hair);margin:11px 0"></div>
+      <div class="row g8 f12 t2"><i data-i="msgq" data-s="14" style="color:var(--text-3)"></i>需要权限请联系项目管理员</div>
+    </div>
+    <div class="f12 t3" style="line-height:1.6;padding:0 2px">工单列表、搜索和 AI 助手里也查不到这张单。</div>
+    <button class="abtn a-sec" style="height:38px;justify-content:center">回到我的工单</button>
+  </div>
+</div></section></div><div class="et"><div class="el"><span class="no">2</span><b>登录过期</b><em>点链接或通知时，登录后回原处</em></div><section class="glass ep"><div class="row grow" style="padding:0 34px;gap:34px;align-items:center">
+  <div class="col" style="width:250px;flex:none">
+    <img src="logo.svg" width="64" height="64" alt="" style="margin-left:-4px">
+    <div style="font-size:20px;font-weight:800;margin-top:12px">登录已过期</div>
+    <div class="f13 t2" style="margin-top:6px">重新登录后，直接回到刚才的页面</div>
+    <div class="card" style="padding:10px 12px;margin-top:16px"><div class="row g10"><span class="ic-box" style="width:30px;height:30px;background:linear-gradient(160deg,#6CC4FF,#1673FF)"><i data-i="bell" data-s="15"></i></span>
+      <div class="col grow"><span class="f11 t3">你点开的链接</span><span class="row g6"><span class="mono f13 w6">TK-20871</span><span class="f12 t2">发布 · 等复测</span></span></div><i data-i="lock" data-s="14" style="color:var(--text-3)"></i></div>
+      <div class="f11 t3" style="margin-top:7px">登录前不显示工单内容</div></div>
+  </div>
+  <div class="col grow g10" style="min-width:0">
+    <div class="ein"><span class="bdj">J</span><span class="grow">linmo</span><span class="f13 lnk">换账号</span></div>
+    <div class="ein fo"><i data-i="lock" data-s="15" style="color:var(--text-3)"></i><span class="dots grow">●●●●●●●●</span><i data-i="eye" data-s="15" style="color:var(--text-3)"></i></div>
+    <button class="abtn a-pri" style="height:40px;justify-content:center;margin-top:4px">登录并回到 TK-20871</button>
+    <div class="f12 t3" style="text-align:center">换成别的账号登录时，不会打开这张单</div>
+    <div class="row g8 f12 t2" style="margin-top:4px;padding:8px 10px;border-radius:10px;background:var(--fill)"><i data-i="edit" data-s="13" style="color:var(--text-3)"></i><span class="grow">没发出去的回复存在本机，登录后还在</span></div>
+  </div>
+</div></section></div><div class="et"><div class="el"><span class="no">3</span><b>状态已经变了</b><em>旧对话、旧页面里的操作不改写已有结果</em></div><section class="glass ep"><header class="thead"><div class="row g10"><span class="appic ic-tita" style="width:32px;height:32px;font-size:9px;border-radius:9px">TITA</span>
+<div class="col grow" style="min-width:0"><h1 class="ell">审批中心：发起审批时点击分组，界面卡住</h1><div class="f12 t3 ell" style="margin-top:1px">TK-20871 · 修复人 林某 · 第 2 轮</div></div><span class="pill p-green" style="flex:none">审核通过 · 发测试中</span></div></header>
+<div class="col grow g10" style="padding:12px 18px 0;min-height:0">
+  <div class="row" style="justify-content:flex-end"><div class="col" style="align-items:flex-end;gap:4px">
+    <span class="f11 t3">你 · 在昨天的对话里</span>
+    <span style="padding:8px 12px;border-radius:14px 14px 4px 14px;background:var(--blue);color:#fff;font-size:13px">打回吧，分组按钮点完还是会闪一下</span></div></div>
+  <div class="row g10" style="align-items:flex-start">
+    <span class="aid" style="margin-top:2px"><i data-i="spark" data-s="13"></i></span>
+    <div class="card col g8 grow" style="padding:11px 13px;min-width:0">
+      <div class="row g8"><span class="tag tg-o">状态已经变了</span><span class="f13 w6">这一轮没有打回，什么也没改</span></div>
+      <div class="f13 t2" style="line-height:1.6">第 2 轮 <span class="mono">a3f9c21</span> 今天 14:20 已由你审核通过，合入测试分支，正在发测试环境。</div>
+      <div class="row g8"><span class="btn2 sm a-sec" style="background:var(--fill)">去「发布」看进度</span><span class="btn2 sm a-sec" style="background:var(--fill)">复测时让王某重点看这点</span></div>
+    </div>
+  </div>
+  <span class="grow"></span>
+  <div class="row g8 f12 t2" style="margin:0 0 2px 34px;padding:8px 12px;border-radius:10px;background:var(--fill)"><i data-i="refresh" data-s="13" style="color:var(--text-3)"></i><span class="grow">页面上的旧按钮也一样：点了先刷新，提示「已由某某处理」，不会重复执行</span></div>
+</div>
+<div class="row g8" style="margin:8px 14px 12px;height:40px;padding:0 6px 0 10px;border-radius:13px;background:var(--fill)"><span class="aid" style="width:20px;height:20px;border-radius:6px"><i data-i="spark" data-s="11"></i></span><span class="f12 w6">本单 AI</span><span class="mono f11 t3">TK-20871</span><span class="f13 t3 grow ell">问这张单…</span></div></section></div><div class="et"><div class="el"><span class="no">4</span><b>审核中有新提交</b><em>通过的永远是最新的那个提交</em></div><section class="glass ep"><header class="thead"><div class="row g10"><span class="appic ic-tita" style="width:32px;height:32px;font-size:9px;border-radius:9px">TITA</span>
+<div class="col grow" style="min-width:0"><h1 class="ell">审批中心：发起审批时点击分组，界面卡住</h1><div class="f12 t3 ell" style="margin-top:1px">TK-20871 · 修复人 林某 · 第 2 轮</div></div><span class="pill p-blue" style="flex:none">待我审核 · 第 2 轮</span></div><div class="row g10" style="margin-top:8px"><div class="tab2"><span>对话</span><span class="on">代码改动 <b>3</b></span><span>证据 <b>4</b></span><span>执行日志</span><span>发布</span></div></div></header>
+<div class="col grow g6" style="padding:10px 18px 0;min-height:0">
+  <div class="ebar" style="padding:8px 14px;background:color-mix(in srgb,var(--orange) 13%,transparent)"><i data-i="git" data-s="16" style="color:var(--orange)"></i>
+    <div class="col grow" style="min-width:0"><span class="f13 w6">Bot 刚又提交了 <span class="mono">b71e0d2</span></span><span class="f12 t2">15:06 · 1 个文件 · 你正在看的是 <span class="mono">a3f9c21</span></span></div>
+    <span class="btn2 sm a-sec" style="background:var(--glass-2)">只看新增的</span><span class="btn2 sm a-pri">切到最新</span></div>
+  <div class="col" style="gap:2px">
+    <div class="row g8" style="padding:3px 10px;border-radius:10px"><span class="st st-m" style="width:16px;height:16px;border-radius:4px;font-size:10px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center">M</span><span class="f13 w6">GroupPicker.tsx</span><span class="tag tg-o">有新改动 · 要重看</span><span class="grow"></span><span class="f11 num" style="color:var(--green)">+1</span><span class="f11 num" style="color:var(--red)">−1</span></div>
+    <div class="row g8" style="padding:3px 10px;border-radius:10px"><span class="st st-m" style="width:16px;height:16px;border-radius:4px;font-size:10px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center">M</span><span class="f13 w6">useMembers.ts</span><span class="tag tg-g">已看 · 没变</span><span class="grow"></span><span class="f11 t3">保留已看</span></div>
+  </div>
+  <div class="mono" style="font-size:11.5px;line-height:21px;border-radius:10px;overflow:hidden;border:1px solid var(--hair)">
+    <div class="hunk"><span>b71e0d2 新增 · GroupPicker.tsx</span></div>
+    <div class="cl del"><span class="n">53</span><span class="s">−</span><span class="c">  setLoading(true);</span></div>
+    <div class="cl add"><span class="n">53</span><span class="s">+</span><span class="c">  if (!members.length) setLoading(true);</span></div>
+  </div>
+</div>
+<div class="row g8" style="padding:10px 18px;border-top:1px solid var(--hair)">
+  <span class="f12 t3 grow">要通过的是最新的 <span class="mono">b71e0d2</span></span>
+  <button class="abtn a-red" style="height:34px;font-size:13px"><i data-i="undo" data-s="13"></i>打回</button>
+  <button class="abtn a-sec" style="height:34px;font-size:13px;opacity:.55"><i data-i="check" data-s="14" data-w="2.6"></i>看完新改动才能通过</button></div></section></div></div>
+</div>
+<script src="../v3/shots.js"></script><script src="icons.js"></script>
+</body></html>

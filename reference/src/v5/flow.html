@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>链路总图</title>
+<link rel="stylesheet" href="../v3/base.css"><link rel="stylesheet" href="../v4/apple.css"><link rel="stylesheet" href="pc.css">
+<script>(function(){var q=new URLSearchParams(location.search);if(q.get('mode')==='dark')document.documentElement.classList.add('dark')})()</script>
+<style>
+body{margin:0}
+.root{position:relative;width:2400px;height:1300px;overflow:hidden;background:var(--wall);font-family:var(--font);color:var(--text)}
+.hd{position:absolute;left:36px;top:30px;right:36px;display:flex;align-items:flex-end;gap:18px}
+.hd h1{font-size:30px;font-weight:800;letter-spacing:.3px}
+.hd span{font-size:15px;color:var(--text-3);padding-bottom:4px}
+.st{position:absolute;top:110px;height:30px;border-radius:9px;background:color-mix(in srgb,var(--text) 6%,transparent);display:flex;align-items:center;justify-content:center;font-size:13.5px;font-weight:700;color:var(--text-2);letter-spacing:.5px}
+.ln{position:absolute;left:30px;right:30px;border-radius:16px}
+.ln.alt{background:color-mix(in srgb,var(--text) 3.5%,transparent)}
+.lh{position:absolute;left:42px;width:150px;display:flex;flex-direction:column;justify-content:center;gap:4px}
+.lh b{font-size:16px;font-weight:700;display:flex;align-items:center}
+.lh em{font-style:normal;font-size:12px;color:var(--text-3)}
+.ld{width:10px;height:10px;border-radius:50%;margin-right:8px;flex:none}
+.edges{position:absolute;left:0;top:0}
+.nd{position:absolute;border-radius:14px;padding:9px 10px 8px;display:flex;flex-direction:column;gap:3px;background:var(--glass-2);border:1px solid var(--stroke);box-shadow:0 8px 22px -14px rgba(20,40,100,.45)}
+.nd.ext{background:color-mix(in srgb,var(--text) 5%,transparent);border-style:dashed;box-shadow:none}
+.nh{display:flex;align-items:center;gap:6px}
+.nh b{font-size:13.5px;font-weight:700;white-space:nowrap}
+.nb{min-width:20px;height:20px;padding:0 5px;border-radius:10px;color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none}
+.nr{font-size:11.5px;line-height:1.4;color:var(--text-2)}
+.nn{font-size:11px;font-weight:600;white-space:nowrap}
+.ni{font-size:10.5px;color:var(--text-3);white-space:nowrap}
+.grow{flex:1}
+.elab{position:absolute;font-size:11.5px;font-weight:600;padding:2px 7px;border-radius:7px;background:var(--glass-2);border:1px solid var(--stroke);white-space:nowrap}
+.el-blue{color:var(--blue)}.el-orange{color:var(--orange)}.el-red{color:var(--red)}.el-gray{color:var(--text-2)}
+.ft{position:absolute;left:30px;right:30px;top:1188px;display:flex;gap:14px;align-items:stretch}
+.fc{border-radius:14px;padding:11px 14px;display:flex;flex-direction:column;gap:7px;background:var(--glass-2);border:1px solid var(--stroke)}
+.fc .t{font-size:12px;font-weight:700;color:var(--text-3);letter-spacing:.3px}
+.fr{display:flex;align-items:center;gap:16px;font-size:12.5px;color:var(--text-2);white-space:nowrap}
+.fr i{display:inline-block;width:26px;height:0;border-top:2px solid;vertical-align:middle;margin-right:6px}
+.chip{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border-radius:8px;background:color-mix(in srgb,var(--text) 6%,transparent);font-size:12.5px;white-space:nowrap}
+.chip b{font-weight:700}
+</style></head><body><div class="root">
+<div class="hd"><h1>一张单的完整链路</h1><span>从交给 AI 到正式上线、回原平台确认 · 节点编号对应 docs/05-链路流转.md · 每个节点：名称 → 结果 → 分支 → 对应设计图</span></div>
+<div class="ln" style="top:150px;height:146px"></div><div class="lh" style="top:160px;height:126px"><b><span class="ld" style="background:#8E8E93"></span>来源平台</b><em>Jira / Tita</em></div><div class="ln alt" style="top:296px;height:146px"></div><div class="lh" style="top:306px;height:126px"><b><span class="ld" style="background:var(--purple)"></span>工作台</b><em>收单 · 通知 · 记录</em></div><div class="ln" style="top:442px;height:146px"></div><div class="lh" style="top:452px;height:126px"><b><span class="ld" style="background:var(--teal)"></span>Bot</b><em>内网服务器</em></div><div class="ln alt" style="top:588px;height:146px"></div><div class="lh" style="top:598px;height:126px"><b><span class="ld" style="background:var(--blue)"></span>修复人</b><em>工单负责人 · 也做开工准备</em></div><div class="ln" style="top:734px;height:146px"></div><div class="lh" style="top:744px;height:126px"><b><span class="ld" style="background:var(--indigo)"></span>MR 审核人</b><em>项目里设，默认修复人</em></div><div class="ln alt" style="top:880px;height:146px"></div><div class="lh" style="top:890px;height:126px"><b><span class="ld" style="background:var(--green)"></span>测试人</b><em>Jira 默认提单人</em></div><div class="ln" style="top:1026px;height:146px"></div><div class="lh" style="top:1036px;height:126px"><b><span class="ld" style="background:var(--orange)"></span>正式发布人</b><em>默认任何人</em></div><div class="st" style="left:210px;width:147px">准备</div><div class="st" style="left:365px;width:302px">收单</div><div class="st" style="left:675px;width:147px">修复</div><div class="st" style="left:830px;width:147px">审核</div><div class="st" style="left:985px;width:612px">发测试</div><div class="st" style="left:1605px;width:147px">复测</div><div class="st" style="left:1760px;width:147px">合回主分支</div><div class="st" style="left:1915px;width:302px">发正式 · 原单确认</div><div class="st" style="left:2225px;width:147px">修复完成</div>
+<svg class="edges" width="2400" height="1300" viewBox="0 0 2400 1300"><defs><marker id="m-blue" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill:var(--blue)"/></marker><marker id="m-orange" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill:var(--orange)"/></marker><marker id="m-red" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill:var(--red)"/></marker><marker id="m-gray" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" style="fill:var(--text-3)"/></marker></defs><path d="M506.5 223.0 L593.5 223.0 L593.5 311.0" fill="none" style="stroke:var(--blue)" stroke-width="2" stroke-linejoin="round"  marker-end="url(#m-blue)"/><path d="M351.5 661.0 L593.5 661.0 L593.5 427.0" fill="none" style="stroke:var(--text-3)" stroke-width="1.8" stroke-linejoin="round" stroke-dasharray="6 5" marker-end="url(#m-gray)"/><path d="M661.5 369.0 L748.5 369.0 L748.5 457.0" fill="none" style="stroke:var(--blue)" stroke-width="2" stroke-linejoin="round"  marker-end="url(#m-blue)"/><path d="M732.5 573.0 L732.5 603.0" fill="none" style="stroke:var(--orange)" stroke-width="1.8" stroke-linejoin="round"  marker-end="url(#m-orange)"/><path d="M764.5 603.0 L764.5 573.0" fill="none" style="stroke:var(--orange)" stroke-width="1.8" stroke-linejoin="round"  marker-end="url(#m-orange)"/><path d="M816.5 497.0 L903.5 497.0 L903.5 603.0" fill="none" style="stroke:var(--blue)" stroke-width="2" stroke-linejoin="round"  marker-end="url(#m-blue)"/><path d="M835.5 669.0 L826.0 669.0 L826.0 539.0 L816.5 539.0" fill="none" style="stroke:var(--red)" stroke-width="1.8" stroke-linejoin="round" stroke-dasharray="6 5" marker-end="url(#m-red)"/><path d="M971.5 661.0 L990.5 661.0" fill="none" style="stroke:var(--blue)" stroke-width="2" stroke-linejoin="round"  marker-end="url(#m-blue)"/><path d="M903.5 719.0 L903.5 727.0 L1988.5 727.0 L1988.5 719.0" fill="none" style="stroke:var(--text-3)" stroke-width="1.8" stroke-linejoin="round" stroke-dasharray="6 5" marker-end="url(#m-gray)"/><path d="M1126.5 661.0 L1213.5 661.0 L1213.5 749.0" fill="none" style="stroke:var(--blue)" stroke-width="2" stroke-linejoin="round"  marker-end="url(#m-blue)"/><path d="M1281.5 807.0 L1368.5 807.0 L1368.5 573.0" fill="none" style="stroke:var(--blue)" stroke-width="2" stroke-linejoin="round"  marker-end="url(#m-blue)"/><path d="M1436.5 515.0 L1523.5 515.0 L1523.5 427.0" fill="none" style="stroke:var(--blue)" stroke-width="2" stroke-linejoin="round"  marker-end="url(#m-blue)"/><path d="M1591.5 369.0 L1678.5 369.0 L1678.5 895.0" fill="none" style="stroke:var(--blue)" stroke-width="2" stroke-linejoin="round"  marker-end="url(#m-blue)"/><path d="M1746.5 953.0 L1833.5 953.0 L1833.5 865.0" fill="none" style="stroke:var(--blue)" stroke-width="2" stroke-linejoin="round"  marker-end="url(#m-blue)"/><path d="M1901.5 807.0 L1988.5 807.0 L1988.5 1041.0" fill="none" style="stroke:var(--blue)" stroke-width="2" stroke-linejoin="round"  marker-end="url(#m-blue)"/><path d="M2056.5 1099.0 L2143.5 1099.0 L2143.5 573.0" fill="none" style="stroke:var(--blue)" stroke-width="2" stroke-linejoin="round"  marker-end="url(#m-blue)"/><path d="M2211.5 515.0 L2298.5 515.0 L2298.5 603.0" fill="none" style="stroke:var(--blue)" stroke-width="2" stroke-linejoin="round"  marker-end="url(#m-blue)"/><path d="M2056.5 661.0 L2230.5 661.0" fill="none" style="stroke:var(--text-3)" stroke-width="1.8" stroke-linejoin="round" stroke-dasharray="6 5" marker-end="url(#m-gray)"/><path d="M1972.5 603.0 L1972.5 281.0" fill="none" style="stroke:var(--text-3)" stroke-width="1.8" stroke-linejoin="round" stroke-dasharray="6 5" marker-end="url(#m-gray)"/><path d="M2004.5 281.0 L2004.5 603.0" fill="none" style="stroke:var(--text-3)" stroke-width="1.8" stroke-linejoin="round" stroke-dasharray="6 5" marker-end="url(#m-gray)"/></svg>
+<div class="nd glass" style="left:216px;top:603px;width:136px;height:116px">
+<div class="nh"><span class="nb" style="background:var(--blue)">0</span><b>开工准备</b></div>
+<div class="nr">项目已准备好<br>开始收单</div><div class="nn" style="color:var(--orange)">必需项没过挡住开工</div><span class="grow"></span><div class="ni">图 · 步骤器 0–7</div></div><div class="nd glass ext" style="left:370px;top:165px;width:136px;height:116px">
+<div class="nh"><span class="nb" style="background:#8E8E93">1</span><b>交给 AI</b></div>
+<div class="nr">Jira「AI修复」<br>Tita「AI干活」进行中</div><span class="grow"></span><div class="ni">图 · 在原平台</div></div><div class="nd glass" style="left:526px;top:311px;width:136px;height:116px">
+<div class="nh"><span class="nb" style="background:var(--purple)">2</span><b>收单</b></div>
+<div class="nr">建任务 · 待修复<br>通知修复人</div><div class="nn" style="color:var(--red)">对不上人 → 需要处理</div><span class="grow"></span><div class="ni">图 · 来源采集 · 成员</div></div><div class="nd glass" style="left:680px;top:457px;width:136px;height:116px">
+<div class="nh"><span class="nb" style="background:var(--teal)">3</span><b>Bot 修复</b></div>
+<div class="nr">Bot 忙时先排队<br>复现、改代码、交付</div><div class="nn" style="color:var(--red)">报错 → 执行日志</div><span class="grow"></span><div class="ni">图 · 修复中 · 证据</div></div><div class="nd glass" style="left:680px;top:603px;width:136px;height:116px">
+<div class="nh"><span class="nb" style="background:var(--blue)">3a</span><b>回答 Bot</b></div>
+<div class="nr">Bot 从原步骤继续</div><div class="nn" style="color:var(--orange)">可存为项目规则</div><span class="grow"></span><div class="ni">图 · Bot 在问你</div></div><div class="nd glass" style="left:836px;top:603px;width:136px;height:116px">
+<div class="nh"><span class="nb" style="background:var(--blue)">4</span><b>审核代码</b></div>
+<div class="nr">通过 → 5，并生成 13<br>有未测项要勾选确认</div><div class="nn" style="color:var(--red)">打回 → 回 3 新一轮</div><span class="grow"></span><div class="ni">图 · 代码改动 · 打回</div></div><div class="nd glass" style="left:990px;top:603px;width:136px;height:116px">
+<div class="nh"><span class="nb" style="background:var(--blue)">5</span><b>发起发测试</b></div>
+<div class="nr">建发布任务<br>测试人发前可换</div><div class="nn" style="color:var(--text-3)">谁能发：项目里配置</div><span class="grow"></span><div class="ni">图 · 发测试 · 发布前</div></div><div class="nd glass" style="left:1146px;top:749px;width:136px;height:116px">
+<div class="nh"><span class="nb" style="background:var(--indigo)">6</span><b>MR → 测试分支</b></div>
+<div class="nr">单独审核，不沿用 4<br>通过后工作台合入</div><div class="nn" style="color:var(--red)">打回 → 回 3</div><span class="grow"></span><div class="ni">图 · 发布 · 第 1 步</div></div><div class="nd glass" style="left:1300px;top:457px;width:136px;height:116px">
+<div class="nh"><span class="nb" style="background:var(--teal)">7</span><b>打包 · 发布 · 核对</b></div>
+<div class="nr">tita build → release<br>TEST → 提交号对上</div><div class="nn" style="color:var(--red)">失败 → 从失败步重试</div><span class="grow"></span><div class="ni">图 · 发布 · 失败</div></div><div class="nd glass" style="left:1456px;top:311px;width:136px;height:116px">
+<div class="nh"><span class="nb" style="background:var(--purple)">8</span><b>可测通知</b></div>
+<div class="nr">已生效 · 等复测</div><div class="nn" style="color:var(--orange)">对不上就不通知</div><span class="grow"></span><div class="ni">图 · 发布 · 等复测</div></div><div class="nd glass" style="left:1610px;top:895px;width:136px;height:116px">
+<div class="nh"><span class="nb" style="background:var(--green)">9</span><b>复测</b></div>
+<div class="nr">通过 → 10</div><div class="nn" style="color:var(--red)">打回 → 回 3 新一轮</div><span class="grow"></span><div class="ni">图 · 等复测 · 复测通过</div></div><div class="nd glass" style="left:1766px;top:749px;width:136px;height:116px">
+<div class="nh"><span class="nb" style="background:var(--indigo)">10</span><b>MR → 主分支</b></div>
+<div class="nr">修复人点了才提 MR<br>审核后工作台合入</div><div class="nn" style="color:var(--red)">打回 → 回 3 要重测</div><span class="grow"></span><div class="ni">图 · 合回主分支 MR</div></div><div class="nd glass" style="left:1920px;top:1041px;width:136px;height:116px">
+<div class="nh"><span class="nb" style="background:var(--orange)">11</span><b>发布到正式</b></div>
+<div class="nr">三项前置齐<br>按钮才变蓝</div><div class="nn" style="color:var(--orange)">没测过的不给发</div><span class="grow"></span><div class="ni">图 · 发正式</div></div><div class="nd glass" style="left:2076px;top:457px;width:136px;height:116px">
+<div class="nh"><span class="nb" style="background:var(--teal)">12</span><b>重新打包 · 发 PROD</b></div>
+<div class="nr">主分支 tita build<br>→ PROD → 核对</div><div class="nn" style="color:var(--red)">出故障 → 紧急回滚</div><span class="grow"></span><div class="ni">图 · 发正式</div></div><div class="nd glass" style="left:1920px;top:603px;width:136px;height:116px">
+<div class="nh"><span class="nb" style="background:var(--blue)">13</span><b>原平台确认</b></div>
+<div class="nr">回来点<br>「我已在原单确认」</div><div class="nn" style="color:var(--orange)">打开链接不算</div><span class="grow"></span><div class="ni">图 · 待原平台确认</div></div><div class="nd glass ext" style="left:1920px;top:165px;width:136px;height:116px">
+<div class="nh"><span class="nb" style="background:#8E8E93">·</span><b>原单手动操作</b></div>
+<div class="nr">Tita 点「已完成」<br>Jira 按原流程改状态</div><span class="grow"></span><div class="ni">图 · 在原平台</div></div><div class="nd glass" style="left:2230px;top:603px;width:136px;height:116px">
+<div class="nh"><span class="nb" style="background:var(--blue)">14</span><b>修复完成</b></div>
+<div class="nr">工单负责人点<br>「修复完成」</div><div class="nn" style="color:var(--orange)">没做完的会再提醒</div><span class="grow"></span><div class="ni">图 · 待原平台确认</div></div>
+<span class="elab el-gray" style="left:594px;top:515px;transform:translate(-50%,-50%)">准备好才开工</span><span class="elab el-orange" style="left:732px;top:588px;transform:translate(calc(-100% - 6px),-50%)">在问你</span><span class="elab el-orange" style="left:764px;top:588px;transform:translate(6px,-50%)">继续</span><span class="elab el-red" style="left:826px;top:559px;transform:translate(6px,-50%)">打回</span><span class="elab el-gray" style="left:1446px;top:727px;transform:translate(-50%,-50%)">通过即生成「待原平台确认」待办，和发布并行</span><span class="elab el-blue" style="left:1790px;top:941px;transform:translate(-50%,-50%)">通过</span><span class="elab el-gray" style="left:1972px;top:369px;transform:translate(calc(-100% - 6px),-50%)">打开原单</span><span class="elab el-gray" style="left:2004px;top:515px;transform:translate(6px,-50%)">回来标记</span>
+<div class="ft">
+  <div class="fc"><span class="t">线</span>
+    <div class="fr"><span><i style="border-color:var(--blue)"></i>主流程</span><span><i style="border-color:var(--orange)"></i>Bot 问人，答完回原步骤</span><span><i style="border-color:var(--red);border-top-style:dashed"></i>打回，回到 3 开新一轮</span><span><i style="border-color:var(--text-3);border-top-style:dashed"></i>前置条件 / 并行待办</span><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:22px;height:14px;border-radius:4px;border:1px dashed var(--text-3)"></span>在原平台，不在工作台</span></div></div>
+  <div class="fc"><span class="t">四份独立记录（不互相代替）</span>
+    <div class="fr"><span class="chip"><b>工单状态</b>2–4</span><span class="chip"><b>发布任务</b>5–8 · 11–12</span><span class="chip"><b>测试记录</b>9</span><span class="chip"><b>原平台确认</b>13</span></div></div>
+  <div class="fc grow"><span class="t">随时可进的支线</span>
+    <div class="fr"><span class="chip"><b>紧急回滚</b>项目里设谁能回滚 · 只回滚 Apollo</span><span class="chip"><b>AI 助手</b>每一步都能用对话办</span><span class="chip"><b>Skills</b>下一张单生效</span><span class="chip"><b>登录与权限</b>过期回原处 · 无权不显示</span></div></div>
+</div>
+</div></body></html>

@@ -1,0 +1,39 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>闪屏 · PC</title>
+<link rel="stylesheet" href="../v3/base.css"><link rel="stylesheet" href="../v4/apple.css"><link rel="stylesheet" href="pc.css">
+<script>(function(){var q=new URLSearchParams(location.search);if(q.get('mode')==='dark')document.documentElement.classList.add('dark')})()</script>
+<style>
+.aura{position:absolute;border-radius:50%;background:conic-gradient(from 210deg,#4F8BFF,#9B5CFF,#FF5FA8,#FFB14A,#4FD1FF,#4F8BFF);filter:blur(70px);opacity:.42}
+html.dark .aura{opacity:.5}
+.ring{position:absolute;border-radius:50%;border:1px solid color-mix(in srgb,var(--text) 7%,transparent)}
+.nm{font-weight:800;letter-spacing:.6px;color:var(--text)}
+.sub{color:var(--text-3);letter-spacing:4px;text-transform:uppercase;font-weight:500}
+.bar{border-radius:3px;background:color-mix(in srgb,var(--text) 9%,transparent);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:3px;background:linear-gradient(90deg,#4F8BFF,#9B5CFF 60%,#FF5FA8)}
+.st{display:inline-flex;align-items:center;gap:8px;color:var(--text-2)}
+.st .d{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px color-mix(in srgb,var(--green) 22%,transparent)}
+.spin{width:14px;height:14px;border-radius:50%;border:2px solid color-mix(in srgb,var(--text) 15%,transparent);border-top-color:var(--blue);flex:none}
+
+.root{display:block;background:var(--wall)}
+.stage{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ic{width:200px;height:200px;position:relative;z-index:2}
+.foot{position:absolute;left:0;right:0;bottom:36px;display:flex;justify-content:center;gap:26px;font-size:12.5px}
+.ver{position:absolute;right:30px;top:26px;font-size:12px;color:var(--text-3)}
+.chip{display:inline-flex;align-items:center;gap:7px;height:30px;padding:0 13px;border-radius:15px;font-size:12.5px;color:var(--text-2);box-shadow:none!important}
+</style></head><body><div class="root">
+  <div class="ring" style="width:520px;height:520px;left:460px;top:62px"></div>
+  <div class="ring" style="width:760px;height:760px;left:340px;top:-58px"></div>
+  <div class="ring" style="width:1000px;height:1000px;left:220px;top:-178px"></div>
+  <div class="aura" style="width:360px;height:360px;left:540px;top:142px"></div>
+  <span class="ver">v1.0 · 一期</span>
+  <div class="stage">
+    <img class="ic" src="logo.svg" alt="">
+    <div class="nm" style="font-size:40px;margin-top:6px">AI 修复工作台</div>
+    <div class="sub" style="font-size:15px;margin-top:8px">Fix Studio</div>
+    <div class="bar" style="width:260px;height:5px;margin-top:46px"><i style="width:68%"></i></div>
+    <div class="st" style="font-size:13.5px;margin-top:14px"><span class="spin"></span>正在同步待办 · 已连接公司内网服务器</div>
+  </div>
+  <div class="foot">
+    <span class="chip glass"><span class="st"><span class="d"></span>3 个 Bot 在线</span></span>
+    <span class="chip glass">关掉电脑，Bot 也会继续修</span>
+  </div>
+</div></body></html>

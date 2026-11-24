@@ -1,0 +1,157 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>第一次使用 · 工单来源</title>
+<link rel="stylesheet" href="../v3/base.css"><link rel="stylesheet" href="../v4/apple.css"><link rel="stylesheet" href="pc.css">
+<script>(function(){var q=new URLSearchParams(location.search);if(q.get('mode')==='dark')document.documentElement.classList.add('dark')})()</script>
+<style>
+.root{display:block;background:var(--wall)}
+.top{position:absolute;left:32px;right:32px;top:22px;display:flex;align-items:center;gap:12px}
+.wz{position:absolute;left:120px;right:120px;top:80px;bottom:36px;border-radius:30px;display:flex;overflow:hidden}
+.sl{width:300px;flex:none;padding:30px 26px 24px;border-right:1px solid var(--hair);background:color-mix(in srgb,var(--text) 2.5%,transparent);display:flex;flex-direction:column}
+.st2{display:flex;gap:14px;position:relative;padding-bottom:22px}
+.st2:not(:last-child)::after{content:"";position:absolute;left:12.5px;top:30px;bottom:4px;width:1.5px;background:var(--hair)}
+.st2.done::after{background:color-mix(in srgb,var(--green) 55%,transparent)}
+.sc2{width:26px;height:26px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:800}
+.done .sc2{background:var(--green);color:#fff}
+.cur .sc2{background:var(--blue);color:#fff;box-shadow:0 0 0 5px color-mix(in srgb,var(--blue) 20%,transparent)}
+.todo .sc2{border:1.5px solid color-mix(in srgb,var(--text) 22%,transparent);color:var(--text-3)}
+.st2 b{display:block;font-size:14px;font-weight:600;line-height:26px}
+.todo b{color:var(--text-2);font-weight:500}
+.cur b{color:var(--blue);font-weight:700}
+.st2 em{display:block;font-style:normal;font-size:12px;color:var(--text-3);margin-top:-1px}
+.done em{color:var(--text-2)}
+.skip .sc2{background:var(--fill);color:var(--text-3)}
+.skip b{color:var(--text-2);font-weight:500}
+.st2.skip::after{background:color-mix(in srgb,var(--green) 55%,transparent)}
+.fm{flex:1;min-width:0;display:flex;flex-direction:column}
+.fb{flex:1;padding:30px 40px 0;min-height:0;overflow:hidden}
+.ff{display:flex;align-items:center;gap:12px;padding:16px 40px;border-top:1px solid var(--hair)}
+.lab{font-size:13.5px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.lab span{font-weight:400;font-size:12px;color:var(--text-3)}
+.inp{height:44px;border-radius:12px;background:var(--fill);display:flex;align-items:center;gap:10px;padding:0 13px;font-size:14px;color:var(--text);min-width:0}
+.inp>i{color:var(--text-3)}
+.inp.focus{background:var(--glass-2);box-shadow:0 0 0 2px var(--blue),0 0 0 5px color-mix(in srgb,var(--blue) 18%,transparent)}
+.dots{letter-spacing:3px;font-size:15px}
+.okt{display:inline-flex;align-items:center;gap:5px;color:var(--green);font-size:12.5px;font-weight:600;white-space:nowrap}
+.ing{display:inline-flex;align-items:center;gap:7px;color:var(--blue);font-size:12.5px;font-weight:600;white-space:nowrap}
+.spin{width:13px;height:13px;border-radius:50%;border:2px solid color-mix(in srgb,var(--blue) 25%,transparent);border-top-color:var(--blue);flex:none}
+.rt{display:grid;grid-template-columns:140px 1fr 160px 128px 116px;gap:8px 10px;align-items:center}
+.au{background:transparent;box-shadow:inset 0 0 0 1px var(--hair)}
+.aut{flex:none;font-size:11px;font-weight:600;color:var(--purple);background:color-mix(in srgb,var(--purple) 12%,transparent);height:20px;padding:0 6px;border-radius:6px;display:inline-flex;align-items:center}
+.cr{gap:8px;padding:0 10px;font-size:13px}
+.crt{flex:none;height:20px;padding:0 6px;border-radius:6px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;background:color-mix(in srgb,var(--text) 8%,transparent);color:var(--text-2)}
+.cr-x{box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--orange) 70%,transparent);color:var(--orange)}
+.wnt{color:var(--orange);font-size:12.5px;font-weight:600;white-space:nowrap}
+.pm{font-size:13px;gap:7px;padding:0 10px}
+.pm-e{color:var(--green)}.pm-e>i{color:var(--green)}
+.pm-v{color:var(--blue)}.pm-v>i{color:var(--blue)}
+.pm-l{color:var(--text-3);background:transparent;box-shadow:inset 0 0 0 1px var(--hair)}
+.menu{position:absolute;right:0;top:44px;width:290px;z-index:5;border-radius:14px;padding:6px;background:var(--glass-2);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);border:1px solid var(--stroke);box-shadow:0 24px 50px -16px rgba(10,20,60,.45)}
+html:not(.dark) .menu{background:rgba(255,255,255,.96)}html.dark .menu{background:rgba(44,46,60,.96)}
+.mi{display:flex;gap:10px;align-items:flex-start;padding:9px 10px;border-radius:10px}
+.mi>i:first-child{margin-top:2px;color:var(--text-2)}
+.mi.on{background:color-mix(in srgb,var(--blue) 10%,transparent)}
+.mi b{display:block;font-size:13.5px}.mi em{display:block;font-style:normal;font-size:12px;color:var(--text-3);margin-top:2px}
+.rt .inp{height:38px}
+.rsel{font-weight:600;font-size:13.5px;padding:0 10px 0 12px}
+.rh{font-size:12px;color:var(--text-3);padding:0 2px 6px}
+.rl{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600}
+.envs{display:grid;grid-template-columns:1fr 1fr 1fr 120px;gap:10px}
+.env{border-radius:14px;padding:11px 13px;background:var(--fill);border:1.5px solid transparent;min-width:0}
+.env b{font-size:14px}
+.env.on{background:var(--glass-2);border-color:var(--blue);box-shadow:0 6px 16px -10px color-mix(in srgb,var(--blue) 70%,transparent)}
+.env.add{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-size:13px;color:var(--text-3);background:transparent;border:1.5px dashed color-mix(in srgb,var(--text) 18%,transparent)}
+.ta{border-radius:12px;background:var(--fill);padding:11px 13px;font-size:14px;line-height:1.6;color:var(--text);min-height:48px}
+.bigb{height:44px;border-radius:13px;border:0;font-size:14.5px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 20px;white-space:nowrap}
+.pri{background:var(--blue);color:#fff;box-shadow:0 10px 22px -10px color-mix(in srgb,var(--blue) 85%,transparent)}
+.secb{background:var(--fill);color:var(--text)}
+.note{display:flex;gap:9px;align-items:flex-start;font-size:12.5px;color:var(--text-2);line-height:1.55;padding:10px 12px;border-radius:12px;background:color-mix(in srgb,var(--blue) 7%,transparent)}
+.pbar{height:4px;border-radius:2px;background:var(--fill);overflow:hidden}
+.pbar i{display:block;height:100%;border-radius:2px;background:linear-gradient(90deg,#4F8BFF,#9B5CFF)}
+</style></head><body><div class="root">
+<div class="top">
+  <img src="logo.svg" width="40" height="40" alt="" style="margin:-4px">
+  <span class="tt" style="display:flex;flex-direction:column;line-height:1.15"><b style="font-size:15px">AI 修复工作台</b><em style="font-style:normal;font-size:11px;color:var(--text-3)">Fix Studio</em></span>
+  <span class="grow"></span>
+  <span class="f13 t2">稍后再填，先进入工作台 ›</span>
+</div>
+<div class="wz glass">
+  <aside class="sl">
+    <div class="f12 t3">第一次使用</div>
+    <div style="font-size:21px;font-weight:800;margin-top:4px">把项目准备好</div>
+    <div class="f12 t2" style="margin-top:6px;line-height:1.55">填完后 Bot 会实际跑一遍检查，<br>都通过才开始接单</div>
+    <div style="margin-top:28px"><div class="st2 done"><span class="sc2"><i data-i="check" data-s="14" data-w="3"></i></span><div><b>选择项目</b><em>OKR</em></div></div><div class="st2 done"><span class="sc2"><i data-i="check" data-s="14" data-w="3"></i></span><div><b>代码仓库</b><em>3 个仓库 · 构建通过</em></div></div><div class="st2 done"><span class="sc2"><i data-i="check" data-s="14" data-w="3"></i></span><div><b>环境与账号</b><em>3 个环境 · 7 个账号</em></div></div><div class="st2 cur"><span class="sc2">4</span><div><b>工单来源</b><em>Jira / Tita 收哪些单</em></div></div><div class="st2 todo"><span class="sc2">5</span><div><b>Skills</b><em>编码和验证规则</em></div></div><div class="st2 todo"><span class="sc2">6</span><div><b>发布配置</b><em>可选，之后再填也行</em></div></div><div class="st2 todo"><span class="sc2">7</span><div><b>检查并开工</b><em>Bot 把条件实际跑一遍</em></div></div></div>
+    <div class="grow"></div>
+    <div class="row f12 t3" style="margin-bottom:8px"><span class="grow">第 4 步，共 7 步</span><span>已完成 3 步</span></div>
+    <div class="pbar"><i style="width:43%"></i></div>
+  </aside>
+  <section class="fm">
+    <div class="fb">
+      <div class="row g10">
+        <div class="grow"><div class="f12" style="color:var(--blue);font-weight:700">第 4 步 · 工单来源</div>
+          <div style="font-size:24px;font-weight:800;margin-top:6px">收哪些单交给 Bot</div>
+          <div class="f13 t2" style="margin-top:6px">Bot 定期去 Jira 和 Tita 收单，符合条件的才接；审核人是工单里的修复人</div></div>
+        <span class="chip2" style="align-self:flex-start"><i data-i="spark" data-s="13" style="color:var(--purple)"></i>不知道填什么？问 AI</span>
+      </div>
+<style>
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.pc{border-radius:16px;padding:14px 16px;background:var(--fill);border:1.5px solid transparent;position:relative;min-width:0}
+.pc.on{background:var(--glass-2);border-color:var(--blue);box-shadow:0 8px 20px -12px color-mix(in srgb,var(--blue) 70%,transparent)}
+.pc.add{display:flex;align-items:center;justify-content:center;gap:8px;font-size:13.5px;color:var(--text-3);background:transparent;border:1.5px dashed color-mix(in srgb,var(--text) 18%,transparent)}
+.pc b{font-size:15.5px}
+.rdo{width:18px;height:18px;border-radius:50%;border:1.5px solid color-mix(in srgb,var(--text) 25%,transparent);flex:none}
+.rdo.on{border:0;background:var(--blue);box-shadow:inset 0 0 0 5px var(--blue),inset 0 0 0 9px #fff}
+.cbx2{width:18px;height:18px;border-radius:5px;border:1.5px solid color-mix(in srgb,var(--text) 25%,transparent);flex:none;display:flex;align-items:center;justify-content:center}
+.cbx2.on{border:0;background:var(--blue);color:#fff}
+.sel{justify-content:space-between}
+.gl{width:22px;height:22px;border-radius:6px;background:#FC6D26;color:#fff;font-size:11px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.jr{width:22px;height:22px;border-radius:6px;background:#2684FF;color:#fff;font-size:11px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.tt2{width:22px;height:22px;border-radius:6px;background:linear-gradient(160deg,#5AA0FF,#2F6BFF);color:#fff;font-size:10px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.rp{display:grid;grid-template-columns:1fr 128px 128px 156px 132px;gap:8px 10px;align-items:center}
+.rp .inp{height:40px;font-size:13.5px}
+.dep{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.dfl{flex-wrap:nowrap;gap:6px}.dfl .dn{padding:0 10px;gap:6px}.dn{display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 12px;border-radius:10px;background:var(--glass-2);border:1px solid var(--stroke);font-size:13px}
+.arw{color:var(--text-3)}
+.obx{border-radius:16px;padding:14px 16px;background:var(--fill)}
+.kv3{display:flex;align-items:center;gap:10px;margin-top:10px}
+.kv3>span:first-child{width:72px;white-space:nowrap;flex:none;font-size:12.5px;color:var(--text-3)}
+.kv3 .inp{height:36px;flex:1;font-size:13.5px}
+.mp{display:grid;grid-template-columns:1fr 24px 1fr;gap:8px 12px;align-items:center}
+.mp .inp{height:36px;font-size:13.5px}
+.pvw{border:1px dashed var(--hair);border-radius:14px;padding:12px 16px 6px}.pvh{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-2);padding-bottom:8px}.tk{display:flex;align-items:center;gap:10px;height:36px;font-size:13px;color:var(--text-2);border-top:1px solid var(--hair)}
+.skc{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:14px;background:var(--fill);border:1.5px solid transparent}
+.skc.on{background:var(--glass-2);border-color:color-mix(in srgb,var(--blue) 55%,transparent)}
+.skc b{font-size:14px}.skadd{display:flex;gap:10px;align-items:center;padding:12px 14px;border-radius:14px;border:1.5px dashed var(--hair);color:var(--blue);font-size:13.5px}.skadd .t3{margin-left:auto}
+.ic3{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;color:#fff;flex:none}
+.pubc{border-radius:16px;padding:14px 16px;background:var(--fill);flex:1;min-width:0}
+.chk3{display:flex;align-items:center;gap:12px;padding:9px 0;border-top:1px solid var(--hair);font-size:13.5px}
+.chk3:first-child{border-top:0}
+.ck3{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;flex:none}
+.big-ok{display:flex;align-items:center;gap:16px;padding:16px 20px;border-radius:18px;background:color-mix(in srgb,var(--green) 10%,var(--glass-2));border:1px solid color-mix(in srgb,var(--green) 30%,transparent)}
+</style>
+      <div class="row g12" style="margin-top:20px;align-items:stretch">
+        <div class="obx grow"><div class="row g8"><span class="jr">J</span><b class="f15">Jira</b><span class="f12 t3">测试提的 Bug</span><span class="grow"></span><span class="okt"><i data-i="check" data-s="14" data-w="3"></i>现在有 2 张</span></div>
+          <div class="kv3"><span>项目</span><div class="inp sel">OKR · 目标管理<i data-i="chevd" data-s="14"></i></div></div>
+          <div class="kv3"><span>收单状态</span><div class="inp sel">AI修复<i data-i="chevd" data-s="14"></i></div></div></div>
+        <div class="obx grow"><div class="row g8"><span class="tt2">Tita</span><b class="f15">Tita 工单</b><span class="f12 t3">线上问题</span><span class="grow"></span><span class="okt"><i data-i="check" data-s="14" data-w="3"></i>现在有 1 张</span></div>
+          <div class="kv3"><span>产品</span><div class="inp sel">OKR<i data-i="chevd" data-s="14"></i></div></div>
+          <div class="kv3"><span>收单节点</span><div class="inp sel">AI干活<i data-i="chevd" data-s="14"></i></div></div></div>
+      </div>
+      <div style="margin-top:20px">
+        <div class="lab">每个来源的单去哪个环境复现<span>在这里统一设置，选第 3 步填过的环境 · 不读工单里的环境字段</span></div>
+        <div class="mp">
+          <div class="inp"><span class="jr" style="width:20px;height:20px;font-size:10px;margin-right:8px">J</span>Jira 工单<span class="t3 f12" style="margin-left:8px">测试提的 Bug</span></div><span class="arw"><i data-i="arrowr" data-s="16"></i></span><div class="inp sel">测试环境<i data-i="chevd" data-s="14"></i></div>
+          <div class="inp"><span class="tt2" style="margin-right:8px">Tita</span>Tita 工单<span class="t3 f12" style="margin-left:8px">线上问题</span></div><span class="arw"><i data-i="arrowr" data-s="16"></i></span><div class="inp sel">正式环境<i data-i="chevd" data-s="14"></i></div>
+        </div>
+      </div>
+      <div style="margin-top:20px">
+        <div class="pvw">
+          <div class="pvh"><i data-i="eye" data-s="15" style="color:var(--text-3)"></i><span>按上面的设置，现在能收到这 3 张，开工后会自动开始。这里只是预览，不用改。</span></div>
+          <div class="tk"><span class="sc10 sc-j">Jira</span><span class="mono f12 t3">OKR-412</span><span class="grow ell">对齐视图里子目标重复显示</span><span class="f12 t3">测试环境 · 审核人 林某</span></div>
+          <div class="tk"><span class="sc10 sc-j">Jira</span><span class="mono f12 t3">OKR-418</span><span class="grow ell">目标导入后截止日期错一天</span><span class="f12 t3">测试环境 · 审核人 林某</span></div>
+          <div class="tk"><span class="sc10 sc-t">Tita</span><span class="mono f12 t3">TK-20902</span><span class="grow ell">目标进度导出缺少部门</span><span class="f12 t3">正式环境 · 审核人 周某</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="ff"><button class="bigb secb"><i data-i="chevl" data-s="16" data-w="2.4"></i>上一步</button><span class="grow"></span><span class="f13 t3" style="margin-right:6px">这一步先跳过</span><button class="bigb pri">下一步：Skills<i data-i="chevr" data-s="16" data-w="2.4"></i></button></div>
+  </section>
+</div>
+</div><script src="icons.js"></script></body></html>

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>应用 Logo</title>
+<link rel="stylesheet" href="../v3/base.css"><link rel="stylesheet" href="../v4/apple.css"><link rel="stylesheet" href="pc.css">
+<script>(function(){var q=new URLSearchParams(location.search);if(q.get('mode')==='dark')document.documentElement.classList.add('dark')})()</script>
+<style>
+.root{display:flex;flex-direction:row;align-items:stretch;padding:40px;gap:28px}
+.hero{width:600px;flex:none;border-radius:32px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+.hero img{width:440px;height:440px}
+.word{display:flex;flex-direction:column;align-items:center;margin-top:6px}
+.word b{font-size:34px;font-weight:800;letter-spacing:.5px}
+.word em{font-style:normal;font-size:16px;color:var(--text-3);letter-spacing:3px;margin-top:6px;text-transform:uppercase}
+.side{flex:1;display:flex;flex-direction:column;gap:20px;min-width:0}
+.box{border-radius:28px;padding:22px 26px}
+.h{font-size:13px;font-weight:700;color:var(--text-3);letter-spacing:.4px;margin-bottom:16px}
+.ladder{display:flex;align-items:flex-end;gap:30px}
+.ladder div{display:flex;flex-direction:column;align-items:center;gap:10px;font-size:12px;color:var(--text-3)}
+.tiles{display:flex;gap:16px;flex:1}
+.tile{flex:1;border-radius:20px;display:flex;align-items:center;justify-content:center;gap:14px;white-space:nowrap}
+.tile.l{background:#F5F6FA;color:#1D1D1F}.tile.d{background:#14151F;color:#F5F5F7}
+.tile.c{background:linear-gradient(135deg,#BFD5FF,#FFD3E6 60%,#FFE3BF)}
+.tile b{font-size:17px;font-weight:700;display:block}.tile em{font-style:normal;font-size:12.5px;opacity:.55;letter-spacing:1.5px}
+.anat{display:flex;gap:18px}
+.anat div{flex:1;display:flex;gap:12px;align-items:flex-start;font-size:13px;color:var(--text-2);line-height:1.55}
+.anat i{font-style:normal;width:30px;height:30px;border-radius:9px;flex:none;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:14px;background:linear-gradient(155deg,#3D86FF,#4338CA 60%,#5B21B6)}
+.anat b{color:var(--text);display:block;font-size:14px}
+</style></head><body><div class="root">
+  <div class="hero glass">
+    <img src="logo.svg" alt="AI 修复工作台">
+    <div class="word"><b>AI 修复工作台</b><em>Fix Studio</em></div>
+  </div>
+  <div class="side">
+    <div class="box glass">
+      <div class="h">图形含义</div>
+      <div class="anat">
+        <div><i>&lt;/&gt;</i><span><b>代码括号</b>修的是代码；右半边半透明，表示「改动中」</span></div>
+        <div><i>✓</i><span><b>对勾</b>修好、验证通过、等你审核</span></div>
+        <div><i>✦</i><span><b>星光</b>AI 在干活；和 AI 助手的光球同源</span></div>
+      </div>
+    </div>
+    <div class="box glass">
+      <div class="h">尺寸 · 小到 16px 仍能认出括号和对勾</div>
+      <div class="ladder">
+        <div><img src="logo.svg" width="160" height="160">160</div>
+        <div><img src="logo.svg" width="96" height="96">96</div>
+        <div><img src="logo.svg" width="64" height="64">64</div>
+        <div><img src="logo.svg" width="44" height="44">44 · 顶栏</div>
+        <div><img src="logo.svg" width="32" height="32">32</div>
+        <div><img src="logo.svg" width="16" height="16">16</div>
+      </div>
+    </div>
+    <div class="box glass" style="flex:1;display:flex;flex-direction:column">
+      <div class="h">放在不同背景上</div>
+      <div class="tiles">
+        <div class="tile l"><img src="logo.svg" width="72" height="72"><span><b>AI 修复工作台</b><em>FIX STUDIO</em></span></div>
+        <div class="tile d"><img src="logo.svg" width="72" height="72"><span><b>AI 修复工作台</b><em>FIX STUDIO</em></span></div>
+        <div class="tile c"><img src="logo.svg" width="96" height="96"></div>
+      </div>
+    </div>
+  </div>
+</div></body></html>

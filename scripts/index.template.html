@@ -1,0 +1,914 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI 修复工作台 · 一期项目总览</title>
+<style>
+:root{
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC",sans-serif;
+  --blue:#007AFF;--green:#34C759;--orange:#FF9500;--red:#FF3B30;--purple:#AF52DE;--teal:#30B0C7;
+  --text:#1D1D1F;--text-2:rgba(29,29,31,.74);--text-3:rgba(29,29,31,.56);
+  --glass:rgba(255,255,255,.55);--glass-2:rgba(255,255,255,.8);--stroke:rgba(255,255,255,.75);--hair:rgba(0,0,0,.07);
+  --fill:rgba(118,118,128,.12);--shadow:0 30px 60px -30px rgba(40,50,90,.3),0 2px 6px rgba(40,50,90,.05);
+  --wall:radial-gradient(900px 600px at 8% 0%,#BFD5FF 0%,transparent 60%),radial-gradient(800px 600px at 92% 10%,#FFD3E6 0%,transparent 60%),radial-gradient(900px 700px at 70% 100%,#FFE3BF 0%,transparent 60%),radial-gradient(700px 600px at 10% 90%,#C7F0E4 0%,transparent 60%),#EEF1F8;
+}
+html.dark{
+  --blue:#0A84FF;--green:#30D158;--orange:#FF9F0A;--red:#FF453A;--purple:#BF5AF2;--teal:#40C8E0;
+  --text:#F5F5F7;--text-2:rgba(245,245,247,.76);--text-3:rgba(245,245,247,.56);
+  --glass:rgba(36,38,50,.55);--glass-2:rgba(58,60,74,.7);--stroke:rgba(255,255,255,.12);--hair:rgba(255,255,255,.08);
+  --fill:rgba(118,118,128,.26);--shadow:0 30px 60px -24px rgba(0,0,0,.6),0 2px 6px rgba(0,0,0,.3);
+  --wall:radial-gradient(900px 600px at 8% 0%,rgba(56,84,220,.5) 0%,transparent 60%),radial-gradient(800px 600px at 92% 10%,rgba(170,60,170,.4) 0%,transparent 60%),radial-gradient(900px 700px at 70% 100%,rgba(30,120,150,.4) 0%,transparent 60%),radial-gradient(700px 600px at 10% 90%,rgba(90,50,200,.35) 0%,transparent 60%),#0B0D18;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:var(--font);color:var(--text);background:var(--wall);background-attachment:fixed;font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh}
+a{color:var(--blue);text-decoration:none}
+code{font-family:"SF Mono",ui-monospace,monospace;font-size:.92em;padding:1px 5px;border-radius:5px;background:var(--fill)}
+.glass{background:var(--glass);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);border:1px solid var(--stroke);box-shadow:var(--shadow)}
+.glass-sub{background:var(--glass-2);border:1px solid var(--stroke);border-radius:16px}
+.wrap{max-width:1280px;margin:0 auto;padding:0 28px}
+
+/* 头部 */
+.top{position:sticky;top:0;z-index:20;padding:14px 0 12px;backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);background:color-mix(in srgb,var(--glass) 60%,transparent);border-bottom:1px solid var(--hair)}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{position:relative;width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex:none;overflow:hidden;
+  background:radial-gradient(90% 70% at 25% 0%,rgba(140,190,255,.9),transparent 60%),linear-gradient(155deg,#3478F6 0%,#4338CA 70%,#5B21B6 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 6px 14px -6px rgba(67,56,202,.7)}
+.brand b{font-size:17px;font-weight:700;letter-spacing:.2px;display:block;line-height:1.2}
+.brand em{font-style:normal;font-size:12px;color:var(--text-3)}
+.seg{display:flex;padding:3px;border-radius:11px;background:var(--fill);gap:2px}
+.seg button{all:unset;cursor:pointer;height:28px;padding:0 12px;border-radius:8px;display:flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--text-2);white-space:nowrap}
+.seg button.on{background:var(--glass-2);color:var(--text);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.toprow{display:flex;align-items:center;gap:16px}
+.grow{flex:1}
+
+/* 步骤标签 */
+.steps{display:flex;gap:6px;margin-top:14px;overflow-x:auto;scrollbar-width:none}
+.steps::-webkit-scrollbar{display:none}
+.step{all:unset;cursor:pointer;flex:none;display:flex;align-items:center;gap:9px;height:40px;padding:0 16px 0 8px;border-radius:13px;font-size:14px;font-weight:600;color:var(--text-2);transition:background .15s}
+.step i{font-style:normal;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;background:var(--fill);color:var(--text-2)}
+.step:hover{background:var(--fill)}
+.step.on{background:var(--glass-2);color:var(--text);box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 6px 16px -8px rgba(20,40,100,.4)}
+.step.on i{background:var(--blue);color:#fff}
+.step.done i{background:color-mix(in srgb,var(--green) 18%,transparent);color:var(--green)}
+.arrow{flex:none;align-self:center;color:var(--text-3);opacity:.5;font-size:12px}
+
+main{padding:28px 0 60px}
+.pane{display:none}.pane.on{display:block;animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+h2.ttl{font-size:28px;font-weight:800;margin:0 0 4px;letter-spacing:.3px}
+.sub{color:var(--text-3);font-size:14px;margin:0 0 22px}
+.card{border-radius:22px;padding:22px 24px}
+.card+.card,.mt{margin-top:18px}
+.grid>.card{margin-top:0}
+h3{font-size:18px;font-weight:700;margin:0 0 12px}
+h4{font-size:15px;font-weight:700;margin:18px 0 8px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+@media (max-width:900px){.g2,.g3,.g4{grid-template-columns:1fr}}
+.kpi{border-radius:18px;padding:16px 18px}
+.kpi b{display:block;font-size:26px;font-weight:800;line-height:1.15}
+.kpi span{color:var(--text-2);font-size:13px}
+.pill{display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 9px;border-radius:12px;font-size:12px;font-weight:600;white-space:nowrap}
+.p-blue{color:var(--blue);background:color-mix(in srgb,var(--blue) 14%,transparent)}
+.p-green{color:var(--green);background:color-mix(in srgb,var(--green) 16%,transparent)}
+.p-orange{color:var(--orange);background:color-mix(in srgb,var(--orange) 16%,transparent)}
+.p-red{color:var(--red);background:color-mix(in srgb,var(--red) 14%,transparent)}
+.p-teal{color:var(--teal);background:color-mix(in srgb,var(--teal) 16%,transparent)}
+.p-purple{color:var(--purple);background:color-mix(in srgb,var(--purple) 14%,transparent)}
+.p-gray{color:var(--text-2);background:var(--fill)}
+html:not(.dark) .p-green{color:#1E8E3E}html:not(.dark) .p-orange{color:#B25E00}
+
+/* 二级切换栏 & 筛选胶囊 */
+.subbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin:0 0 18px}
+.subtabs{display:inline-flex;padding:4px;border-radius:14px;background:var(--glass);border:1px solid var(--stroke);gap:3px;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px)}
+.subtabs button{all:unset;cursor:pointer;height:32px;padding:0 14px;border-radius:10px;font-size:13.5px;font-weight:600;color:var(--text-2);transition:background .15s}
+.subtabs button:hover{color:var(--text)}
+.subtabs button.on{background:var(--glass-2);color:var(--text);box-shadow:0 2px 6px rgba(0,0,0,.1)}
+.subpane{display:none}.subpane.on{display:block;animation:fade .2s ease}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+.chip-btn{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:15px;font-size:12.5px;font-weight:600;color:var(--text-2);background:var(--fill);transition:all .15s}
+.chip-btn:hover{background:var(--glass-2);color:var(--text)}
+.chip-btn.on{background:var(--blue);color:#fff;box-shadow:0 6px 14px -6px color-mix(in srgb,var(--blue) 80%,transparent)}
+.chip-btn em{font-style:normal;opacity:.75;font-size:11.5px}
+
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{text-align:left;font-weight:600;color:var(--text-3);font-size:12.5px;padding:8px 10px;border-bottom:1px solid var(--hair);white-space:nowrap}
+td{padding:10px;border-bottom:1px solid var(--hair);vertical-align:top}
+tr:last-child td{border-bottom:0}
+.tw{overflow-x:auto;border-radius:14px;background:var(--glass-2);border:1px solid var(--stroke);margin:12px 0}
+.tw table th:first-child,.tw table td:first-child{padding-left:16px}
+.md .tw table td:first-child{min-width:108px}
+
+/* 文档（需求 / 链路 / 修复流转 / 技术设计） */
+.doc{display:grid;grid-template-columns:250px 1fr;gap:22px;align-items:start}
+@media (max-width:900px){.doc{grid-template-columns:1fr}.toc{display:none}}
+.toc{position:sticky;top:148px;max-height:calc(100vh - 168px);overflow:auto;border-radius:18px;padding:14px 10px}
+.toc a{display:block;padding:5px 10px;border-radius:8px;color:var(--text-2);font-size:13px;line-height:1.4}
+.toc a:hover{background:var(--fill)}
+.toc a.toc-l3{padding-left:22px;font-size:12.5px;color:var(--text-3)}
+.toc a.cur{background:color-mix(in srgb,var(--blue) 13%,transparent);color:var(--blue);font-weight:600}
+.md{border-radius:22px;padding:12px 30px 28px;min-width:0}
+.md h2{font-size:21px;font-weight:800;margin:26px 0 10px;padding-top:6px;scroll-margin-top:155px;display:flex;align-items:center;flex-wrap:wrap;gap:8px}
+.md h3{font-size:16.5px;margin:22px 0 8px;scroll-margin-top:155px;display:flex;align-items:center;flex-wrap:wrap;gap:8px}
+.md h4{font-size:14.5px;margin:16px 0 6px;scroll-margin-top:155px}
+.md p{margin:8px 0;color:var(--text)}
+.md p.meta{color:var(--text-3);font-size:13px}
+.md li{margin:4px 0}
+.md li.sub-li{margin-left:22px;list-style-type:circle;color:var(--text-2)}
+.md b{font-weight:700}
+.md-hr{border:0;height:1px;background:var(--hair);margin:24px 0}
+.md-quote{margin:14px 0;padding:12px 16px;border-radius:14px;background:color-mix(in srgb,var(--blue) 7%,var(--glass-2));border:1px solid var(--stroke);border-left:3px solid var(--blue);color:var(--text-2);font-size:13.5px}
+.h-pill{height:21px;padding:0 8px;font-size:11px;font-weight:600}
+.tag-tbd{display:inline-block;padding:0 6px;border-radius:6px;font-size:12px;font-weight:700;color:#B25E00;background:color-mix(in srgb,var(--orange) 18%,transparent)}
+html.dark .tag-tbd{color:var(--orange)}
+pre.code{margin:12px 0;padding:14px 16px;border-radius:14px;background:var(--glass-2);border:1px solid var(--stroke);overflow-x:auto;font-family:"SF Mono",ui-monospace,monospace;font-size:12.5px;line-height:1.55;color:var(--text)}
+pre.code code{background:none;padding:0;font-size:inherit}
+details.md-fold{margin:12px 0;padding:10px 14px;border-radius:14px;background:var(--glass-2);border:1px solid var(--stroke)}
+details.md-fold summary{cursor:pointer;font-size:13px;font-weight:600;color:var(--text-2)}
+
+/* 内联 SVG 技术图表 */
+.diagram{margin:16px 0;overflow:hidden}
+.diag-hd{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:12px 16px;border-bottom:1px solid var(--hair)}
+.diag-hd b{font-size:14px;font-weight:700}
+.diag-hd span{font-size:12px;color:var(--text-3)}
+.diag-body{padding:12px;overflow-x:auto}
+.diag-body svg{display:block;min-width:680px;height:auto;font-family:var(--font)}
+.dg-zone{stroke-width:1.2;stroke-dasharray:5 4}
+.z-blue{fill:color-mix(in srgb,var(--blue) 6%,transparent);stroke:color-mix(in srgb,var(--blue) 35%,transparent)}
+.z-main{fill:color-mix(in srgb,var(--text) 3.5%,transparent);stroke:color-mix(in srgb,var(--text) 18%,transparent)}
+.z-ext{fill:color-mix(in srgb,var(--orange) 5%,transparent);stroke:color-mix(in srgb,var(--orange) 30%,transparent)}
+.dg-zt{font-size:12px;font-weight:700}
+.dg-box{stroke-width:1.2}
+.b-blue{fill:color-mix(in srgb,var(--blue) 14%,var(--glass-2));stroke:color-mix(in srgb,var(--blue) 45%,transparent)}
+.b-teal{fill:color-mix(in srgb,var(--teal) 15%,var(--glass-2));stroke:color-mix(in srgb,var(--teal) 45%,transparent)}
+.b-orange{fill:color-mix(in srgb,var(--orange) 15%,var(--glass-2));stroke:color-mix(in srgb,var(--orange) 45%,transparent)}
+.b-green{fill:color-mix(in srgb,var(--green) 15%,var(--glass-2));stroke:color-mix(in srgb,var(--green) 45%,transparent)}
+.b-red{fill:color-mix(in srgb,var(--red) 14%,var(--glass-2));stroke:color-mix(in srgb,var(--red) 45%,transparent)}
+.b-purple{fill:color-mix(in srgb,var(--purple) 14%,var(--glass-2));stroke:color-mix(in srgb,var(--purple) 45%,transparent)}
+.b-gray{fill:var(--glass-2);stroke:var(--hair)}
+.b-ext{fill:var(--glass-2);stroke:color-mix(in srgb,var(--text) 16%,transparent)}
+.dg-t{fill:var(--text);font-size:12.5px;font-weight:700}
+.dg-s{fill:var(--text-3);font-size:10.5px}
+.dg-lb{fill:var(--text-2);font-size:11px;font-weight:600}
+.dg-ln{fill:none;stroke-width:1.6;stroke-linejoin:round;stroke-linecap:round}
+.l-blue{stroke:var(--blue)}.l-teal{stroke:var(--teal)}.l-orange{stroke:var(--orange)}.l-red{stroke:var(--red)}.l-green{stroke:var(--green)}.l-gray{stroke:var(--text-3)}
+
+/* 章节进度条 */
+.sec-bar{display:flex;flex-wrap:wrap;gap:8px}
+.sec-chip{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:10px;font-size:12.5px;font-weight:600;background:var(--glass-2);border:1px solid var(--stroke);color:var(--text);transition:transform .12s,background .15s}
+.sec-chip:hover{transform:translateY(-1px)}
+.sec-chip .dot{width:7px;height:7px;border-radius:50%}
+.sec-chip.ok .dot{background:var(--green)}
+.sec-chip.wip .dot{background:var(--orange)}
+
+/* 流程 */
+.flow{display:flex;align-items:center;flex-wrap:wrap;gap:10px}
+.node{border-radius:14px;padding:10px 14px;min-width:120px}
+.node b{display:block;font-size:14px}
+.node span{font-size:12px;color:var(--text-3)}
+.node.c-gray{background:var(--fill)}
+.node.c-teal{background:color-mix(in srgb,var(--teal) 15%,transparent)}
+.node.c-orange{background:color-mix(in srgb,var(--orange) 15%,transparent)}
+.node.c-blue{background:color-mix(in srgb,var(--blue) 15%,transparent)}
+.node.c-red{background:color-mix(in srgb,var(--red) 13%,transparent)}
+.node.c-green{background:color-mix(in srgb,var(--green) 15%,transparent)}
+.node.c-purple{background:color-mix(in srgb,var(--purple) 13%,transparent)}
+.fa{color:var(--text-3);font-size:16px}
+.loop{font-size:12px;color:var(--text-3);margin-top:10px}
+
+/* 设计主题 */
+.sw{border-radius:16px;overflow:hidden;border:1px solid var(--stroke);background:var(--glass-2)}
+.sw i{display:block;height:64px}
+.sw div{padding:9px 12px;font-size:12.5px}
+.sw b{display:block;font-size:13.5px}
+.sw code{background:none;padding:0;color:var(--text-3)}
+.dockdemo{display:flex;flex-direction:column;align-items:center;gap:12px;width:74px;padding:14px 0;border-radius:24px}
+.ap{position:relative;width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:hidden;flex:none;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -1px 1px rgba(0,0,0,.12),0 6px 14px -6px rgba(0,0,0,.4);transform:scale(.94)}
+.ap::before{content:"";position:absolute;left:0;right:0;top:0;height:50%;background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,0))}
+.ap svg{position:relative;z-index:1;filter:drop-shadow(0 1.5px 1.5px rgba(0,0,0,.18))}
+.ap.on{transform:scale(1.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 2px 4px rgba(0,0,0,.08),0 14px 26px -8px rgba(20,50,120,.5)}
+html.dark .ap.on{box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 16px 28px -8px rgba(0,0,0,.75)}
+.ap-ai{background:#141530}.ap-ai::after{content:"";position:absolute;inset:6px;border-radius:50%;background:conic-gradient(from 210deg,#4F8BFF,#9B5CFF,#FF5FA8,#FFB14A,#4FD1FF,#4F8BFF);filter:blur(5px)}
+.ap-chat{background:linear-gradient(180deg,#fff,#E8EEF7)}html.dark .ap-chat{background:linear-gradient(180deg,#3A4157,#262B3C)}
+.ap-pub{background:linear-gradient(160deg,#FFC54D,#FF9A1F 55%,#FF7A00)}
+.ap-rb{background:linear-gradient(160deg,#FF8A7A,#FF453A 55%,#E0281E)}
+.ap-sk{background:linear-gradient(160deg,#C58BFF,#8E5CFF 55%,#6A3DF0)}
+.ap-set{background:linear-gradient(160deg,#A9AEB8,#6E737D)}
+.bd{position:absolute;top:-5px;right:-6px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:#FF3B30;color:#fff;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;z-index:3;box-shadow:0 0 0 2px var(--glass-2)}
+.dk{position:relative}
+.sep{width:28px;height:1px;background:var(--hair)}
+.lrow{display:flex;gap:11px;padding:10px 12px;border-radius:14px;align-items:center;position:relative}
+.lrow.on{background:linear-gradient(180deg,#3B8BFF,#1F6FFF);box-shadow:0 8px 18px -10px rgba(31,111,255,.9);color:#fff}
+.av{position:relative;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;flex:none;white-space:nowrap}
+.av i{position:absolute;right:-1px;bottom:-1px;width:12px;height:12px;border-radius:50%;box-shadow:0 0 0 2.5px var(--glass-2)}
+.lrow.on .av i{box-shadow:0 0 0 2px #fff}.lrow.on .av{box-shadow:0 0 0 2px rgba(255,255,255,.55)}
+.lt{font-size:13.5px;font-weight:600}.ls{font-size:12px;color:var(--text-3)}
+.lrow.on .ls{color:rgba(255,255,255,.85)}
+.sc{height:16px;padding:0 5px;border-radius:5px;font-size:10px;font-weight:700;display:inline-flex;align-items:center;margin-right:6px}
+.sc-t{background:color-mix(in srgb,#2F6BFF 13%,transparent);color:#2F6BFF}
+.sc-j{background:color-mix(in srgb,#0C66E4 10%,transparent);color:#0B5BD3;box-shadow:inset 0 0 0 1px color-mix(in srgb,#0C66E4 25%,transparent)}
+html.dark .sc-t{color:#7FA7FF}html.dark .sc-j{color:#6FA8FF}
+.lrow.on .sc{background:rgba(255,255,255,.22);color:#fff;box-shadow:none}
+.btn{all:unset;height:40px;padding:0 18px;border-radius:12px;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:7px}
+.b-pri{background:var(--blue);color:#fff;box-shadow:0 8px 20px -8px color-mix(in srgb,var(--blue) 80%,transparent)}
+.b-red{background:color-mix(in srgb,var(--red) 12%,transparent);color:var(--red)}
+.b-sec{background:var(--fill);color:var(--text)}
+.ubub{display:inline-block;padding:9px 14px;border-radius:18px 18px 6px 18px;background:linear-gradient(180deg,#3B8BFF,#1F6FFF);color:#fff;box-shadow:0 8px 18px -10px rgba(31,111,255,.9)}
+.aitag{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 10px 0 4px;border-radius:10px;background:color-mix(in srgb,var(--purple) 12%,transparent);font-size:13px;font-weight:700}
+.aid{width:22px;height:22px;border-radius:7px;background:linear-gradient(135deg,#5E8BFF,#B157F0);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px}
+.orb{width:44px;height:44px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.7) 0,rgba(255,255,255,0) 35%),conic-gradient(from 210deg,#4F8BFF,#9B5CFF,#FF5FA8,#FFB14A,#4FD1FF,#4F8BFF);box-shadow:0 8px 20px -6px rgba(155,92,255,.7)}
+.type div{display:flex;align-items:baseline;gap:16px;padding:8px 0;border-bottom:1px solid var(--hair)}
+.type div:last-child{border:0}
+.type code{background:none;color:var(--text-3);min-width:150px;font-size:12px}
+
+/* 设计图 */
+.shot{position:relative;border-radius:18px;overflow:hidden;box-shadow:0 30px 60px -30px rgba(20,30,70,.5),0 0 0 1px var(--hair)}
+.shot img{display:block;width:100%}
+.img-d{display:none!important}html.dark .img-d{display:block!important}html.dark .img-l{display:none!important}
+.mk{position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;background:#FF2D55;color:#fff;font-size:12.5px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px rgba(255,255,255,.9),0 6px 14px -4px rgba(0,0,0,.5);cursor:pointer;transition:transform .15s;z-index:2}
+.mk:hover,.mk.hl{transform:scale(1.25)}
+.legend{display:grid;grid-template-columns:repeat(2,1fr);gap:10px 18px;margin-top:18px}
+@media (max-width:900px){.legend{grid-template-columns:1fr}}
+.lg{display:flex;gap:12px;padding:12px 14px;border-radius:16px;transition:background .15s;cursor:default}
+.lg:hover,.lg.hl{background:var(--glass-2)}
+.lg i{font-style:normal;flex:none;width:24px;height:24px;border-radius:50%;background:#FF2D55;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.lg b{display:block;font-size:14.5px}
+.lg span{font-size:13px;color:var(--text-2)}
+.toggle-note{font-size:12.5px;color:var(--text-3);margin:-10px 0 14px}
+
+.next{display:flex;justify-content:space-between;margin-top:30px;gap:12px}
+.nb{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 18px;border-radius:14px;font-size:14px;font-weight:600}
+.nb.pri{background:var(--blue);color:#fff;box-shadow:0 8px 20px -8px color-mix(in srgb,var(--blue) 80%,transparent)}
+.nb.sec{background:var(--glass-2);border:1px solid var(--stroke)}
+ul.clean{margin:0;padding-left:18px}ul.clean li{margin:5px 0}
+.no{color:var(--red);font-weight:700}.yes{color:var(--green);font-weight:700}
+.gal{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+@media (max-width:900px){.gal{grid-template-columns:1fr}}
+.gal figure{margin:0;border-radius:18px;overflow:hidden;background:var(--glass-2);border:1px solid var(--stroke)}
+.gal figure.hide{display:none}
+.gal img{display:block;width:100%;cursor:zoom-in}
+.gal figcaption{padding:10px 14px;font-size:13px;color:var(--text-2)}
+.gal figcaption b{color:var(--text)}
+.zoom{position:fixed;inset:0;z-index:99;background:rgba(0,0,0,.74);display:none;align-items:center;justify-content:center;padding:30px;cursor:zoom-out;backdrop-filter:blur(8px)}
+.zoom.on{display:flex}.zoom img{max-width:100%;max-height:100%;border-radius:12px;box-shadow:0 24px 64px rgba(0,0,0,.5)}
+.chk li{list-style:none;margin:6px 0;padding-left:0}
+.chk{padding-left:0}
+.chk li::before{content:"";display:inline-block;width:14px;height:14px;border-radius:4px;border:1.5px solid var(--text-3);margin-right:9px;vertical-align:-2px}
+.chk li.done::before{background:var(--green);border-color:var(--green)}
+.chk li.wip::before{background:var(--orange);border-color:var(--orange)}
+</style>
+<script>
+(function(){var q=new URLSearchParams(location.search).get('mode'),d=q;if(!d){try{d=localStorage.getItem('theme')}catch(e){}}
+if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.classList.add('dark')})();
+</script>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="toprow">
+      <div class="brand">
+        <span class="logo"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7.2L3.6 12 8 16.8"/><path d="M16 7.2l4.4 4.8-4.4 4.8" opacity=".6"/><path d="M9.6 12.3l1.8 1.8 3.2-4"/></svg></span>
+        <span><b>AI 修复工作台 · 一期项目总览</b><em>统一文档与设计集合 · 需求 → 方案与链路 → 设计主题 → PC → 移动端 → 技术设计 → 决策与后续</em></span>
+      </div>
+      <span class="grow"></span>
+      <div class="seg" role="group" aria-label="主题"><button data-theme="light">☀︎ 亮色</button><button data-theme="dark">☾ 暗色</button></div>
+    </div>
+    <nav class="steps" aria-label="步骤">
+      <button class="step" data-tab="req"><i>1</i>需求</button><span class="arrow">›</span>
+      <button class="step" data-tab="plan"><i>2</i>方案与链路</button><span class="arrow">›</span>
+      <button class="step" data-tab="theme"><i>3</i>设计主题</button><span class="arrow">›</span>
+      <button class="step" data-tab="pc"><i>4</i>PC 界面</button><span class="arrow">›</span>
+      <button class="step" data-tab="mobile"><i>5</i>移动端</button><span class="arrow">›</span>
+      <button class="step" data-tab="tech"><i>6</i>技术设计</button><span class="arrow">›</span>
+      <button class="step" data-tab="log"><i>7</i>决策与后续</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- ========== 1 需求 ========== -->
+<section class="pane" id="p-req" data-pane="req">
+  <h2 class="ttl">第 1 步 · 需求</h2>
+  <p class="sub">一期要做什么：工单交给 AI 后，Bot 在服务器上持续修复，负责人在 PC 或手机上看证据、审核、发布。下方同步包含 <code>docs/00-一期产品需求.md</code> 全文。</p>
+  <div class="grid g4">
+    <div class="kpi glass"><b>2 个</b><span>工单来源：Jira、Tita</span></div>
+    <div class="kpi glass"><b>6 个</b><span>工单状态：待修复 → 审核通过</span></div>
+    <div class="kpi glass"><b>双端</b><span>PC App 加移动 App，结果同步</span></div>
+    <div class="kpi glass"><b>2 个 AI</b><span>全局对话助手，加服务器修复 Bot</span></div>
+  </div>
+  <div class="card glass mt">
+    <h3>一期核心能力</h3>
+    <div class="grid g3" style="gap:10px 24px">
+      <div><span class="pill p-blue">收单</span> Jira「AI修复」/ Tita「AI干活」自动收单，同一次交付只建一个任务</div>
+      <div><span class="pill p-teal">修复</span> Bot 在内网服务器 7×24 复现、定位、改代码、浏览器验证</div>
+      <div><span class="pill p-orange">协作</span> 每张单一段对话；Bot 缺资料时提问，人补充后继续</div>
+      <div><span class="pill p-green">审核</span> 看根因、改动、证据；在 App 内逐行审代码；通过或带理由打回</div>
+      <div><span class="pill p-purple">Skills</span> 编码和验证规则由使用者在线编写、导入、按项目启用</div>
+      <div><span class="pill p-blue">发布</span> 一键发测试 / 正式环境；跨项目大包、断点续发</div>
+      <div><span class="pill p-red">回滚</span> 手机端 Apollo 紧急回滚（一期移动端必备）</div>
+      <div><span class="pill p-gray">原单确认</span> 审核通过后保留「回原平台确认」待办</div>
+      <div><span class="pill p-purple">AI 对话</span> 用自然语言查询和办理工作台里的任何事</div>
+    </div>
+  </div>
+  <div class="doc mt">
+    <nav class="toc glass">{{REQ_TOC}}</nav>
+    <article class="md glass">{{REQ_BODY}}</article>
+  </div>
+  <div class="next"><span></span><button class="nb pri" data-go-tab="plan">下一步：方案与链路 →</button></div>
+</section>
+
+<!-- ========== 2 方案与链路 ========== -->
+<section class="pane" id="p-plan" data-pane="plan">
+  <h2 class="ttl">第 2 步 · 方案与链路</h2>
+  <p class="sub">整合设计方案、链路总图，以及 <code>docs/05-链路流转.md</code> 与 <code>docs/04-修复流转方案.md</code> 完整全文，切换下方标签即可直接查阅。</p>
+
+  <div class="subbar">
+    <div class="subtabs" data-subtabs="plan">
+      <button class="on" data-sub="overview">概览与总图</button>
+      <button data-sub="flow">链路流转全文（05）</button>
+      <button data-sub="run">修复流转方案（04）</button>
+    </div>
+  </div>
+
+  <!-- 2.1 概览与总图 -->
+  <div class="subpane on" data-subpane="plan:overview">
+    <div class="grid g4">
+      <div class="kpi glass"><b style="font-size:17px">一张单 = 一段对话</b><span>交付、提问、打回、复测都按轮次排在同一条对话里，能追溯</span></div>
+      <div class="kpi glass"><b style="font-size:17px">按「等你做什么」排</b><span>列表分组：等你决定 → Bot 在问你 → 修复中 → 待原平台确认 → 需要处理</span></div>
+      <div class="kpi glass"><b style="font-size:17px">两个 AI 分工</b><span>全局 AI 管跨单的事，本单 AI 只管这张单，入口和标识都不同</span></div>
+      <div class="kpi glass"><b style="font-size:17px">双端一致</b><span>PC 和手机用同一套颜色、图标和列表；手机审核按钮固定在底部</span></div>
+    </div>
+
+    <div class="card glass mt">
+      <h3>完整链路：一张单从交给 AI 到上线</h3>
+      <p class="loop" style="margin:0 0 12px">横向是阶段，纵向是角色；每个节点写「名称 → 结果 → 分支 → 对应设计图」，编号和上方「链路流转全文（05）」第三节一一对应。点图可放大。</p>
+      <div class="gal" style="grid-template-columns:1fr"><figure><img class="img-l" src="reference/images/flow/链路总图-亮色.png" alt="链路总图 亮色"><img class="img-d" src="reference/images/flow/链路总图-暗色.png" alt="链路总图 暗色"><figcaption><b>链路总图</b> · 0 开工准备 → 1 交给 AI → 2 收单 → 3 Bot 修复 → 4 审核代码 → 5–8 发测试 → 9 复测 → 10 合回主分支 → 11–12 发正式 → 13 原平台确认 → 14 修复完成（工单负责人点）</figcaption></figure></div>
+    </div>
+
+    <div class="card glass mt">
+      <h3>工单流转（需求第 3 节）</h3>
+      <div class="flow">
+        <div class="node c-gray"><b>待修复</b><span>已收单 · 通知修复人</span></div><span class="fa">→</span>
+        <div class="node c-teal"><b>AI 修复中</b><span>复现 · 定位 · 改代码 · 验证</span></div><span class="fa">→</span>
+        <div class="node c-blue"><b>待我审核</b><span>交付根因、改动、证据</span></div><span class="fa">→</span>
+        <div class="node c-green"><b>审核通过</b><span>可发布测试环境</span></div><span class="fa">→</span>
+        <div class="node c-purple"><b>待原平台确认</b><span>回 Jira/Tita 人工确认</span></div>
+      </div>
+      <div class="flow" style="margin-top:12px">
+        <div class="node c-orange"><b>需要协助</b><span>缺资料或验证受阻 · 人补充后回到「修复中」</span></div>
+        <div class="node c-red"><b>打回重修</b><span>带理由打回 · Bot 开始下一轮，展示相对上轮的变化</span></div>
+      </div>
+      <p class="loop">列表分组和头像状态点的颜色与上面一一对应：修复中 <span class="pill p-teal">teal</span> · 需要协助 / Bot 在问 <span class="pill p-orange">orange</span> · 待我审核 <span class="pill p-blue">blue</span> · 已通过 <span class="pill p-green">green</span> · 需要处理 <span class="pill p-red">red</span></p>
+    </div>
+
+    <div class="card glass mt">
+      <h3>信息架构（左侧 Dock 菜单 / 手机底部 Tab）</h3>
+      <div class="tw" style="margin:0"><table>
+        <thead><tr><th>入口</th><th>页面</th><th>主要内容</th><th>对应需求</th><th>设计进度</th></tr></thead>
+        <tbody>
+          <tr><td><span class="ap ap-ai" style="width:30px;height:30px;border-radius:9px;display:inline-flex;transform:none"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M10 3l1.9 5.6 5.6 1.9-5.6 1.9L10 18l-1.9-5.6L2.5 10.5l5.6-1.9z"/></svg></span></td><td><b>AI 助手</b>（全局）</td><td>跨工单、发布、收单情况提问和办事；回答里直接给可点的工单</td><td>1.3、1.4</td><td><span class="pill p-green">PC 和移动端已出</span></td></tr>
+          <tr><td><span class="ap ap-chat" style="width:30px;height:30px;border-radius:9px;display:inline-flex;transform:none"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M9.6 3.2c-4 0-7.2 2.6-7.2 5.8 0 1.7.9 3.2 2.3 4.2l-.6 3 3.5-1.7c.6.2 1.3.2 2 .2 4 0 7.2-2.6 7.2-5.8S13.6 3.2 9.6 3.2z" fill="#1673FF"/></svg></span></td><td><b>对话</b>（工单）</td><td>工单列表 + 工单对话 + 右侧信息栏；代码改动、证据、执行日志、发布 tab</td><td>2、3、3.1、4、5、6</td><td><span class="pill p-green">PC 和移动端已出</span></td></tr>
+          <tr><td><span class="ap ap-pub" style="width:30px;height:30px;border-radius:9px;display:inline-flex;transform:none"></span></td><td><b>发布</b></td><td>发测试 / 正式环境、可测通知、测试结果、跨项目大包明细、报错</td><td>5.1、5.2、5.3</td><td><span class="pill p-green">PC 和移动端已出</span></td></tr>
+          <tr><td><span class="ap ap-rb" style="width:30px;height:30px;border-radius:9px;display:inline-flex;transform:none"></span></td><td><b>紧急回滚</b></td><td>Apollo 回滚：选环境 → 预览差异 → 确认 → 回读和业务验证</td><td>5.4</td><td><span class="pill p-green">PC 和移动端已出</span></td></tr>
+          <tr><td><span class="ap ap-sk" style="width:30px;height:30px;border-radius:9px;display:inline-flex;transform:none"></span></td><td><b>Skills</b></td><td>在线新建、导入、编辑、草稿、按项目启用、版本回看</td><td>4</td><td><span class="pill p-green">PC 和移动端已出</span></td></tr>
+          <tr><td><span class="ap ap-set" style="width:30px;height:30px;border-radius:9px;display:inline-flex;transform:none"></span></td><td><b>设置</b></td><td>项目（开工准备）、全局 AI、来源采集、成员与身份、我的账号、通知</td><td>1.2、4</td><td><span class="pill p-green">PC 和移动端已出</span></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="card glass mt">
+      <h3>需求 → 界面对照</h3>
+      <div class="tw" style="margin:0"><table>
+        <thead><tr><th>需求点</th><th>在界面里怎么体现</th><th>位置</th></tr></thead>
+        <tbody>
+          <tr><td>两个来源分别展示采集时间，采集失败要可见</td><td>顶栏状态胶囊：「Jira · 2 分钟前」「Tita 采集失败 · 重试中」（橙色）</td><td>PC 顶栏 / 手机首页</td></tr>
+          <tr><td>Bot 在服务器持续工作，关掉电脑也不影响</td><td>顶栏「3 个 Bot 在线」；列表里修复中的单带进度条</td><td>PC 顶栏 / 列表</td></tr>
+          <tr><td>每张单保留协作记录，区分补充、回复、是否采纳</td><td>对话流按轮次分隔；你说的话是蓝色气泡，Bot 交付是卡片</td><td>工单对话</td></tr>
+          <tr><td>每轮交付附根因、改动、验证证据、剩余问题</td><td>交付卡：根因、回应上轮、修复前后截图（标注已查阅/未查阅）、验证清单（未测项橙色）、改动文件、所用 Skills</td><td>工单对话</td></tr>
+          <tr><td>重修后能看到针对上轮反馈的变化</td><td>交付卡「回应上轮 ✓ 已处理 · 看相对上轮的改动 ›」</td><td>工单对话</td></tr>
+          <tr><td>通过或打回时记录实际审阅的提交</td><td>审核行「审核对象 a3f9c21」，按钮写成「审核通过 a3f9c21」</td><td>工单对话底部</td></tr>
+          <tr><td>选中代码行问 AI、带位置打回</td><td>本单 AI 输入框（带工单号）；工单「代码改动」tab 逐行差异</td><td>工单对话 / 代码改动</td></tr>
+          <tr><td>通过后保留回原平台确认的待办</td><td>列表分组「待原平台确认」；右栏「我已在原单确认」按钮</td><td>列表 / 右栏</td></tr>
+          <tr><td>无法确定审核人时列入异常</td><td>列表分组「需要处理」（红色）：「无法确定真人修复人」</td><td>列表</td></tr>
+          <tr><td>手机从通知进入就能审核</td><td>手机工单页底部固定「打回 / 审核通过」，不用滚到底</td><td>移动端</td></tr>
+          <tr><td>全局 AI 对话入口，PC 和手机都有</td><td>菜单 / Tab 第一个图标进入 AI 助手页；问候语里给出今日待办</td><td>AI 助手</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="card glass mt">
+      <h3>两个 AI 怎么区分</h3>
+      <div class="tw" style="margin:0"><table>
+        <thead><tr><th></th><th><span class="orb" style="width:22px;height:22px;vertical-align:-6px;margin-right:6px"></span>全局 AI（AI 助手）</th><th><span class="aid" style="vertical-align:-6px;margin-right:6px">✦</span>本单 AI</th></tr></thead>
+        <tbody>
+          <tr><td>入口</td><td>左侧菜单第一个图标；手机 Tab 第一个</td><td>每张工单对话的最底部</td></tr>
+          <tr><td>形态</td><td>独立页面</td><td>输入框</td></tr>
+          <tr><td>标识</td><td>彩色光球 + 蓝紫粉渐变描边</td><td>紫色标签，永远带工单号</td></tr>
+          <tr><td>管什么</td><td>跨工单、发布、收单情况；搜索；办理</td><td>只管这张单：问原因、补资料、让 Bot 复测</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <!-- 2.2 链路流转全文 (05) -->
+  <div class="subpane" data-subpane="plan:flow">
+    <div class="doc">
+      <nav class="toc glass">{{FLOW_TOC}}</nav>
+      <article class="md glass">{{FLOW_BODY}}</article>
+    </div>
+  </div>
+
+  <!-- 2.3 修复流转方案全文 (04) -->
+  <div class="subpane" data-subpane="plan:run">
+    <div class="doc">
+      <nav class="toc glass">{{RUN_TOC}}</nav>
+      <article class="md glass">{{RUN_BODY}}</article>
+    </div>
+  </div>
+
+  <div class="next"><button class="nb sec" data-go-tab="req">← 上一步：需求</button><button class="nb pri" data-go-tab="theme">下一步：设计主题 →</button></div>
+</section>
+
+<!-- ========== 3 设计主题 ========== -->
+<section class="pane" id="p-theme" data-pane="theme">
+  <h2 class="ttl">第 3 步 · 设计主题</h2>
+  <p class="sub">苹果系 · 毛玻璃 · 对话流。下面的色块和组件都是实时渲染的，切换右上角的亮色 / 暗色可以直接对比。规范源文件：<code>docs/01-设计主题.md</code> 与 <code>tokens/theme.css</code>。</p>
+
+  <div class="card glass">
+    <h3>应用图标</h3>
+    <p class="sub" style="margin-top:0">顶栏 44px logo 的精修版：代码括号 + 对勾 + AI 星光，蓝紫渐变。原稿 <code>reference/src/v5/logo.svg</code>。</p>
+    <div class="gal" style="grid-template-columns:1fr"><figure><img class="img-l" src="reference/images/logo/Logo-展示-亮色.png" alt="应用图标"><img class="img-d" src="reference/images/logo/Logo-展示-暗色.png" alt="应用图标"><figcaption><b>应用图标</b> · 含义、尺寸、在不同背景上</figcaption></figure></div>
+  </div>
+
+  <div class="card glass mt">
+    <h3>系统色</h3>
+    <div class="grid g4" style="grid-template-columns:repeat(6,1fr)">
+      <div class="sw"><i style="background:var(--blue)"></i><div><b>Blue</b><code>#007AFF / #0A84FF</code><br>主操作 · 待你审核</div></div>
+      <div class="sw"><i style="background:var(--green)"></i><div><b>Green</b><code>#34C759 / #30D158</code><br>通过 · 验证通过</div></div>
+      <div class="sw"><i style="background:var(--orange)"></i><div><b>Orange</b><code>#FF9500 / #FF9F0A</code><br>受阻 · Bot 在问</div></div>
+      <div class="sw"><i style="background:var(--red)"></i><div><b>Red</b><code>#FF3B30 / #FF453A</code><br>打回 · 回滚 · 异常</div></div>
+      <div class="sw"><i style="background:var(--teal)"></i><div><b>Teal</b><code>#30B0C7 / #40C8E0</code><br>修复中 · 进度</div></div>
+      <div class="sw"><i style="background:var(--purple)"></i><div><b>Purple</b><code>#AF52DE / #BF5AF2</code><br>本单 AI</div></div>
+    </div>
+  </div>
+
+  <div class="grid g2 mt">
+    <div class="card glass">
+      <h3>毛玻璃层级</h3>
+      <div style="display:flex;gap:12px">
+        <div class="glass" style="flex:1;border-radius:18px;padding:16px"><b>glass</b><div class="ls">一级面板：列表、对话、右栏、菜单</div><div style="margin-top:12px;border-radius:14px;padding:12px;background:var(--glass-2);border:1px solid var(--stroke)"><b>glass-2</b><div class="ls">二级卡片：交付卡、选中分段</div></div></div>
+      </div>
+      <p class="ls" style="margin-top:10px"><code>backdrop-filter: blur(40px) saturate(180%)</code> · 边框 <code>--stroke</code> · 背景是四角柔光壁纸</p>
+    </div>
+    <div class="card glass">
+      <h3>字号与圆角</h3>
+      <div class="type">
+        <div><code>工单标题 22 / 700</code><span style="font-size:22px;font-weight:700">发起审批时点击分组</span></div>
+        <div><code>面板标题 18 / 700</code><span style="font-size:18px;font-weight:700">工单</span></div>
+        <div><code>列表标题 13.5 / 600</code><span style="font-size:13.5px;font-weight:600">点击分组后界面卡住</span></div>
+        <div><code>辅助 12 / text-3</code><span class="ls">第 2 轮交付 · 验证 3/4</span></div>
+      </div>
+      <p class="ls" style="margin-top:8px">圆角：面板 24 · 卡片 18 · 列表行 14 · 图标 12 · 按钮 12 · 标签 5</p>
+    </div>
+  </div>
+
+  <div class="grid g2 mt">
+    <div class="card glass">
+      <h3>Dock 菜单图标 · 选中 = 放大加悬浮</h3>
+      <div style="display:flex;gap:28px;align-items:flex-start">
+        <div class="dockdemo glass" id="dockdemo"></div>
+        <ul class="clean" style="font-size:13.5px">
+          <li>只放图标，不放文字，和 macOS Dock 一样</li>
+          <li>44px 彩色圆角方块，带渐变、顶部高光和投影</li>
+          <li>选中的放大到 1.16 倍、投影加深；其余缩到 0.94</li>
+          <li>不加小圆点、托盘、描边环、光条或悬停提示</li>
+          <li>红色数字角标在右上角</li>
+          <li>AI 助手放在最上面，和功能图标之间有分隔线</li>
+          <li>设置固定在最底部</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card glass">
+      <h3>工单列表行 · 提单人头像加状态点</h3>
+      <div class="glass" style="border-radius:18px;padding:6px;box-shadow:none" id="rowdemo"></div>
+      <p class="ls" style="margin-top:10px">选中行用蓝色渐变实底加白字；来源用 Tita / Jira 小标签；修复中的单加青色进度条。</p>
+    </div>
+  </div>
+
+  <div class="card glass mt">
+    <h3>对话与操作</h3>
+    <div style="display:flex;flex-wrap:wrap;gap:18px;align-items:center">
+      <span class="ubub">第二个分组还是会卡，再看看。</span>
+      <button class="btn b-red">↶ 打回并说明原因</button>
+      <button class="btn b-pri">✓ 审核通过 a3f9c21</button>
+      <button class="btn b-sec">我已在原单确认</button>
+      <span class="aitag"><span class="aid">✦</span>本单 AI <span style="font-family:'SF Mono',monospace;font-weight:500;color:var(--text-3)">TK-20871</span></span>
+      <span class="orb"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M10 3l1.9 5.6 5.6 1.9-5.6 1.9L10 18l-1.9-5.6L2.5 10.5l5.6-1.9z"/></svg></span>
+      <span class="pill p-blue">待我审核 · 第 2 轮</span><span class="pill p-orange">Tita 采集失败 · 重试中</span>
+    </div>
+  </div>
+  <div class="next"><button class="nb sec" data-go-tab="plan">← 上一步：方案与链路</button><button class="nb pri" data-go-tab="pc">下一步：PC 界面 →</button></div>
+</section>
+
+<!-- ========== 4 PC ========== -->
+<section class="pane" id="p-pc" data-pane="pc">
+  <h2 class="ttl">第 4 步 · PC 界面</h2>
+  <p class="sub">主界面 + 闪屏 + 登录 + 首次使用步骤器（10 张）+ 其余功能页面（33 张），画布 1440 × 900，图片自动跟随右上角的亮色 / 暗色切换。</p>
+  <p class="toggle-note">把鼠标移到红色编号上，下面对应的说明会高亮。</p>
+  <div class="shot" id="pcshot">
+    <img class="img-l" src="reference/images/PC-主界面-亮色.png" alt="PC 主界面 亮色">
+    <img class="img-d" src="reference/images/PC-主界面-暗色.png" alt="PC 主界面 暗色">
+  </div>
+  <div class="legend" id="pclegend"></div>
+  <div class="card glass mt">
+    <h3>启动、登录与首次使用步骤器（12 张）</h3>
+    <div class="gal">
+      <figure><img class="img-l" src="reference/images/splash/PC-闪屏-亮色.png" alt="PC 闪屏"><img class="img-d" src="reference/images/splash/PC-闪屏-暗色.png" alt="PC 闪屏"><figcaption><b>PC 闪屏</b> · 图标 + 名称 + 真实加载步骤</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/PC-登录-亮色.png" alt="PC 登录 亮色"><img class="img-d" src="reference/images/pages/PC-登录-暗色.png" alt="PC 登录 暗色"><figcaption><b>登录</b> · 管理员事先建好的 Jira / 公司 GitLab 账号直接登录，没有注册</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/PC-步骤器-0-连接AI-亮色.png" alt="连接 AI 亮色"><img class="img-d" src="reference/images/pages/PC-步骤器-0-连接AI-暗色.png" alt="连接 AI 暗色"><figcaption><b>管理员第一步 · 连接 AI</b> · 只有管理员、且 AI 还没接时出现，之后的步骤顺延</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/PC-步骤器-1-选择项目-亮色.png" alt="选择项目 亮色"><img class="img-d" src="reference/images/pages/PC-步骤器-1-选择项目-暗色.png" alt="选择项目 暗色"><figcaption><b>第 1 步 · 选择项目</b> · 项目卡片、已就绪的直接用</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/PC-步骤器-2-代码仓库-亮色.png" alt="代码仓库 亮色"><img class="img-d" src="reference/images/pages/PC-步骤器-2-代码仓库-暗色.png" alt="代码仓库 暗色"><figcaption><b>第 2 步 · 代码仓库</b> · 每个仓库的主分支、测试分支和构建命令，Bot 实测；修单时分支怎么走（两次 MR 审核）</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/PC-首次使用步骤器-亮色.png" alt="步骤器 测试环境 亮色"><img class="img-d" src="reference/images/pages/PC-首次使用步骤器-暗色.png" alt="步骤器 测试环境 暗色"><figcaption><b>第 3 步 · 环境与账号（测试环境）</b> · 多环境、账号不限数量、密码或 Cookie、Bot 当场试登录</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/PC-首次使用步骤器-正式环境-亮色.png" alt="步骤器 正式环境 亮色"><img class="img-d" src="reference/images/pages/PC-首次使用步骤器-正式环境-暗色.png" alt="步骤器 正式环境 暗色"><figcaption><b>第 3 步 · 环境与账号（正式环境）</b> · 每个账号的数据权限（只能查看 / 可以修改）、Cookie 过期、Bot 识别账号</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/PC-步骤器-4-工单来源-亮色.png" alt="工单来源 亮色"><img class="img-d" src="reference/images/pages/PC-步骤器-4-工单来源-暗色.png" alt="工单来源 暗色"><figcaption><b>第 4 步 · 工单来源</b> · Jira / Tita 收单条件，按来源统一设复现环境，只读预览</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/PC-步骤器-5-Skills-亮色.png" alt="Skills 亮色"><img class="img-d" src="reference/images/pages/PC-步骤器-5-Skills-暗色.png" alt="Skills 暗色"><figcaption><b>第 5 步 · Skills</b> · 新用户只有内置规则，自己的当场写</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/PC-步骤器-5-写自己的规则-亮色.png" alt="写自己的规则 亮色"><img class="img-d" src="reference/images/pages/PC-步骤器-5-写自己的规则-暗色.png" alt="写自己的规则 暗色"><figcaption><b>第 5 步 · 写一条自己的规则</b> · 右侧弹出面板，AI 读代码起草，保存后加进列表标「我的」</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/PC-步骤器-6-发布配置-亮色.png" alt="发布配置（可选） 亮色"><img class="img-d" src="reference/images/pages/PC-步骤器-6-发布配置-暗色.png" alt="发布配置（可选） 暗色"><figcaption><b>第 6 步 · 发布配置（可选）</b> · tita build 打包上传、tita release 更新 Apollo 发到测试 / 正式，可先跳过</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/PC-步骤器-7-检查并开工-亮色.png" alt="检查并开工 亮色"><img class="img-d" src="reference/images/pages/PC-步骤器-7-检查并开工-暗色.png" alt="检查并开工 暗色"><figcaption><b>第 7 步 · 检查并开工</b> · Bot 实际跑一遍，逐项结果，开始接单</figcaption></figure>
+    </div>
+  </div>
+  <div class="card glass mt">
+    <h3>其余功能页面（33 张）</h3>
+    <p class="sub" style="margin:0 0 12px">外壳（顶栏、Dock、工单列表）与主界面完全一致，只换中间内容。可按模块筛选，点图放大。</p>
+    <div class="chips" id="pc-filter">
+      <button class="chip-btn on" data-cat="all">全部 <em>33</em></button>
+      <button class="chip-btn" data-cat="ticket">工单与审核 <em>9</em></button>
+      <button class="chip-btn" data-cat="release">发布与回滚 <em>11</em></button>
+      <button class="chip-btn" data-cat="skills">Skills <em>3</em></button>
+      <button class="chip-btn" data-cat="settings">设置 <em>6</em></button>
+      <button class="chip-btn" data-cat="state">排队与边界状态 <em>4</em></button>
+    </div>
+    <div class="gal" id="pc-gal">
+      <figure data-cat="ticket"><img class="img-l" src="reference/images/pages/PC-AI助手-亮色.png" alt="AI 助手（全局） 亮色"><img class="img-d" src="reference/images/pages/PC-AI助手-暗色.png" alt="AI 助手（全局） 暗色"><figcaption><b>AI 助手（全局）</b> · 对话记录、回答里带工单和执行状态、按权限办事</figcaption></figure>
+      <figure data-cat="ticket"><img class="img-l" src="reference/images/pages/PC-工单-修复中-亮色.png" alt="工单 · Bot 修复中 亮色"><img class="img-d" src="reference/images/pages/PC-工单-修复中-暗色.png" alt="工单 · Bot 修复中 暗色"><figcaption><b>工单 · Bot 修复中</b> · 步骤条实时进度、正在做的事和实时画面、中途补充标「已采纳」、我来接手 / 停止本轮</figcaption></figure>
+      <figure data-cat="ticket"><img class="img-l" src="reference/images/pages/PC-工单-待原平台确认-亮色.png" alt="工单 · 待原平台确认 亮色"><img class="img-d" src="reference/images/pages/PC-工单-待原平台确认-暗色.png" alt="工单 · 待原平台确认 暗色"><figcaption><b>工单 · 待原平台确认</b> · 去原单做什么、回来点「我已在原单确认」；右栏「修复完成」由工单负责人点</figcaption></figure>
+      <figure data-cat="ticket"><img class="img-l" src="reference/images/pages/PC-代码改动-亮色.png" alt="代码改动 亮色"><img class="img-d" src="reference/images/pages/PC-代码改动-暗色.png" alt="代码改动 暗色"><figcaption><b>代码改动</b> · 逐行差异、选中一行问 AI、缺失仓库明确提示</figcaption></figure>
+      <figure data-cat="ticket"><img class="img-l" src="reference/images/pages/PC-证据-亮色.png" alt="证据 亮色"><img class="img-d" src="reference/images/pages/PC-证据-暗色.png" alt="证据 暗色"><figcaption><b>证据</b> · 原单 / 修前 / 修后用途标签、查阅状态、计划与实际执行对照</figcaption></figure>
+      <figure data-cat="ticket"><img class="img-l" src="reference/images/pages/PC-执行日志报错-亮色.png" alt="执行日志 · 报错 亮色"><img class="img-d" src="reference/images/pages/PC-执行日志报错-暗色.png" alt="执行日志 · 报错 暗色"><figcaption><b>执行日志 · 报错</b> · 失败步骤、报错原文可复制、AI 解读单独展示、保留上次尝试</figcaption></figure>
+      <figure data-cat="ticket"><img class="img-l" src="reference/images/pages/PC-Bot提问回复-亮色.png" alt="Bot 在问你 亮色"><img class="img-d" src="reference/images/pages/PC-Bot提问回复-暗色.png" alt="Bot 在问你 暗色"><figcaption><b>Bot 在问你</b> · 一键回答、可选存为项目规则、回复后从原步骤继续</figcaption></figure>
+      <figure data-cat="ticket"><img class="img-l" src="reference/images/pages/PC-打回原因-亮色.png" alt="打回原因 亮色"><img class="img-d" src="reference/images/pages/PC-打回原因-暗色.png" alt="打回原因 暗色"><figcaption><b>打回原因</b> · 意见 + 代码位置 + 截图，要求下一轮复测的角色</figcaption></figure>
+      <figure data-cat="ticket"><img class="img-l" src="reference/images/pages/PC-审核通过-有未测项-亮色.png" alt="审核通过 · 有未测项 亮色"><img class="img-d" src="reference/images/pages/PC-审核通过-有未测项-暗色.png" alt="审核通过 · 有未测项 暗色"><figcaption><b>审核通过 · 有未测项</b> · 已验证 / 没测的项和原因、通过后转给测试人重点测、要勾「我知道有未测项」才能通过</figcaption></figure>
+      <figure data-cat="release"><img class="img-l" src="reference/images/pages/PC-发布-亮色.png" alt="发布 亮色"><img class="img-d" src="reference/images/pages/PC-发布-暗色.png" alt="发布 暗色"><figcaption><b>发布（Dock）</b> · 发布列表 + 详情：合入测试分支 → tita build → tita release → 核对提交号 → 通知测试人；顶部工单条可「进入工单」</figcaption></figure>
+      <figure data-cat="release"><img class="img-l" src="reference/images/pages/PC-工单-发布-亮色.png" alt="工单 · 发布 亮色"><img class="img-d" src="reference/images/pages/PC-工单-发布-暗色.png" alt="工单 · 发布 暗色"><figcaption><b>工单 · 发布</b> · 工单里的第 5 个标签，同一份发布详情，点开工单就能看到这张单的全部信息</figcaption></figure>
+      <figure data-cat="release"><img class="img-l" src="reference/images/pages/PC-发测试-发布前-亮色.png" alt="发测试 · 发布前 亮色"><img class="img-d" src="reference/images/pages/PC-发测试-发布前-暗色.png" alt="发测试 · 发布前 暗色"><figcaption><b>发测试 · 发布前</b> · 同一套发布详情：5 步都等待；Tita 单当场选测试人，预览会一起打进包里的提交，点「发布到测试环境」</figcaption></figure>
+      <figure data-cat="release"><img class="img-l" src="reference/images/pages/PC-第一次发布-配账号-亮色.png" alt="第一次发布 · 配账号 亮色"><img class="img-d" src="reference/images/pages/PC-第一次发布-配账号-暗色.png" alt="第一次发布 · 配账号 暗色"><figcaption><b>第一次发布 · 配账号</b> · 没配过的人第一次点发布，就地填 Apollo 账号，填好接着发</figcaption></figure>
+      <figure data-cat="release"><img class="img-l" src="reference/images/pages/PC-发布-等复测-亮色.png" alt="发布 · 等复测 亮色"><img class="img-d" src="reference/images/pages/PC-发布-等复测-暗色.png" alt="发布 · 等复测 暗色"><figcaption><b>发布 · 等复测</b> · 同一套发布详情：5 步都完成、测试人卡片带入口和账号；测试人本人在右栏「测试记录」里点通过 / 打回</figcaption></figure>
+      <figure data-cat="release"><img class="img-l" src="reference/images/pages/PC-发布-复测通过-亮色.png" alt="发布 · 复测通过 亮色"><img class="img-d" src="reference/images/pages/PC-发布-复测通过-暗色.png" alt="发布 · 复测通过 暗色"><figcaption><b>发布 · 复测通过</b> · 同一套发布详情：5 步全绿；右栏第三项旁边「合回主分支」按钮，修复人点了才提 MR</figcaption></figure>
+      <figure data-cat="release"><img class="img-l" src="reference/images/pages/PC-合回主分支-MR审核-亮色.png" alt="合回主分支 · MR 审核 亮色"><img class="img-d" src="reference/images/pages/PC-合回主分支-MR审核-暗色.png" alt="合回主分支 · MR 审核 暗色"><figcaption><b>合回主分支 · MR 审核</b> · 同一套发布详情：第 1 步橙色等审核；左卡「和测试时比」，修复人点「合回主分支」才提 MR，右卡审核人「打回 / 通过并合入」</figcaption></figure>
+      <figure data-cat="release"><img class="img-l" src="reference/images/pages/PC-发正式-亮色.png" alt="发正式 亮色"><img class="img-d" src="reference/images/pages/PC-发正式-暗色.png" alt="发正式 暗色"><figcaption><b>发正式</b> · 同一套发布详情：合回主分支已完成、其余等待；左卡「和测试时比」，右卡「生效后通知」；三项前置齐了右栏按钮变蓝</figcaption></figure>
+      <figure data-cat="release"><img class="img-l" src="reference/images/pages/PC-发布-失败-亮色.png" alt="发布 · 失败 亮色"><img class="img-d" src="reference/images/pages/PC-发布-失败-暗色.png" alt="发布 · 失败 暗色"><figcaption><b>发布 · 失败</b> · 同一套发布详情：失败步骤标红、后面没执行、测试环境没变不通知；报错原文 + AI 解读，从失败那一步重试、不重新提 MR</figcaption></figure>
+      <figure data-cat="release"><img class="img-l" src="reference/images/pages/PC-大包明细-亮色.png" alt="大包明细 亮色"><img class="img-d" src="reference/images/pages/PC-大包明细-暗色.png" alt="大包明细 暗色"><figcaption><b>大包明细</b> · 组件 → 子项目 → 主站依赖图、部分完成、从失败处重试</figcaption></figure>
+      <figure data-cat="release"><img class="img-l" src="reference/images/pages/PC-紧急回滚-亮色.png" alt="紧急回滚（Apollo） 亮色"><img class="img-d" src="reference/images/pages/PC-紧急回滚-暗色.png" alt="紧急回滚（Apollo） 暗色"><figcaption><b>紧急回滚（Apollo）</b> · 选历史发布、配置差异和连带变化、输入环境名确认</figcaption></figure>
+      <figure data-cat="skills"><img class="img-l" src="reference/images/pages/PC-Skills-亮色.png" alt="Skills 亮色"><img class="img-d" src="reference/images/pages/PC-Skills-暗色.png" alt="Skills 暗色"><figcaption><b>Skills</b> · 我的 / 内置、在线编辑、AI 帮写草稿、按项目启用和生效时机</figcaption></figure>
+      <figure data-cat="skills"><img class="img-l" src="reference/images/pages/PC-Skills-版本历史-亮色.png" alt="Skills · 版本历史 亮色"><img class="img-d" src="reference/images/pages/PC-Skills-版本历史-暗色.png" alt="Skills · 版本历史 暗色"><figcaption><b>Skills · 版本历史</b> · 版本列表、相对上一版的改动、哪些轮次用过；每个项目可用不同版本，退回旧版也是选中再启用</figcaption></figure>
+      <figure data-cat="skills"><img class="img-l" src="reference/images/pages/PC-Skills-导入-亮色.png" alt="Skills · 导入 亮色"><img class="img-d" src="reference/images/pages/PC-Skills-导入-暗色.png" alt="Skills · 导入 暗色"><figcaption><b>Skills · 导入</b> · 文件 / GitLab 链接 / 粘贴；自动读出名称和用途，账号密码自动打码；像已有的可作为新版本；导入先是草稿</figcaption></figure>
+      <figure data-cat="settings"><img class="img-l" src="reference/images/pages/PC-设置-亮色.png" alt="设置 · 项目 亮色"><img class="img-d" src="reference/images/pages/PC-设置-暗色.png" alt="设置 · 项目 暗色"><figcaption><b>设置 · 项目</b> · 即开工准备：每项配置的当前值和 Bot 实测，点「改」修改；没准备好时单先等着</figcaption></figure>
+      <figure data-cat="settings"><img class="img-l" src="reference/images/pages/PC-设置-全局AI-亮色.png" alt="设置 · 全局 AI 亮色"><img class="img-d" src="reference/images/pages/PC-设置-全局AI-暗色.png" alt="设置 · 全局 AI 暗色"><figcaption><b>设置 · 全局 AI</b> · 管理员接一次 AI（工具、模型、公司网关、试一下）；Bot 用的账号、Bot 能自己做的事、什么时候找人、共用提示词</figcaption></figure>
+      <figure data-cat="settings"><img class="img-l" src="reference/images/pages/PC-设置-来源采集-亮色.png" alt="设置 · 来源采集 亮色"><img class="img-d" src="reference/images/pages/PC-设置-来源采集-暗色.png" alt="设置 · 来源采集 暗色"><figcaption><b>设置 · 来源采集</b> · Jira / Tita 采集状态、失败原文和重试；最近收单的四种结果，没收成的去处理</figcaption></figure>
+      <figure data-cat="settings"><img class="img-l" src="reference/images/pages/PC-设置-成员与身份-亮色.png" alt="设置 · 成员与身份 亮色"><img class="img-d" src="reference/images/pages/PC-设置-成员与身份-暗色.png" alt="设置 · 成员与身份 暗色"><figcaption><b>设置 · 成员与身份</b> · 不知道通知谁的待处理、成员与 Jira / Tita 身份、停用后转交</figcaption></figure>
+      <figure data-cat="settings"><img class="img-l" src="reference/images/pages/PC-设置-我的账号-亮色.png" alt="设置 · 我的账号 亮色"><img class="img-d" src="reference/images/pages/PC-设置-我的账号-暗色.png" alt="设置 · 我的账号 暗色"><figcaption><b>设置 · 我的账号</b> · 每人自己的 GitLab、Apollo 账号：合入、发布、回滚用本人的，记的是本人</figcaption></figure>
+      <figure data-cat="settings"><img class="img-l" src="reference/images/pages/PC-设置-通知-亮色.png" alt="设置 · 通知 亮色"><img class="img-d" src="reference/images/pages/PC-设置-通知-暗色.png" alt="设置 · 通知 暗色"><figcaption><b>设置 · 通知</b> · 每人自己的：事件 × PC / 手机开关、设备、免打扰；发布失败关不掉</figcaption></figure>
+      <figure data-cat="state"><img class="img-l" src="reference/images/pages/PC-排队-亮色.png" alt="排队 亮色"><img class="img-d" src="reference/images/pages/PC-排队-暗色.png" alt="排队 暗色"><figcaption><b>排队</b> · Bot 都在忙时：列表多一组「排队中」、排队的单写清前面是谁和预计开始、管理员配同时修几张、谁在修谁在排</figcaption></figure>
+      <figure data-cat="state"><img class="img-l" src="reference/images/pages/PC-边界状态-亮色.png" alt="边界状态 亮色"><img class="img-d" src="reference/images/pages/PC-边界状态-暗色.png" alt="边界状态 暗色"><figcaption><b>边界状态</b> · 无权查看、登录过期回原处、状态已经变了不改写结果、审核中有新提交要看完最新才能通过</figcaption></figure>
+      <figure data-cat="state"><img class="img-l" src="reference/images/pages/PC-空状态-亮色.png" alt="空状态 亮色"><img class="img-d" src="reference/images/pages/PC-空状态-暗色.png" alt="空状态 暗色"><figcaption><b>空状态</b> · 还没收到单（Bot 在等单、收单条件）、搜索没结果（说清在哪没找到、去全部找）、还没有发布、还没有自己的 Skill</figcaption></figure>
+      <figure data-cat="state"><img class="img-l" src="reference/images/pages/PC-空状态-2-亮色.png" alt="空状态 · 二 亮色"><img class="img-d" src="reference/images/pages/PC-空状态-2-暗色.png" alt="空状态 · 二 暗色"><figcaption><b>空状态 · 二</b> · AI 助手第一次打开（可点的例句）、回滚没有上一次、代码改动还没提交、工单发布还没开始</figcaption></figure>
+    </div>
+  </div>
+  <div class="next"><button class="nb sec" data-go-tab="theme">← 上一步：设计主题</button><button class="nb pri" data-go-tab="mobile">下一步：移动端 →</button></div>
+</section>
+
+<!-- ========== 5 移动端 ========== -->
+<section class="pane" id="p-mobile" data-pane="mobile">
+  <h2 class="ttl">第 5 步 · 移动端</h2>
+  <p class="sub">首页三屏：工单列表、工单对话（审核）、AI 助手；下面是闪屏、登录、步骤器以及其余 9 张（27 屏）。每台手机 390 × 844，和 PC 用同一套主题。</p>
+  <p class="toggle-note">把鼠标移到红色编号上，下面对应的说明会高亮。</p>
+  <div class="shot" id="mshot">
+    <img class="img-l" src="reference/images/移动端-亮色.png" alt="移动端 亮色">
+    <img class="img-d" src="reference/images/移动端-暗色.png" alt="移动端 暗色">
+  </div>
+  <div class="legend" id="mlegend"></div>
+  <div class="card glass mt">
+    <h3>启动、登录与步骤器（3 张）</h3>
+    <div class="gal" style="grid-template-columns:1fr">
+      <figure><img class="img-l" src="reference/images/splash/移动端-闪屏-亮色.png" alt="移动端闪屏"><img class="img-d" src="reference/images/splash/移动端-闪屏-暗色.png" alt="移动端闪屏"><figcaption><b>移动端闪屏</b> · 启动 / 首次加载 / 从通知打开</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/移动端-登录-亮色.png" alt="移动端登录 亮色"><img class="img-d" src="reference/images/pages/移动端-登录-暗色.png" alt="移动端登录 暗色"><figcaption><b>移动端登录（4 屏）</b> · Jira 登录 / GitLab 密码错误 / 登录过期回到原工单 / 无权查看</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/移动端-首次使用步骤器-亮色.png" alt="移动端步骤器 亮色"><img class="img-d" src="reference/images/pages/移动端-首次使用步骤器-暗色.png" alt="移动端步骤器 暗色"><figcaption><b>移动端步骤器（4 屏）</b> · 步骤概览 / 环境与账号 / 添加账号（Cookie）/ 检查并开工</figcaption></figure>
+    </div>
+  </div>
+  <div class="card glass mt">
+    <h3>其余功能页面（9 张 · 27 屏）</h3>
+    <div class="gal">
+      <figure><img class="img-l" src="reference/images/pages/移动端-代码与审核-亮色.png" alt="代码与审核 亮色"><img class="img-d" src="reference/images/pages/移动端-代码与审核-暗色.png" alt="代码与审核 暗色"><figcaption><b>代码与审核</b> · 代码改动 · 打回 · Bot 在问你</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/移动端-证据报错发布-亮色.png" alt="证据、报错与发布 亮色"><img class="img-d" src="reference/images/pages/移动端-证据报错发布-暗色.png" alt="证据、报错与发布 暗色"><figcaption><b>证据、报错与发布</b> · 证据 · 报错 · 发布到测试</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/移动端-发布-亮色.png" alt="移动端 · 发布 亮色"><img class="img-d" src="reference/images/pages/移动端-发布-暗色.png" alt="移动端 · 发布 暗色"><figcaption><b>移动端 · 发布</b> · 同一套发布详情的三种状态：工单里的「发布」标签、等复测（测试人点通过 / 打回）、发布到正式（前置齐了才能点）</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/移动端-大包与紧急回滚-亮色.png" alt="大包与紧急回滚 亮色"><img class="img-d" src="reference/images/pages/移动端-大包与紧急回滚-暗色.png" alt="大包与紧急回滚 暗色"><figcaption><b>大包与紧急回滚</b> · 大包明细 · 回滚确认 · 回滚结果</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/移动端-Skills与设置-亮色.png" alt="Skills 与设置 亮色"><img class="img-d" src="reference/images/pages/移动端-Skills与设置-暗色.png" alt="Skills 与设置 暗色"><figcaption><b>Skills 与设置</b> · Skills · 编辑草稿 · 设置</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/移动端-通知-亮色.png" alt="移动端 · 通知 亮色"><img class="img-d" src="reference/images/pages/移动端-通知-暗色.png" alt="移动端 · 通知 暗色"><figcaption><b>移动端 · 通知</b> · 锁屏推送（点开直达）· 通知设置（两项关不掉）· 免打扰与设备</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/移动端-审核与排队-亮色.png" alt="移动端 · 审核与排队 亮色"><img class="img-d" src="reference/images/pages/移动端-审核与排队-暗色.png" alt="移动端 · 审核与排队 暗色"><figcaption><b>移动端 · 审核与排队</b> · 审核通过有未测项（勾选才能通过）· 工单排队中 · 发测试前换测试人</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/移动端-空状态-亮色.png" alt="移动端 · 空状态 亮色"><img class="img-d" src="reference/images/pages/移动端-空状态-暗色.png" alt="移动端 · 空状态 暗色"><figcaption><b>移动端 · 空状态</b> · 工单还没收到单（Bot 在等单）· 还没有发布 · AI 助手第一次打开</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/移动端-空状态-2-亮色.png" alt="移动端 · 空状态二 亮色"><img class="img-d" src="reference/images/pages/移动端-空状态-2-暗色.png" alt="移动端 · 空状态二 暗色"><figcaption><b>移动端 · 空状态二</b> · 搜索没结果（去全部里找）· Skills 我的还没有 · 紧急回滚没有上一次</figcaption></figure>
+    </div>
+  </div>
+  <div class="next"><button class="nb sec" data-go-tab="pc">← 上一步：PC 界面</button><button class="nb pri" data-go-tab="tech">下一步：技术设计 →</button></div>
+</section>
+
+<!-- ========== 6 技术设计 ========== -->
+<section class="pane" id="p-tech" data-pane="tech">
+  <h2 class="ttl">第 6 步 · 技术设计</h2>
+  <p class="sub">来源于 <code>docs/06-技术设计方案.md</code>，改完文档重新运行 <code>python3 scripts/build-index.py</code> 即可自动同步到这里。架构图、ER 图、状态机图已离线内置渲染，支持亮/暗切换。</p>
+
+  <div class="grid g4">
+    <div class="kpi glass"><b style="font-size:19px">Node / TS + PG</b><span>服务端与队列同库事务一致</span></div>
+    <div class="kpi glass"><b style="font-size:19px">Electron + Flutter</b><span>双端由 OpenAPI 同源生成客户端</span></div>
+    <div class="kpi glass"><b style="font-size:19px">Codex · gpt-6.2-sol</b><span>Bot 执行与对话助手统一模型</span></div>
+    <div class="kpi glass"><b style="font-size:19px">第 0～6 节已确认</b><span>第 7 节确认中 · 后续章节持续汇入</span></div>
+  </div>
+
+  <div class="card glass mt">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+      <h3 style="margin:0">章节确认进度（点击直达）</h3>
+      <span class="ls"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:5px"></span>已确认 &nbsp;&nbsp;<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--orange);margin-right:5px"></span>确认中 / 草稿</span>
+    </div>
+    <div class="sec-bar" id="tech-sec-bar"></div>
+  </div>
+
+  <div class="doc mt">
+    <nav class="toc glass">{{TECH_TOC}}</nav>
+    <article class="md glass">{{TECH_BODY}}</article>
+  </div>
+
+  <div class="next"><button class="nb sec" data-go-tab="mobile">← 上一步：移动端</button><button class="nb pri" data-go-tab="log">下一步：决策与后续 →</button></div>
+</section>
+
+<!-- ========== 7 决策与后续 ========== -->
+<section class="pane" id="p-log" data-pane="log">
+  <h2 class="ttl">第 7 步 · 决策与后续</h2>
+  <p class="sub">记录被否掉的方向、协作约定（含单 HTML 统一集合规范）、页面与文档进度，以及待定事项。</p>
+
+  <div class="card glass">
+    <h3>被否掉的方向</h3>
+    <div class="tw" style="margin:0"><table>
+      <thead><tr><th>不要</th><th>原因 / 用户原话</th><th>要</th></tr></thead>
+      <tbody>
+        <tr><td class="no">后台管理风</td><td>「不好看，不要做的跟后端管理一样」</td><td class="yes">苹果系毛玻璃，像原生应用</td></tr>
+        <tr><td class="no">产品原型、线框</td><td>「我要的不是产品原型图，我要的是 UI 设计图」</td><td class="yes">高保真静态设计图</td></tr>
+        <tr><td class="no">霓虹、赛博、杂志风等「抽象炫酷」</td><td>「你现在做的太抽象了」</td><td class="yes">精致的苹果质感</td></tr>
+        <tr><td class="no">底部大浮层、扇形菜单、岛屿</td><td>「太夸张了」</td><td class="yes">左菜单加三栏面板</td></tr>
+        <tr><td class="no">菜单带文字</td><td>「菜单不用加 label，跟苹果一样」</td><td class="yes">只有图标的 Dock</td></tr>
+        <tr><td class="no">单色线条图标、扁平色块</td><td>「很 low」「违和」</td><td class="yes">有质感的彩色图标</td></tr>
+        <tr><td class="no">小圆点、托盘、描边环、光条选中态</td><td>「选中能不能用别的方式」</td><td class="yes">放大加悬浮</td></tr>
+        <tr><td class="no">macOS 红黄绿三个圆点</td><td>「这个不需要苹果自带」</td><td class="yes">不画</td></tr>
+        <tr><td class="no">全局 AI 放顶栏输入框</td><td>「点击打开肯定是一个新的 AI 页面」</td><td class="yes">菜单第一个图标，进入独立页面</td></tr>
+        <tr><td class="no">列表用 TITA/JIRA 方块、浅色符号圆</td><td>和菜单图标撞在一起；「图标我不是很喜欢」</td><td class="yes">提单人头像加状态点</td></tr>
+        <tr><td class="no">静态图里画悬停提示</td><td>压住了列表内容</td><td class="yes">静态图不画悬停提示</td></tr>
+        <tr><td class="no">散落多个独立 HTML 查阅文档</td><td>「以后都放到一个 HTML 文档里面，不需要到处乱找」</td><td class="yes">全部汇入唯一的 <code>index.html</code></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="card glass mt">
+    <h3>探索过程中的对比图</h3>
+    <div class="gal">
+      <figure><img src="reference/images/explore/菜单选中态-4种.png" alt=""><figcaption><b>菜单选中态 4 种</b> · 最终都没选，改用「放大加悬浮」</figcaption></figure>
+      <figure><img src="reference/images/explore/列表图标-4种.png" alt=""><figcaption><b>列表图标 4 种</b> · 选了 ③ 提单人头像</figcaption></figure>
+      <figure><img src="reference/images/explore/头部-3种.png" alt=""><figcaption><b>头部 3 种</b> · 最终保留原来的 44px logo 加两行标题</figcaption></figure>
+      <figure><img src="reference/images/explore/列表-新旧对比.png" alt=""><figcaption><b>列表新旧对比</b> · 采用精修后的列表</figcaption></figure>
+    </div>
+  </div>
+
+  <div class="grid g2 mt">
+    <div class="card glass">
+      <h3>协作约定</h3>
+      <ul class="clean">
+        <li><b>唯一总览集合</b>：项目的所有文档（需求、方案、链路、设计规范、双端设计图、技术设计、决策）全部收口在根目录唯一的 <code>index.html</code>，由 <code>scripts/build-index.py</code> 生成；以后新增任何文档或设计页都继续汇入这里，不另建散落 HTML</li>
+        <li>先出一张精细图，确认后再铺开</li>
+        <li>用户圈出哪里，只改哪里</li>
+        <li>要备选时做成一张对比图，3 到 4 种，亮色和暗色都有</li>
+        <li>本地 HTML 渲染成 PNG，不上传</li>
+        <li>交付前自己检查有没有换行、重叠、遮挡</li>
+      </ul>
+    </div>
+    <div class="card glass">
+      <h3>页面与文档进度</h3>
+      <ul class="chk">
+        <li class="done">产品需求（00）、修复流转（04）、链路流转（05）与链路总图</li>
+        <li class="done">应用图标、PC 和移动端闪屏、登录（PC + 移动端 4 屏）</li>
+        <li class="done">PC 主界面 + 首次使用步骤器（10 张）+ 其余功能页面（33 张）</li>
+        <li class="done">移动端首页 3 屏 + 步骤器（4 屏）+ 其余功能页面（9 张 · 27 屏）</li>
+        <li class="done">技术设计方案第 0～6 节（架构、数据模型、状态、收单、Bot、审核与 MR）</li>
+        <li class="wip">技术设计方案第 7 节（发布与回滚，待确认）及第 8～14 节（待续写）</li>
+        <li>开工准备页的移动端</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card glass mt">
+    <h3>最新确认的关键规则与待定事项（需求 §8 &amp; 技术方案）</h3>
+    <ol style="margin:0;padding-left:20px">
+      <li><b>已定</b>：Jira 取经办人；Tita 节点多个负责人时任一负责人都能审，先审的算数</li>
+      <li><b>已定</b>：首批 Mac、Windows、iOS、Android，设计只画一套；快捷录屏、系统分享不进一期</li>
+      <li><b>已定</b>：新单 5 分钟内开始修并通知；Bot 忙时排队，先按优先级、同级打回重修在前、再按先后</li>
+      <li><b>部分已定</b>：试点审批、OKR、考勤；允许带「待人工复测」提交，审核通过要确认未测项并转给测试人重点测。仓库、测试角色和验收用例待给</li>
+      <li><b>已定</b>：登录用公司内部 Jira / GitLab 账号密码，管理员开通；管理员管全部，项目负责人管本项目</li>
+      <li><b>已定</b>：测试人 Jira 默认提单人（发测试前可换）、Tita 当场选；正式发布人和谁能回滚默认任何人，可改；回退用 Apollo 回滚</li>
+      <li><b>已定（2026-11-21）</b>：AI 工具与模型初步选定 Codex + gpt-6.2-sol；合入 MR 用审核人自己的 GitLab 个人令牌；发布与回滚用操作人自己的 Apollo 账号（<code>tita release --local-config</code> 本地算配置后以本人身份写回）</li>
+      <li><b>待定</b>：用一条真实的「组件包 → 子项目 → 主站」链路评审大包清单；Tita 工单查询接口字段、Apollo 登录/开放接口与外网远程访问方案待实测确认</li>
+    </ol>
+  </div>
+  <div class="next"><button class="nb sec" data-go-tab="tech">← 上一步：技术设计</button><button class="nb pri" data-go-tab="req">回到第 1 步</button></div>
+</section>
+</main>
+
+<div class="zoom" id="zoom"><img alt=""></div>
+
+<script>
+(function(){
+  var root=document.documentElement;
+  function store(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+  function read(k){try{return localStorage.getItem(k)}catch(e){return null}}
+
+  /* 主题 */
+  var tb=document.querySelectorAll('[data-theme]');
+  function syncTheme(){var d=root.classList.contains('dark');tb.forEach(function(b){b.classList.toggle('on',(b.dataset.theme==='dark')===d)})}
+  tb.forEach(function(b){b.onclick=function(){root.classList.toggle('dark',b.dataset.theme==='dark');store('theme',b.dataset.theme);syncTheme()}});
+  syncTheme();
+
+  /* 顶部步骤标签 */
+  var order=['req','plan','theme','pc','mobile','tech','log'];
+  function go(id,noScroll){
+    if(order.indexOf(id)<0)id='req';
+    document.querySelectorAll('.pane').forEach(function(p){p.classList.toggle('on',p.dataset.pane===id)});
+    var idx=order.indexOf(id);
+    document.querySelectorAll('.step').forEach(function(s){var i=order.indexOf(s.dataset.tab);s.classList.toggle('on',i===idx);s.classList.toggle('done',i<idx)});
+    if(location.hash!=='#'+id)history.replaceState(null,'','#'+id);
+    store('tab',id);
+    if(!noScroll)window.scrollTo({top:0,behavior:'smooth'});
+    updateActiveToc();
+  }
+  document.querySelectorAll('.step').forEach(function(s){s.onclick=function(){go(s.dataset.tab)}});
+  document.querySelectorAll('[data-go-tab]').forEach(function(b){b.onclick=function(){go(b.dataset.goTab)}});
+
+  /* 二级标签（方案与链路） */
+  function goSub(group,sub){
+    document.querySelectorAll('[data-subtabs="'+group+'"] button').forEach(function(b){b.classList.toggle('on',b.dataset.sub===sub)});
+    document.querySelectorAll('[data-subpane^="'+group+':"]').forEach(function(p){p.classList.toggle('on',p.dataset.subpane===group+':'+sub)});
+    updateActiveToc();
+  }
+  document.querySelectorAll('[data-subtabs]').forEach(function(bar){
+    var g=bar.dataset.subtabs;
+    bar.querySelectorAll('button').forEach(function(b){b.onclick=function(){goSub(g,b.dataset.sub)}});
+  });
+
+  /* 初始路由（支持 #tech 或 #tech-5 锚点直达） */
+  var initHash=(location.hash||'').slice(1);
+  if(initHash&&order.indexOf(initHash)>=0){
+    go(initHash,true);window.scrollTo(0,0);
+  }else if(initHash&&document.getElementById(initHash)){
+    var el=document.getElementById(initHash);
+    var pane=el.closest('.pane');
+    if(pane)go(pane.dataset.pane,true);
+    var sp=el.closest('.subpane');
+    if(sp){var parts=sp.dataset.subpane.split(':');goSub(parts[0],parts[1])}
+    setTimeout(function(){el.scrollIntoView({behavior:'auto',block:'start'})},50);
+  }else{
+    go(read('tab')||'req',true);window.scrollTo(0,0);
+  }
+
+  /* 通用文档目录：支持全部 .doc 容器点击滚动与高亮 */
+  document.querySelectorAll('.toc a').forEach(function(a){
+    a.onclick=function(e){
+      e.preventDefault();
+      var t=document.getElementById(a.dataset.go);
+      if(t)t.scrollIntoView({behavior:'smooth',block:'start'});
+    };
+  });
+  function updateActiveToc(){
+    document.querySelectorAll('.doc').forEach(function(doc){
+      if(!doc.offsetParent)return;
+      var heads=[].slice.call(doc.querySelectorAll('.md h2,.md h3'));
+      var cur=null;
+      heads.forEach(function(h){if(h.getBoundingClientRect().top<180)cur=h.id});
+      if(!cur&&heads.length)cur=heads[0].id;
+      doc.querySelectorAll('.toc a').forEach(function(a){a.classList.toggle('cur',a.dataset.go===cur)});
+    });
+  }
+  window.addEventListener('scroll',updateActiveToc,{passive:true});
+
+  /* 技术设计：从二级标题自动生成章节进度直达条 */
+  var secBar=document.getElementById('tech-sec-bar');
+  if(secBar){
+    document.querySelectorAll('#p-tech .md h2').forEach(function(h){
+      var clone=h.cloneNode(true);
+      var ok=false;
+      clone.querySelectorAll('.h-pill').forEach(function(p){if(p.textContent.indexOf('确认')>=0)ok=true;p.remove()});
+      var btn=document.createElement('button');
+      btn.className='sec-chip '+(ok?'ok':'wip');
+      btn.innerHTML='<span class="dot"></span>'+clone.textContent.trim();
+      btn.onclick=function(){h.scrollIntoView({behavior:'smooth',block:'start'})};
+      secBar.appendChild(btn);
+    });
+  }
+
+  /* PC 其余页面分类筛选 */
+  var pcFilter=document.getElementById('pc-filter');
+  if(pcFilter){
+    pcFilter.querySelectorAll('.chip-btn').forEach(function(btn){
+      btn.onclick=function(){
+        var cat=btn.dataset.cat;
+        pcFilter.querySelectorAll('.chip-btn').forEach(function(b){b.classList.toggle('on',b===btn)});
+        document.querySelectorAll('#pc-gal figure').forEach(function(fig){
+          fig.classList.toggle('hide',cat!=='all'&&fig.dataset.cat!==cat);
+        });
+      };
+    });
+  }
+
+  /* Dock 演示 */
+  var W='width="24" height="24" viewBox="0 0 24 24"';
+  var I={
+    ai:'<svg '+W+' fill="#fff"><path d="M10 3l1.9 5.6 5.6 1.9-5.6 1.9L10 18l-1.9-5.6L2.5 10.5l5.6-1.9z"/><path d="M18 13.5l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9z" opacity=".8"/></svg>',
+    chat:'<svg width="28" height="28" viewBox="0 0 24 24"><defs><linearGradient id="cbx" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6CC4FF"/><stop offset="1" stop-color="#1673FF"/></linearGradient></defs><path d="M15 9.6c3.4 0 6.1 2.2 6.1 4.9 0 1.4-.7 2.6-1.8 3.5l.5 2.5-2.9-1.4c-.6.2-1.2.3-1.9.3-3.4 0-6.1-2.2-6.1-4.9s2.7-4.9 6.1-4.9z" fill="#B9DBFF"/><path d="M9.6 3.2c-4 0-7.2 2.6-7.2 5.8 0 1.7.9 3.2 2.3 4.2l-.6 3 3.5-1.7c.6.2 1.3.2 2 .2 4 0 7.2-2.6 7.2-5.8S13.6 3.2 9.6 3.2z" fill="url(#cbx)"/><circle cx="6.8" cy="9" r="1" fill="#fff"/><circle cx="9.6" cy="9" r="1" fill="#fff"/><circle cx="12.4" cy="9" r="1" fill="#fff"/></svg>',
+    pub:'<svg '+W+'><path d="M12 2.6l8.4 4.7L12 12 3.6 7.3z" fill="#FFE2A8"/><path d="M3.6 7.3L12 12v9.4l-8.4-4.7z" fill="#fff" opacity=".95"/><path d="M20.4 7.3L12 12v9.4l8.4-4.7z" fill="#fff" opacity=".7"/></svg>',
+    rb:'<svg '+W+' fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3.8 4.8v4.4h4.4"/><path d="M4.2 9.2A8.3 8.3 0 1 1 3.9 13.6"/><path d="M12 8v4.2l2.7 1.7"/></svg>',
+    sk:'<svg '+W+'><path d="M12 13.2l8.6-4.4L12 4.4 3.4 8.8z" fill="#fff"/><path d="M3.4 12.6L12 17l8.6-4.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".75"/><path d="M3.4 16.2L12 20.6l8.6-4.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".5"/></svg>',
+    set:'<svg '+W+'><path d="M12 1.8l1.6 2.4 2.8-.7.5 2.9 2.8.9-.9 2.8 2.2 1.9-2.2 1.9.9 2.8-2.8.9-.5 2.9-2.8-.7L12 22.2l-1.6-2.4-2.8.7-.5-2.9-2.8-.9.9-2.8-2.2-1.9 2.2-1.9-.9-2.8 2.8-.9.5-2.9 2.8.7z" fill="#EEF0F4"/><circle cx="12" cy="12" r="5.2" fill="#8D919B"/><circle cx="12" cy="12" r="2.6" fill="#E9EBF0"/></svg>'
+  };
+  var dd=document.getElementById('dockdemo'),sel='chat';
+  function dock(){
+    var h='';[['ai',''],['|'],['chat','4'],['pub','1'],['rb',''],['sk',''],['set','']].forEach(function(x){
+      if(x[0]==='|'){h+='<span class="sep"></span>';return}
+      h+='<span class="dk" data-k="'+x[0]+'" style="cursor:pointer"><span class="ap ap-'+x[0]+(x[0]===sel?' on':'')+'">'+I[x[0]]+'</span>'+(x[1]?'<b class="bd">'+x[1]+'</b>':'')+'</span>';
+    });
+    dd.innerHTML=h;
+    dd.querySelectorAll('.dk').forEach(function(d){d.onclick=function(){sel=d.dataset.k;dock()}});
+  }
+  dock();
+
+  /* 列表行演示 */
+  var rows=[['王芳','#7FB2FF,#4C7DF0','blue','点击分组后界面卡住','t','第 2 轮交付 · 验证 3/4',1],['陈晨','#FFC38A,#F08A5D','orange','进度条切换周期不刷新','j','验证受阻：账号进不去页面'],['赵磊','#8FD8C9,#3FAE9A','teal','考勤导出部门名乱码','t','浏览器验证中 · 84%'],['孙浩','#9EDB9A,#4FB06A','green','审批单撤回后状态错乱','t','已通过 · 去 Tita 点「已完成」']];
+  document.getElementById('rowdemo').innerHTML=rows.map(function(r){
+    return '<div class="lrow'+(r[6]?' on':'')+'"><span class="av" style="background:linear-gradient(150deg,'+r[1]+')">'+r[0]+'<i style="background:var(--'+r[2]+')"></i></span><div style="min-width:0"><div class="lt">'+r[3]+'</div><div class="ls"><span class="sc sc-'+r[4]+'">'+(r[4]==='t'?'Tita':'Jira')+'</span>'+r[5]+'</div></div></div>';
+  }).join('');
+
+  /* 标注 */
+  function annotate(shotId,legendId,items){
+    var shot=document.getElementById(shotId),lg=document.getElementById(legendId);
+    items.forEach(function(it,i){
+      var n=i+1,m=document.createElement('span');m.className='mk';m.textContent=n;m.style.left=it[0]+'%';m.style.top=it[1]+'%';shot.appendChild(m);
+      var d=document.createElement('div');d.className='lg';d.innerHTML='<i>'+n+'</i><div><b>'+it[2]+'</b><span>'+it[3]+'</span></div>';lg.appendChild(d);
+      function on(v){m.classList.toggle('hl',v);d.classList.toggle('hl',v)}
+      m.onmouseenter=function(){on(true)};m.onmouseleave=function(){on(false)};
+      d.onmouseenter=function(){on(true)};d.onmouseleave=function(){on(false)};
+    });
+  }
+  annotate('pcshot','pclegend',[
+    [1.7,3.6,'顶栏 · logo 和标题','44px 蓝紫渐变 logo，加两行标题「AI 修复工作台 / Fix Studio」；logo 和下方菜单竖直对齐'],
+    [65.4,3.6,'顶栏 · 状态胶囊','Bot 在线数、Jira 最近采集时间、Tita 采集失败（橙色）。对应需求「采集失败要可见」'],
+    [1.5,26,'Dock 菜单','只放图标的彩色 Dock：AI 助手 / 对话 / 发布 / 回滚 / Skills，设置在最底部。选中的放大加悬浮，红色数字角标'],
+    [7.4,15.2,'工单列表 · 分组','按「等你做什么」分组：等你决定 → Bot 在问你 → Bot 修复中 → 待原平台确认 → 需要处理'],
+    [28.2,19.6,'工单列表 · 行','提单人头像加状态点、来源标签、状态说明；选中行蓝底白字；修复中带进度条'],
+    [29.2,10.5,'工单头部','来源、标题、编号、P1、修复人、执行 Bot；右上「待我审核 · 第 2 轮」；下面是「对话 / 代码改动 / 证据 / 执行日志 / 发布」'],
+    [57.6,35.2,'对话流','按轮次分隔；你说的话是蓝色气泡；Bot 的四个步骤是一行毛玻璃条'],
+    [33.8,52,'交付卡','根因、回应上轮、修复前后截图（已查阅 / 未查阅）、验证清单（未测项橙色）、改动文件、所用 Skills'],
+    [49.6,86.8,'审核操作','「审核对象 a3f9c21」，加「打回并说明原因」和「审核通过 a3f9c21」两个按钮'],
+    [30.8,92.8,'本单 AI','紫色标签带工单号，只管这张单：问原因、补资料、让 Bot 复测'],
+    [78.4,13,'右侧信息栏','经过（时间线）、环境版本、各项进度，最底部是「我已在原单确认」']
+  ]);
+  annotate('mshot','mlegend',[
+    [5.4,16.5,'首页 · 大标题加状态','日期、大标题「工单」、头像；下面是 Bot 在线和 Tita 采集状态'],
+    [5.4,32,'数字卡片','等你决定 / Bot 在问你 / 修复中，点一下筛选；当前项用 glass-2 托起'],
+    [5.4,43.5,'分组列表','iOS 分组卡片样式，头像加状态点，和 PC 一致'],
+    [5.4,83,'底部 Tab 栏','悬浮毛玻璃，5 个彩色图标不带文字；选中的放大加悬浮'],
+    [36.3,18.8,'工单头部','返回、工单号、标题、P1、待我审核；分段控件'],
+    [63.6,48,'交付卡','根因、回应上轮、修复前后截图并排、验证清单'],
+    [36.3,78.2,'固定操作区','「打回 / 审核通过」固定在底部，下面是本单 AI 输入框；手机不用滚到底就能审核'],
+    [94.6,24,'AI 助手','彩色光球加问候语，告诉你今天有几张单在等你'],
+    [67.2,64,'回答带操作','AI 的回答直接列出工单，每张带「去审核」按钮'],
+    [94.6,76,'全局 AI 输入框','蓝紫粉渐变描边，和本单 AI 的紫色标签区分开']
+  ]);
+
+  /* 图片放大（支持点击关闭和 Esc 关闭） */
+  var z=document.getElementById('zoom');
+  document.querySelectorAll('.gal img').forEach(function(im){im.onclick=function(){z.querySelector('img').src=im.src;z.classList.add('on')}});
+  z.onclick=function(){z.classList.remove('on')};
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')z.classList.remove('on')});
+})();
+</script>
+</body>
+</html>

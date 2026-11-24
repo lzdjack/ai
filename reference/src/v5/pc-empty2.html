@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>空状态 · 二</title>
+<link rel="stylesheet" href="../v3/base.css"><link rel="stylesheet" href="../v4/apple.css"><link rel="stylesheet" href="pc.css">
+<script>(function(){var q=new URLSearchParams(location.search);if(q.get('mode')==='dark')document.documentElement.classList.add('dark')})()</script>
+<style>
+.eb{position:absolute;inset:0;padding:26px 30px 28px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:18px 22px}
+.et{display:flex;flex-direction:column;min-height:0}
+.el{display:flex;align-items:center;gap:10px;height:34px;flex:none;padding:0 4px}
+.el .no{width:22px;height:22px;border-radius:50%;background:var(--text);font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center}
+html.dark .el .no{color:#111}
+html:not(.dark) .el .no{color:#fff}
+.el b{font-size:16px;font-weight:700}
+.el em{font-style:normal;font-size:13px;color:var(--text-3)}
+.ep{flex:1;min-height:0;border-radius:22px;display:flex;overflow:hidden}
+.ml{width:200px;flex:none;border-right:1px solid var(--hair);padding:14px 10px 10px;display:flex;flex-direction:column}
+.ml .hd{display:flex;align-items:center;gap:6px;padding:0 6px 8px}
+.ml .hd b{font-size:16px;font-weight:700}
+.ph{border:1.5px dashed var(--hair);border-radius:12px;height:46px;margin:6px 4px 0}
+.ph.s{height:34px;opacity:.6}
+.bdj{width:18px;height:18px;border-radius:5px;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none}
+.ec{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;padding:0 26px}
+.eh{font-size:19px;font-weight:800;margin-top:12px}
+.kv2{display:flex;align-items:center;gap:8px;font-size:13px;padding:6px 0}
+.kv2+.kv2{border-top:1px solid var(--hair)}
+.chip{display:inline-flex;align-items:center;height:26px;padding:0 10px;border-radius:8px;background:var(--fill);font-size:12px;font-weight:600;color:var(--text-2);white-space:nowrap}
+.arr{color:var(--text-3);font-size:12px}
+.opt{flex:1;min-width:0;padding:12px;border-radius:14px;display:flex;flex-direction:column;gap:6px}
+
+.ask{padding:10px 12px;border-radius:12px;background:var(--fill);font-size:12.5px;line-height:1.5;display:flex;gap:8px;align-items:flex-start}
+.ask .k{flex:none;height:18px;padding:0 6px;border-radius:5px;font-size:10.5px;font-weight:700;display:inline-flex;align-items:center}
+.eb .thead{padding:12px 18px 10px}
+.eb .thead h1{font-size:16px}
+.ep.v{flex-direction:column}
+</style>
+</head><body><div class="root">
+<div class="eb"><div class="et"><div class="el"><span class="no">1</span><b>AI 助手 · 第一次打开</b><em>还没有任何对话</em></div><section class="glass ep"><div class="ml"><div class="hd"><b class="grow">AI 助手</b></div>
+<div class="row g6" style="margin:0 4px 4px;height:28px;padding:0 9px;border-radius:9px;background:var(--fill);color:var(--text-3)"><i data-i="search" data-s="12"></i><span class="f12">搜索对话</span></div>
+<div class="ph"></div><div class="ph"></div><div class="ph s"></div>
+<div class="f11 t3" style="padding:10px 6px 0;line-height:1.5">问过的会留在这里，下次接着问</div><span class="grow"></span></div><div class="ec">
+  <span class="orb" style="width:52px;height:52px"><i data-i="spark" data-s="24" style="color:#fff"></i></span>
+  <div class="eh">有事直接说</div>
+  <div class="f13 t2" style="margin-top:6px">能做的和页面上一样，按你的权限来</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px">
+    <div class="ask"><span class="k tag tg-b">查</span><span class="grow">哪几张在等我审核？</span></div>
+    <div class="ask"><span class="k tag tg-p">办</span><span class="grow">把 TK-20871 发到测试</span></div>
+    <div class="ask"><span class="k tag tg-b">查</span><span class="grow">今天 Tita 收单正常吗？</span></div>
+    <div class="ask"><span class="k tag tg-t">问</span><span class="grow">TK-20855 为什么打包失败</span></div>
+  </div>
+  <div class="row g8" style="margin-top:12px;height:38px;padding:0 6px 0 12px;border-radius:12px;background:var(--glass-2);box-shadow:0 0 0 1px var(--hair)"><span class="f13 t3 grow">问 AI 助手…</span><span class="chip2" style="height:26px;font-size:11.5px">关联：全局</span><span class="ic-box" style="width:28px;height:28px;border-radius:9px;background:linear-gradient(160deg,#5AA0FF,#1F6FFF)"><i data-i="arrowup" data-s="14" data-w="2.4"></i></span></div>
+  <div class="f12 t3" style="margin-top:8px">说的不清楚是哪张单时，会先问你</div>
+</div></section></div><div class="et"><div class="el"><span class="no">2</span><b>紧急回滚 · 没有可回滚的</b><em>这个环境只发布过一次</em></div><section class="glass ep"><div class="ml"><div class="hd"><b class="grow">紧急回滚</b><span class="tag tg-r">值班</span></div>
+<div class="row g8" style="margin:0 4px;padding:7px 8px;border-radius:10px;background:var(--fill)"><span class="ic-box" style="width:22px;height:22px;border-radius:6px;background:linear-gradient(160deg,#5AA0FF,#1F6FFF)"><i data-i="globe" data-s="12"></i></span><span class="f12 w6 grow ell">okr-web</span><i data-i="chevd" data-s="11" style="color:var(--text-3)"></i></div>
+<div class="seg" style="margin:8px 4px 0;padding:2px"><span class="on" style="flex:1;justify-content:center;height:22px;font-size:11px;color:var(--red)">PRO 正式</span><span style="flex:1;justify-content:center;height:22px;font-size:11px">TEST 测试</span></div>
+<div class="g10h" style="padding-top:12px">发布历史<span>1</span></div>
+<div class="row g8" style="padding:7px 8px;border-radius:10px"><div class="col grow" style="min-width:0"><span class="f12 w6 ell">okr-web 2.1.0 上线</span><span class="f11 t3">11-19 20:30</span></div><span class="tag tg-r">当前生效</span></div>
+<div class="ph s"></div><span class="grow"></span></div><div class="ec">
+  <span class="ic-box" style="width:52px;height:52px;border-radius:16px;background:linear-gradient(160deg,#B7BDC8,#8A92A0)"><i data-i="history" data-s="24" data-w="2"></i></span>
+  <div class="eh">没有可以回到的上一次</div>
+  <div class="f13 t2" style="margin-top:6px;line-height:1.65">okr-web 正式环境在 Apollo 里只有当前这一次发布。<br>回滚只回到之前的某次发布，不重新打包。</div>
+  <div class="row g8" style="margin-top:14px"><span class="btn2 sm a-sec" style="background:var(--fill)">换个应用</span><span class="btn2 sm a-sec" style="background:var(--fill)">看测试环境</span></div>
+  <div class="row g8 f12 t2" style="margin-top:14px;padding:8px 10px;border-radius:10px;background:var(--fill)"><i data-i="msgq" data-s="13" style="color:var(--text-3)"></i><span class="grow">历史从 Apollo 读，不是从工作台发的也会列出来</span></div>
+</div></section></div><div class="et"><div class="el"><span class="no">3</span><b>代码改动 · 还没提交</b><em>Bot 修复中，这一轮还没改完</em></div><section class="glass ep v"><header class="thead"><div class="row g10"><span class="appic ic-tita" style="width:32px;height:32px;font-size:9px;border-radius:9px">TITA</span>
+<div class="col grow" style="min-width:0"><h1 class="ell">考勤：导出月报后部门名显示乱码</h1><div class="f12 t3 ell" style="margin-top:1px">TK-20840 · 修复人 林某 · 第 1 轮</div></div><span class="pill p-teal" style="flex:none">AI 修复中 · 第 1 轮</span></div><div class="row g10" style="margin-top:8px"><div class="tab2"><span>对话</span><span class="on">代码改动</span><span>证据 <b>1</b></span><span>执行日志</span><span>发布</span></div></div></header>
+<div class="col grow" style="align-items:center;justify-content:center;text-align:center;padding:0 30px">
+  <span class="ic-box" style="width:52px;height:52px;border-radius:16px;background:linear-gradient(160deg,#B7BDC8,#8A92A0)"><i data-i="code" data-s="24" data-w="2"></i></span>
+  <div class="eh">第 1 轮还没提交代码</div>
+  <div class="row g8 f13 t2" style="margin-top:8px"><span class="dot10" style="width:8px;height:8px;border-radius:50%;background:var(--teal)"></span>Bot 正在「定位」· 已用 6 分钟</div>
+  <div class="f13 t2" style="margin-top:6px">提交后这里显示逐行差异，修复中也能随时看</div>
+  <div class="row g8" style="margin-top:14px"><span class="btn2 sm a-sec" style="background:var(--fill)">去对话看进度</span></div>
+  <div class="f12 t3" style="margin-top:14px">证据、执行日志没有内容时也一样：写清 Bot 做到哪一步</div>
+</div></section></div><div class="et"><div class="el"><span class="no">4</span><b>工单 · 发布 · 还没开始</b><em>审核通过之前</em></div><section class="glass ep v"><header class="thead"><div class="row g10"><span class="appic ic-tita" style="width:32px;height:32px;font-size:9px;border-radius:9px">TITA</span>
+<div class="col grow" style="min-width:0"><h1 class="ell">审批中心：发起审批时点击分组，界面卡住</h1><div class="f12 t3 ell" style="margin-top:1px">TK-20871 · 修复人 林某 · 第 2 轮</div></div><span class="pill p-blue" style="flex:none">待我审核 · 第 2 轮</span></div><div class="row g10" style="margin-top:8px"><div class="tab2"><span>对话</span><span>代码改动 <b>3</b></span><span>证据 <b>4</b></span><span>执行日志</span><span class="on">发布</span></div></div></header>
+<div class="col grow" style="align-items:center;justify-content:center;text-align:center;padding:0 30px">
+  <span class="ic-box" style="width:52px;height:52px;border-radius:16px;background:linear-gradient(160deg,#B7BDC8,#8A92A0)"><i data-i="rocket" data-s="24" data-w="2"></i></span>
+  <div class="eh">这张单还没发布</div>
+  <div class="f13 t2" style="margin-top:6px">第 2 轮等你审核，通过后在这里发到测试环境</div>
+  <div class="row g6" style="margin-top:14px"><span class="chip" style="background:color-mix(in srgb,var(--blue) 14%,transparent);color:var(--blue)">审核通过</span><span class="arr">→</span><span class="chip">合入测试分支</span><span class="arr">→</span><span class="chip">打包</span><span class="arr">→</span><span class="chip">发测试</span></div>
+  <div class="row g8" style="margin-top:14px"><span class="btn2 sm a-pri">去审核代码</span></div>
+  <div class="f12 t3" style="margin-top:14px">第 1 轮被你打回，没有发布过</div>
+</div></section></div></div>
+</div>
+<script src="../v3/shots.js"></script><script src="icons.js"></script>
+</body></html>
