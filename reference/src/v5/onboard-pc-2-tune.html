@@ -117,8 +117,14 @@
 .fchip.on{background:var(--blue);color:#fff}
 .fchip em{font-style:normal;opacity:.72;font-size:11px;font-weight:500}
 .addbtn{height:34px;padding:0 12px;border-radius:10px;background:var(--fill);border:1px solid var(--hair);font-size:12.5px;font-weight:600;color:var(--text);display:inline-flex;align-items:center;gap:5px;white-space:nowrap;flex:none}
-.plist{display:flex;flex-direction:column;gap:8px;margin-top:12px;flex:1;min-height:0}
-.prow{border-radius:15px;padding:11px 14px;background:var(--fill);border:1.5px solid transparent;display:flex;align-items:center;gap:14px;min-width:0}
+.plist{display:flex;flex-direction:column;gap:10px;margin-top:11px;flex:1;min-height:0}
+.sgrp{display:flex;flex-direction:column;gap:6px}
+.sgh{display:flex;align-items:center;gap:7px;padding:0 3px;font-size:12px}
+.sgh b{font-size:12.5px;font-weight:700;color:var(--text)}
+.sgh .surl{font-size:11.5px;color:var(--text-3)}
+.sgh .scnt{height:18px;padding:0 6px;border-radius:6px;background:color-mix(in srgb,var(--text) 7%,transparent);font-size:11px;font-weight:600;color:var(--text-2);display:inline-flex;align-items:center}
+.sgh .sadd{margin-left:auto;font-size:11.5px;font-weight:600;color:var(--blue);white-space:nowrap}
+.prow{border-radius:14px;padding:9px 13px;background:var(--fill);border:1.5px solid transparent;display:flex;align-items:center;gap:12px;min-width:0}
 .prow.rw{background:var(--glass-2);border-color:color-mix(in srgb,var(--green) 42%,transparent);box-shadow:0 6px 18px -12px color-mix(in srgb,var(--green) 55%,transparent)}
 .prow.ro{background:var(--glass-2);border-color:color-mix(in srgb,var(--blue) 38%,transparent);box-shadow:0 6px 18px -12px color-mix(in srgb,var(--blue) 45%,transparent)}
 .prow.off{opacity:.72}
@@ -162,86 +168,109 @@ html.dark .pseg{background:rgba(255,255,255,.07)}
       </div>
 
       <div class="plist">
-        <div class="prow rw">
-          <span class="pic" style="background:linear-gradient(155deg,#5AA0FF,#1F6FFF)">OKR</span>
-          <div class="pinfo">
-            <div class="ptop">
-              <b>OKR · 目标管理</b>
-              <span class="src-pill"><span class="sdot" style="background:#FC6D26">G</span><span class="mono">fe/tita-okr-web</span></span>
-              <span class="okchip"><i data-i="check" data-s="13" data-w="2.8"></i>已探测</span>
-            </div>
-            <div class="pmeta">
-              <span class="ai-bdg"><i data-i="spark" data-s="11"></i>AI 推测</span>
-              <span class="ell"><span class="mono">master</span> → <span class="mono">dev-okr</span> · <span class="mono">pnpm build-prod</span> · 规范 <span class="mono">AGENTS.md</span></span>
-              <span class="tune">微调 ›</span>
-            </div>
+        <!-- 分组 1：公司 GitLab -->
+        <div class="sgrp">
+          <div class="sgh">
+            <span class="sdot" style="background:#FC6D26;width:18px;height:18px;font-size:10px">G</span>
+            <b>公司 GitLab</b>
+            <span class="mono surl">https://git.tita.cloud</span>
+            <span class="scnt">已选 2 / 28</span>
+            <span class="sadd">+ 从此来源挑选 ›</span>
           </div>
-          <div class="pseg"><span><i data-i="eye" data-s="12"></i>仅查看</span><span class="s-rw"><i data-i="edit" data-s="12"></i>可修改</span></div>
-          <span class="rmb" title="移出授权列表"><i data-i="x" data-s="14"></i></span>
+          <div class="prow rw">
+            <span class="pic" style="background:linear-gradient(155deg,#5AA0FF,#1F6FFF)">OKR</span>
+            <div class="pinfo">
+              <div class="ptop">
+                <b>OKR · 目标管理</b>
+                <span class="src-pill" style="padding:2px 7px"><span class="mono">fe/tita-okr-web</span></span>
+                <span class="okchip"><i data-i="check" data-s="13" data-w="2.8"></i>已探测</span>
+              </div>
+              <div class="pmeta">
+                <span class="ai-bdg"><i data-i="spark" data-s="11"></i>AI 推测</span>
+                <span class="ell"><span class="mono">master</span> → <span class="mono">dev-okr</span> · <span class="mono">pnpm build-prod</span> · 规范 <span class="mono">AGENTS.md</span></span>
+                <span class="tune">微调 ›</span>
+              </div>
+            </div>
+            <div class="pseg"><span><i data-i="eye" data-s="12"></i>仅查看</span><span class="s-rw"><i data-i="edit" data-s="12"></i>可修改</span></div>
+            <span class="rmb" title="移出授权列表"><i data-i="x" data-s="14"></i></span>
+          </div>
+          <div class="prow ro">
+            <span class="pic" style="background:linear-gradient(155deg,#4FD6E6,#0E8FB3)">API</span>
+            <div class="pinfo">
+              <div class="ptop">
+                <b>OKR 后端服务</b>
+                <span class="src-pill" style="padding:2px 7px"><span class="mono">be/tita-okr-api</span></span>
+                <span class="tag tg-b" style="height:19px;font-size:10.5px">接口参考</span>
+              </div>
+              <div class="pmeta">
+                <span class="ro-bdg"><i data-i="lock" data-s="11"></i>只读隔离</span>
+                <span class="ell">辅助核对接口字段、错误码与权限逻辑，宿主机硬拦截写入与推送</span>
+              </div>
+            </div>
+            <div class="pseg"><span class="s-ro"><i data-i="eye" data-s="12"></i>仅查看</span><span><i data-i="edit" data-s="12"></i>可修改</span></div>
+            <span class="rmb" title="移出授权列表"><i data-i="x" data-s="14"></i></span>
+          </div>
         </div>
 
-        <div class="prow rw">
-          <span class="pic" style="background:linear-gradient(155deg,#5EDB7A,#22A748)">审批</span>
-          <div class="pinfo">
-            <div class="ptop">
-              <b>审批 · 协同办公</b>
-              <span class="src-pill"><span class="sdot" style="background:#3B82F6"><i data-i="folder" data-s="9" data-w="2.5"></i></span><span class="mono">~/workspace/approval-web</span></span>
-              <span class="okchip"><i data-i="check" data-s="13" data-w="2.8"></i>已探测</span>
-            </div>
-            <div class="pmeta">
-              <span class="ai-bdg"><i data-i="spark" data-s="11"></i>AI 推测</span>
-              <span class="ell"><span class="mono">main</span> → <span class="mono">test</span> · <span class="mono">pnpm build</span> · 本机 <span class="mono">worktree</span> 隔离修改</span>
-              <span class="tune">微调 ›</span>
-            </div>
+        <!-- 分组 2：本机代码目录 -->
+        <div class="sgrp">
+          <div class="sgh">
+            <span class="sdot" style="background:#3B82F6;width:18px;height:18px"><i data-i="folder" data-s="10" data-w="2.5"></i></span>
+            <b>本机代码目录</b>
+            <span class="mono surl">~/workspace</span>
+            <span class="scnt">已选 1 / 4</span>
+            <span class="sadd">+ 从此来源挑选 ›</span>
           </div>
-          <div class="pseg"><span><i data-i="eye" data-s="12"></i>仅查看</span><span class="s-rw"><i data-i="edit" data-s="12"></i>可修改</span></div>
-          <span class="rmb" title="移出授权列表"><i data-i="x" data-s="14"></i></span>
+          <div class="prow rw">
+            <span class="pic" style="background:linear-gradient(155deg,#5EDB7A,#22A748)">审批</span>
+            <div class="pinfo">
+              <div class="ptop">
+                <b>审批 · 协同办公</b>
+                <span class="src-pill" style="padding:2px 7px"><span class="mono">~/workspace/approval-web</span></span>
+                <span class="okchip"><i data-i="check" data-s="13" data-w="2.8"></i>已探测</span>
+              </div>
+              <div class="pmeta">
+                <span class="ai-bdg"><i data-i="spark" data-s="11"></i>AI 推测</span>
+                <span class="ell"><span class="mono">main</span> → <span class="mono">test</span> · <span class="mono">pnpm build</span> · 本机 <span class="mono">worktree</span> 隔离修改</span>
+                <span class="tune">微调 ›</span>
+              </div>
+            </div>
+            <div class="pseg"><span><i data-i="eye" data-s="12"></i>仅查看</span><span class="s-rw"><i data-i="edit" data-s="12"></i>可修改</span></div>
+            <span class="rmb" title="移出授权列表"><i data-i="x" data-s="14"></i></span>
+          </div>
         </div>
 
-        <div class="prow ro">
-          <span class="pic" style="background:linear-gradient(155deg,#B78BFF,#7B42F6)">UI</span>
-          <div class="pinfo">
-            <div class="ptop">
-              <b>基础组件库 · @tita/ui</b>
-              <span class="src-pill"><span class="sdot" style="background:#1F2328">GH</span><span class="mono">tita-org/ui-kit</span></span>
-              <span class="tag tg-b" style="height:19px;font-size:10.5px">共享参考</span>
-            </div>
-            <div class="pmeta">
-              <span class="ro-bdg"><i data-i="lock" data-s="11"></i>只读隔离</span>
-              <span class="ell">供 Bot 跨仓查组件 API 与主题变量，宿主机硬拦截任何代码写入与提 PR</span>
-            </div>
+        <!-- 分组 3：GitHub -->
+        <div class="sgrp">
+          <div class="sgh">
+            <span class="sdot" style="background:#1F2328;width:18px;height:18px;font-size:9px">GH</span>
+            <b>GitHub</b>
+            <span class="mono surl">github.com/tita-org</span>
+            <span class="scnt">已选 1 / 14</span>
+            <span class="sadd">+ 从此来源挑选 ›</span>
           </div>
-          <div class="pseg"><span class="s-ro"><i data-i="eye" data-s="12"></i>仅查看</span><span><i data-i="edit" data-s="12"></i>可修改</span></div>
-          <span class="rmb" title="移出授权列表"><i data-i="x" data-s="14"></i></span>
-        </div>
-
-        <div class="prow ro">
-          <span class="pic" style="background:linear-gradient(155deg,#4FD6E6,#0E8FB3)">API</span>
-          <div class="pinfo">
-            <div class="ptop">
-              <b>OKR 后端服务</b>
-              <span class="src-pill"><span class="sdot" style="background:#FC6D26">G</span><span class="mono">be/tita-okr-api</span></span>
-              <span class="tag tg-b" style="height:19px;font-size:10.5px">接口参考</span>
+          <div class="prow ro">
+            <span class="pic" style="background:linear-gradient(155deg,#B78BFF,#7B42F6)">UI</span>
+            <div class="pinfo">
+              <div class="ptop">
+                <b>基础组件库 · @tita/ui</b>
+                <span class="src-pill" style="padding:2px 7px"><span class="mono">tita-org/ui-kit</span></span>
+                <span class="tag tg-b" style="height:19px;font-size:10.5px">共享参考</span>
+              </div>
+              <div class="pmeta">
+                <span class="ro-bdg"><i data-i="lock" data-s="11"></i>只读隔离</span>
+                <span class="ell">供 Bot 跨仓查组件 API 与主题变量，宿主机硬拦截任何代码写入与提 PR</span>
+              </div>
             </div>
-            <div class="pmeta">
-              <span class="ro-bdg"><i data-i="lock" data-s="11"></i>只读隔离</span>
-              <span class="ell">辅助核对接口字段、错误码与权限逻辑，禁止修改或推送分支</span>
-            </div>
+            <div class="pseg"><span class="s-ro"><i data-i="eye" data-s="12"></i>仅查看</span><span><i data-i="edit" data-s="12"></i>可修改</span></div>
+            <span class="rmb" title="移出授权列表"><i data-i="x" data-s="14"></i></span>
           </div>
-          <div class="pseg"><span class="s-ro"><i data-i="eye" data-s="12"></i>仅查看</span><span><i data-i="edit" data-s="12"></i>可修改</span></div>
-          <span class="rmb" title="移出授权列表"><i data-i="x" data-s="14"></i></span>
-        </div>
-
-        <div class="pickmore">
-          <span class="sdots"><i style="background:#FC6D26">G</i><i style="background:#1F2328">GH</i><i style="background:#3B82F6">本</i></span>
-          <span class="grow">未选中的仓库不会拉取、也不展示在这里 · 可随时从 <b>公司 GitLab (28)</b>、<b>GitHub (14)</b>、<b>本机目录 (4)</b> 继续搜索添加</span>
-          <span class="lnk w6" style="white-space:nowrap">+ 挑选仓库 ›</span>
         </div>
       </div>
 
-      <div class="note" style="margin-bottom:12px">
+      <div class="note" style="margin-bottom:10px;padding:8px 13px">
         <i data-i="shield" data-s="15" style="color:var(--blue);margin-top:1px"></i>
-        <span><b>最小授权 + 自动路由：</b>Bot 只访问你主动选入的这 4 个仓库，且仅在「可修改」仓拉 <span class="mono">fix/</span> 分支提 MR（合入仍需真人审）；修单时自动定位目标项目，拿不准先问你。</span>
+        <span><b>按连接器分组 · 最小授权：</b>Bot 只访问你从各连接器主动选入的这 4 个仓库，且仅在「可修改」仓拉 <span class="mono">fix/</span> 分支提 MR（合入仍需真人审）；修单时自动路由到对应项目。</span>
       </div>
     </div>
     <div class="ff"><button class="bigb secb"><i data-i="chevl" data-s="16" data-w="2.4"></i>上一步</button><span class="stat-pill sp-g"><i data-i="edit" data-s="13"></i>可修改 2 个</span><span class="stat-pill sp-b"><i data-i="eye" data-s="13"></i>仅查看 2 个</span><span class="grow"></span><button class="bigb pri">下一步：环境与账号<i data-i="chevr" data-s="16" data-w="2.4"></i></button></div>
