@@ -200,6 +200,7 @@ html.dark .ap.on{box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 16px 28px -8px
 .ap-pub{background:linear-gradient(160deg,#FFC54D,#FF9A1F 55%,#FF7A00)}
 .ap-rb{background:linear-gradient(160deg,#FF8A7A,#FF453A 55%,#E0281E)}
 .ap-sk{background:linear-gradient(160deg,#C58BFF,#8E5CFF 55%,#6A3DF0)}
+.ap-mkt{background:linear-gradient(155deg,#34D399 0%,#14B8A6 52%,#0284C7 100%)}
 .ap-set{background:linear-gradient(160deg,#A9AEB8,#6E737D)}
 .bd{position:absolute;top:-5px;right:-6px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:#FF3B30;color:#fff;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;z-index:3;box-shadow:0 0 0 2px var(--glass-2)}
 .dk{position:relative}
@@ -550,13 +551,14 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
     </div>
   </div>
   <div class="card glass mt">
-    <h3>阶段二 · 日常修单、审核、发布上线与支线页面（33 张 · 严格按链路第 3 → 13 步排序）</h3>
-    <p class="sub" style="margin:0 0 12px">外壳（顶栏、Dock、工单列表）与主界面完全一致，只换中间内容。每张图已标出对应 <code>05-链路流转</code> 步号，按从左到右、从上到下连贯阅读即可，也可按模块筛选、点图放大。</p>
+    <h3>阶段二 · 日常修单、审核、发布上线、模块市场与支线页面（34 张 · 严格按链路第 3 → 13 步排序）</h3>
+    <p class="sub" style="margin:0 0 12px">外壳（顶栏、Dock、工单列表）与主界面完全一致（全部已同步「模块市场」Dock 图标），只换中间内容。每张图已标出对应 <code>05-链路流转</code> 步号，按从左到右、从上到下连贯阅读即可，也可按模块筛选、点图放大。</p>
     <div class="chips" id="pc-filter">
-      <button class="chip-btn on" data-cat="all">全部 <em>33</em></button>
+      <button class="chip-btn on" data-cat="all">全部 <em>34</em></button>
       <button class="chip-btn" data-cat="ticket">工单与审核（第 3～4、13 步） <em>9</em></button>
       <button class="chip-btn" data-cat="release">发布、复测与回滚（第 5～12 步） <em>11</em></button>
       <button class="chip-btn" data-cat="skills">Skills <em>3</em></button>
+      <button class="chip-btn" data-cat="market">模块市场 <em>1</em></button>
       <button class="chip-btn" data-cat="settings">设置 <em>6</em></button>
       <button class="chip-btn" data-cat="state">排队与边界状态 <em>4</em></button>
     </div>
@@ -587,6 +589,8 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
       <figure data-cat="skills"><img class="img-l" src="reference/images/pages/PC-Skills-亮色.png" alt="Skills 亮色"><img class="img-d" src="reference/images/pages/PC-Skills-暗色.png" alt="Skills 暗色"><figcaption><b>Skills · 主页</b> · 我的 / 内置、在线编辑、AI 帮写草稿、按项目启用和生效时机</figcaption></figure>
       <figure data-cat="skills"><img class="img-l" src="reference/images/pages/PC-Skills-版本历史-亮色.png" alt="Skills · 版本历史 亮色"><img class="img-d" src="reference/images/pages/PC-Skills-版本历史-暗色.png" alt="Skills · 版本历史 暗色"><figcaption><b>Skills · 版本历史</b> · 版本列表、相对上一版的改动、哪些轮次用过；退回旧版选中再启用</figcaption></figure>
       <figure data-cat="skills"><img class="img-l" src="reference/images/pages/PC-Skills-导入-亮色.png" alt="Skills · 导入 亮色"><img class="img-d" src="reference/images/pages/PC-Skills-导入-暗色.png" alt="Skills · 导入 暗色"><figcaption><b>Skills · 导入</b> · 文件 / GitLab 链接 / 粘贴；账号密码自动打码；导入先是草稿</figcaption></figure>
+      <!-- 模块市场 -->
+      <figure data-cat="market"><img class="img-l" src="reference/images/pages/PC-模块市场-亮色.png" alt="模块市场 亮色"><img class="img-d" src="reference/images/pages/PC-模块市场-暗色.png" alt="模块市场 暗色"><figcaption><b>[扩展底座 · 标杆插件] 模块市场</b> · Dock 绿青入口（设置上方）；默认安装「紧急回滚（Apollo）」，展示 6 黄金槽位、<code>craft</code> 命令映射、MCP 能力与最小权限边界</figcaption></figure>
       <!-- 设置 -->
       <figure data-cat="settings"><img class="img-l" src="reference/images/pages/PC-设置-亮色.png" alt="设置 · 项目 亮色"><img class="img-d" src="reference/images/pages/PC-设置-暗色.png" alt="设置 · 项目 暗色"><figcaption><b>设置 · 项目（即开工准备）</b> · 每项配置的当前值和 Bot 实测，点「改」修改；没准备好时单先等着</figcaption></figure>
       <figure data-cat="settings"><img class="img-l" src="reference/images/pages/PC-设置-全局AI-亮色.png" alt="设置 · 全局 AI 亮色"><img class="img-d" src="reference/images/pages/PC-设置-全局AI-暗色.png" alt="设置 · 全局 AI 暗色"><figcaption><b>设置 · 全局 AI</b> · 管理员接一次 AI（工具、模型、公司网关、试一下）；Bot 账号、权限边界、共用提示词</figcaption></figure>
@@ -607,7 +611,7 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
 <!-- ========== 5 移动端 ========== -->
 <section class="pane" id="p-mobile" data-pane="mobile">
   <h2 class="ttl">第 5 步 · 移动端</h2>
-  <p class="sub">首页三屏：工单列表、工单对话（审核）、AI 助手；下面是闪屏、登录、步骤器以及其余 9 张（27 屏）。每台手机 390 × 844，和 PC 用同一套主题。</p>
+  <p class="sub">首页三屏：工单列表、工单对话（审核）、AI 助手；下面是闪屏、登录、步骤器以及其余 10 张（30 屏，含模块市场与无在线执行器轻引导）。每台手机 390 × 844，和 PC 用同一套主题。</p>
   <p class="toggle-note">把鼠标移到红色编号上，下面对应的说明会高亮。</p>
   <div class="shot" id="mshot">
     <img class="img-l" src="reference/images/移动端-亮色.png" alt="移动端 亮色">
@@ -623,13 +627,14 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
     </div>
   </div>
   <div class="card glass mt">
-    <h3>其余功能页面（9 张 · 27 屏）</h3>
+    <h3>其余功能页面（10 张 · 30 屏）</h3>
     <div class="gal">
       <figure><img class="img-l" src="reference/images/pages/移动端-代码与审核-亮色.png" alt="代码与审核 亮色"><img class="img-d" src="reference/images/pages/移动端-代码与审核-暗色.png" alt="代码与审核 暗色"><figcaption><b>代码与审核</b> · 代码改动 · 打回 · Bot 在问你</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/移动端-证据报错发布-亮色.png" alt="证据、报错与发布 亮色"><img class="img-d" src="reference/images/pages/移动端-证据报错发布-暗色.png" alt="证据、报错与发布 暗色"><figcaption><b>证据、报错与发布</b> · 证据 · 报错 · 发布到测试</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/移动端-发布-亮色.png" alt="移动端 · 发布 亮色"><img class="img-d" src="reference/images/pages/移动端-发布-暗色.png" alt="移动端 · 发布 暗色"><figcaption><b>移动端 · 发布</b> · 同一套发布详情的三种状态：工单里的「发布」标签、等复测（测试人点通过 / 打回）、发布到正式（前置齐了才能点）</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/移动端-大包与紧急回滚-亮色.png" alt="大包与紧急回滚 亮色"><img class="img-d" src="reference/images/pages/移动端-大包与紧急回滚-暗色.png" alt="大包与紧急回滚 暗色"><figcaption><b>大包与紧急回滚</b> · 大包明细 · 回滚确认 · 回滚结果</figcaption></figure>
-      <figure><img class="img-l" src="reference/images/pages/移动端-Skills与设置-亮色.png" alt="Skills 与设置 亮色"><img class="img-d" src="reference/images/pages/移动端-Skills与设置-暗色.png" alt="Skills 与设置 暗色"><figcaption><b>Skills 与设置</b> · Skills · 编辑草稿 · 设置</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/移动端-Skills与设置-亮色.png" alt="Skills 与设置 亮色"><img class="img-d" src="reference/images/pages/移动端-Skills与设置-暗色.png" alt="Skills 与设置 暗色"><figcaption><b>Skills 与设置</b> · Skills · 编辑草稿 · 设置（含模块市场入口与执行器状态）</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/移动端-模块市场与执行器-亮色.png" alt="模块市场与执行器 亮色"><img class="img-d" src="reference/images/pages/移动端-模块市场与执行器-暗色.png" alt="模块市场与执行器 暗色"><figcaption><b>模块市场与执行器</b> · 设置 → 模块市场列表 · 紧急回滚（Apollo）详情与启停 · 暂无在线执行器轻引导</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/移动端-通知-亮色.png" alt="移动端 · 通知 亮色"><img class="img-d" src="reference/images/pages/移动端-通知-暗色.png" alt="移动端 · 通知 暗色"><figcaption><b>移动端 · 通知</b> · 锁屏推送（点开直达）· 通知设置（两项关不掉）· 免打扰与设备</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/移动端-审核与排队-亮色.png" alt="移动端 · 审核与排队 亮色"><img class="img-d" src="reference/images/pages/移动端-审核与排队-暗色.png" alt="移动端 · 审核与排队 暗色"><figcaption><b>移动端 · 审核与排队</b> · 审核通过有未测项（勾选才能通过）· 工单排队中 · 发测试前换测试人</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/移动端-空状态-亮色.png" alt="移动端 · 空状态 亮色"><img class="img-d" src="reference/images/pages/移动端-空状态-暗色.png" alt="移动端 · 空状态 暗色"><figcaption><b>移动端 · 空状态</b> · 工单还没收到单（Bot 在等单）· 还没有发布 · AI 助手第一次打开</figcaption></figure>
@@ -648,7 +653,7 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
     <div class="kpi glass"><b style="font-size:19px">Fastify + Drizzle + PG</b><span>纯 ESM · 单源 Schema 出 OpenAPI 3.1</span></div>
     <div class="kpi glass"><b style="font-size:19px">Electron + Flutter</b><span>双端由 OpenAPI 同源生成客户端</span></div>
     <div class="kpi glass"><b style="font-size:19px">Pi 内核 · 多模型</b><span>轻量可控执行引擎 + UI Block 协议</span></div>
-    <div class="kpi glass"><b style="font-size:19px">第 0～12 节已确认</b><span>核心与动态模块底座全确认 · 第 13～14 节待续写</span></div>
+    <div class="kpi glass"><b style="font-size:19px">第 0～13 节已确认</b><span>核心、动态模块底座与 M1～M3 里程碑全确认 · 可直接开工</span></div>
   </div>
 
   <div class="card glass mt">
@@ -689,6 +694,7 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
         <tr><td class="no">列表用 TITA/JIRA 方块、浅色符号圆</td><td>和菜单图标撞在一起；「图标我不是很喜欢」</td><td class="yes">提单人头像加状态点</td></tr>
         <tr><td class="no">静态图里画悬停提示</td><td>压住了列表内容</td><td class="yes">静态图不画悬停提示</td></tr>
         <tr><td class="no">散落多个独立 HTML 查阅文档</td><td>「以后都放到一个 HTML 文档里面，不需要到处乱找」</td><td class="yes">全部汇入唯一的 <code>index.html</code></td></tr>
+        <tr><td class="no">一切皆插件、核心全拆成松散模块随意组装</td><td>跨模块事务失控、前端体验割裂、开发成倍膨胀</td><td class="yes">「厚核心 + 轻插件」黄金分割线（核心焊死，外围进模块市场）</td></tr>
       </tbody>
     </table></div>
   </div>
@@ -720,12 +726,11 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
       <ul class="chk">
         <li class="done">产品需求（00）、修复流转（04）、链路流转（05）与链路总图</li>
         <li class="done">应用图标、PC 和移动端闪屏、独立登录与注册（PC 2 页 + 移动端 4 屏）</li>
-        <li class="done">PC 主界面 + 首次使用步骤器（10 张）+ 其余功能页面（33 张）</li>
-        <li class="done">移动端首页 3 屏 + 步骤器（4 屏）+ 其余功能页面（9 张 · 27 屏）</li>
-        <li class="done">技术设计方案第 0～12 节全部已确认（含动态模块扩展底座、<code>craft</code> 三级命令映射、Pi 同级插件与 4C8G 方案）</li>
-        <li class="wip">技术设计方案第 13～14 节（安全与外网访问、客户端工程与待定总表，待续写）</li>
+        <li class="done">PC 主界面 + 首次使用步骤器（10 张）+ 其余功能页面（34 张，含模块市场，全量同步 Dock 图标）</li>
+        <li class="done">移动端首页 3 屏 + 步骤器（4 屏）+ 其余功能页面（10 张 · 30 屏，含模块市场与无执行器轻引导）</li>
+        <li class="done">技术设计方案第 0～13 节全部已确认（含动态模块底座、<code>craft</code> 三级映射、Pi 同级插件、4C8G 方案与 M1～M3 编码里程碑）</li>
         <li class="done">PC 选择执行环境 + 执行器首次初始化 Loading 页（水波纹星光 + 灵动岛单胶囊，亮暗两版）</li>
-        <li>开工准备页的移动端</li>
+        <li class="wip">正式进入 M1 编码落地（<code>cloudcraft/</code> pnpm Monorepo 核心修单闭环）</li>
       </ul>
     </div>
   </div>
@@ -861,11 +866,12 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
     pub:'<svg '+W+'><path d="M12 2.6l8.4 4.7L12 12 3.6 7.3z" fill="#FFE2A8"/><path d="M3.6 7.3L12 12v9.4l-8.4-4.7z" fill="#fff" opacity=".95"/><path d="M20.4 7.3L12 12v9.4l8.4-4.7z" fill="#fff" opacity=".7"/></svg>',
     rb:'<svg '+W+' fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3.8 4.8v4.4h4.4"/><path d="M4.2 9.2A8.3 8.3 0 1 1 3.9 13.6"/><path d="M12 8v4.2l2.7 1.7"/></svg>',
     sk:'<svg '+W+'><path d="M12 13.2l8.6-4.4L12 4.4 3.4 8.8z" fill="#fff"/><path d="M3.4 12.6L12 17l8.6-4.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".75"/><path d="M3.4 16.2L12 20.6l8.6-4.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".5"/></svg>',
+    mkt:'<svg '+W+'><rect x="3.5" y="3.5" width="7.2" height="7.2" rx="2.2" fill="#fff"/><rect x="13.3" y="3.5" width="7.2" height="7.2" rx="2.2" fill="#fff" opacity=".82"/><rect x="3.5" y="13.3" width="7.2" height="7.2" rx="2.2" fill="#fff" opacity=".82"/><path d="M16.9 13.2l1.1 2.7 2.7 1.1-2.7 1.1-1.1 2.7-1.1-2.7-2.7-1.1 2.7-1.1z" fill="#fff"/></svg>',
     set:'<svg '+W+'><path d="M12 1.8l1.6 2.4 2.8-.7.5 2.9 2.8.9-.9 2.8 2.2 1.9-2.2 1.9.9 2.8-2.8.9-.5 2.9-2.8-.7L12 22.2l-1.6-2.4-2.8.7-.5-2.9-2.8-.9.9-2.8-2.2-1.9 2.2-1.9-.9-2.8 2.8-.9.5-2.9 2.8.7z" fill="#EEF0F4"/><circle cx="12" cy="12" r="5.2" fill="#8D919B"/><circle cx="12" cy="12" r="2.6" fill="#E9EBF0"/></svg>'
   };
   var dd=document.getElementById('dockdemo'),sel='chat';
   function dock(){
-    var h='';[['ai',''],['|'],['chat','4'],['pub','1'],['rb',''],['sk',''],['set','']].forEach(function(x){
+    var h='';[['ai',''],['|'],['chat','4'],['pub','1'],['rb',''],['sk',''],['|'],['mkt',''],['set','']].forEach(function(x){
       if(x[0]==='|'){h+='<span class="sep"></span>';return}
       h+='<span class="dk" data-k="'+x[0]+'" style="cursor:pointer"><span class="ap ap-'+x[0]+(x[0]===sel?' on':'')+'">'+I[x[0]]+'</span>'+(x[1]?'<b class="bd">'+x[1]+'</b>':'')+'</span>';
     });
@@ -894,7 +900,7 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
   annotate('pcshot','pclegend',[
     [1.7,3.6,'顶栏 · logo 和标题','44px 蓝紫渐变 logo，加两行标题「云匠 / CLOUDCRAFT」（冬青黑 + Optima 蓝紫渐变）；logo 和下方菜单竖直对齐'],
     [65.4,3.6,'顶栏 · 状态胶囊','Bot 在线数、Jira 最近采集时间、Tita 采集失败（橙色）。对应需求「采集失败要可见」'],
-    [1.5,26,'Dock 菜单','只放图标的彩色 Dock：AI 助手 / 对话 / 发布 / 回滚 / Skills，设置在最底部。选中的放大加悬浮，红色数字角标'],
+    [1.5,26,'Dock 菜单','只放图标的彩色 Dock：AI 助手 / 对话 / 发布 / 回滚 / Skills，底部为模块市场（绿青）与设置。选中的放大加悬浮，红色数字角标'],
     [7.4,15.2,'工单列表 · 分组','按「等你做什么」分组：等你决定 → Bot 在问你 → Bot 修复中 → 待原平台确认 → 需要处理'],
     [28.2,19.6,'工单列表 · 行','提单人头像加状态点、来源标签、状态说明；选中行蓝底白字；修复中带进度条'],
     [29.2,10.5,'工单头部','来源、标题、编号、P1、修复人、执行 Bot；右上「待我审核 · 第 2 轮」；下面是「对话 / 代码改动 / 证据 / 执行日志 / 发布」'],

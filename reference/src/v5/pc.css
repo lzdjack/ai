@@ -34,6 +34,7 @@ html.dark .ap-chat{background:linear-gradient(180deg,#3A4157,#262B3C)}
 .ap-pub{background:linear-gradient(160deg,#FFC54D 0%,#FF9A1F 55%,#FF7A00 100%)}
 .ap-rb{background:linear-gradient(160deg,#FF8A7A 0%,#FF453A 55%,#E0281E 100%)}
 .ap-sk{background:linear-gradient(160deg,#C58BFF 0%,#8E5CFF 55%,#6A3DF0 100%)}
+.ap-mkt{background:linear-gradient(155deg,#34D399 0%,#14B8A6 52%,#0284C7 100%)}
 .ap-set{background:linear-gradient(160deg,#A9AEB8 0%,#6E737D 100%)}
 .dki.on{z-index:2}
 .dki.on .ap{transform:scale(1.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),inset 0 -1px 1px rgba(0,0,0,.1),0 2px 4px rgba(0,0,0,.08),0 14px 26px -8px rgba(20,50,120,.5)}
