@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><title>模块市场 · PC</title>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>插件市场 · PC</title>
 <link rel="stylesheet" href="../v3/base.css"><link rel="stylesheet" href="../v4/apple.css"><link rel="stylesheet" href="pc.css">
 <script>(function(){var q=new URLSearchParams(location.search);if(q.get('mode')==='dark')document.documentElement.classList.add('dark')})()</script>
 </head><body><div class="root">
@@ -23,8 +23,8 @@
 .mk-item.on .mk-sub{color:rgba(255,255,255,.84)!important}
 .mk-item.on .mk-bd{background:rgba(255,255,255,.22)!important;color:#fff!important}
 .mk-bd{height:17px;padding:0 6px;border-radius:5px;font-size:10px;font-weight:700;display:inline-flex;align-items:center;white-space:nowrap;flex:none}
-.slot-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
-.slot-c{padding:11px 13px;border-radius:14px;background:var(--fill);border:1px solid var(--hair)}
+.slot-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;margin-top:10px}
+.slot-c{padding:11px 13px;border-radius:14px;background:var(--fill);border:1px solid var(--hair);min-width:0;overflow:hidden}
 .cmd-row{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:11px;background:var(--fill);font-size:12.5px}
 .cmd-row+.cmd-row{margin-top:7px}
 .cmd-k{font-family:"SF Mono",ui-monospace,monospace;font-weight:700;color:var(--blue);min-width:118px;flex:none}
@@ -36,26 +36,27 @@ html:not(.dark) .mcp-chip{color:#7C3AED}
 </style>
 <section class="glass pn" style="width:296px;flex:none;padding:16px 10px 10px">
   <div class="row" style="padding:0 8px 8px">
-    <span class="f18 w7 grow">模块市场</span>
-    <span class="btn2 sm" style="background:var(--fill);color:var(--text)"><i data-i="plus" data-s="13" data-w="2.3"></i>私有模块</span>
+    <span class="f18 w7 grow">插件市场</span>
+    <span class="btn2 sm" style="background:var(--fill);color:var(--text)"><i data-i="plus" data-s="13" data-w="2.3"></i>私有插件</span>
   </div>
-  <div class="row g8" style="margin:0 6px;height:32px;padding:0 10px;border-radius:10px;background:var(--fill);color:var(--text-3)"><i data-i="search" data-s="14"></i><span class="f12">搜索模块、连接器、MCP…</span></div>
+  <div class="row g8" style="margin:0 6px;height:32px;padding:0 10px;border-radius:10px;background:var(--fill);color:var(--text-3)"><i data-i="search" data-s="14"></i><span class="f12">搜索插件、连接器、主题、MCP…</span></div>
   <div class="seg" style="margin:10px 6px 2px;padding:2px">
-    <span class="on" style="height:26px;font-size:12px;flex:1">全部 7</span>
-    <span style="height:26px;font-size:12px;flex:1">已安装 3</span>
+    <span class="on" style="height:26px;font-size:12px;flex:1">全部 8</span>
+    <span style="height:26px;font-size:12px;flex:1">已安装 4</span>
     <span style="height:26px;font-size:12px;flex:1">企业私有</span>
   </div>
 
-  <div class="g10h">已安装 · 默认启用<span>3</span></div>
-  <div class="mk-item on"><span class="mk-ic" style="background:linear-gradient(160deg,#FF8A7A,#E0281E)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.8 4.8v4.4h4.4"/><path d="M4.2 9.2A8.3 8.3 0 1 1 3.9 13.6"/><path d="M12 8v4.2l2.7 1.7"/></svg></span><div class="grow" style="min-width:0"><div class="row g6"><span class="f13 w6 ell grow">紧急回滚（Apollo）</span><span class="mk-bd tg-g">默认安装</span></div><div class="f12 t3 ell mk-sub" style="margin-top:2px">Dock 回滚入口 · 历史发布与差异回退</div></div></div>
-  <div class="mk-item"><span class="mk-ic" style="background:linear-gradient(160deg,#FFC54D,#FF7A00)"><svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 2.6l8.4 4.7L12 12 3.6 7.3z" fill="#FFE2A8"/><path d="M3.6 7.3L12 12v9.4l-8.4-4.7z" fill="#fff" opacity=".95"/><path d="M20.4 7.3L12 12v9.4l8.4-4.7z" fill="#fff" opacity=".7"/></svg></span><div class="grow" style="min-width:0"><div class="row g6"><span class="f13 w6 ell grow">发布流水线（Tita）</span><span class="mk-bd tg-g">默认安装</span></div><div class="f12 t3 ell mk-sub" style="margin-top:2px">Dock 发布 + 工单发布标签 · craft 映射</div></div></div>
-  <div class="mk-item"><span class="mk-ic" style="background:linear-gradient(155deg,#5E8BFF,#8B5CF6)"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8z"/></svg></span><div class="grow" style="min-width:0"><div class="row g6"><span class="f13 w6 ell grow">Pi 修复引擎（runtime-pi）</span><span class="mk-bd tg-b">核心默认</span></div><div class="f12 t3 ell mk-sub" style="margin-top:2px">核心默认引擎 · 多模型与流式交互</div></div></div>
+  <div class="g10h">已安装 · 含官方预装<span>4</span></div>
+  <div class="mk-item on"><span class="mk-ic" style="background:linear-gradient(160deg,#FF8A7A,#E0281E)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.8 4.8v4.4h4.4"/><path d="M4.2 9.2A8.3 8.3 0 1 1 3.9 13.6"/><path d="M12 8v4.2l2.7 1.7"/></svg></span><div class="grow" style="min-width:0"><div class="row g6"><span class="f13 w6 ell grow">紧急回滚（Apollo）</span><span class="mk-bd tg-g">默认安装</span></div><div class="f12 t3 ell mk-sub" style="margin-top:2px">views + connectors · 回滚与差异预览</div></div></div>
+  <div class="mk-item"><span class="mk-ic" style="background:linear-gradient(160deg,#FFC54D,#FF7A00)"><svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 2.6l8.4 4.7L12 12 3.6 7.3z" fill="#FFE2A8"/><path d="M3.6 7.3L12 12v9.4l-8.4-4.7z" fill="#fff" opacity=".95"/><path d="M20.4 7.3L12 12v9.4l8.4-4.7z" fill="#fff" opacity=".7"/></svg></span><div class="grow" style="min-width:0"><div class="row g6"><span class="f13 w6 ell grow">发布流水线（Tita）</span><span class="mk-bd tg-g">默认安装</span></div><div class="f12 t3 ell mk-sub" style="margin-top:2px">views + craft · 发测试与正式流水线</div></div></div>
+  <div class="mk-item"><span class="mk-ic" style="background:linear-gradient(155deg,#38BDF8,#2563EB)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a6 6 0 0 1-12 0V8z"/></svg></span><div class="grow" style="min-width:0"><div class="row g6"><span class="f13 w6 ell grow">GitLab / Jira 连接器</span><span class="mk-bd tg-b">官方预装</span></div><div class="f12 t3 ell mk-sub" style="margin-top:2px">connectors · 鉴权归「设置 → 连接器」</div></div></div>
+  <div class="mk-item"><span class="mk-ic" style="background:linear-gradient(155deg,#5E8BFF,#8B5CF6)"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8z"/></svg></span><div class="grow" style="min-width:0"><div class="row g6"><span class="f13 w6 ell grow">Pi 修复引擎（runtime-pi）</span><span class="mk-bd tg-b">核心默认</span></div><div class="f12 t3 ell mk-sub" style="margin-top:2px">runtimes · 多模型与流式交互</div></div></div>
 
-  <div class="g10h">可安装 · 官方与扩展<span>4</span></div>
-  <div class="mk-item"><span class="mk-ic" style="background:linear-gradient(155deg,#34D399,#059669)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></span><div class="grow" style="min-width:0"><div class="row g6"><span class="f13 w6 ell grow">灰度放量（Canary）</span><span class="inst-pill">安装</span></div><div class="f12 t3 ell mk-sub" style="margin-top:2px">5%→50%→100% 流量大盘 · 沙箱微应用</div></div></div>
-  <div class="mk-item"><span class="mk-ic" style="background:linear-gradient(155deg,#38BDF8,#2563EB)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></span><div class="grow" style="min-width:0"><div class="row g6"><span class="f13 w6 ell grow">通用 CI/CD 命令发布</span><span class="inst-pill">安装</span></div><div class="f12 t3 ell mk-sub" style="margin-top:2px">craft 映射任意公司 build/deploy</div></div></div>
-  <div class="mk-item"><span class="mk-ic" style="background:linear-gradient(155deg,#64748B,#334155)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a6 6 0 0 1-12 0V8z"/></svg></span><div class="grow" style="min-width:0"><div class="row g6"><span class="f13 w6 ell grow">外部 CLI 引擎（ACP）</span><span class="inst-pill">安装</span></div><div class="f12 t3 ell mk-sub" style="margin-top:2px">可选插件 · 复用 Claude Code / Codex</div></div></div>
-  <div class="mk-item"><span class="mk-ic" style="background:linear-gradient(155deg,#60A5FA,#4F46E5)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><div class="grow" style="min-width:0"><div class="row g6"><span class="f13 w6 ell grow">飞书 / 钉钉审批联动</span><span class="inst-pill">安装</span></div><div class="f12 t3 ell mk-sub" style="margin-top:2px">L2 MCP · 审核与发布推送群审批卡</div></div></div>
+  <div class="g10h">可安装 · 扩展生态<span>4</span></div>
+  <div class="mk-item"><span class="mk-ic" style="background:linear-gradient(155deg,#34D399,#059669)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></span><div class="grow" style="min-width:0"><div class="row g6"><span class="f13 w6 ell grow">Token 费用检测</span><span class="inst-pill">安装</span></div><div class="f12 t3 ell mk-sub" style="margin-top:2px">topbar.widgets + 插件设置 · 预算熔断</div></div></div>
+  <div class="mk-item"><span class="mk-ic" style="background:linear-gradient(155deg,#A855F7,#6366F1)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></span><div class="grow" style="min-width:0"><div class="row g6"><span class="f13 w6 ell grow">高对比暗夜主题</span><span class="inst-pill">安装</span></div><div class="f12 t3 ell mk-sub" style="margin-top:2px">themes · 自动归「外观与语言」单选</div></div></div>
+  <div class="mk-item"><span class="mk-ic" style="background:linear-gradient(155deg,#64748B,#334155)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a6 6 0 0 1-12 0V8z"/></svg></span><div class="grow" style="min-width:0"><div class="row g6"><span class="f13 w6 ell grow">外部 CLI 引擎（ACP）</span><span class="inst-pill">安装</span></div><div class="f12 t3 ell mk-sub" style="margin-top:2px">runtimes · 复用 Claude Code / Codex</div></div></div>
+  <div class="mk-item"><span class="mk-ic" style="background:linear-gradient(155deg,#60A5FA,#4F46E5)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><div class="grow" style="min-width:0"><div class="row g6"><span class="f13 w6 ell grow">飞书 / 钉钉审批联动</span><span class="inst-pill">安装</span></div><div class="f12 t3 ell mk-sub" style="margin-top:2px">connectors + mcp · 群审批卡</div></div></div>
 </section><main class="glass pn grow" style="min-width:0;padding:18px 22px;gap:12px">
   <div class="row g14" style="align-items:flex-start;padding-bottom:13px;border-bottom:1px solid var(--hair)">
     <span class="ap ap-rb" style="width:52px;height:52px;border-radius:14px;transform:none;flex:none"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3.8 4.8v4.4h4.4"/><path d="M4.2 9.2A8.3 8.3 0 1 1 3.9 13.6"/><path d="M12 8v4.2l2.7 1.7"/></svg></span>
@@ -65,16 +66,16 @@ html:not(.dark) .mcp-chip{color:#7C3AED}
         <span class="tag tg-g">已安装 · 默认安装</span>
         <span class="tag tg-n mono">v1.2.0</span>
       </div>
-      <div class="f12 t2" style="line-height:1.5">官方扩展插件 <span class="mono t3">plugins/module-rollback-apollo</span> · L1 流水线 + L2 MCP · 独立提供发布历史查看、配置连带差异预览与一键回滚，不需要时可随时停用卸载。</div>
+      <div class="f12 t2" style="line-height:1.5">官方扩展插件 <span class="mono t3">plugins/module-rollback-apollo</span> · 遵循 5 贡献点协议（<span class="mono">views / connectors / capabilities</span>），不展示令牌明文，鉴权实例归口「设置 → 连接器」。</div>
     </div>
     <div class="row g8" style="flex:none">
-      <button class="btn2" style="background:color-mix(in srgb,var(--blue) 13%,transparent);color:var(--blue)">模块设置</button>
+      <button class="btn2" style="background:color-mix(in srgb,var(--blue) 13%,transparent);color:var(--blue)">插件设置</button>
       <button class="btn2" style="background:color-mix(in srgb,var(--red) 11%,transparent);color:var(--red)">停用卸载</button>
     </div>
   </div>
 
   <div class="card" style="padding:13px 16px">
-    <div class="row"><span class="sec">挂载的云匠扩展位（6 黄金插座）</span><span class="grow"></span><span class="f12 t3">卸载后自动隐藏，零核心代码残留</span></div>
+    <div class="row"><span class="sec">声明的贡献点与扩展插座</span><span class="grow"></span><span class="f12 t3">按 manifest 自动归位 · 卸载零核心残留</span></div>
     <div class="slot-grid">
       <div class="slot-c">
         <div class="row g6"><span class="tag tg-r mono">dock.items</span><span class="f13 w6 ell">左侧 Dock · 紧急回滚</span></div>
@@ -89,7 +90,7 @@ html:not(.dark) .mcp-chip{color:#7C3AED}
         <div class="f12 t3" style="margin-top:5px">区分「配置已回退 / 业务恢复待验证 / 已恢复」三段状态</div>
       </div>
       <div class="slot-c">
-        <div class="row g6"><span class="tag tg-p mono">settings.connectors</span><span class="f13 w6 ell">设置 · 个人 Apollo 凭据</span></div>
+        <div class="row g6"><span class="tag tg-p mono">connectors</span><span class="f13 w6 ell">鉴权归「设置 → 连接器」 ›</span></div>
         <div class="f12 t3" style="margin-top:5px">复用本人 Apollo 账号执行与审计，需输入 PROD 二次确认</div>
       </div>
     </div>
@@ -134,10 +135,10 @@ html:not(.dark) .mcp-chip{color:#7C3AED}
   </div>
 
   <div class="card" style="padding:13px 14px">
-    <div class="mini">企业自研模块接入</div>
-    <div class="f12 t2" style="line-height:1.6">其他公司不用 Apollo 时，可直接卸载本插件，改用 L1 YAML 映射 <span class="mono">kubectl rollout undo</span> 或挂接自有回滚 MCP 插件。</div>
+    <div class="mini">企业自研与新物种插件</div>
+    <div class="f12 t2" style="line-height:1.6">外部鉴权自动进「设置 → 连接器」，主题进「外观与语言」；Token 费用检测等任意新物种零代码自动落入「插件设置」通用 Schema 抽屉。</div>
     <div class="row g8" style="margin-top:11px">
-      <span class="btn2 sm grow" style="background:var(--blue);color:#fff">导入私有模块</span>
+      <span class="btn2 sm grow" style="background:var(--blue);color:#fff">导入私有插件</span>
       <span class="btn2 sm" style="background:var(--fill);color:var(--text)">SDK 文档</span>
     </div>
   </div>

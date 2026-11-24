@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """第一次使用的步骤器 · 移动端：reference/src/v5/onboard-m.html（4 台手机，1880×1000）。
-步骤概览 / 第 3 步环境与账号 / 添加账号（Cookie）/ 第 7 步检查并开工。规则同 PC（docs/01 第 11 节）。
+精简 4 步：步骤概览（4 步）/ 第 3 步环境与账号 / 添加账号（Cookie）/ 第 4 步 AI 体检并开工。
 用法：python3 scripts/gen-onboard-m.py
 """
 import pathlib, sys
@@ -26,16 +26,16 @@ STYLE = '''
 .h1{font-size:24px;font-weight:800;margin-top:4px}
 .pbar{height:4px;border-radius:2px;background:var(--fill);overflow:hidden}
 .pbar i{display:block;height:100%;border-radius:2px;background:linear-gradient(90deg,#4F8BFF,#9B5CFF)}
-.st3{display:flex;gap:12px;align-items:center;padding:8.5px 14px;border-top:1px solid var(--hair)}
+.st3{display:flex;gap:12px;align-items:center;padding:12px 14px;border-top:1px solid var(--hair)}
 .st3:first-child{border-top:0}
-.sc3{width:24px;height:24px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
+.sc3{width:26px;height:26px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
 .s-done .sc3{background:var(--green);color:#fff}
 .s-cur .sc3{background:var(--blue);color:#fff;box-shadow:0 0 0 4px color-mix(in srgb,var(--blue) 20%,transparent)}
 .s-todo .sc3{border:1.5px solid color-mix(in srgb,var(--text) 22%,transparent);color:var(--text-3)}
-.st3 b{display:block;font-size:14.5px;font-weight:600}
+.st3 b{display:block;font-size:15px;font-weight:600}
 .s-cur b{color:var(--blue)}
 .s-todo b{color:var(--text-2);font-weight:500}
-.st3 em{display:block;font-style:normal;font-size:12px;color:var(--text-3);margin-top:1px}
+.st3 em{display:block;font-style:normal;font-size:12px;color:var(--text-3);margin-top:2px}
 .lst{border-radius:18px;overflow:hidden}
 .ech{display:flex;gap:8px;overflow:hidden}
 .ec{flex:none;height:34px;padding:0 12px;border-radius:17px;display:inline-flex;align-items:center;gap:6px;font-size:13px;background:var(--fill);color:var(--text-2)}
@@ -57,8 +57,9 @@ html.dark .sg span.on{background:rgba(255,255,255,.16)}
 .sel2{display:flex;align-items:center;justify-content:space-between;height:42px;border-radius:12px;background:var(--fill);padding:0 12px;font-size:14px}
 .ckk{border-radius:12px;background:var(--fill);padding:10px 12px;font-size:12px;line-height:1.5;color:var(--text-2);word-break:break-all;box-shadow:0 0 0 2px var(--blue),0 0 0 5px color-mix(in srgb,var(--blue) 18%,transparent)}
 .ck3{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;flex:none;font-size:11px;font-weight:800}
-.rw{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--hair);font-size:13.5px}
+.rw{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--hair);font-size:13px}
 .rw:first-child{border-top:0}
+.mwhy{border-radius:14px;padding:12px 14px;margin-top:14px;background:color-mix(in srgb,var(--purple) 8%,var(--fill));border:1px solid color-mix(in srgb,var(--purple) 20%,transparent);font-size:12px;line-height:1.55;color:var(--text-2)}
 '''
 
 
@@ -66,22 +67,24 @@ def phone(inner, extra=""):
     return f'<div class="phone"><div class="scr">{status}{inner}{extra}<div class="home"></div></div></div>'
 
 
-# 1 步骤概览
-steps = [("done", "选择项目", "OKR"), ("done", "代码仓库", "3 个仓库 · 构建通过"), ("cur", "环境与账号", "测试、线上各自的地址和账号"),
-         ("todo", "工单来源", "Jira / Tita 收哪些单"), ("todo", "Skills", "编码和验证规则"),
-         ("todo", "扩展模块", "默认推荐发布 / 回滚 + 市场按需装"),
-         ("todo", "发布与回滚配置", "按已选模块展开，可先跳过"),
-         ("todo", "检查并开工", "Bot 把条件实际跑一遍")]
+# 1 步骤概览（精简 4 步）
+steps = [
+    ("done", "连接器与鉴权", "GitLab · GitHub · 本机 · Jira"),
+    ("done", "授权项目与代码", "2 可修改 · 2 仅查看（AI 自动推测）"),
+    ("cur", "环境与账号", "复现入口与数据权限 · 可跳过"),
+    ("todo", "AI 体检并开工", "试拉取构建、试登录后开工"),
+]
 sl = "".join(f'<div class="st3 s-{k}"><span class="sc3">{CHECK if k == "done" else i + 1}</span><div class="grow"><b>{t}</b><em>{d}</em></div>'
              + (I("chevr", 16, st="color:var(--text-3)") if k != "todo" else '') + '</div>' for i, (k, t, d) in enumerate(steps))
 p1 = phone(f'''
 <div class="top2">
   <div class="row"><span class="f12 t3 grow">第一次使用</span><span class="f13 t2">稍后再填</span></div>
-  <div class="h1">把 OKR 准备好</div>
-  <div class="f13 t2" style="margin-top:5px;line-height:1.5">填完后 Bot 会实际跑一遍检查，都通过才开始接单。也可以在电脑上接着填。</div>
-  <div class="row f12 t3" style="margin:12px 0 6px"><span class="grow">第 3 步，共 8 步</span><span>已完成 2 步</span></div>
-  <div class="pbar"><i style="width:25%"></i></div>
-  <div class="lst glass" style="margin-top:12px">{sl}</div>
+  <div class="h1">接入工具与权限</div>
+  <div class="f13 t2" style="margin-top:5px;line-height:1.5">只填 AI 猜不出的鉴权与权限边界，分支、构建和找项目由 AI 自动推测。</div>
+  <div class="row f12 t3" style="margin:14px 0 6px"><span class="grow">第 3 步，共 4 步</span><span>已完成 2 步</span></div>
+  <div class="pbar"><i style="width:50%"></i></div>
+  <div class="lst glass" style="margin-top:14px">{sl}</div>
+  <div class="mwhy"><div class="row g6" style="font-weight:700;color:var(--text);margin-bottom:4px">{I("spark",13,st="color:var(--purple)")}内置规则直接生效</div>自定义 Skills、发布回滚、主题与费用检测插件之后在设置和插件市场按需启用，不挡开工。</div>
 </div>
 <div class="bot2"><button class="bigbtn pri" style="flex:1">继续：环境与账号{I("chevr",16,2.4)}</button></div>''')
 
@@ -96,7 +99,7 @@ EDIT = f'<span class="chp c-e">{I("edit",11)}可以修改</span>'
 OKS = f'<span class="okt">{CHECK}登录成功</span>'
 p2 = phone(f'''
 <div class="top2">
-  <div class="row"><span class="row g4 lnk f15">{I("chevr",18,st="transform:rotate(180deg)")}步骤</span><span class="grow"></span><span class="f13 t3">3 / 8</span></div>
+  <div class="row"><span class="row g4 lnk f15">{I("chevr",18,st="transform:rotate(180deg)")}步骤</span><span class="grow"></span><span class="f13 t3">3 / 4</span></div>
   <div class="kk" style="margin-top:10px">第 3 步 · 环境与账号</div>
   <div class="ttl" style="font-size:20px;margin-top:4px">Bot 在哪儿复现、用谁登录</div>
   <div class="ech" style="margin-top:14px"><span class="ec on">测试环境 · 4</span><span class="ec">联调环境 · 2</span><span class="ec">正式 · 3</span><span class="ec">{I("plus",14)}</span></div>
@@ -106,9 +109,9 @@ p2 = phone(f'''
     {acc("普通员工", "李娜 · 研发部", '<span class="chp c-n">Cookie · 至 11-27</span>', EDIT, OKS, True)}
     {acc("OKR 管理员", "okr_admin", PW, EDIT, '<span class="ing"><span class="spin"></span>正在试登录</span>')}
   </div>
-  <div class="row" style="margin-top:12px"><span class="f14 lnk">+ 添加账号</span><span class="grow"></span><span class="f12 t3">还有 1 个账号 ›</span></div>
+  <div class="row" style="margin-top:12px"><span class="f14 lnk">+ 添加账号</span><span class="grow"></span><span class="f12 t3">纯代码单可先跳过 ›</span></div>
 </div>
-<div class="bot2"><button class="bigbtn sec2" style="width:96px">上一步</button><button class="bigbtn pri" style="flex:1">下一步：工单来源</button></div>''')
+<div class="bot2"><button class="bigbtn sec2" style="width:96px">上一步</button><button class="bigbtn pri" style="flex:1">下一步：AI 体检</button></div>''')
 
 # 3 添加账号（Cookie）
 sheet = f'''<div class="scrim"></div><div class="sheet">
@@ -120,7 +123,7 @@ sheet = f'''<div class="scrim"></div><div class="sheet">
   <div class="sg"><span>密码</span><span class="on">Cookie</span></div>
   <div class="flb">粘贴 Cookie</div>
   <div class="ckk mono">SESSION=6f2c9a…e81b; tita_uid=8820…; tita_tenant=shifan; Path=/; Expires=Sun, 23 Nov 2026</div>
-  <div class="f12 t3" style="margin:7px 2px 0;line-height:1.5">不用填账号名，Bot 登录后自己识别是谁；Cookie 过期会提醒你更新</div>
+  <div class="f12 t3" style="margin:7px 2px 0;line-height:1.5">不用填账号名，Bot 登录后自动识别是谁；Cookie 过期会提醒你更新</div>
   <div class="flb">数据权限</div>
   <div class="sg"><span class="on">{I("eye",13)}只能查看</span><span>{I("edit",13)}可以修改</span></div>
   <div class="f12 t3" style="margin:7px 2px 0">只看页面，不点保存、提交、删除</div>
@@ -130,43 +133,41 @@ p3 = phone(f'''
 <div class="top2"><div class="kk" style="margin-top:10px">第 3 步 · 环境与账号</div><div class="ttl" style="font-size:20px;margin-top:4px">Bot 在哪儿复现、用谁登录</div>
 <div class="ech" style="margin-top:14px"><span class="ec">测试环境 · 4</span><span class="ec">联调环境 · 2</span><span class="ec on">正式 · 3</span></div></div>''', sheet)
 
-# 4 第 8 步 · 检查并开工
+# 4 第 4 步 · AI 体检并开工
 def rw(st, t, r):
     bg = {"ok": "var(--green)", "wn": "var(--orange)", "sk": "color-mix(in srgb,var(--text) 25%,transparent)"}[st]
     g = {"ok": CHECK, "wn": "!", "sk": "–"}[st]
     rc = {"ok": "var(--text-3)", "wn": "var(--orange)", "sk": "var(--text-3)"}[st]
-    return f'<div class="rw" style="padding:8px 0"><span class="ck3" style="background:{bg}">{g}</span><span class="grow">{t}</span><span class="f12" style="color:{rc}">{r}</span></div>'
+    return f'<div class="rw"><span class="ck3" style="background:{bg}">{g}</span><span class="grow">{t}</span><span class="f12" style="color:{rc}">{r}</span></div>'
 p4 = phone(f'''
 <div class="top2">
-  <div class="row"><span class="row g4 lnk f15">{I("chevr",18,st="transform:rotate(180deg)")}步骤</span><span class="grow"></span><span class="f13 t3">8 / 8</span></div>
-  <div class="kk" style="margin-top:8px">第 8 步 · 检查并开工</div>
+  <div class="row"><span class="row g4 lnk f15">{I("chevr",18,st="transform:rotate(180deg)")}步骤</span><span class="grow"></span><span class="f13 t3">4 / 4</span></div>
+  <div class="kk" style="margin-top:8px">第 4 步 · AI 体检并开工</div>
   <div class="row g12" style="margin-top:10px;padding:12px 14px;border-radius:18px;background:color-mix(in srgb,var(--green) 12%,var(--glass-2));border:1px solid color-mix(in srgb,var(--green) 30%,transparent)">
     <span class="ck3" style="width:38px;height:38px;background:var(--green)">{I("check",19,3)}</span>
-    <div class="grow"><div class="f16 w7">可以开工了</div><div class="f12 t2" style="margin-top:2px">Bot-02 实际跑了一遍 · 4 分 38 秒</div></div></div>
+    <div class="grow"><div class="f16 w7">可以开工了</div><div class="f12 t2" style="margin-top:2px">Bot-02 自动探测与体检 · 3 分 52 秒</div></div></div>
   <div class="glass" style="border-radius:18px;padding:4px 14px;margin-top:10px">
-    {rw("ok", "AI 已连接", "Pi · gpt-6.2-sol")}
-    {rw("ok", "拉取 3 个仓库，构建 2 个", "通过")}
-    {rw("ok", "打开 3 个环境", "都能打开")}
-    {rw("ok", "账号试登录", "6 个成功")}
+    {rw("ok", "AI 引擎已连通", "Pi · gpt-6.2-sol")}
+    {rw("ok", "连接器鉴权（4 个）", "全部通过")}
+    {rw("ok", "可修改仓（2）推测构建", "通过")}
+    {rw("ok", "仅查看仓（2）只读隔离", "宿主机禁写")}
+    {rw("ok", "仓库规范 + 内置 Skills", "已自动生效")}
+    {rw("ok", "环境与账号（6 个）", "登录成功")}
     {rw("wn", "OKR 管理员 Cookie 过期", "用到时提醒")}
-    {rw("ok", "收单条件", "能收到 3 张")}
-    {rw("ok", "Skills", "3 个")}
-    {rw("ok", "扩展模块", "发布 · 回滚")}
-    {rw("ok", "你的 GitLab、Apollo", "已连通")}
-    {rw("sk", "发布与回滚配置", "已跳过")}
+    {rw("sk", "发布回滚 / 主题 / 费用插件", "按需市场装")}
   </div>
-  <div class="f12 t2" style="margin-top:10px;line-height:1.5">开工后已收的 3 张单马上开始，有结果会通知你审核。之后在「设置 → 项目」或「模块市场」随时改。</div>
+  <div class="f12 t2" style="margin-top:10px;line-height:1.5">开工后 Jira 已收的 2 张单马上开始，AI 自动找对应项目；之后在「设置 → 连接器 / 项目」随时改。</div>
 </div>
-<div class="bot2"><button class="bigbtn pri" style="flex:1">开始接单</button></div>''')
+<div class="bot2"><button class="bigbtn pri" style="flex:1">开始使用，进入工作台</button></div>''')
 
 html = f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>第一次使用 · 移动端</title>
 <link rel="stylesheet" href="../v3/base.css"><link rel="stylesheet" href="../v4/apple.css"><link rel="stylesheet" href="m.css">
 <script>(function(){{var q=new URLSearchParams(location.search);if(q.get('mode')==='dark')document.documentElement.classList.add('dark')}})()</script>
 <style>{STYLE}</style></head><body><div class="board">
-<div class="col3">{p1}<div class="lbl">步骤概览<em>做到哪一步、还差什么</em></div></div>
-<div class="col3">{p2}<div class="lbl">环境与账号<em>按环境切换，账号数量不限</em></div></div>
+<div class="col3">{p1}<div class="lbl">步骤概览（4 步）<em>只填鉴权与权限边界</em></div></div>
+<div class="col3">{p2}<div class="lbl">环境与账号<em>按环境切换，可先跳过</em></div></div>
 <div class="col3">{p3}<div class="lbl">添加账号<em>密码或 Cookie · 数据权限</em></div></div>
-<div class="col3">{p4}<div class="lbl">检查并开工<em>Bot 实际跑一遍</em></div></div>
+<div class="col3">{p4}<div class="lbl">AI 体检并开工<em>自动推测并实测</em></div></div>
 </div><script src="icons.js"></script></body></html>'''
 (OUT / "onboard-m.html").write_text(html, encoding="utf-8")
-print("ok")
+print("ok: 4-step onboard-m generated")
