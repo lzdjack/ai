@@ -301,15 +301,15 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
   <h2 class="ttl">第 1 步 · 需求</h2>
   <p class="sub">一期要做什么：工单交给 AI 后，Bot 在服务器上持续修复，负责人在 PC 或手机上看证据、审核、发布。下方同步包含 <code>docs/00-一期产品需求.md</code> 全文。</p>
   <div class="grid g4">
-    <div class="kpi glass"><b>2 个</b><span>工单来源：Jira、Tita</span></div>
-    <div class="kpi glass"><b>6 个</b><span>工单状态：待修复 → 审核通过</span></div>
+    <div class="kpi glass"><b>3 种</b><span>收单方式：Jira、Tita、手动新建</span></div>
+    <div class="kpi glass"><b>7 个</b><span>工单状态：待修复 → 修复完成</span></div>
     <div class="kpi glass"><b>双端</b><span>PC App 加移动 App，结果同步</span></div>
-    <div class="kpi glass"><b>2 个 AI</b><span>全局对话助手，加服务器修复 Bot</span></div>
+    <div class="kpi glass"><b>一期+二期</b><span>M1 修 Bug 闭环 + M4 跨项目需求变更集</span></div>
   </div>
   <div class="card glass mt">
     <h3>一期核心能力</h3>
     <div class="grid g3" style="gap:10px 24px">
-      <div><span class="pill p-blue">收单</span> Jira「AI修复」/ Tita「AI干活」自动收单，同一次交付只建一个任务</div>
+      <div><span class="pill p-blue">收单 / 建单</span> Jira「AI修复」/ Tita「AI干活」自动收单，或点 <code>+</code> 手动新建（<code>M-&lt;序号&gt;</code>，不生原平台待办）</div>
       <div><span class="pill p-teal">修复</span> Bot 在内网服务器 7×24 复现、定位、改代码、浏览器验证</div>
       <div><span class="pill p-orange">协作</span> 每张单一段对话；Bot 缺资料时提问，人补充后继续</div>
       <div><span class="pill p-green">审核</span> 看根因、改动、证据；在 App 内逐行审代码；通过或带理由打回</div>
@@ -378,10 +378,11 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
         <tbody>
           <tr><td><span class="ap ap-ai" style="width:30px;height:30px;border-radius:9px;display:inline-flex;transform:none"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M10 3l1.9 5.6 5.6 1.9-5.6 1.9L10 18l-1.9-5.6L2.5 10.5l5.6-1.9z"/></svg></span></td><td><b>AI 助手</b>（全局）</td><td>跨工单、发布、收单情况提问和办事；回答里直接给可点的工单</td><td>1.3、1.4</td><td><span class="pill p-green">PC 和移动端已出</span></td></tr>
           <tr><td><span class="ap ap-chat" style="width:30px;height:30px;border-radius:9px;display:inline-flex;transform:none"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M9.6 3.2c-4 0-7.2 2.6-7.2 5.8 0 1.7.9 3.2 2.3 4.2l-.6 3 3.5-1.7c.6.2 1.3.2 2 .2 4 0 7.2-2.6 7.2-5.8S13.6 3.2 9.6 3.2z" fill="#1673FF"/></svg></span></td><td><b>对话</b>（工单）</td><td>工单列表 + 工单对话 + 右侧信息栏；代码改动、证据、执行日志、发布 tab</td><td>2、3、3.1、4、5、6</td><td><span class="pill p-green">PC 和移动端已出</span></td></tr>
-          <tr><td><span class="ap ap-pub" style="width:30px;height:30px;border-radius:9px;display:inline-flex;transform:none"></span></td><td><b>发布</b></td><td>发测试 / 正式环境、可测通知、测试结果、跨项目大包明细、报错</td><td>5.1、5.2、5.3</td><td><span class="pill p-green">PC 和移动端已出</span></td></tr>
-          <tr><td><span class="ap ap-rb" style="width:30px;height:30px;border-radius:9px;display:inline-flex;transform:none"></span></td><td><b>紧急回滚</b></td><td>Apollo 回滚：选环境 → 预览差异 → 确认 → 回读和业务验证</td><td>5.4</td><td><span class="pill p-green">PC 和移动端已出</span></td></tr>
-          <tr><td><span class="ap ap-sk" style="width:30px;height:30px;border-radius:9px;display:inline-flex;transform:none"></span></td><td><b>Skills</b></td><td>在线新建、导入、编辑、草稿、按项目启用、版本回看</td><td>4</td><td><span class="pill p-green">PC 和移动端已出</span></td></tr>
-          <tr><td><span class="ap ap-set" style="width:30px;height:30px;border-radius:9px;display:inline-flex;transform:none"></span></td><td><b>设置</b></td><td>项目（开工准备）、全局 AI、来源采集、成员与身份、我的账号、通知</td><td>1.2、4</td><td><span class="pill p-green">PC 和移动端已出</span></td></tr>
+          <tr><td><span class="ap ap-pub" style="width:30px;height:30px;border-radius:9px;display:inline-flex;transform:none"></span></td><td><b>发布</b>（默认可选模块）</td><td>发测试 / 正式环境、可测通知、测试结果、跨项目大包明细、报错（模块市场可启停）</td><td>5.1、5.2、5.3</td><td><span class="pill p-green">PC 和移动端已出</span></td></tr>
+          <tr><td><span class="ap ap-rb" style="width:30px;height:30px;border-radius:9px;display:inline-flex;transform:none"></span></td><td><b>紧急回滚</b>（默认可选模块）</td><td>Apollo 回滚：选环境 → 预览差异 → 确认 → 回读和业务验证（模块市场标杆插件）</td><td>5.4</td><td><span class="pill p-green">PC 和移动端已出</span></td></tr>
+          <tr><td><span class="ap ap-sk" style="width:30px;height:30px;border-radius:9px;display:inline-flex;transform:none"></span></td><td><b>Skills</b></td><td>在线新建、导入、编辑、草稿、按项目启用、版本回看与四道防膨胀治理</td><td>4</td><td><span class="pill p-green">PC 和移动端已出</span></td></tr>
+          <tr><td><span class="ap ap-mkt" style="width:30px;height:30px;border-radius:9px;display:inline-flex;transform:none"></span></td><td><b>模块市场</b>（设置正上方）</td><td>按需安装/启停发布、紧急回滚、连接器等扩展插件（移动端收进「设置 → 模块市场」）</td><td>技术 §12</td><td><span class="pill p-green">PC 和移动端已出</span></td></tr>
+          <tr><td><span class="ap ap-set" style="width:30px;height:30px;border-radius:9px;display:inline-flex;transform:none"></span></td><td><b>设置</b></td><td>全局 AI（Pi）、执行器、项目（开工准备）、来源采集、成员与身份（含免 SMTP 邀请）、我的账号、通知</td><td>1.2、4</td><td><span class="pill p-green">PC 和移动端已出</span></td></tr>
         </tbody>
       </table></div>
     </div>
@@ -494,6 +495,7 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
           <li>不加小圆点、托盘、描边环、光条或悬停提示</li>
           <li>红色数字角标在右上角</li>
           <li>AI 助手放在最上面，和功能图标之间有分隔线</li>
+          <li>模块市场固定在设置正上方；外挂插件图标最多直出 4 个，超出聚合进「更多模块」文件夹</li>
           <li>设置固定在最底部</li>
         </ul>
       </div>
@@ -554,11 +556,11 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
     </div>
   </div>
   <div class="card glass mt">
-    <h3>阶段二 · 日常修单、审核、发布上线、模块市场与支线页面（35 张 · 严格按链路第 3 → 13 步排序）</h3>
-    <p class="sub" style="margin:0 0 12px">外壳（顶栏、Dock、工单列表）与主界面完全一致（全部已同步「模块市场」Dock 图标，设置页已同步「执行器」入口），只换中间内容。每张图已标出对应 <code>05-链路流转</code> 步号，按从左到右、从上到下连贯阅读即可，也可按模块筛选、点图放大。</p>
+    <h3>阶段二 · 日常修单、审核、发布上线、模块市场与支线页面（36 张 · 严格按链路第 3 → 13 步排序）</h3>
+    <p class="sub" style="margin:0 0 12px">外壳（顶栏、Dock、工单列表含手动建单 <code>+</code>）与主界面完全一致（全部已同步「模块市场」Dock 图标，设置页已同步「执行器」与免 SMTP 邀请链接），只换中间内容。每张图已标出对应 <code>05-链路流转</code> 步号，按从左到右、从上到下连贯阅读即可，也可按模块筛选、点图放大。</p>
     <div class="chips" id="pc-filter">
-      <button class="chip-btn on" data-cat="all">全部 <em>35</em></button>
-      <button class="chip-btn" data-cat="ticket">工单与审核（第 3～4、13 步） <em>9</em></button>
+      <button class="chip-btn on" data-cat="all">全部 <em>36</em></button>
+      <button class="chip-btn" data-cat="ticket">工单与审核（第 3～4、13 步） <em>10</em></button>
       <button class="chip-btn" data-cat="release">发布、复测与回滚（第 5～12 步） <em>11</em></button>
       <button class="chip-btn" data-cat="skills">Skills <em>3</em></button>
       <button class="chip-btn" data-cat="market">模块市场 <em>1</em></button>
@@ -566,7 +568,8 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
       <button class="chip-btn" data-cat="state">排队与边界状态 <em>4</em></button>
     </div>
     <div class="gal" id="pc-gal">
-      <!-- 工单与审核：严格按 3 → 3a → 3 异常 → 4 查看/打回/通过 → 13 完结 → 支线 AI 助手 -->
+      <!-- 工单与审核：严格按 建单 → 3 → 3a → 3 异常 → 4 查看/打回/通过 → 13 完结 → 支线 AI 助手 -->
+      <figure data-cat="ticket"><img class="img-l" src="reference/images/pages/PC-手动新建工单-亮色.png" alt="手动新建工单 亮色"><img class="img-d" src="reference/images/pages/PC-手动新建工单-暗色.png" alt="手动新建工单 暗色"><figcaption><b>[链路第 1～2 步 · 独立建单] 手动新建工单</b> · 点列表顶部 <code>+</code> 直接建单（不依赖 Jira / Tita），自动生成 <code>M-105</code> 入队派给 Bot，不产生原平台确认待办</figcaption></figure>
       <figure data-cat="ticket"><img class="img-l" src="reference/images/pages/PC-工单-修复中-亮色.png" alt="工单 · Bot 修复中 亮色"><img class="img-d" src="reference/images/pages/PC-工单-修复中-暗色.png" alt="工单 · Bot 修复中 暗色"><figcaption><b>[链路第 3 步] 工单 · Bot 修复中</b> · 步骤条实时进度、正在做的事和实时画面、中途补充标「已采纳」、我来接手 / 停止本轮</figcaption></figure>
       <figure data-cat="ticket"><img class="img-l" src="reference/images/pages/PC-Bot提问回复-亮色.png" alt="Bot 在问你 亮色"><img class="img-d" src="reference/images/pages/PC-Bot提问回复-暗色.png" alt="Bot 在问你 暗色"><figcaption><b>[链路第 3a 步] Bot 在问你</b> · 一键回答、可选存为项目规则、回复后从原步骤继续</figcaption></figure>
       <figure data-cat="ticket"><img class="img-l" src="reference/images/pages/PC-执行日志报错-亮色.png" alt="执行日志 · 报错 亮色"><img class="img-d" src="reference/images/pages/PC-执行日志报错-暗色.png" alt="执行日志 · 报错 暗色"><figcaption><b>[链路第 3 步 · 异常] 执行日志 · 报错</b> · 失败步骤、报错原文可复制、AI 解读单独展示、保留上次尝试</figcaption></figure>
@@ -599,7 +602,7 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
       <figure data-cat="settings"><img class="img-l" src="reference/images/pages/PC-设置-全局AI-亮色.png" alt="设置 · 全局 AI 亮色"><img class="img-d" src="reference/images/pages/PC-设置-全局AI-暗色.png" alt="设置 · 全局 AI 暗色"><figcaption><b>设置 · 全局 AI</b> · 管理员接一次 AI（工具、模型、公司网关、试一下）；Bot 账号、权限边界、共用提示词</figcaption></figure>
       <figure data-cat="settings"><img class="img-l" src="reference/images/pages/PC-设置-执行器-亮色.png" alt="设置 · 执行器 亮色"><img class="img-d" src="reference/images/pages/PC-设置-执行器-暗色.png" alt="设置 · 执行器 暗色"><figcaption><b>设置 · 执行器（跳过补配 &amp; 随时切换）</b> · 统一管理团队服务器 / 本机 / 云端 Pro，切换调度策略、看 4C8G 实时资源槽，「+ 添加执行器」随时重开三选一向导</figcaption></figure>
       <figure data-cat="settings"><img class="img-l" src="reference/images/pages/PC-设置-来源采集-亮色.png" alt="设置 · 来源采集 亮色"><img class="img-d" src="reference/images/pages/PC-设置-来源采集-暗色.png" alt="设置 · 来源采集 暗色"><figcaption><b>设置 · 来源采集</b> · Jira / Tita 采集状态、失败原文和重试；最近收单的四种结果，没收成的去处理</figcaption></figure>
-      <figure data-cat="settings"><img class="img-l" src="reference/images/pages/PC-设置-成员与身份-亮色.png" alt="设置 · 成员与身份 亮色"><img class="img-d" src="reference/images/pages/PC-设置-成员与身份-暗色.png" alt="设置 · 成员与身份 暗色"><figcaption><b>设置 · 成员与身份</b> · 不知道通知谁的待处理、成员与 Jira / Tita 身份、停用后转交</figcaption></figure>
+      <figure data-cat="settings"><img class="img-l" src="reference/images/pages/PC-设置-成员与身份-亮色.png" alt="设置 · 成员与身份 亮色"><img class="img-d" src="reference/images/pages/PC-设置-成员与身份-暗色.png" alt="设置 · 成员与身份 暗色"><figcaption><b>设置 · 成员与身份</b> · 独立邮箱账号、免 SMTP 一次性邀请链接、空间管理员与项目负责人分层、外部 ID 身份映射</figcaption></figure>
       <figure data-cat="settings"><img class="img-l" src="reference/images/pages/PC-设置-我的账号-亮色.png" alt="设置 · 我的账号 亮色"><img class="img-d" src="reference/images/pages/PC-设置-我的账号-暗色.png" alt="设置 · 我的账号 暗色"><figcaption><b>设置 · 我的账号</b> · 每人自己的 GitLab、Apollo 账号：合入、发布、回滚用本人的，记的是本人</figcaption></figure>
       <figure data-cat="settings"><img class="img-l" src="reference/images/pages/PC-设置-通知-亮色.png" alt="设置 · 通知 亮色"><img class="img-d" src="reference/images/pages/PC-设置-通知-暗色.png" alt="设置 · 通知 暗色"><figcaption><b>设置 · 通知</b> · 每人自己的：事件 × PC / 手机开关、设备、免打扰；发布失败关不掉</figcaption></figure>
       <!-- 排队、空状态与边界状态 -->
@@ -607,6 +610,19 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
       <figure data-cat="state"><img class="img-l" src="reference/images/pages/PC-空状态-亮色.png" alt="空状态 亮色"><img class="img-d" src="reference/images/pages/PC-空状态-暗色.png" alt="空状态 暗色"><figcaption><b>空状态 · 一</b> · 还没收到单（Bot 在等单）、搜索没结果、还没有发布、还没有自己的 Skill</figcaption></figure>
       <figure data-cat="state"><img class="img-l" src="reference/images/pages/PC-空状态-2-亮色.png" alt="空状态 · 二 亮色"><img class="img-d" src="reference/images/pages/PC-空状态-2-暗色.png" alt="空状态 · 二 暗色"><figcaption><b>空状态 · 二</b> · AI 助手第一次打开、回滚没有上一次、代码改动还没提交、工单发布还没开始</figcaption></figure>
       <figure data-cat="state"><img class="img-l" src="reference/images/pages/PC-边界状态-亮色.png" alt="边界状态 亮色"><img class="img-d" src="reference/images/pages/PC-边界状态-暗色.png" alt="边界状态 暗色"><figcaption><b>边界状态</b> · 无权查看、登录过期回原处、状态已经变了不改写结果、审核中有新提交要看完最新才能通过</figcaption></figure>
+    </div>
+  </div>
+  <div class="card glass mt" style="border-color:color-mix(in srgb,var(--orange) 42%,transparent)">
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px">
+      <h3 style="margin:0">附录 · 二期（M4）跨项目需求变更集高清蓝图（4 张 · 隔离归档）</h3>
+      <span class="pill p-orange">仅二期（M4）规划参考 · M1 严禁提前实现 UI</span>
+    </div>
+    <p class="sub" style="margin:0 0 14px">物理隔离存放于 <code>reference/images/phase2/</code>（源脚本 <code>scripts/gen-phase2.py</code>），对应「技术设计」第 14 节与「需求」第 9 节，展示未来跨「薪酬 / 组织人事 / 绩效 / CRM」平级项目的完整 AI-Native 闭环。一期（M1）仅在数据库与协议层静默落 6 项零重构预留钩子，不露出以下界面。</p>
+    <div class="gal">
+      <figure><img class="img-l" src="reference/images/phase2/二期-1-需求变更集与活原型-亮色.png" alt="二期 1 需求变更集与活原型 亮色"><img class="img-d" src="reference/images/phase2/二期-1-需求变更集与活原型-暗色.png" alt="二期 1 需求变更集与活原型 暗色"><figcaption><b>[二期 M4 · ① 需求与活原型] 跨项目需求变更集 CS-089</b> · 产品提意图 → 生成真实可点活原型 + 自动 E2E 断言 → 领域 Agent 单跳提案（锚定 <code>repo@sha</code>）与独立接口契约 <code>@v1</code> 拍板</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/phase2/二期-2-无损抽屉下钻审切片-亮色.png" alt="二期 2 无损抽屉下钻审切片 亮色"><img class="img-d" src="reference/images/phase2/二期-2-无损抽屉下钻审切片-暗色.png" alt="二期 2 无损抽屉下钻审切片 暗色"><figcaption><b>[二期 M4 · ② 总控审核] 无损 72% 毛玻璃抽屉下钻</b> · 在变更集点切片卡不整页跳转，就地审代码与契约，<code>Esc</code> 秒回总览；Dock 红点按决策/执行去重；非本项目成员自动折叠源码不撞红锁</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/phase2/二期-3-工单实战三栏与契约护栏-亮色.png" alt="二期 3 工单实战三栏与契约护栏 亮色"><img class="img-d" src="reference/images/phase2/二期-3-工单实战三栏与契约护栏-暗色.png" alt="二期 3 工单实战三栏与契约护栏 暗色"><figcaption><b>[二期 M4 · ③ 开发干活] 工单实战三栏与冻结契约护栏</b> · P1 救火单强置顶防淹没、顶部 1 行浮层看活原型不丢 Diff 行号、右栏常驻冻结契约对照与 1 项目多仓兄弟进度，严格遵循 04 两次 MR 独立审核</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/phase2/二期-4-QA联调验收与AI归因-亮色.png" alt="二期 4 QA联调验收与AI归因 亮色"><img class="img-d" src="reference/images/phase2/二期-4-QA联调验收与AI归因-暗色.png" alt="二期 4 QA联调验收与AI归因 暗色"><figcaption><b>[二期 M4 · ④ 联调与发版] QA 联调验收 + Ajv/Zod 0 幻觉判责池</b> · QA 按活原型 E2E 清单勾验，失败项机械比对契约与脱敏抓包自动判责，底部走 Expand-Contract + Feature Flag 安全波次发布（禁自动级联全回滚）</figcaption></figure>
     </div>
   </div>
   <div class="next"><button class="nb sec" data-go-tab="theme">← 上一步：设计主题</button><button class="nb pri" data-go-tab="mobile">下一步：移动端 →</button></div>
@@ -657,7 +673,7 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
     <div class="kpi glass"><b style="font-size:19px">Fastify + Drizzle + PG</b><span>纯 ESM · 单源 Schema 出 OpenAPI 3.1</span></div>
     <div class="kpi glass"><b style="font-size:19px">Electron + Flutter</b><span>双端由 OpenAPI 同源生成客户端</span></div>
     <div class="kpi glass"><b style="font-size:19px">Pi 内核 · 多模型</b><span>轻量可控执行引擎 + UI Block 协议</span></div>
-    <div class="kpi glass"><b style="font-size:19px">第 0～13 节已确认</b><span>核心、动态模块底座与 M1～M3 里程碑全确认 · 可直接开工</span></div>
+    <div class="kpi glass"><b style="font-size:19px">第 0～14 节已锁版</b><span>M1 六项二期零重构预留 + M4 跨项目需求变更集全定案 · 可开工</span></div>
   </div>
 
   <div class="card glass mt">
@@ -723,6 +739,8 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
         <li>要备选时做成一张对比图，3 到 4 种，亮色和暗色都有</li>
         <li>本地 HTML 渲染成 PNG，不上传</li>
         <li>交付前自己检查有没有换行、重叠、遮挡</li>
+        <li><b>设计图与文档强同步铁律</b>：改导航图标、交互结构或技术边界必须同步重绘受影响双端 PNG 并重跑 <code>build-index.py</code></li>
+        <li><b>全局零占位悬浮滚动条规范</b>：0px 布局占位、默认隐藏、悬停/滚动淡入，静态图不画常驻滚动条与多余「框中框」边框</li>
       </ul>
     </div>
     <div class="card glass">
@@ -730,9 +748,9 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
       <ul class="chk">
         <li class="done">产品需求（00）、修复流转（04）、链路流转（05）与链路总图</li>
         <li class="done">应用图标、PC 和移动端闪屏、独立登录与注册（PC 2 页 + 移动端 4 屏）</li>
-        <li class="done">PC 主界面 + 首次引导与步骤器（18 张，含执行环境 3 路径 + 第 6 步「扩展模块」全闭环）+ 其余功能页面（35 张，含模块市场与设置→执行器）</li>
+        <li class="done">PC 主界面 + 首次引导与步骤器（18 张，含执行环境 3 路径 + 第 6 步「扩展模块」全闭环）+ 其余功能页面（36 张，含手动新建工单、模块市场与免 SMTP 成员邀请）</li>
         <li class="done">移动端首页 3 屏 + 步骤器（4 屏）+ 其余功能页面（10 张 · 30 屏，含模块市场与无执行器轻引导）</li>
-        <li class="done">技术设计方案第 0～13 节全部已确认（含执行器三路径接入与跳过补配协议、动态模块底座、<code>craft</code> 三级映射与 M1～M3 编码里程碑）</li>
+        <li class="done">技术设计方案第 0～14 节全锁版（含 <code>workspaces</code> 统一作用域、M1 六项零重构预留、四项 AI 飞轮守卫与二期跨项目需求变更集架构）</li>
         <li class="done">PC 选择执行环境 + 三路径接入页（本机初始化 / 连接自有服务器 / 开通云端 Pro）+ 设置→执行器（亮暗全套）</li>
         <li class="wip">正式进入 M1 编码落地（<code>cloudcraft/</code> pnpm Monorepo 核心修单闭环）</li>
       </ul>
@@ -751,6 +769,9 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
       <li><b>已定（2026-11-24 升级）</b>：AI 引擎采用 <b>pnpm 多包平等插件架构</b>——核心只定 <code>AgentRuntimePlugin</code> 统一 API 与共享 <code>mcp-tool-host</code>（CI 禁核心反向依赖、零代码污染），<code>plugins/runtime-pi</code> 与后续外部 CLI 插件完全同级（一期先做并默认启用 Pi，多模型 + UI Block 协议 + 三层 UI 兜底），详见「技术设计」第 11 节；合入 MR 用审核人自己的 GitLab 个人令牌，发布与回滚用操作人自己的 Apollo 账号（<code>tita release --local-config</code> 本地算配置后以本人身份写回）</li>
       <li><b>已定（2026-11-23）</b>：纳入五项体验与工程增强（打回沉淀 Skill 与四道防 Token 膨胀闸门、审核前一键本地产物预览、手机端 10 秒极速审核交付卡、历史相似 Bug 雷达、Bot 效能与卡点度量埋点），详见「技术设计」5.9 与第 8 节</li>
       <li><b>已定（2026-11-24）</b>：品牌更名为「云匠 / CLOUDCRAFT」（保留原图标，冬青黑 + Optima 蓝紫渐变）；多语言采用「单源强类型代码生成 + 前后端全量 AI 自动补译（零人工）+ 高危审计原文固化」，首批简中 + 英文，详见「技术设计」第 9 节</li>
+      <li><b>已定（2026-11-24）</b>：采用 <b>4C 8G 资源分槽 + 三档无状态执行器</b>（个人默认 PC 内置本机执行器免 Docker 零云算力；团队自有服务器 WSS 443 出站；云端 Pro 按需托管）与 <b>CDP 抓帧 + VFR H.264 MP4 + <code>replay.json</code></b> 证据流水线，详见「技术设计」§5.2～§5.3a</li>
+      <li><b>已定（2026-11-24）</b>：确立 <b>「厚核心 + 轻插件」黄金分割线</b>、6 黄金 UI 插座、<code>craft</code> 三级命令映射与插件防爆三层约束；以「紧急回滚（Apollo）」为模块市场官方首发标杆插件，详见「技术设计」第 7、12、13 节</li>
+      <li><b>已定（2026-11-24 锁版）</b>：一期补齐<b>手动新建工单（<code>M-&lt;序号&gt;</code>）</b>、<b>免 SMTP 一次性邀请/重置密码链接</b>、<b>四项 AI 飞轮守卫</b>（Hard/Soft 机审前置门禁、影响面 <code>L0/L1/L2</code> 分级、防篡改验证棘轮、<code>Repo Atlas</code>）与 <b>6 项零重构预留钩子</b>（UI 零露出）；二期（M4）以插件落地 <b>AI-Native 跨项目需求变更集（无损 72% 抽屉 + QA 联调 Ajv/Zod 0 幻觉归因 + Expand-Contract 波次发布）</b>，详见「技术设计」§2、§5.7、§10.1、第 14 节</li>
       <li><b>待定</b>：用一条真实的「组件包 → 子项目 → 主站」链路评审大包清单；Tita 工单查询接口字段、Apollo 登录/开放接口与外网远程访问方案待实测确认</li>
     </ol>
   </div>
