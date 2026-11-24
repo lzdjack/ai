@@ -12,6 +12,7 @@
 import html
 import pathlib
 import re
+import struct
 from tech_diagrams import render_mermaid
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -242,6 +243,46 @@ def build_toc_html(toc) -> str:
     )
 
 
+def png_size(path: pathlib.Path) -> tuple[int, int] | None:
+    """从 PNG 文件头（IHDR）零依赖读取像素宽高，用于生成预占位尺寸防布局抖动。"""
+    if not path.exists():
+        return None
+    with path.open("rb") as f:
+        header = f.read(24)
+    if len(header) >= 24 and header[:8] == b"\x89PNG\r\n\x1a\n" and header[12:16] == b"IHDR":
+        return struct.unpack(">II", header[16:24])
+    return None
+
+
+def optimize_images(html_text: str) -> tuple[str, int]:
+    """为所有 reference/ 图片自动注入 loading="lazy"、decoding="async" 和真实宽高比例占位。"""
+    count = 0
+
+    def _repl(m):
+        nonlocal count
+        tag = m.group(0)
+        src_m = re.search(r'src="(reference/[^"]+)"', tag)
+        if not src_m:
+            return tag
+        src = src_m.group(1)
+        extras = []
+        if "loading=" not in tag:
+            extras.append('loading="lazy"')
+        if "decoding=" not in tag:
+            extras.append('decoding="async"')
+        if "width=" not in tag and "height=" not in tag:
+            dims = png_size(ROOT / src)
+            if dims:
+                w, h = dims
+                extras.append(f'width="{w}" height="{h}"')
+        if not extras:
+            return tag
+        count += 1
+        return tag[:-1] + " " + " ".join(extras) + ">"
+
+    return re.sub(r"<img\b[^>]*>", _repl, html_text), count
+
+
 def main():
     page = TPL.read_text(encoding="utf-8")
     for key, (path, prefix) in DOCS.items():
@@ -250,8 +291,9 @@ def main():
         body, toc = md_to_html(path.read_text(encoding="utf-8"), prefix)
         toc_html = build_toc_html(toc)
         page = page.replace(f"{{{{{key}_BODY}}}}", body).replace(f"{{{{{key}_TOC}}}}", toc_html)
+    page, img_cnt = optimize_images(page)
     OUT.write_text(page, encoding="utf-8")
-    print("→", OUT)
+    print(f"→ {OUT}（已优化 {img_cnt} 张图片：lazy + 尺寸占位）")
 
 
 if __name__ == "__main__":
