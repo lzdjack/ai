@@ -731,7 +731,7 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
       <li><b>部分已定</b>：试点审批、OKR、考勤；允许带「待人工复测」提交，审核通过要确认未测项并转给测试人重点测。仓库、测试角色和验收用例待给</li>
       <li><b>已定（2026-11-24 升级）</b>：账号体系改为独立邮箱注册与登录（私有部署支持开关开放/仅邀请注册）；GitLab / GitHub / Jira / Tita / Apollo 解耦为登录后的<b>连接器（Connector）+ 触发器（Trigger）</b>，详见「技术设计」第 10 节</li>
       <li><b>已定</b>：测试人 Jira 默认提单人（发测试前可换）、Tita 当场选；正式发布人和谁能回滚默认任何人，可改；回退用 Apollo 回滚</li>
-      <li><b>已定（2026-11-24 升级）</b>：AI 引擎改用<b>默认内置 Pi 轻量内核 + 多模型（OpenAI 兼容 / Anthropic / Gemini / Ollama）+ 统一 UI Block 渲染协议</b>，并建好 <code>AgentRuntimeAdapter</code> + 共享 <code>McpToolHost</code> 与外部 CLI 三层 UI 兜底方案，详见「技术设计」第 11 节；合入 MR 用审核人自己的 GitLab 个人令牌，发布与回滚用操作人自己的 Apollo 账号（<code>tita release --local-config</code> 本地算配置后以本人身份写回）</li>
+      <li><b>已定（2026-11-24 升级）</b>：AI 引擎采用 <b>pnpm 多包平等插件架构</b>——核心只定 <code>AgentRuntimePlugin</code> 统一 API 与共享 <code>mcp-tool-host</code>（CI 禁核心反向依赖、零代码污染），<code>plugins/runtime-pi</code> 与后续外部 CLI 插件完全同级（一期先做并默认启用 Pi，多模型 + UI Block 协议 + 三层 UI 兜底），详见「技术设计」第 11 节；合入 MR 用审核人自己的 GitLab 个人令牌，发布与回滚用操作人自己的 Apollo 账号（<code>tita release --local-config</code> 本地算配置后以本人身份写回）</li>
       <li><b>已定（2026-11-23）</b>：纳入五项体验与工程增强（打回沉淀 Skill 与四道防 Token 膨胀闸门、审核前一键本地产物预览、手机端 10 秒极速审核交付卡、历史相似 Bug 雷达、Bot 效能与卡点度量埋点），详见「技术设计」5.9 与第 8 节</li>
       <li><b>已定（2026-11-24）</b>：品牌更名为「云匠 / CLOUDCRAFT」（保留原图标，冬青黑 + Optima 蓝紫渐变）；多语言采用「单源强类型代码生成 + 前后端全量 AI 自动补译（零人工）+ 高危审计原文固化」，首批简中 + 英文，详见「技术设计」第 9 节</li>
       <li><b>待定</b>：用一条真实的「组件包 → 子项目 → 主站」链路评审大包清单；Tita 工单查询接口字段、Apollo 登录/开放接口与外网远程访问方案待实测确认</li>
