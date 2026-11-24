@@ -1121,7 +1121,7 @@ def p_notify():
 </main>'''
     def ban(t, b, s):
         return f'''<div style="padding:10px 12px;border-radius:16px;background:var(--glass-2);box-shadow:0 6px 18px -8px rgba(0,0,0,.25);margin-top:10px">
-  <div class="row g8"><span style="width:20px;height:20px;border-radius:6px;background:linear-gradient(160deg,#5B8CFF,#6A3DF0);flex:none"></span><span class="f11 t3 grow">AI 修复工作台</span><span class="f11 t3">现在</span></div>
+  <div class="row g8"><span style="width:20px;height:20px;border-radius:6px;background:linear-gradient(160deg,#5B8CFF,#6A3DF0);flex:none"></span><span class="f11 t3 grow">云匠</span><span class="f11 t3">现在</span></div>
   <div class="f13 w7" style="margin-top:6px">{t}</div><div class="f12 t2" style="margin-top:2px">{b}</div><div class="f11 t3" style="margin-top:4px">{s}</div></div>'''
     right = aside(
         f'''<div class="card" style="padding:12px 14px"><div class="mini">通知长这样</div>

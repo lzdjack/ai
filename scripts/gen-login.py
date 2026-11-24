@@ -22,8 +22,9 @@ COMMON = '''
 .aura{position:absolute;border-radius:50%;background:conic-gradient(from 210deg,#4F8BFF,#9B5CFF,#FF5FA8,#FFB14A,#4FD1FF,#4F8BFF);filter:blur(70px);opacity:.36}
 html.dark .aura{opacity:.46}
 .ring{position:absolute;border-radius:50%;border:1px solid color-mix(in srgb,var(--text) 7%,transparent)}
-.nm{font-weight:800;letter-spacing:.6px;color:var(--text)}
-.sub{color:var(--text-3);letter-spacing:4px;text-transform:uppercase;font-weight:500}
+.nm{font-family:"Hiragino Sans GB","PingFang SC",sans-serif;font-weight:600;letter-spacing:2.8px;color:var(--text)}
+.sub{font-family:"Optima","Avenir Next",sans-serif;letter-spacing:3.2px;text-transform:uppercase;font-weight:700;background:linear-gradient(90deg,#2563EB,#6D28D9);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+html.dark .sub{background:linear-gradient(90deg,#7DD3FC,#C4B5FD);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .pri{background:var(--blue);color:#fff;box-shadow:0 12px 26px -10px color-mix(in srgb,var(--blue) 85%,transparent)}
 .sec{background:var(--fill);color:var(--text)}
 .av3{border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;flex:none;background:linear-gradient(150deg,#FFB14A,#FF5FA8)}
@@ -89,8 +90,8 @@ html .v-login{display:flex}
 pc_login = f'''<div class="card glass v-login" style="width:430px;padding:34px 38px 28px;align-items:stretch">
   <div style="display:flex;flex-direction:column;align-items:center">
     <img src="logo.svg" width="96" height="96" alt="" style="margin:-8px 0 -4px">
-    <div class="nm" style="font-size:24px">AI 修复工作台</div>
-    <div class="sub" style="font-size:11.5px;margin-top:6px">Fix Studio</div>
+    <div class="nm" style="font-size:26px">云匠</div>
+    <div class="sub" style="font-size:12px;margin-top:6px">CloudCraft</div>
   </div>
   <div style="margin-top:24px">{seg('j')}</div>
   <div style="margin-top:18px"><div class="lab">Jira 账号</div><div class="inp">{USER}<span class="grow">chenyu</span></div></div>
@@ -127,7 +128,7 @@ def phone(inner):
 
 head_logo = '''<div class="aura" style="width:130px;height:130px;left:129px;top:92px"></div>
 <div class="mid" style="top:90px"><img src="logo.svg" width="112" height="112" style="position:relative" alt="">
-<div class="nm" style="font-size:22px">AI 修复工作台</div><div class="sub" style="font-size:11px;margin-top:5px">Fix Studio</div></div>'''
+<div class="nm" style="font-size:24px">云匠</div><div class="sub" style="font-size:11.5px;margin-top:5px">CloudCraft</div></div>'''
 
 # 1 Jira 登录
 p1 = phone(f'''{head_logo}

@@ -198,7 +198,7 @@ def page(cur, title, sub, inner, nxt=None, skip=True, prev=True, foot=None):
 <style>{STYLE}</style></head><body><div class="root">
 <div class="top">
   <img src="logo.svg" width="40" height="40" alt="" style="margin:-4px">
-  <span class="tt" style="display:flex;flex-direction:column;line-height:1.15"><b style="font-size:15px">AI 修复工作台</b><em style="font-style:normal;font-size:11px;color:var(--text-3)">Fix Studio</em></span>
+  <span class="tt"><b>云匠</b><em>CloudCraft</em></span>
   <span class="grow"></span>
   <span class="f13 t2">稍后再填，先进入工作台 ›</span>
 </div>

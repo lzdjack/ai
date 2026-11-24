@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
-  <!-- AI 修复工作台 · App 图标（macOS 图标栅格：824 主体 + 四周 100 留白给投影） -->
+  <!-- 云匠（CLOUDCRAFT）· App 图标（macOS 图标栅格：824 主体 + 四周 100 留白给投影） -->
   <defs>
     <linearGradient id="bg" x1="0.18" y1="0" x2="0.82" y2="1">
       <stop offset="0" stop-color="#3D86FF"/>
