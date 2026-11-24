@@ -194,53 +194,97 @@ html.dark .drw{{background:rgba(36,38,52,.96)}}
 </div>'''
     p5n = p5.replace('</div><script src="icons.js">', DRW + '</div><script src="icons.js">', 1)
 
-    # ---------------- 6 扩展模块（模块市场 · 默认推荐 + 按需勾选） ----------------
-    def mod_card(ic, bg, name, tags, desc, foot, on=False):
-        tgs = "".join(f'<span class="tag {c}">{t}</span>' for t, c in tags)
-        ft = f'<div class="f11.5 t3" style="font-size:11.5px;margin-top:8px;padding-top:7px;border-top:1px solid var(--hair);color:{"var(--blue)" if on else "var(--text-3)"}">{foot}</div>' if foot else ""
-        return f'''<div class="skc{' on' if on else ''}" style="flex-direction:column;gap:0;padding:13px 15px">
+    # ---------------- 6 扩展模块（模块市场 · 抗 50+ 插件：默认推荐 + 搜索分类 + 限高滚动 + 全量抽屉） ----------------
+    MOD_CSS = '''<style>
+.mbar{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.msrch{width:214px;height:32px;border-radius:10px;background:var(--fill);padding:0 10px;display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--text-3);flex:none;border:1px solid var(--hair)}
+.mchips{display:flex;align-items:center;gap:5px;min-width:0}
+.mch{height:28px;padding:0 10px;border-radius:9px;font-size:12px;font-weight:600;color:var(--text-2);background:var(--fill);display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.mch.on{background:var(--blue);color:#fff}
+.mch em{font-style:normal;opacity:.7;font-size:11px;font-weight:500}
+.mall{margin-left:auto;font-size:12.5px;font-weight:600;color:var(--blue);white-space:nowrap;display:inline-flex;align-items:center;gap:2px}
+.mscroll{position:relative;height:224px;overflow:hidden;padding:2px 0 0 0}
+.mclip{height:100%;overflow:hidden;-webkit-mask-image:linear-gradient(180deg,#000 0%,#000 72%,transparent 100%);mask-image:linear-gradient(180deg,#000 0%,#000 72%,transparent 100%)}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mc{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:13px;background:var(--fill);border:1.5px solid transparent}
+.mc.on{background:var(--glass-2);border-color:color-mix(in srgb,var(--blue) 60%,transparent);box-shadow:0 6px 16px -10px color-mix(in srgb,var(--blue) 65%,transparent)}
+.mslot{font-size:10.5px;color:var(--text-3);margin-top:4px;display:flex;align-items:center;gap:5px;white-space:nowrap}
+.mslot i{width:5px;height:5px;border-radius:50%;background:var(--text-3);opacity:.5;display:inline-block;flex:none}
+.mslot.is-dk{color:var(--blue);font-weight:600}.mslot.is-dk i{background:var(--blue);opacity:1}
+</style>'''
+
+    def rec_card(ic, bg, name, desc, foot):
+        return f'''<div class="skc on" style="flex-direction:column;gap:0;padding:11px 14px">
   <div class="row g10" style="width:100%;align-items:flex-start">
-    <span class="ic3" style="width:34px;height:34px;border-radius:10px;background:{bg}">{I(ic,17,2)}</span>
-    <div class="col grow" style="min-width:0;gap:3px">
-      <div class="row g6"><b class="ell">{name}</b>{tgs}</div>
-      <div class="f12 t2" style="line-height:1.45">{desc}</div>
+    <span class="ic3" style="width:32px;height:32px;border-radius:9px;background:{bg}">{I(ic,16,2)}</span>
+    <div class="col grow" style="min-width:0;gap:2px">
+      <div class="row g6"><b class="ell">{name}</b><span class="tag tg-b">官方</span><span class="tag tg-g">默认推荐</span></div>
+      <div class="f12 t2 ell">{desc}</div>
     </div>
-    <span class="cbx2{' on' if on else ''}" style="margin-top:2px">{CHECK if on else ''}</span>
-  </div>{ft}
+    <span class="cbx2 on" style="margin-top:2px">{CHECK}</span>
+  </div>
+  <div class="row g6" style="width:100%;margin-top:7px;padding-top:6px;border-top:1px solid var(--hair);font-size:11.5px;color:var(--blue)">
+    <span class="grow">{foot}</span><span class="f11 t3">占 Dock · 可取消</span>
+  </div>
 </div>'''
 
-    s6_mod = X + f'''
-      <div style="margin-top:18px">
-        <div class="lab">默认推荐模块<span>已为你默认勾选 · 下一步直接顺手配好，不需要可取消勾选</span></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-          {mod_card("history", "linear-gradient(160deg,#FF8A7A,#FF453A 55%,#E0281E)", "紧急回滚（Apollo）",
-                    [("官方", "tg-b"), ("默认推荐", "tg-g")],
-                    "挂载 Dock 回滚入口，预览 Apollo 配置差异并一键回退与业务回读校验。",
-                    "✓ 将在第 7 步配好 Apollo 应用与本人回滚账号", True)}
-          {mod_card("pkg", "linear-gradient(160deg,#FFC54D,#FF9A1F 55%,#FF7A00)", "发布流水线（Tita）",
-                    [("官方", "tg-b"), ("默认推荐", "tg-g")],
-                    "接管 craft build / release 命令，支持工单内一键发测试与正式双环境。",
-                    "✓ 将在第 7 步配好测试 / 正式打包与发布命令", True)}
-        </div>
-      </div>
-      <div style="margin-top:18px">
-        <div class="lab">模块市场 · 更多扩展<span>按需勾选即装，之后随时可在左侧 Dock「模块市场」增删或启停</span></div>
+    def mkt_card(ic, bg, name, tag, desc, slot, dk=False, on=False):
+        t_txt, t_cls = tag
+        return f'''<div class="mc{' on' if on else ''}">
+  <span class="ic3" style="width:30px;height:30px;border-radius:9px;background:{bg}">{I(ic,15,2)}</span>
+  <div class="col grow" style="min-width:0;gap:2px">
+    <div class="row g6"><b class="f13 ell">{name}</b><span class="tag {t_cls}" style="height:18px;font-size:10.5px">{t_txt}</span></div>
+    <div class="f12 t2 ell">{desc}</div>
+    <div class="mslot{' is-dk' if dk else ''}"><i></i>{slot}</div>
+  </div>
+  <span class="cbx2{' on' if on else ''}" style="margin-top:2px">{CHECK if on else ''}</span>
+</div>'''
+
+    s6_mod = X + MOD_CSS + f'''
+      <div style="margin-top:14px">
+        <div class="lab" style="margin-bottom:7px">默认推荐<span>核心修 Bug 永远内置 · 以下 2 个推荐模块已默认勾选，不需要可直接取消</span></div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-          {mod_card("zap", "linear-gradient(160deg,#C58BFF,#6A3DF0)", "灰度放量与金丝雀", [("官方", "tg-n")],
-                    "按流量比例切流与核心指标监控，异常自动触发回退。", "", False)}
-          {mod_card("git", "linear-gradient(160deg,#64748B,#334155)", "GitHub Actions 构建", [("官方", "tg-n")],
-                    "复用现有 GitHub Actions Workflow 接管 craft build / verify。", "", False)}
-          {mod_card("msg", "linear-gradient(160deg,#4FD6E6,#16A3C0)", "飞书 / 企微审批卡点", [("社区", "tg-t")],
-                    "正式发布或高危回滚前向群里发审批卡，主管同意后继续。", "", False)}
-          {mod_card("terminal", "linear-gradient(155deg,#34D399,#0284C7)", "自定义 CLI / MCP 适配器", [("企业自研", "tg-p")],
-                    "用 L1 YAML 或标准 MCP Server 接入公司内部发布与测试系统。", "", False)}
+          {rec_card("history", "linear-gradient(160deg,#FF8A7A,#FF453A 55%,#E0281E)", "紧急回滚（Apollo）",
+                    "预览 Apollo 配置差异、一键回退与业务回读校验", "✓ 将在第 7 步顺手配好 Apollo 应用与回滚账号")}
+          {rec_card("pkg", "linear-gradient(160deg,#FFC54D,#FF9A1F 55%,#FF7A00)", "发布流水线（Tita）",
+                    "接管 craft build / release，支持工单内一键发测试与正式", "✓ 将在第 7 步顺手配好打包与发布命令")}
         </div>
       </div>
-      <div class="note" style="margin-top:14px">{I("layers",15,st="color:var(--blue);margin-top:1px")}<span><b>动态联动：</b>AI 修 Bug 主工作台永远内置；若取消勾选所有扩展模块，将自动跳过第 7 步直接进入「检查并开工」，且未启用的模块不会出现在左侧 Dock。</span></div>'''
+      <div style="margin-top:14px">
+        <div class="lab" style="margin-bottom:7px">模块市场 · 按需加装<span>支持搜索与分类筛选，也可点右侧浏览全量市场</span></div>
+        <div class="mbar">
+          <div class="msrch">{I("search",13)}<span>搜索 48 个市场模块…</span></div>
+          <div class="mchips">
+            <span class="mch on">热门</span>
+            <span class="mch">发布<em>12</em></span>
+            <span class="mch">连接器<em>18</em></span>
+            <span class="mch">审批<em>8</em></span>
+            <span class="mch">自研<em>10</em></span>
+          </div>
+          <span class="mall">浏览全部 48 个 {I("chevr",13)}</span>
+        </div>
+        <div class="mscroll">
+          <div class="mclip"><div class="mgrid">
+            {mkt_card("msg", "linear-gradient(160deg,#4FD6E6,#16A3C0)", "飞书 / 企微审批卡点", ("社区", "tg-t"),
+                      "正式发版或回滚前发审批卡，同意后放行", "审批卡点 · 不占 Dock", dk=False, on=True)}
+            {mkt_card("zap", "linear-gradient(160deg,#C58BFF,#6A3DF0)", "灰度放量与金丝雀", ("官方", "tg-n"),
+                      "按流量比例切流，核心指标异常自动回退", "独立入口 · 占 Dock", dk=True, on=False)}
+            {mkt_card("git", "linear-gradient(160deg,#64748B,#334155)", "GitHub Actions 构建", ("官方", "tg-n"),
+                      "复用现有 Workflow 接管 craft build / verify", "命令槽 · 不占 Dock", dk=False, on=False)}
+            {mkt_card("terminal", "linear-gradient(155deg,#34D399,#0284C7)", "自定义 CLI / MCP 适配器", ("企业自研", "tg-p"),
+                      "L1 YAML 或标准 MCP 接入公司内部工具", "MCP / 命令槽 · 不占 Dock", dk=False, on=False)}
+            {mkt_card("alert", "linear-gradient(160deg,#FB7185,#E11D48)", "Sentry 线上报错联动", ("官方", "tg-n"),
+                      "自动关联堆栈与 SourceMap，一键触发修单", "连接器 · 不占 Dock", dk=False, on=False)}
+            {mkt_card("bell", "linear-gradient(160deg,#FBBF24,#D97706)", "Slack / 钉钉值班播报", ("社区", "tg-t"),
+                      "发布失败与 P1 阻塞自动推送研发值班群", "通知槽 · 不占 Dock", dk=False, on=False)}
+          </div></div>
+        </div>
+      </div>
+      <div class="note" style="margin-top:11px;padding:8px 12px">{I("layers",14,st="color:var(--blue);margin-top:1px")}<span><b>多模块不拥挤：</b>选 3 个及以上时，第 7 步自动按模块分子标签逐个配置（可单独跳过）；左侧 Dock 最多直出 4 个插件图标，超出自动收入「更多模块」文件夹。</span></div>'''
     foot6m = ('<button class="bigb secb"><i data-i="chevl" data-s="16" data-w="2.4"></i>上一步</button><span class="grow"></span>'
-              '<span class="f12 t3" style="margin-right:8px">已选 2 个推荐模块</span>'
-              '<button class="bigb pri">下一步：配置已选模块<i data-i="chevr" data-s="16" data-w="2.4"></i></button>')
-    p6_mod = page(6, "挑选并启用需要的扩展模块", "AI 修 Bug 核心默认内置；发布、紧急回滚与市场扩展都在这里选好，下一步一次性完成配置", s6_mod, foot=foot6m)
+              '<span class="tag tg-b" style="height:28px;padding:0 11px;font-size:12px">已选 3 个（默认 2 + 市场 1）</span>'
+              '<button class="bigb pri">下一步：配置 3 个模块<i data-i="chevr" data-s="16" data-w="2.4"></i></button>')
+    p6_mod = page(6, "挑选并启用需要的扩展模块", "推荐模块开箱即用，市场插件支持快搜、分类与全量抽屉勾选，下一步一次性配好", s6_mod, foot=foot6m)
 
     # ---------------- 7 发布与回滚配置（由第 6 步已选模块动态展开，可选） ----------------
     def kv(k, v, sel=True, extra="", hint=""):

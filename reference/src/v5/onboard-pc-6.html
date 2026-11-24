@@ -88,7 +88,7 @@ html:not(.dark) .menu{background:rgba(255,255,255,.96)}html.dark .menu{backgroun
       <div class="row g10">
         <div class="grow"><div class="f12" style="color:var(--blue);font-weight:700">第 6 步 · 扩展模块</div>
           <div style="font-size:24px;font-weight:800;margin-top:6px">挑选并启用需要的扩展模块</div>
-          <div class="f13 t2" style="margin-top:6px">AI 修 Bug 核心默认内置；发布、紧急回滚与市场扩展都在这里选好，下一步一次性完成配置</div></div>
+          <div class="f13 t2" style="margin-top:6px">推荐模块开箱即用，市场插件支持快搜、分类与全量抽屉勾选，下一步一次性配好</div></div>
         <span class="chip2" style="align-self:flex-start"><i data-i="spark" data-s="13" style="color:var(--purple)"></i>不知道填什么？问 AI</span>
       </div>
 <style>
@@ -126,80 +126,129 @@ html:not(.dark) .menu{background:rgba(255,255,255,.96)}html.dark .menu{backgroun
 .chk3:first-child{border-top:0}
 .ck3{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;flex:none}
 .big-ok{display:flex;align-items:center;gap:16px;padding:16px 20px;border-radius:18px;background:color-mix(in srgb,var(--green) 10%,var(--glass-2));border:1px solid color-mix(in srgb,var(--green) 30%,transparent)}
+</style><style>
+.mbar{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.msrch{width:214px;height:32px;border-radius:10px;background:var(--fill);padding:0 10px;display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--text-3);flex:none;border:1px solid var(--hair)}
+.mchips{display:flex;align-items:center;gap:5px;min-width:0}
+.mch{height:28px;padding:0 10px;border-radius:9px;font-size:12px;font-weight:600;color:var(--text-2);background:var(--fill);display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.mch.on{background:var(--blue);color:#fff}
+.mch em{font-style:normal;opacity:.7;font-size:11px;font-weight:500}
+.mall{margin-left:auto;font-size:12.5px;font-weight:600;color:var(--blue);white-space:nowrap;display:inline-flex;align-items:center;gap:2px}
+.mscroll{position:relative;height:224px;overflow:hidden;padding:2px 0 0 0}
+.mclip{height:100%;overflow:hidden;-webkit-mask-image:linear-gradient(180deg,#000 0%,#000 72%,transparent 100%);mask-image:linear-gradient(180deg,#000 0%,#000 72%,transparent 100%)}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mc{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:13px;background:var(--fill);border:1.5px solid transparent}
+.mc.on{background:var(--glass-2);border-color:color-mix(in srgb,var(--blue) 60%,transparent);box-shadow:0 6px 16px -10px color-mix(in srgb,var(--blue) 65%,transparent)}
+.mslot{font-size:10.5px;color:var(--text-3);margin-top:4px;display:flex;align-items:center;gap:5px;white-space:nowrap}
+.mslot i{width:5px;height:5px;border-radius:50%;background:var(--text-3);opacity:.5;display:inline-block;flex:none}
+.mslot.is-dk{color:var(--blue);font-weight:600}.mslot.is-dk i{background:var(--blue);opacity:1}
 </style>
-      <div style="margin-top:18px">
-        <div class="lab">默认推荐模块<span>已为你默认勾选 · 下一步直接顺手配好，不需要可取消勾选</span></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-          <div class="skc on" style="flex-direction:column;gap:0;padding:13px 15px">
-  <div class="row g10" style="width:100%;align-items:flex-start">
-    <span class="ic3" style="width:34px;height:34px;border-radius:10px;background:linear-gradient(160deg,#FF8A7A,#FF453A 55%,#E0281E)"><i data-i="history" data-s="17" data-w="2"></i></span>
-    <div class="col grow" style="min-width:0;gap:3px">
-      <div class="row g6"><b class="ell">紧急回滚（Apollo）</b><span class="tag tg-b">官方</span><span class="tag tg-g">默认推荐</span></div>
-      <div class="f12 t2" style="line-height:1.45">挂载 Dock 回滚入口，预览 Apollo 配置差异并一键回退与业务回读校验。</div>
-    </div>
-    <span class="cbx2 on" style="margin-top:2px"><i data-i="check" data-s="14" data-w="3"></i></span>
-  </div><div class="f11.5 t3" style="font-size:11.5px;margin-top:8px;padding-top:7px;border-top:1px solid var(--hair);color:var(--blue)">✓ 将在第 7 步配好 Apollo 应用与本人回滚账号</div>
-</div>
-          <div class="skc on" style="flex-direction:column;gap:0;padding:13px 15px">
-  <div class="row g10" style="width:100%;align-items:flex-start">
-    <span class="ic3" style="width:34px;height:34px;border-radius:10px;background:linear-gradient(160deg,#FFC54D,#FF9A1F 55%,#FF7A00)"><i data-i="pkg" data-s="17" data-w="2"></i></span>
-    <div class="col grow" style="min-width:0;gap:3px">
-      <div class="row g6"><b class="ell">发布流水线（Tita）</b><span class="tag tg-b">官方</span><span class="tag tg-g">默认推荐</span></div>
-      <div class="f12 t2" style="line-height:1.45">接管 craft build / release 命令，支持工单内一键发测试与正式双环境。</div>
-    </div>
-    <span class="cbx2 on" style="margin-top:2px"><i data-i="check" data-s="14" data-w="3"></i></span>
-  </div><div class="f11.5 t3" style="font-size:11.5px;margin-top:8px;padding-top:7px;border-top:1px solid var(--hair);color:var(--blue)">✓ 将在第 7 步配好测试 / 正式打包与发布命令</div>
-</div>
-        </div>
-      </div>
-      <div style="margin-top:18px">
-        <div class="lab">模块市场 · 更多扩展<span>按需勾选即装，之后随时可在左侧 Dock「模块市场」增删或启停</span></div>
+      <div style="margin-top:14px">
+        <div class="lab" style="margin-bottom:7px">默认推荐<span>核心修 Bug 永远内置 · 以下 2 个推荐模块已默认勾选，不需要可直接取消</span></div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-          <div class="skc" style="flex-direction:column;gap:0;padding:13px 15px">
+          <div class="skc on" style="flex-direction:column;gap:0;padding:11px 14px">
   <div class="row g10" style="width:100%;align-items:flex-start">
-    <span class="ic3" style="width:34px;height:34px;border-radius:10px;background:linear-gradient(160deg,#C58BFF,#6A3DF0)"><i data-i="zap" data-s="17" data-w="2"></i></span>
-    <div class="col grow" style="min-width:0;gap:3px">
-      <div class="row g6"><b class="ell">灰度放量与金丝雀</b><span class="tag tg-n">官方</span></div>
-      <div class="f12 t2" style="line-height:1.45">按流量比例切流与核心指标监控，异常自动触发回退。</div>
+    <span class="ic3" style="width:32px;height:32px;border-radius:9px;background:linear-gradient(160deg,#FF8A7A,#FF453A 55%,#E0281E)"><i data-i="history" data-s="16" data-w="2"></i></span>
+    <div class="col grow" style="min-width:0;gap:2px">
+      <div class="row g6"><b class="ell">紧急回滚（Apollo）</b><span class="tag tg-b">官方</span><span class="tag tg-g">默认推荐</span></div>
+      <div class="f12 t2 ell">预览 Apollo 配置差异、一键回退与业务回读校验</div>
     </div>
-    <span class="cbx2" style="margin-top:2px"></span>
+    <span class="cbx2 on" style="margin-top:2px"><i data-i="check" data-s="14" data-w="3"></i></span>
+  </div>
+  <div class="row g6" style="width:100%;margin-top:7px;padding-top:6px;border-top:1px solid var(--hair);font-size:11.5px;color:var(--blue)">
+    <span class="grow">✓ 将在第 7 步顺手配好 Apollo 应用与回滚账号</span><span class="f11 t3">占 Dock · 可取消</span>
   </div>
 </div>
-          <div class="skc" style="flex-direction:column;gap:0;padding:13px 15px">
+          <div class="skc on" style="flex-direction:column;gap:0;padding:11px 14px">
   <div class="row g10" style="width:100%;align-items:flex-start">
-    <span class="ic3" style="width:34px;height:34px;border-radius:10px;background:linear-gradient(160deg,#64748B,#334155)"><i data-i="git" data-s="17" data-w="2"></i></span>
-    <div class="col grow" style="min-width:0;gap:3px">
-      <div class="row g6"><b class="ell">GitHub Actions 构建</b><span class="tag tg-n">官方</span></div>
-      <div class="f12 t2" style="line-height:1.45">复用现有 GitHub Actions Workflow 接管 craft build / verify。</div>
+    <span class="ic3" style="width:32px;height:32px;border-radius:9px;background:linear-gradient(160deg,#FFC54D,#FF9A1F 55%,#FF7A00)"><i data-i="pkg" data-s="16" data-w="2"></i></span>
+    <div class="col grow" style="min-width:0;gap:2px">
+      <div class="row g6"><b class="ell">发布流水线（Tita）</b><span class="tag tg-b">官方</span><span class="tag tg-g">默认推荐</span></div>
+      <div class="f12 t2 ell">接管 craft build / release，支持工单内一键发测试与正式</div>
     </div>
-    <span class="cbx2" style="margin-top:2px"></span>
+    <span class="cbx2 on" style="margin-top:2px"><i data-i="check" data-s="14" data-w="3"></i></span>
   </div>
-</div>
-          <div class="skc" style="flex-direction:column;gap:0;padding:13px 15px">
-  <div class="row g10" style="width:100%;align-items:flex-start">
-    <span class="ic3" style="width:34px;height:34px;border-radius:10px;background:linear-gradient(160deg,#4FD6E6,#16A3C0)"><i data-i="msg" data-s="17" data-w="2"></i></span>
-    <div class="col grow" style="min-width:0;gap:3px">
-      <div class="row g6"><b class="ell">飞书 / 企微审批卡点</b><span class="tag tg-t">社区</span></div>
-      <div class="f12 t2" style="line-height:1.45">正式发布或高危回滚前向群里发审批卡，主管同意后继续。</div>
-    </div>
-    <span class="cbx2" style="margin-top:2px"></span>
-  </div>
-</div>
-          <div class="skc" style="flex-direction:column;gap:0;padding:13px 15px">
-  <div class="row g10" style="width:100%;align-items:flex-start">
-    <span class="ic3" style="width:34px;height:34px;border-radius:10px;background:linear-gradient(155deg,#34D399,#0284C7)"><i data-i="terminal" data-s="17" data-w="2"></i></span>
-    <div class="col grow" style="min-width:0;gap:3px">
-      <div class="row g6"><b class="ell">自定义 CLI / MCP 适配器</b><span class="tag tg-p">企业自研</span></div>
-      <div class="f12 t2" style="line-height:1.45">用 L1 YAML 或标准 MCP Server 接入公司内部发布与测试系统。</div>
-    </div>
-    <span class="cbx2" style="margin-top:2px"></span>
+  <div class="row g6" style="width:100%;margin-top:7px;padding-top:6px;border-top:1px solid var(--hair);font-size:11.5px;color:var(--blue)">
+    <span class="grow">✓ 将在第 7 步顺手配好打包与发布命令</span><span class="f11 t3">占 Dock · 可取消</span>
   </div>
 </div>
         </div>
       </div>
-      <div class="note" style="margin-top:14px"><i data-i="layers" data-s="15" style="color:var(--blue);margin-top:1px"></i><span><b>动态联动：</b>AI 修 Bug 主工作台永远内置；若取消勾选所有扩展模块，将自动跳过第 7 步直接进入「检查并开工」，且未启用的模块不会出现在左侧 Dock。</span></div>
+      <div style="margin-top:14px">
+        <div class="lab" style="margin-bottom:7px">模块市场 · 按需加装<span>支持搜索与分类筛选，也可点右侧浏览全量市场</span></div>
+        <div class="mbar">
+          <div class="msrch"><i data-i="search" data-s="13"></i><span>搜索 48 个市场模块…</span></div>
+          <div class="mchips">
+            <span class="mch on">热门</span>
+            <span class="mch">发布<em>12</em></span>
+            <span class="mch">连接器<em>18</em></span>
+            <span class="mch">审批<em>8</em></span>
+            <span class="mch">自研<em>10</em></span>
+          </div>
+          <span class="mall">浏览全部 48 个 <i data-i="chevr" data-s="13"></i></span>
+        </div>
+        <div class="mscroll">
+          <div class="mclip"><div class="mgrid">
+            <div class="mc on">
+  <span class="ic3" style="width:30px;height:30px;border-radius:9px;background:linear-gradient(160deg,#4FD6E6,#16A3C0)"><i data-i="msg" data-s="15" data-w="2"></i></span>
+  <div class="col grow" style="min-width:0;gap:2px">
+    <div class="row g6"><b class="f13 ell">飞书 / 企微审批卡点</b><span class="tag tg-t" style="height:18px;font-size:10.5px">社区</span></div>
+    <div class="f12 t2 ell">正式发版或回滚前发审批卡，同意后放行</div>
+    <div class="mslot"><i></i>审批卡点 · 不占 Dock</div>
+  </div>
+  <span class="cbx2 on" style="margin-top:2px"><i data-i="check" data-s="14" data-w="3"></i></span>
+</div>
+            <div class="mc">
+  <span class="ic3" style="width:30px;height:30px;border-radius:9px;background:linear-gradient(160deg,#C58BFF,#6A3DF0)"><i data-i="zap" data-s="15" data-w="2"></i></span>
+  <div class="col grow" style="min-width:0;gap:2px">
+    <div class="row g6"><b class="f13 ell">灰度放量与金丝雀</b><span class="tag tg-n" style="height:18px;font-size:10.5px">官方</span></div>
+    <div class="f12 t2 ell">按流量比例切流，核心指标异常自动回退</div>
+    <div class="mslot is-dk"><i></i>独立入口 · 占 Dock</div>
+  </div>
+  <span class="cbx2" style="margin-top:2px"></span>
+</div>
+            <div class="mc">
+  <span class="ic3" style="width:30px;height:30px;border-radius:9px;background:linear-gradient(160deg,#64748B,#334155)"><i data-i="git" data-s="15" data-w="2"></i></span>
+  <div class="col grow" style="min-width:0;gap:2px">
+    <div class="row g6"><b class="f13 ell">GitHub Actions 构建</b><span class="tag tg-n" style="height:18px;font-size:10.5px">官方</span></div>
+    <div class="f12 t2 ell">复用现有 Workflow 接管 craft build / verify</div>
+    <div class="mslot"><i></i>命令槽 · 不占 Dock</div>
+  </div>
+  <span class="cbx2" style="margin-top:2px"></span>
+</div>
+            <div class="mc">
+  <span class="ic3" style="width:30px;height:30px;border-radius:9px;background:linear-gradient(155deg,#34D399,#0284C7)"><i data-i="terminal" data-s="15" data-w="2"></i></span>
+  <div class="col grow" style="min-width:0;gap:2px">
+    <div class="row g6"><b class="f13 ell">自定义 CLI / MCP 适配器</b><span class="tag tg-p" style="height:18px;font-size:10.5px">企业自研</span></div>
+    <div class="f12 t2 ell">L1 YAML 或标准 MCP 接入公司内部工具</div>
+    <div class="mslot"><i></i>MCP / 命令槽 · 不占 Dock</div>
+  </div>
+  <span class="cbx2" style="margin-top:2px"></span>
+</div>
+            <div class="mc">
+  <span class="ic3" style="width:30px;height:30px;border-radius:9px;background:linear-gradient(160deg,#FB7185,#E11D48)"><i data-i="alert" data-s="15" data-w="2"></i></span>
+  <div class="col grow" style="min-width:0;gap:2px">
+    <div class="row g6"><b class="f13 ell">Sentry 线上报错联动</b><span class="tag tg-n" style="height:18px;font-size:10.5px">官方</span></div>
+    <div class="f12 t2 ell">自动关联堆栈与 SourceMap，一键触发修单</div>
+    <div class="mslot"><i></i>连接器 · 不占 Dock</div>
+  </div>
+  <span class="cbx2" style="margin-top:2px"></span>
+</div>
+            <div class="mc">
+  <span class="ic3" style="width:30px;height:30px;border-radius:9px;background:linear-gradient(160deg,#FBBF24,#D97706)"><i data-i="bell" data-s="15" data-w="2"></i></span>
+  <div class="col grow" style="min-width:0;gap:2px">
+    <div class="row g6"><b class="f13 ell">Slack / 钉钉值班播报</b><span class="tag tg-t" style="height:18px;font-size:10.5px">社区</span></div>
+    <div class="f12 t2 ell">发布失败与 P1 阻塞自动推送研发值班群</div>
+    <div class="mslot"><i></i>通知槽 · 不占 Dock</div>
+  </div>
+  <span class="cbx2" style="margin-top:2px"></span>
+</div>
+          </div></div>
+        </div>
+      </div>
+      <div class="note" style="margin-top:11px;padding:8px 12px"><i data-i="layers" data-s="14" style="color:var(--blue);margin-top:1px"></i><span><b>多模块不拥挤：</b>选 3 个及以上时，第 7 步自动按模块分子标签逐个配置（可单独跳过）；左侧 Dock 最多直出 4 个插件图标，超出自动收入「更多模块」文件夹。</span></div>
     </div>
-    <div class="ff"><button class="bigb secb"><i data-i="chevl" data-s="16" data-w="2.4"></i>上一步</button><span class="grow"></span><span class="f12 t3" style="margin-right:8px">已选 2 个推荐模块</span><button class="bigb pri">下一步：配置已选模块<i data-i="chevr" data-s="16" data-w="2.4"></i></button></div>
+    <div class="ff"><button class="bigb secb"><i data-i="chevl" data-s="16" data-w="2.4"></i>上一步</button><span class="grow"></span><span class="tag tg-b" style="height:28px;padding:0 11px;font-size:12px">已选 3 个（默认 2 + 市场 1）</span><button class="bigb pri">下一步：配置 3 个模块<i data-i="chevr" data-s="16" data-w="2.4"></i></button></div>
   </section>
 </div>
 </div><script src="icons.js"></script></body></html>
