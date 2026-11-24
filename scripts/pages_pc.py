@@ -961,8 +961,8 @@ def p_aiset():
   <span class="chip2">{I("spark",13,style="color:var(--purple)")}也可以问 AI「连续受阻几次会找人？」</span></div></header>
 <div class="col g12 grow" style="padding:14px 22px;min-height:0;overflow:hidden">
   <div class="card" style="padding:12px 16px 6px"><div class="row g8" style="margin-bottom:4px"><span class="sec grow">连接</span><span class="row g6 f12" style="color:var(--green)">{I("check",13,3)}已连通 · 今天 10:12 试过，1.2 秒</span><span class="btn2 sm a-sec" style="background:var(--fill);margin-left:8px">{I("refresh",13)}再试一下</span></div>
-    <div class="kv2"><span class="t2">AI 工具</span><span class="f13 w6">Codex</span></div>
-    <div class="kv2"><span class="t2">模型</span><span class="f13 w6">gpt-6.2-sol</span></div>
+    <div class="kv2"><span class="t2">AI 引擎</span><span class="f13 w6">Pi（默认内置 · 多模型）</span></div>
+    <div class="kv2"><span class="t2">主力模型</span><span class="f13 w6">gpt-6.2-sol</span></div>
     <div class="kv2"><span class="t2">连接方式</span><span class="row g8"><span class="f13">公司网关</span><span class="mono f12 t2">https://ai-gateway.tita.cloud</span></span></div>
     <div class="kv2"><span class="t2">访问令牌</span><span class="row g8"><span class="mono f12 t2">•••••••••••• 3f9a</span><span class="f12 t3">加密存在内网服务器上，只给 Bot 用</span></span></div></div>
   <div class="card" style="padding:12px 16px 6px"><div class="row g8" style="margin-bottom:2px"><span class="sec grow">Bot 用的账号</span><span class="f12 t3">合入、发布、回滚用各人自己的账号 · Jira、Tita 采集账号</span><span class="f12 lnk">在来源采集改 ›</span></div>
@@ -1059,35 +1059,36 @@ def p_members():
   <div class="row g8"><span class="ck" style="background:var(--orange);font-size:12px;font-weight:800">!</span><span class="f14 w7 grow">OKR-3320 不知道该通知谁</span><span class="f12 t3">14:58 收单 · 管理员或 OKR 负责人可选 · 单子先留着</span></div>
   <div class="f13 t2" style="margin:6px 0 10px 30px">Jira 经办人显示「张伟」，账号 <span class="mono">zw01</span> 还没关联成员。工作台里有 2 个叫张伟的，选一个——以后 <span class="mono">zw01</span> 的单自动给他。</div>
   <div class="row g10" style="margin-left:30px">{pick("张伟","人事产研","zhangwei","#9FD7FF,#3A8EE6")}{pick("张伟","销售产研","zhangwei2","#C9B6FF,#7B5BE0")}</div></div>'''
-    M = [("林某", "#FFC9A8,#F08F7A", "lin", "林某 · lin", "林某", "审批 考勤 OKR", "管理员", "g", "正常"),
-         ("王某", "#7FB2FF,#4C7DF0", "wang", "王某 · wang", "—", "审批 考勤", "负责人 · 审批", "g", "正常"),
-         ("陈晨", "#FFD27F,#F0A23C", "chenchen", "陈晨 · chenchen", "陈晨", "审批", "成员", "g", "正常"),
-         ("张某", "#8FD8C9,#3FAE9A", "zhang", "张某 · zhang", "张某", "审批 OKR", "成员", "g", "正常"),
-         ("李娜", "#F7A8D0,#E0609E", "lina", "李娜 · lina", "李娜", "考勤", "成员", "g", "正常"),
-         ("周某", "#B5E3A0,#5FB84A", "zhou", "周某 · zhou", '<span style="color:var(--orange)">未关联</span>', "考勤", "成员", "g", "正常"),
-         ("赵磊", "#C8CCD4,#8A909B", "zhaolei", "赵磊 · zhaolei", "赵磊", "考勤", "成员", "n", "已停用")]
-    tb = "".join(f'''<tr{" style=\"opacity:.6\"" if s=="已停用" else ""}><td><div class="row g8">{av(n,g)}<span class="w6">{n}</span></div></td><td class="mono f12 t2">{a}</td><td class="f12 t2">{j}</td><td class="f12 t2">{t}</td><td class="f12 t2">{p}</td><td>{"<span class=\"tag tg-b\">管理员</span>" if r=="管理员" else (f"<span class=\"tag tg-p\">{r}</span>" if r.startswith("负责人") else "<span class=\"f12 t3\">成员</span>")}</td><td><span class="tag tg-{c}">{s}</span></td></tr>''' for n, g, a, j, t, p, r, c, s in M)
+    M = [("林某", "#FFC9A8,#F08F7A", "lin@company.com", "林某 · lin", "林某", "审批 考勤 OKR", "空间管理员", "g", "正常"),
+         ("王某", "#7FB2FF,#4C7DF0", "wang@company.com", "王某 · wang", "—", "审批 考勤", "负责人 · 审批", "g", "正常"),
+         ("陈晨", "#FFD27F,#F0A23C", "chen@company.com", "陈晨 · chenchen", "陈晨", "审批", "成员", "g", "正常"),
+         ("张某", "#8FD8C9,#3FAE9A", "zhang@company.com", "张某 · zhang", "张某", "审批 OKR", "成员", "g", "正常"),
+         ("李娜", "#F7A8D0,#E0609E", "lina@company.com", "李娜 · lina", "李娜", "考勤", "成员", "g", "正常"),
+         ("周某", "#B5E3A0,#5FB84A", "zhou@company.com", "周某 · zhou", '<span style="color:var(--orange)">未关联</span>', "考勤", "成员", "g", "正常"),
+         ("赵磊", "#C8CCD4,#8A909B", "zhao@company.com", "赵磊 · zhaolei", "赵磊", "考勤", "成员", "n", "已停用")]
+    tb = "".join(f'''<tr{" style=\"opacity:.6\"" if s=="已停用" else ""}><td><div class="row g8">{av(n,g)}<span class="w6">{n}</span></div></td><td class="mono f11 t2">{a}</td><td class="f12 t2">{j}</td><td class="f12 t2">{t}</td><td class="f12 t2">{p}</td><td>{"<span class=\"tag tg-b\">空间管理员</span>" if r=="空间管理员" else (f"<span class=\"tag tg-p\">{r}</span>" if r.startswith("负责人") else "<span class=\"f12 t3\">成员</span>")}</td><td><span class="tag tg-{c}">{s}</span></td></tr>''' for n, g, a, j, t, p, r, c, s in M)
     main = f'''<main class="glass pn grow" style="min-width:0">
-<header class="thead"><div class="row g10"><div class="col grow"><h1>成员与身份</h1><div class="f12 t3" style="margin-top:2px">谁能用、单子通知谁、谁能审核 · 管理员管全部，项目负责人管本项目 · 账号是公司内部的 Jira / GitLab 账号</div></div>
+<header class="thead"><div class="row g10"><div class="col grow"><h1>成员与身份</h1><div class="f12 t3" style="margin-top:2px">独立邮箱登录 · 工作空间管理员管全部，项目负责人管本项目 · 支持免 SMTP 一次性邀请链接</div></div>
+  <button class="btn2 a-sec" style="background:var(--fill)">{I("ext",13)}生成邀请链接</button>
   <button class="btn2 a-pri">{I("plus",14,2.4)}添加成员</button></div></header>
 <div class="col g14 grow" style="padding:14px 22px;min-height:0;overflow:hidden">
   {pend}
   <div class="card" style="padding:12px 16px 4px"><div class="row g8" style="margin-bottom:6px"><span class="sec grow">成员</span><span class="seg" style="padding:2px"><span class="on" style="height:24px;font-size:12px">全部 12</span><span style="height:24px;font-size:12px">未关联 1</span><span style="height:24px;font-size:12px">已停用 1</span></span></div>
-    <style>.tbl.mb td{{padding:7px 10px;white-space:nowrap}}</style><table class="tbl mb"><thead><tr><th style="width:15%">成员</th><th style="width:12%">登录账号</th><th style="width:15%">Jira 身份</th><th style="width:10%">Tita 身份</th><th>能看的项目</th><th style="width:13%">角色</th><th style="width:9%">状态</th></tr></thead><tbody>{tb}</tbody></table>
+    <style>.tbl.mb td{{padding:7px 8px;white-space:nowrap}}</style><table class="tbl mb"><thead><tr><th style="width:13%">成员</th><th style="width:20%">登录邮箱</th><th style="width:15%">Jira 身份</th><th style="width:9%">Tita</th><th>能看的项目</th><th style="width:14%">角色</th><th style="width:8%">状态</th></tr></thead><tbody>{tb}</tbody></table>
     <div class="row g8 f12" style="padding:8px 0;border-top:1px solid var(--hair)"><span class="ck" style="background:var(--orange);width:16px;height:16px;font-size:10px;font-weight:800">!</span><span class="t2 grow">赵磊已停用，还有 1 张单等他审核，指定新负责人后才会转出去</span><span class="lnk w6">指定新负责人 ›</span></div></div>
 </div>
 </main>'''
     right = aside(
+        f'''<div class="card" style="padding:12px 14px"><div class="row"><div class="mini grow" style="margin:0">免 SMTP 邀请链接</div><span class="tag tg-g">私有部署</span></div>
+  <div class="f12 t2" style="margin-top:6px;line-height:1.6">内网无邮件服务器时，生成 24 小时一次性链接直接发企微/飞书，同事点开即可设密码加入。</div>
+  <div class="row g6" style="margin-top:8px;padding:6px 8px;border-radius:8px;background:var(--fill)"><span class="mono f11 t2 ell grow">https://cc.intra/join/9f2a…k8</span><span class="lnk f11 w6" style="white-space:nowrap">复制</span></div></div>''',
         f'''<div class="card" style="padding:12px 14px"><div class="mini">单子怎么找到人</div>
-  <div class="f12 t2" style="margin-top:6px;line-height:1.7">1. 先看原单的真人修复人：Jira 经办人、Tita「AI干活」节点负责人<br>2. 按这里关联的 Jira / Tita 身份找到成员<br>3. 对不上、同名或缺失，放进上面的待处理，不会发错人</div></div>''',
+  <div class="f12 t2" style="margin-top:6px;line-height:1.65">1. 按原单外部用户 ID（非显示名）匹配<br>2. 对不上、同名或缺失进入顶部待处理，不发错人</div></div>''',
         f'''<div class="card" style="padding:12px 14px"><div class="mini">谁能做什么</div>
-  <div class="kv2"><span class="t2">通过 / 打回</span><span class="f12">只有这张单的修复人</span></div>
-  <div class="kv2"><span class="t2">发正式</span><span class="f12">按项目设置 · 默认任何人</span></div>
-  <div class="kv2"><span class="t2">开通 / 停用 / 角色</span><span class="f12">管理员</span></div>
-  <div class="kv2"><span class="t2">本项目成员和身份</span><span class="f12">管理员 · 项目负责人</span></div>
-  <div class="f12 t3" style="margin-top:6px">管理员不能替别人审核。</div></div>''',
-        f'''<div class="card" style="padding:12px 14px"><div class="mini">停用之后</div>
-  <div class="f12 t2" style="margin-top:6px;line-height:1.6">马上不能登录、不再收通知；做过的审核保留署名。</div></div>''')
+  <div class="kv2"><span class="t2">通过 / 打回</span><span class="f12">仅本单修复人</span></div>
+  <div class="kv2"><span class="t2">成员 / 角色 / 邀请</span><span class="f12">空间管理员</span></div>
+  <div class="kv2"><span class="t2">本项目身份映射</span><span class="f12">管理员 · 负责人</span></div>
+  <div class="f12 t3" style="margin-top:6px">管理员不能替别人审核；停用保留历史署名。</div></div>''')
     return set_left("成员与身份") + main + right
 
 
@@ -1980,8 +1981,8 @@ def p_myacct():
 <div class="col g14 grow" style="padding:14px 22px;min-height:0;overflow:hidden">
   <div class="card" style="padding:10px 16px">
     <div class="row g12"><span class="av" style="width:34px;height:34px;font-size:13px;background:linear-gradient(150deg,#FFB38A,#F0703C)">林</span>
-      <div class="col grow" style="gap:1px"><span class="f14 w6">林某 <span class="f12 t3" style="font-weight:400">· 用 Jira 账号 <span class="mono">lin.x</span> 登录工作台</span></span><span class="f12 t3">负责人 · OKR · 能看审批、OKR、考勤</span></div>
-      <span class="f12 t3">管理员开通 · 工作台不存你的 Jira 密码</span></div>
+      <div class="col grow" style="gap:1px"><span class="f14 w6">林某 <span class="f12 t3" style="font-weight:400">· 独立邮箱 <span class="mono">lin@company.com</span> 登录</span></span><span class="f12 t3">空间管理员 · 能看审批、OKR、考勤</span></div>
+      <span class="f12 t3">独立云匠账号 · 外部工具走个人连接器</span></div>
   </div>
   <div class="row g14" style="align-items:stretch">
     {acct(GL, "GitLab 账号", "已连通", gl_f, "试连接", "在 GitLab 偏好设置 → 访问令牌里生成")}
@@ -2115,8 +2116,102 @@ def p_runners():
     return left + main + right
 
 
+# =====================================================================
+# 34. 手动新建工单（点列表顶部 + 弹出；一期独立使用 / 未接外部平台 / 临时救火）
+# =====================================================================
+def p_newticket():
+    overlay = f'''<!--OVERLAY--><div class="scrim"></div>
+  <div class="dlg" style="left:50%;top:50%;width:650px;transform:translate(-50%,-50%);padding:22px 24px">
+    <div class="row g10">
+      <span class="ic-box" style="width:36px;height:36px;border-radius:10px;background:linear-gradient(155deg,#5AA0FF,#1F6FFF)">{I("plus",18,2.6)}</span>
+      <div class="col grow">
+        <div class="f18 w7">手动新建工单</div>
+        <div class="f12 t3" style="margin-top:2px">不依赖 Jira / Tita，直接派给 Bot 修复 · 自动编号 <span class="mono t2">M-105</span> · 不生成「待原平台确认」待办</div>
+      </div>
+      <span class="t3">{I("x",18)}</span>
+    </div>
+
+    <div class="col g12" style="margin-top:16px">
+      <!-- 所属项目 & 优先级 -->
+      <div class="row g14" style="align-items:flex-start">
+        <div class="col g6 grow">
+          <span class="f12 w6 t2">所属项目</span>
+          <div class="row g6">
+            <span class="pill p-blue" style="height:30px;padding:0 12px;border:1px solid color-mix(in srgb,var(--blue) 45%,transparent)">审批 · 已开工</span>
+            <span class="pill p-gray" style="height:30px;padding:0 12px">OKR</span>
+            <span class="pill p-gray" style="height:30px;padding:0 12px">考勤</span>
+          </div>
+        </div>
+        <div class="col g6">
+          <span class="f12 w6 t2">优先级（决定排队顺序）</span>
+          <div class="row g6">
+            <span class="pill p-red" style="height:30px;padding:0 11px;border:1px solid color-mix(in srgb,var(--red) 45%,transparent)">P1 紧急</span>
+            <span class="pill p-gray" style="height:30px;padding:0 11px">P2 高</span>
+            <span class="pill p-gray" style="height:30px;padding:0 11px">P3 普通</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 复现环境 & 修复人 -->
+      <div class="row g14">
+        <div class="col g6 grow">
+          <span class="f12 w6 t2">复现环境</span>
+          <div class="row g8" style="height:36px;padding:0 12px;border-radius:10px;background:var(--glass-2);border:1px solid var(--stroke)">
+            <span class="dot" style="width:7px;height:7px;color:var(--green)"></span>
+            <span class="f13 w6">测试环境</span>
+            <span class="mono f11 t3 grow ell">test.tita.work/approval</span>
+            {I("chevd",13,style="color:var(--text-3)")}
+          </div>
+        </div>
+        <div class="col g6" style="width:220px;flex:none">
+          <span class="f12 w6 t2">真人修复人（审核人）</span>
+          <div class="row g8" style="height:36px;padding:0 10px;border-radius:10px;background:var(--glass-2);border:1px solid var(--stroke)">
+            <span class="av" style="width:22px;height:22px;font-size:10px;background:linear-gradient(160deg,#FFC9A8,#F08F7A);color:#5A2414">林</span>
+            <span class="f13 w6 grow">林某（我）</span>
+            {I("chevd",13,style="color:var(--text-3)")}
+          </div>
+        </div>
+      </div>
+
+      <!-- 标题 -->
+      <div class="col g6">
+        <span class="f12 w6 t2">问题标题</span>
+        <div class="row" style="height:38px;padding:0 12px;border-radius:10px;background:var(--glass-2);border:1px solid color-mix(in srgb,var(--blue) 55%,transparent)">
+          <span class="f13.5 w5" style="font-size:13.5px">审批单批量导出时，部门名称包含斜杠导致文件名被截断</span>
+        </div>
+      </div>
+
+      <!-- 问题说明与复现步骤 -->
+      <div class="col g6">
+        <div class="row"><span class="f12 w6 t2 grow">复现步骤与期望结果</span><span class="f11 t3">越具体，Bot 一次修对率越高</span></div>
+        <div style="padding:10px 12px;border-radius:11px;background:var(--glass-2);border:1px solid var(--stroke);font-size:13px;line-height:1.65;color:var(--text-2)">
+          1. 用普通员工进入「审批中心 → 我发起的」，筛选「研发/前端组」<br>
+          2. 勾选 3 条审批单，点击右上角「批量导出 Excel」<br>
+          <b style="color:var(--text)">实际</b>：下载文件名只剩「前端组.xlsx」，斜杠前全部丢失；<b style="color:var(--text)">期望</b>：自动转义非法路径字符。
+        </div>
+      </div>
+
+      <!-- 附件与截图 -->
+      <div class="row g10" style="padding:9px 12px;border-radius:11px;background:var(--fill)">
+        <span class="ic-box" style="width:28px;height:28px;border-radius:8px;background:color-mix(in srgb,var(--blue) 14%,transparent);color:var(--blue)">{I("paperclip",14)}</span>
+        <div class="col grow" style="min-width:0"><span class="f12.5 w6" style="font-size:12.5px">export-filename-bug.png</span><span class="f11 t3">428 KB · 作为修前参考材料交给 Bot</span></div>
+        <span class="btn2 sm a-sec" style="background:var(--glass-2)">{I("plus",12,2.4)}添加截图 / 录屏</span>
+      </div>
+    </div>
+
+    <div class="row g10" style="margin-top:18px;padding-top:14px;border-top:1px solid var(--hair)">
+      <span class="f12 t3 grow">创建后立即按优先级入队交给 Bot，开启机审门禁与浏览器复测</span>
+      <button class="btn2 a-sec" style="background:var(--fill)">取消</button>
+      <button class="btn2 a-pri" style="padding:0 20px">{I("bot",14)}创建并派给 Bot</button>
+    </div>
+  </div>'''
+    return ticket_list("20871") + chat_main_dim() + aside(
+        '<div class="card" style="padding:12px 14px;opacity:.45"><div class="mini">经过</div><div class="f12 t3">正在新建手动工单…</div></div>') + overlay
+
+
 PAGES = {
     "ai": ("AI 助手", "ai", p_ai()),
+    "newticket": ("手动新建工单", "chat", p_newticket()),
     "code": ("代码改动", "chat", p_code()),
     "evidence": ("证据", "chat", p_evidence()),
     "log": ("执行日志 · 报错", "chat", p_log()),

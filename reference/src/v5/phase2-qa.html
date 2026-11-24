@@ -1,0 +1,199 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>二期蓝图 4 · QA 联调验收与 AI 机械归因定责池</title>
+<link rel="stylesheet" href="../v3/base.css">
+<link rel="stylesheet" href="../v4/apple.css">
+<link rel="stylesheet" href="pc.css">
+<style>
+.ap-spec{background:linear-gradient(155deg,#6366F1 0%,#4F46E5 55%,#0EA5E9 100%)}
+.c-pill{display:inline-flex;align-items:center;gap:4px;height:21px;padding:0 8px;border-radius:7px;font-size:11px;font-weight:700;white-space:nowrap;flex-shrink:0}
+.cp-b{background:color-mix(in srgb,var(--blue) 14%,transparent);color:var(--blue)}
+.cp-g{background:color-mix(in srgb,var(--green) 15%,transparent);color:var(--green)}
+.cp-o{background:color-mix(in srgb,var(--orange) 16%,transparent);color:var(--orange)}
+.cp-r{background:color-mix(in srgb,var(--red) 14%,transparent);color:var(--red)}
+.cp-p{background:color-mix(in srgb,var(--purple) 14%,transparent);color:var(--purple)}
+.cp-i{background:color-mix(in srgb,#6366F1 15%,transparent);color:#4F46E5}
+html.dark .cp-i{color:#A5B4FC}
+.cp-n{background:var(--fill);color:var(--text-2)}
+html:not(.dark) .cp-g{color:#1E8E3E}html:not(.dark) .cp-o{color:#B25E00}
+.plus-btn{width:26px;height:26px;border-radius:8px;background:var(--blue);color:#fff;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.seg{flex-shrink:0}
+.seg span{white-space:nowrap}
+/* 活原型预览与单跳提案 */
+.proto-box{border-radius:14px;padding:11px 13px;background:var(--surface);border:1px solid var(--hair);box-shadow:0 6px 18px -12px rgba(20,30,70,.25)}
+html.dark .proto-box{background:rgba(20,23,34,.85)}
+.ptbl{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:7px}
+.ptbl th{text-align:left;color:var(--text-3);font-weight:600;padding:4px 8px;border-bottom:1px solid var(--hair)}
+.ptbl td{padding:5px 8px;border-bottom:1px solid var(--hair)}
+.ptbl tr:last-child td{border-bottom:0}
+.ptbl .newc{background:color-mix(in srgb,var(--blue) 10%,transparent);color:var(--blue);font-weight:700;border-radius:5px}
+.prop-row{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:12px;background:var(--fill);margin-top:7px}
+.prop-row.wait{background:color-mix(in srgb,var(--orange) 10%,var(--glass-2));box-shadow:inset 0 0 0 1.2px color-mix(in srgb,var(--orange) 45%,transparent)}
+/* 轻筛选胶囊 */
+.fstrip{display:flex;align-items:center;gap:5px;padding:4px 8px 6px}
+.fpill{height:24px;padding:0 9px;border-radius:999px;font-size:11.5px;font-weight:600;display:inline-flex;align-items:center;gap:4px;background:var(--fill);color:var(--text-2);white-space:nowrap}
+.fpill.on{background:color-mix(in srgb,var(--blue) 16%,transparent);color:var(--blue)}
+/* 角标 */
+.cs-chip{height:17px;padding:0 5px;border-radius:5px;font-size:10px;font-weight:700;display:inline-flex;align-items:center;white-space:nowrap;flex-shrink:0;background:rgba(99,102,241,.18);color:#4F46E5}
+html.dark .cs-chip{color:#A5B4FC}
+.r10.on .cs-chip{background:rgba(255,255,255,.24);color:#fff}
+.p1-chip{height:17px;padding:0 5px;border-radius:5px;font-size:10px;font-weight:800;display:inline-flex;align-items:center;white-space:nowrap;flex-shrink:0;background:var(--red);color:#fff}
+.sub-row{margin-left:14px;border-left:2px solid color-mix(in srgb,var(--red) 40%,transparent);padding-left:6px;margin-top:-2px}
+/* 工单顶部变更集联动横条 */
+.cs-bar{display:flex;align-items:center;gap:7px;padding:7px 12px;border-radius:12px;background:color-mix(in srgb,#6366F1 10%,var(--glass-2));border:1px solid color-mix(in srgb,#6366F1 30%,transparent);font-size:12px}
+.cs-btn{height:24px;padding:0 9px;border-radius:7px;font-size:11.5px;font-weight:600;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;flex-shrink:0;background:var(--glass-2);border:1px solid var(--stroke);color:var(--text)}
+.cs-btn.pri{background:color-mix(in srgb,#6366F1 16%,transparent);border-color:color-mix(in srgb,#6366F1 34%,transparent);color:#4F46E5}
+html.dark .cs-btn.pri{color:#C7D2FE}
+/* 切片工单行 */
+.srow{display:flex;align-items:center;gap:10px;padding:10px 13px;border-radius:13px;background:var(--glass-2);border:1px solid var(--stroke)}
+.srow.hi{border-color:color-mix(in srgb,var(--blue) 55%,transparent)}
+/* 无损右侧毛玻璃抽屉 */
+.stage-rel{position:relative;flex:1;min-width:0;display:flex;gap:14px}
+.dim-scrim{position:absolute;inset:0;border-radius:22px;background:rgba(15,23,42,.10);z-index:10}
+html.dark .dim-scrim{background:rgba(2,6,23,.34)}
+.drawer{position:absolute;top:0;right:0;bottom:0;width:960px;z-index:20;border-radius:22px;display:flex;flex-direction:column;overflow:hidden;
+  background:color-mix(in srgb,var(--glass-1) 94%,transparent);
+  backdrop-filter:blur(34px) saturate(180%);-webkit-backdrop-filter:blur(34px) saturate(180%);
+  border:1px solid var(--stroke-hi);
+  box-shadow:-24px 0 60px -16px rgba(15,23,42,.26),0 10px 30px -12px rgba(15,23,42,.14)}
+html.dark .drawer{background:rgba(20,24,36,.92);box-shadow:-28px 0 68px -12px rgba(0,0,0,.62)}
+/* 契约字段表 */
+.cf-row{display:flex;align-items:center;justify-content:space-between;padding:5px 8px;border-radius:8px;background:var(--fill);font-size:11.5px;margin-top:5px}
+/* QA 断言行 */
+.qa-row{display:flex;align-items:center;gap:10px;padding:9px 13px;border-radius:12px;background:var(--glass-2);border:1px solid var(--stroke)}
+.qa-row.fail{background:color-mix(in srgb,var(--red) 7%,var(--glass-2));border-color:color-mix(in srgb,var(--red) 35%,transparent)}
+.qa-dot{width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fff;flex:none;font-size:11px;font-weight:800}
+.qa-ok{background:var(--green)}.qa-no{background:var(--red)}
+.har-box{padding:9px 12px;border-radius:10px;background:var(--fill);font-size:11.5px;line-height:1.65}
+.har-ok{color:var(--green);font-weight:600}
+html:not(.dark) .har-ok{color:#1E8E3E}
+.har-bad{color:var(--red);font-weight:700}
+</style>
+<script>(function(){var q=new URLSearchParams(location.search);if(q.get('mode')==='dark')document.documentElement.classList.add('dark')})()</script>
+</head><body><div class="root"><div class="tbar">
+  <div class="br"><span class="lg"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7.2L3.6 12 8 16.8"/><path d="M16 7.2l4.4 4.8-4.4 4.8" opacity=".6"/><path d="M9.6 12.3l1.8 1.8 3.2-4"/></svg><svg class="spk" width="11" height="11" viewBox="0 0 24 24" fill="#fff"><path d="M12 1l2.6 8.4L23 12l-8.4 2.6L12 23l-2.6-8.4L1 12l8.4-2.6z"/></svg></span><span class="tt"><b>云匠</b><em>CloudCraft</em></span></div>
+  <div class="grow row" style="justify-content:center"><div class="glass tsearch"><i data-i="search" data-s="15"></i><span class="f13 grow">搜索工单、MR、发布记录</span><span class="kbd" style="border-color:var(--hair)">⌘F</span></div></div>
+  <div class="tright">
+    <span class="pill glass tpill"><i data-i="bot" data-s="13"></i>3 个 Bot 在线</span>
+    <span class="pill glass tpill"><span class="dot" style="width:7px;height:7px;color:var(--green)"></span>Jira · 2 分钟前</span>
+    <span class="pill glass tpill" style="color:var(--orange)"><span class="dot" style="width:7px;height:7px"></span>Tita 采集失败 · 重试中</span>
+    <span class="av" style="width:34px;height:34px;font-size:13px;background:linear-gradient(160deg,#FFC9A8,#F08F7A);color:#5A2414">林</span>
+  </div>
+</div><nav class="dockv glass" aria-label="主菜单"><span class="dki"><span class="ap ap-ai"><svg width="24" height="24" viewBox="0 0 24 24" fill="#fff"><path d="M10 3l1.9 5.6 5.6 1.9-5.6 1.9L10 18l-1.9-5.6L2.5 10.5l5.6-1.9z"/><path d="M18 13.5l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9z" opacity=".8"/></svg></span></span><span class="dsep"></span><span class="dki on"><span class="ap ap-spec"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="4" y="3.5" width="16" height="17" rx="3.2" fill="#fff" opacity=".24"/><rect x="4" y="3.5" width="16" height="17" rx="3.2" stroke="#fff" stroke-width="1.9"/><path d="M8 9h8M8 13h6M8 17h4" stroke="#fff" stroke-width="1.9" stroke-linecap="round"/><circle cx="17.2" cy="16.8" r="2.6" fill="#34D399"/></svg></span><b>1</b></span><span class="dki"><span class="ap ap-chat"><svg width="30" height="30" viewBox="0 0 24 24"><defs><linearGradient id="cb1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6CC4FF"/><stop offset="1" stop-color="#1673FF"/></linearGradient></defs><path d="M15 9.6c3.4 0 6.1 2.2 6.1 4.9 0 1.4-.7 2.6-1.8 3.5l.5 2.5-2.9-1.4c-.6.2-1.2.3-1.9.3-3.4 0-6.1-2.2-6.1-4.9s2.7-4.9 6.1-4.9z" fill="#B9DBFF"/><path d="M9.6 3.2c-4 0-7.2 2.6-7.2 5.8 0 1.7.9 3.2 2.3 4.2l-.6 3 3.5-1.7c.6.2 1.3.2 2 .2 4 0 7.2-2.6 7.2-5.8S13.6 3.2 9.6 3.2z" fill="url(#cb1)"/><circle cx="6.8" cy="9" r="1" fill="#fff"/><circle cx="9.6" cy="9" r="1" fill="#fff"/><circle cx="12.4" cy="9" r="1" fill="#fff"/></svg></span><b>3</b></span><span class="dki"><span class="ap ap-pub"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 2.6l8.4 4.7L12 12 3.6 7.3z" fill="#FFE2A8"/><path d="M3.6 7.3L12 12v9.4l-8.4-4.7z" fill="#fff" opacity=".95"/><path d="M20.4 7.3L12 12v9.4l8.4-4.7z" fill="#fff" opacity=".7"/><path d="M7.8 4.9l8.4 4.7v3.2" stroke="#FF8A00" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".7"/></svg></span><b>1</b></span><span class="dki"><span class="ap ap-rb"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3.8 4.8v4.4h4.4"/><path d="M4.2 9.2A8.3 8.3 0 1 1 3.9 13.6"/><path d="M12 8v4.2l2.7 1.7"/></svg></span></span><span class="dki"><span class="ap ap-sk"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 13.2l8.6-4.4L12 4.4 3.4 8.8z" fill="#fff"/><path d="M3.4 12.6L12 17l8.6-4.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".75"/><path d="M3.4 16.2L12 20.6l8.6-4.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".5"/></svg></span></span><span class="grow"></span><span class="dki"><span class="ap ap-mkt"><svg width="24" height="24" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7.2" height="7.2" rx="2.2" fill="#fff"/><rect x="13.3" y="3.5" width="7.2" height="7.2" rx="2.2" fill="#fff" opacity=".82"/><rect x="3.5" y="13.3" width="7.2" height="7.2" rx="2.2" fill="#fff" opacity=".82"/><path d="M16.9 13.2l1.1 2.7 2.7 1.1-2.7 1.1-1.1 2.7-1.1-2.7-2.7-1.1 2.7-1.1z" fill="#fff"/></svg></span></span><span class="dki"><span class="ap ap-set"><svg width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="gr1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#D9DCE3"/></linearGradient></defs><path d="M12 1.8l1.6 2.4 2.8-.7.5 2.9 2.8.9-.9 2.8 2.2 1.9-2.2 1.9.9 2.8-2.8.9-.5 2.9-2.8-.7L12 22.2l-1.6-2.4-2.8.7-.5-2.9-2.8-.9.9-2.8-2.2-1.9 2.2-1.9-.9-2.8 2.8-.9.5-2.9 2.8.7z" fill="url(#gr1)"/><circle cx="12" cy="12" r="5.2" fill="#8D919B"/><circle cx="12" cy="12" r="2.6" fill="#E9EBF0"/></svg></span></span></nav><div class="panels"><section class="glass pn" style="width:296px;flex:none;padding:16px 10px 10px">
+  <div class="row g8" style="padding:0 8px 6px"><span class="f18 w7">需求变更集</span><span class="c-pill cp-i">待决策 1</span><span class="grow"></span><span class="plus-btn"><i data-i="plus" data-s="14" data-w="2.6"></i></span></div>
+  <div class="g10h">联调验收中<span>1</span></div>
+  <div class="r10 on" style="align-items:flex-start">
+    <span class="ic-box" style="width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,.22);flex:none"><i data-i="layers" data-s="17" data-w="2"></i></span>
+    <div class="grow" style="min-width:0">
+      <div class="row g6"><span class="t10 ell grow">月度算薪接入绩效与 CRM 提成</span></div>
+      <div class="row g4" style="margin-top:4px"><span class="sc10">QA 验收</span><span class="d10 ell">E2E 3/4 · 1 项待定责</span></div>
+      <span class="pg10"><i style="width:82%;background:#fff"></i></span>
+    </div>
+  </div>
+  <div class="g10h">待拍板契约<span>1</span></div>
+  <div class="r10" style="align-items:flex-start">
+    <span class="ic-box" style="width:34px;height:34px;border-radius:10px;background:linear-gradient(155deg,#5AA0FF,#1F6FFF);flex:none"><i data-i="layers" data-s="17" data-w="2"></i></span>
+    <div class="grow" style="min-width:0">
+      <div class="row g6"><span class="t10 ell grow">审批单支持批量撤回</span><span class="tm10">1 小时</span></div>
+      <div class="row g6" style="margin-top:3px"><span class="sc10 sc-t">审批主导</span><span class="d10 ell">2 个项目 · 等契约冻结</span></div>
+    </div>
+  </div>
+  <div class="grow"></div>
+  <div class="card" style="margin:6px;padding:10px 12px">
+    <div class="mini" style="margin-bottom:5px">QA 验收环境</div>
+    <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">联调环境</span><span class="c-pill cp-g">TEST-02 在线</span></div>
+    <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">已部署仓</span><span class="f11.5 w6" style="font-size:11.5px">5 / 5 仓就绪</span></div>
+  </div>
+</section><main class="glass pn grow" style="min-width:0">
+  <header class="thead">
+    <div class="row g10">
+      <span class="ic-box" style="width:40px;height:40px;border-radius:11px;background:linear-gradient(155deg,#6366F1,#0EA5E9)"><i data-i="layers" data-s="20" data-w="2"></i></span>
+      <div class="col grow" style="min-width:0">
+        <div class="row g8"><h1 class="ell">月度算薪自动拉取绩效系数与 CRM 提成</h1><span class="c-pill cp-o">TEST 联调验收 · 3/4</span></div>
+        <div class="f12 t3" style="margin-top:2px">CS-089 · 4 个平级项目 · 5 个交付切片 · 活原型 E2E 清单由系统自动生成</div>
+      </div>
+    </div>
+    <div class="row g10" style="margin-top:11px">
+      <div class="seg"><span>协作流</span><span>活原型</span><span>契约 3</span><span>切片 5</span><span class="on">联调验收</span></div>
+      <span class="grow"></span>
+      <span class="cs-btn pri"><i data-i="play" data-s="11"></i>重跑全仓 E2E</span>
+    </div>
+  </header>
+
+  <div class="col g10 grow" style="padding:12px 20px 12px;min-height:0;overflow:hidden">
+    <div class="col g6">
+      <div class="qa-row">
+        <span class="qa-dot qa-ok">✓</span>
+        <span class="f12.5 w6 grow ell" style="font-size:12.5px">1. 拉取季度绩效 S/A/B 系数并参与月度算薪公式</span>
+        <span class="c-pill cp-g">绩效 + 薪酬 · 通过</span>
+        <span class="f11.5 t3" style="font-size:11.5px">QA 李娜已签</span>
+      </div>
+      <div class="qa-row">
+        <span class="qa-dot qa-ok">✓</span>
+        <span class="f12.5 w6 grow ell" style="font-size:12.5px">2. 员工月中调岗按 effectiveDate 拆分归属成本中心</span>
+        <span class="c-pill cp-g">人事 + 薪酬 · 通过</span>
+        <span class="f11.5 t3" style="font-size:11.5px">QA 李娜已签</span>
+      </div>
+      <div class="qa-row">
+        <span class="qa-dot qa-ok">✓</span>
+        <span class="f12.5 w6 grow ell" style="font-size:12.5px">3. 订单回款后 5 秒内推入薪酬提成明细并防重入账</span>
+        <span class="c-pill cp-g">CRM + 薪酬 · 通过</span>
+        <span class="f11.5 t3" style="font-size:11.5px">QA 李娜已签</span>
+      </div>
+      <div class="qa-row fail">
+        <span class="qa-dot qa-no">✕</span>
+        <span class="f12.5 w6 grow ell" style="font-size:12.5px">4. 客户退单后，薪酬提成明细自动生成负数冲红记录</span>
+        <span class="c-pill cp-r">E2E 失败 · 已入定责池</span>
+        <span class="c-pill cp-i">AI 已举证</span>
+      </div>
+    </div>
+
+    <div class="card" style="padding:12px 15px;border-color:color-mix(in srgb,var(--red) 35%,transparent)">
+      <div class="row g8">
+        <span class="c-pill cp-r">待定责池 · M-104</span>
+        <b class="f13.5" style="font-size:13.5px">退单提成未做负数冲红</b>
+        <span class="c-pill cp-g" style="margin-left:auto">Ajv/Zod 机械判责 · 0 幻觉</span>
+      </div>
+      <div class="har-box" style="margin-top:8px">
+        <div><span class="t3">冻结契约 #8e1b@v1：</span><span class="mono har-ok">when isRefund == true =&gt; amount &lt; 0</span></div>
+        <div><span class="t3">脱敏抓包（CRM 发出）：</span><span class="mono har-bad">{ "orderId": "ORD-***91", "isRefund": true, "amount": +1280.00 }  ← 响应违约！</span></div>
+        <div class="f11.5 t2" style="margin-top:3px;font-size:11.5px"><b>归因结论：</b>100% 归责提供方 <b>CRM</b>（未按契约发负数），非薪酬算错；原始录屏已按 <span class="mono">project_only</span> 脱敏隔离。</div>
+      </div>
+      <div class="row g8" style="margin-top:9px">
+        <span class="btn2 sm a-pri"><i data-i="check" data-s="13" data-w="2.6"></i>确认派给 CRM 生成工单</span>
+        <span class="btn2 sm a-sec" style="background:var(--fill)">转契约 RFC 升 v2</span>
+        <span class="btn2 sm a-sec" style="background:var(--fill)">改派项目 ▾</span>
+        <span class="f11 t3" style="margin-left:auto">确认后自动挂入 CRM 待办并支持审计转派</span>
+      </div>
+    </div>
+
+    <div class="row g10" style="margin-top:auto;padding:9px 13px;border-radius:12px;background:color-mix(in srgb,var(--blue) 8%,transparent);font-size:11.5px;color:var(--text-2)">
+      <span style="color:var(--blue);display:flex"><i data-i="rocket" data-s="15"></i></span>
+      <span class="grow"><b>安全发版波次（Expand-Contract + Flag）：</b>波次 1 绩效/人事/CRM 兼容增量先上 → 波次 2 薪酬关开关上线 → 验稳开 Flag（异常 0 秒关开关，<b>严禁自动级联全回滚</b>）。</span>
+      <span class="btn2 sm a-sec" style="background:var(--fill);opacity:.65;white-space:nowrap">编排 PROD 波次（差 1 项）</span>
+    </div>
+  </div>
+</main><aside class="glass pn" style="width:292px;flex:none;padding:13px;display:flex;flex-direction:column;gap:10px">
+  <div class="card" style="padding:11px 13px">
+    <div class="row"><span class="mini grow" style="margin:0">切片状态（公共白名单）</span><span class="c-pill cp-n">5 切片</span></div>
+    <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">绩效 · TK-901</span><span class="c-pill cp-g">TEST 就绪</span></div>
+    <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">人事 · TK-902</span><span class="c-pill cp-g">TEST 就绪</span></div>
+    <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">CRM · TK-903</span><span class="c-pill cp-r">待修 M-104</span></div>
+    <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">薪酬 API · TK-904a</span><span class="c-pill cp-g">TEST 就绪</span></div>
+    <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">薪酬 Web · TK-904b</span><span class="c-pill cp-g">TEST 就绪</span></div>
+  </div>
+
+  <div class="card" style="padding:11px 13px">
+    <div class="mini" style="margin-bottom:5px">跨项目 RBAC 隐私护栏</div>
+    <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">联调公共区</span><span class="f11.5 w6" style="font-size:11.5px;color:var(--green)">仅脱敏契约 Diff</span></div>
+    <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">录屏与堆栈</span><span class="mono f11" style="color:var(--blue)">project_only</span></div>
+    <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">全局 AI 聚合</span><span class="f11.5 w6" style="font-size:11.5px">按成员强裁剪</span></div>
+  </div>
+
+  <div class="card" style="padding:11px 13px">
+    <div class="mini" style="margin-bottom:5px">PROD 波次编排（release_bundles）</div>
+    <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">波次 1（提供方）</span><span class="f11.5 w6" style="font-size:11.5px">绩效 / 人事 / CRM</span></div>
+    <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">波次 2（消费方）</span><span class="f11.5 w6" style="font-size:11.5px">薪酬 API + Web</span></div>
+    <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">灰度开关</span><span class="c-pill cp-o">Flag OFF</span></div>
+    <div class="f11 t3" style="margin-top:6px;line-height:1.5">每个节点复用一期 <span class="mono">release_tasks</span> 串行锁、个人 Apollo 账号与真人输 <span class="mono">PROD</span> 确认。</div>
+  </div>
+</aside></div></div>
+<script src="icons.js"></script></body></html>

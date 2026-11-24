@@ -21,7 +21,10 @@
 - 左侧菜单只放彩色 Dock 图标，不放文字；选中态只用「放大加悬浮」。
 - 工单列表用「提单人头像加状态点」；选中行用蓝色渐变实底。
 - 应用图标只用 `reference/src/v5/logo.svg`（顶栏 logo 的精修版），不要另画。
-- 账号体系为**独立注册与登录**（2026-11-24 升级，面向大众与多团队）：邮箱 + 密码登录，注册带 6 位邮箱验证码（私有部署支持后台开关「开放注册 / 仅邀请注册」）；GitLab / GitHub / Jira / Tita / Apollo 等外部工具解耦为登录后的 **连接器（Connector）+ 触发器（Trigger）**（见 `docs/01-设计主题.md` 第 9 节与 `docs/06-技术设计方案.md` 第 10 节）。
+- 账号体系为**独立注册与登录**（2026-11-24 升级，面向大众与多团队）：邮箱 + 密码登录，注册带 6 位邮箱验证码（私有部署支持后台开关「开放注册 / 仅邀请注册」及免 SMTP 一次性邀请/重置密码链接）；GitLab / GitHub / Jira / Tita / Apollo 等外部工具解耦为登录后的 **连接器（Connector）+ 触发器（Trigger）**（见 `docs/01-设计主题.md` 第 9 节与 `docs/06-技术设计方案.md` 第 10 节）。
+- **「厚核心 + 轻插件」与依赖边界**：核心包（`packages/`、`apps/`）严禁静态 `import plugins/*` 或硬编码具体 AI 引擎分支；默认内置引擎为同级插件 `plugins/runtime-pi`，发布与紧急回滚（Apollo）为模块市场可选插件（见 `docs/06-技术设计方案.md` §11.4、§12、§13）。
+- **M1 反膨胀与零露出红线**：一期（M1）聚焦修 Bug 闭环 + 手动新建工单 + 免 SMTP 邀请 + 四项 AI 飞轮守卫 + 6 项底层零重构预留；**一期 UI 严禁提前露出二期跨项目变更集、切片筛选或 L3 微应用导入界面**（二期演进见 `docs/06-技术设计方案.md` 第 14 节）。
+- **设计图与文档强同步铁律**：凡修改导航图标、交互结构或技术边界，必须同步重绘受影响的双端 PNG 并更新 `docs/` 与 `index.html`，严禁留下「文档改了、旧图未更」的错配。
 - 全局 AI 是独立页面，入口是菜单第一个图标；本单 AI 是工单对话底部的输入框，始终带工单号。
 - 交付的是高保真 UI 设计图（本地 HTML 渲染成 PNG），不是原型，不上传网络。
 - 先出一张精细图让用户确认，再铺开其余页面。用户要修改时只改他指出的位置。
@@ -35,6 +38,6 @@
 docs/        需求原文、设计主题、决策记录、出图流程、修复流转方案、链路流转、技术设计方案
 tokens/      theme.css（全部颜色和组件 token）
 reference/   源文件（src/v4 主界面、src/v5 其余页面）和图（images/、images/pages/）
-scripts/     render.sh（HTML → PNG）；gen-pages.py + shell_pc.py + pages_pc.py（PC 页面）；gen-splash.py（闪屏）；gen-login.py（登录）；gen-onboard.py + onboard_steps.py、gen-onboard-m.py（第一次使用的步骤器）；gen-mobile.py、gen-mobile-pages.py + shell_m.py（移动端）；build-index.py + tech_diagrams.py + index.template.html（生成唯一的 index.html 集合）
+scripts/     render.sh（HTML → PNG）；gen-pages.py + shell_pc.py + pages_pc.py（PC 页面）；gen-market.py（模块市场）；gen-phase2.py（二期 M4 隔离蓝图）；gen-runner-select.py / gen-runner-init.py / gen-runner-server.py / gen-runner-pro.py（执行环境三路径）；gen-flow.py（链路总图）；gen-splash.py（闪屏）；gen-login.py（登录与注册）；gen-onboard.py + onboard_steps.py、gen-onboard-m.py（第一次使用的步骤器）；gen-mobile.py、gen-mobile-pages.py + shell_m.py（移动端）；build-index.py + tech_diagrams.py + index.template.html（生成唯一的 index.html 集合）
 index.html   唯一总览集合页（生成产物，不要直接改；全部文档与设计统一汇入此处）
 ```

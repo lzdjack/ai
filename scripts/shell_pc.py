@@ -85,7 +85,7 @@ def trow(t, on=False, right_override=None):
 
 def ticket_list(sel="20871"):
     h = ['<section class="glass pn" style="width:300px;flex:none;padding:16px 10px 10px">',
-         '<div class="row" style="padding:0 8px 2px"><span class="f18 w7">工单</span><span class="f13 t3" style="margin-left:8px;flex:1">8</span><div class="seg" style="padding:2px"><span class="on" style="height:24px;padding:0 10px;font-size:12px">我的</span><span style="height:24px;padding:0 10px;font-size:12px">全部</span></div></div>']
+         f'<div class="row g8" style="padding:0 8px 2px"><span class="f18 w7">工单</span><span class="f13 t3">8</span><span style="width:24px;height:24px;border-radius:7px;background:var(--blue);color:#fff;display:inline-flex;align-items:center;justify-content:center;flex:none" title="手动新建工单">{I("plus",13,2.6)}</span><span class="grow"></span><div class="seg" style="padding:2px"><span class="on" style="height:24px;padding:0 10px;font-size:12px">我的</span><span style="height:24px;padding:0 10px;font-size:12px">全部</span></div></div>']
     for g, cls, rows in TICKETS:
         h.append(f'<div class="g10h{" " + cls if cls else ""}">{g}<span>{len(rows)}</span></div>')
         h += [trow(t, t[0] == sel, "" if t[0] == sel and t[7].startswith("dot") else None) for t in rows]
