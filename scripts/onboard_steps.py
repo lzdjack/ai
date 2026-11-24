@@ -50,12 +50,13 @@ X = '''<style>
 .okchip{display:inline-flex;align-items:center;gap:3px;color:var(--green);font-size:11.5px;font-weight:600;flex:none}
 .tune{font-size:12px;font-weight:600;color:var(--blue);margin-left:auto;padding-left:6px;flex:none;white-space:nowrap}
 .pseg{display:inline-flex;padding:3px;border-radius:11px;background:color-mix(in srgb,var(--text) 6%,transparent);flex:none;gap:2px}
-.pseg span{height:28px;padding:0 10px;border-radius:8px;font-size:12px;font-weight:600;color:var(--text-3);display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
-.pseg span.s-off{background:var(--glass-2);color:var(--text-2);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.pseg span{height:28px;padding:0 11px;border-radius:8px;font-size:12px;font-weight:600;color:var(--text-3);display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
 .pseg span.s-ro{background:var(--blue);color:#fff;box-shadow:0 4px 12px -4px color-mix(in srgb,var(--blue) 85%,transparent)}
 .pseg span.s-rw{background:var(--green);color:#fff;box-shadow:0 4px 12px -4px color-mix(in srgb,var(--green) 85%,transparent)}
 html.dark .pseg{background:rgba(255,255,255,.07)}
-html.dark .pseg span.s-off{background:rgba(255,255,255,.14);color:var(--text)}
+.rmb{width:28px;height:28px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;color:var(--text-3);background:transparent;flex:none}
+.pickbtn{height:34px;padding:0 13px;border-radius:10px;background:var(--blue);color:#fff;font-size:12.5px;font-weight:600;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex:none;box-shadow:0 6px 16px -8px color-mix(in srgb,var(--blue) 85%,transparent)}
+.pickmore{border-radius:14px;padding:11px 15px;border:1.5px dashed color-mix(in srgb,var(--text) 16%,transparent);display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--text-2)}
 
 /* 第 4 步与管理员第 0 步 */
 .obx{border-radius:16px;padding:14px 16px;background:var(--fill)}
@@ -246,18 +247,14 @@ html.dark .seg2 span.on{{background:rgba(255,255,255,.15)}}
 </div>'''
     p1_new = p1.replace('</div><script src="icons.js">', DRW + '</div><script src="icons.js">', 1)
 
-    # ---------------- 2 授权项目与代码权限 ----------------
+    # ---------------- 2 授权项目与代码权限（仅保留用户主动筛选留下的仓库） ----------------
     s2 = X + f'''
       <div class="ptbar">
-        <div class="srcsel">
-          <span class="sdots"><i style="background:#FC6D26">G</i><i style="background:#1F2328">GH</i><i style="background:#3B82F6">本</i></span>
-          <span>全部来源 (3)</span>
-          {I("chevd",14,st="color:var(--text-3)")}
-        </div>
-        <div class="srch2">{I("search",14)}<span>搜索仓库或项目名称…</span></div>
-        <span class="fchip on">全部<em>5</em></span>
-        <span class="fchip">已授权<em>4</em></span>
-        <span class="addbtn">{I("plus",14)}新增连接器</span>
+        <span class="pickbtn">{I("plus",14,2.4)}从已连来源挑选仓库</span>
+        <div class="srch2">{I("search",14)}<span>在已选的 4 个仓库中筛选…</span></div>
+        <span class="fchip on">已选<em>4</em></span>
+        <span class="fchip">可修改<em>2</em></span>
+        <span class="fchip">仅查看<em>2</em></span>
       </div>
 
       <div class="plist">
@@ -275,7 +272,8 @@ html.dark .seg2 span.on{{background:rgba(255,255,255,.15)}}
               <span class="tune">微调 ›</span>
             </div>
           </div>
-          <div class="pseg"><span>不关联</span><span>{I("eye",12)}仅查看</span><span class="s-rw">{I("edit",12)}可修改</span></div>
+          <div class="pseg"><span>{I("eye",12)}仅查看</span><span class="s-rw">{I("edit",12)}可修改</span></div>
+          <span class="rmb" title="移出授权列表">{I("x",14)}</span>
         </div>
 
         <div class="prow rw">
@@ -292,7 +290,8 @@ html.dark .seg2 span.on{{background:rgba(255,255,255,.15)}}
               <span class="tune">微调 ›</span>
             </div>
           </div>
-          <div class="pseg"><span>不关联</span><span>{I("eye",12)}仅查看</span><span class="s-rw">{I("edit",12)}可修改</span></div>
+          <div class="pseg"><span>{I("eye",12)}仅查看</span><span class="s-rw">{I("edit",12)}可修改</span></div>
+          <span class="rmb" title="移出授权列表">{I("x",14)}</span>
         </div>
 
         <div class="prow ro">
@@ -308,7 +307,8 @@ html.dark .seg2 span.on{{background:rgba(255,255,255,.15)}}
               <span class="ell">供 Bot 跨仓查组件 API 与主题变量，宿主机硬拦截任何代码写入与提 PR</span>
             </div>
           </div>
-          <div class="pseg"><span>不关联</span><span class="s-ro">{I("eye",12)}仅查看</span><span>{I("edit",12)}可修改</span></div>
+          <div class="pseg"><span class="s-ro">{I("eye",12)}仅查看</span><span>{I("edit",12)}可修改</span></div>
+          <span class="rmb" title="移出授权列表">{I("x",14)}</span>
         </div>
 
         <div class="prow ro">
@@ -324,35 +324,104 @@ html.dark .seg2 span.on{{background:rgba(255,255,255,.15)}}
               <span class="ell">辅助核对接口字段、错误码与权限逻辑，禁止修改或推送分支</span>
             </div>
           </div>
-          <div class="pseg"><span>不关联</span><span class="s-ro">{I("eye",12)}仅查看</span><span>{I("edit",12)}可修改</span></div>
+          <div class="pseg"><span class="s-ro">{I("eye",12)}仅查看</span><span>{I("edit",12)}可修改</span></div>
+          <span class="rmb" title="移出授权列表">{I("x",14)}</span>
         </div>
 
-        <div class="prow off">
-          <span class="pic" style="background:linear-gradient(155deg,#94A3B8,#64748B)">薪酬</span>
-          <div class="pinfo">
-            <div class="ptop">
-              <b>薪酬 · 人事</b>
-              <span class="src-pill"><span class="sdot" style="background:#FC6D26">G</span><span class="mono">fe/tita-payroll-web</span></span>
-            </div>
-            <div class="pmeta">
-              <span class="t3 ell">未授权 · Bot 不可见、不拉取代码，需要时随时在「设置 → 项目」里开启</span>
-            </div>
-          </div>
-          <div class="pseg"><span class="s-off">不关联</span><span>{I("eye",12)}仅查看</span><span>{I("edit",12)}可修改</span></div>
+        <div class="pickmore">
+          <span class="sdots"><i style="background:#FC6D26">G</i><i style="background:#1F2328">GH</i><i style="background:#3B82F6">本</i></span>
+          <span class="grow">未选中的仓库不会拉取、也不展示在这里 · 可随时从 <b>公司 GitLab (28)</b>、<b>GitHub (14)</b>、<b>本机目录 (4)</b> 继续搜索添加</span>
+          <span class="lnk w6" style="white-space:nowrap">+ 挑选仓库 ›</span>
         </div>
       </div>
 
       <div class="note" style="margin-bottom:12px">
         {I("shield",15,st="color:var(--blue);margin-top:1px")}
-        <span><b>权限红线由宿主机兜底：</b>Bot 只能在「可修改」仓库拉 <span class="mono">fix/</span> 分支并提 MR/PR（合入仍需真人审，默认合测试=修复人、合主干=项目负责人）；遇归属拿不准的工单先问人再改。</span>
+        <span><b>最小授权 + 自动路由：</b>Bot 只访问你主动选入的这 4 个仓库，且仅在「可修改」仓拉 <span class="mono">fix/</span> 分支提 MR（合入仍需真人审）；修单时自动定位目标项目，拿不准先问你。</span>
       </div>'''
     foot2 = ('<button class="bigb secb"><i data-i="chevl" data-s="16" data-w="2.4"></i>上一步</button>'
              f'<span class="stat-pill sp-g">{I("edit",13)}可修改 2 个</span>'
              f'<span class="stat-pill sp-b">{I("eye",13)}仅查看 2 个</span><span class="grow"></span>'
              '<button class="bigb pri">下一步：环境与账号<i data-i="chevr" data-s="16" data-w="2.4"></i></button>')
-    why2 = ("spark", "多来源统一调度", "不管仓库来自企业 GitLab、GitHub、Gitee 还是本机目录，修 Bug 时 Bot 会按工单内容自动匹配对应项目，并严格遵守读写权限。")
-    p2 = page(2, "告诉 Bot 哪些项目能改、哪些只能看", "已从第 1 步鉴权通过的来源拉取仓库；修单时 Bot 自动找对应项目，分支与构建命令自动推测",
+    why2 = ("spark", "只留你选中的仓库", "大公司连接器里往往有上百个仓库，这里绝不平铺全量清单；你通过搜索按需挑出相关项目，再切「可修改 / 仅查看」即可。")
+    p2 = page(2, "挑选要授权给 Bot 的项目与权限", "点「+ 从已连来源挑选仓库」搜索添加；这里只保留你选中的仓库，分支与构建命令自动推测",
               s2, foot=foot2, why=why2, chip="不知道怎么选？问 AI")
+
+    # ---------------- 2-pick 从已连连接器搜索挑选仓库抽屉 ----------------
+    def pk_row(name, path, desc, picked=False, mode="可修改"):
+        cb = f'<span class="pkc on">{CHECK}</span>' if picked else '<span class="pkc"></span>'
+        bd = (f'<span class="tag {"tg-g" if mode=="可修改" else "tg-b"}" style="height:20px;font-size:11px">已加入 · {mode}</span>'
+              if picked else '<span class="f11 t3">未选</span>')
+        return f'''<div class="pkr{" on" if picked else ""}">{cb}<div class="grow" style="min-width:0">
+          <div class="row g8"><b class="f13">{name}</b><span class="mono f11 t3 ell">{path}</span></div>
+          <div class="f12 t3 ell" style="margin-top:2px">{desc}</div></div>{bd}</div>'''
+
+    PICK_DRW = f'''<style>
+.scr{{position:fixed;inset:0;z-index:30;background:rgba(15,20,40,.28);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}}
+html.dark .scr{{background:rgba(0,0,0,.48)}}
+.drw{{position:fixed;z-index:31;top:24px;right:24px;bottom:24px;width:660px;border-radius:26px;display:flex;flex-direction:column;overflow:hidden;
+  background:rgba(255,255,255,.96);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);box-shadow:0 30px 80px -20px rgba(10,20,60,.45),0 0 0 1px var(--stroke)}}
+html.dark .drw{{background:rgba(34,36,50,.96)}}
+.drw .dh{{display:flex;gap:12px;align-items:center;padding:18px 24px 14px;border-bottom:1px solid var(--hair)}}
+.drw .db{{flex:1;display:flex;flex-direction:column;gap:12px;padding:16px 24px;min-height:0;overflow:hidden}}
+.drw .df{{display:flex;align-items:center;gap:10px;padding:14px 24px;border-top:1px solid var(--hair)}}
+.xb{{width:32px;height:32px;border-radius:50%;background:var(--fill);display:flex;align-items:center;justify-content:center;color:var(--text-2);flex:none}}
+.ic3{{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:#fff;flex:none;font-size:15px;font-weight:800}}
+.ctabs{{display:flex;gap:8px;align-items:center}}
+.ctab{{height:34px;padding:0 12px;border-radius:10px;background:var(--fill);font-size:12.5px;font-weight:600;color:var(--text-2);display:inline-flex;align-items:center;gap:6px;white-space:nowrap}}
+.ctab.on{{background:var(--blue);color:#fff}}
+.ctab em{{font-style:normal;opacity:.75;font-size:11px}}
+.pksrch{{height:38px;border-radius:11px;background:var(--glass-2);border:1.5px solid var(--blue);box-shadow:0 0 0 4px color-mix(in srgb,var(--blue) 14%,transparent);padding:0 12px;display:flex;align-items:center;gap:8px;font-size:13px}}
+.pkg{{font-size:11.5px;font-weight:700;color:var(--text-3);margin-top:4px;display:flex;align-items:center;gap:6px}}
+.pkr{{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:13px;background:var(--fill);border:1.5px solid transparent}}
+.pkr.on{{background:var(--glass-2);border-color:color-mix(in srgb,var(--blue) 45%,transparent)}}
+.pkc{{width:18px;height:18px;border-radius:6px;border:1.5px solid color-mix(in srgb,var(--text) 24%,transparent);display:inline-flex;align-items:center;justify-content:center;flex:none}}
+.pkc.on{{border:0;background:var(--blue);color:#fff}}
+.pklist{{display:flex;flex-direction:column;gap:7px;flex:1;min-height:0;overflow:hidden;-webkit-mask-image:linear-gradient(180deg,#000 0%,#000 86%,transparent 100%);mask-image:linear-gradient(180deg,#000 0%,#000 86%,transparent 100%)}}
+</style>
+<div class="scr"></div>
+<div class="drw">
+  <div class="dh">
+    <span class="ic3" style="background:linear-gradient(155deg,#5AA0FF,#1F6FFF)">{I("search",18,2.2)}</span>
+    <div class="grow">
+      <div style="font-size:18px;font-weight:800">从已连来源挑选仓库</div>
+      <div class="f12 t3" style="margin-top:2px">按连接器与关键词主动筛选，勾选的仓库才会留到第 2 步授权列表</div>
+    </div>
+    <span class="xb">{I("x",16,2.2)}</span>
+  </div>
+  <div class="db">
+    <div class="ctabs">
+      <span class="ctab on">G 公司 GitLab <em>28</em></span>
+      <span class="ctab">GH GitHub <em>14</em></span>
+      <span class="ctab">{I("folder",13)}本机目录 <em>4</em></span>
+      <span class="grow"></span>
+      <span class="f12 lnk">+ 新增连接器</span>
+    </div>
+    <div class="pksrch">
+      {I("search",15,st="color:var(--blue)")}
+      <span class="grow">okr</span>
+      <span class="tag tg-n" style="height:20px;font-size:11px">命中 4 / 28 个</span>
+      {I("x",14,st="color:var(--text-3)")}
+    </div>
+    <div class="pklist">
+      <div class="pkg">{I("folder",12)}Group: fe（前端业务线）</div>
+      {pk_row("OKR · 目标管理", "fe/tita-okr-web", "最近提交 2 小时前 · TypeScript / React · 默认分支 master", True, "可修改")}
+      {pk_row("OKR 移动端 H5", "fe/tita-okr-h5", "最近提交 5 天前 · Vue 3 · 默认分支 main", False)}
+      <div class="pkg">{I("folder",12)}Group: be（后端服务）</div>
+      {pk_row("OKR 后端服务", "be/tita-okr-api", "最近提交 1 小时前 · Go / Gin · 默认分支 master", True, "仅查看")}
+      {pk_row("OKR 数据报表服务", "be/tita-okr-report", "最近提交 12 天前 · Java / SpringBoot · 默认分支 master", False)}
+      <div class="pkg">{I("folder",12)}未匹配搜索词的其余 24 个仓库已折叠</div>
+      {pk_row("薪酬 · 人事", "fe/tita-payroll-web", "输入其他关键词或清空搜索即可继续挑选", False)}
+    </div>
+  </div>
+  <div class="df">
+    <span class="f12 t2">新加入的仓库默认设为<b>仅查看</b>，回到列表可随时切「可修改」</span>
+    <span class="grow"></span>
+    <button class="bigb secb" style="height:40px">取消</button>
+    <button class="bigb pri" style="height:40px">确认保留（共 4 个）</button>
+  </div>
+</div>'''
+    p2_pick = p2.replace('</div><script src="icons.js">', PICK_DRW + '</div><script src="icons.js">', 1)
 
     # ---------------- 4 AI 体检并开工 ----------------
     def c(st, t, r):
@@ -395,7 +464,7 @@ html.dark .seg2 span.on{{background:rgba(255,255,255,.15)}}
     p4 = page(4, "AI 自动体检通过，可以开工了", "拉代码、推测构建、只读权限隔离、环境试登录全部真实跑通，不是只看表单填没填",
               s4, foot=foot4, why=why4)
 
-    return {"1": p1, "1-new": p1_new, "2": p2, "4": p4}
+    return {"1": p1, "1-new": p1_new, "2": p2, "2-pick": p2_pick, "4": p4}
 
 
 def ai_step(page, CHECK):
