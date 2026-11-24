@@ -14,7 +14,7 @@
 
 - 其余全部页面（PC 44 张、移动端 11 张）：[reference/images/pages/](reference/images/pages/)，在 `index.html` 的 PC 和移动端标签页里可以直接看
 - 应用图标和闪屏：[reference/images/logo/](reference/images/logo/)、[reference/images/splash/](reference/images/splash/)
-- 登录：[PC-登录](reference/images/pages/PC-登录-亮色.png)、[移动端-登录](reference/images/pages/移动端-登录-亮色.png)（只有登录，用 Jira / GitLab 账号）
+- 登录与注册：[PC-登录](reference/images/pages/PC-登录-亮色.png)、[PC-注册](reference/images/pages/PC-注册-亮色.png)、[移动端-登录](reference/images/pages/移动端-登录-亮色.png)（独立邮箱注册与登录；GitLab / GitHub / Jira / Tita 通过连接器与触发器接入）
 - 设计规范：[docs/01-设计主题.md](docs/01-设计主题.md)
 - 已否掉的方向和协作约定：[docs/02-决策记录与禁区.md](docs/02-决策记录与禁区.md)
 - 出图方法：[docs/03-出图流程.md](docs/03-出图流程.md)
