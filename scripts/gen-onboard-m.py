@@ -26,7 +26,7 @@ STYLE = '''
 .h1{font-size:24px;font-weight:800;margin-top:4px}
 .pbar{height:4px;border-radius:2px;background:var(--fill);overflow:hidden}
 .pbar i{display:block;height:100%;border-radius:2px;background:linear-gradient(90deg,#4F8BFF,#9B5CFF)}
-.st3{display:flex;gap:12px;align-items:center;padding:11px 14px;border-top:1px solid var(--hair)}
+.st3{display:flex;gap:12px;align-items:center;padding:8.5px 14px;border-top:1px solid var(--hair)}
 .st3:first-child{border-top:0}
 .sc3{width:24px;height:24px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
 .s-done .sc3{background:var(--green);color:#fff}
@@ -68,7 +68,9 @@ def phone(inner, extra=""):
 
 # 1 步骤概览
 steps = [("done", "选择项目", "OKR"), ("done", "代码仓库", "3 个仓库 · 构建通过"), ("cur", "环境与账号", "测试、线上各自的地址和账号"),
-         ("todo", "工单来源", "Jira / Tita 收哪些单"), ("todo", "Skills", "编码和验证规则"), ("todo", "发布配置", "可选，之后再填也行"),
+         ("todo", "工单来源", "Jira / Tita 收哪些单"), ("todo", "Skills", "编码和验证规则"),
+         ("todo", "扩展模块", "默认推荐发布 / 回滚 + 市场按需装"),
+         ("todo", "发布与回滚配置", "按已选模块展开，可先跳过"),
          ("todo", "检查并开工", "Bot 把条件实际跑一遍")]
 sl = "".join(f'<div class="st3 s-{k}"><span class="sc3">{CHECK if k == "done" else i + 1}</span><div class="grow"><b>{t}</b><em>{d}</em></div>'
              + (I("chevr", 16, st="color:var(--text-3)") if k != "todo" else '') + '</div>' for i, (k, t, d) in enumerate(steps))
@@ -76,10 +78,10 @@ p1 = phone(f'''
 <div class="top2">
   <div class="row"><span class="f12 t3 grow">第一次使用</span><span class="f13 t2">稍后再填</span></div>
   <div class="h1">把 OKR 准备好</div>
-  <div class="f13 t2" style="margin-top:6px;line-height:1.55">填完后 Bot 会实际跑一遍检查，都通过才开始接单。也可以在电脑上接着填。</div>
-  <div class="row f12 t3" style="margin:16px 0 7px"><span class="grow">第 3 步，共 7 步</span><span>已完成 2 步</span></div>
-  <div class="pbar"><i style="width:29%"></i></div>
-  <div class="lst glass" style="margin-top:16px">{sl}</div>
+  <div class="f13 t2" style="margin-top:5px;line-height:1.5">填完后 Bot 会实际跑一遍检查，都通过才开始接单。也可以在电脑上接着填。</div>
+  <div class="row f12 t3" style="margin:12px 0 6px"><span class="grow">第 3 步，共 8 步</span><span>已完成 2 步</span></div>
+  <div class="pbar"><i style="width:25%"></i></div>
+  <div class="lst glass" style="margin-top:12px">{sl}</div>
 </div>
 <div class="bot2"><button class="bigbtn pri" style="flex:1">继续：环境与账号{I("chevr",16,2.4)}</button></div>''')
 
@@ -94,7 +96,7 @@ EDIT = f'<span class="chp c-e">{I("edit",11)}可以修改</span>'
 OKS = f'<span class="okt">{CHECK}登录成功</span>'
 p2 = phone(f'''
 <div class="top2">
-  <div class="row"><span class="row g4 lnk f15">{I("chevr",18,st="transform:rotate(180deg)")}步骤</span><span class="grow"></span><span class="f13 t3">3 / 7</span></div>
+  <div class="row"><span class="row g4 lnk f15">{I("chevr",18,st="transform:rotate(180deg)")}步骤</span><span class="grow"></span><span class="f13 t3">3 / 8</span></div>
   <div class="kk" style="margin-top:10px">第 3 步 · 环境与账号</div>
   <div class="ttl" style="font-size:20px;margin-top:4px">Bot 在哪儿复现、用谁登录</div>
   <div class="ech" style="margin-top:14px"><span class="ec on">测试环境 · 4</span><span class="ec">联调环境 · 2</span><span class="ec">正式 · 3</span><span class="ec">{I("plus",14)}</span></div>
@@ -128,31 +130,32 @@ p3 = phone(f'''
 <div class="top2"><div class="kk" style="margin-top:10px">第 3 步 · 环境与账号</div><div class="ttl" style="font-size:20px;margin-top:4px">Bot 在哪儿复现、用谁登录</div>
 <div class="ech" style="margin-top:14px"><span class="ec">测试环境 · 4</span><span class="ec">联调环境 · 2</span><span class="ec on">正式 · 3</span></div></div>''', sheet)
 
-# 4 第 7 步 · 检查并开工
+# 4 第 8 步 · 检查并开工
 def rw(st, t, r):
     bg = {"ok": "var(--green)", "wn": "var(--orange)", "sk": "color-mix(in srgb,var(--text) 25%,transparent)"}[st]
     g = {"ok": CHECK, "wn": "!", "sk": "–"}[st]
     rc = {"ok": "var(--text-3)", "wn": "var(--orange)", "sk": "var(--text-3)"}[st]
-    return f'<div class="rw"><span class="ck3" style="background:{bg}">{g}</span><span class="grow">{t}</span><span class="f12" style="color:{rc}">{r}</span></div>'
+    return f'<div class="rw" style="padding:8px 0"><span class="ck3" style="background:{bg}">{g}</span><span class="grow">{t}</span><span class="f12" style="color:{rc}">{r}</span></div>'
 p4 = phone(f'''
 <div class="top2">
-  <div class="row"><span class="row g4 lnk f15">{I("chevr",18,st="transform:rotate(180deg)")}步骤</span><span class="grow"></span><span class="f13 t3">7 / 7</span></div>
-  <div class="kk" style="margin-top:10px">第 7 步 · 检查并开工</div>
-  <div class="row g12" style="margin-top:12px;padding:14px;border-radius:18px;background:color-mix(in srgb,var(--green) 12%,var(--glass-2));border:1px solid color-mix(in srgb,var(--green) 30%,transparent)">
-    <span class="ck3" style="width:40px;height:40px;background:var(--green)">{I("check",20,3)}</span>
-    <div class="grow"><div class="f16 w7">可以开工了</div><div class="f12 t2" style="margin-top:3px">Bot-02 实际跑了一遍 · 4 分 38 秒</div></div></div>
-  <div class="glass" style="border-radius:18px;padding:4px 14px;margin-top:12px">
-    {rw("ok", "AI 已连接", "gpt-6.2-sol")}
+  <div class="row"><span class="row g4 lnk f15">{I("chevr",18,st="transform:rotate(180deg)")}步骤</span><span class="grow"></span><span class="f13 t3">8 / 8</span></div>
+  <div class="kk" style="margin-top:8px">第 8 步 · 检查并开工</div>
+  <div class="row g12" style="margin-top:10px;padding:12px 14px;border-radius:18px;background:color-mix(in srgb,var(--green) 12%,var(--glass-2));border:1px solid color-mix(in srgb,var(--green) 30%,transparent)">
+    <span class="ck3" style="width:38px;height:38px;background:var(--green)">{I("check",19,3)}</span>
+    <div class="grow"><div class="f16 w7">可以开工了</div><div class="f12 t2" style="margin-top:2px">Bot-02 实际跑了一遍 · 4 分 38 秒</div></div></div>
+  <div class="glass" style="border-radius:18px;padding:4px 14px;margin-top:10px">
+    {rw("ok", "AI 已连接", "Pi · gpt-6.2-sol")}
     {rw("ok", "拉取 3 个仓库，构建 2 个", "通过")}
     {rw("ok", "打开 3 个环境", "都能打开")}
     {rw("ok", "账号试登录", "6 个成功")}
     {rw("wn", "OKR 管理员 Cookie 过期", "用到时提醒")}
     {rw("ok", "收单条件", "能收到 3 张")}
     {rw("ok", "Skills", "3 个")}
+    {rw("ok", "扩展模块", "发布 · 回滚")}
     {rw("ok", "你的 GitLab、Apollo", "已连通")}
-    {rw("sk", "发布配置", "已跳过")}
+    {rw("sk", "发布与回滚配置", "已跳过")}
   </div>
-  <div class="f12 t2" style="margin-top:12px;line-height:1.55">开工后已收的 3 张单马上开始，有结果会通知你审核。之后在「设置 → 项目」里随时改。</div>
+  <div class="f12 t2" style="margin-top:10px;line-height:1.5">开工后已收的 3 张单马上开始，有结果会通知你审核。之后在「设置 → 项目」或「模块市场」随时改。</div>
 </div>
 <div class="bot2"><button class="bigbtn pri" style="flex:1">开始接单</button></div>''')
 

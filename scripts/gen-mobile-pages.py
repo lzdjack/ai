@@ -297,29 +297,34 @@ def m_skill_edit():
     return phone(inner)
 
 
+MKT_SVG_SM = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none"><rect x="3.5" y="3.5" width="7.2" height="7.2" rx="2.2" fill="#fff"/><rect x="13.3" y="3.5" width="7.2" height="7.2" rx="2.2" fill="#fff" opacity=".82"/><rect x="3.5" y="13.3" width="7.2" height="7.2" rx="2.2" fill="#fff" opacity=".82"/><path d="M16.9 13.2l1.1 2.7 2.7 1.1-2.7 1.1-1.1 2.7-1.1-2.7-2.7-1.1 2.7-1.1z" fill="#fff"/></svg>'
+
+
 def m_settings():
-    def ir(ic, bg, t, e="", badge=""):
+    def ir(ic, bg, t, e="", badge="", raw=None):
         b = f'<span class="tag tg-r" style="min-width:20px;justify-content:center;border-radius:10px">{badge}</span>' if badge else ""
-        return f'<div class="ir"><span class="ii" style="background:{bg}">{I(ic,15,2)}</span><span class="grow">{t}</span>{b}<em>{e}{I("chevr",14)}</em></div>'
+        icon = raw if raw is not None else I(ic, 15, 2)
+        return f'<div class="ir" style="min-height:43px"><span class="ii" style="background:{bg}">{icon}</span><span class="grow">{t}</span>{b}<em>{e}{I("chevr",14)}</em></div>'
     inner = f'''<div class="pad">
-  <div class="row" style="margin-top:6px"><div class="grow"><div class="lgt">设置</div></div></div>
-  <div class="grp glass" style="margin-top:12px;padding:12px;display:flex;align-items:center;gap:12px"><span class="me" style="width:52px;height:52px;font-size:19px">林</span><div class="col grow"><span class="f16 w7">林某</span><span class="f12 t3">公司账号 · 审批项目管理员</span></div>{I("chevr",15,st="color:var(--text-3)")}</div>
-  <div class="gh">收单</div>
+  <div class="row" style="margin-top:4px"><div class="grow"><div class="lgt">设置</div></div></div>
+  <div class="grp glass" style="margin-top:10px;padding:11px 12px;display:flex;align-items:center;gap:12px"><span class="me" style="width:48px;height:48px;font-size:18px">林</span><div class="col grow"><span class="f16 w7">林某</span><span class="f12 t3">云匠账号 · 审批项目管理员</span></div>{I("chevr",15,st="color:var(--text-3)")}</div>
+  <div class="gh" style="padding:11px 6px 5px">收单</div>
   <div class="grp glass">
-    <div class="ir"><span class="sc sc-j">Jira</span><span class="grow">状态「AI修复」</span><em style="color:var(--green)">2 分钟前</em></div>
-    <div class="ir"><span class="sc sc-t">Tita</span><span class="grow">节点「AI干活」</span><em style="color:var(--orange)">失败 · 重试中</em></div>
+    <div class="ir" style="min-height:42px"><span class="sc sc-j">Jira</span><span class="grow">状态「AI修复」</span><em style="color:var(--green)">2 分钟前</em></div>
+    <div class="ir" style="min-height:42px"><span class="sc sc-t">Tita</span><span class="grow">节点「AI干活」</span><em style="color:var(--orange)">失败 · 重试中</em></div>
   </div>
-  <div class="gh">AI 与项目</div>
+  <div class="gh" style="padding:11px 6px 5px">AI 与模块</div>
   <div class="grp glass">
-    {ir("spark","linear-gradient(160deg,#C58BFF,#6A3DF0)","全局 AI","gpt-6.2-sol")}
+    {ir("spark","linear-gradient(160deg,#C58BFF,#6A3DF0)","全局 AI","Pi · 多模型")}
+    {ir("","linear-gradient(155deg,#34D399,#0284C7)","模块市场","已装 3",raw=MKT_SVG_SM)}
     {ir("layers","linear-gradient(160deg,#5AA0FF,#1F6FFF)","项目","OKR 差 1 项")}
     {ir("users","linear-gradient(160deg,#5EDB7A,#28B04F)","成员与身份","",'1')}
   </div>
-  <div class="gh">我自己</div>
+  <div class="gh" style="padding:11px 6px 5px">我自己</div>
   <div class="grp glass">
-    {ir("key","linear-gradient(160deg,#FFC15A,#F08A00)","我的账号","GitLab、Apollo")}
+    {ir("key","linear-gradient(160deg,#FFC15A,#F08A00)","我的连接器","GitLab、Apollo")}
     {ir("bell","linear-gradient(160deg,#FF8A7A,#E0281E)","通知","免打扰 22:00")}
-    <div class="ir"><span class="ii" style="background:linear-gradient(160deg,#A9AEB8,#6E737D)">{I("globe",15,2)}</span><span class="grow">外网访问</span><em>已连接</em></div>
+    <div class="ir" style="min-height:43px"><span class="ii" style="background:linear-gradient(160deg,#A9AEB8,#6E737D)">{I("monitor",15,2)}</span><span class="grow">执行器状态</span><em style="color:var(--green)">本机在线</em></div>
   </div>
 </div>{tabbar("none", 24)}'''
     return phone(inner)
@@ -686,6 +691,110 @@ def m_tester():
     return phone(inner)
 
 
+# ============ 板：模块市场与执行器（移动端轻量对齐） ============
+def m_market_list():
+    def mrow(bg, ic, title, sub, badge="", right="", on=False):
+        b = f'<span class="tag tg-g" style="height:18px;font-size:10px;padding:0 5px">{badge}</span>' if badge else ""
+        sel = ' style="min-height:60px;background:color-mix(in srgb,var(--blue) 9%,transparent);border-radius:14px"' if on else ' style="min-height:60px"'
+        return (f'<div class="ir"{sel}>'
+                f'<span class="ii" style="width:36px;height:36px;border-radius:10px;background:{bg}">{I(ic,18,2)}</span>'
+                f'<div class="col grow" style="min-width:0;gap:2px">'
+                f'<div class="row g6"><span class="f14 w7 ell">{title}</span>{b}</div>'
+                f'<span class="f12 t3 ell">{sub}</span></div>{right}</div>')
+    inner = f'''{nav("设置", "模块市场", "")}
+<div class="pad">
+  <div class="row g6" style="margin-top:4px">
+    <span class="chip" style="background:var(--blue);color:#fff">全部 6</span>
+    <span class="chip glass">已安装 3</span>
+    <span class="chip glass">官方 5</span>
+  </div>
+  <div class="gh" style="padding:12px 6px 6px">已安装<span>3</span><em>可随时启停</em></div>
+  <div class="grp glass">
+    {mrow("linear-gradient(160deg,#FF8A7A,#E0281E)","history","紧急回滚（Apollo）","回滚入口 · 差异预览与回退","默认安装",'<span class="tgl on"></span>',True)}
+    {mrow("linear-gradient(160deg,#FFC54D,#FF7A00)","pkg","发布流水线（Tita）","构建发布 · 测试/正式双环境","默认安装",'<span class="tgl on"></span>')}
+    {mrow("linear-gradient(160deg,#5AA0FF,#1F6FFF)","link","Jira / Tita 连接器","工单采集 · 状态同步回写","内置",'<span class="tgl on" style="opacity:.45"></span>')}
+  </div>
+  <div class="gh" style="padding:14px 6px 6px">可安装<span>3</span><em>PC 端安装</em></div>
+  <div class="grp glass">
+    {mrow("linear-gradient(160deg,#C58BFF,#6A3DF0)","zap","灰度放量与金丝雀","按比例切流 · 异常自动回退","","<em>PC 安装" + I("chevr",13) + "</em>")}
+    {mrow("linear-gradient(160deg,#64748B,#334155)","git","GitHub Actions 构建","接管 craft build 与验证","","<em>PC 安装" + I("chevr",13) + "</em>")}
+    {mrow("linear-gradient(160deg,#34D399,#0284C7)","terminal","自定义 CLI 适配器","用 YAML 接入公司内部脚手架","","<em>PC 安装" + I("chevr",13) + "</em>")}
+  </div>
+  <div class="f12 t3" style="padding:10px 6px 0;line-height:1.55">手机端支持查看与启停，安装和命令配置请在 PC 端「模块市场」完成。关闭「紧急回滚」后底部回滚入口自动隐藏。</div>
+</div>'''
+    return phone(inner)
+
+
+def m_market_detail():
+    def kvrow(k, v):
+        return f'<div class="row g8" style="padding:7px 0;border-top:1px solid var(--hair)"><span class="f12 t3" style="width:78px;flex:none">{k}</span><span class="f12 w6 grow ell">{v}</span></div>'
+    inner = f'''{nav("模块市场", "模块详情", "")}
+<div class="pad">
+  <div class="card2" style="margin-top:4px;padding:14px">
+    <div class="row g12" style="align-items:flex-start">
+      <span class="ii" style="width:50px;height:50px;border-radius:14px;background:linear-gradient(160deg,#FF8A7A,#FF453A 55%,#E0281E);display:flex;align-items:center;justify-content:center;color:#fff;flex:none;box-shadow:0 8px 18px -6px rgba(224,40,30,.55)">{I("history",24,2.2)}</span>
+      <div class="col grow" style="min-width:0;gap:5px">
+        <div class="f16 w7 ell">紧急回滚（Apollo）</div>
+        <div class="row g6"><span class="tag tg-b">官方</span><span class="tag tg-g">默认安装</span><span class="tag tg-n">v1.4.2</span></div>
+      </div>
+    </div>
+    <div class="f12 t2" style="margin-top:10px;line-height:1.55">对接 Apollo 配置中心，预览配置差异、执行一键回退并触发业务回读校验；不依赖核心工单强耦合。</div>
+  </div>
+  <div class="grp glass" style="margin-top:10px">
+    <div class="ir" style="min-height:46px"><span class="grow w6">在当前团队启用</span><span class="tgl on"></span></div>
+    <div class="ir" style="min-height:44px"><span class="grow">生效项目</span><em>审批、考勤（2）{I("chevr",14)}</em></div>
+  </div>
+  <div class="sec2">挂载到工作台<em>6 黄金槽位</em></div>
+  <div class="card2" style="padding:4px 14px 6px">
+    <div class="row g8" style="padding:7px 0"><span class="f12 t3" style="width:78px;flex:none">导航入口</span><span class="f12 w6 grow">PC Dock + 手机底部「回滚」</span></div>
+    {kvrow("工单操作", "发版历史卡片 · 一键发起回滚")}
+    {kvrow("命令槽位", "craft rollback / craft verify")}
+    {kvrow("运行形态", "零凭证沙箱微应用 · MCP 工具")}
+  </div>
+  <div class="sec2">最小权限边界<em>不可越权</em></div>
+  <div class="card2" style="padding:10px 14px">
+    <div class="row g6" style="flex-wrap:wrap">
+      <span class="tag tg-g">{I("check",11,2.4)}读工单快照</span>
+      <span class="tag tg-g">{I("check",11,2.4)}写回滚时间线</span>
+      <span class="tag tg-b">{I("shield",11,2)}只读配置差异</span>
+    </div>
+    <div class="f11 t3" style="margin-top:8px;line-height:1.5">插件拿不到登录态和 Apollo 私钥，所有回滚请求由云匠宿主校验本人二次确认后代理签发。</div>
+  </div>
+</div>
+<div class="dock2 glass">
+  <button class="bigbtn" style="background:color-mix(in srgb,var(--red) 12%,transparent);color:var(--red);height:44px;font-size:14.5px">停用模块并隐藏回滚入口</button>
+  <div class="f11 t3" style="text-align:center">停用后保留历史回滚记录，随时可重新开启</div>
+</div>'''
+    return phone(inner)
+
+
+def m_no_runner():
+    tags = '<span class="tg" style="color:var(--orange);background:color-mix(in srgb,var(--orange) 14%,transparent)">等待执行器上线</span>'
+    inner = f'''{nav("工单", "TK-20871")}{_mhead("点击分组后界面卡住", tags, 0)}
+<div class="pad">
+  <div class="card2" style="margin-top:12px;padding:18px 16px;text-align:center">
+    <div style="width:54px;height:54px;border-radius:16px;margin:0 auto;background:linear-gradient(155deg,#34D399,#0284C7);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 12px 24px -8px rgba(2,132,199,.5)">{I("monitor",26,2)}</div>
+    <div class="f16 w7" style="margin-top:12px">当前没有在线执行器</div>
+    <div class="f12 t2" style="margin-top:6px;line-height:1.55">工单已接单并排队，但你的本机执行器未在线，且团队尚未接入远程 Runner。</div>
+  </div>
+  <div class="gh" style="padding:12px 6px 6px">执行器状态</div>
+  <div class="grp glass">
+    <div class="ir" style="min-height:48px"><span class="ii" style="background:linear-gradient(160deg,#5AA0FF,#1F6FFF)">{I("monitor",15,2)}</span><div class="col grow" style="gap:1px"><span class="f14 w6">MacBook Pro · 本机</span><span class="f11 t3">个人默认模式 · 18 分钟前离线</span></div><em style="color:var(--orange)">离线</em></div>
+    <div class="ir" style="min-height:48px"><span class="ii" style="background:linear-gradient(160deg,#A9AEB8,#6E737D)">{I("server",15,2)}</span><div class="col grow" style="gap:1px"><span class="f14 w6">团队远程 Runner</span><span class="f11 t3">私有部署 / 团队内网算力池</span></div><em>未接入</em></div>
+  </div>
+  <div class="gh" style="padding:12px 6px 6px">怎么让 Bot 开始修</div>
+  <div class="card2" style="padding:10px 14px;display:flex;flex-direction:column;gap:8px">
+    <div class="row g8" style="align-items:flex-start"><span class="ok2" style="background:var(--blue);margin-top:1px">1</span><span class="f12 t2" style="line-height:1.5">回到电脑打开云匠 PC 端，连上后自动接着修这张单</span></div>
+    <div class="row g8" style="align-items:flex-start"><span class="ok2" style="background:var(--teal);margin-top:1px">2</span><span class="f12 t2" style="line-height:1.5">或在 PC 端切到「团队 Runner / 云端托管」</span></div>
+  </div>
+</div>
+<div class="dock2 glass">
+  <button class="bigbtn" style="background:var(--blue);color:#fff;height:44px;font-size:15px">{I("bell",16,2)}执行器上线后提醒我</button>
+  <div class="f11 t3" style="text-align:center">现在也能先补充复现说明，上线后自动带入</div>
+</div>'''
+    return phone(inner)
+
+
 BOARDS = {
     "code": ("移动端 · 代码与审核", [(m_code, "代码改动", "单列差异 · 选中一行问 AI"), (m_reject, "打回", "原因 + 代码位置 + 截图"), (m_ask, "Bot 在问你", "一键回答，回复后接着跑")]),
     "evidence": ("移动端 · 证据与发布", [(m_evidence, "证据", "用途、查阅状态、验证记录"), (m_error, "报错", "失败步骤 + 原文 + AI 解读"), (m_release, "发布到测试", "关掉 App 也能接着看进度")]),
@@ -695,7 +804,8 @@ BOARDS = {
     "empty": ("移动端 · 空状态", [(m_empty_tk, "工单 · 还没收到单", "Bot 在等单，收单条件和采集状态"), (m_empty_pub, "发布 · 还没有发布", "审核通过后才有；配置没填先提醒"), (m_empty_ai, "AI 助手 · 第一次打开", "点一句就能问")]),
     "empty2": ("移动端 · 空状态二", [(m_empty_search, "搜索没有结果", "说清在哪没找到，去全部里找"), (m_empty_sk, "Skills · 我的还没有", "新建、导入、复制内置"), (m_empty_rb, "紧急回滚 · 没有上一次", "只发布过一次，没得回")]),
     "rules": ("移动端 · 审核与排队", [(m_approve, "审核通过 · 有未测项", "勾「我知道有未测项」才能通过"), (m_queue, "工单 · 排队中", "前面是谁、预计几点开始"), (m_tester, "发测试 · 换测试人", "提单人找不到时必须选一个")]),
-    "skills": ("移动端 · Skills 与设置", [(m_skills, "Skills", "我的 + 平台内置"), (m_skill_edit, "编辑 Skill", "接着 PC 的草稿写"), (m_settings, "设置", "从头像进入")]),
+    "skills": ("移动端 · Skills 与设置", [(m_skills, "Skills", "我的 + 平台内置"), (m_skill_edit, "编辑 Skill", "接着 PC 的草稿写"), (m_settings, "设置", "从头像进入 · 含模块市场入口")]),
+    "market": ("移动端 · 模块市场与执行器", [(m_market_list, "模块市场", "查看与启停，安装配置在 PC 端"), (m_market_detail, "紧急回滚 · 详情", "官方默认安装 · 6 槽位与权限边界"), (m_no_runner, "暂无在线执行器", "个人电脑离线时的轻量引导")]),
 }
 
 

@@ -154,7 +154,7 @@ def STEP_PAGES(page, CHECK):
         <span class="chip2">{I("spark",13,st="color:var(--purple)")}让 AI 读 OKR 的代码，帮你起草一条</span><span class="f12 t3">起草完你确认了才会启用</span>
       </div>
       <div class="note" style="margin-top:16px">{I("layers",15,st="color:var(--blue);margin-top:1px")}<span>第一次用只有系统内置的，够用就直接下一步。自己写的当场加进列表，不用离开步骤器，之后也能在 Skills 里改。</span></div>'''
-    p5 = page(5, "Bot 按什么规则改、怎么验", "Skills 是写给 Bot 的规则。系统内置的直接能用，有自己的规则也可以在这里写", s5, "发布配置")
+    p5 = page(5, "Bot 按什么规则改、怎么验", "Skills 是写给 Bot 的规则。系统内置的直接能用，有自己的规则也可以在这里写", s5, "扩展模块")
 
     # ---------------- 5 · 写一条自己的规则（弹出面板） ----------------
     rule = [("1", "## 什么时候用", "h"), ("2", "OKR 页面里和表单有关的 Bug：录入、校验、提交。", ""), ("3", "", ""),
@@ -194,18 +194,110 @@ html.dark .drw{{background:rgba(36,38,52,.96)}}
 </div>'''
     p5n = p5.replace('</div><script src="icons.js">', DRW + '</div><script src="icons.js">', 1)
 
-    # ---------------- 6 发布配置（可选） ----------------
+    # ---------------- 6 扩展模块（模块市场 · 抗 50+ 插件：默认推荐 + 搜索分类 + 限高滚动 + 全量抽屉） ----------------
+    MOD_CSS = '''<style>
+.mbar{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.msrch{width:214px;height:32px;border-radius:10px;background:var(--fill);padding:0 10px;display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--text-3);flex:none;border:1px solid var(--hair)}
+.mchips{display:flex;align-items:center;gap:5px;min-width:0}
+.mch{height:28px;padding:0 10px;border-radius:9px;font-size:12px;font-weight:600;color:var(--text-2);background:var(--fill);display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.mch.on{background:var(--blue);color:#fff}
+.mch em{font-style:normal;opacity:.7;font-size:11px;font-weight:500}
+.mall{margin-left:auto;font-size:12.5px;font-weight:600;color:var(--blue);white-space:nowrap;display:inline-flex;align-items:center;gap:2px}
+.mscroll{position:relative;height:224px;overflow:hidden;padding:2px 0 0 0}
+.mclip{height:100%;overflow:hidden;-webkit-mask-image:linear-gradient(180deg,#000 0%,#000 72%,transparent 100%);mask-image:linear-gradient(180deg,#000 0%,#000 72%,transparent 100%)}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mc{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:13px;background:var(--fill);border:1.5px solid transparent}
+.mc.on{background:var(--glass-2);border-color:color-mix(in srgb,var(--blue) 60%,transparent);box-shadow:0 6px 16px -10px color-mix(in srgb,var(--blue) 65%,transparent)}
+.mslot{font-size:10.5px;color:var(--text-3);margin-top:4px;display:flex;align-items:center;gap:5px;white-space:nowrap}
+.mslot i{width:5px;height:5px;border-radius:50%;background:var(--text-3);opacity:.5;display:inline-block;flex:none}
+.mslot.is-dk{color:var(--blue);font-weight:600}.mslot.is-dk i{background:var(--blue);opacity:1}
+</style>'''
+
+    def rec_card(ic, bg, name, desc, foot):
+        return f'''<div class="skc on" style="flex-direction:column;gap:0;padding:11px 14px">
+  <div class="row g10" style="width:100%;align-items:flex-start">
+    <span class="ic3" style="width:32px;height:32px;border-radius:9px;background:{bg}">{I(ic,16,2)}</span>
+    <div class="col grow" style="min-width:0;gap:2px">
+      <div class="row g6"><b class="ell">{name}</b><span class="tag tg-b">官方</span><span class="tag tg-g">默认推荐</span></div>
+      <div class="f12 t2 ell">{desc}</div>
+    </div>
+    <span class="cbx2 on" style="margin-top:2px">{CHECK}</span>
+  </div>
+  <div class="row g6" style="width:100%;margin-top:7px;padding-top:6px;border-top:1px solid var(--hair);font-size:11.5px;color:var(--blue)">
+    <span class="grow">{foot}</span><span class="f11 t3">占 Dock · 可取消</span>
+  </div>
+</div>'''
+
+    def mkt_card(ic, bg, name, tag, desc, slot, dk=False, on=False):
+        t_txt, t_cls = tag
+        return f'''<div class="mc{' on' if on else ''}">
+  <span class="ic3" style="width:30px;height:30px;border-radius:9px;background:{bg}">{I(ic,15,2)}</span>
+  <div class="col grow" style="min-width:0;gap:2px">
+    <div class="row g6"><b class="f13 ell">{name}</b><span class="tag {t_cls}" style="height:18px;font-size:10.5px">{t_txt}</span></div>
+    <div class="f12 t2 ell">{desc}</div>
+    <div class="mslot{' is-dk' if dk else ''}"><i></i>{slot}</div>
+  </div>
+  <span class="cbx2{' on' if on else ''}" style="margin-top:2px">{CHECK if on else ''}</span>
+</div>'''
+
+    s6_mod = X + MOD_CSS + f'''
+      <div style="margin-top:14px">
+        <div class="lab" style="margin-bottom:7px">默认推荐<span>核心修 Bug 永远内置 · 以下 2 个推荐模块已默认勾选，不需要可直接取消</span></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          {rec_card("history", "linear-gradient(160deg,#FF8A7A,#FF453A 55%,#E0281E)", "紧急回滚（Apollo）",
+                    "预览 Apollo 配置差异、一键回退与业务回读校验", "✓ 将在第 7 步顺手配好 Apollo 应用与回滚账号")}
+          {rec_card("pkg", "linear-gradient(160deg,#FFC54D,#FF9A1F 55%,#FF7A00)", "发布流水线（Tita）",
+                    "接管 craft build / release，支持工单内一键发测试与正式", "✓ 将在第 7 步顺手配好打包与发布命令")}
+        </div>
+      </div>
+      <div style="margin-top:14px">
+        <div class="lab" style="margin-bottom:7px">模块市场 · 按需加装<span>支持搜索与分类筛选，也可点右侧浏览全量市场</span></div>
+        <div class="mbar">
+          <div class="msrch">{I("search",13)}<span>搜索 48 个市场模块…</span></div>
+          <div class="mchips">
+            <span class="mch on">热门</span>
+            <span class="mch">发布<em>12</em></span>
+            <span class="mch">连接器<em>18</em></span>
+            <span class="mch">审批<em>8</em></span>
+            <span class="mch">自研<em>10</em></span>
+          </div>
+          <span class="mall">浏览全部 48 个 {I("chevr",13)}</span>
+        </div>
+        <div class="mscroll">
+          <div class="mclip"><div class="mgrid">
+            {mkt_card("msg", "linear-gradient(160deg,#4FD6E6,#16A3C0)", "飞书 / 企微审批卡点", ("社区", "tg-t"),
+                      "正式发版或回滚前发审批卡，同意后放行", "审批卡点 · 不占 Dock", dk=False, on=True)}
+            {mkt_card("zap", "linear-gradient(160deg,#C58BFF,#6A3DF0)", "灰度放量与金丝雀", ("官方", "tg-n"),
+                      "按流量比例切流，核心指标异常自动回退", "独立入口 · 占 Dock", dk=True, on=False)}
+            {mkt_card("git", "linear-gradient(160deg,#64748B,#334155)", "GitHub Actions 构建", ("官方", "tg-n"),
+                      "复用现有 Workflow 接管 craft build / verify", "命令槽 · 不占 Dock", dk=False, on=False)}
+            {mkt_card("terminal", "linear-gradient(155deg,#34D399,#0284C7)", "自定义 CLI / MCP 适配器", ("企业自研", "tg-p"),
+                      "L1 YAML 或标准 MCP 接入公司内部工具", "MCP / 命令槽 · 不占 Dock", dk=False, on=False)}
+            {mkt_card("alert", "linear-gradient(160deg,#FB7185,#E11D48)", "Sentry 线上报错联动", ("官方", "tg-n"),
+                      "自动关联堆栈与 SourceMap，一键触发修单", "连接器 · 不占 Dock", dk=False, on=False)}
+            {mkt_card("bell", "linear-gradient(160deg,#FBBF24,#D97706)", "Slack / 钉钉值班播报", ("社区", "tg-t"),
+                      "发布失败与 P1 阻塞自动推送研发值班群", "通知槽 · 不占 Dock", dk=False, on=False)}
+          </div></div>
+        </div>
+      </div>
+      <div class="note" style="margin-top:11px;padding:8px 12px">{I("layers",14,st="color:var(--blue);margin-top:1px")}<span><b>多模块不拥挤：</b>选 3 个及以上时，第 7 步自动按模块分子标签逐个配置（可单独跳过）；左侧 Dock 最多直出 4 个插件图标，超出自动收入「更多模块」文件夹。</span></div>'''
+    foot6m = ('<button class="bigb secb"><i data-i="chevl" data-s="16" data-w="2.4"></i>上一步</button><span class="grow"></span>'
+              '<span class="tag tg-b" style="height:28px;padding:0 11px;font-size:12px">已选 3 个（默认 2 + 市场 1）</span>'
+              '<button class="bigb pri">下一步：配置 3 个模块<i data-i="chevr" data-s="16" data-w="2.4"></i></button>')
+    p6_mod = page(6, "挑选并启用需要的扩展模块", "推荐模块开箱即用，市场插件支持快搜、分类与全量抽屉勾选，下一步一次性配好", s6_mod, foot=foot6m)
+
+    # ---------------- 7 发布与回滚配置（由第 6 步已选模块动态展开，可选） ----------------
     def kv(k, v, sel=True, extra="", hint=""):
         h = f'<span class="f12 t3" style="margin-left:auto;flex:none;padding-left:10px">{hint}</span>' if hint else ""
         return f'<div class="kv3"><span>{k}</span><div class="inp{" sel" if sel else ""}"><span class="ell">{v}</span>{h}{CHD if sel else ""}</div>{extra}</div>'
-    s6 = X + f'''
+    s7_pub = X + f'''
       <div class="row g12" style="margin-top:20px;align-items:stretch">
-        <div class="pubc"><div class="row g8"><b class="f15">测试环境</b><span class="tag tg-b">测试</span><span class="grow"></span><span class="f12 t3">修完一键发测试</span></div>
+        <div class="pubc"><div class="row g8"><b class="f15">测试环境</b><span class="tag tg-b">发布流水线</span><span class="grow"></span><span class="f12 t3">修完一键发测试</span></div>
           {kv("打包上传", '<span class="mono f12">tita build</span>', False, hint="在测试分支上打")}
           {kv("发布到测试", '<span class="mono f12">tita release --app www --env TEST</span>', False)}
           {kv("发测试的人", "工单修复人", hint="可改成指定的人或任何人")}
           <div class="f12 t3" style="margin:10px 0 0 82px;line-height:1.6">版本号不用填，tita release 从包里读。发完 Bot 核对测试环境 Apollo 里的提交号，对上了才通知测试人。</div></div>
-        <div class="pubc"><div class="row g8"><b class="f15">正式环境</b><span class="tag tg-o">线上</span><span class="grow"></span><span class="f12 t3">测试通过才能发</span></div>
+        <div class="pubc"><div class="row g8"><b class="f15">正式环境与回滚</b><span class="tag tg-r">紧急回滚</span><span class="grow"></span><span class="f12 t3">测试通过才能发</span></div>
           {kv("打包上传", '<span class="mono f12">tita build</span>', False, hint="合回主分支后重新打")}
           {kv("发布到正式", '<span class="mono f12">tita release --app www --env PROD</span>', False)}
           {kv("正式发布人", "任何人", hint="可以改成指定的人")}
@@ -222,34 +314,35 @@ html.dark .drw{{background:rgba(36,38,52,.96)}}
         </div>
         <div class="row g10" style="margin-top:10px">{OK}都已连通 · OKR 能合入两个分支、能发测试和正式</span><span class="grow"></span><span class="f12 t3">存到「设置 → 我的账号」· 其他人第一次用到时再配</span></div>
       </div>
-      <div class="note" style="margin-top:14px">{I("rocket",15,st="color:var(--blue);margin-top:1px")}<span>这一步可以先跳过：不影响 Bot 修代码，只是修完不能一键发测试。之后在「设置 → 项目」里补。</span></div>'''
-    foot6 = ('<button class="bigb secb"><i data-i="chevl" data-s="16" data-w="2.4"></i>上一步</button><span class="grow"></span>'
-             '<button class="bigb secb">先跳过</button><button class="bigb pri">保存，下一步：检查并开工<i data-i="chevr" data-s="16" data-w="2.4"></i></button>')
-    p6 = page(6, "修完怎么发到测试和正式环境", "可选。Bot 在仓库目录下执行这些命令；填了之后，修复人能在工单里一键发测试", s6, foot=foot6)
+      <div class="note" style="margin-top:14px">{I("rocket",15,st="color:var(--blue);margin-top:1px")}<span>由第 6 步勾选的「发布流水线 + 紧急回滚」模块动态展开；也可先跳过，不影响 Bot 修代码，之后在「设置 → 项目」或「模块市场」里补配。</span></div>'''
+    foot7p = ('<button class="bigb secb"><i data-i="chevl" data-s="16" data-w="2.4"></i>上一步</button><span class="grow"></span>'
+              '<button class="bigb secb">先跳过</button><button class="bigb pri">保存，下一步：检查并开工<i data-i="chevr" data-s="16" data-w="2.4"></i></button>')
+    p7_pub = page(7, "配置已选的发布与回滚模块", "按第 6 步勾选的模块展开 · 填好之后，修复人能在工单里一键发测试，并在 Dock 使用紧急回滚", s7_pub, foot=foot7p)
 
-    # ---------------- 7 检查并开工 ----------------
+    # ---------------- 8 检查并开工 ----------------
     def c(st, t, r):
         bg = {"ok": "var(--green)", "wn": "var(--orange)", "sk": "color-mix(in srgb,var(--text) 25%,transparent)"}[st]
         g = {"ok": CHECK, "wn": "!", "sk": "–"}[st]
         rc = {"ok": "var(--text-3)", "wn": "var(--orange)", "sk": "var(--text-3)"}[st]
-        return f'<div class="chk3"><span class="ck3" style="background:{bg};font-size:12px;font-weight:800">{g}</span><span class="grow">{t}</span><span class="f12" style="color:{rc}">{r}</span></div>'
-    s7 = X + f'''
-      <div class="big-ok" style="margin-top:20px">
-        <span class="ck3" style="width:46px;height:46px;background:var(--green)">{I("check",24,3)}</span>
+        return f'<div class="chk3" style="padding:7.5px 0"><span class="ck3" style="background:{bg};font-size:12px;font-weight:800">{g}</span><span class="grow">{t}</span><span class="f12" style="color:{rc}">{r}</span></div>'
+    s8 = X + f'''
+      <div class="big-ok" style="margin-top:16px;padding:14px 18px">
+        <span class="ck3" style="width:44px;height:44px;background:var(--green)">{I("check",22,3)}</span>
         <div class="grow"><div class="f16 w7">必需条件全部通过，可以开工了</div><div class="f13 t2" style="margin-top:3px">Bot-02 实际跑了一遍 · 用时 4 分 38 秒 · 今天 10:42</div></div>
         <span class="f12 lnk">看完整日志 ›</span>
       </div>
-      <div class="row g12" style="margin-top:16px;align-items:flex-start">
-        <div class="obx grow" style="padding:6px 16px">
-          {c("ok", "AI 已连接 · gpt-6.2-sol", "管理员配置")}
+      <div class="row g12" style="margin-top:14px;align-items:flex-start">
+        <div class="obx grow" style="padding:4px 16px">
+          {c("ok", "AI 已连接 · Pi · gpt-6.2-sol", "管理员配置")}
           {c("ok", "拉取 3 个仓库，构建 2 个", "4 分 02 秒")}
           {c("ok", "打开 3 个环境", "都能打开")}
           {c("ok", "账号试登录", "6 个成功")}
           {c("wn", "正式环境 · OKR 管理员 Cookie 已过期", "不挡开工，用到时提醒你")}
           {c("ok", "收单条件", "能收到 3 张")}
           {c("ok", "Skills", "3 个已启用")}
+          {c("ok", "扩展模块", "已启用 2 个（发布流水线、紧急回滚）")}
           {c("ok", "你的 GitLab、Apollo 账号", "都已连通 · 没配不挡开工")}
-          {c("sk", "发布配置", "已跳过 · 修完不能一键发测试")}
+          {c("sk", "发布与回滚配置", "已跳过 · 之后在项目或模块市场补配")}
         </div>
         <div class="obx" style="width:270px;flex:none">
           <div class="f13 w7">开工后</div>
@@ -261,12 +354,12 @@ html.dark .drw{{background:rgba(36,38,52,.96)}}
           </div>
         </div>
       </div>'''
-    foot7 = ('<button class="bigb secb"><i data-i="chevl" data-s="16" data-w="2.4"></i>上一步</button><span class="grow"></span>'
-             '<span class="f13 t3" style="margin-right:6px">之后在「设置 → 项目」里随时改</span>'
+    foot8 = ('<button class="bigb secb"><i data-i="chevl" data-s="16" data-w="2.4"></i>上一步</button><span class="grow"></span>'
+             '<span class="f13 t3" style="margin-right:6px">之后在「设置 → 项目」或「模块市场」随时改</span>'
              '<button class="bigb pri">开始接单，进入工作台<i data-i="chevr" data-s="16" data-w="2.4"></i></button>')
-    p7 = page(7, "Bot 把条件实际跑了一遍", "每一项都是真的去拉代码、打开环境、登录账号、收单，不是只看填没填", s7, foot=foot7)
+    p8 = page(8, "Bot 把条件实际跑了一遍", "每一项都是真的去拉代码、打开环境、登录账号、收单，不是只看填没填", s8, foot=foot8)
 
-    return {"1": p1, "2": p2, "4": p4, "5": p5, "5-new": p5n, "6": p6, "7": p7}
+    return {"1": p1, "2": p2, "4": p4, "5": p5, "5-new": p5n, "6": p6_mod, "7": p7_pub, "8": p8}
 
 
 
@@ -280,7 +373,7 @@ def ai_step(page, CHECK):
         return f'<div class="kv3" style="margin-top:12px"><span>{k}</span>{v}</div>'
     body = X + f'''
       <div class="obx" style="margin-top:20px;padding:18px 20px">
-        {row("AI 工具", f'<div class="inp sel">Codex{CHD}</div>')}
+        {row("AI 引擎", f'<div class="inp sel">Pi（默认内置 · 多模型）{CHD}</div>')}
         {row("模型", f'<div class="inp sel">gpt-6.2-sol{CHD}</div>')}
         {row("连接方式", '<div class="seg" style="flex:1"><span class="on" style="flex:1;justify-content:center">公司网关</span><span style="flex:1;justify-content:center">API Key</span></div>')}
         {row("网关地址", '<div class="inp"><span class="mono f12">https://ai-gateway.tita.cloud</span></div>')}

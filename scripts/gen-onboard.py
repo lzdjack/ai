@@ -12,9 +12,9 @@ STYLE = '''
 .root{display:block;background:var(--wall)}
 .top{position:absolute;left:32px;right:32px;top:22px;display:flex;align-items:center;gap:12px}
 .wz{position:absolute;left:120px;right:120px;top:80px;bottom:36px;border-radius:30px;display:flex;overflow:hidden}
-.sl{width:300px;flex:none;padding:30px 26px 24px;border-right:1px solid var(--hair);background:color-mix(in srgb,var(--text) 2.5%,transparent);display:flex;flex-direction:column}
-.st2{display:flex;gap:14px;position:relative;padding-bottom:22px}
-.st2:not(:last-child)::after{content:"";position:absolute;left:12.5px;top:30px;bottom:4px;width:1.5px;background:var(--hair)}
+.sl{width:300px;flex:none;padding:24px 24px 20px;border-right:1px solid var(--hair);background:color-mix(in srgb,var(--text) 2.5%,transparent);display:flex;flex-direction:column}
+.st2{display:flex;gap:13px;position:relative;padding-bottom:15px}
+.st2:not(:last-child)::after{content:"";position:absolute;left:12.5px;top:28px;bottom:3px;width:1.5px;background:var(--hair)}
 .st2.done::after{background:color-mix(in srgb,var(--green) 55%,transparent)}
 .sc2{width:26px;height:26px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:800}
 .done .sc2{background:var(--green);color:#fff}
@@ -83,10 +83,11 @@ STEPS = [
     ("环境与账号", "测试、线上各自的地址和账号", "3 个环境 · 7 个账号"),
     ("工单来源", "Jira / Tita 收哪些单", "Jira OKR · Tita OKR"),
     ("Skills", "编码和验证规则", "3 个 Skills"),
-    ("发布配置", "可选，之后再填也行", "已跳过，之后再填"),
+    ("扩展模块", "默认推荐 + 模块市场按需装", "发布流水线 · 紧急回滚"),
+    ("发布与回滚配置", "按已选模块展开，可先跳过", "已跳过，之后再填"),
     ("检查并开工", "Bot 把条件实际跑一遍", ""),
 ]
-SKIPPED = {6}
+SKIPPED = {7}
 
 
 def sidebar(cur):
@@ -207,7 +208,7 @@ def page(cur, title, sub, inner, nxt=None, skip=True, prev=True, foot=None):
     <div class="f12 t3">第一次使用</div>
     <div style="font-size:21px;font-weight:800;margin-top:4px">把项目准备好</div>
     <div class="f12 t2" style="margin-top:6px;line-height:1.55">填完后 Bot 会实际跑一遍检查，<br>都通过才开始接单</div>
-    <div style="margin-top:28px">{sidebar(cur)}</div>
+    <div style="margin-top:18px">{sidebar(cur)}</div>
     <div class="grow"></div>
     <div class="row f12 t3" style="margin-bottom:8px"><span class="grow">第 {cur} 步，共 {len(STEPS)} 步</span><span>已完成 {done} 步</span></div>
     <div class="pbar"><i style="width:{pct}%"></i></div>

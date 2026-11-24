@@ -855,7 +855,9 @@ def p_skills():
 # 11. 设置 · 项目（= 开工准备：每项配置的当前值 + Bot 实测，点「改」打开对应编辑面板）
 # =====================================================================
 # 设置左菜单（所有设置页共用一份）
-SET_NAV = [("spark", "linear-gradient(160deg,#C58BFF,#6A3DF0)", "全局 AI", ""), ("layers", "linear-gradient(160deg,#5AA0FF,#1F6FFF)", "项目", "4"),
+SET_NAV = [("spark", "linear-gradient(160deg,#C58BFF,#6A3DF0)", "全局 AI", ""),
+           ("server", "linear-gradient(155deg,#34D399,#059669)", "执行器", "2"),
+           ("layers", "linear-gradient(160deg,#5AA0FF,#1F6FFF)", "项目", "4"),
            ("inbox", "linear-gradient(160deg,#4FD6E6,#16A3C0)", "来源采集", "!"), ("users", "linear-gradient(160deg,#5EDB7A,#28B04F)", "成员与身份", "1"),
            ("key", "linear-gradient(160deg,#FFC15A,#F08A00)", "我的账号", ""), ("bell", "linear-gradient(160deg,#FF8A7A,#E0281E)", "通知", "")]
 
@@ -2027,6 +2029,92 @@ def p_acctneed():
     return base + '<!--OVERLAY-->' + dlg
 
 
+def p_runners():
+    """设置 · 执行器（跳过首次选择后的补配入口 + 随时切换本机 / 自有服务器 / 云端 Pro）。"""
+    nav = SET_NAV
+    nv = "".join(f'<div class="sn{" on" if n=="执行器" else ""}"><span class="si" style="background:{bg}">{I(ic,14,2)}</span>{n}<em{" style=\"color:var(--orange)\"" if e=="!" else ""}>{e}</em></div>' for ic, bg, n, e in nav)
+    left = f'''<section class="glass pn" style="width:240px;flex:none;padding:16px 4px 10px">
+  <div class="row" style="padding:0 14px 6px"><span class="f18 w7">设置</span></div>{nv}
+</section>'''
+
+    def rcard(bg, ic, name, badges, meta, sub, status, stc, actions, active=False):
+        bds = "".join(f'<span class="tag tg-{c}">{t}</span>' for t, c in badges)
+        sty = ' style="padding:14px 16px;box-shadow:0 0 0 1.5px color-mix(in srgb,var(--blue) 45%,transparent)"' if active else ' style="padding:14px 16px"'
+        return f'''<div class="card"{sty}>
+  <div class="row g12" style="align-items:flex-start">
+    <span class="ic-box" style="width:38px;height:38px;border-radius:11px;background:{bg};flex:none">{I(ic,18,2)}</span>
+    <div class="col grow" style="min-width:0;gap:4px">
+      <div class="row g8"><span class="f15 w7">{name}</span>{bds}<span class="grow"></span><span class="row g6 f12 w6" style="color:var(--{stc})"><span class="dot" style="width:7px;height:7px;color:var(--{stc})"></span>{status}</span></div>
+      <div class="f12 t2">{meta}</div>
+      <div class="row g10" style="margin-top:6px;padding-top:8px;border-top:1px solid var(--hair)">
+        <span class="f12 t3 grow ell">{sub}</span>{actions}
+      </div>
+    </div>
+  </div>
+</div>'''
+
+    c1 = rcard(
+        "linear-gradient(145deg,#34D399,#059669)", "server",
+        "shanghai-ci-01", [("团队服务器", "g"), ("默认优先", "b")],
+        "Linux x64 · 4C 8G · 出站 WSS 延迟 14ms · 并发修单 1 / 2 · v1.4.0",
+        "全团队共用 · 代码与构建 100% 留在公司内网，关电脑也能通宵修单",
+        "在线 · 忙碌中", "green",
+        f'<span class="btn2 sm a-sec" style="background:var(--fill)">看日志</span><span class="btn2 sm a-sec" style="background:var(--fill)">解绑</span>',
+        active=True,
+    )
+    c2 = rcard(
+        "linear-gradient(145deg,#38BDF8,#2563EB)", "monitor",
+        "MacBook Pro · 本机执行器", [("个人免费", "b"), ("免 Docker", "n")],
+        "macOS arm64 · 复用本机 Chrome 131 · 仅自己可见 · 无需额外服务器",
+        "已就绪 · 团队服务器全忙或离线时自动顶上，也可一键设为主用",
+        "在线 · 待命", "green",
+        f'<span class="btn2 sm a-sec" style="background:var(--fill)">设为主用</span><span class="btn2 sm a-sec" style="background:var(--fill)">重检环境</span>',
+    )
+    c3 = rcard(
+        "linear-gradient(145deg,#A855F7,#6366F1)", "globe",
+        "云端托管算力池", [("Pro", "p"), ("24h 在线", "n")],
+        "华东上海节点 · 4C 8G 独占容器 · 免下载免维护 · 合盖关机持续修单",
+        "未开通 · 适合无自有服务器且希望离机自动修复的个人或小团队",
+        "未开通", "text-3",
+        f'<span class="btn2 sm a-pri">去开通 / 绑兑换码 ›</span>',
+    )
+
+    main = f'''<main class="glass pn grow" style="min-width:0">
+<header class="thead"><div class="row g10"><div class="col grow"><h1>执行器</h1><div class="f12 t3" style="margin-top:2px">管理云匠干活的算力节点 · 首次跳过选择或日后换机器都在这里随时配</div></div>
+  <span class="btn2 a-sec" style="background:var(--fill)">{I("refresh",13)}刷新状态</span>
+  <span class="btn2 a-pri">{I("plus",14,2.4)}添加执行器</span></div></header>
+<div class="col g12 grow" style="padding:14px 22px;min-height:0;overflow:hidden">
+  <div class="card row g12" style="padding:11px 16px;background:color-mix(in srgb,var(--blue) 7%,var(--glass-2))">
+    <span class="ic-box" style="width:30px;height:30px;border-radius:9px;background:var(--blue)">{I("zap",15,2)}</span>
+    <div class="col grow" style="min-width:0;gap:2px"><span class="f13 w7">调度策略：团队服务器优先 → 本机电脑兜底</span><span class="f12 t2">全部执行器离线时，新单自动排队并在 PC / 手机提示上线；连上后自动续修</span></div>
+    <span class="btn2 sm a-sec" style="background:var(--glass-2)">切换策略</span>
+  </div>
+  {c1}
+  {c2}
+  {c3}
+  <div class="row g8 f12 t3" style="padding:2px 4px">{I("shield",13)}<span>点击右上角「添加执行器」可随时重新打开三选一向导（本机 / 自有服务器 / 云端 Pro）；跳过首次配置进入工作台后也由此处补配。</span></div>
+</div>
+</main>'''
+
+    def slot_row(lbl, val, pct, col):
+        return f'''<div style="margin-top:9px"><div class="row f12"><span class="t2 grow">{lbl}</span><span class="mono w6" style="color:var(--{col})">{val}</span></div>
+  <div style="height:5px;border-radius:3px;background:var(--fill);margin-top:4px;overflow:hidden"><div style="width:{pct}%;height:100%;border-radius:3px;background:var(--{col})"></div></div></div>'''
+
+    right = aside(
+        f'''<div class="card" style="padding:12px 14px"><div class="row"><span class="mini grow" style="margin:0">实时资源槽 · 4C 8G</span><span class="tag tg-g">健康</span></div>
+  {slot_row("并发修单槽", "1 / 2", 50, "teal")}
+  {slot_row("浏览器沙箱槽", "1 / 1 · 活跃", 100, "blue")}
+  {slot_row("构建打包槽", "0 / 1 · 空闲", 0, "green")}
+  {slot_row("视频转码槽", "0 / 1 · 空闲", 0, "green")}
+  <div class="f11 t3" style="margin-top:10px;line-height:1.5">浏览器空闲 2 分钟自动休眠释放内存；打包与发布共用构建槽且发布优先。</div></div>''',
+        f'''<div class="card" style="padding:12px 14px"><div class="mini">快速挂载新服务器</div>
+  <div class="f12 t2" style="line-height:1.55">在任意 Linux / macOS 服务器跑一行命令即可自动扩容算力池，纯出站 WSS 零入站端口。</div>
+  <button class="abtn a-sec" style="width:100%;justify-content:center;height:34px;margin-top:10px;background:var(--fill)">{I("terminal",13)}获取一行安装命令</button></div>''',
+        f'''<div class="card" style="padding:12px 14px"><div class="mini">切换机器会丢数据吗？</div>
+  <div class="f12 t2" style="line-height:1.6">不会。工单、项目配置、Skills、会话树与证据全部持久化在云端，执行器纯无状态，随时换机或重装 <b>0 丢数</b>。</div></div>''')
+    return left + main + right
+
+
 PAGES = {
     "ai": ("AI 助手", "ai", p_ai()),
     "code": ("代码改动", "chat", p_code()),
@@ -2047,6 +2135,7 @@ PAGES = {
     "skimport": ("Skills · 导入", "sk", p_skimport()),
     "settings": ("设置 · 项目", "set", p_settings()),
     "aiset": ("设置 · 全局 AI", "set", p_aiset()),
+    "runners": ("设置 · 执行器", "set", p_runners()),
     "source": ("设置 · 来源采集", "set", p_source()),
     "members": ("设置 · 成员与身份", "set", p_members()),
     "notify": ("设置 · 通知", "set", p_notify()),
