@@ -423,6 +423,112 @@ html.dark .drw{{background:rgba(34,36,50,.96)}}
 </div>'''
     p2_pick = p2.replace('</div><script src="icons.js">', PICK_DRW + '</div><script src="icons.js">', 1)
 
+    # ---------------- 2-tune 点击「微调 ›」右侧抽屉 ----------------
+    TUNE_DRW = f'''<style>
+.scr{{position:fixed;inset:0;z-index:30;background:rgba(15,20,40,.28);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}}
+html.dark .scr{{background:rgba(0,0,0,.48)}}
+.drw{{position:fixed;z-index:31;top:24px;right:24px;bottom:24px;width:640px;border-radius:26px;display:flex;flex-direction:column;overflow:hidden;
+  background:rgba(255,255,255,.96);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);box-shadow:0 30px 80px -20px rgba(10,20,60,.45),0 0 0 1px var(--stroke)}}
+html.dark .drw{{background:rgba(34,36,50,.96)}}
+.drw .dh{{display:flex;gap:12px;align-items:center;padding:18px 24px 14px;border-bottom:1px solid var(--hair)}}
+.drw .db{{flex:1;display:flex;flex-direction:column;gap:13px;padding:16px 24px;min-height:0;overflow:hidden}}
+.drw .df{{display:flex;align-items:center;gap:10px;padding:14px 24px;border-top:1px solid var(--hair)}}
+.xb{{width:32px;height:32px;border-radius:50%;background:var(--fill);display:flex;align-items:center;justify-content:center;color:var(--text-2);flex:none}}
+.ic3{{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:#fff;flex:none;font-size:13px;font-weight:800}}
+.flab{{font-size:12.5px;font-weight:700;color:var(--text-2);margin-bottom:6px;display:flex;align-items:center;gap:6px}}
+.flab .rst{{margin-left:auto;font-weight:600;color:var(--blue);font-size:11.5px}}
+.dinp{{height:38px;border-radius:11px;background:var(--fill);display:flex;align-items:center;gap:8px;padding:0 12px;font-size:13px;color:var(--text);min-width:0}}
+.dinp.ov{{background:var(--glass-2);border:1.5px solid color-mix(in srgb,var(--blue) 55%,transparent)}}
+.tsec{{border-radius:15px;padding:12px 14px;background:var(--fill);display:flex;flex-direction:column;gap:10px}}
+.tsec-h{{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--text)}}
+.aid2{{display:inline-flex;align-items:center;gap:3px;height:18px;padding:0 6px;border-radius:5px;font-size:10.5px;font-weight:600;color:var(--purple);background:color-mix(in srgb,var(--purple) 13%,transparent)}}
+.ov2{{display:inline-flex;align-items:center;gap:3px;height:18px;padding:0 6px;border-radius:5px;font-size:10.5px;font-weight:600;color:var(--blue);background:color-mix(in srgb,var(--blue) 13%,transparent)}}
+</style>
+<div class="scr"></div>
+<div class="drw">
+  <div class="dh">
+    <span class="ic3" style="background:linear-gradient(155deg,#5AA0FF,#1F6FFF)">OKR</span>
+    <div class="grow" style="min-width:0">
+      <div class="row g8"><span style="font-size:17px;font-weight:800">微调仓库配置</span><span class="tag tg-g" style="height:20px;font-size:11px">可修改</span></div>
+      <div class="f12 t3 mono ell" style="margin-top:2px">公司 GitLab · fe/tita-okr-web · 探测于 10:20</div>
+    </div>
+    <span class="xb">{I("x",16,2.2)}</span>
+  </div>
+  <div class="db">
+    <!-- 1. 归属项目与权限 -->
+    <div class="tsec">
+      <div class="tsec-h"><span>归属项目</span><span class="f11 t3" style="font-weight:400">支持多仓并入同一平级项目；修单时 Bot 自动路由</span></div>
+      <div class="row g10">
+        <div class="grow">
+          <div class="flab">项目名称<span class="aid2">{I("spark",10)}AI 推测</span></div>
+          <div class="dinp" style="background:var(--glass-2)"><span>OKR · 目标管理</span><span class="grow"></span>{I("chevd",13,st="color:var(--text-3)")}</div>
+        </div>
+        <div style="width:188px;flex:none">
+          <div class="flab">权限模式</div>
+          <div class="dinp" style="background:var(--glass-2);color:var(--green);font-weight:600">{I("edit",13)}<span class="grow">可修改（推 fix/）</span>{I("chevd",13,st="color:var(--text-3)")}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. 分支与试构建覆盖 -->
+    <div class="tsec">
+      <div class="tsec-h"><span>分支与试构建命令</span><span class="f11 t3" style="font-weight:400">人工覆盖项标蓝，后续重探测不冲掉</span><span class="rst" style="margin-left:auto;font-size:11.5px;color:var(--blue);font-weight:600">恢复全部 AI 推测</span></div>
+      <div class="row g10">
+        <div class="grow">
+          <div class="flab">主干分支<span class="aid2">{I("spark",10)}默认分支</span></div>
+          <div class="dinp" style="background:var(--glass-2)"><span class="mono grow">master</span>{I("chevd",13,st="color:var(--text-3)")}</div>
+        </div>
+        <div class="grow">
+          <div class="flab">测试分支<span class="aid2">{I("spark",10)}命中 dev-*</span></div>
+          <div class="dinp" style="background:var(--glass-2)"><span class="mono grow">dev-okr</span>{I("chevd",13,st="color:var(--text-3)")}</div>
+        </div>
+      </div>
+      <div class="row g10">
+        <div style="width:150px;flex:none">
+          <div class="flab">包管理器<span class="aid2">lockfile</span></div>
+          <div class="dinp" style="background:var(--glass-2)"><span class="mono grow">pnpm</span>{I("chevd",13,st="color:var(--text-3)")}</div>
+        </div>
+        <div class="grow">
+          <div class="flab">试构建命令（不上传产物）<span class="ov2">已人工覆盖</span><span class="rst">还原推测</span></div>
+          <div class="dinp ov"><span class="mono grow">pnpm build-prod --no-sourcemap</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. 代码规范与 MR 审核人 -->
+    <div class="tsec">
+      <div class="tsec-h"><span>代码规范与默认 MR 审核人</span></div>
+      <div class="row g8 f12 t2" style="padding:7px 10px;border-radius:10px;background:var(--glass-2)">
+        {I("file",14,st="color:var(--purple)")}
+        <span class="grow ell">自动读取仓库根目录 <span class="mono">AGENTS.md</span> 与 <span class="mono">.eslintrc.cjs</span>，并启用内置「最小改动修复」</span>
+        <span class="tag tg-g" style="height:19px;font-size:10.5px">已生效</span>
+      </div>
+      <div class="row g10">
+        <div class="grow">
+          <div class="flab">合入测试分支审核人</div>
+          <div class="dinp" style="background:var(--glass-2)"><span class="grow">工单修复人（默认）</span>{I("chevd",13,st="color:var(--text-3)")}</div>
+        </div>
+        <div class="grow">
+          <div class="flab">合回主干分支审核人</div>
+          <div class="dinp" style="background:var(--glass-2)"><span class="grow">林某（项目负责人）</span>{I("chevd",13,st="color:var(--text-3)")}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g8 f12" style="padding:9px 12px;border-radius:12px;background:color-mix(in srgb,var(--green) 10%,transparent);color:var(--green)">
+      {I("check",14,2.8)}
+      <span class="grow">上次试构建通过 · <span class="mono">pnpm build-prod</span> · 3 分 12 秒（修改命令后建议重新试构建）</span>
+    </div>
+  </div>
+  <div class="df">
+    <button class="bigb secb" style="height:40px">取消</button>
+    <span class="grow"></span>
+    <button class="bigb secb" style="height:40px;background:var(--glass-2);border:1px solid var(--stroke)">仅保存</button>
+    <button class="bigb pri" style="height:40px">{I("zap",14)}保存并试构建</button>
+  </div>
+</div>'''
+    p2_tune = p2.replace('</div><script src="icons.js">', TUNE_DRW + '</div><script src="icons.js">', 1)
+
     # ---------------- 4 AI 体检并开工 ----------------
     def c(st, t, r):
         bg = {"ok": "var(--green)", "wn": "var(--orange)", "sk": "color-mix(in srgb,var(--text) 25%,transparent)"}[st]
@@ -464,7 +570,7 @@ html.dark .drw{{background:rgba(34,36,50,.96)}}
     p4 = page(4, "AI 自动体检通过，可以开工了", "拉代码、推测构建、只读权限隔离、环境试登录全部真实跑通，不是只看表单填没填",
               s4, foot=foot4, why=why4)
 
-    return {"1": p1, "1-new": p1_new, "2": p2, "2-pick": p2_pick, "4": p4}
+    return {"1": p1, "1-new": p1_new, "2": p2, "2-pick": p2_pick, "2-tune": p2_tune, "4": p4}
 
 
 def ai_step(page, CHECK):
