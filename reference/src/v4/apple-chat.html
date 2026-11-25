@@ -3,12 +3,13 @@
 <head>
 <meta charset="utf-8">
 <title>对话流 · 苹果毛玻璃</title>
+<link rel="stylesheet" href="../../../tokens/components.css">
 <link rel="stylesheet" href="../v3/base.css">
 <link rel="stylesheet" href="apple.css">
 <style>
 .grp{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--text-3);padding:12px 10px 4px}
 .th{display:flex;gap:10px;padding:9px 10px;border-radius:14px;align-items:center}
-.th.on{background:var(--glass-2);box-shadow:0 0 0 2px var(--blue)}
+.th.on{background:var(--glass-2);box-shadow:0 0 0 2px var(--focus-ring)}
 .th .t{font-size:13.5px;font-weight:600;line-height:1.35}
 .th .d{font-size:12px;color:var(--text-3);margin-top:1px}
 .sic{position:relative;width:34px;height:34px;border-radius:10px;font-size:9.5px;flex:none}
@@ -31,7 +32,7 @@
 .nb{position:relative;width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;color:var(--text-2)}
 .nb.on{background:color-mix(in srgb,var(--blue) 15%,transparent);color:var(--ink-blue)}
 .bd2{position:absolute;top:5px;right:5px;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:var(--btn-danger-bg);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px var(--glass-2)}
-.qs{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:15px;font-size:12.5px;color:var(--text-2);background:var(--glass);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);border:1px solid var(--stroke);white-space:nowrap}
+.qs{display:inline-flex;align-items:center;gap:6px;height:var(--ctl-xs);padding:0 12px;border-radius:15px;font-size:12.5px;color:var(--text-2);background:var(--glass);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);border:1px solid var(--stroke);white-space:nowrap}
 
 .v1,.v2,.v3,.v3nav{display:none}
 html[data-v="1"] .v0,html[data-v="2"] .v0,html[data-v="3"] .v0{display:none}
@@ -44,12 +45,12 @@ html[data-v="3"] .v3nav{display:flex}html[data-v="3"] .topsearch{display:none}ht
 .sparkle{width:30px;height:30px;border-radius:50%;background:conic-gradient(from 180deg,#5E8BFF,#B157F0,#FF6FB5,#FFB547,#5E8BFF);color:#fff;display:flex;align-items:center;justify-content:center;flex:none}
 .ib{position:relative;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.72)}
 .ib.on{background:rgba(255,255,255,.14);color:#fff}
-.ib b,.fc b{position:absolute;top:2px;right:0;min-width:15px;height:15px;padding:0 4px;border-radius:8px;background:#FF3B30;color:#fff;font-size:9.5px;display:flex;align-items:center;justify-content:center}
+.ib b,.fc b{position:absolute;top:2px;right:0;min-width:15px;height:15px;padding:0 4px;border-radius:8px;background:var(--btn-danger-bg);color:#fff;font-size:9.5px;display:flex;align-items:center;justify-content:center}
 .fan{position:absolute;z-index:6;width:0;height:0}
 .fi{position:absolute;left:-32px;top:-32px}
 .fc{position:relative;width:64px;height:64px;border-radius:50%;flex-direction:column;gap:2px;background:var(--glass-2);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);border:1px solid var(--stroke);box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;color:var(--text)}
 .fc em{font-style:normal;font-size:10.5px;font-weight:600;color:var(--text-2)}
-.scrim2{position:absolute;inset:0;z-index:4;background:radial-gradient(700px 520px at 365px 847px,rgba(20,22,40,.0),rgba(20,22,40,.14))}
+.scrim2{position:absolute;inset:0;z-index:var(--z-scrim);background:radial-gradient(700px 520px at 365px 847px,rgba(20,22,40,.0),rgba(20,22,40,.14))}
 .glow{position:absolute;inset:4px 30px;border-radius:40px;background:linear-gradient(90deg,#5E8BFF,#B157F0,#FF6FB5,#FFB547,#5E8BFF);filter:blur(22px);opacity:.55}
 .glowline{position:relative;padding:2px;border-radius:35px;background:linear-gradient(90deg,#5E8BFF,#B157F0,#FF6FB5,#FFB547,#40C8E0)}
 .launcher{width:46px;height:46px;border-radius:50%;background:conic-gradient(from 200deg,#5E8BFF,#B157F0,#FF6FB5,#FFB547,#5E8BFF);color:#fff;display:flex;align-items:center;justify-content:center;flex:none;box-shadow:0 6px 16px -6px rgba(94,139,255,.8)}
@@ -105,7 +106,7 @@ html.rl .panels{left:110px!important}
 .rb6.on{color:var(--ink-blue)!important;font-weight:600;background:var(--glass-2)!important;box-shadow:0 1px 0 rgba(255,255,255,.6) inset,0 6px 16px -8px rgba(30,60,140,.35)!important}
 .rb6.on .g7{color:var(--ink-blue)}.rb6.on .g7 .du{fill-opacity:.22}
 .rb6.on::before{content:"";position:absolute;left:-7px;top:18px;bottom:18px;width:3px;border-radius:2px;background:var(--blue);box-shadow:0 0 8px var(--blue)}
-.rb7 .g7{color:color-mix(in srgb,var(--red) 80%,var(--text-2))}
+.rb7 .g7{color:color-mix(in srgb,var(--ink-red) 80%,var(--text-2))}
 .rb6 b{top:5px!important;right:9px!important;min-width:15px!important;height:15px!important;font-size:9.5px!important;padding:0 4px!important}
 .ai7{height:66px!important}
 .orb7{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative;
@@ -131,17 +132,16 @@ html.rl .panels{left:104px!important}
 .ap-mkt{background:linear-gradient(155deg,#34D399 0%,#14B8A6 52%,#0284C7 100%)}
 .ap-set{background:linear-gradient(160deg,#A9AEB8 0%,#6E737D 100%)}
 html.dark .ap-chat{background:linear-gradient(180deg,#3A4157,#262B3C)}
-.dk7>b{position:absolute;top:-4px;right:-5px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:#FF3B30;color:#fff;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 3px rgba(0,0,0,.25);z-index:2}
+.dk7>b{position:absolute;top:-4px;right:-5px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--btn-danger-bg);color:#fff;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 3px rgba(0,0,0,.25);z-index:2}
 .dk7.on::before{content:"";position:absolute;left:-10px;top:50%;width:5px;height:5px;margin-top:-2.5px;border-radius:50%;background:var(--text);opacity:.75}
 .dk7.on .ap7{box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 0 0 2.5px var(--glass-2),0 0 0 4.5px color-mix(in srgb,var(--blue) 70%,transparent),0 8px 18px -6px rgba(0,0,0,.4)}
 .dk7.hov .ap7{transform:scale(1.08)}
 .tip7{position:absolute;left:60px;top:50%;transform:translateY(-50%);white-space:nowrap;height:30px;padding:0 12px;border-radius:9px;display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;color:var(--text);
-  background:var(--glass-2);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);box-shadow:0 0 0 .5px var(--hair),0 8px 24px -8px rgba(0,0,0,.35);z-index:5}
+  background:var(--glass-overlay)!important;backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);box-shadow:0 0 0 .5px var(--hair),0 8px 24px -8px rgba(0,0,0,.35);z-index:var(--z-tooltip)}
 .tip7 em{font-style:normal;font-weight:400;color:var(--text-3);font-size:11.5px}
 .tip7::before{content:"";position:absolute;left:-5px;top:50%;width:10px;height:10px;margin-top:-5px;transform:rotate(45deg);background:inherit;box-shadow:-.5px .5px 0 var(--hair)}
 .sep7{width:28px!important;margin:2px 0!important}
 .rail6{z-index:20!important}
-.tip7{background:rgba(255,255,255,.98)!important}html.dark .tip7{background:rgba(44,48,66,.96)!important}
 .dk7.on .ap7{box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -1px 1px rgba(0,0,0,.12),0 6px 14px -6px rgba(0,0,0,.4)!important}
 .ap-chat svg{width:30px;height:30px}
 .dk7.on::before{left:-11px!important;width:6px!important;height:6px!important;margin-top:-3px!important;background:var(--blue)!important;opacity:1!important;box-shadow:0 0 6px var(--blue)}
@@ -160,7 +160,7 @@ html.rl .tt8{display:flex;align-items:baseline;gap:10px;font-size:15px;font-weig
 .it8 .du{fill:currentColor;fill-opacity:0}
 .it8.on{background:color-mix(in srgb,var(--blue) 13%,transparent);color:var(--ink-blue)}
 .it8.on .du{fill-opacity:.22}
-.it8.rb8{color:color-mix(in srgb,var(--red) 75%,var(--text-2))}
+.it8.rb8{color:color-mix(in srgb,var(--ink-red) 75%,var(--text-2))}
 .it8>b{position:absolute;top:5px;right:5px;min-width:15px;height:15px;padding:0 4px;border-radius:8px;background:var(--btn-danger-bg);color:#fff;font-size:9.5px;font-weight:600;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px var(--glass-2)}
 .ai8{background:linear-gradient(135deg,color-mix(in srgb,#4F8BFF 12%,transparent),color-mix(in srgb,#FF5FA8 12%,transparent))}
 /* ===== 左侧三款 ===== */
@@ -207,8 +207,7 @@ html[data-v="10"] .dk7>b{top:-5px;right:-6px;box-shadow:0 0 0 2px var(--glass-2)
 .lg10 .spk{position:absolute;right:6px;top:6px;opacity:.95}
 .tt10{display:flex;flex-direction:column;line-height:1.15}
 .tt10 b{font-family:"Hiragino Sans GB","PingFang SC",sans-serif;font-size:17.5px;font-weight:600;letter-spacing:1.4px}
-.tt10 em{font-style:normal;font-family:"Optima","Avenir Next",sans-serif;font-size:11px;font-weight:700;margin-top:2px;letter-spacing:1.8px;text-transform:uppercase;background:linear-gradient(90deg,#2563EB,#6D28D9);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-html.dark .tt10 em{background:linear-gradient(90deg,#7DD3FC,#C4B5FD);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.tt10 em{font-style:normal;font-family:"Optima","Avenir Next",sans-serif;font-size:11px;font-weight:700;margin-top:2px;letter-spacing:1.8px;text-transform:uppercase;background:var(--brand-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .bot10{align-items:center;gap:6px}
 /* 列表 */
 .g10h{display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--text-3);padding:14px 10px 6px;letter-spacing:.3px}
@@ -216,7 +215,7 @@ html.dark .tt10 em{background:linear-gradient(90deg,#7DD3FC,#C4B5FD);-webkit-bac
 .g10h.red{color:var(--ink-red)}.g10h.red span{background:color-mix(in srgb,var(--red) 14%,transparent);color:var(--ink-red)}
 .r10{display:flex;gap:11px;padding:10px 10px;border-radius:14px;align-items:flex-start;position:relative}
 .r10+.r10::after{content:"";position:absolute;left:53px;right:10px;top:0;height:1px;background:var(--hair)}
-.r10.on{background:linear-gradient(180deg,#3B8BFF,#1F6FFF);box-shadow:0 8px 18px -10px rgba(31,111,255,.9),inset 0 1px 0 rgba(255,255,255,.25)}
+.r10.on{background:linear-gradient(180deg,var(--btn-pri-bg),var(--btn-pri-active));box-shadow:0 8px 18px -10px color-mix(in srgb,var(--btn-pri-bg) 88%,transparent),inset 0 1px 0 rgba(255,255,255,.25)}
 .r10.on::after,.r10.on+.r10::after{display:none}
 .si10{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;margin-top:1px}
 .si10 .gl{font-size:15px;font-weight:800;line-height:1}
@@ -225,14 +224,13 @@ html.dark .tt10 em{background:linear-gradient(90deg,#7DD3FC,#C4B5FD);-webkit-bac
 .s-run{background:color-mix(in srgb,var(--teal) 16%,transparent);color:var(--ink-teal)}
 .s-ok{background:color-mix(in srgb,var(--green) 16%,transparent);color:var(--ink-green)}
 .s-err{background:color-mix(in srgb,var(--red) 14%,transparent);color:var(--ink-red)}
-.r10.on .si10{background:rgba(255,255,255,.95);color:#1F6FFF}
+.r10.on .si10{background:rgba(255,255,255,.95);color:var(--btn-pri-bg)}
 .t10{font-size:13.5px;font-weight:600;line-height:1.3}
 .tm10{font-size:11px;color:var(--text-3);flex:none}
 .d10{font-size:12px;color:var(--text-3)}
 .sc10{flex:none;height:16px;padding:0 5px;border-radius:5px;font-size:10px;font-weight:700;display:inline-flex;align-items:center;letter-spacing:.2px}
-.sc-t{background:color-mix(in srgb,#2F6BFF 13%,transparent);color:#2F6BFF}
-.sc-j{background:color-mix(in srgb,#0C66E4 10%,transparent);color:#0B5BD3;box-shadow:inset 0 0 0 1px color-mix(in srgb,#0C66E4 25%,transparent)}
-html.dark .sc-t{color:#7FA7FF}html.dark .sc-j{color:#6FA8FF}
+.sc-t{background:color-mix(in srgb,var(--blue) 13%,transparent);color:var(--ink-blue)}
+.sc-j{background:color-mix(in srgb,var(--blue) 10%,transparent);color:var(--ink-blue);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--blue) 26%,transparent)}
 .r10.on .t10,.r10.on .tm10,.r10.on .d10{color:#fff!important}.r10.on .tm10,.r10.on .d10{opacity:.85}
 .r10.on .sc10{background:rgba(255,255,255,.22);color:#fff;box-shadow:none}
 .ud10{width:8px;height:8px;border-radius:50%;background:var(--blue);flex:none}
@@ -307,7 +305,7 @@ html[data-ic="2"] .s-ok{background:linear-gradient(160deg,#5EDB7A,#28B04F)}
 html[data-ic="2"] .s-err{background:linear-gradient(160deg,#FF7A70,#E5372C)}
 html[data-ic="2"] .si10 svg{width:14px;height:14px}
 html[data-ic="2"] .si10 .gl{font-size:14px}
-html[data-ic="2"] .r10.on .si10{background:#fff!important;color:#1F6FFF!important}
+html[data-ic="2"] .r10.on .si10{background:#fff!important;color:var(--btn-pri-bg)!important}
 /* ic3 提单人头像 + 状态点 */
 html[data-ic="3"] .si10{background:none!important;position:relative;width:34px;height:34px}
 html[data-ic="3"] .si10>i,html[data-ic="3"] .si10>.gl,html[data-ic="3"] .si10>svg{display:none}
@@ -332,7 +330,7 @@ html[data-ic="1"] .r10+.r10::after,html[data-ic="3"] .r10+.r10::after{left:55px}
   <div class="row tbar7" style="height:64px;padding:0 26px;gap:16px;position:relative;z-index:2">
     <div class="row g8" style="width:330px"><span class="tlx7"><span class="tl" style="background:#FF5F57"></span><span class="tl" style="background:#FEBC2E"></span><span class="tl" style="background:#28C840"></span></span><span class="br10"><span class="lg10"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7.2L3.6 12 8 16.8"/><path d="M16 7.2l4.4 4.8-4.4 4.8" opacity=".6"/><path d="M9.6 12.3l1.8 1.8 3.2-4"/></svg><svg class="spk" width="11" height="11" viewBox="0 0 24 24" fill="#fff"><path d="M12 1l2.6 8.4L23 12l-8.4 2.6L12 23l-2.6-8.4L1 12l8.4-2.6z"/></svg></span><svg class="hsp" width="18" height="18" viewBox="0 0 24 24"><defs><linearGradient id="hsg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4F8BFF"/><stop offset=".55" stop-color="#9B5CFF"/><stop offset="1" stop-color="#FF5FA8"/></linearGradient></defs><path fill="url(#hsg)" d="M10 2.5l2 6 6 2-6 2-2 6-2-6-6-2 6-2z"/><path fill="url(#hsg)" d="M18.5 14l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9z"/></svg><span class="tt10"><b>云匠</b><em>CloudCraft</em></span><span class="crumb"><i>/</i>对话<i>/</i><span class="mono">TK-20871</span></span></span><span class="lgT"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 7.5L4 12l4.5 4.5"/><path d="M15.5 7.5L20 12l-4.5 4.5"/><path d="M10.3 12.4l1.5 1.5 2.6-3.4"/></svg></span><span class="tt8">云匠<em>Bot 在线 3</em></span></div>
     <div class="grow row v6ai" style="justify-content:center">
-      <div class="glass row g10" style="width:540px;height:40px;padding:0 8px 0 8px;border-radius:13px;box-shadow:none">
+      <div class="row g10" style="width:540px;height:var(--ctl-lg);padding:0 8px;border-radius:var(--r-lg);background:var(--well);border:1px solid var(--hair);box-shadow:none">
         <span style="width:26px;height:26px;border-radius:8px;background:conic-gradient(from 200deg,#5E8BFF,#B157F0,#FF6FB5,#FFB547,#5E8BFF);color:#fff;display:flex;align-items:center;justify-content:center;flex:none"><i data-i="spark" data-s="14"></i></span>
         <span class="f13 w7" style="flex:none">全局 AI</span>
         <span class="f13 t3 grow ell">问所有工单、发布、收单情况，或搜索…</span>
@@ -350,16 +348,16 @@ html[data-ic="1"] .r10+.r10::after,html[data-ic="3"] .r10+.r10::after{left:55px}
       <span class="tx on">对话 <em>4</em></span><span class="tx">发布 <em style="color:var(--ink-red)">1</em></span><span class="tx">紧急回滚</span><span class="tx">Skills</span><span class="tx">设置</span>
     </div>
     <div class="grow row v3nav" style="justify-content:center">
-      <div class="seg glass" style="box-shadow:none">
+      <div class="seg">
         <span class="on"><i data-i="msg" data-s="14"></i>对话<span class="c">4</span></span><span><i data-i="rocket" data-s="14"></i>发布<span class="c" style="color:var(--ink-red)">1</span></span><span style="color:var(--ink-red)"><i data-i="undo" data-s="14"></i>紧急回滚</span><span><i data-i="book" data-s="14"></i>Skills</span><span><i data-i="settings" data-s="14"></i>设置</span>
       </div>
     </div>
     <div class="grow row topsearch" style="justify-content:center">
-      <div class="glass row g8" style="width:440px;height:36px;padding:0 12px;border-radius:11px;box-shadow:none;color:var(--text-3)"><i data-i="search" data-s="15"></i><span class="f13 grow">搜索工单、MR、发布记录</span><span class="kbd" style="border-color:var(--hair)">⌘F</span></div>
+      <div class="row g8" style="width:440px;height:var(--ctl-md);padding:0 12px;border-radius:var(--r-md);background:var(--well);border:1px solid var(--hair);box-shadow:none;color:var(--text-3)"><i data-i="search" data-s="15"></i><span class="f13 grow">搜索工单、MR、发布记录</span><span class="kbd" style="border-color:var(--hair)">⌘F</span></div>
     </div>
     <div class="row g8" style="width:330px;justify-content:flex-end">
-      <span class="pill glass srcp bot10" style="box-shadow:none;color:var(--text-2)"><i data-i="bot" data-s="13"></i>3 个 Bot 在线</span><span class="pill glass srcp" style="box-shadow:none;color:var(--text-2)"><span class="dot" style="width:7px;height:7px;color:var(--green)"></span>Jira · 2 分钟前</span>
-      <span class="pill glass srcp" style="box-shadow:none;color:var(--orange)"><span class="dot" style="width:7px;height:7px"></span>Tita 采集失败 · 重试中</span>
+      <span class="pill glass srcp bot10" style="box-shadow:none;color:var(--text-2)"><i data-i="bot" data-s="13"></i>3 个 Bot 在线</span><span class="pill glass srcp" style="box-shadow:none;color:var(--text-2)"><span class="dot" style="width:7px;height:7px;background:var(--green)"></span>Jira · 2 分钟前</span>
+      <span class="pill glass srcp" style="box-shadow:none;color:var(--ink-orange)"><span class="dot" style="width:7px;height:7px;background:var(--orange)"></span>Tita 采集失败 · 重试中</span>
       <span class="sicon glass"><i data-i="search" data-s="16"></i></span>
       <span class="av" style="width:34px;height:34px;font-size:13px;background:linear-gradient(160deg,#FFC9A8,#F08F7A);color:#5A2414">林</span>
     </div>
@@ -369,7 +367,7 @@ html[data-ic="1"] .r10+.r10::after,html[data-ic="3"] .r10+.r10::after{left:55px}
 
     <!-- 左：工单 -->
     <section class="glass panel col list10" style="width:300px;flex:none;padding:16px 10px 10px;border-radius:24px;overflow:hidden">
-      <div class="row g8" style="padding:0 8px 2px"><span class="f18 w7">工单</span><span class="f13 t3">8</span><span style="width:24px;height:24px;border-radius:7px;background:var(--btn-pri-bg);color:#fff;display:inline-flex;align-items:center;justify-content:center;flex:none" title="手动新建工单"><i data-i="plus" data-s="13" data-w="2.6"></i></span><span class="grow"></span><div class="seg" style="padding:2px"><span class="on" style="height:24px;padding:0 10px;font-size:12px">我的</span><span style="height:24px;padding:0 10px;font-size:12px">全部</span></div></div>
+      <div class="row g8" style="padding:0 8px 2px"><span class="f18 w7">工单</span><span class="f13 t3">8</span><span style="width:24px;height:24px;border-radius:7px;background:var(--btn-pri-bg);color:#fff;display:inline-flex;align-items:center;justify-content:center;flex:none" title="手动新建工单"><i data-i="plus" data-s="13" data-w="2.6"></i></span><span class="grow"></span><div class="cc-seg cc-seg-xs"><span class="on">我的</span><span>全部</span></div></div>
       <div class="g10h">等你决定<span>2</span></div>
       <div class="r10 on"><span class="bar10" style="background:var(--blue)"></span><span class="si10 s-rev"><i data-i="review" data-s="15" data-w="2.4"></i><svg class="rg10" width="34" height="34" viewBox="0 0 34 34"><circle cx="17" cy="17" r="13" fill="none" stroke="currentColor" stroke-opacity=".18" stroke-width="3"/><circle cx="17" cy="17" r="13" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-dasharray="81.7" stroke-dashoffset="0.0" transform="rotate(-90 17 17)"/></svg><b class="rl10">T</b><span class="av10" style="background:linear-gradient(150deg,#7FB2FF,#4C7DF0)">王芳</span><span class="sd10" style="background:var(--blue)"></span></span><div class="grow" style="min-width:0"><div class="row g6"><span class="t10 ell grow">点击分组后界面卡住</span><span class="tm10">8 分钟</span></div><div class="row g6" style="margin-top:3px"><span class="sc10 sc-t">Tita</span><span class="d10 ell" >第 2 轮交付 · 验证 3/4</span></div></div></div>
       <div class="r10 "><span class="bar10" style="background:var(--orange)"></span><span class="si10 s-warn"><b class="gl">!</b><svg class="rg10" width="34" height="34" viewBox="0 0 34 34"><circle cx="17" cy="17" r="13" fill="none" stroke="currentColor" stroke-opacity=".18" stroke-width="3"/><circle cx="17" cy="17" r="13" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-dasharray="81.7" stroke-dashoffset="36.8" transform="rotate(-90 17 17)"/></svg><b class="rl10">J</b><span class="av10" style="background:linear-gradient(150deg,#FFC38A,#F08A5D)">陈晨</span><span class="sd10" style="background:var(--orange)"></span></span><div class="grow" style="min-width:0"><div class="row g6"><span class="t10 ell grow">进度条切换周期不刷新</span><span class="ud10"></span></div><div class="row g6" style="margin-top:3px"><span class="sc10 sc-j">Jira</span><span class="d10 ell" >验证受阻：账号进不去页面</span></div></div></div>
@@ -384,7 +382,7 @@ html[data-ic="1"] .r10+.r10::after,html[data-ic="3"] .r10+.r10::after{left:55px}
       <div class="r10 "><span class="bar10" style="background:var(--red)"></span><span class="si10 s-err"><b class="gl">!</b><svg class="rg10" width="34" height="34" viewBox="0 0 34 34"><circle cx="17" cy="17" r="13" fill="none" stroke="currentColor" stroke-opacity=".18" stroke-width="3"/><circle cx="17" cy="17" r="13" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-dasharray="81.7" stroke-dashoffset="0.0" transform="rotate(-90 17 17)"/></svg><b class="rl10">J</b><span class="av10" style="background:linear-gradient(150deg,#C7CBD4,#9298A6)">OKR</span><span class="sd10" style="background:var(--red)"></span></span><div class="grow" style="min-width:0"><div class="row g6"><span class="t10 ell grow">OKR-3320 已收单</span></div><div class="row g6" style="margin-top:3px"><span class="sc10 sc-j">Jira</span><span class="d10 ell" style="color:var(--ink-red)">无法确定真人修复人</span></div></div></div>
     </section>
     <section class="glass panel col list8" style="width:292px;flex:none;padding:14px 8px;border-radius:24px;overflow:hidden">
-      <div class="row" style="padding:0 10px 4px"><span class="f18 w7 grow">工单</span><div class="seg" style="padding:2px"><span class="on" style="height:24px;padding:0 10px;font-size:12px">我的</span><span style="height:24px;padding:0 10px;font-size:12px">全部</span></div></div>
+      <div class="row" style="padding:0 10px 4px"><span class="f18 w7 grow">工单</span><div class="cc-seg cc-seg-xs"><span class="on">我的</span><span>全部</span></div></div>
 
       <div class="grp">等你决定<span style="color:var(--ink-blue)">2</span></div>
       <div class="th on"><span class="appic ic-tita sic">TITA<span class="st" style="background:var(--blue)"><i data-i="review" data-s="9" data-w="3"></i></span></span><div class="grow" style="min-width:0"><div class="t ell">点击分组后界面卡住</div><div class="d ell">第 2 轮交付 · 验证 3/4</div></div><span class="f11 t3">8分</span></div>
@@ -430,10 +428,10 @@ html[data-ic="1"] .r10+.r10::after,html[data-ic="3"] .r10+.r10::after{left:55px}
           <span class="botav"><i data-i="bot" data-s="16"></i></span>
           <div class="col g10 grow" style="min-width:0">
             <div class="row g14 wrap" style="padding:8px 12px;border-radius:12px;background:var(--fill)">
-              <span class="stp"><span class="ck" style="background:var(--green)"><i data-i="check" data-s="10" data-w="3"></i></span>复现</span>
-              <span class="stp"><span class="ck" style="background:var(--green)"><i data-i="check" data-s="10" data-w="3"></i></span>定位</span>
-              <span class="stp"><span class="ck" style="background:var(--green)"><i data-i="check" data-s="10" data-w="3"></i></span>改代码</span>
-              <span class="stp"><span class="ck" style="background:var(--green)"><i data-i="check" data-s="10" data-w="3"></i></span>浏览器验证</span>
+              <span class="stp"><span class="ck" style="background:var(--btn-ok-bg)"><i data-i="check" data-s="10" data-w="3"></i></span>复现</span>
+              <span class="stp"><span class="ck" style="background:var(--btn-ok-bg)"><i data-i="check" data-s="10" data-w="3"></i></span>定位</span>
+              <span class="stp"><span class="ck" style="background:var(--btn-ok-bg)"><i data-i="check" data-s="10" data-w="3"></i></span>改代码</span>
+              <span class="stp"><span class="ck" style="background:var(--btn-ok-bg)"><i data-i="check" data-s="10" data-w="3"></i></span>浏览器验证</span>
               <span class="grow"></span><span class="f12 t3">用时 42 分钟 · 展开过程 ›</span>
             </div>
 
@@ -445,30 +443,30 @@ html[data-ic="1"] .r10+.r10::after,html[data-ic="3"] .r10+.r10::after{left:55px}
                 <div class="col g6" style="width:222px;flex:none"><div class="shot" data-s="after" style="height:140px;box-shadow:0 0 0 2px var(--green)"></div><span class="f11 t3">修复后复测 · <span style="color:var(--ink-blue)">未查阅</span></span></div>
                 <div class="col g6 grow" style="min-width:0">
                   <span class="f11 t3 ell">测试环境 · 2.18.0-fix.2 · 普通员工</span>
-                  <div class="stp" style="color:var(--text)"><span class="ck" style="background:var(--green)"><i data-i="check" data-s="10" data-w="3"></i></span>进入发起审批</div>
-                  <div class="stp" style="color:var(--text)"><span class="ck" style="background:var(--green)"><i data-i="check" data-s="10" data-w="3"></i></span>点击分组 1、2、3</div>
-                  <div class="stp" style="color:var(--text)"><span class="ck" style="background:var(--green)"><i data-i="check" data-s="10" data-w="3"></i></span>仍可选择审批人</div>
-                  <div class="stp" style="color:var(--ink-orange)"><span class="ck" style="background:var(--orange)">!</span>管理员未测·缺账号</div>
+                  <div class="stp" style="color:var(--text)"><span class="ck" style="background:var(--btn-ok-bg)"><i data-i="check" data-s="10" data-w="3"></i></span>进入发起审批</div>
+                  <div class="stp" style="color:var(--text)"><span class="ck" style="background:var(--btn-ok-bg)"><i data-i="check" data-s="10" data-w="3"></i></span>点击分组 1、2、3</div>
+                  <div class="stp" style="color:var(--text)"><span class="ck" style="background:var(--btn-ok-bg)"><i data-i="check" data-s="10" data-w="3"></i></span>仍可选择审批人</div>
+                  <div class="stp" style="color:var(--ink-orange)"><span class="ck" style="background:color-mix(in srgb,var(--orange) 18%,transparent);color:var(--ink-orange);font-weight:800">!</span>管理员未测·缺账号</div>
                 </div>
               </div>
               <div class="row g10" style="margin-top:12px;padding-top:12px;border-top:1px solid var(--hair)">
                 <i data-i="git" data-s="15" style="color:var(--text-3)"></i><span class="f13">3 个文件 <span style="color:var(--ink-green)">+38</span> <span style="color:var(--ink-red)">−12</span></span><span class="f12 t3">MR !482</span>
                 <span class="grow"></span>
-                <span class="chip2" style="height:24px;font-size:11.5px">编码 · 复用表单组件 v3</span><span class="chip2" style="height:24px;font-size:11.5px">验证 · 页面交互回归 v1</span>
+                <span class="cc-pill">编码 · 复用表单组件 v3</span><span class="cc-pill">验证 · 页面交互回归 v1</span>
               </div>
             </div>
 
             <div class="row g10 reviewrow">
               <span class="f12 t3">审核对象 <span class="mono" style="color:var(--text)">a3f9c21</span></span>
               <span class="grow"></span>
-              <button class="abtn a-red" style="height:36px"><i data-i="undo" data-s="14"></i>打回并说明原因</button>
-              <button class="abtn a-pri" style="height:36px;padding:0 22px"><i data-i="check" data-s="15" data-w="2.6"></i>审核通过 a3f9c21</button>
+              <button class="cc-btn cc-btn-red"><i data-i="undo" data-s="14"></i>打回并说明原因</button>
+              <button class="cc-btn cc-btn-pri" style="padding:0 20px"><i data-i="check" data-s="15" data-w="2.6"></i>审核通过 a3f9c21</button>
             </div>
           </div>
         </div>
       </div>
       <div class="incomp6">
-        <div class="row g10" style="height:52px;padding:0 6px 0 8px;border-radius:16px;background:var(--glass-2);border:1px solid var(--stroke);box-shadow:0 4px 14px -8px rgba(0,0,0,.25)">
+        <div class="row g10" style="height:52px;padding:0 6px 0 8px;border-radius:16px;background:var(--glass-2);border:1px solid var(--border-ctl);box-shadow:0 4px 14px -8px rgba(0,0,0,.25)">
           <span class="row g6" style="height:36px;padding:0 10px 0 6px;border-radius:11px;background:color-mix(in srgb,var(--purple) 12%,transparent);flex:none">
             <span style="width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,#5E8BFF,#B157F0);color:#fff;display:flex;align-items:center;justify-content:center"><i data-i="spark" data-s="13"></i></span>
             <span class="f13 w7">本单 AI</span><span class="f12 t3 mono">TK-20871</span>
@@ -479,10 +477,10 @@ html[data-ic="1"] .r10+.r10::after,html[data-ic="3"] .r10+.r10::after{left:55px}
         </div>
       </div>
       <div class="incomp">
-        <div class="row g10" style="height:50px;padding:0 6px 0 14px;border-radius:16px;background:var(--glass-2);border:1px solid var(--stroke);box-shadow:0 4px 14px -8px rgba(0,0,0,.25)">
+        <div class="row g10" style="height:50px;padding:0 6px 0 14px;border-radius:16px;background:var(--glass-2);border:1px solid var(--border-ctl);box-shadow:0 4px 14px -8px rgba(0,0,0,.25)">
           <i data-i="paperclip" data-s="17" style="color:var(--text-3)"></i>
           <span class="f14 t3 grow">回复 Bot-01… <span style="opacity:.7">试试「用管理员再测一次」</span></span>
-          <span class="row g4 f12 t2" style="height:30px;padding:0 10px;border-radius:9px;background:var(--fill)"><i data-i="bot" data-s="13"></i>Bot<i data-i="chevd" data-s="12"></i></span>
+          <span class="cc-select cc-select-sm"><i data-i="bot" data-s="13"></i><span class="cc-sel-val">Bot</span><span class="cc-sel-sp"></span><span class="cc-sel-caret"><i data-i="chevd" data-s="13"></i></span></span>
           <span style="width:38px;height:38px;border-radius:11px;background:var(--btn-pri-bg);color:#fff;display:flex;align-items:center;justify-content:center"><i data-i="arrowup" data-s="17" data-w="2.4"></i></span>
         </div>
       </div>
@@ -507,7 +505,7 @@ html[data-ic="1"] .r10+.r10::after,html[data-ic="3"] .r10+.r10::after{left:55px}
         <div class="kv2"><span class="t2">代码审核</span><span class="pill p-blue" style="height:22px">等你</span></div>
         <div class="kv2"><span class="t2">发布 · 复测</span><span class="f12 t3">通过后可发测试</span></div>
         <div class="kv2"><span class="t2">原平台确认</span><span class="f12 t3">未确认</span></div>
-        <div class="row g8" style="padding:8px 0 4px"><button class="abtn a-sec grow" style="height:32px;font-size:12.5px;justify-content:center">我已在原单确认</button><button class="abtn a-sec" style="height:32px;padding:0 10px" aria-label="打开原单"><i data-i="ext" data-s="14"></i></button></div>
+        <div class="row g8" style="padding:8px 0 4px"><button class="cc-btn cc-btn-sm cc-btn-sec grow" style="justify-content:center">我已在原单确认</button><button class="cc-btn cc-btn-sm cc-btn-sec" style="padding:0 10px" aria-label="打开原单"><i data-i="ext" data-s="14"></i></button></div>
       </div>
     </aside>
   </div>
@@ -528,10 +526,10 @@ html[data-ic="1"] .r10+.r10::after,html[data-ic="3"] .r10+.r10::after{left:55px}
     <span class="nb" title="Skills"><i data-i="book" data-s="21"></i></span>
     <span class="nb" title="设置"><i data-i="settings" data-s="21"></i></span>
     <span class="dvd" style="margin:0 6px;height:32px"></span>
-    <div class="row g8" style="width:600px;height:48px;padding:0 6px 0 6px;border-radius:15px;background:var(--glass-2);border:1px solid var(--stroke)">
-      <span class="row g6" style="height:36px;padding:0 10px 0 6px;border-radius:11px;background:var(--fill);flex:none">
+    <div class="row g8" style="width:600px;height:48px;padding:0 6px;border-radius:15px;background:var(--glass-2);border:1px solid var(--border-ctl)">
+      <span class="cc-select" style="padding:0 10px 0 6px;flex:none">
         <span style="width:24px;height:24px;border-radius:7px;background:linear-gradient(160deg,#5E8BFF,#B157F0);color:#fff;display:flex;align-items:center;justify-content:center"><i data-i="bot" data-s="14"></i></span>
-        <span class="f13 w6">Bot-01</span><i data-i="chevd" data-s="13" style="color:var(--text-3)"></i>
+        <span class="cc-sel-val">Bot-01</span><span class="cc-sel-caret"><i data-i="chevd" data-s="13"></i></span>
       </span>
       <span class="f14 t3 grow ell">回复 Bot，补充资料或说明…</span>
       <span class="f12 t3" style="padding:3px 8px;border-radius:7px;background:var(--fill);flex:none">TK-20871</span>
@@ -568,8 +566,8 @@ html[data-ic="1"] .r10+.r10::after,html[data-ic="3"] .r10+.r10::after{left:55px}
   <div class="sbar">
     <span class="row g8"><span class="ring" style="width:16px;height:16px"><span style="width:10px;height:10px;border-radius:50%;background:var(--glass-2)"></span></span>Bot-01 正在复测 TK-20871 · 管理员 · 72%</span>
     <span class="grow"></span>
-    <span class="row g6"><span class="dot" style="width:6px;height:6px;color:var(--green)"></span>Jira 2 分钟前</span>
-    <span class="row g6" style="color:var(--orange)"><span class="dot" style="width:6px;height:6px"></span>Tita 采集失败 · 重试中</span>
+    <span class="row g6"><span class="dot" style="width:6px;height:6px;background:var(--green)"></span>Jira 2 分钟前</span>
+    <span class="row g6" style="color:var(--ink-orange)"><span class="dot" style="width:6px;height:6px;background:var(--orange)"></span>Tita 采集失败 · 重试中</span>
     <span>3 个任务进行中</span>
   </div>
 
@@ -578,8 +576,8 @@ html[data-ic="1"] .r10+.r10::after,html[data-ic="3"] .r10+.r10::after{left:55px}
     <div class="glass row g12" style="position:absolute;left:50%;transform:translateX(-50%);bottom:98px;width:600px;border-radius:24px;padding:14px 14px 14px 16px;z-index:6">
       <span style="width:40px;height:40px;border-radius:50%;background:var(--btn-ok-bg);color:#fff;display:flex;align-items:center;justify-content:center;flex:none;box-shadow:0 0 0 5px color-mix(in srgb,var(--green) 22%,transparent)"><i data-i="check" data-s="20" data-w="2.8"></i></span>
       <div class="col grow" style="min-width:0"><span class="f14 w7">复测完成 · 管理员角色也没问题</span><span class="f12 t2 ell">TK-20871 切换分组 1→3 都能继续操作，证据已补到第 2 轮</span></div>
-      <button class="abtn a-sec" style="height:36px;font-size:13px">查看</button>
-      <button class="abtn a-pri" style="height:36px;font-size:13px">现在通过</button>
+      <button class="cc-btn cc-btn-sec">查看</button>
+      <button class="cc-btn cc-btn-pri">现在通过</button>
     </div>
     <div class="island">
       <span class="ring"><span class="ring-in"><i data-i="bot" data-s="17"></i></span></span>
@@ -614,7 +612,7 @@ html[data-ic="1"] .r10+.r10::after,html[data-ic="3"] .r10+.r10::after{left:55px}
           <span class="f15" style="color:var(--text)">用管理员再测<span style="color:var(--text-3)">一次，重点看第二个分组</span></span>
           <span class="kbd" style="border-color:var(--hair)">Tab</span>
           <span class="grow"></span>
-          <span class="row g6 f12 t2" style="height:32px;padding:0 10px;border-radius:16px;background:var(--fill)"><i data-i="bot" data-s="13"></i>回复 Bot · TK-20871<i data-i="chevd" data-s="12"></i></span>
+          <span class="cc-select cc-select-sm"><i data-i="bot" data-s="13"></i><span class="cc-sel-val">回复 Bot · TK-20871</span><span class="cc-sel-sp"></span><span class="cc-sel-caret"><i data-i="chevd" data-s="13"></i></span></span>
           <span style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#5E8BFF,#B157F0);color:#fff;display:flex;align-items:center;justify-content:center"><i data-i="arrowup" data-s="19" data-w="2.4"></i></span>
         </div>
       </div>
@@ -630,7 +628,7 @@ html[data-ic="1"] .r10+.r10::after,html[data-ic="3"] .r10+.r10::after{left:55px}
       <span class="tile" style="width:170px;background:color-mix(in srgb,var(--red) 10%,var(--glass-2))"><span class="row g6 f15 w7" style="color:var(--ink-red)"><i data-i="undo" data-s="16"></i>打回</span><span class="f12 t2">写明原因，可附代码行</span><span class="key">B</span></span>
       <span class="tile" style="width:170px;opacity:.5"><span class="row g6 f15 w7"><i data-i="rocket" data-s="16"></i>发测试环境</span><span class="f12 t2">审核通过后可用</span></span>
       <span class="dvd" style="height:52px;margin:0 4px"></span>
-      <div class="row g8" style="width:250px;height:52px;padding:0 6px 0 14px;border-radius:16px;background:var(--fill)"><span class="f13 t3 grow">或者直接说…</span><span style="width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#5E8BFF,#B157F0);color:#fff;display:flex;align-items:center;justify-content:center"><i data-i="spark" data-s="16"></i></span></div>
+      <div class="row g8" style="width:250px;height:52px;padding:0 6px 0 14px;border-radius:16px;background:var(--well);border:1px solid var(--hair)"><span class="f13 t3 grow">或者直接说…</span><span style="width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#5E8BFF,#B157F0);color:#fff;display:flex;align-items:center;justify-content:center"><i data-i="spark" data-s="16"></i></span></div>
     </div>
   </div>
 </div>

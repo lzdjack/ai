@@ -33,7 +33,7 @@ TOPBAR = f'''<div class="tbar">
   <div class="grow row" style="justify-content:center"><div class="glass tsearch">{I("search",15)}<span class="f13 grow">搜索工单、MR、发布记录</span><span class="kbd" style="border-color:var(--hair)">⌘F</span></div></div>
   <div class="tright">
     <span class="pill glass tpill">{I("bot",13)}3 个 Bot 在线</span>
-    <span class="pill glass tpill"><span class="dot" style="width:7px;height:7px;color:var(--green)"></span>Jira · 2 分钟前</span>
+    <span class="pill glass tpill"><span class="dot" style="width:7px;height:7px;background:var(--green)"></span>Jira · 2 分钟前</span>
     <span class="pill glass tpill" style="color:var(--ink-orange)"><span class="dot" style="width:7px;height:7px;background:var(--orange)"></span>Tita 采集失败 · 重试中</span>
     <span class="av" style="width:34px;height:34px;font-size:13px;background:linear-gradient(160deg,#FFC9A8,#F08F7A);color:#5A2414">林</span>
   </div>
@@ -85,7 +85,7 @@ def trow(t, on=False, right_override=None):
 
 def ticket_list(sel="20871"):
     h = ['<section class="glass pn" style="width:300px;flex:none;padding:16px 10px 10px">',
-         f'<div class="row g8" style="padding:0 8px 2px"><span class="f18 w7">工单</span><span class="f13 t3">8</span><span style="width:24px;height:24px;border-radius:7px;background:var(--btn-pri-bg);color:#fff;display:inline-flex;align-items:center;justify-content:center;flex:none" title="手动新建工单">{I("plus",13,2.6)}</span><span class="grow"></span><div class="seg" style="padding:2px"><span class="on" style="height:24px;padding:0 10px;font-size:12px">我的</span><span style="height:24px;padding:0 10px;font-size:12px">全部</span></div></div>']
+         f'<div class="row g8" style="padding:0 8px 2px"><span class="f18 w7">工单</span><span class="f13 t3">8</span><span style="width:24px;height:24px;border-radius:7px;background:var(--btn-pri-bg);color:#fff;display:inline-flex;align-items:center;justify-content:center;flex:none" title="手动新建工单">{I("plus",13,2.6)}</span><span class="grow"></span><div class="cc-seg cc-seg-xs"><span class="on">我的</span><span>全部</span></div></div>']
     for g, cls, rows in TICKETS:
         h.append(f'<div class="g10h{" " + cls if cls else ""}">{g}<span>{len(rows)}</span></div>')
         h += [trow(t, t[0] == sel, "" if t[0] == sel and t[7].startswith("dot") else None) for t in rows]

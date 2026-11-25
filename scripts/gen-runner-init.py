@@ -199,17 +199,17 @@ html.dark .island{
   display:flex;flex-direction:column;align-items:center;gap:12px;z-index:2;
 }
 .ghost-btn{
-  height:var(--ctl-lg);padding:0 24px;border-radius:99px;
+  height:var(--ctl-lg);padding:0 24px;border-radius:var(--r-lg);
   display:inline-flex;align-items:center;gap:8px;
   font-size:13.5px;font-weight:600;color:var(--text);
-  background:var(--glass);
+  background:var(--glass-2);
   backdrop-filter:blur(32px) saturate(180%);
   -webkit-backdrop-filter:blur(32px) saturate(180%);
-  border:1px solid var(--stroke);
-  box-shadow:0 12px 28px -12px rgba(20,30,70,.16),inset 0 1px 0 rgba(255,255,255,.55);
+  border:1px solid var(--border-ctl);
+  box-shadow:var(--shadow-ctl);
 }
 html.dark .ghost-btn{
-  box-shadow:0 14px 32px -10px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.14);
+  box-shadow:var(--shadow-ctl);
 }
 .sub-links{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--text-3)}
 .vbar{width:1px;height:11px;background:var(--hair);display:inline-block}

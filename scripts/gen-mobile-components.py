@@ -48,7 +48,7 @@ p1 = f'''
     {I("search",15,st="color:var(--text-3)")}
     <span class="grow">okr-web</span>
     <span class="cc-search-clear">{I("x",10,2.8)}</span>
-    <span class="cc-tag cc-tag-b" style="height:18px;font-size:10px">46pt</span>
+    <span class="cc-tag cc-tag-b" style="height:18px;font-size:11px">46pt</span>
   </div>
 
   <!-- OTP 聚焦输入（46px） + 错误态字段 -->
@@ -108,8 +108,8 @@ p1 = f'''
     <span class="cc-m-btn cc-m-btn-pri" style="flex:1.55">{CK}审核通过 a3f9c21</span>
   </div>
   <div class="row" style="gap:10px">
-    <span class="cc-m-btn cc-m-btn-glass" style="flex:1;height:40px;font-size:13px"><span class="cc-spinner cc-spinner-sm" style="color:var(--ink-blue)"></span>试连中…</span>
-    <span class="cc-m-btn cc-m-btn-ok" style="flex:1;height:40px;font-size:13px">{CK}复测通过</span>
+    <span class="cc-m-btn cc-m-btn-glass" style="flex:1;font-size:13px"><span class="cc-spinner cc-spinner-sm" style="color:var(--ink-blue)"></span>试连中…</span>
+    <span class="cc-m-btn cc-m-btn-ok" style="flex:1;font-size:13px">{CK}复测通过</span>
   </div>
 </div>
 '''
@@ -171,9 +171,9 @@ p2 = f'''
       {I("lock",14,2.2,st="margin-top:1px;flex:none")}
       <span><b>L2 高危改动（命中 auth/ 核心路径）</b><br>手机端已禁用 10 秒速过，请去 PC 端逐行审 Diff</span>
     </div>
-    <div class="row g8">
-      <span class="cc-m-btn cc-m-btn-locked" style="flex:1.15;height:40px;font-size:12.5px">{I("lock",13)}仅限 PC 审核</span>
-      <span class="cc-m-btn cc-m-btn-glass" style="flex:1;height:40px;font-size:12.5px;color:var(--ink-blue)">{I("ext",13)}发到 PC ›</span>
+    <div class="row" style="gap:8px">
+      <span class="cc-m-btn cc-m-btn-locked" style="flex:1.15;font-size:12.5px">{I("lock",13)}仅限 PC 审核</span>
+      <span class="cc-m-btn cc-m-btn-glass" style="flex:1;font-size:12.5px;color:var(--ink-blue)">{I("ext",13)}发到 PC ›</span>
     </div>
   </div>
 </div>
@@ -242,14 +242,14 @@ p3_sheet = f'''
     </div>
 
     <!-- 44pt 复选行 -->
-    <div class="row" style="gap:10px;min-height:40px">
+    <div class="row" style="gap:10px;min-height:var(--m-touch)">
       <span class="cc-m-checkbox is-checked">{CK}</span>
       <span class="f13 grow">下一轮使用管理员账号补跑验证</span>
     </div>
 
     <!-- 2 步竖向微时间线 -->
     <div class="cc-card-flat" style="padding:8px 11px;display:flex;flex-direction:column;gap:5px">
-      <div class="row g8 f12"><span class="ok2" style="background:var(--switch-on)">{I("check",9,3)}</span><span>附加代码位置 <span class="mono">GroupPicker.tsx:49</span></span></div>
+      <div class="row g8 f12"><span class="ok2" style="background:var(--btn-ok-bg)">{I("check",9,3)}</span><span>附加代码位置 <span class="mono">GroupPicker.tsx:49</span></span></div>
       <div class="row g8 f12 t2"><span class="cc-dot" style="background:var(--blue);margin:0 4px"></span><span>提交后立即通知 Bot-01 开始第 3 轮修复</span></div>
     </div>
 

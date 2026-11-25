@@ -56,7 +56,7 @@ p2=f'''<div class="phone"><div class="scr">{status}
 <div class="nav"><span class="bk"><i data-i="chevr" data-s="20" style="transform:rotate(180deg)"></i>工单</span><span class="grow" style="text-align:center;font-weight:600;font-size:15px">TK-20871</span><span class="nb2 glass"><i data-i="more" data-s="18"></i></span></div>
 <div class="pad" style="padding-top:4px">
   <div class="row g12" style="align-items:flex-start">
-    <span class="appic ic-tita" style="width:44px;height:44px;border-radius:12px;font-size:10px;font-weight:800">TITA</span>
+    <span class="appic ic-tita" style="width:44px;height:44px;border-radius:12px;font-size:11px;font-weight:800">TITA</span>
     <div class="grow"><div style="font-size:18px;font-weight:700;line-height:1.3">发起审批时点击分组，界面卡住</div>
     <div class="row g6" style="margin-top:6px;flex-wrap:wrap"><span class="tg" style="color:var(--ink-red);background:color-mix(in srgb,var(--red) 12%,transparent)">P1</span><span class="tg" style="color:var(--ink-blue);background:color-mix(in srgb,var(--blue) 12%,transparent)">待我审核 · 第 2 轮</span><span class="f12 t3">Bot-01</span></div></div>
   </div>
@@ -74,7 +74,7 @@ p2=f'''<div class="phone"><div class="scr">{status}
       <div class="col g4 grow" style="min-width:0"><div class="shw" style="box-shadow:0 0 0 2px var(--green)"><div class="shot" data-s="after" style="width:230px;height:150px"></div></div><span class="f11 t3">修复后 · <span style="color:var(--ink-blue);font-weight:600">未看</span></span></div>
     </div>
     <div class="chk"><span class="ok2">✓</span>进入发起审批<span class="ok2" style="margin-left:10px">✓</span>点击分组 1、2、3</div>
-    <div class="chk" style="color:var(--ink-orange)"><span class="ok2" style="background:var(--orange)">!</span>管理员角色未测 · 缺账号</div>
+    <div class="chk" style="color:var(--ink-orange)"><span class="ok2" style="background:color-mix(in srgb,var(--orange) 18%,transparent);color:var(--ink-orange)">!</span>管理员角色未测 · 缺账号</div>
     <div class="row g6 f12 t2" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--hair)"><i data-i="git" data-s="14"></i>3 个文件 <span style="color:var(--ink-green);font-weight:600">+38</span><span style="color:var(--ink-red);font-weight:600">−12</span><span class="grow"></span><span style="color:var(--ink-blue);font-weight:600">看改动 ›</span></div>
   </div>
 </div>

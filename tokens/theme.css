@@ -137,9 +137,9 @@ body{font-family:var(--font);color:var(--text);background:#000}
 .glass{background:var(--glass);backdrop-filter:var(--blur-panel);-webkit-backdrop-filter:var(--blur-panel);border:1px solid var(--stroke);box-shadow:var(--shadow)}
 .panel{border-radius:var(--r-panel)}
 .tl{width:12px;height:12px;border-radius:50%}
-.seg{display:flex;padding:3px;border-radius:12px;background:var(--fill);gap:2px}
-.seg span{height:30px;padding:0 14px;border-radius:9px;display:flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--text-2)}
-.seg span.on{background:var(--glass-2);color:var(--text);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.12),0 0 0 .5px rgba(0,0,0,.04)}
+.seg{display:flex;height:var(--ctl-md);align-items:center;padding:3px;border-radius:var(--r-md);background:var(--well);border:1px solid var(--hair);gap:2px}
+.seg span{height:100%;padding:0 12px;border-radius:7px;display:flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--text-2);white-space:nowrap}
+.seg span.on{background:var(--seg-thumb);color:var(--text);font-weight:600;box-shadow:var(--shadow-seg)}
 .seg .c{font-size:12px;color:var(--text-3)}
 .seg span.on .c{color:var(--ink-blue);font-weight:700}
 .pill{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border-radius:13px;font-size:12px;font-weight:600;white-space:nowrap}
@@ -153,7 +153,7 @@ body{font-family:var(--font);color:var(--text);background:#000}
 .ic-tita{background:linear-gradient(160deg,#5B8CFF,#2558E8)}
 .ic-jira{background:linear-gradient(160deg,#4FA3FF,#1D6FE0)}
 .row-it{display:flex;gap:12px;padding:12px;border-radius:16px;align-items:flex-start}
-.row-it.on{background:var(--glass-2);box-shadow:0 0 0 2px var(--blue),0 10px 24px -12px rgba(0,122,255,.5)}
+.row-it.on{background:var(--glass-2);box-shadow:0 0 0 2px var(--focus-ring),0 10px 24px -12px var(--focus-halo)}
 .sep{height:1px;background:var(--hair);margin:0 12px}
 .card{border-radius:18px;background:var(--glass-2);border:1px solid var(--stroke);padding:16px}
 .lbl{font-size:12px;font-weight:600;color:var(--text-3);text-transform:none}
@@ -166,12 +166,12 @@ body{font-family:var(--font);color:var(--text);background:#000}
 .a-red{background:color-mix(in srgb,var(--red) 12%,transparent);color:var(--ink-red)}
 .dock{position:absolute;left:50%;transform:translateX(-50%);bottom:18px;height:72px;padding:0 12px;border-radius:26px;display:flex;align-items:center;gap:10px;z-index:5}
 .dk{position:relative;width:48px;height:48px;border-radius:13px;display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 6px 14px -6px rgba(0,0,0,.4)}
-.dk .bd{position:absolute;top:-5px;right:-5px;min-width:20px;height:20px;padding:0 5px;border-radius:10px;background:#FF3B30;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px rgba(255,255,255,.6)}
+.dk .bd{position:absolute;top:-5px;right:-5px;min-width:20px;height:20px;padding:0 5px;border-radius:10px;background:var(--btn-danger-bg);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px var(--glass-2)}
 .dk .on{position:absolute;bottom:-9px;left:50%;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--text-2)}
 .dvd{width:1px;height:40px;background:var(--hair);margin:0 4px}
-.tab2{display:flex;padding:3px;border-radius:11px;background:var(--fill)}
-.tab2 span{height:28px;padding:0 14px;border-radius:8px;display:flex;align-items:center;gap:5px;font-size:13px;font-weight:500;color:var(--text-2)}
-.tab2 span.on{background:var(--glass-2);color:var(--text);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.tab2{display:flex;height:var(--ctl-md);align-items:center;padding:3px;border-radius:var(--r-md);background:var(--well);border:1px solid var(--hair);gap:2px}
+.tab2 span{height:100%;padding:0 12px;border-radius:7px;display:flex;align-items:center;gap:5px;font-size:13px;font-weight:500;color:var(--text-2);white-space:nowrap}
+.tab2 span.on{background:var(--seg-thumb);color:var(--text);font-weight:600;box-shadow:var(--shadow-seg)}
 .shot{border-radius:14px;border:1px solid var(--hair)}
 .mono{font-family:var(--font-mono)}
 

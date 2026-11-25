@@ -4,7 +4,7 @@
 <style>
 .root{display:block;background:var(--wall)}
 .top{position:absolute;left:32px;right:32px;top:22px;display:flex;align-items:center;gap:12px}
-.wz{position:absolute;left:120px;right:120px;top:80px;bottom:36px;border-radius:30px;display:flex;overflow:hidden}
+.wz{position:absolute;left:120px;right:120px;top:80px;bottom:36px;border-radius:var(--r-panel);display:flex;overflow:hidden}
 .sl{width:300px;flex:none;padding:26px 24px 22px;border-right:1px solid var(--hair);background:color-mix(in srgb,var(--text) 2.5%,transparent);display:flex;flex-direction:column}
 .st2{display:flex;gap:13px;position:relative;padding-bottom:20px}
 .st2:not(:last-child)::after{content:"";position:absolute;left:12.5px;top:28px;bottom:3px;width:1.5px;background:var(--hair)}
@@ -34,9 +34,9 @@
 .dots{letter-spacing:3px;font-size:15px}
 .okt{display:inline-flex;align-items:center;gap:5px;color:var(--ink-green);font-size:12.5px;font-weight:600;white-space:nowrap}
 .ing{display:inline-flex;align-items:center;gap:7px;color:var(--ink-blue);font-size:12.5px;font-weight:600;white-space:nowrap}
-.spin{width:13px;height:13px;border-radius:50%;border:2px solid color-mix(in srgb,var(--blue) 25%,transparent);border-top-color:var(--blue);flex:none}
+.spin{width:13px;height:13px;border-radius:50%;border:2px solid color-mix(in srgb,var(--blue) 25%,transparent);border-top-color:var(--ink-blue);flex:none}
 .rt{display:grid;grid-template-columns:140px 1fr 160px 128px 116px;gap:8px 10px;align-items:center}
-.au{background:transparent;border:1px solid var(--hair)}
+.au{background:transparent;border:1px dashed color-mix(in srgb,var(--text) 16%,transparent);color:var(--text-2)}
 .aut{flex:none;font-size:11px;font-weight:600;color:var(--ink-purple);background:color-mix(in srgb,var(--purple) 12%,transparent);height:20px;padding:0 6px;border-radius:6px;display:inline-flex;align-items:center}
 .cr{gap:8px;padding:0 10px;font-size:13px}
 .crt{flex:none;height:20px;padding:0 6px;border-radius:6px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;background:color-mix(in srgb,var(--text) 8%,transparent);color:var(--text-2)}
@@ -58,8 +58,8 @@
 .pri{background:var(--btn-pri-bg);color:#fff;box-shadow:0 10px 22px -10px color-mix(in srgb,var(--btn-pri-bg) 85%,transparent)}
 .secb{background:var(--fill);color:var(--text)}
 .note{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;color:var(--text-2);line-height:1.5;padding:9px 13px;border-radius:13px;background:color-mix(in srgb,var(--blue) 7%,transparent)}
-.pbar{height:4px;border-radius:2px;background:var(--fill);overflow:hidden}
-.pbar i{display:block;height:100%;border-radius:2px;background:linear-gradient(90deg,#4F8BFF,#9B5CFF)}
+.pbar{height:4px;border-radius:2px;background:var(--well);overflow:hidden}
+.pbar i{display:block;height:100%;border-radius:2px;background:linear-gradient(90deg,var(--blue),var(--purple))}
 </style></head><body><div class="root">
 <div class="top">
   <img src="logo.svg" width="40" height="40" alt="" style="margin:-4px">
@@ -74,7 +74,7 @@
     <div class="f12 t2" style="margin-top:6px;line-height:1.55">只填 AI 猜不出的鉴权与权限边界，<br>其余由 Bot 自动探测与匹配</div>
     <div style="margin-top:22px"><div class="st2 cur"><span class="sc2">1</span><div><b>连接 AI</b><em>全公司接一次，只有管理员看到</em></div></div><div class="st2 todo"><span class="sc2">2</span><div><b>连接器与鉴权</b><em>接代码平台、本机目录或工单源</em></div></div><div class="st2 todo"><span class="sc2">3</span><div><b>授权项目与代码</b><em>拉取仓库，划定可修改 / 仅查看</em></div></div><div class="st2 todo"><span class="sc2">4</span><div><b>环境与账号</b><em>复现入口与数据权限 · 可跳过</em></div></div><div class="st2 todo"><span class="sc2">5</span><div><b>AI 体检并开工</b><em>试拉取与构建，通过即开干</em></div></div></div>
     <div class="grow"></div>
-    <div class="why"><div class="wh"><i data-i="spark" data-s="13" style="color:var(--purple)"></i>管理员一次性配置</div>AI 引擎全工作空间共用，仅首次登录的管理员可见；其他团队成员登录后直接从「连接器与鉴权」开始。</div>
+    <div class="why"><div class="wh"><i data-i="spark" data-s="13" style="color:var(--ink-purple)"></i>管理员一次性配置</div>AI 引擎全工作空间共用，仅首次登录的管理员可见；其他团队成员登录后直接从「连接器与鉴权」开始。</div>
     <div class="row f12 t3" style="margin-bottom:8px"><span class="grow">第 1 步，共 5 步</span><span>已完成 0 步</span></div>
     <div class="pbar"><i style="width:20%"></i></div>
   </aside>
@@ -84,7 +84,7 @@
         <div class="grow"><div class="f12" style="color:var(--ink-blue);font-weight:700">第 1 步 · 连接 AI</div>
           <div style="font-size:24px;font-weight:800;margin-top:5px">先把工作空间的 AI 接上</div>
           <div class="f13 t2" style="margin-top:5px">全公司接一次，所有项目共用；后续想切外部 CLI 引擎（ACP / Claude Code / Codex），在插件市场安装即可</div></div>
-        <span class="chip2" style="align-self:flex-start"><i data-i="spark" data-s="13" style="color:var(--purple)"></i>不知道填什么？问 AI</span>
+        <span class="chip2" style="align-self:flex-start"><i data-i="spark" data-s="13" style="color:var(--ink-purple)"></i>不知道填什么？问 AI</span>
       </div>
 <style>
 .sech{display:flex;align-items:center;gap:8px;margin-top:18px;margin-bottom:9px}
@@ -102,7 +102,7 @@
 .qadd{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:nowrap}
 .qbtn{height:var(--ctl-sm);padding:0 11px;border-radius:var(--r-sm);background:var(--fill);border:1px solid var(--hair);display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--text-2);white-space:nowrap}
 .qdot{width:17px;height:17px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:800;flex:none}
-.stat-pill{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 10px;border-radius:9px;font-size:12px;font-weight:600;white-space:nowrap}
+.stat-pill{display:inline-flex;align-items:center;gap:6px;height:var(--ctl-xs);padding:0 10px;border-radius:var(--r-sm);font-size:12px;font-weight:600;white-space:nowrap}
 .sp-g{background:color-mix(in srgb,var(--green) 13%,transparent);color:var(--ink-green)}
 .sp-b{background:color-mix(in srgb,var(--blue) 13%,transparent);color:var(--ink-blue)}
 
@@ -139,11 +139,10 @@
 .ro-bdg{display:inline-flex;align-items:center;gap:3px;height:20px;padding:0 6px;border-radius:6px;font-size:11px;font-weight:600;color:var(--ink-blue);background:color-mix(in srgb,var(--blue) 12%,transparent);flex:none}
 .okchip{display:inline-flex;align-items:center;gap:3px;color:var(--ink-green);font-size:11.5px;font-weight:600;flex:none}
 .tune{font-size:12px;font-weight:600;color:var(--ink-blue);margin-left:auto;padding-left:6px;flex:none;white-space:nowrap}
-.pseg{display:inline-flex;padding:3px;border-radius:11px;background:color-mix(in srgb,var(--text) 6%,transparent);flex:none;gap:2px}
-.pseg span{height:28px;padding:0 11px;border-radius:8px;font-size:12px;font-weight:600;color:var(--text-3);display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.pseg{display:inline-flex;height:var(--ctl-md);align-items:center;padding:3px;border-radius:var(--r-md);background:var(--well);border:1px solid var(--hair);flex:none;gap:2px}
+.pseg span{height:100%;padding:0 11px;border-radius:7px;font-size:12px;font-weight:600;color:var(--text-2);display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
 .pseg span.s-ro{background:var(--btn-pri-bg);color:#fff;box-shadow:0 4px 12px -4px color-mix(in srgb,var(--btn-pri-bg) 85%,transparent)}
 .pseg span.s-rw{background:var(--btn-ok-bg);color:#fff;box-shadow:0 4px 12px -4px color-mix(in srgb,var(--btn-ok-bg) 85%,transparent)}
-html.dark .pseg{background:rgba(255,255,255,.07)}
 .rmb{width:28px;height:28px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;color:var(--text-3);background:transparent;flex:none}
 .pickbtn{height:var(--ctl-md);padding:0 13px;border-radius:var(--r-md);background:var(--btn-pri-bg);color:#fff;font-size:12.5px;font-weight:600;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex:none;box-shadow:0 6px 16px -8px color-mix(in srgb,var(--btn-pri-bg) 85%,transparent)}
 .pickmore{border-radius:14px;padding:11px 15px;border:1.5px dashed color-mix(in srgb,var(--text) 16%,transparent);display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--text-2)}
@@ -152,8 +151,8 @@ html.dark .pseg{background:rgba(255,255,255,.07)}
 .obx{border-radius:16px;padding:14px 16px;background:var(--fill)}
 .kv3{display:flex;align-items:center;gap:10px;margin-top:10px}
 .kv3>span:first-child{width:76px;white-space:nowrap;flex:none;font-size:12.5px;color:var(--text-3)}
-.kv3 .inp{height:38px;flex:1;font-size:13.5px}
-.kv3 .inp.sel{justify-content:space-between;background:var(--glass-2);border:1px solid var(--stroke)}
+.kv3 .inp{height:var(--ctl-lg);flex:1;font-size:13.5px}
+.kv3 .inp.sel{justify-content:space-between;background:var(--glass-2);border:1px solid var(--border-ctl);box-shadow:var(--shadow-ctl)}
 .chk3{display:flex;align-items:center;gap:12px;padding:8px 0;border-top:1px solid var(--hair);font-size:13.5px}
 .chk3:first-child{border-top:0}
 .ck3{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;flex:none}
@@ -164,11 +163,11 @@ html.dark .pseg{background:rgba(255,255,255,.07)}
         <div class="kv3" style="margin-top:12px"><span>AI 引擎</span><div class="cc-select cc-select-lg grow"><span style="width:7px;height:7px;border-radius:50%;background:var(--purple);flex:none"></span><span class="cc-sel-val">Pi</span><span class="cc-sel-sub">默认内置 · 多模型</span><span class="cc-sel-caret"><i data-i="chevd" data-s="13"></i></span></div></div>
         <div class="kv3" style="margin-top:12px"><span>主力模型</span><div class="cc-select cc-select-lg grow"><span style="width:7px;height:7px;border-radius:50%;background:var(--green);flex:none"></span><span class="cc-sel-val mono">gpt-6.2-sol</span><span class="cc-sel-sub">公司网关 · 深度推理与多文件修单</span><span class="cc-sel-caret"><i data-i="chevd" data-s="13"></i></span></div></div>
         <div class="kv3" style="margin-top:12px"><span>快速模型</span><div class="cc-select cc-select-lg grow"><span class="cc-sel-val mono">gpt-6.2-mini</span><span class="cc-sel-sub">报错解读 / 翻译 / 轻问答</span><span class="cc-sel-caret"><i data-i="chevd" data-s="13"></i></span></div></div>
-        <div class="kv3" style="margin-top:12px"><span>连接方式</span><div class="seg" style="flex:1"><span class="on" style="flex:1;justify-content:center">公司网关</span><span style="flex:1;justify-content:center">API Key</span></div></div>
+        <div class="kv3" style="margin-top:12px"><span>连接方式</span><div class="cc-seg cc-seg-lg" style="flex:1;display:flex"><span class="on" style="flex:1">公司网关</span><span style="flex:1">API Key</span></div></div>
         <div class="kv3" style="margin-top:12px"><span>网关地址</span><div class="cc-input cc-input-lg grow"><span class="mono f12">https://ai-gateway.tita.cloud</span></div></div>
         <div class="kv3" style="margin-top:12px"><span>访问令牌</span><div class="cc-input cc-input-lg grow"><span class="mono f12">•••••••••••••••• 3f9a</span></div></div>
         <div class="row g10" style="margin:16px 0 0 86px">
-          <button class="btn2 a-sec" style="background:var(--glass-2)"><i data-i="zap" data-s="14"></i>试一下</button>
+          <button class="cc-btn cc-btn-glass"><i data-i="zap" data-s="14"></i>试一下</button>
           <span class="okt"><i data-i="check" data-s="14" data-w="3"></i>已连通 · Bot-02 实际调用了一次（1.2 秒），4 项模型能力探测完成</span>
         </div>
       </div>

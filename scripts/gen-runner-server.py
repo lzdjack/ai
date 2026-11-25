@@ -10,7 +10,7 @@ OUT = ROOT / "reference" / "src" / "v5"
 
 STYLE = '''
 .root{display:block;background:var(--wall)}
-.top-l{position:absolute;left:32px;top:24px;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--text-2);padding:7px 13px;border-radius:11px;z-index:3}
+.top-l{position:absolute;left:32px;top:24px;display:inline-flex;align-items:center;gap:6px;height:var(--ctl-sm);padding:0 12px;border-radius:var(--r-sm);background:var(--glass-2);border:1px solid var(--border-ctl);box-shadow:var(--shadow-ctl);font-size:13px;font-weight:600;color:var(--text-2);z-index:3}
 .ver{position:absolute;right:32px;top:28px;font-size:12px;color:var(--text-3);letter-spacing:.3px;z-index:3}
 .aura{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);width:620px;height:620px;border-radius:50%;
   background:conic-gradient(from 160deg,#34D399,#0EA5E9,#3B8BFF,#10B981,#34D399);filter:blur(98px);opacity:.22;pointer-events:none}
@@ -35,7 +35,7 @@ html.dark .panel{
   background:linear-gradient(145deg,#34D399,#059669);box-shadow:0 12px 24px -8px rgba(5,150,105,.5),inset 0 1px 0 rgba(255,255,255,.4)}
 .hd-t{font-size:21px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:9px}
 .hd-s{font-size:13px;color:var(--text-2);margin-top:4px}
-.bd-team{height:21px;padding:0 8px;border-radius:6px;font-size:11px;font-weight:700;color:var(--ink-green);background:color-mix(in srgb,var(--green) 14%,transparent);display:inline-flex;align-items:center}
+.bd-team{height:20px;padding:0 7px;border-radius:6px;font-size:11px;font-weight:700;color:var(--ink-green);background:color-mix(in srgb,var(--green) 14%,transparent);display:inline-flex;align-items:center}
 
 .sec-h{display:flex;align-items:center;gap:8px;margin-top:20px;margin-bottom:10px}
 .snum{width:20px;height:20px;border-radius:50%;background:color-mix(in srgb,var(--blue) 14%,transparent);color:var(--ink-blue);font-size:11.5px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;flex:none}
@@ -48,8 +48,8 @@ html.dark .panel{
 .inp{height:var(--ctl-md);border-radius:var(--r-md);padding:0 12px;background:var(--well);border:1px solid var(--hair);display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--text)}
 .sel{height:var(--ctl-md);border-radius:var(--r-md);padding:0 12px;background:var(--glass-2);border:1px solid var(--border-ctl);box-shadow:var(--shadow-ctl);display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:600;color:var(--text)}
 .sel svg{color:var(--text-3);flex:none}
-.seg2{height:var(--ctl-md);border-radius:var(--r-md);padding:3px;background:var(--fill);display:flex;gap:3px}
-.seg2 span{flex:1;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:600;color:var(--text-2);white-space:nowrap}
+.seg2{height:var(--ctl-md);border-radius:var(--r-md);padding:3px;background:var(--well);border:1px solid var(--hair);display:flex;gap:2px;align-items:center}
+.seg2 span{flex:1;height:100%;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:600;color:var(--text-2);white-space:nowrap}
 .seg2 span.on{background:var(--seg-thumb);color:var(--text);box-shadow:var(--shadow-seg)}
 
 /* 终端命令块 */
@@ -82,7 +82,7 @@ html.dark .term{background:rgba(8,10,18,.78)}
 .f-pri{background:var(--btn-pri-bg);color:#fff;box-shadow:0 10px 22px -8px color-mix(in srgb,var(--btn-pri-bg) 85%,transparent)}
 
 .ft{position:absolute;left:0;right:0;bottom:26px;display:flex;justify-content:center;z-index:2}
-.pill{display:inline-flex;align-items:center;gap:7px;height:30px;padding:0 14px;border-radius:15px;font-size:12px;color:var(--text-2);box-shadow:none!important}
+.pill{display:inline-flex;align-items:center;gap:7px;height:26px;padding:0 12px;border-radius:var(--r-full);font-size:12px;font-weight:600;color:var(--text-2);box-shadow:none!important}
 '''
 
 BACK = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>'
@@ -90,7 +90,7 @@ SERVER = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="cu
 COPY = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>'
 REF = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 11-3.2-6.9"/><path d="M21 3v6h-6"/></svg>'
 SHIELD = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 5-3.5 8-7 9-3.5-1-7-4-7-9V6l7-3z"/><path d="M9.5 12l1.8 1.8 3.2-3.6"/></svg>'
-CHEVD = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>'
+CHEVD = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>'
 
 HTML = f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>连接自有 / 团队服务器 · PC</title>
 <link rel="stylesheet" href="../v3/base.css"><link rel="stylesheet" href="../v4/apple.css"><link rel="stylesheet" href="pc.css">

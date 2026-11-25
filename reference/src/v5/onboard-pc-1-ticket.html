@@ -4,7 +4,7 @@
 <style>
 .root{display:block;background:var(--wall)}
 .top{position:absolute;left:32px;right:32px;top:22px;display:flex;align-items:center;gap:12px}
-.wz{position:absolute;left:120px;right:120px;top:80px;bottom:36px;border-radius:30px;display:flex;overflow:hidden}
+.wz{position:absolute;left:120px;right:120px;top:80px;bottom:36px;border-radius:var(--r-panel);display:flex;overflow:hidden}
 .sl{width:300px;flex:none;padding:26px 24px 22px;border-right:1px solid var(--hair);background:color-mix(in srgb,var(--text) 2.5%,transparent);display:flex;flex-direction:column}
 .st2{display:flex;gap:13px;position:relative;padding-bottom:20px}
 .st2:not(:last-child)::after{content:"";position:absolute;left:12.5px;top:28px;bottom:3px;width:1.5px;background:var(--hair)}
@@ -34,9 +34,9 @@
 .dots{letter-spacing:3px;font-size:15px}
 .okt{display:inline-flex;align-items:center;gap:5px;color:var(--ink-green);font-size:12.5px;font-weight:600;white-space:nowrap}
 .ing{display:inline-flex;align-items:center;gap:7px;color:var(--ink-blue);font-size:12.5px;font-weight:600;white-space:nowrap}
-.spin{width:13px;height:13px;border-radius:50%;border:2px solid color-mix(in srgb,var(--blue) 25%,transparent);border-top-color:var(--blue);flex:none}
+.spin{width:13px;height:13px;border-radius:50%;border:2px solid color-mix(in srgb,var(--blue) 25%,transparent);border-top-color:var(--ink-blue);flex:none}
 .rt{display:grid;grid-template-columns:140px 1fr 160px 128px 116px;gap:8px 10px;align-items:center}
-.au{background:transparent;border:1px solid var(--hair)}
+.au{background:transparent;border:1px dashed color-mix(in srgb,var(--text) 16%,transparent);color:var(--text-2)}
 .aut{flex:none;font-size:11px;font-weight:600;color:var(--ink-purple);background:color-mix(in srgb,var(--purple) 12%,transparent);height:20px;padding:0 6px;border-radius:6px;display:inline-flex;align-items:center}
 .cr{gap:8px;padding:0 10px;font-size:13px}
 .crt{flex:none;height:20px;padding:0 6px;border-radius:6px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;background:color-mix(in srgb,var(--text) 8%,transparent);color:var(--text-2)}
@@ -58,8 +58,8 @@
 .pri{background:var(--btn-pri-bg);color:#fff;box-shadow:0 10px 22px -10px color-mix(in srgb,var(--btn-pri-bg) 85%,transparent)}
 .secb{background:var(--fill);color:var(--text)}
 .note{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;color:var(--text-2);line-height:1.5;padding:9px 13px;border-radius:13px;background:color-mix(in srgb,var(--blue) 7%,transparent)}
-.pbar{height:4px;border-radius:2px;background:var(--fill);overflow:hidden}
-.pbar i{display:block;height:100%;border-radius:2px;background:linear-gradient(90deg,#4F8BFF,#9B5CFF)}
+.pbar{height:4px;border-radius:2px;background:var(--well);overflow:hidden}
+.pbar i{display:block;height:100%;border-radius:2px;background:linear-gradient(90deg,var(--blue),var(--purple))}
 </style></head><body><div class="root">
 <div class="top">
   <img src="logo.svg" width="40" height="40" alt="" style="margin:-4px">
@@ -74,7 +74,7 @@
     <div class="f12 t2" style="margin-top:6px;line-height:1.55">只填 AI 猜不出的鉴权与权限边界，<br>其余由 Bot 自动探测与匹配</div>
     <div style="margin-top:22px"><div class="st2 cur"><span class="sc2">1</span><div><b>连接器与鉴权</b><em>接代码平台、本机目录或工单源</em></div></div><div class="st2 todo"><span class="sc2">2</span><div><b>授权项目与代码</b><em>拉取仓库，划定可修改 / 仅查看</em></div></div><div class="st2 todo"><span class="sc2">3</span><div><b>环境与账号</b><em>复现入口与数据权限 · 可跳过</em></div></div><div class="st2 todo"><span class="sc2">4</span><div><b>AI 体检并开工</b><em>试拉取与构建，通过即开干</em></div></div></div>
     <div class="grow"></div>
-    <div class="why"><div class="wh"><i data-i="key" data-s="13" style="color:var(--purple)"></i>为什么先建连接器？</div>没有鉴权凭证就无法从 GitLab、GitHub、Gitee 或 Jira 拉取项目数据；管理员配好公司级连接器后，团队成员直接复用无需重填。</div>
+    <div class="why"><div class="wh"><i data-i="key" data-s="13" style="color:var(--ink-purple)"></i>为什么先建连接器？</div>没有鉴权凭证就无法从 GitLab、GitHub、Gitee 或 Jira 拉取项目数据；管理员配好公司级连接器后，团队成员直接复用无需重填。</div>
     <div class="row f12 t3" style="margin-bottom:8px"><span class="grow">第 1 步，共 4 步</span><span>已完成 0 步</span></div>
     <div class="pbar"><i style="width:25%"></i></div>
   </aside>
@@ -84,7 +84,7 @@
         <div class="grow"><div class="f12" style="color:var(--ink-blue);font-weight:700">第 1 步 · 连接器与鉴权</div>
           <div style="font-size:24px;font-weight:800;margin-top:5px">先接通代码和工单来源</div>
           <div class="f13 t2" style="margin-top:5px">支持同时接入多个企业私有平台、公有代码托管、插件市场连接器或本机目录；鉴权通过后下一步拉取项目</div></div>
-        <span class="chip2" style="align-self:flex-start"><i data-i="spark" data-s="13" style="color:var(--purple)"></i>怎么填令牌？问 AI</span>
+        <span class="chip2" style="align-self:flex-start"><i data-i="spark" data-s="13" style="color:var(--ink-purple)"></i>怎么填令牌？问 AI</span>
       </div>
 <style>
 .sech{display:flex;align-items:center;gap:8px;margin-top:18px;margin-bottom:9px}
@@ -102,7 +102,7 @@
 .qadd{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:nowrap}
 .qbtn{height:var(--ctl-sm);padding:0 11px;border-radius:var(--r-sm);background:var(--fill);border:1px solid var(--hair);display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--text-2);white-space:nowrap}
 .qdot{width:17px;height:17px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:800;flex:none}
-.stat-pill{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 10px;border-radius:9px;font-size:12px;font-weight:600;white-space:nowrap}
+.stat-pill{display:inline-flex;align-items:center;gap:6px;height:var(--ctl-xs);padding:0 10px;border-radius:var(--r-sm);font-size:12px;font-weight:600;white-space:nowrap}
 .sp-g{background:color-mix(in srgb,var(--green) 13%,transparent);color:var(--ink-green)}
 .sp-b{background:color-mix(in srgb,var(--blue) 13%,transparent);color:var(--ink-blue)}
 
@@ -139,11 +139,10 @@
 .ro-bdg{display:inline-flex;align-items:center;gap:3px;height:20px;padding:0 6px;border-radius:6px;font-size:11px;font-weight:600;color:var(--ink-blue);background:color-mix(in srgb,var(--blue) 12%,transparent);flex:none}
 .okchip{display:inline-flex;align-items:center;gap:3px;color:var(--ink-green);font-size:11.5px;font-weight:600;flex:none}
 .tune{font-size:12px;font-weight:600;color:var(--ink-blue);margin-left:auto;padding-left:6px;flex:none;white-space:nowrap}
-.pseg{display:inline-flex;padding:3px;border-radius:11px;background:color-mix(in srgb,var(--text) 6%,transparent);flex:none;gap:2px}
-.pseg span{height:28px;padding:0 11px;border-radius:8px;font-size:12px;font-weight:600;color:var(--text-3);display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.pseg{display:inline-flex;height:var(--ctl-md);align-items:center;padding:3px;border-radius:var(--r-md);background:var(--well);border:1px solid var(--hair);flex:none;gap:2px}
+.pseg span{height:100%;padding:0 11px;border-radius:7px;font-size:12px;font-weight:600;color:var(--text-2);display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
 .pseg span.s-ro{background:var(--btn-pri-bg);color:#fff;box-shadow:0 4px 12px -4px color-mix(in srgb,var(--btn-pri-bg) 85%,transparent)}
 .pseg span.s-rw{background:var(--btn-ok-bg);color:#fff;box-shadow:0 4px 12px -4px color-mix(in srgb,var(--btn-ok-bg) 85%,transparent)}
-html.dark .pseg{background:rgba(255,255,255,.07)}
 .rmb{width:28px;height:28px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;color:var(--text-3);background:transparent;flex:none}
 .pickbtn{height:var(--ctl-md);padding:0 13px;border-radius:var(--r-md);background:var(--btn-pri-bg);color:#fff;font-size:12.5px;font-weight:600;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex:none;box-shadow:0 6px 16px -8px color-mix(in srgb,var(--btn-pri-bg) 85%,transparent)}
 .pickmore{border-radius:14px;padding:11px 15px;border:1.5px dashed color-mix(in srgb,var(--text) 16%,transparent);display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--text-2)}
@@ -152,8 +151,8 @@ html.dark .pseg{background:rgba(255,255,255,.07)}
 .obx{border-radius:16px;padding:14px 16px;background:var(--fill)}
 .kv3{display:flex;align-items:center;gap:10px;margin-top:10px}
 .kv3>span:first-child{width:76px;white-space:nowrap;flex:none;font-size:12.5px;color:var(--text-3)}
-.kv3 .inp{height:38px;flex:1;font-size:13.5px}
-.kv3 .inp.sel{justify-content:space-between;background:var(--glass-2);border:1px solid var(--stroke)}
+.kv3 .inp{height:var(--ctl-lg);flex:1;font-size:13.5px}
+.kv3 .inp.sel{justify-content:space-between;background:var(--glass-2);border:1px solid var(--border-ctl);box-shadow:var(--shadow-ctl)}
 .chk3{display:flex;align-items:center;gap:12px;padding:8px 0;border-top:1px solid var(--hair);font-size:13.5px}
 .chk3:first-child{border-top:0}
 .ck3{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;flex:none}
@@ -243,9 +242,8 @@ html.dark .pseg{background:rgba(255,255,255,.07)}
 html.dark .tsec2{background:rgba(255,255,255,.038)}
 .tsec2-h{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:var(--text)}
 .flab2{font-size:11.5px;font-weight:600;color:var(--text-3);margin-bottom:5px;display:flex;align-items:center;gap:6px}
-.mtags{display:flex;align-items:center;gap:6px;flex-wrap:nowrap;height:36px;padding:0 9px;border-radius:10px;background:var(--glass-2);border:1px solid var(--stroke)}
+.mtags{display:flex;align-items:center;gap:6px;flex-wrap:nowrap;height:var(--ctl-md);padding:0 9px;border-radius:var(--r-md);background:var(--well);border:1px solid var(--hair)}
 .mchip{height:22px;padding:0 7px;border-radius:6px;background:color-mix(in srgb,var(--blue) 14%,transparent);color:var(--ink-blue);font-size:11.5px;font-weight:600;display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
-html.dark .mchip{color:#7DC4FF;background:color-mix(in srgb,var(--blue) 22%,transparent)}
 .jqlbar{padding:7px 10px;border-radius:9px;background:var(--fill);border:1px solid var(--hair);display:flex;align-items:center;gap:8px;font-size:11.5px}
 .drybox{border-radius:14px;padding:11px 13px;background:color-mix(in srgb,var(--green) 8%,var(--fill));border:1px solid color-mix(in srgb,var(--green) 28%,transparent);display:flex;flex-direction:column;gap:6px}
 .dryit{display:flex;align-items:center;gap:8px;padding:6px 9px;border-radius:9px;background:var(--glass-2);font-size:12px}
@@ -287,7 +285,7 @@ html.dark .mchip{color:#7DC4FF;background:color-mix(in srgb,var(--blue) 22%,tran
 
     <div class="tsec2">
       <div class="tsec2-h"><span>2. 自动收单触发条件（Trigger）</span><span class="f11 t3" style="font-weight:400">决定哪些单自动流进云匠</span>
-        <div class="cc-seg" style="margin-left:auto;flex:none"><span class="on" style="height:26px;padding:0 10px;font-size:11.5px">轮询 · 每 2 分钟</span><span style="height:26px;padding:0 10px;font-size:11.5px">Webhook</span></div>
+        <div class="cc-seg cc-seg-sm" style="margin-left:auto;flex:none"><span class="on">轮询 · 每 2 分钟</span><span>Webhook</span></div>
       </div>
       <div>
         <div class="flab2">监听的 Jira 项目<span>实时拉自当前账号可见的 6 个项目，免手敲 Key</span></div>

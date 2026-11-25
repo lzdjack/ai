@@ -18,7 +18,7 @@ X = '''<style>
 .qadd{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:nowrap}
 .qbtn{height:var(--ctl-sm);padding:0 11px;border-radius:var(--r-sm);background:var(--fill);border:1px solid var(--hair);display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--text-2);white-space:nowrap}
 .qdot{width:17px;height:17px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:800;flex:none}
-.stat-pill{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 10px;border-radius:9px;font-size:12px;font-weight:600;white-space:nowrap}
+.stat-pill{display:inline-flex;align-items:center;gap:6px;height:var(--ctl-xs);padding:0 10px;border-radius:var(--r-sm);font-size:12px;font-weight:600;white-space:nowrap}
 .sp-g{background:color-mix(in srgb,var(--green) 13%,transparent);color:var(--ink-green)}
 .sp-b{background:color-mix(in srgb,var(--blue) 13%,transparent);color:var(--ink-blue)}
 
@@ -55,11 +55,10 @@ X = '''<style>
 .ro-bdg{display:inline-flex;align-items:center;gap:3px;height:20px;padding:0 6px;border-radius:6px;font-size:11px;font-weight:600;color:var(--ink-blue);background:color-mix(in srgb,var(--blue) 12%,transparent);flex:none}
 .okchip{display:inline-flex;align-items:center;gap:3px;color:var(--ink-green);font-size:11.5px;font-weight:600;flex:none}
 .tune{font-size:12px;font-weight:600;color:var(--ink-blue);margin-left:auto;padding-left:6px;flex:none;white-space:nowrap}
-.pseg{display:inline-flex;padding:3px;border-radius:11px;background:color-mix(in srgb,var(--text) 6%,transparent);flex:none;gap:2px}
-.pseg span{height:28px;padding:0 11px;border-radius:8px;font-size:12px;font-weight:600;color:var(--text-3);display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.pseg{display:inline-flex;height:var(--ctl-md);align-items:center;padding:3px;border-radius:var(--r-md);background:var(--well);border:1px solid var(--hair);flex:none;gap:2px}
+.pseg span{height:100%;padding:0 11px;border-radius:7px;font-size:12px;font-weight:600;color:var(--text-2);display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
 .pseg span.s-ro{background:var(--btn-pri-bg);color:#fff;box-shadow:0 4px 12px -4px color-mix(in srgb,var(--btn-pri-bg) 85%,transparent)}
 .pseg span.s-rw{background:var(--btn-ok-bg);color:#fff;box-shadow:0 4px 12px -4px color-mix(in srgb,var(--btn-ok-bg) 85%,transparent)}
-html.dark .pseg{background:rgba(255,255,255,.07)}
 .rmb{width:28px;height:28px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;color:var(--text-3);background:transparent;flex:none}
 .pickbtn{height:var(--ctl-md);padding:0 13px;border-radius:var(--r-md);background:var(--btn-pri-bg);color:#fff;font-size:12.5px;font-weight:600;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex:none;box-shadow:0 6px 16px -8px color-mix(in srgb,var(--btn-pri-bg) 85%,transparent)}
 .pickmore{border-radius:14px;padding:11px 15px;border:1.5px dashed color-mix(in srgb,var(--text) 16%,transparent);display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--text-2)}
@@ -68,8 +67,8 @@ html.dark .pseg{background:rgba(255,255,255,.07)}
 .obx{border-radius:16px;padding:14px 16px;background:var(--fill)}
 .kv3{display:flex;align-items:center;gap:10px;margin-top:10px}
 .kv3>span:first-child{width:76px;white-space:nowrap;flex:none;font-size:12.5px;color:var(--text-3)}
-.kv3 .inp{height:38px;flex:1;font-size:13.5px}
-.kv3 .inp.sel{justify-content:space-between;background:var(--glass-2);border:1px solid var(--stroke)}
+.kv3 .inp{height:var(--ctl-lg);flex:1;font-size:13.5px}
+.kv3 .inp.sel{justify-content:space-between;background:var(--glass-2);border:1px solid var(--border-ctl);box-shadow:var(--shadow-ctl)}
 .chk3{display:flex;align-items:center;gap:12px;padding:8px 0;border-top:1px solid var(--hair);font-size:13.5px}
 .chk3:first-child{border-top:0}
 .ck3{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;flex:none}
@@ -168,15 +167,6 @@ def STEP_PAGES(page, CHECK):
 
     # ---------------- 1-new 新建连接器鉴权抽屉 ----------------
     DRW = f'''<style>
-.scr{{position:fixed;inset:0;z-index:30;background:rgba(15,20,40,.28);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}}
-html.dark .scr{{background:rgba(0,0,0,.48)}}
-.drw{{position:fixed;z-index:31;top:24px;right:24px;bottom:24px;width:660px;border-radius:26px;display:flex;flex-direction:column;overflow:hidden;
-  background:rgba(255,255,255,.96);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);box-shadow:0 30px 80px -20px rgba(10,20,60,.45),0 0 0 1px var(--stroke)}}
-html.dark .drw{{background:rgba(34,36,50,.96)}}
-.drw .dh{{display:flex;gap:12px;align-items:center;padding:20px 24px 16px;border-bottom:1px solid var(--hair)}}
-.drw .db{{flex:1;display:flex;flex-direction:column;gap:15px;padding:18px 24px;min-height:0;overflow:hidden}}
-.drw .df{{display:flex;align-items:center;gap:10px;padding:14px 24px;border-top:1px solid var(--hair)}}
-.xb{{width:32px;height:32px;border-radius:50%;background:var(--fill);display:flex;align-items:center;justify-content:center;color:var(--text-2);flex:none}}
 .ic3{{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:#fff;flex:none;font-size:15px;font-weight:800}}
 .flab{{font-size:12.5px;font-weight:700;color:var(--text-2);margin-bottom:7px;display:flex;align-items:center;gap:6px}}
 .flab span{{font-weight:400;color:var(--text-3);font-size:11.5px}}
@@ -186,24 +176,24 @@ html.dark .drw{{background:rgba(34,36,50,.96)}}
 .pdot{{width:18px;height:18px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:800;flex:none}}
 .dinp{{height:var(--ctl-lg);border-radius:var(--r-lg);background:var(--well);border:1px solid var(--hair);display:flex;align-items:center;gap:9px;padding:0 13px;font-size:13.5px;color:var(--text);min-width:0}}
 .dinp.foc{{background:var(--glass-2);border-color:var(--focus-ring);box-shadow:0 0 0 3px var(--focus-halo)}}
-.seg2{{display:flex;padding:3px;border-radius:var(--r-lg);background:var(--fill);gap:2px;height:var(--ctl-lg)}}
-.seg2 span{{flex:1;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;gap:5px;font-size:12.5px;font-weight:600;color:var(--text-2)}}
+.seg2{{display:flex;padding:3px;border-radius:var(--r-lg);background:var(--well);border:1px solid var(--hair);gap:2px;height:var(--ctl-lg);align-items:center}}
+.seg2 span{{flex:1;height:100%;border-radius:9px;display:flex;align-items:center;justify-content:center;gap:5px;font-size:12.5px;font-weight:600;color:var(--text-2)}}
 .seg2 span.on{{background:var(--seg-thumb);color:var(--text);box-shadow:var(--shadow-seg)}}
 .vbox{{border-radius:16px;padding:13px 16px;background:color-mix(in srgb,var(--green) 8%,var(--fill));border:1px solid color-mix(in srgb,var(--green) 28%,transparent)}}
 .vrow{{display:flex;align-items:center;gap:9px;font-size:12.5px;padding:4px 0;color:var(--text)}}
 .vck{{width:17px;height:17px;border-radius:50%;background:var(--btn-ok-bg);color:#fff;display:inline-flex;align-items:center;justify-content:center;flex:none}}
 </style>
-<div class="scr"></div>
-<div class="drw">
-  <div class="dh">
+<div class="cc-scrim"></div>
+<div class="cc-drawer">
+  <div class="cc-drawer-hd">
     <span class="ic3" style="background:linear-gradient(155deg,#FF8A4C,#E24329)">G</span>
     <div class="grow">
       <div style="font-size:18px;font-weight:800">新建代码连接器</div>
       <div class="f12 t3" style="margin-top:2px">表单按插件 <span class="mono">authSchema</span> 自动渲染 · 鉴权通过后下一步即可拉取该平台仓库</div>
     </div>
-    <span class="xb">{I("x",16,2.2)}</span>
+    <span class="cc-close">{I("x",16,2.2)}</span>
   </div>
-  <div class="db">
+  <div class="cc-drawer-bd" style="gap:14px">
     <div>
       <div class="flab">连接器插件<span>默认显示官方预装，其他平台可从插件市场安装或选通用 Git / MCP</span></div>
       <div class="pgrid">
@@ -234,7 +224,7 @@ html.dark .drw{{background:rgba(34,36,50,.96)}}
       <div class="flab">访问令牌（Token）<span>公钥加密保存，仅执行器可解</span></div>
       <div class="row g10">
         <div class="dinp foc grow">{I("lock",14,st="color:var(--ink-blue)")}<span class="mono grow">glpat-•••••••••••••••••• 91d0</span></div>
-        <button class="bigb secb" style="height:40px;background:var(--glass-2);border:1px solid var(--stroke)">{I("zap",14,st="color:var(--ink-blue)")}重新验证</button>
+        <button class="cc-btn cc-btn-lg cc-btn-glass">{I("zap",14,st="color:var(--ink-blue)")}重新验证</button>
       </div>
     </div>
     <div class="vbox">
@@ -244,11 +234,11 @@ html.dark .drw{{background:rgba(34,36,50,.96)}}
       <div class="vrow"><span class="vck">{I("check",11,3)}</span><span>安全校验：<b>无合入主干权限</b>（符合最小权限原则），可拉取 <b>28 个仓库</b></span></div>
     </div>
   </div>
-  <div class="df">
-    <button class="bigb secb" style="height:42px">取消</button>
+  <div class="cc-drawer-ft">
+    <button class="cc-btn cc-btn-lg cc-btn-sec">取消</button>
     <span class="grow"></span>
     <span class="f12 t3">保存后团队成员可直接复用此连接器</span>
-    <button class="bigb pri" style="height:42px">保存并拉取仓库</button>
+    <button class="cc-btn cc-btn-lg cc-btn-pri">保存并拉取仓库</button>
   </div>
 </div>'''
     p1_new = p1.replace('</div><script src="icons.js">', DRW + '</div><script src="icons.js">', 1)
@@ -260,9 +250,8 @@ html.dark .drw{{background:rgba(34,36,50,.96)}}
 html.dark .tsec2{{background:rgba(255,255,255,.038)}}
 .tsec2-h{{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:var(--text)}}
 .flab2{{font-size:11.5px;font-weight:600;color:var(--text-3);margin-bottom:5px;display:flex;align-items:center;gap:6px}}
-.mtags{{display:flex;align-items:center;gap:6px;flex-wrap:nowrap;height:36px;padding:0 9px;border-radius:10px;background:var(--glass-2);border:1px solid var(--stroke)}}
+.mtags{{display:flex;align-items:center;gap:6px;flex-wrap:nowrap;height:var(--ctl-md);padding:0 9px;border-radius:var(--r-md);background:var(--well);border:1px solid var(--hair)}}
 .mchip{{height:22px;padding:0 7px;border-radius:6px;background:color-mix(in srgb,var(--blue) 14%,transparent);color:var(--ink-blue);font-size:11.5px;font-weight:600;display:inline-flex;align-items:center;gap:4px;white-space:nowrap}}
-html.dark .mchip{{color:#7DC4FF;background:color-mix(in srgb,var(--blue) 22%,transparent)}}
 .jqlbar{{padding:7px 10px;border-radius:9px;background:var(--fill);border:1px solid var(--hair);display:flex;align-items:center;gap:8px;font-size:11.5px}}
 .drybox{{border-radius:14px;padding:11px 13px;background:color-mix(in srgb,var(--green) 8%,var(--fill));border:1px solid color-mix(in srgb,var(--green) 28%,transparent);display:flex;flex-direction:column;gap:6px}}
 .dryit{{display:flex;align-items:center;gap:8px;padding:6px 9px;border-radius:9px;background:var(--glass-2);font-size:12px}}
@@ -304,7 +293,7 @@ html.dark .mchip{{color:#7DC4FF;background:color-mix(in srgb,var(--blue) 22%,tra
 
     <div class="tsec2">
       <div class="tsec2-h"><span>2. 自动收单触发条件（Trigger）</span><span class="f11 t3" style="font-weight:400">决定哪些单自动流进云匠</span>
-        <div class="cc-seg" style="margin-left:auto;flex:none"><span class="on" style="height:26px;padding:0 10px;font-size:11.5px">轮询 · 每 2 分钟</span><span style="height:26px;padding:0 10px;font-size:11.5px">Webhook</span></div>
+        <div class="cc-seg cc-seg-sm" style="margin-left:auto;flex:none"><span class="on">轮询 · 每 2 分钟</span><span>Webhook</span></div>
       </div>
       <div>
         <div class="flab2">监听的 Jira 项目<span>实时拉自当前账号可见的 6 个项目，免手敲 Key</span></div>
@@ -374,10 +363,9 @@ html.dark .mchip{{color:#7DC4FF;background:color-mix(in srgb,var(--blue) 22%,tra
 .aorb svg,.aorb i{{position:relative;z-index:1;color:#fff}}
 .ctxbar{{padding:9px 16px;background:color-mix(in srgb,var(--purple) 7%,transparent);border-bottom:1px solid var(--hair);display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--text-2)}}
 .qqs{{display:flex;flex-wrap:wrap;gap:6px}}
-.qq{{height:27px;padding:0 10px;border-radius:9px;background:var(--fill);border:1px solid var(--hair);font-size:11.5px;font-weight:600;color:var(--text-2);display:inline-flex;align-items:center;gap:5px}}
+.qq{{height:var(--ctl-xs);padding:0 11px;border-radius:var(--r-full);background:var(--fill);border:1px solid var(--hair);font-size:11.5px;font-weight:600;color:var(--text-2);display:inline-flex;align-items:center;gap:5px}}
 .qq.on{{background:color-mix(in srgb,var(--purple) 14%,transparent);border-color:color-mix(in srgb,var(--purple) 34%,transparent);color:var(--ink-purple)}}
-html.dark .qq.on{{color:#D4A5FF}}
-.umsg{{align-self:flex-end;max-width:88%;padding:9px 13px;border-radius:16px 16px 5px 16px;background:linear-gradient(180deg,#3B8BFF,#1F6FFF);color:#fff;font-size:13px;line-height:1.5;box-shadow:0 8px 16px -10px rgba(31,111,255,.85)}}
+.umsg{{align-self:flex-end;max-width:88%;padding:9px 13px;border-radius:16px 16px 5px 16px;background:linear-gradient(180deg,var(--btn-pri-bg),var(--btn-pri-active));color:#fff;font-size:13px;line-height:1.5;box-shadow:0 8px 16px -10px color-mix(in srgb,var(--btn-pri-bg) 85%,transparent)}}
 .amsg{{border-radius:16px 16px 16px 5px;padding:12px 13px;background:var(--glass-2);border:1px solid var(--stroke);display:flex;flex-direction:column;gap:9px;font-size:12.5px;line-height:1.55;color:var(--text)}}
 .stepb{{display:flex;gap:8px;align-items:flex-start;font-size:12px;color:var(--text-2)}}
 .snm{{width:18px;height:18px;border-radius:50%;background:color-mix(in srgb,var(--blue) 16%,transparent);color:var(--ink-blue);font-size:10.5px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;flex:none;margin-top:1px}}
@@ -385,7 +373,7 @@ html.dark .qq.on{{color:#D4A5FF}}
 .prow2{{display:flex;align-items:center;gap:7px;font-size:12px}}
 .actcard{{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:12px;background:color-mix(in srgb,var(--blue) 10%,var(--glass-2));border:1px solid color-mix(in srgb,var(--blue) 32%,transparent)}}
 .acmp{{padding:12px 14px 14px;border-top:1px solid var(--hair)}}
-.ainp{{height:42px;border-radius:13px;padding:0 5px 0 12px;background:var(--glass-2);border:1.5px solid color-mix(in srgb,var(--purple) 40%,var(--stroke));display:flex;align-items:center;gap:8px}}
+.ainp{{height:var(--ctl-lg);border-radius:var(--r-lg);padding:0 5px 0 12px;background:var(--glass-2);border:1.5px solid color-mix(in srgb,var(--purple) 40%,var(--border-ctl));display:flex;align-items:center;gap:8px}}
 .asnd{{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#4F8BFF,#9B5CFF 55%,#FF5FA8);color:#fff;display:flex;align-items:center;justify-content:center;flex:none}}
 </style>
 <div class="cc-scrim-light"></div>
@@ -396,7 +384,7 @@ html.dark .qq.on{{color:#D4A5FF}}
       <div class="row g6"><b style="font-size:15px;font-weight:800">向导 AI 帮手</b><span class="cc-tag cc-tag-p">就地浮层 · 不丢表单</span></div>
       <div class="f11 t3" style="margin-top:1px">自动感知当前步骤与已连通状态，支持一键帮填</div>
     </div>
-    <span class="cc-close" style="width:30px;height:30px">{I("x",15,2.2)}</span>
+    <span class="cc-close">{I("x",15,2.2)}</span>
   </div>
 
   <div class="ctxbar">
@@ -435,7 +423,7 @@ html.dark .qq.on{{color:#D4A5FF}}
           <div class="f12 w7">拿到令牌了？就地打开配置</div>
           <div class="f11 t3">自动预选 GitLab · Access Token</div>
         </div>
-        <span class="cc-btn cc-btn-sm cc-btn-pri" style="height:26px">去填令牌 ›</span>
+        <span class="cc-btn cc-btn-xs cc-btn-pri">去填令牌 ›</span>
       </div>
     </div>
 
@@ -586,51 +574,38 @@ html.dark .qq.on{{color:#D4A5FF}}
           <div class="f12 t3 ell" style="margin-top:2px">{desc}</div></div>{bd}</div>'''
 
     PICK_DRW = f'''<style>
-.scr{{position:fixed;inset:0;z-index:30;background:rgba(15,20,40,.28);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}}
-html.dark .scr{{background:rgba(0,0,0,.48)}}
-.drw{{position:fixed;z-index:31;top:24px;right:24px;bottom:24px;width:660px;border-radius:26px;display:flex;flex-direction:column;overflow:hidden;
-  background:rgba(255,255,255,.96);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);box-shadow:0 30px 80px -20px rgba(10,20,60,.45),0 0 0 1px var(--stroke)}}
-html.dark .drw{{background:rgba(34,36,50,.96)}}
-.drw .dh{{display:flex;gap:12px;align-items:center;padding:18px 24px 14px;border-bottom:1px solid var(--hair)}}
-.drw .db{{flex:1;display:flex;flex-direction:column;gap:12px;padding:16px 24px;min-height:0;overflow:hidden}}
-.drw .df{{display:flex;align-items:center;gap:10px;padding:14px 24px;border-top:1px solid var(--hair)}}
-.xb{{width:32px;height:32px;border-radius:50%;background:var(--fill);display:flex;align-items:center;justify-content:center;color:var(--text-2);flex:none}}
-.ic3{{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:#fff;flex:none;font-size:15px;font-weight:800}}
-.ctabs{{display:flex;gap:8px;align-items:center}}
-.ctab{{height:34px;padding:0 12px;border-radius:10px;background:var(--fill);font-size:12.5px;font-weight:600;color:var(--text-2);display:inline-flex;align-items:center;gap:6px;white-space:nowrap}}
-.ctab.on{{background:var(--btn-pri-bg);color:#fff}}
-.ctab em{{font-style:normal;opacity:.75;font-size:11px}}
-.pksrch{{height:38px;border-radius:11px;background:var(--glass-2);border:1.5px solid var(--blue);box-shadow:0 0 0 4px color-mix(in srgb,var(--blue) 14%,transparent);padding:0 12px;display:flex;align-items:center;gap:8px;font-size:13px}}
 .pkg{{font-size:11.5px;font-weight:700;color:var(--text-3);margin-top:4px;display:flex;align-items:center;gap:6px}}
 .pkr{{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:13px;background:var(--fill);border:1.5px solid transparent}}
 .pkr.on{{background:var(--glass-2);border-color:color-mix(in srgb,var(--blue) 45%,transparent)}}
-.pkc{{width:18px;height:18px;border-radius:6px;border:1.5px solid color-mix(in srgb,var(--text) 24%,transparent);display:inline-flex;align-items:center;justify-content:center;flex:none}}
+.pkc{{width:18px;height:18px;border-radius:6px;border:1.5px solid var(--border-ctl-hover);display:inline-flex;align-items:center;justify-content:center;flex:none}}
 .pkc.on{{border:0;background:var(--btn-pri-bg);color:#fff}}
 .pklist{{display:flex;flex-direction:column;gap:7px;flex:1;min-height:0;overflow:hidden;-webkit-mask-image:linear-gradient(180deg,#000 0%,#000 86%,transparent 100%);mask-image:linear-gradient(180deg,#000 0%,#000 86%,transparent 100%)}}
 </style>
-<div class="scr"></div>
-<div class="drw">
-  <div class="dh">
+<div class="cc-scrim"></div>
+<div class="cc-drawer">
+  <div class="cc-drawer-hd">
     <span class="ic3" style="background:linear-gradient(155deg,#5AA0FF,#1F6FFF)">{I("search",18,2.2)}</span>
     <div class="grow">
       <div style="font-size:18px;font-weight:800">从已连来源挑选仓库</div>
       <div class="f12 t3" style="margin-top:2px">按连接器与关键词主动筛选，勾选的仓库才会留到第 2 步授权列表</div>
     </div>
-    <span class="xb">{I("x",16,2.2)}</span>
+    <span class="cc-close">{I("x",16,2.2)}</span>
   </div>
-  <div class="db">
-    <div class="ctabs">
-      <span class="ctab on">G 公司 GitLab <em>28</em></span>
-      <span class="ctab">GH GitHub <em>14</em></span>
-      <span class="ctab">{I("folder",13)}本机目录 <em>4</em></span>
+  <div class="cc-drawer-bd" style="gap:12px">
+    <div class="row g10">
+      <div class="cc-tabs">
+        <span class="cc-tab is-active">G 公司 GitLab<span class="cc-count">28</span></span>
+        <span class="cc-tab">GH GitHub<span class="cc-count">14</span></span>
+        <span class="cc-tab">{I("folder",13)}本机目录<span class="cc-count">4</span></span>
+      </div>
       <span class="grow"></span>
-      <span class="f12 lnk">+ 新增连接器</span>
+      <span class="f12 lnk" style="white-space:nowrap">+ 新增连接器</span>
     </div>
-    <div class="pksrch">
+    <div class="cc-search is-focus" style="height:var(--ctl-md)">
       {I("search",15,st="color:var(--ink-blue)")}
       <span class="grow">okr</span>
-      <span class="tag tg-n" style="height:20px;font-size:11px">命中 4 / 28 个</span>
-      {I("x",14,st="color:var(--text-3)")}
+      <span class="cc-tag cc-tag-n">命中 4 / 28 个</span>
+      <span class="cc-search-clear">{I("x",11,2.4)}</span>
     </div>
     <div class="pklist">
       <div class="pkg">{I("folder",12)}Group: fe（前端业务线）</div>
@@ -643,48 +618,38 @@ html.dark .drw{{background:rgba(34,36,50,.96)}}
       {pk_row("薪酬 · 人事", "fe/tita-payroll-web", "输入其他关键词或清空搜索即可继续挑选", False)}
     </div>
   </div>
-  <div class="df">
+  <div class="cc-drawer-ft">
     <span class="f12 t2">新加入的仓库默认设为<b>仅查看</b>，回到列表可随时切「可修改」</span>
     <span class="grow"></span>
-    <button class="bigb secb" style="height:40px">取消</button>
-    <button class="bigb pri" style="height:40px">确认保留（共 4 个）</button>
+    <button class="cc-btn cc-btn-lg cc-btn-sec">取消</button>
+    <button class="cc-btn cc-btn-lg cc-btn-pri">确认保留（共 4 个）</button>
   </div>
 </div>'''
     p2_pick = p2.replace('</div><script src="icons.js">', PICK_DRW + '</div><script src="icons.js">', 1)
 
     # ---------------- 2-tune 点击「微调 ›」右侧抽屉 ----------------
     TUNE_DRW = f'''<style>
-.scr{{position:fixed;inset:0;z-index:30;background:rgba(15,20,40,.28);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}}
-html.dark .scr{{background:rgba(0,0,0,.48)}}
-.drw{{position:fixed;z-index:31;top:24px;right:24px;bottom:24px;width:640px;border-radius:26px;display:flex;flex-direction:column;overflow:hidden;
-  background:rgba(255,255,255,.96);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);box-shadow:0 30px 80px -20px rgba(10,20,60,.45),0 0 0 1px var(--stroke)}}
-html.dark .drw{{background:rgba(34,36,50,.96)}}
-.drw .dh{{display:flex;gap:12px;align-items:center;padding:18px 24px 14px;border-bottom:1px solid var(--hair)}}
-.drw .db{{flex:1;display:flex;flex-direction:column;gap:13px;padding:16px 24px;min-height:0;overflow:hidden}}
-.drw .df{{display:flex;align-items:center;gap:10px;padding:14px 24px;border-top:1px solid var(--hair)}}
-.xb{{width:32px;height:32px;border-radius:50%;background:var(--fill);display:flex;align-items:center;justify-content:center;color:var(--text-2);flex:none}}
-.ic3{{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:#fff;flex:none;font-size:13px;font-weight:800}}
 .flab{{font-size:12.5px;font-weight:700;color:var(--text-2);margin-bottom:6px;display:flex;align-items:center;gap:6px}}
 .flab .rst{{margin-left:auto;font-weight:600;color:var(--ink-blue);font-size:11.5px}}
 .dinp{{height:var(--ctl-md);border-radius:var(--r-md);background:var(--well);border:1px solid var(--hair);display:flex;align-items:center;gap:8px;padding:0 12px;font-size:13px;color:var(--text);min-width:0}}
-.dinp.ov{{background:var(--glass-2);border:1.5px solid color-mix(in srgb,var(--blue) 55%,transparent)}}
+.dinp.ov{{background:var(--well);border:1.5px solid var(--focus-ring);box-shadow:0 0 0 3px var(--focus-halo)}}
 .dsel{{height:var(--ctl-md);border-radius:var(--r-md);background:var(--glass-2);border:1px solid var(--border-ctl);box-shadow:var(--shadow-ctl);display:flex;align-items:center;gap:8px;padding:0 12px;font-size:13px;font-weight:600;color:var(--text);min-width:0}}
 .tsec{{border-radius:15px;padding:12px 14px;background:var(--fill);display:flex;flex-direction:column;gap:10px}}
 .tsec-h{{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--text)}}
 .aid2{{display:inline-flex;align-items:center;gap:3px;height:18px;padding:0 6px;border-radius:5px;font-size:10.5px;font-weight:600;color:var(--ink-purple);background:color-mix(in srgb,var(--purple) 13%,transparent)}}
 .ov2{{display:inline-flex;align-items:center;gap:3px;height:18px;padding:0 6px;border-radius:5px;font-size:10.5px;font-weight:600;color:var(--ink-blue);background:color-mix(in srgb,var(--blue) 13%,transparent)}}
 </style>
-<div class="scr"></div>
-<div class="drw">
-  <div class="dh">
-    <span class="ic3" style="background:linear-gradient(155deg,#5AA0FF,#1F6FFF)">OKR</span>
+<div class="cc-scrim"></div>
+<div class="cc-drawer" style="width:640px">
+  <div class="cc-drawer-hd">
+    <span class="ic3" style="width:38px;height:38px;font-size:13px;background:linear-gradient(155deg,#5AA0FF,#1F6FFF)">OKR</span>
     <div class="grow" style="min-width:0">
-      <div class="row g8"><span style="font-size:17px;font-weight:800">微调仓库配置</span><span class="tag tg-g" style="height:20px;font-size:11px">可修改</span></div>
+      <div class="row g8"><span style="font-size:17px;font-weight:800">微调仓库配置</span><span class="cc-tag cc-tag-g">可修改</span></div>
       <div class="f12 t3 mono ell" style="margin-top:2px">公司 GitLab · fe/tita-okr-web · 探测于 10:20</div>
     </div>
-    <span class="xb">{I("x",16,2.2)}</span>
+    <span class="cc-close">{I("x",16,2.2)}</span>
   </div>
-  <div class="db">
+  <div class="cc-drawer-bd" style="gap:13px">
     <!-- 1. 归属项目与权限 -->
     <div class="tsec">
       <div class="tsec-h"><span>归属项目</span><span class="f11 t3" style="font-weight:400">支持多仓并入同一平级项目；修单时 Bot 自动路由</span></div>
@@ -695,7 +660,7 @@ html.dark .drw{{background:rgba(34,36,50,.96)}}
         </div>
         <div style="width:188px;flex:none">
           <div class="flab">权限模式</div>
-          <div class="dsel" style="color:var(--ink-green)">{I("edit",13)}<span class="grow">可修改（推 fix/）</span>{I("chevd",13,st="color:var(--text-3)")}</div>
+          <div class="dsel" style="color:var(--ink-green);border-color:color-mix(in srgb,var(--green) 42%,transparent);background:color-mix(in srgb,var(--green) 10%,var(--glass-2))">{I("edit",13)}<span class="grow">可修改（推 fix/）</span>{I("chevd",13,st="color:var(--text-3)")}</div>
         </div>
       </div>
     </div>
@@ -750,25 +715,25 @@ html.dark .drw{{background:rgba(34,36,50,.96)}}
       <span class="grow">上次试构建通过 · <span class="mono">pnpm build-prod</span> · 3 分 12 秒（修改命令后建议重新试构建）</span>
     </div>
   </div>
-  <div class="df">
-    <button class="bigb secb" style="height:40px">取消</button>
+  <div class="cc-drawer-ft">
+    <button class="cc-btn cc-btn-lg cc-btn-sec">取消</button>
     <span class="grow"></span>
-    <button class="bigb secb" style="height:40px;background:var(--glass-2);border:1px solid var(--stroke)">仅保存</button>
-    <button class="bigb pri" style="height:40px">{I("zap",14)}保存并试构建</button>
+    <button class="cc-btn cc-btn-lg cc-btn-glass">仅保存</button>
+    <button class="cc-btn cc-btn-lg cc-btn-pri">{I("zap",14)}保存并试构建</button>
   </div>
 </div>'''
     p2_tune = p2.replace('</div><script src="icons.js">', TUNE_DRW + '</div><script src="icons.js">', 1)
 
     # ---------------- 4 AI 体检并开工 ----------------
     def c(st, t, r):
-        bg = {"ok": "var(--green)", "wn": "var(--orange)", "sk": "color-mix(in srgb,var(--text) 25%,transparent)"}[st]
+        bg = {"ok": "var(--btn-ok-bg)", "wn": "#B45309", "sk": "color-mix(in srgb,var(--text) 25%,transparent)"}[st]
         g = {"ok": CHECK, "wn": "!", "sk": "–"}[st]
-        rc = {"ok": "var(--text-3)", "wn": "var(--orange)", "sk": "var(--text-3)"}[st]
+        rc = {"ok": "var(--text-3)", "wn": "var(--ink-orange)", "sk": "var(--text-3)"}[st]
         return f'<div class="chk3"><span class="ck3" style="background:{bg};font-size:12px;font-weight:800">{g}</span><span class="grow">{t}</span><span class="f12" style="color:{rc}">{r}</span></div>'
 
     s4 = X + f'''
       <div class="big-ok" style="margin-top:18px">
-        <span class="ck3" style="width:44px;height:44px;background:var(--green)">{I("check",22,3)}</span>
+        <span class="ck3" style="width:44px;height:44px;background:var(--btn-ok-bg)">{I("check",22,3)}</span>
         <div class="grow"><div class="f16 w7">必需条件全部通过，可以开工了</div><div class="f13 t2" style="margin-top:3px">Bot-02 实际跑了一遍自动探测与体检 · 用时 3 分 52 秒 · 今天 10:42</div></div>
         <span class="f12 lnk">看完整日志 ›</span>
       </div>
@@ -818,11 +783,11 @@ def ai_step(page, CHECK):
         {row("AI 引擎", f'<div class="cc-select cc-select-lg grow"><span style="width:7px;height:7px;border-radius:50%;background:var(--purple);flex:none"></span><span class="cc-sel-val">Pi</span><span class="cc-sel-sub">默认内置 · 多模型</span>{CHEV}</div>')}
         {row("主力模型", f'<div class="cc-select cc-select-lg grow"><span style="width:7px;height:7px;border-radius:50%;background:var(--green);flex:none"></span><span class="cc-sel-val mono">gpt-6.2-sol</span><span class="cc-sel-sub">公司网关 · 深度推理与多文件修单</span>{CHEV}</div>')}
         {row("快速模型", f'<div class="cc-select cc-select-lg grow"><span class="cc-sel-val mono">gpt-6.2-mini</span><span class="cc-sel-sub">报错解读 / 翻译 / 轻问答</span>{CHEV}</div>')}
-        {row("连接方式", '<div class="seg" style="flex:1"><span class="on" style="flex:1;justify-content:center">公司网关</span><span style="flex:1;justify-content:center">API Key</span></div>')}
+        {row("连接方式", '<div class="cc-seg cc-seg-lg" style="flex:1;display:flex"><span class="on" style="flex:1">公司网关</span><span style="flex:1">API Key</span></div>')}
         {row("网关地址", '<div class="cc-input cc-input-lg grow"><span class="mono f12">https://ai-gateway.tita.cloud</span></div>')}
         {row("访问令牌", '<div class="cc-input cc-input-lg grow"><span class="mono f12">•••••••••••••••• 3f9a</span></div>')}
         <div class="row g10" style="margin:16px 0 0 86px">
-          <button class="btn2 a-sec" style="background:var(--glass-2)">{I("zap",14)}试一下</button>
+          <button class="cc-btn cc-btn-glass">{I("zap",14)}试一下</button>
           {OK}已连通 · Bot-02 实际调用了一次（1.2 秒），4 项模型能力探测完成</span>
         </div>
       </div>

@@ -13,7 +13,7 @@
     <i data-i="search" data-s="15" style="color:var(--text-3)"></i>
     <span class="grow">okr-web</span>
     <span class="cc-search-clear"><i data-i="x" data-s="10" data-w="2.8"></i></span>
-    <span class="cc-tag cc-tag-b" style="height:18px;font-size:10px">46pt</span>
+    <span class="cc-tag cc-tag-b" style="height:18px;font-size:11px">46pt</span>
   </div>
 
   <!-- OTP 聚焦输入（46px） + 错误态字段 -->
@@ -73,8 +73,8 @@
     <span class="cc-m-btn cc-m-btn-pri" style="flex:1.55"><i data-i="check" data-s="12" data-w="3"></i>审核通过 a3f9c21</span>
   </div>
   <div class="row" style="gap:10px">
-    <span class="cc-m-btn cc-m-btn-glass" style="flex:1;height:40px;font-size:13px"><span class="cc-spinner cc-spinner-sm" style="color:var(--ink-blue)"></span>试连中…</span>
-    <span class="cc-m-btn cc-m-btn-ok" style="flex:1;height:40px;font-size:13px"><i data-i="check" data-s="12" data-w="3"></i>复测通过</span>
+    <span class="cc-m-btn cc-m-btn-glass" style="flex:1;font-size:13px"><span class="cc-spinner cc-spinner-sm" style="color:var(--ink-blue)"></span>试连中…</span>
+    <span class="cc-m-btn cc-m-btn-ok" style="flex:1;font-size:13px"><i data-i="check" data-s="12" data-w="3"></i>复测通过</span>
   </div>
 </div>
 <div class="home"></div></div></div><div class="lbl">基础控件与 44pt 标尺<em>NavBar · 输入 · 下拉 · 开关 · 吸底栏</em></div></div><div class="col3"><div class="phone"><div class="scr"><div class="sbar"><span>9:41</span><span class="sbi"><svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M8 2.2c2.4 0 4.6.9 6.2 2.5l1.2-1.2A10.4 10.4 0 0 0 8 .5 10.4 10.4 0 0 0 .6 3.5l1.2 1.2A8.7 8.7 0 0 1 8 2.2zm0 3.4c1.5 0 2.8.6 3.8 1.5L13 5.9a7 7 0 0 0-10 0l1.2 1.2c1-.9 2.3-1.5 3.8-1.5zM8 9l2-2a2.9 2.9 0 0 0-4 0z"/></svg><svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="17" height="8" rx="2" fill="currentColor"/><rect x="23.5" y="4" width="1.5" height="4" rx=".75" fill="currentColor" opacity=".4"/></svg></span></div>
@@ -131,9 +131,9 @@
       <i data-i="lock" data-s="14" data-w="2.2" style="margin-top:1px;flex:none"></i>
       <span><b>L2 高危改动（命中 auth/ 核心路径）</b><br>手机端已禁用 10 秒速过，请去 PC 端逐行审 Diff</span>
     </div>
-    <div class="row g8">
-      <span class="cc-m-btn cc-m-btn-locked" style="flex:1.15;height:40px;font-size:12.5px"><i data-i="lock" data-s="13"></i>仅限 PC 审核</span>
-      <span class="cc-m-btn cc-m-btn-glass" style="flex:1;height:40px;font-size:12.5px;color:var(--ink-blue)"><i data-i="ext" data-s="13"></i>发到 PC ›</span>
+    <div class="row" style="gap:8px">
+      <span class="cc-m-btn cc-m-btn-locked" style="flex:1.15;font-size:12.5px"><i data-i="lock" data-s="13"></i>仅限 PC 审核</span>
+      <span class="cc-m-btn cc-m-btn-glass" style="flex:1;font-size:12.5px;color:var(--ink-blue)"><i data-i="ext" data-s="13"></i>发到 PC ›</span>
     </div>
   </div>
 </div>
@@ -195,14 +195,14 @@
     </div>
 
     <!-- 44pt 复选行 -->
-    <div class="row" style="gap:10px;min-height:40px">
+    <div class="row" style="gap:10px;min-height:var(--m-touch)">
       <span class="cc-m-checkbox is-checked"><i data-i="check" data-s="12" data-w="3"></i></span>
       <span class="f13 grow">下一轮使用管理员账号补跑验证</span>
     </div>
 
     <!-- 2 步竖向微时间线 -->
     <div class="cc-card-flat" style="padding:8px 11px;display:flex;flex-direction:column;gap:5px">
-      <div class="row g8 f12"><span class="ok2" style="background:var(--switch-on)"><i data-i="check" data-s="9" data-w="3"></i></span><span>附加代码位置 <span class="mono">GroupPicker.tsx:49</span></span></div>
+      <div class="row g8 f12"><span class="ok2" style="background:var(--btn-ok-bg)"><i data-i="check" data-s="9" data-w="3"></i></span><span>附加代码位置 <span class="mono">GroupPicker.tsx:49</span></span></div>
       <div class="row g8 f12 t2"><span class="cc-dot" style="background:var(--blue);margin:0 4px"></span><span>提交后立即通知 Bot-01 开始第 3 轮修复</span></div>
     </div>
 

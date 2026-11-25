@@ -18,27 +18,28 @@ CHECK = I("check", 13, 3)
 STYLE = '''
 .board{width:1880px;gap:44px}
 .top2{position:absolute;left:0;right:0;top:54px;padding:0 18px}
-.bot2{position:absolute;left:16px;right:16px;bottom:30px;display:flex;gap:12px;align-items:center}
+.bot2{position:absolute;left:16px;right:16px;bottom:30px;display:flex;gap:12px;align-items:center;z-index:var(--z-dock)}
 .bot2 .bigbtn{width:auto;margin:0}
 .pri{background:var(--btn-pri-bg);color:#fff;box-shadow:0 10px 22px -10px color-mix(in srgb,var(--btn-pri-bg) 85%,transparent)}
 .mbtn-sec{background:var(--fill);color:var(--text)}
 .kk{font-size:12px;color:var(--ink-blue);font-weight:700}
 .h1{font-size:24px;font-weight:800;margin-top:4px}
-.pbar{height:4px;border-radius:2px;background:var(--fill);overflow:hidden}
-.pbar i{display:block;height:100%;border-radius:2px;background:linear-gradient(90deg,#4F8BFF,#9B5CFF)}
+.pbar{height:4px;border-radius:2px;background:var(--well);overflow:hidden}
+.pbar i{display:block;height:100%;border-radius:2px;background:linear-gradient(90deg,var(--blue),var(--purple))}
 .st3{display:flex;gap:12px;align-items:center;min-height:var(--m-row-h);padding:10px 14px;border-top:1px solid var(--hair)}
 .st3:first-child{border-top:0}
 .sc3{width:26px;height:26px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
-.s-done .sc3{background:var(--green);color:#fff}
+.s-done .sc3{background:var(--btn-ok-bg);color:#fff}
 .s-cur .sc3{background:var(--btn-pri-bg);color:#fff;box-shadow:0 0 0 4px color-mix(in srgb,var(--blue) 20%,transparent)}
-.s-todo .sc3{border:1.5px solid color-mix(in srgb,var(--text) 22%,transparent);color:var(--text-3)}
+.s-todo .sc3{border:1.5px solid var(--border-ctl-hover);color:var(--text-3)}
 .st3 b{display:block;font-size:15px;font-weight:600}
 .s-cur b{color:var(--ink-blue)}
 .s-todo b{color:var(--text-2);font-weight:500}
 .st3 em{display:block;font-style:normal;font-size:12px;color:var(--text-3);margin-top:2px}
 .lst{border-radius:18px;overflow:hidden}
 .ech{display:flex;gap:8px;overflow:hidden}
-.ec{flex:none;height:36px;padding:0 12px;border-radius:18px;display:inline-flex;align-items:center;gap:6px;font-size:13px;background:var(--fill);color:var(--text-2)}
+.ec{flex:none;height:36px;padding:0 12px;border-radius:18px;display:inline-flex;align-items:center;gap:6px;font-size:13px;background:var(--fill);color:var(--text-2);position:relative}
+.ec::before{content:"";position:absolute;inset:-4px 0;min-height:var(--m-touch)}
 .ec.on{background:var(--btn-pri-bg);color:#fff;font-weight:600}
 .ac{border-radius:16px;padding:12px 14px}
 .chp{display:inline-flex;align-items:center;gap:4px;height:22px;padding:0 7px;border-radius:7px;font-size:11.5px;font-weight:600;white-space:nowrap}
@@ -49,9 +50,9 @@ STYLE = '''
 .c-o{background:color-mix(in srgb,var(--orange) 15%,transparent);color:var(--ink-orange)}
 .okt{display:inline-flex;align-items:center;gap:4px;color:var(--ink-green);font-size:12px;font-weight:600;white-space:nowrap}
 .ing{display:inline-flex;align-items:center;gap:6px;color:var(--ink-blue);font-size:12px;font-weight:600;white-space:nowrap}
-.spin{width:12px;height:12px;border-radius:50%;border:2px solid color-mix(in srgb,var(--blue) 25%,transparent);border-top-color:var(--blue);flex:none}
-.sg{display:flex;height:var(--m-seg-h);padding:3px;border-radius:12px;background:var(--fill)}
-.sg span{flex:1;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;gap:5px;font-size:13px;color:var(--text-2)}
+.spin{width:12px;height:12px;border-radius:50%;border:2px solid color-mix(in srgb,var(--blue) 25%,transparent);border-top-color:var(--ink-blue);flex:none}
+.sg{display:flex;height:var(--m-seg-h);align-items:center;padding:3px;border-radius:var(--r-lg);background:var(--well);border:1px solid var(--hair);gap:2px}
+.sg span{flex:1;height:100%;border-radius:9px;display:flex;align-items:center;justify-content:center;gap:5px;font-size:13px;font-weight:500;color:var(--text-2)}
 .sg span.on{background:var(--seg-thumb);color:var(--text);font-weight:600;box-shadow:var(--shadow-seg)}
 .sel2{display:flex;align-items:center;justify-content:space-between;height:var(--m-input-h);border-radius:12px;background:var(--glass-2);border:1px solid var(--border-ctl);box-shadow:var(--shadow-ctl);padding:0 13px;font-size:14.5px;font-weight:600}
 .ckk{border-radius:12px;background:var(--glass-2);border:1px solid var(--focus-ring);padding:10px 12px;font-size:12px;line-height:1.5;color:var(--text-2);word-break:break-all;box-shadow:0 0 0 3px var(--focus-halo)}
@@ -83,7 +84,7 @@ p1 = phone(f'''
   <div class="row f12 t3" style="margin:14px 0 6px"><span class="grow">第 3 步，共 4 步</span><span>已完成 2 步</span></div>
   <div class="pbar"><i style="width:50%"></i></div>
   <div class="lst glass" style="margin-top:14px">{sl}</div>
-  <div class="mwhy"><div class="row g6" style="font-weight:700;color:var(--text);margin-bottom:4px">{I("spark",13,st="color:var(--purple)")}内置规则直接生效</div>自定义 Skills、发布回滚、主题与费用检测插件之后在设置和插件市场按需启用，不挡开工。</div>
+  <div class="mwhy"><div class="row g6" style="font-weight:700;color:var(--text);margin-bottom:4px">{I("spark",13,st="color:var(--ink-purple)")}内置规则直接生效</div>自定义 Skills、发布回滚、主题与费用检测插件之后在设置和插件市场按需启用，不挡开工。</div>
 </div>
 <div class="bot2"><button class="bigbtn pri" style="flex:1">继续：环境与账号{I("chevr",16,2.4)}</button></div>''')
 
@@ -98,7 +99,7 @@ EDIT = f'<span class="chp c-e">{I("edit",11)}可以修改</span>'
 OKS = f'<span class="okt">{CHECK}登录成功</span>'
 p2 = phone(f'''
 <div class="top2">
-  <div class="row"><span class="row g4 lnk f15">{I("chevr",18,st="transform:rotate(180deg)")}步骤</span><span class="grow"></span><span class="f13 t3">3 / 4</span></div>
+  <div class="row" style="min-height:var(--m-nav-h)"><span class="row g4 lnk f15" style="min-height:var(--m-touch)">{I("chevr",18,st="transform:rotate(180deg)")}步骤</span><span class="grow"></span><span class="f13 t3">3 / 4</span></div>
   <div class="kk" style="margin-top:10px">第 3 步 · 环境与账号</div>
   <div class="ttl" style="font-size:20px;margin-top:4px">Bot 在哪儿复现、用谁登录</div>
   <div class="ech" style="margin-top:14px"><span class="ec on">测试环境 · 4</span><span class="ec">联调环境 · 2</span><span class="ec">正式 · 3</span><span class="ec">{I("plus",14)}</span></div>
@@ -108,7 +109,7 @@ p2 = phone(f'''
     {acc("普通员工", "李娜 · 研发部", '<span class="chp c-n">Cookie · 至 11-27</span>', EDIT, OKS, True)}
     {acc("OKR 管理员", "okr_admin", PW, EDIT, '<span class="ing"><span class="spin"></span>正在试登录</span>')}
   </div>
-  <div class="row" style="margin-top:12px"><span class="f14 lnk">+ 添加账号</span><span class="grow"></span><span class="f12 t3">纯代码单可先跳过 ›</span></div>
+  <div class="row" style="margin-top:4px;min-height:var(--m-touch)"><span class="f14 lnk" style="min-height:var(--m-touch);display:inline-flex;align-items:center">+ 添加账号</span><span class="grow"></span><span class="f12 t3">纯代码单可先跳过 ›</span></div>
 </div>
 <div class="bot2"><button class="bigbtn mbtn-sec" style="width:96px">上一步</button><button class="bigbtn pri" style="flex:1">下一步：AI 体检</button></div>''')
 
@@ -117,7 +118,7 @@ sheet = f'''<div class="scrim"></div><div class="sheet">
   <div class="grab"></div>
   <div class="row g8"><span class="ttl grow">添加账号 · 正式环境</span><span class="f13 t3">取消</span></div>
   <div class="flb">角色</div>
-  <div class="sel2">普通员工{I("chevd",15,st="color:var(--text-3)")}</div>
+  <div class="cc-m-select"><span class="cc-sel-val">普通员工</span><span class="cc-sel-sp"></span><span class="cc-sel-caret">{I("chevd",14)}</span></div>
   <div class="flb">登录方式</div>
   <div class="sg"><span>密码</span><span class="on">Cookie</span></div>
   <div class="flb">粘贴 Cookie</div>
@@ -134,16 +135,17 @@ p3 = phone(f'''
 
 # 4 第 4 步 · AI 体检并开工
 def rw(st, t, r):
-    bg = {"ok": "var(--green)", "wn": "var(--orange)", "sk": "color-mix(in srgb,var(--text) 25%,transparent)"}[st]
+    bg = {"ok": "var(--btn-ok-bg)", "wn": "color-mix(in srgb,var(--orange) 18%,transparent)", "sk": "var(--fill)"}[st]
+    fg = {"ok": "#fff", "wn": "var(--ink-orange)", "sk": "var(--text-2)"}[st]
     g = {"ok": CHECK, "wn": "!", "sk": "–"}[st]
     rc = {"ok": "var(--text-3)", "wn": "var(--ink-orange)", "sk": "var(--text-3)"}[st]
-    return f'<div class="rw"><span class="ck3" style="background:{bg}">{g}</span><span class="grow">{t}</span><span class="f12" style="color:{rc}">{r}</span></div>'
+    return f'<div class="rw"><span class="ck3" style="background:{bg};color:{fg}">{g}</span><span class="grow">{t}</span><span class="f12" style="color:{rc}">{r}</span></div>'
 p4 = phone(f'''
 <div class="top2">
-  <div class="row"><span class="row g4 lnk f15">{I("chevr",18,st="transform:rotate(180deg)")}步骤</span><span class="grow"></span><span class="f13 t3">4 / 4</span></div>
+  <div class="row" style="min-height:var(--m-nav-h)"><span class="row g4 lnk f15" style="min-height:var(--m-touch)">{I("chevr",18,st="transform:rotate(180deg)")}步骤</span><span class="grow"></span><span class="f13 t3">4 / 4</span></div>
   <div class="kk" style="margin-top:8px">第 4 步 · AI 体检并开工</div>
   <div class="row g12" style="margin-top:10px;padding:12px 14px;border-radius:18px;background:color-mix(in srgb,var(--green) 12%,var(--glass-2));border:1px solid color-mix(in srgb,var(--green) 30%,transparent)">
-    <span class="ck3" style="width:38px;height:38px;background:var(--green)">{I("check",19,3)}</span>
+    <span class="ck3" style="width:38px;height:38px;background:var(--btn-ok-bg)">{I("check",19,3)}</span>
     <div class="grow"><div class="f16 w7">可以开工了</div><div class="f12 t2" style="margin-top:2px">Bot-02 自动探测与体检 · 3 分 52 秒</div></div></div>
   <div class="glass" style="border-radius:18px;padding:4px 14px;margin-top:10px">
     {rw("ok", "AI 引擎已连通", "Pi · gpt-6.2-sol")}

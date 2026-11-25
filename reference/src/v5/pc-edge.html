@@ -12,8 +12,8 @@ html:not(.dark) .el .no{color:#fff}
 .el b{font-size:16px;font-weight:700}
 .el em{font-style:normal;font-size:13px;color:var(--text-3)}
 .ep{flex:1;min-height:0;border-radius:22px;display:flex;flex-direction:column;overflow:hidden}
-.ein{height:40px;border-radius:11px;background:var(--fill);display:flex;align-items:center;gap:10px;padding:0 12px;font-size:14px}
-.ein.fo{box-shadow:0 0 0 2px color-mix(in srgb,var(--blue) 55%,transparent);background:var(--glass-2)}
+.ein{height:40px;border-radius:var(--r-lg);background:var(--well);border:1px solid var(--hair);display:flex;align-items:center;gap:10px;padding:0 12px;font-size:14px}
+.ein.fo{border-color:var(--focus-ring);box-shadow:0 0 0 3px var(--focus-halo);background:var(--glass-2)}
 .bdj{width:18px;height:18px;border-radius:5px;background:linear-gradient(160deg,#4FA3FF,#1D6FE0);color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none}
 .dots{letter-spacing:3px;font-size:16px;line-height:1}
 .ebar{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:14px}
@@ -70,12 +70,12 @@ html:not(.dark) .el .no{color:#fff}
   <span class="grow"></span>
   <div class="row g8 f12 t2" style="margin:0 0 2px 34px;padding:8px 12px;border-radius:10px;background:var(--fill)"><i data-i="refresh" data-s="13" style="color:var(--text-3)"></i><span class="grow">页面上的旧按钮也一样：点了先刷新，提示「已由某某处理」，不会重复执行</span></div>
 </div>
-<div class="row g8" style="margin:8px 14px 12px;height:40px;padding:0 6px 0 10px;border-radius:13px;background:var(--fill)"><span class="aid" style="width:20px;height:20px;border-radius:6px"><i data-i="spark" data-s="11"></i></span><span class="f12 w6">本单 AI</span><span class="mono f11 t3">TK-20871</span><span class="f13 t3 grow ell">问这张单…</span></div></section></div><div class="et"><div class="el"><span class="no">4</span><b>审核中有新提交</b><em>通过的永远是最新的那个提交</em></div><section class="glass ep"><header class="thead"><div class="row g10"><span class="appic ic-tita" style="width:32px;height:32px;font-size:9px;border-radius:9px">TITA</span>
+<div class="row g8" style="margin:8px 14px 12px;height:40px;padding:0 6px 0 10px;border-radius:var(--r-lg);background:var(--well);border:1px solid var(--hair)"><span class="aid" style="width:20px;height:20px;border-radius:6px"><i data-i="spark" data-s="11"></i></span><span class="f12 w6">本单 AI</span><span class="mono f11 t3">TK-20871</span><span class="f13 t3 grow ell">问这张单…</span></div></section></div><div class="et"><div class="el"><span class="no">4</span><b>审核中有新提交</b><em>通过的永远是最新的那个提交</em></div><section class="glass ep"><header class="thead"><div class="row g10"><span class="appic ic-tita" style="width:32px;height:32px;font-size:9px;border-radius:9px">TITA</span>
 <div class="col grow" style="min-width:0"><h1 class="ell">审批中心：发起审批时点击分组，界面卡住</h1><div class="f12 t3 ell" style="margin-top:1px">TK-20871 · 修复人 林某 · 第 2 轮</div></div><span class="pill p-blue" style="flex:none">待我审核 · 第 2 轮</span></div><div class="row g10" style="margin-top:8px"><div class="tab2"><span>对话</span><span class="on">代码改动 <b>3</b></span><span>证据 <b>4</b></span><span>执行日志</span><span>发布</span></div></div></header>
 <div class="col grow g6" style="padding:10px 18px 0;min-height:0">
   <div class="ebar" style="padding:8px 14px;background:color-mix(in srgb,var(--orange) 13%,transparent)"><i data-i="git" data-s="16" style="color:var(--ink-orange)"></i>
     <div class="col grow" style="min-width:0"><span class="f13 w6">Bot 刚又提交了 <span class="mono">b71e0d2</span></span><span class="f12 t2">15:06 · 1 个文件 · 你正在看的是 <span class="mono">a3f9c21</span></span></div>
-    <span class="btn2 sm a-sec" style="background:var(--glass-2)">只看新增的</span><span class="btn2 sm a-pri">切到最新</span></div>
+    <span class="cc-btn cc-btn-xs cc-btn-glass">只看新增的</span><span class="cc-btn cc-btn-xs cc-btn-pri">切到最新</span></div>
   <div class="col" style="gap:2px">
     <div class="row g8" style="padding:3px 10px;border-radius:10px"><span class="st st-m" style="width:16px;height:16px;border-radius:4px;font-size:10px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center">M</span><span class="f13 w6">GroupPicker.tsx</span><span class="tag tg-o">有新改动 · 要重看</span><span class="grow"></span><span class="f11 num" style="color:var(--ink-green)">+1</span><span class="f11 num" style="color:var(--ink-red)">−1</span></div>
     <div class="row g8" style="padding:3px 10px;border-radius:10px"><span class="st st-m" style="width:16px;height:16px;border-radius:4px;font-size:10px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center">M</span><span class="f13 w6">useMembers.ts</span><span class="tag tg-g">已看 · 没变</span><span class="grow"></span><span class="f11 t3">保留已看</span></div>
@@ -89,7 +89,7 @@ html:not(.dark) .el .no{color:#fff}
 <div class="row g8" style="padding:10px 18px;border-top:1px solid var(--hair)">
   <span class="f12 t3 grow">要通过的是最新的 <span class="mono">b71e0d2</span></span>
   <button class="abtn a-red" style="height:36px;font-size:13px"><i data-i="undo" data-s="13"></i>打回</button>
-  <button class="abtn a-sec" style="height:36px;font-size:13px;opacity:.55"><i data-i="check" data-s="14" data-w="2.6"></i>看完新改动才能通过</button></div></section></div></div>
+  <button class="abtn a-sec" style="height:36px;font-size:13px;opacity:.46"><i data-i="check" data-s="14" data-w="2.6"></i>看完新改动才能通过</button></div></section></div></div>
 </div>
 <script src="../v3/shots.js"></script><script src="icons.js"></script>
 </body></html>

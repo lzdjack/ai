@@ -8,7 +8,7 @@
   <div class="grow row" style="justify-content:center"><div class="glass tsearch"><i data-i="search" data-s="15"></i><span class="f13 grow">搜索工单、MR、发布记录</span><span class="kbd" style="border-color:var(--hair)">⌘F</span></div></div>
   <div class="tright">
     <span class="pill glass tpill"><i data-i="bot" data-s="13"></i>3 个 Bot 在线</span>
-    <span class="pill glass tpill"><span class="dot" style="width:7px;height:7px;color:var(--green)"></span>Jira · 2 分钟前</span>
+    <span class="pill glass tpill"><span class="dot" style="width:7px;height:7px;background:var(--green)"></span>Jira · 2 分钟前</span>
     <span class="pill glass tpill" style="color:var(--ink-orange)"><span class="dot" style="width:7px;height:7px;background:var(--orange)"></span>Tita 采集失败 · 重试中</span>
     <span class="av" style="width:34px;height:34px;font-size:13px;background:linear-gradient(160deg,#FFC9A8,#F08F7A);color:#5A2414">林</span>
   </div>
@@ -17,12 +17,12 @@
 <style>
 .mk-item{display:flex;gap:10px;padding:9px 10px;border-radius:14px;align-items:center;position:relative}
 .mk-item+.mk-item::after{content:"";position:absolute;left:54px;right:10px;top:0;height:1px;background:var(--hair)}
-.mk-item.on{background:linear-gradient(180deg,#3B8BFF,#1F6FFF);color:#fff;box-shadow:0 8px 18px -10px rgba(31,111,255,.9),inset 0 1px 0 rgba(255,255,255,.25)}
+.mk-item.on{background:linear-gradient(180deg,var(--btn-pri-bg),var(--btn-pri-active));color:#fff;box-shadow:0 8px 18px -10px color-mix(in srgb,var(--btn-pri-bg) 88%,transparent),inset 0 1px 0 rgba(255,255,255,.25)}
 .mk-item.on::after,.mk-item.on+.mk-item::after{display:none}
 .mk-ic{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;flex:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 4px 10px -4px rgba(0,0,0,.3)}
 .mk-item.on .mk-sub{color:rgba(255,255,255,.84)!important}
 .mk-item.on .mk-bd{background:rgba(255,255,255,.22)!important;color:#fff!important}
-.mk-bd{height:17px;padding:0 6px;border-radius:5px;font-size:10px;font-weight:700;display:inline-flex;align-items:center;white-space:nowrap;flex:none}
+.mk-bd{height:20px;padding:0 6px;border-radius:6px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;white-space:nowrap;flex:none}
 .slot-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;margin-top:10px}
 .slot-c{padding:11px 13px;border-radius:14px;background:var(--fill);border:1px solid var(--hair);min-width:0;overflow:hidden}
 .cmd-row{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:11px;background:var(--fill);font-size:12.5px}
@@ -31,7 +31,7 @@
 .cmd-v{font-family:"SF Mono",ui-monospace,monospace;color:var(--text);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .cmd-n{font-size:11.5px;color:var(--text-3);white-space:nowrap;flex:none}
 .mcp-chip{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 11px;border-radius:9px;background:color-mix(in srgb,var(--purple) 11%,transparent);color:var(--ink-purple);font-family:"SF Mono",ui-monospace,monospace;font-size:12px;font-weight:600}
-.inst-pill{height:24px;padding:0 9px;border-radius:8px;font-size:11.5px;font-weight:600;display:inline-flex;align-items:center;gap:4px;color:var(--ink-blue);background:color-mix(in srgb,var(--blue) 12%,transparent)}
+.inst-pill{height:var(--ctl-xs);padding:0 10px;border-radius:var(--r-sm);font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:4px;color:var(--ink-blue);background:color-mix(in srgb,var(--blue) 12%,transparent)}
 </style>
 <section class="glass pn" style="width:296px;flex:none;padding:16px 10px 10px">
   <div class="row" style="padding:0 8px 8px">
@@ -39,10 +39,10 @@
     <span class="btn2 sm" style="background:var(--fill);color:var(--text)"><i data-i="plus" data-s="13" data-w="2.3"></i>私有插件</span>
   </div>
   <div class="row g8" style="margin:0 6px;height:var(--ctl-sm);padding:0 10px;border-radius:var(--r-sm);background:var(--well);border:1px solid var(--hair);color:var(--text-3)"><i data-i="search" data-s="14"></i><span class="f12">搜索插件、连接器、主题、MCP…</span></div>
-  <div class="seg" style="margin:10px 6px 2px;padding:2px">
-    <span class="on" style="height:26px;font-size:12px;flex:1">全部 8</span>
-    <span style="height:26px;font-size:12px;flex:1">已安装 4</span>
-    <span style="height:26px;font-size:12px;flex:1">企业私有</span>
+  <div class="cc-seg cc-seg-sm" style="margin:10px 6px 2px;display:flex">
+    <span class="on" style="flex:1">全部 8</span>
+    <span style="flex:1">已安装 4</span>
+    <span style="flex:1">企业私有</span>
   </div>
 
   <div class="g10h">已安装 · 含官方预装<span>4</span></div>

@@ -27,30 +27,30 @@ html.dark .aura{opacity:.46}
 .ring{position:absolute;border-radius:50%;border:1px solid color-mix(in srgb,var(--text) 7%,transparent)}
 .nm{font-family:"Hiragino Sans GB","PingFang SC",sans-serif;font-weight:600;letter-spacing:2.8px;color:var(--text)}
 .sub{font-family:"Optima","Avenir Next",sans-serif;letter-spacing:3.2px;text-transform:uppercase;font-weight:700;background:linear-gradient(90deg,#3B6FE8,#7C4DDB);-webkit-background-clip:text;-webkit-text-fill-color:transparent;opacity:.88}
-html.dark .sub{background:linear-gradient(90deg,#7DD3FC,#C4B5FD);-webkit-background-clip:text;-webkit-text-fill-color:transparent;opacity:.92}
+html.dark .sub{background:var(--brand-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;opacity:.92}
 .pri{background:var(--btn-pri-bg);color:#fff;box-shadow:0 12px 26px -10px color-mix(in srgb,var(--btn-pri-bg) 85%,transparent)}
 .sec{background:var(--fill);color:var(--text)}
 .ib{border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none}
 .ib-b{background:color-mix(in srgb,var(--blue) 14%,transparent);color:var(--ink-blue)}
 .hr{height:1px;background:var(--hair)}
 .lnk{color:var(--ink-blue);font-weight:600}
-.pill{display:inline-flex;align-items:center;gap:7px;height:30px;padding:0 13px;border-radius:15px;font-size:12.5px;color:var(--text-2);box-shadow:none!important}
+.pill{display:inline-flex;align-items:center;gap:7px;height:26px;padding:0 12px;border-radius:var(--r-full);font-size:12px;font-weight:600;color:var(--text-2);box-shadow:none!important}
 .lab{font-size:12px;font-weight:600;color:var(--text-2);margin:0 0 6px 2px}
 .inp{height:var(--ctl-lg);border-radius:var(--r-lg);background:var(--well);border:1px solid var(--hair);display:flex;align-items:center;gap:10px;padding:0 14px;font-size:14px;color:var(--text)}
 .inp>i,.inp>svg{color:var(--text-3);flex:none}
 .inp.focus{background:var(--glass-2);border-color:var(--focus-ring);box-shadow:0 0 0 3px var(--focus-halo)}
 .inp.ro{background:transparent;border-color:var(--hair)}
 .dots{letter-spacing:3px;font-size:15px}
-.seg2{display:flex;padding:3px;border-radius:var(--r-lg);background:var(--fill)}
-.seg2 span{flex:1;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;gap:7px;font-size:13.5px;font-weight:600;color:var(--text-2)}
+.seg2{display:flex;height:var(--ctl-lg);align-items:center;padding:3px;border-radius:var(--r-lg);background:var(--well);border:1px solid var(--hair);gap:2px}
+.seg2 span{flex:1;height:100%;border-radius:9px;display:flex;align-items:center;justify-content:center;gap:7px;font-size:13.5px;font-weight:600;color:var(--text-2)}
 .seg2 span.on{color:var(--text);background:var(--seg-thumb);box-shadow:var(--shadow-seg)}
 .bd{width:18px;height:18px;border-radius:5px;color:#fff;display:inline-flex;align-items:center;justify-content:center;flex:none}
 .bd-in{background:linear-gradient(155deg,#3B8BFF,#1D6FE0)}
 .bd-up{background:linear-gradient(155deg,#A86BFF,#6D3DF0)}
-.inp.err{background:color-mix(in srgb,var(--red) 7%,var(--well));border-color:var(--red);box-shadow:0 0 0 3px var(--error-halo)}
+.inp.err{background:color-mix(in srgb,var(--red) 7%,var(--glass-2));border-color:var(--red);box-shadow:0 0 0 3px var(--error-halo)}
 .errt{display:flex;align-items:center;gap:6px;color:var(--ink-red);font-size:12.5px;font-weight:600;margin:8px 0 0 2px}
-.ck{width:18px;height:18px;border-radius:5px;background:var(--btn-pri-bg);color:#fff;display:inline-flex;align-items:center;justify-content:center;flex:none}
-.cbtn{height:28px;padding:0 10px;border-radius:8px;background:var(--glass-2);border:1px solid var(--border-ctl);font-size:12px;font-weight:600;color:var(--ink-blue);display:inline-flex;align-items:center;white-space:nowrap}
+.ck{width:18px;height:18px;border-radius:5px;background:var(--btn-pri-bg);color:#fff;display:inline-flex;align-items:center;justify-content:center;flex:none;position:relative}
+.cbtn{height:28px;padding:0 10px;border-radius:var(--r-sm);background:var(--glass-2);border:1px solid var(--border-ctl);font-size:12px;font-weight:600;color:var(--ink-blue);display:inline-flex;align-items:center;white-space:nowrap;position:relative}
 .cbtn.sent{color:var(--text-3)}
 '''
 
@@ -75,7 +75,7 @@ def seg(sel):
 # ---------------- PC ----------------
 pc_style = COMMON + '''
 .root{display:block;background:var(--wall)}
-.card{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:30px;display:flex;flex-direction:column;z-index:2}
+.card{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:var(--r-panel);display:flex;flex-direction:column;z-index:2}
 .btnL{height:44px;border-radius:var(--r-lg);border:0;font-size:15px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:9px;width:100%}
 .ft{position:absolute;left:0;right:0;bottom:34px;display:flex;justify-content:center}
 .ver{position:absolute;right:30px;top:26px;font-size:12px;color:var(--text-3)}
@@ -90,7 +90,7 @@ pc_login_card = f'''<div class="card glass" style="width:430px;padding:34px 38px
   <div style="margin-top:24px">{seg('in')}</div>
   <div style="margin-top:18px"><div class="lab">邮箱</div><div class="inp">{MAIL}<span class="grow">lin.x@company.com</span></div></div>
   <div style="margin-top:14px"><div class="lab">密码</div><div class="inp focus">{LOCK}{DOTS}{EYE}</div></div>
-  <div class="row" style="margin-top:14px;font-size:13px"><span class="ck">{CHECK}</span><span class="t2" style="margin-left:7px">记住我</span><span class="grow"></span><span class="lnk">忘记密码？</span></div>
+  <div class="row m-act-row" style="margin-top:8px;font-size:13px"><span class="ck">{CHECK}</span><span class="t2" style="margin-left:7px">记住我</span><span class="grow"></span><span class="lnk" style="min-height:var(--m-touch);display:inline-flex;align-items:center">忘记密码？</span></div>
   <button class="btnL pri" style="margin-top:20px">登录</button>
   <div class="f12 t3" style="margin-top:12px;text-align:center">私有部署可在设置中切换「开放注册 / 仅邀请注册」</div>
 </div>'''
@@ -134,6 +134,10 @@ m_style = COMMON + '''
 .pad{position:absolute;left:22px;right:22px}
 .ctx{border-radius:20px;padding:14px 16px}
 .inp{height:var(--m-input-h);font-size:14.5px}
+.seg2{height:var(--m-seg-h)}
+.ck{width:22px;height:22px;border-radius:6px}.ck::before{content:"";position:absolute;inset:-11px}
+.cbtn::before{content:"";position:absolute;inset:-8px -4px;min-height:var(--m-touch)}
+.m-act-row{min-height:var(--m-touch)}
 '''
 
 
@@ -150,7 +154,7 @@ p1 = phone(f'''{head_logo}
 <div class="pad" style="top:280px">{seg('in')}
   <div style="margin-top:18px"><div class="lab">邮箱</div><div class="inp">{MAIL}<span class="grow">lin.x@company.com</span></div></div>
   <div style="margin-top:14px"><div class="lab">密码</div><div class="inp focus">{LOCK}{DOTS}{EYE}</div></div>
-  <div class="row" style="margin-top:14px;font-size:13px"><span class="ck">{CHECK}</span><span class="t2" style="margin-left:7px">记住我</span><span class="grow"></span><span class="lnk">忘记密码？</span></div>
+  <div class="row m-act-row" style="margin-top:8px;font-size:13px"><span class="ck">{CHECK}</span><span class="t2" style="margin-left:7px">记住我</span><span class="grow"></span><span class="lnk" style="min-height:var(--m-touch);display:inline-flex;align-items:center">忘记密码？</span></div>
 </div>
 <div class="pad" style="bottom:56px"><button class="bigbtn pri">登录</button>
 <div class="f12 t3" style="text-align:center;margin-top:11px">GitLab / Jira / Tita 登录后通过连接器接入</div></div>
@@ -173,7 +177,7 @@ p3 = phone(f'''{head_logo}
   <div style="margin-top:18px"><div class="lab">邮箱</div><div class="inp">{MAIL}<span class="grow">lin.x@company.com</span></div></div>
   <div style="margin-top:14px"><div class="lab">密码</div><div class="inp err">{LOCK}{DOTS}{EYE}</div>
   <div class="errt"><i data-i="alert" data-s="14"></i>邮箱或密码不对，请检查后重试</div></div>
-  <div class="row" style="margin-top:14px;font-size:13px"><span class="ck">{CHECK}</span><span class="t2" style="margin-left:7px">记住我</span><span class="grow"></span><span class="lnk">忘记密码？</span></div>
+  <div class="row m-act-row" style="margin-top:8px;font-size:13px"><span class="ck">{CHECK}</span><span class="t2" style="margin-left:7px">记住我</span><span class="grow"></span><span class="lnk" style="min-height:var(--m-touch);display:inline-flex;align-items:center">忘记密码？</span></div>
 </div>
 <div class="pad" style="bottom:56px"><button class="bigbtn pri">登录</button>
 <div class="f12 t3" style="text-align:center;margin-top:11px">忘记密码可通过注册邮箱重置</div></div>
@@ -197,7 +201,7 @@ p4 = phone(f'''
 </div>
 <div class="pad" style="bottom:88px"><button class="bigbtn pri">登录并打开工单</button>
 <div class="f12 t3" style="text-align:center;margin-top:11px">换成无权账号登录时，不显示工单内容</div></div>
-<div class="mid" style="bottom:38px"><div class="f13 lnk">先去首页</div></div>''')
+<div class="mid" style="bottom:28px"><div class="f13 lnk" style="min-height:var(--m-touch);display:inline-flex;align-items:center;padding:0 12px">先去首页</div></div>''')
 
 m = HEAD.format(t="登录与注册 · 移动端", css="m.css", style=m_style) + f'''<div class="board">
 <div class="col3">{p1}<div class="lbl">邮箱登录<em>顶部分段切换登录 / 注册</em></div></div>

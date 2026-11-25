@@ -14,17 +14,15 @@ SPEC_ICON = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x
 
 EXTRA_CSS = '''<style>
 .ap-spec{background:linear-gradient(155deg,#6366F1 0%,#4F46E5 55%,#0EA5E9 100%)}
-.c-pill{display:inline-flex;align-items:center;gap:4px;height:21px;padding:0 8px;border-radius:7px;font-size:11px;font-weight:700;white-space:nowrap;flex-shrink:0}
+.c-pill{display:inline-flex;align-items:center;gap:4px;height:20px;padding:0 7px;border-radius:6px;font-size:11px;font-weight:700;white-space:nowrap;flex-shrink:0}
 .cp-b{background:color-mix(in srgb,var(--blue) 14%,transparent);color:var(--ink-blue)}
 .cp-g{background:color-mix(in srgb,var(--green) 15%,transparent);color:var(--ink-green)}
 .cp-o{background:color-mix(in srgb,var(--orange) 16%,transparent);color:var(--ink-orange)}
 .cp-r{background:color-mix(in srgb,var(--red) 14%,transparent);color:var(--ink-red)}
 .cp-p{background:color-mix(in srgb,var(--purple) 14%,transparent);color:var(--ink-purple)}
-.cp-i{background:color-mix(in srgb,#6366F1 15%,transparent);color:#4F46E5}
-html.dark .cp-i{color:#A5B4FC}
+.cp-i{background:color-mix(in srgb,var(--purple) 15%,transparent);color:var(--ink-purple)}
 .cp-n{background:var(--fill);color:var(--text-2)}
-html:not(.dark) .cp-g{color:#1E8E3E}html:not(.dark) .cp-o{color:#B25E00}
-.plus-btn{width:26px;height:26px;border-radius:8px;background:var(--btn-pri-bg);color:#fff;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.plus-btn{width:28px;height:28px;border-radius:var(--r-sm);background:var(--btn-pri-bg);color:#fff;display:inline-flex;align-items:center;justify-content:center;flex:none}
 .seg{flex-shrink:0}
 .seg span{white-space:nowrap}
 /* 活原型预览与单跳提案 */
@@ -39,42 +37,37 @@ html.dark .proto-box{background:rgba(20,23,34,.85)}
 .prop-row.wait{background:color-mix(in srgb,var(--orange) 10%,var(--glass-2));box-shadow:inset 0 0 0 1.2px color-mix(in srgb,var(--orange) 45%,transparent)}
 /* 轻筛选胶囊 */
 .fstrip{display:flex;align-items:center;gap:5px;padding:4px 8px 6px}
-.fpill{height:24px;padding:0 9px;border-radius:999px;font-size:11.5px;font-weight:600;display:inline-flex;align-items:center;gap:4px;background:var(--fill);color:var(--text-2);white-space:nowrap}
+.fpill{height:var(--ctl-xs);padding:0 11px;border-radius:var(--r-full);font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:4px;background:var(--fill);color:var(--text-2);white-space:nowrap}
 .fpill.on{background:color-mix(in srgb,var(--blue) 16%,transparent);color:var(--ink-blue)}
 /* 角标 */
-.cs-chip{height:17px;padding:0 5px;border-radius:5px;font-size:10px;font-weight:700;display:inline-flex;align-items:center;white-space:nowrap;flex-shrink:0;background:rgba(99,102,241,.18);color:#4F46E5}
-html.dark .cs-chip{color:#A5B4FC}
+.cs-chip{height:20px;padding:0 6px;border-radius:6px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;white-space:nowrap;flex-shrink:0;background:color-mix(in srgb,var(--purple) 14%,transparent);color:var(--ink-purple)}
 .r10.on .cs-chip{background:rgba(255,255,255,.24);color:#fff}
-.p1-chip{height:17px;padding:0 5px;border-radius:5px;font-size:10px;font-weight:800;display:inline-flex;align-items:center;white-space:nowrap;flex-shrink:0;background:var(--btn-danger-bg);color:#fff}
+.p1-chip{height:20px;padding:0 6px;border-radius:6px;font-size:11px;font-weight:800;display:inline-flex;align-items:center;white-space:nowrap;flex-shrink:0;background:var(--btn-danger-bg);color:#fff}
 .sub-row{margin-left:14px;border-left:2px solid color-mix(in srgb,var(--red) 40%,transparent);padding-left:6px;margin-top:-2px}
 /* 工单顶部变更集联动横条 */
-.cs-bar{display:flex;align-items:center;gap:7px;padding:7px 12px;border-radius:12px;background:color-mix(in srgb,#6366F1 10%,var(--glass-2));border:1px solid color-mix(in srgb,#6366F1 30%,transparent);font-size:12px}
-.cs-btn{height:24px;padding:0 9px;border-radius:7px;font-size:11.5px;font-weight:600;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;flex-shrink:0;background:var(--glass-2);border:1px solid var(--stroke);color:var(--text)}
-.cs-btn.pri{background:color-mix(in srgb,#6366F1 16%,transparent);border-color:color-mix(in srgb,#6366F1 34%,transparent);color:#4F46E5}
-html.dark .cs-btn.pri{color:#C7D2FE}
+.cs-bar{display:flex;align-items:center;gap:7px;padding:7px 12px;border-radius:12px;background:color-mix(in srgb,var(--purple) 10%,var(--glass-2));border:1px solid color-mix(in srgb,var(--purple) 30%,transparent);font-size:12px}
+.cs-btn{height:var(--ctl-xs);padding:0 10px;border-radius:var(--r-sm);font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;flex-shrink:0;background:var(--glass-2);border:1px solid var(--border-ctl);box-shadow:var(--shadow-ctl);color:var(--text)}
+.cs-btn.pri{background:color-mix(in srgb,var(--purple) 15%,transparent);border-color:color-mix(in srgb,var(--purple) 34%,transparent);color:var(--ink-purple)}
 /* 切片工单行 */
 .srow{display:flex;align-items:center;gap:10px;padding:10px 13px;border-radius:13px;background:var(--glass-2);border:1px solid var(--stroke)}
 .srow.hi{border-color:color-mix(in srgb,var(--blue) 55%,transparent)}
 /* 无损右侧毛玻璃抽屉 */
 .stage-rel{position:relative;flex:1;min-width:0;display:flex;gap:14px}
-.dim-scrim{position:absolute;inset:0;border-radius:22px;background:rgba(15,23,42,.10);z-index:10}
-html.dark .dim-scrim{background:rgba(2,6,23,.34)}
-.drawer{position:absolute;top:0;right:0;bottom:0;width:960px;z-index:20;border-radius:22px;display:flex;flex-direction:column;overflow:hidden;
-  background:color-mix(in srgb,var(--glass-1) 94%,transparent);
-  backdrop-filter:blur(34px) saturate(180%);-webkit-backdrop-filter:blur(34px) saturate(180%);
-  border:1px solid var(--stroke-hi);
-  box-shadow:-24px 0 60px -16px rgba(15,23,42,.26),0 10px 30px -12px rgba(15,23,42,.14)}
-html.dark .drawer{background:rgba(20,24,36,.92);box-shadow:-28px 0 68px -12px rgba(0,0,0,.62)}
+.dim-scrim{position:absolute;inset:0;border-radius:24px;background:var(--scrim);z-index:var(--z-scrim)}
+.drawer{position:absolute;top:0;right:0;bottom:0;width:960px;z-index:var(--z-drawer);border-radius:24px;display:flex;flex-direction:column;overflow:hidden;
+  background:var(--glass-overlay);
+  backdrop-filter:var(--blur-panel);-webkit-backdrop-filter:var(--blur-panel);
+  border:1px solid var(--stroke);
+  box-shadow:var(--shadow-dialog)}
 /* 契约字段表 */
 .cf-row{display:flex;align-items:center;justify-content:space-between;padding:5px 8px;border-radius:8px;background:var(--fill);font-size:11.5px;margin-top:5px}
 /* QA 断言行 */
 .qa-row{display:flex;align-items:center;gap:10px;padding:9px 13px;border-radius:12px;background:var(--glass-2);border:1px solid var(--stroke)}
 .qa-row.fail{background:color-mix(in srgb,var(--red) 7%,var(--glass-2));border-color:color-mix(in srgb,var(--red) 35%,transparent)}
 .qa-dot{width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fff;flex:none;font-size:11px;font-weight:800}
-.qa-ok{background:var(--green)}.qa-no{background:var(--red)}
+.qa-ok{background:var(--btn-ok-bg)}.qa-no{background:var(--btn-danger-bg)}
 .har-box{padding:9px 12px;border-radius:10px;background:var(--fill);font-size:11.5px;line-height:1.65}
 .har-ok{color:var(--ink-green);font-weight:600}
-html:not(.dark) .har-ok{color:#1E8E3E}
 .har-bad{color:var(--ink-red);font-weight:700}
 </style>'''
 
@@ -228,7 +221,7 @@ def build_1_spec():
       </div>
     </div>
 
-    <div class="row g8" style="margin-top:auto;padding:7px 10px;border-radius:14px;background:var(--fill)">
+    <div class="row g8" style="margin-top:auto;padding:7px 10px;border-radius:14px;background:var(--well);border:1px solid var(--hair)">
       <span class="aitag"><span class="aid">{I("spark",11)}</span>变更集 AI</span>
       <span class="f13 t3 grow ell">直接说修改意见（如：退单时 CRM 提成按负数冲红，并更新活原型与契约）…</span>
       <span style="width:30px;height:30px;border-radius:50%;background:var(--btn-pri-bg);color:#fff;display:flex;align-items:center;justify-content:center">{I("arrowup",14,2.4)}</span>
@@ -384,7 +377,7 @@ def build_2_drawer():
         </div>
       </div>
 
-      <div class="row g8" style="margin-top:auto;padding:7px 10px;border-radius:13px;background:var(--fill)">
+      <div class="row g8" style="margin-top:auto;padding:7px 10px;border-radius:13px;background:var(--well);border:1px solid var(--hair)">
         <span class="aitag"><span class="aid">{I("spark",11)}</span>本单 AI · TK-903</span>
         <span class="f12.5 t3 grow ell" style="font-size:12.5px">就地追问 CRM Agent 幂等键生成逻辑，Esc 一键退回变更集总览…</span>
         <span style="width:28px;height:28px;border-radius:50%;background:var(--btn-pri-bg);color:#fff;display:flex;align-items:center;justify-content:center">{I("arrowup",13,2.4)}</span>
@@ -400,7 +393,7 @@ def build_2_drawer():
         <div class="cf-row"><span class="mono w6">amount</span><span class="mono t3">Decimal(12,2)</span></div>
         <div class="cf-row"><span class="mono w6">isRefund</span><span class="mono t3">bool · 退单负数</span></div>
         <div class="cf-row"><span class="mono w6">idemKey</span><span class="mono" style="color:var(--ink-green)">header ✓</span></div>
-        <button class="abtn a-sec" style="width:100%;justify-content:center;height:30px;margin-top:9px;background:var(--fill);font-size:11.5px;white-space:nowrap">发起契约 RFC（升 v2）</button>
+        <button class="cc-btn cc-btn-xs cc-btn-sec" style="width:100%;justify-content:center;margin-top:9px">发起契约 RFC（升 v2）</button>
       </div>
 
       <div class="card" style="padding:11px 13px">
@@ -431,7 +424,7 @@ def build_3_ticket():
     r_bug = '<div class="sub-row">' + trow(bug_row, on=False).replace('<span class="sc10 sc-j">Jira</span>', '<span class="cs-chip" style="background:color-mix(in srgb,var(--red) 16%,transparent);color:var(--ink-red)">联调 M-104</span>') + '</div>'
 
     left = ['<section class="glass pn" style="width:302px;flex:none;padding:16px 10px 10px">',
-            f'<div class="row g8" style="padding:0 8px 4px"><span class="f18 w7">工单</span><span class="f13 t3">9</span><span class="plus-btn">{I("plus",14,2.6)}</span><span class="grow"></span><div class="seg" style="padding:2px"><span class="on" style="height:24px;padding:0 10px;font-size:12px">我的</span><span style="height:24px;padding:0 10px;font-size:12px">全部</span></div></div>',
+            f'<div class="row g8" style="padding:0 8px 4px"><span class="f18 w7">工单</span><span class="f13 t3">9</span><span class="plus-btn">{I("plus",14,2.6)}</span><span class="grow"></span><div class="cc-seg cc-seg-xs"><span class="on">我的</span><span>全部</span></div></div>',
             '<div class="fstrip"><span class="fpill on">全部 9</span><span class="fpill">救火 Bug 5</span><span class="fpill">需求切片 4</span></div>',
             '<div class="g10h">等你决定<span>3</span></div>',
             r_p1,
@@ -510,7 +503,7 @@ def build_3_ticket():
       </div>
     </div>
 
-    <div class="row g8" style="margin-top:auto;padding:7px 10px;border-radius:14px;background:var(--fill)">
+    <div class="row g8" style="margin-top:auto;padding:7px 10px;border-radius:14px;background:var(--well);border:1px solid var(--hair)">
       <span class="aitag"><span class="aid">{I("spark",11)}</span>本单 AI · TK-903</span>
       <span class="f13 t3 grow ell">问 CRM Agent 为什么这样写，或让它补充异常重试单测…</span>
       <span style="width:30px;height:30px;border-radius:50%;background:var(--btn-pri-bg);color:#fff;display:flex;align-items:center;justify-content:center">{I("arrowup",14,2.4)}</span>
@@ -526,7 +519,7 @@ def build_3_ticket():
     <div class="cf-row" style="padding:4px 8px"><span class="mono w6">amount</span><span class="mono t3">Decimal · 退单&lt;0</span></div>
     <div class="cf-row" style="padding:4px 8px"><span class="mono w6">isRefund</span><span class="mono t3">bool · 退单标记</span></div>
     <div class="cf-row" style="padding:4px 8px"><span class="mono w6">idemKey</span><span class="mono" style="color:var(--ink-green)">header 幂等 ✓</span></div>
-    <button class="abtn a-sec" style="width:100%;justify-content:center;height:28px;margin-top:7px;background:var(--fill);font-size:11.5px;white-space:nowrap">发起契约 RFC（升 v2）</button>
+    <button class="cc-btn cc-btn-xs cc-btn-sec" style="width:100%;justify-content:center;height:28px;margin-top:7px">发起契约 RFC（升 v2）</button>
   </div>
 
   <div class="card" style="padding:11px 13px">
@@ -536,7 +529,7 @@ def build_3_ticket():
     <div class="kv2" style="padding:3px 0"><span class="f11.5 w7" style="font-size:11.5px;color:var(--ink-blue)">CRM · TK-903（本单）</span><span class="c-pill cp-b">待审代码</span></div>
     <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">薪酬 API · TK-904a</span><span class="c-pill cp-n">Mock 4/4</span></div>
     <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">薪酬 Web · TK-904b</span><span class="c-pill cp-n">Mock 过审</span></div>
-    <button class="abtn a-sec" style="width:100%;justify-content:center;height:30px;margin-top:8px;background:var(--fill);font-size:11.5px;white-space:nowrap">{I("plus",12,2.4)}提联调 Bug · 入待定责池</button>
+    <button class="cc-btn cc-btn-xs cc-btn-sec" style="width:100%;justify-content:center;margin-top:8px">{I("plus",12,2.4)}提联调 Bug · 入待定责池</button>
   </div>
 
   <div class="card" style="padding:11px 13px">
@@ -639,7 +632,7 @@ def build_4_qa():
       <div class="row g8" style="margin-top:9px">
         <span class="btn2 sm a-pri">{I("check",13,2.6)}确认派给 CRM 生成工单</span>
         <span class="btn2 sm a-sec" style="background:var(--fill)">转契约 RFC 升 v2</span>
-        <span class="btn2 sm a-sec" style="background:var(--fill)">改派项目 {I("chevd",12)}</span>
+        <span class="cc-select cc-select-xs"><span class="cc-sel-val">改派项目</span><span class="cc-sel-sp"></span><span class="cc-sel-caret">{I("chevd",13)}</span></span>
         <span class="f11 t3" style="margin-left:auto">确认后自动挂入 CRM 待办并支持审计转派</span>
       </div>
     </div>
@@ -647,7 +640,7 @@ def build_4_qa():
     <div class="row g10" style="margin-top:auto;padding:9px 13px;border-radius:12px;background:color-mix(in srgb,var(--blue) 8%,transparent);font-size:11.5px;color:var(--text-2)">
       <span style="color:var(--ink-blue);display:flex">{I("rocket",15)}</span>
       <span class="grow"><b>安全发版波次（Expand-Contract + Flag）：</b>波次 1 绩效/人事/CRM 兼容增量先上 → 波次 2 薪酬关开关上线 → 验稳开 Flag（异常 0 秒关开关，<b>严禁自动级联全回滚</b>）。</span>
-      <span class="btn2 sm a-sec" style="background:var(--fill);opacity:.65;white-space:nowrap">编排 PROD 波次（差 1 项）</span>
+      <span class="cc-btn cc-btn-xs cc-btn-sec is-disabled" style="opacity:.46;white-space:nowrap">编排 PROD 波次（差 1 项）</span>
     </div>
   </div>
 </main>'''

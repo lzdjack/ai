@@ -8,7 +8,7 @@
   <div class="grow row" style="justify-content:center"><div class="glass tsearch"><i data-i="search" data-s="15"></i><span class="f13 grow">搜索工单、MR、发布记录</span><span class="kbd" style="border-color:var(--hair)">⌘F</span></div></div>
   <div class="tright">
     <span class="pill glass tpill"><i data-i="bot" data-s="13"></i>3 个 Bot 在线</span>
-    <span class="pill glass tpill"><span class="dot" style="width:7px;height:7px;color:var(--green)"></span>Jira · 2 分钟前</span>
+    <span class="pill glass tpill"><span class="dot" style="width:7px;height:7px;background:var(--green)"></span>Jira · 2 分钟前</span>
     <span class="pill glass tpill" style="color:var(--ink-orange)"><span class="dot" style="width:7px;height:7px;background:var(--orange)"></span>Tita 采集失败 · 重试中</span>
     <span class="av" style="width:34px;height:34px;font-size:13px;background:linear-gradient(160deg,#FFC9A8,#F08F7A);color:#5A2414">林</span>
   </div>
@@ -27,7 +27,7 @@
 .cft{display:flex;align-items:center;gap:8px;padding-top:8px;border-top:1px solid var(--hair);font-size:11.5px;color:var(--text-3)}
 .cft .ca{margin-left:auto;color:var(--ink-blue);font-weight:600;white-space:nowrap}
 .fbar{display:flex;align-items:center;gap:8px}
-.fc{height:28px;padding:0 11px;border-radius:9px;font-size:12px;font-weight:600;color:var(--text-2);background:var(--fill);display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.fc{height:var(--ctl-xs);padding:0 11px;border-radius:var(--r-sm);font-size:12px;font-weight:600;color:var(--text-2);background:var(--fill);display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
 .fc.on{background:var(--btn-pri-bg);color:#fff}
 .fc em{font-style:normal;opacity:.72;font-size:11px;font-weight:500}
 .catrow{display:flex;align-items:center;gap:8px;padding:6px 0;border-top:1px solid var(--hair);font-size:12px}
@@ -50,7 +50,7 @@
     <span class="fc">工单平台<em>2</em></span>
     <span class="fc">发布与通知<em>1</em></span>
     <span class="grow"></span>
-    <span class="chip2" style="height:28px;font-size:12px">共享范围：全部 <i data-i="chevd" data-s="12"></i></span>
+    <span class="cc-select cc-select-xs"><span class="cc-sel-val">共享范围：全部</span><span class="cc-sel-sp"></span><span class="cc-sel-caret"><i data-i="chevd" data-s="13"></i></span></span>
   </div>
 
   <div class="cgrp"><b>代码存储</b><span class="mono f11 t3">code_source</span><span class="csub">· 自动出现在开工引导第 1 步</span></div>
@@ -105,7 +105,7 @@
         <span class="tag tg-r">令牌已过期</span>
       </div>
       <div class="f12 ell" style="color:var(--ink-red)">已断 22 分钟 · <span class="mono">401 token expired</span>（恢复后补收）</div>
-      <div class="cft"><span class="t2">仅影响 Tita 自动收单</span><span style="margin-left:auto"><button class="btn2 sm a-pri" style="height:24px;padding:0 11px;font-size:11.5px">更新令牌</button></span></div>
+      <div class="cft"><span class="t2">仅影响 Tita 自动收单</span><span style="margin-left:auto"><button class="cc-btn cc-btn-xs cc-btn-pri">更新令牌</button></span></div>
     </div>
   </div>
 
@@ -133,7 +133,7 @@
 </main><aside class="glass pn" style="width:290px;flex:none;padding:16px 14px;gap:12px"><div class="card" style="padding:12px 14px;background:color-mix(in srgb,var(--blue) 7%,var(--glass-2));border:1px solid color-mix(in srgb,var(--blue) 22%,transparent)">
   <div class="row g6"><span style="color:var(--ink-blue)"><i data-i="rocket" data-s="14"></i></span><span class="f13 w7 grow">跳过首次向导怎么补配？</span></div>
   <div class="f12 t2" style="margin-top:6px;line-height:1.6">在这里补建连接器完成鉴权，再去「设置 → 项目」划定<b>可修改 / 仅查看</b>即可开工；数据与首次向导完全同源。</div>
-  <button class="btn2 sm a-pri" style="width:100%;justify-content:center;margin-top:10px;height:30px">继续未完成的开工向导 ›</button></div><div class="card" style="padding:12px 14px">
+  <button class="cc-btn cc-btn-sm cc-btn-pri" style="width:100%;justify-content:center;margin-top:10px">继续未完成的开工向导 ›</button></div><div class="card" style="padding:12px 14px">
   <div class="mini">插件按能力标签自动归类</div>
   <div class="f12 t3" style="margin-bottom:6px;line-height:1.5">无需官方写死白名单，插件 <span class="mono">manifest</span> 声明以下类别即自动出现在对应位置：</div>
   <div>
