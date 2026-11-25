@@ -21,7 +21,7 @@ STYLE = '''
 .bot2{position:absolute;left:16px;right:16px;bottom:30px;display:flex;gap:10px;align-items:center}
 .bot2 .bigbtn{width:auto;margin:0}
 .pri{background:var(--blue);color:#fff;box-shadow:0 10px 22px -10px color-mix(in srgb,var(--blue) 85%,transparent)}
-.sec2{background:var(--fill);color:var(--text)}
+.mbtn-sec{background:var(--fill);color:var(--text)}
 .kk{font-size:12px;color:var(--blue);font-weight:700}
 .h1{font-size:24px;font-weight:800;margin-top:4px}
 .pbar{height:4px;border-radius:2px;background:var(--fill);overflow:hidden}
@@ -111,7 +111,7 @@ p2 = phone(f'''
   </div>
   <div class="row" style="margin-top:12px"><span class="f14 lnk">+ 添加账号</span><span class="grow"></span><span class="f12 t3">纯代码单可先跳过 ›</span></div>
 </div>
-<div class="bot2"><button class="bigbtn sec2" style="width:96px">上一步</button><button class="bigbtn pri" style="flex:1">下一步：AI 体检</button></div>''')
+<div class="bot2"><button class="bigbtn mbtn-sec" style="width:96px">上一步</button><button class="bigbtn pri" style="flex:1">下一步：AI 体检</button></div>''')
 
 # 3 添加账号（Cookie）
 sheet = f'''<div class="scrim"></div><div class="sheet">

@@ -224,6 +224,12 @@ html.dark .cc-menu-item.is-selected .cc-tag-b,html.dark .cc-menu-item[aria-selec
 html.dark .cc-btn-red{background:color-mix(in srgb,var(--red) 16%,transparent)}
 .cc-btn-red:hover:not(:disabled):not(.is-disabled){background:color-mix(in srgb,var(--red) 22%,transparent)}
 
+.cc-btn-ok{background:var(--btn-ok-bg);color:#fff;box-shadow:0 8px 18px -9px color-mix(in srgb,var(--btn-ok-bg) 85%,transparent)}
+.cc-btn-ok:hover:not(:disabled):not(.is-disabled){background:var(--btn-ok-hover)}
+.cc-btn-danger-solid{background:var(--btn-danger-bg);color:#fff;box-shadow:0 10px 22px -10px color-mix(in srgb,var(--btn-danger-bg) 80%,transparent)}
+.cc-btn-danger-solid:hover:not(:disabled):not(.is-disabled){background:var(--btn-danger-hover)}
+.cc-btn-locked{background:var(--fill);color:var(--text-3);border:1px dashed var(--border-ctl-hover);cursor:not-allowed;pointer-events:none;box-shadow:none}
+
 .cc-btn-ghost{background:transparent;color:var(--text-2)}
 .cc-btn-ghost:hover:not(:disabled):not(.is-disabled){background:var(--hover-tint);color:var(--text)}
 
@@ -405,14 +411,161 @@ html.dark .cc-tag-b,html.dark .cc-tag-g,html.dark .cc-tag-o,html.dark .cc-tag-r,
 .cc-close:active{transform:scale(.94)}
 .cc-close:focus-visible{outline:2px solid var(--focus-ring);outline-offset:2px}
 
-/* ---------- 10. 移动端 / 粗指针触控目标合规（Apple iOS HIG ≥ 44×44pt） ---------- */
+/* ---------- 10. 移动端 / 粗指针触控目标合规（Apple iOS HIG ≥ 44×44pt · Android M3 ≥ 48dp） ---------- */
 @media (pointer:coarse){
-  .cc-select,.cc-select-sm,.cc-input,.cc-input-sm,.cc-search,.cc-search-sm,
-  .cc-btn,.cc-btn-lg,.cc-menu-item{min-height:var(--ctl-touch)}
-  .cc-seg{min-height:var(--ctl-touch)}
-  .cc-btn-sm,.cc-btn-xs,.cc-switch,.cc-close,.cc-icon-btn,.cc-search-clear{position:relative}
-  .cc-btn-sm::before,.cc-btn-xs::before,.cc-switch::before,.cc-close::before,.cc-icon-btn::before,.cc-search-clear::before{
+  .cc-select,.cc-select-sm,.cc-select-lg,
+  .cc-input,.cc-input-sm,.cc-input-lg,
+  .cc-search,.cc-search-sm,.cc-search-lg,
+  .cc-btn,.cc-btn-lg,.cc-menu-item,.cc-seg,.cc-seg-sm,.cc-seg-lg,.cc-tabs{min-height:var(--ctl-touch)}
+  .cc-btn-sm,.cc-btn-xs,.cc-switch,.cc-close,.cc-icon-btn,.cc-search-clear,
+  .cc-checkbox,.cc-radio,.cc-chip,.cc-touch-link{position:relative}
+  .cc-btn-sm::before,.cc-btn-xs::before,.cc-switch::before,.cc-close::before,
+  .cc-icon-btn::before,.cc-search-clear::before,.cc-checkbox::before,.cc-radio::before,
+  .cc-chip::before,.cc-touch-link::before{
     content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
     min-width:var(--ctl-touch);min-height:var(--ctl-touch);
   }
 }
+
+/* ================================================================
+   11. 移动端专用标准原语（.cc-m-* · 与 PC .cc-* 0% 冲突 · 1:1 映射 Flutter Cc*）
+   ================================================================ */
+
+/* 11.1 移动端导航栏（3 列 Grid 严格居中，彻底修复无右侧按钮时标题右偏 +45px） */
+.cc-m-nav{
+  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
+  min-height:var(--m-nav-h);padding:0 12px;gap:6px;position:relative;z-index:var(--z-sticky);
+}
+.cc-m-nav-back{
+  justify-self:start;min-height:var(--m-touch);display:inline-flex;align-items:center;gap:2px;
+  font-size:15px;font-weight:500;color:var(--ink-blue);white-space:nowrap;
+}
+.cc-m-nav-title{justify-self:center;font-size:15.5px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:190px}
+.cc-m-nav-act{
+  justify-self:end;width:36px;height:36px;border-radius:50%;position:relative;
+  display:inline-flex;align-items:center;justify-content:center;color:var(--text);
+}
+.cc-m-nav-act::before{content:"";position:absolute;inset:-4px} /* 44×44pt 隐形热区 */
+
+/* 11.2 移动端表单控件（全员 ≥ 44pt，遵循微凹 --well vs 浮起 --glass-2） */
+.cc-m-input,.cc-m-search{
+  height:var(--m-input-h);padding:0 13px;border-radius:var(--r-lg);
+  background:var(--well);border:1px solid var(--hair);
+  display:flex;align-items:center;gap:9px;min-width:0;font-size:14px;color:var(--text);
+}
+.cc-m-input.is-focus,.cc-m-search.is-focus{background:var(--glass-2);border-color:var(--focus-ring);box-shadow:0 0 0 3px var(--focus-halo)}
+.cc-m-input.is-error{background:var(--glass-2);border-color:var(--red);box-shadow:0 0 0 3px var(--error-halo)}
+.cc-m-textarea{
+  width:100%;min-height:66px;padding:10px 13px;border-radius:var(--r-lg);
+  background:var(--well);border:1px solid var(--hair);font-size:13.5px;line-height:1.55;color:var(--text);
+}
+.cc-m-textarea.is-focus{background:var(--glass-2);border-color:var(--focus-ring);box-shadow:0 0 0 3px var(--focus-halo)}
+.cc-m-select{
+  height:var(--m-input-h);padding:0 13px;border-radius:var(--r-lg);
+  background:var(--glass-2);border:1px solid var(--border-ctl);box-shadow:var(--shadow-ctl);
+  display:flex;align-items:center;gap:8px;min-width:0;font-size:14px;color:var(--text);
+}
+.cc-m-select .cc-sel-val{font-weight:600;white-space:nowrap}
+.cc-m-select .cc-sel-sub{flex:1;min-width:0;font-size:12px;color:var(--text-3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* 11.3 移动端统一分段控件（取代散落的 .seg/.sg/.seg2） */
+.cc-m-seg{
+  display:flex;height:var(--m-seg-h);padding:3px;border-radius:var(--r-lg);
+  background:var(--well);border:1px solid var(--hair);gap:2px;position:relative;
+}
+.cc-m-seg>*{
+  flex:1;height:100%;border-radius:9px;display:flex;align-items:center;justify-content:center;gap:5px;
+  font-size:13px;font-weight:500;color:var(--text-2);white-space:nowrap;
+}
+.cc-m-seg>.is-active{background:var(--seg-thumb);color:var(--text);font-weight:600;box-shadow:var(--shadow-seg)}
+
+/* 11.4 移动端 Cupertino 开关（46×28pt + 44pt 隐形热区）& 复选/单选 */
+.cc-m-switch{
+  width:46px;height:28px;border-radius:var(--r-full);border:1px solid var(--border-ctl);
+  background:var(--fill);position:relative;flex:none;display:inline-block;
+  transition:background var(--dur-base) var(--ease-std);
+}
+.cc-m-switch::before{content:"";position:absolute;inset:-8px -2px} /* ≥ 44pt 垂直热区 */
+.cc-m-switch::after{
+  content:"";position:absolute;top:1px;left:1px;width:24px;height:24px;border-radius:50%;
+  background:#fff;box-shadow:0 2px 5px rgba(0,0,0,.24);
+  transition:transform var(--dur-base) var(--ease-spring);
+}
+.cc-m-switch.on{background:var(--switch-on);border-color:transparent}
+.cc-m-switch.on::after{transform:translateX(18px)}
+.cc-m-switch.is-disabled{opacity:.45;pointer-events:none}
+
+.cc-m-checkbox,.cc-m-radio{
+  width:22px;height:22px;flex:none;display:inline-flex;align-items:center;justify-content:center;
+  background:var(--glass-2);border:1.5px solid var(--border-ctl-hover);color:#fff;position:relative;
+}
+.cc-m-checkbox::before,.cc-m-radio::before{content:"";position:absolute;inset:-11px}
+.cc-m-checkbox{border-radius:6px}
+.cc-m-radio{border-radius:50%}
+.cc-m-checkbox.is-checked{background:var(--btn-pri-bg);border-color:transparent}
+.cc-m-radio.is-checked{background:var(--btn-pri-bg);border-color:transparent}
+.cc-m-radio.is-checked::after{content:"";width:7px;height:7px;border-radius:50%;background:#fff}
+
+/* 11.5 移动端 Inset Grouped List（每行严格 min-height:48px，禁止压扁至 38px） */
+.cc-m-list{border-radius:var(--m-group-r);padding:4px;overflow:hidden}
+.cc-m-row{
+  display:flex;align-items:center;gap:11px;min-height:var(--m-row-h);padding:8px 10px;
+  border-radius:14px;position:relative;font-size:14px;color:var(--text);
+}
+.cc-m-row+.cc-m-row::before{content:"";position:absolute;left:12px;right:12px;top:0;height:1px;background:var(--hair)}
+.cc-m-row .cc-m-row-val{font-size:13px;color:var(--text-3);display:inline-flex;align-items:center;gap:4px;flex:none}
+.cc-m-ticket-row{display:flex;gap:11px;padding:10px;border-radius:14px;align-items:flex-start;position:relative}
+.cc-m-ticket-row.is-selected{background:linear-gradient(180deg,#3B8BFF,#1F6FFF);color:#fff;box-shadow:0 8px 18px -10px rgba(31,111,255,.85)}
+
+/* 11.6 移动端吸底操作栏（.cc-m-bar · 同心圆弧 26-10=16）& 大按钮（44–48pt） */
+.cc-m-bar{
+  position:absolute;left:12px;right:12px;bottom:22px;border-radius:var(--m-bar-r);
+  padding:10px;display:flex;flex-direction:column;gap:8px;z-index:var(--z-dock);
+}
+.cc-m-btn{
+  height:var(--m-btn-sm-h);padding:0 16px;border-radius:16px;border:1px solid transparent;
+  font-size:14.5px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap;
+}
+.cc-m-btn-lg{height:var(--m-btn-h);width:100%;font-size:15px}
+.cc-m-btn-pri{background:var(--btn-pri-bg);color:#fff;box-shadow:0 8px 20px -10px color-mix(in srgb,var(--btn-pri-bg) 85%,transparent)}
+.cc-m-btn-ok{background:var(--btn-ok-bg);color:#fff;box-shadow:0 8px 20px -10px color-mix(in srgb,var(--btn-ok-bg) 85%,transparent)}
+.cc-m-btn-danger{background:var(--btn-danger-bg);color:#fff;box-shadow:0 8px 20px -10px color-mix(in srgb,var(--btn-danger-bg) 80%,transparent)}
+.cc-m-btn-red{background:color-mix(in srgb,var(--red) 13%,transparent);color:var(--ink-red)}
+html.dark .cc-m-btn-red{background:color-mix(in srgb,var(--red) 18%,transparent)}
+.cc-m-btn-glass{background:var(--glass-2);color:var(--text);border-color:var(--border-ctl)}
+.cc-m-btn-sec{background:var(--fill);color:var(--text)}
+.cc-m-btn-locked{background:var(--fill);color:var(--text-3);border:1px dashed var(--border-ctl-hover)}
+
+/* 11.7 移动端 10 秒审核卡 + L2 高危锁横幅（填补 M3 关键缺失） */
+.cc-m-review-card{border-radius:20px;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.cc-m-l2-lock{
+  border-radius:12px;padding:9px 11px;display:flex;align-items:flex-start;gap:8px;
+  background:color-mix(in srgb,var(--red) 10%,transparent);
+  border:1px solid color-mix(in srgb,var(--red) 32%,transparent);
+  font-size:12px;line-height:1.45;color:var(--ink-red);
+}
+
+/* 11.8 移动端底部弹层（Bottom Sheet · z:40 · r:30px · 安全区 34pt） */
+.cc-m-scrim{position:absolute;inset:0;z-index:var(--z-scrim);background:var(--scrim);backdrop-filter:var(--blur-scrim);-webkit-backdrop-filter:var(--blur-scrim)}
+.cc-m-sheet{
+  position:absolute;left:0;right:0;bottom:0;z-index:var(--z-drawer);
+  border-radius:var(--m-sheet-r) var(--m-sheet-r) 0 0;
+  background:var(--glass-overlay);backdrop-filter:var(--blur-panel);-webkit-backdrop-filter:var(--blur-panel);
+  border-top:1px solid var(--stroke);box-shadow:0 -20px 50px -20px rgba(10,20,60,.5);
+  display:flex;flex-direction:column;padding:8px 16px 26px;
+}
+.cc-m-sheet-grab{width:38px;height:5px;border-radius:var(--r-full);background:var(--text-3);opacity:.4;margin:0 auto 10px}
+.cc-m-sheet-hd{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+
+/* 11.9 移动端悬浮 Toast（z:70 盖过弹层）、下拉刷新胶囊与离线执行器条 */
+.cc-m-toast{
+  display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:14px;
+  background:var(--glass-elev);backdrop-filter:var(--blur-elev);-webkit-backdrop-filter:var(--blur-elev);
+  border:1px solid var(--border-ctl);box-shadow:var(--shadow-pop);
+  font-size:13px;color:var(--text);position:relative;z-index:var(--z-toast);
+}
+.cc-m-ptr{
+  display:inline-flex;align-items:center;gap:7px;height:30px;padding:0 12px;border-radius:var(--r-full);
+  background:var(--glass-2);border:1px solid var(--border-ctl);font-size:12px;font-weight:600;color:var(--text-2);
+}
+

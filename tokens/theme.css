@@ -16,8 +16,10 @@
   /* —— WCAG 2.1 AA 语义文字/图标专用色（在 glass / glass-2 / 光斑上均 ≥ 4.5:1） —— */
   --ink-blue:#005CC5;--ink-green:#137333;--ink-orange:#9A4D00;--ink-red:#B91C1C;--ink-purple:#7E22CE;--ink-teal:#0A6678;
 
-  /* —— 主按钮高对比实底（#fff 白字 5.42:1）与开关开启色 —— */
+  /* —— 主按钮 / 成功按钮 / 危险实底按钮高对比实底（#fff 白字 ≥ 4.8:1）与开关开启色 —— */
   --btn-pri-bg:#0066D6;--btn-pri-hover:#0055B8;--btn-pri-active:#004699;
+  --btn-ok-bg:#157F3D;--btn-ok-hover:#126B33;--btn-ok-active:#0E5729;
+  --btn-danger-bg:#C81E1E;--btn-danger-hover:#B01919;--btn-danger-active:#961414;
   --switch-on:#248A3D;
 
   /* —— 文字层级（--text-3 升至 .66 确保全表面 ≥ 4.73:1） —— */
@@ -76,7 +78,11 @@
   --fs-xs:11px;--fs-sm:12px;--fs-md:13px;--fs-base:14px;--fs-lg:16px;--fs-xl:18px;--fs-2xl:22px;
 
   /* —— Z-Index 层级契约（严禁自由写 magic number） —— */
-  --z-base:0;--z-sticky:10;--z-dock:20;--z-scrim:30;--z-drawer:40;--z-dialog:50;--z-popover:60;--z-toast:70;--z-tooltip:80;
+  --z-base:0;--z-sticky:10;--z-dock:20;--z-scrim:30;--z-drawer:40;--z-dialog:50;--z-popover:60;--z-toast:70;--z-tooltip:80;--z-chrome:90;
+
+  /* —— 移动端专用尺寸与安全区 Token（4pt 网格 · iOS HIG ≥ 44pt / Android M3 ≥ 48dp） —— */
+  --m-touch:44px;--m-row-h:48px;--m-btn-h:48px;--m-btn-sm-h:44px;--m-input-h:46px;--m-seg-h:40px;
+  --m-nav-h:48px;--m-tabbar-h:70px;--m-group-r:18px;--m-bar-r:26px;--m-sheet-r:30px;--m-safe-b:34px;
 
   /* —— 动效曲线与时长 —— */
   --dur-fast:120ms;--dur-base:180ms;--dur-slow:280ms;
@@ -91,6 +97,8 @@ html.dark{
   --blue:#0A84FF;--green:#30D158;--orange:#FF9F0A;--red:#FF453A;--purple:#BF5AF2;--indigo:#5E5CE6;--teal:#40C8E0;
   --ink-blue:#6BB8FF;--ink-green:#4CE073;--ink-orange:#FFB340;--ink-red:#FF948C;--ink-purple:#D79BFF;--ink-teal:#5CE1F5;
   --btn-pri-bg:#006EE6;--btn-pri-hover:#177FF2;--btn-pri-active:#005AC2;
+  --btn-ok-bg:#1A8742;--btn-ok-hover:#20994C;--btn-ok-active:#147036;
+  --btn-danger-bg:#D92D20;--btn-danger-hover:#E53E32;--btn-danger-active:#B92217;
   --switch-on:#30D158;
   --brand-grad:linear-gradient(90deg,#7DD3FC,#C4B5FD);
   --text:#F5F5F7;--text-2:rgba(245,245,247,.76);--text-3:rgba(245,245,247,.64);
