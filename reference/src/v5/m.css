@@ -1,4 +1,6 @@
-/* 移动端公共样式：抽自定稿 v4/mobile.html，下方追加新页面组件 */
+/* 移动端公共样式：抽自定稿 v4/mobile.html，统一引入主题 Token 与标准组件库 */
+@import url("../../../tokens/theme.css");
+@import url("../../../tokens/components.css");
 body{margin:0;background:#E6E9F0;font-family:var(--font);color:var(--text)}
 html.dark body{background:#05060C}
 .board{width:1440px;height:1000px;display:flex;align-items:center;justify-content:center;gap:56px;position:relative;

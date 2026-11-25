@@ -1,45 +1,145 @@
-/* 苹果毛玻璃主题（亮/暗） */
+/* ================================================================
+   云匠（CLOUDCRAFT）· 苹果毛玻璃设计 Token 真相源（亮 / 暗双色）
+   遵循 Apple macOS Liquid Glass HIG + WCAG 2.1 AA + 4px 空间网格
+   ================================================================ */
 :root{
+  /* —— 字体与品牌 —— */
   --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC",sans-serif;
+  --font-mono:"SF Mono",ui-monospace,"JetBrains Mono",Menlo,monospace;
   --brand-cn:"Hiragino Sans GB","PingFang SC",sans-serif;
   --brand-en:"Optima","Avenir Next",sans-serif;
   --brand-grad:linear-gradient(90deg,#2563EB,#6D28D9);
+
+  /* —— 系统装饰色（图标、状态点、圆环、进度条） —— */
   --blue:#007AFF;--green:#34C759;--orange:#FF9500;--red:#FF3B30;--purple:#AF52DE;--indigo:#5856D6;--teal:#30B0C7;
-  --text:#1D1D1F;--text-2:rgba(29,29,31,.74);--text-3:rgba(29,29,31,.56);
-  --glass:rgba(255,255,255,.52);--glass-2:rgba(255,255,255,.78);--stroke:rgba(255,255,255,.75);--hair:rgba(0,0,0,.07);
-  --fill:rgba(118,118,128,.12);--shadow:0 30px 60px -30px rgba(40,50,90,.35),0 2px 6px rgba(40,50,90,.06);
-  --border:rgba(0,0,0,.08);--surface:#fff;--code-bg:#fff;
-  --sb-w:5px;--sb-radius:999px;--sb-thumb:rgba(29,29,31,.20);--sb-thumb-hover:rgba(29,29,31,.36);
+
+  /* —— WCAG 2.1 AA 语义文字/图标专用色（在 glass / glass-2 / 光斑上均 ≥ 4.5:1） —— */
+  --ink-blue:#005CC5;--ink-green:#137333;--ink-orange:#9A4D00;--ink-red:#B91C1C;--ink-purple:#7E22CE;--ink-teal:#0A6678;
+
+  /* —— 主按钮高对比实底（#fff 白字 5.42:1）与开关开启色 —— */
+  --btn-pri-bg:#0066D6;--btn-pri-hover:#0055B8;--btn-pri-active:#004699;
+  --switch-on:#248A3D;
+
+  /* —— 文字层级（--text-3 升至 .66 确保全表面 ≥ 4.73:1） —— */
+  --text:#1D1D1F;--text-2:rgba(29,29,31,.74);--text-3:rgba(29,29,31,.66);
+
+  /* —— 材质与表面层级（L-1 凹槽 → L0 壁纸 → L1 主面板 → L2 卡片/控件 → L3 浮层） —— */
   --wall:radial-gradient(900px 600px at 8% 10%,#BFD5FF 0%,transparent 60%),radial-gradient(800px 600px at 92% 18%,#FFD3E6 0%,transparent 60%),radial-gradient(900px 700px at 70% 100%,#FFE3BF 0%,transparent 60%),radial-gradient(700px 600px at 15% 95%,#C7F0E4 0%,transparent 60%),#EEF1F8;
+  --glass:rgba(255,255,255,.52);
+  --glass-2:rgba(255,255,255,.78);
+  --glass-elev:rgba(255,255,255,.94);
+  --glass-overlay:rgba(255,255,255,.96);
+  --surface:#FFFFFF;--code-bg:#FFFFFF;--terminal-bg:#1B1D27;--terminal-text:#E8E9EE;
+  --fill:rgba(118,118,128,.12);
+  --well:rgba(118,118,128,.12);        /* 微凹文本输入/搜索/多行框底色 */
+  --seg-thumb:rgba(255,255,255,.92);
+  --hover-tint:rgba(29,29,31,.05);
+  --active-tint:rgba(29,29,31,.09);
+  --scrim:rgba(15,20,40,.28);
+  --scrim-light:rgba(12,16,32,.14);
+
+  /* —— 边框、高光与焦点环 —— */
+  --stroke:rgba(255,255,255,.75);      /* 玻璃面板外高光边 */
+  --border-ctl:rgba(29,29,31,.15);     /* 可交互控件结构边（解决浅色抽屉白底隐形） */
+  --border-ctl-hover:rgba(29,29,31,.26);
+  --hair:rgba(0,0,0,.08);              /* 分隔线与凹槽细边 */
+  --border:rgba(0,0,0,.08);
+  --focus-ring:#005CC5;
+  --focus-halo:rgba(0,102,214,.22);
+  --error-halo:rgba(255,59,48,.18);
+
+  /* —— 模糊与阴影 —— */
+  --blur-panel:blur(40px) saturate(180%);
+  --blur-elev:blur(36px) saturate(185%);
+  --blur-scrim:blur(4px);
+  --shadow:0 30px 60px -30px rgba(40,50,90,.35),0 2px 6px rgba(40,50,90,.06);
+  --shadow-ctl:inset 0 1px 0 rgba(255,255,255,.88),0 1px 2px rgba(15,23,42,.05);
+  --shadow-seg:0 1px 3px rgba(0,0,0,.12);
+  --shadow-pop:0 18px 40px -14px rgba(15,23,42,.24),0 2px 6px rgba(15,23,42,.06);
+  --shadow-drawer:0 30px 80px -20px rgba(10,20,60,.45),0 0 0 1px var(--stroke);
+  --shadow-dialog:0 36px 90px -24px rgba(10,20,60,.52),0 0 0 1px var(--stroke);
+
+  /* —— 控件 4 档统一尺寸标尺（4px 网格：输入 / 搜索 / 下拉 / 按钮 / 分段同档 100% 等高） —— */
+  --ctl-xs:28px;   /* 行内微按钮/微标签动作 */
+  --ctl-sm:32px;   /* 紧凑工具栏/密集抽屉筛选行 */
+  --ctl-md:36px;   /* 全站默认表单与操作控件 */
+  --ctl-lg:40px;   /* 大表单/登录/步骤器主操作栏 */
+  --ctl-touch:44px;/* 移动端 iOS HIG 最小触控热区 */
+
+  /* —— 4px 空间间距标尺 —— */
+  --sp-1:4px;--sp-1-5:6px;--sp-2:8px;--sp-3:12px;--sp-4:16px;--sp-5:20px;--sp-6:24px;
+
+  /* —— 同心圆弧梯度（内圆角 = 外圆角 - padding） —— */
+  --r-2xs:4px;--r-xs:6px;--r-sm:8px;--r-md:10px;--r-lg:12px;--r-xl:16px;--r-2xl:20px;--r-panel:24px;--r-full:999px;
+
+  /* —— 字号梯度 —— */
+  --fs-xs:11px;--fs-sm:12px;--fs-md:13px;--fs-base:14px;--fs-lg:16px;--fs-xl:18px;--fs-2xl:22px;
+
+  /* —— Z-Index 层级契约（严禁自由写 magic number） —— */
+  --z-base:0;--z-sticky:10;--z-dock:20;--z-scrim:30;--z-drawer:40;--z-dialog:50;--z-popover:60;--z-toast:70;--z-tooltip:80;
+
+  /* —— 动效曲线与时长 —— */
+  --dur-fast:120ms;--dur-base:180ms;--dur-slow:280ms;
+  --ease-std:cubic-bezier(0.2,0,0,1);
+  --ease-spring:cubic-bezier(0.32,0.72,0,1);
+
+  /* —— 全局 0px 零占位悬浮滚动条 —— */
+  --sb-w:5px;--sb-radius:var(--r-full);--sb-thumb:rgba(29,29,31,.20);--sb-thumb-hover:rgba(29,29,31,.36);
 }
+
 html.dark{
   --blue:#0A84FF;--green:#30D158;--orange:#FF9F0A;--red:#FF453A;--purple:#BF5AF2;--indigo:#5E5CE6;--teal:#40C8E0;
+  --ink-blue:#6BB8FF;--ink-green:#4CE073;--ink-orange:#FFB340;--ink-red:#FF948C;--ink-purple:#D79BFF;--ink-teal:#5CE1F5;
+  --btn-pri-bg:#006EE6;--btn-pri-hover:#177FF2;--btn-pri-active:#005AC2;
+  --switch-on:#30D158;
   --brand-grad:linear-gradient(90deg,#7DD3FC,#C4B5FD);
-  --text:#F5F5F7;--text-2:rgba(245,245,247,.76);--text-3:rgba(245,245,247,.56);
-  --glass:rgba(36,38,50,.52);--glass-2:rgba(58,60,74,.66);--stroke:rgba(255,255,255,.13);--hair:rgba(255,255,255,.08);
-  --fill:rgba(118,118,128,.26);--shadow:0 30px 60px -24px rgba(0,0,0,.7),0 2px 6px rgba(0,0,0,.3);
-  --border:rgba(255,255,255,.1);
+  --text:#F5F5F7;--text-2:rgba(245,245,247,.76);--text-3:rgba(245,245,247,.64);
+  --glass:rgba(36,38,50,.52);
+  --glass-2:rgba(58,60,74,.68);
+  --glass-elev:rgba(34,36,48,.94);
+  --glass-overlay:rgba(32,34,48,.96);
+  --surface:#1C1E2A;--code-bg:#151722;--terminal-bg:rgba(0,0,0,.45);--terminal-text:#E8E9EE;
+  --fill:rgba(118,118,128,.24);
+  --well:rgba(0,0,0,.26);              /* 暗色真正微凹，不再比面板更亮 */
+  --seg-thumb:rgba(255,255,255,.15);
+  --hover-tint:rgba(255,255,255,.07);
+  --active-tint:rgba(255,255,255,.12);
+  --scrim:rgba(0,0,0,.50);
+  --scrim-light:rgba(0,0,0,.28);
+  --stroke:rgba(255,255,255,.14);
+  --border-ctl:rgba(255,255,255,.17);
+  --border-ctl-hover:rgba(255,255,255,.28);
+  --hair:rgba(255,255,255,.09);
+  --border:rgba(255,255,255,.10);
+  --focus-ring:#6BB8FF;
+  --focus-halo:rgba(107,184,255,.28);
+  --error-halo:rgba(255,69,58,.24);
+  --shadow:0 30px 60px -24px rgba(0,0,0,.7),0 2px 6px rgba(0,0,0,.3);
+  --shadow-ctl:inset 0 1px 0 rgba(255,255,255,.10),0 1px 2px rgba(0,0,0,.30);
+  --shadow-pop:0 22px 46px -12px rgba(0,0,0,.72),0 2px 8px rgba(0,0,0,.38);
+  --shadow-drawer:0 30px 80px -20px rgba(0,0,0,.78),0 0 0 1px var(--stroke);
+  --shadow-dialog:0 36px 90px -20px rgba(0,0,0,.82),0 0 0 1px var(--stroke);
   --sb-thumb:rgba(245,245,247,.24);--sb-thumb-hover:rgba(245,245,247,.42);
   --wall:radial-gradient(900px 600px at 8% 10%,rgba(56,84,220,.55) 0%,transparent 60%),radial-gradient(800px 600px at 92% 18%,rgba(170,60,170,.45) 0%,transparent 60%),radial-gradient(900px 700px at 70% 100%,rgba(30,120,150,.45) 0%,transparent 60%),radial-gradient(700px 600px at 15% 95%,rgba(90,50,200,.4) 0%,transparent 60%),#0B0D18;
 }
+
 body{font-family:var(--font);color:var(--text);background:#000}
 .root{background:var(--wall);flex-direction:column;font-family:var(--font)}
-.glass{background:var(--glass);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);border:1px solid var(--stroke);box-shadow:var(--shadow)}
-.panel{border-radius:26px}
+.glass{background:var(--glass);backdrop-filter:var(--blur-panel);-webkit-backdrop-filter:var(--blur-panel);border:1px solid var(--stroke);box-shadow:var(--shadow)}
+.panel{border-radius:var(--r-panel)}
 .tl{width:12px;height:12px;border-radius:50%}
 .seg{display:flex;padding:3px;border-radius:12px;background:var(--fill);gap:2px}
 .seg span{height:30px;padding:0 14px;border-radius:9px;display:flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--text-2)}
 .seg span.on{background:var(--glass-2);color:var(--text);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.12),0 0 0 .5px rgba(0,0,0,.04)}
 .seg .c{font-size:12px;color:var(--text-3)}
-.seg span.on .c{color:var(--blue);font-weight:700}
+.seg span.on .c{color:var(--ink-blue);font-weight:700}
 .pill{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border-radius:13px;font-size:12px;font-weight:600;white-space:nowrap}
-.p-blue{color:var(--blue);background:color-mix(in srgb,var(--blue) 14%,transparent)}
-.p-green{color:var(--green);background:color-mix(in srgb,var(--green) 16%,transparent)}
-.p-orange{color:var(--orange);background:color-mix(in srgb,var(--orange) 16%,transparent)}
-.p-red{color:var(--red);background:color-mix(in srgb,var(--red) 14%,transparent)}
+.p-blue{color:var(--ink-blue);background:color-mix(in srgb,var(--blue) 14%,transparent)}
+.p-green{color:var(--ink-green);background:color-mix(in srgb,var(--green) 16%,transparent)}
+.p-orange{color:var(--ink-orange);background:color-mix(in srgb,var(--orange) 16%,transparent)}
+.p-red{color:var(--ink-red);background:color-mix(in srgb,var(--red) 14%,transparent)}
 .p-gray{color:var(--text-2);background:var(--fill)}
-.p-teal{color:var(--teal);background:color-mix(in srgb,var(--teal) 16%,transparent)}
-html:not(.dark) .p-green{color:#1E8E3E}html:not(.dark) .p-orange{color:#B25E00}html:not(.dark) .p-teal{color:#0E8196}
+.p-teal{color:var(--ink-teal);background:color-mix(in srgb,var(--teal) 16%,transparent)}
 .appic{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:#fff;flex:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 4px 10px -4px rgba(0,0,0,.35);font-size:11px;font-weight:800;letter-spacing:.02em}
 .ic-tita{background:linear-gradient(160deg,#5B8CFF,#2558E8)}
 .ic-jira{background:linear-gradient(160deg,#4FA3FF,#1D6FE0)}
@@ -52,9 +152,9 @@ html:not(.dark) .p-green{color:#1E8E3E}html:not(.dark) .p-orange{color:#B25E00}h
 .li{display:flex;align-items:center;gap:10px;height:38px;font-size:13.5px}
 .li+.li{border-top:1px solid var(--hair)}
 .abtn{height:40px;padding:0 18px;border-radius:12px;border:0;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:7px;cursor:pointer}
-.a-pri{background:var(--blue);color:#fff;box-shadow:0 8px 20px -8px color-mix(in srgb,var(--blue) 80%,transparent)}
+.a-pri{background:var(--btn-pri-bg);color:#fff;box-shadow:0 8px 20px -8px color-mix(in srgb,var(--btn-pri-bg) 80%,transparent)}
 .a-sec{background:var(--fill);color:var(--text)}
-.a-red{background:color-mix(in srgb,var(--red) 12%,transparent);color:var(--red)}
+.a-red{background:color-mix(in srgb,var(--red) 12%,transparent);color:var(--ink-red)}
 .dock{position:absolute;left:50%;transform:translateX(-50%);bottom:18px;height:72px;padding:0 12px;border-radius:26px;display:flex;align-items:center;gap:10px;z-index:5}
 .dk{position:relative;width:48px;height:48px;border-radius:13px;display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 6px 14px -6px rgba(0,0,0,.4)}
 .dk .bd{position:absolute;top:-5px;right:-5px;min-width:20px;height:20px;padding:0 5px;border-radius:10px;background:#FF3B30;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px rgba(255,255,255,.6)}
@@ -64,59 +164,9 @@ html:not(.dark) .p-green{color:#1E8E3E}html:not(.dark) .p-orange{color:#B25E00}h
 .tab2 span{height:28px;padding:0 14px;border-radius:8px;display:flex;align-items:center;gap:5px;font-size:13px;font-weight:500;color:var(--text-2)}
 .tab2 span.on{background:var(--glass-2);color:var(--text);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.12)}
 .shot{border-radius:14px;border:1px solid var(--hair)}
-.mono{font-family:"SF Mono",ui-monospace,"JetBrains Mono",monospace}
+.mono{font-family:var(--font-mono)}
 
-/* ================================================================
-   以下为最终定稿追加的组件级 token（2026-11-20 定稿）
-   ================================================================ */
-
-/* —— 应用 logo —— */
-.logo{width:44px;height:44px;border-radius:12px;
-  background:radial-gradient(90% 70% at 25% 0%,rgba(140,190,255,.9),transparent 60%),linear-gradient(155deg,#3478F6 0%,#4338CA 70%,#5B21B6 100%);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.5),inset 0 -1px 1px rgba(0,0,0,.2),0 6px 14px -6px rgba(67,56,202,.7)}
-
-/* —— Dock 菜单图标（44px 圆角方块，带高光）—— */
-.ap{width:44px;height:44px;border-radius:12px;position:relative;overflow:hidden;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -1px 1px rgba(0,0,0,.12),0 1px 1px rgba(0,0,0,.08),0 6px 14px -6px rgba(0,0,0,.4)}
-.ap::before{content:"";position:absolute;left:0;right:0;top:0;height:50%;background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,0))}
-.ap-ai  {background:#141530}  /* 内部再叠一层 conic 彩色光晕 blur(5px) + 白色星光 */
-.ap-ai::after{content:"";position:absolute;inset:6px;border-radius:50%;background:conic-gradient(from 210deg,#4F8BFF,#9B5CFF,#FF5FA8,#FFB14A,#4FD1FF,#4F8BFF);filter:blur(5px)}
-.ap-chat{background:linear-gradient(180deg,#FFFFFF,#E8EEF7)}           /* 暗色：#3A4157 → #262B3C */
-.ap-pub {background:linear-gradient(160deg,#FFC54D 0%,#FF9A1F 55%,#FF7A00 100%)}
-.ap-rb  {background:linear-gradient(160deg,#FF8A7A 0%,#FF453A 55%,#E0281E 100%)}
-.ap-sk  {background:linear-gradient(160deg,#C58BFF 0%,#8E5CFF 55%,#6A3DF0 100%)}
-.ap-mkt {background:linear-gradient(155deg,#34D399 0%,#14B8A6 52%,#0284C7 100%)}
-.ap-set {background:linear-gradient(160deg,#A9AEB8 0%,#6E737D 100%)}
-
-/* 选中态 = 放大 + 悬浮（唯一认可的方式）*/
-.dk.on .ap{transform:scale(1.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),inset 0 -1px 1px rgba(0,0,0,.1),0 2px 4px rgba(0,0,0,.08),0 14px 26px -8px rgba(20,50,120,.5)}
-.dk:not(.on) .ap{transform:scale(.94)}
-.dk>b{/* 数字角标 */position:absolute;top:-5px;right:-6px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:#FF3B30;color:#fff;font-size:11px;font-weight:600;box-shadow:0 0 0 2px var(--glass-2)}
-
-/* —— 工单状态色 —— */
-/* 待你审核 blue · 受阻/Bot 在问 orange · 修复中 teal · 已通过 green · 需要处理 red */
-
-/* —— 提单人头像（34px PC / 40px 移动端，两字姓名，白字）—— */
-/* 渐变取值（150deg）：#7FB2FF,#4C7DF0 | #FFC38A,#F08A5D | #F5A3C7,#D96BA0 | #8FD8C9,#3FAE9A | #C3A8FF,#8E6BEA | #9EDB9A,#4FB06A | 系统单 #C7CBD4,#9298A6 */
-.av{border-radius:50%;color:#fff;font-size:11px;font-weight:700;position:relative}
-.av i{/* 状态点 */position:absolute;right:-1px;bottom:-1px;width:12px;height:12px;border-radius:50%;box-shadow:0 0 0 2.5px var(--glass-2)}
-
-/* —— 来源标签 —— */
-.sc{height:16px;padding:0 5px;border-radius:5px;font-size:10px;font-weight:700}
-.sc-t{background:color-mix(in srgb,#2F6BFF 13%,transparent);color:#2F6BFF}   /* 暗色文字 #7FA7FF */
-.sc-j{background:color-mix(in srgb,#0C66E4 10%,transparent);color:#0B5BD3;box-shadow:inset 0 0 0 1px color-mix(in srgb,#0C66E4 25%,transparent)} /* 暗色 #6FA8FF */
-
-/* —— 列表选中行 / 用户气泡 —— */
-.row.on,.user-bubble{background:linear-gradient(180deg,#3B8BFF,#1F6FFF);color:#fff;box-shadow:0 8px 18px -10px rgba(31,111,255,.9)}
-
-/* —— 本单 AI / 全局 AI —— */
-.ai-tag{background:color-mix(in srgb,var(--purple) 12%,transparent)}           /* 「本单 AI · TK-xxxx」紫色标签 */
-.ai-mini{background:linear-gradient(135deg,#5E8BFF,#B157F0)}                     /* 本单 AI 小图标 */
-.ai-grad{background:linear-gradient(90deg,#4F8BFF,#9B5CFF,#FF5FA8)}               /* 全局 AI 输入框描边 / 发送按钮 */
-
-/* —— 全局悬浮滚动条（零占位：不占容器宽度，默认隐藏，移入/滚动时淡入）—— */
+/* —— 全局悬浮滚动条（零占位：0px 布局宽度，默认隐藏，移入/滚动淡入） —— */
 .scroll-viewport{scrollbar-width:none;-ms-overflow-style:none}
 .scroll-viewport::-webkit-scrollbar{display:none}
-.scroll-thumb{width:var(--sb-w);border-radius:var(--sb-radius);background:var(--sb-thumb);opacity:0;transition:opacity .18s ease,background .15s ease}
-.scroll-area:hover .scroll-thumb,.scroll-area[data-scrolling="true"] .scroll-thumb{opacity:1}
-.scroll-thumb:hover{background:var(--sb-thumb-hover)}
+.scroll-thumb{width:var(--sb-w);border-radius:var(--sb-radius);background:var(--sb-thumb);opacity:0;transition:opacity var(--dur-base) var(--ease-std),background var(--dur-fast) var(--ease-std)}

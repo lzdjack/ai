@@ -732,16 +732,19 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
   </div>
 
   <div class="card glass mt" id="component-library">
-    <h3>标准组件库模块（Component Library · 唯一真相源）</h3>
-    <p class="sub" style="margin:0 0 12px">规范源码 <code>tokens/components.css</code> + <code>docs/01-设计主题.md §16</code>。以后所有新页面、抽屉、弹窗与 M1 代码一律严格按本模块复用，禁止单页自造样式；其中下拉选择锁定 <code>.cc-select</code>（<code>--glass-2</code> + <code>1px --stroke</code> + 右对齐单向 <code>chevd 13px</code>，绝不贴字、不加小方盒）。</p>
-    <figure style="margin:0 0 14px"><img class="img-l" src="reference/images/pages/PC-组件库规范-亮色.png" alt="标准组件库规范 亮色" loading="lazy" decoding="async" width="2880" height="1800"><img class="img-d" src="reference/images/pages/PC-组件库规范-暗色.png" alt="标准组件库规范 暗色" loading="lazy" decoding="async" width="2880" height="1800"><figcaption><b>云匠标准组件库规范总览</b> · 下拉选择（基准 + 展开菜单）/ 输入与搜索 / 分段与开关 / 按钮系统 / 标签与胶囊 / 提示横幅 / 抽屉与弹窗尺寸 / 头像与 0px 悬浮滚动条（点图放大）</figcaption></figure>
+    <h3>标准组件库模块（Component Library · 3 路多 Agent 审定 · 唯一真相源）</h3>
+    <p class="sub" style="margin:0 0 12px">源码 <code>tokens/theme.css</code> + <code>tokens/components.css</code> + <code>docs/01-设计主题.md §16</code>（Apple Liquid Glass HIG × WCAG 2.1 AA ≥4.5:1 × 4px 网格）。全站控件统一 <b>4 档等高标尺（xs 28 / sm 32 / md 36 / lg 40，移动端 ≥44pt）</b>，下拉选择锁定 <code>.cc-select</code>（<code>--glass-2</code> + <code>--border-ctl</code> + 右对齐单向 <code>chevd 13px</code>，绝不贴字、不加小方盒）。</p>
+    <div class="gal" style="margin-bottom:14px">
+      <figure><img class="img-l" src="reference/images/pages/PC-组件库规范-亮色.png" alt="标准组件库规范 1 亮色" loading="lazy" decoding="async" width="2880" height="1800"><img class="img-d" src="reference/images/pages/PC-组件库规范-暗色.png" alt="标准组件库规范 1 暗色" loading="lazy" decoding="async" width="2880" height="1800"><figcaption><b>组件库 1/2 · 基础表单、选择控件与 4 档尺寸标尺</b> · 下拉基准 &amp; L3 悬浮菜单 / 字段解剖 / 微凹输入·搜索·多行框 / 分段·开关·复选·单选 / 36px 同档等高实测 / 按钮 8 态 / WCAG AA 标签与角标</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/PC-组件库规范-2-亮色.png" alt="标准组件库规范 2 亮色" loading="lazy" decoding="async" width="2880" height="1800"><img class="img-d" src="reference/images/pages/PC-组件库规范-2-暗色.png" alt="标准组件库规范 2 暗色" loading="lazy" decoding="async" width="2880" height="1800"><figcaption><b>组件库 2/2 · 导航、数据展示、反馈加载、浮层与无障碍红线</b> · Tabs / 表格与键值对 / 暗色终端指令块 / 4 态横幅 / Toast &amp; Tooltip / 骨架屏与空态 / 浮层比例示意图 / Z-Index 契约（10→80）与 44pt 触控红线</figcaption></figure>
+    </div>
     <div class="tw" style="margin:0"><table>
-      <thead><tr><th>组件类别</th><th>标准类名</th><th>锁定视觉规格</th><th>禁用红线</th></tr></thead>
+      <thead><tr><th>维度 / 类别</th><th>标准 Token / 类名</th><th>行业审定锁定规格</th><th>禁用红线</th></tr></thead>
       <tbody>
-        <tr><td><b>下拉选择（钦定基准）</b></td><td><code>.cc-select</code> / <code>.cc-menu</code></td><td>高 36px（sm 34 / lg 40）、圆角 10px、<code>--glass-2</code> + <code>1px --stroke</code>；左侧可选状态点/头像 + 主值 13/600 + 次说明 11.5/text-3 撑开 + 右对齐单向 <code>chevd 13px</code></td><td>严禁箭头贴字、严禁画成无边框 <code>--fill</code>、严禁箭头外加小方盒底色</td></tr>
-        <tr><td><b>文本输入 / 搜索</b></td><td><code>.cc-input</code> / <code>.cc-search</code></td><td>同源微凹内嵌容器（Apple HIG）：<code>--fill</code> + <code>1px --hair</code> 细描边（与轻浮起下拉一眼区分）；聚焦转 <code>--glass-2</code> + 蓝描边与 3px 蓝晕；搜索框有输入时右侧浮现清除 <code>×</code></td><td>普通输入与搜索严禁一处有边一处无边；搜索框统一 300ms 防抖</td></tr>
-        <tr><td><b>按钮 / 分段 / 开关</b></td><td><code>.cc-btn</code> / <code>.cc-seg</code> / <code>.cc-switch</code></td><td>按钮 5 语义（pri/sec/glass/red/ghost）× 3 高度（28/34/40px）；分段 <code>--fill</code> 槽 + <code>--glass-2</code> 滑块；开关 38×22px</td><td>同一底部操作栏最多 1 个 <code>pri</code> 蓝色主按钮</td></tr>
-        <tr><td><b>浮层与抽屉尺寸</b></td><td><code>.cc-drawer</code> / <code>.cc-drawer-sm</code></td><td>配置/编辑抽屉统一右侧 <b>640–660px</b> 模态（<code>.cc-scrim</code>）；向导 AI 帮手统一右侧 <b>440px</b> 非模态（<code>.cc-scrim-light</code>）；轻确认弹窗居中 <b>520–560px</b></td><td>严禁在向导中点击「问 AI」整页跳走丢失表单</td></tr>
+        <tr><td><b>4 档统一尺寸标尺</b></td><td><code>--ctl-xs / sm / md / lg</code></td><td><b>xs 28px</b>（r:8）/ <b>sm 32px</b>（r:8）/ <b>md 36px 默认</b>（r:10）/ <b>lg 40px</b>（r:12），输入·搜索·下拉·分段·按钮同档 100% 等高；移动端 <code>--ctl-touch ≥ 44pt</code></td><td>严禁同行控件高低差 2px、严禁手写 inline height 补对齐、严禁把 PC 28–36px 照搬手机端</td></tr>
+        <tr><td><b>下拉选择（钦定基准）</b></td><td><code>.cc-select</code> / <code>.cc-menu</code></td><td><code>--glass-2</code> + <code>--border-ctl</code>（解决浅色抽屉白边隐形）+ 右对齐单向 <code>chevd 13px</code>；展开菜单走 L3 <code>--glass-elev</code>（94% 防透字，<code>z:60</code>），选中行嵌套标切换高反差底</td><td>严禁箭头贴字、严禁画成无边框凹槽、严禁在箭头外加小方盒</td></tr>
+        <tr><td><b>输入 / 搜索 / 多行框</b></td><td><code>.cc-input</code> / <code>.cc-search</code> / <code>.cc-textarea</code></td><td>同源 L-1 微凹内嵌容器（<code>--well</code> + <code>1px --hair</code>，暗色 <code>rgba(0,0,0,.26)</code> 真微凹）；聚焦转 <code>--glass-2</code> + 蓝晕；搜索框带清除 <code>×</code> 与 300ms 防抖</td><td>普通输入与搜索严禁一处有边一处无边；报错文案挂 <code>.cc-field-err</code> 不塞 placeholder</td></tr>
+        <tr><td><b>WCAG AA 与 8 态契约</b></td><td><code>--ink-*</code> / <code>--btn-pri-bg</code> / <code>--z-*</code></td><td>彩色文字统一 <code>--ink-*</code>（≥4.5:1）；<code>--text-3</code> 亮 .66 / 暗 .64；开关 <code>40×24px</code>；完整 8 态 + <code>:focus-visible</code> + <code>prefers-reduced-motion</code> + Z-Index <code>10→80</code></td><td>严禁裸用 <code>--green/--orange</code> 写小字；非模态 AI 帮手（440px）严禁锁死主表单</td></tr>
       </tbody>
     </table></div>
   </div>

@@ -1,5 +1,6 @@
 /* PC 全部页面公共样式：定稿外壳（顶栏 + Dock + 面板）+ 定稿列表 + 各页组件
-   依赖：../v3/base.css、../v4/apple.css、../../../tokens/components.css。颜色全部来自 apple.css 的 token。 */
+   依赖：../../../tokens/theme.css、../../../tokens/components.css（唯一真相源）。 */
+@import url("../../../tokens/theme.css");
 @import url("../../../tokens/components.css");
 
 .root{background:var(--wall);font-family:var(--font)}
