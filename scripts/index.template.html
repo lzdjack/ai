@@ -254,7 +254,8 @@ ul.clean{margin:0;padding-left:18px}ul.clean li{margin:5px 0}
 @media (max-width:900px){.gal{grid-template-columns:1fr}}
 .gal figure{margin:0;border-radius:18px;overflow:hidden;background:var(--glass-2);border:1px solid var(--stroke)}
 .gal figure.hide{display:none}
-.gal img{display:block;width:100%;height:auto;cursor:zoom-in;background:var(--fill)}
+figure img,.gal img{display:block;width:100%;max-width:100%;height:auto;background:var(--fill)}
+.gal img{cursor:zoom-in}
 .gal figcaption{padding:10px 14px;font-size:13px;color:var(--text-2)}
 .gal figcaption b{color:var(--text)}
 .zoom{position:fixed;inset:0;z-index:99;background:rgba(0,0,0,.74);display:none;align-items:center;justify-content:center;padding:30px;cursor:zoom-out;backdrop-filter:blur(8px)}
@@ -527,7 +528,9 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
       <figure><img class="img-l" src="reference/images/pages/PC-组件库规范-亮色.png" alt="标准组件库规范 1 亮色"><img class="img-d" src="reference/images/pages/PC-组件库规范-暗色.png" alt="标准组件库规范 1 暗色"><figcaption><b>PC 组件库 1/2 · 基础表单、选择控件与 4 档尺寸标尺</b> · 下拉基准 &amp; L3 悬浮菜单 / 字段解剖 / 微凹输入·搜索·多行框 / 分段·开关·复选·单选 / 36px 同档等高实测 / 按钮 8 态 / WCAG AA 标签与角标</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/PC-组件库规范-2-亮色.png" alt="标准组件库规范 2 亮色"><img class="img-d" src="reference/images/pages/PC-组件库规范-2-暗色.png" alt="标准组件库规范 2 暗色"><figcaption><b>PC 组件库 2/2 · 导航、数据展示、反馈加载、浮层与无障碍红线</b> · Tabs / 表格与键值对 / 暗色终端指令块 / 4 态横幅 / Toast &amp; Tooltip / 骨架屏与空态 / 浮层比例示意图 / Z-Index 契约（10→80）与 44pt 触控红线</figcaption></figure>
     </div>
-    <figure style="margin:0 0 14px"><img class="img-l" src="reference/images/pages/移动端-组件库规范-亮色.png" alt="移动端标准组件库规范 亮色"><img class="img-d" src="reference/images/pages/移动端-组件库规范-暗色.png" alt="移动端标准组件库规范 暗色"><figcaption><b>移动端组件库（3 屏 · iOS HIG + Android M3 + Flutter 1:1 映射）</b> · ① 基础控件与 44–48pt 触控标尺（3 列居中 NavBar / 46pt 输入·OTP·下拉 / 46×28pt 开关 / 12pt 间距吸底栏）；② 下拉刷新 + 选中行 + 10 秒审核卡 + <b>L2 高危锁横幅</b> + 悬浮 5-Tab；③ <code>z:70</code> 悬浮 Toast + 骨架屏 + 离线执行器 + <code>r:30px</code> Bottom Sheet（安全区 34pt）</figcaption></figure>
+    <div class="gal" style="grid-template-columns:1fr;margin-bottom:14px">
+      <figure><img class="img-l" src="reference/images/pages/移动端-组件库规范-亮色.png" alt="移动端标准组件库规范 亮色"><img class="img-d" src="reference/images/pages/移动端-组件库规范-暗色.png" alt="移动端标准组件库规范 暗色"><figcaption><b>移动端组件库（3 屏 · iOS HIG + Android M3 + Flutter 1:1 映射）</b> · ① 基础控件与 44–48pt 触控标尺（3 列居中 NavBar / 46pt 输入·OTP·下拉 / 46×28pt 开关 / 12pt 间距吸底栏）；② 下拉刷新 + 选中行 + 10 秒审核卡 + <b>L2 高危锁横幅</b> + 悬浮 5-Tab；③ <code>z:70</code> 悬浮 Toast + 骨架屏 + 离线执行器 + <code>r:30px</code> Bottom Sheet（安全区 34pt）</figcaption></figure>
+    </div>
     <div class="tw" style="margin:0"><table>
       <thead><tr><th>维度 / 类别</th><th>标准 Token / 类名</th><th>行业审定锁定规格</th><th>禁用红线</th></tr></thead>
       <tbody>
