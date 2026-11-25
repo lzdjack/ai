@@ -176,9 +176,6 @@ def STEP_PAGES(page, CHECK):
 .pdot{{width:18px;height:18px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:800;flex:none}}
 .dinp{{height:var(--ctl-lg);border-radius:var(--r-lg);background:var(--well);border:1px solid var(--hair);display:flex;align-items:center;gap:9px;padding:0 13px;font-size:13.5px;color:var(--text);min-width:0}}
 .dinp.foc{{background:var(--glass-2);border-color:var(--focus-ring);box-shadow:0 0 0 3px var(--focus-halo)}}
-.seg2{{display:flex;padding:3px;border-radius:var(--r-lg);background:var(--well);border:1px solid var(--hair);gap:2px;height:var(--ctl-lg);align-items:center}}
-.seg2 span{{flex:1;height:100%;border-radius:9px;display:flex;align-items:center;justify-content:center;gap:5px;font-size:12.5px;font-weight:600;color:var(--text-2)}}
-.seg2 span.on{{background:var(--seg-thumb);color:var(--text);box-shadow:var(--shadow-seg)}}
 .vbox{{border-radius:16px;padding:13px 16px;background:color-mix(in srgb,var(--green) 8%,var(--fill));border:1px solid color-mix(in srgb,var(--green) 28%,transparent)}}
 .vrow{{display:flex;align-items:center;gap:9px;font-size:12.5px;padding:4px 0;color:var(--text)}}
 .vck{{width:17px;height:17px;border-radius:50%;background:var(--btn-ok-bg);color:#fff;display:inline-flex;align-items:center;justify-content:center;flex:none}}
@@ -206,7 +203,7 @@ def STEP_PAGES(page, CHECK):
     </div>
     <div class="row g12">
       <div class="grow"><div class="flab">连接器名称</div><div class="dinp">公司 GitLab（私有部署）</div></div>
-      <div style="width:230px;flex:none"><div class="flab">共享范围</div><div class="seg2"><span class="on">公司共用</span><span>仅我自己</span></div></div>
+      <div style="width:230px;flex:none"><div class="flab">共享范围</div><div class="cc-seg cc-seg-lg" style="display:flex;width:100%"><span class="on" style="flex:1">公司共用</span><span style="flex:1">仅我自己</span></div></div>
     </div>
     <div>
       <div class="flab">服务地址<span>企业私有部署填内网域名，公有云保持默认即可</span></div>
@@ -214,10 +211,10 @@ def STEP_PAGES(page, CHECK):
     </div>
     <div>
       <div class="flab">鉴权方式<span>推荐给 Bot 专号签发 Access Token，不给合入主干权限</span></div>
-      <div class="seg2">
-        <span class="on">{I("key",13)}Access Token</span>
-        <span>{I("shield",13)}OAuth 一键授权</span>
-        <span>{I("terminal",13)}SSH Key</span>
+      <div class="cc-seg cc-seg-lg" style="display:flex;width:100%">
+        <span class="on" style="flex:1">{I("key",13)}Access Token</span>
+        <span style="flex:1">{I("shield",13)}OAuth 一键授权</span>
+        <span style="flex:1">{I("terminal",13)}SSH Key</span>
       </div>
     </div>
     <div>
@@ -632,7 +629,7 @@ html.dark .tsec2{{background:rgba(255,255,255,.038)}}
 .flab{{font-size:12.5px;font-weight:700;color:var(--text-2);margin-bottom:6px;display:flex;align-items:center;gap:6px}}
 .flab .rst{{margin-left:auto;font-weight:600;color:var(--ink-blue);font-size:11.5px}}
 .dinp{{height:var(--ctl-md);border-radius:var(--r-md);background:var(--well);border:1px solid var(--hair);display:flex;align-items:center;gap:8px;padding:0 12px;font-size:13px;color:var(--text);min-width:0}}
-.dinp.ov{{background:var(--well);border:1.5px solid var(--focus-ring);box-shadow:0 0 0 3px var(--focus-halo)}}
+.dinp.ov{{background:var(--glass-2);border:1px solid var(--focus-ring);box-shadow:0 0 0 3px var(--focus-halo)}}
 .dsel{{height:var(--ctl-md);border-radius:var(--r-md);background:var(--glass-2);border:1px solid var(--border-ctl);box-shadow:var(--shadow-ctl);display:flex;align-items:center;gap:8px;padding:0 12px;font-size:13px;font-weight:600;color:var(--text);min-width:0}}
 .tsec{{border-radius:15px;padding:12px 14px;background:var(--fill);display:flex;flex-direction:column;gap:10px}}
 .tsec-h{{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--text)}}

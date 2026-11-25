@@ -51,9 +51,6 @@ STYLE = '''
 .okt{display:inline-flex;align-items:center;gap:4px;color:var(--ink-green);font-size:12px;font-weight:600;white-space:nowrap}
 .ing{display:inline-flex;align-items:center;gap:6px;color:var(--ink-blue);font-size:12px;font-weight:600;white-space:nowrap}
 .spin{width:12px;height:12px;border-radius:50%;border:2px solid color-mix(in srgb,var(--blue) 25%,transparent);border-top-color:var(--ink-blue);flex:none}
-.sg{display:flex;height:var(--m-seg-h);align-items:center;padding:3px;border-radius:var(--r-lg);background:var(--well);border:1px solid var(--hair);gap:2px}
-.sg span{flex:1;height:100%;border-radius:9px;display:flex;align-items:center;justify-content:center;gap:5px;font-size:13px;font-weight:500;color:var(--text-2)}
-.sg span.on{background:var(--seg-thumb);color:var(--text);font-weight:600;box-shadow:var(--shadow-seg)}
 .sel2{display:flex;align-items:center;justify-content:space-between;height:var(--m-input-h);border-radius:12px;background:var(--glass-2);border:1px solid var(--border-ctl);box-shadow:var(--shadow-ctl);padding:0 13px;font-size:14.5px;font-weight:600}
 .ckk{border-radius:12px;background:var(--glass-2);border:1px solid var(--focus-ring);padding:10px 12px;font-size:12px;line-height:1.5;color:var(--text-2);word-break:break-all;box-shadow:0 0 0 3px var(--focus-halo)}
 .ck3{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;flex:none;font-size:11px;font-weight:800}
@@ -120,12 +117,12 @@ sheet = f'''<div class="scrim"></div><div class="sheet">
   <div class="flb">角色</div>
   <div class="cc-m-select"><span class="cc-sel-val">普通员工</span><span class="cc-sel-sp"></span><span class="cc-sel-caret">{I("chevd",14)}</span></div>
   <div class="flb">登录方式</div>
-  <div class="sg"><span>密码</span><span class="on">Cookie</span></div>
+  <div class="cc-m-seg"><span>密码</span><span class="on">Cookie</span></div>
   <div class="flb">粘贴 Cookie</div>
   <div class="ckk mono">SESSION=6f2c9a…e81b; tita_uid=8820…; tita_tenant=shifan; Path=/; Expires=Sun, 23 Nov 2026</div>
   <div class="f12 t3" style="margin:7px 2px 0;line-height:1.5">不用填账号名，Bot 登录后自动识别是谁；Cookie 过期会提醒你更新</div>
   <div class="flb">数据权限</div>
-  <div class="sg"><span class="on">{I("eye",13)}只能查看</span><span>{I("edit",13)}可以修改</span></div>
+  <div class="cc-m-seg"><span class="on">{I("eye",13)}只能查看</span><span>{I("edit",13)}可以修改</span></div>
   <div class="f12 t3" style="margin:7px 2px 0">只看页面，不点保存、提交、删除</div>
   <button class="bigbtn pri" style="margin-top:16px">保存并让 Bot 试登录</button>
 </div>'''

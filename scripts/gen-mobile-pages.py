@@ -29,7 +29,7 @@ def nav(back, title, right=None):
 
 
 def seg(items, on):
-    return '<div class="seg" style="margin-top:12px">' + "".join(f'<span{" class=\"on\"" if i == on else ""} style="flex:1;justify-content:center;white-space:nowrap;padding:0 4px">{t}</span>' for i, t in enumerate(items)) + "</div>"
+    return '<div class="cc-m-seg" style="margin-top:12px">' + "".join(f'<span{" class=\"on\"" if i == on else ""} style="padding:0 4px">{t}</span>' for i, t in enumerate(items)) + "</div>"
 
 
 def review_dock():
@@ -75,7 +75,7 @@ def m_code():
     inner = f'''{nav("工单", "代码改动")}
 <div class="pad" style="padding-top:2px">
   <div class="row g8"><div class="cc-m-select grow"><span class="tag tg-o">M</span><span class="cc-sel-val mono">GroupPicker.tsx</span><span class="cc-sel-sp"></span><span class="f13 t3">1 / 3</span><span class="cc-sel-caret">{I("chevd",14)}</span></div></div>
-  <div class="row g8" style="margin-top:8px"><div class="seg" style="flex:1"><span style="flex:1">相对基线</span><span class="on" style="flex:1">相对上轮</span></div><span class="f12 t3 mono">a3f9c21</span></div>
+  <div class="row g8" style="margin-top:8px"><div class="cc-m-seg" style="flex:1"><span>相对基线</span><span class="on">相对上轮</span></div><span class="f12 t3 mono">a3f9c21</span></div>
   <div class="cd" style="margin-top:10px">{code}</div>
   <div class="card2" style="margin-top:10px;padding:11px 12px">
     <div class="row g6"><span class="f12 t3">选中第 48 行</span><span class="grow"></span><span class="f12 lnk">查看完整文件</span></div>
@@ -271,7 +271,7 @@ def m_skills():
         return f'<div class="lr"><span class="av2" style="width:38px;height:38px;border-radius:11px;background:{bg}">{I("code" if kind=="编码" else "eye",18,2)}</span><div class="grow mn"><div class="row g6"><span class="lt ell grow">{n}</span>{extra}</div><div class="ls ell" style="margin-top:2px">{d}</div></div></div>'
     inner = f'''<div class="pad">
   <div class="row" style="margin-top:6px"><div class="grow"><div class="cap">编码和验证规则</div><div class="lgt">Skills</div></div><span class="nb2 glass">{I("download",17)}</span><span class="nb2" style="margin-left:8px;background:var(--btn-pri-bg);color:#fff">{I("plus",18,2.4)}</span></div>
-  <div class="seg" style="margin-top:12px"><span class="on" style="flex:1;justify-content:center">全部</span><span style="flex:1;justify-content:center">编码</span><span style="flex:1;justify-content:center">验证</span></div>
+  <div class="cc-m-seg" style="margin-top:12px"><span class="on">全部</span><span>编码</span><span>验证</span></div>
   <div class="gh">我的<span>3</span></div>
   <div class="grp glass">
     {sk("页面交互回归 · 我的版本","草稿 v2 · PC 15:02 保存","验证",'<span class="tag tg-o">草稿</span>')}

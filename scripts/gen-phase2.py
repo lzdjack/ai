@@ -23,8 +23,6 @@ EXTRA_CSS = '''<style>
 .cp-i{background:color-mix(in srgb,var(--purple) 15%,transparent);color:var(--ink-purple)}
 .cp-n{background:var(--fill);color:var(--text-2)}
 .plus-btn{width:28px;height:28px;border-radius:var(--r-sm);background:var(--btn-pri-bg);color:#fff;display:inline-flex;align-items:center;justify-content:center;flex:none}
-.seg{flex-shrink:0}
-.seg span{white-space:nowrap}
 /* 活原型预览与单跳提案 */
 .proto-box{border-radius:14px;padding:11px 13px;background:var(--surface);border:1px solid var(--hair);box-shadow:0 6px 18px -12px rgba(20,30,70,.25)}
 html.dark .proto-box{background:rgba(20,23,34,.85)}
@@ -148,7 +146,7 @@ def build_1_spec():
       </div>
     </div>
     <div class="row g10" style="margin-top:11px">
-      <div class="seg"><span class="on">协作流</span><span>活原型</span><span>契约 3</span><span>切片 5</span><span>联调验收</span></div>
+      <div class="cc-seg"><span class="on">协作流</span><span>活原型</span><span>契约 3</span><span>切片 5</span><span>联调验收</span></div>
       <span class="grow"></span>
       <span class="f12 t3" style="white-space:nowrap">契约拍板即触发契约级真并行</span>
     </div>
@@ -299,7 +297,7 @@ def build_2_drawer():
       </div>
     </div>
     <div class="row g10" style="margin-top:11px">
-      <div class="seg"><span>协作流</span><span>活原型</span><span>契约 3</span><span class="on">切片 5</span><span>联调验收</span></div>
+      <div class="cc-seg"><span>协作流</span><span>活原型</span><span>契约 3</span><span class="on">切片 5</span><span>联调验收</span></div>
     </div>
   </header>
   <div class="col g8" style="padding:12px 20px">
@@ -325,7 +323,7 @@ def build_2_drawer():
   <div class="row grow" style="align-items:stretch;min-height:0;overflow:hidden">
     <div class="col g10 grow" style="padding:14px 18px;min-width:0;border-right:1px solid var(--hair)">
       <div class="row g8">
-        <div class="seg"><span class="on">对话</span><span>代码改动 2</span><span>证据 3</span><span>执行日志</span></div>
+        <div class="cc-seg"><span class="on">对话</span><span>代码改动 2</span><span>证据 3</span><span>执行日志</span></div>
         <span class="grow"></span>
         <span class="c-pill cp-b">待审核代码 · L1 中危</span>
       </div>
@@ -454,7 +452,7 @@ def build_3_ticket():
       </div>
     </div>
     <div class="row g10" style="margin-top:10px">
-      <div class="seg"><span class="on">对话</span><span>代码改动 2</span><span>证据 3</span><span>执行日志</span><span>发布</span></div>
+      <div class="cc-seg"><span class="on">对话</span><span>代码改动 2</span><span>证据 3</span><span>执行日志</span><span>发布</span></div>
       <span class="grow"></span>
       <span class="f12 t3" style="white-space:nowrap">左审 Diff · 右核冻结契约</span>
     </div>
@@ -584,7 +582,7 @@ def build_4_qa():
       </div>
     </div>
     <div class="row g10" style="margin-top:11px">
-      <div class="seg"><span>协作流</span><span>活原型</span><span>契约 3</span><span>切片 5</span><span class="on">联调验收</span></div>
+      <div class="cc-seg"><span>协作流</span><span>活原型</span><span>契约 3</span><span>切片 5</span><span class="on">联调验收</span></div>
       <span class="grow"></span>
       <span class="cs-btn pri">{I("play",11)}重跑全仓 E2E</span>
     </div>

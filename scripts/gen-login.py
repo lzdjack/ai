@@ -41,9 +41,6 @@ html.dark .sub{background:var(--brand-grad);-webkit-background-clip:text;-webkit
 .inp.focus{background:var(--glass-2);border-color:var(--focus-ring);box-shadow:0 0 0 3px var(--focus-halo)}
 .inp.ro{background:transparent;border-color:var(--hair)}
 .dots{letter-spacing:3px;font-size:15px}
-.seg2{display:flex;height:var(--ctl-lg);align-items:center;padding:3px;border-radius:var(--r-lg);background:var(--well);border:1px solid var(--hair);gap:2px}
-.seg2 span{flex:1;height:100%;border-radius:9px;display:flex;align-items:center;justify-content:center;gap:7px;font-size:13.5px;font-weight:600;color:var(--text-2)}
-.seg2 span.on{color:var(--text);background:var(--seg-thumb);box-shadow:var(--shadow-seg)}
 .bd{width:18px;height:18px;border-radius:5px;color:#fff;display:inline-flex;align-items:center;justify-content:center;flex:none}
 .bd-in{background:linear-gradient(155deg,#3B8BFF,#1D6FE0)}
 .bd-up{background:linear-gradient(155deg,#A86BFF,#6D3DF0)}
@@ -69,7 +66,7 @@ CHECK = '<i data-i="check" data-s="14" data-w="3"></i>'
 def seg(sel):
     a = ' class="on"' if sel == 'in' else ''
     b = ' class="on"' if sel == 'up' else ''
-    return f'<div class="seg2" style="width:100%"><span{a}><b class="bd bd-in">{IN_IC}</b>登录</span><span{b}><b class="bd bd-up">{UP_IC}</b>注册</span></div>'
+    return f'<div class="cc-seg cc-seg-lg" style="width:100%;display:flex"><span{a} style="flex:1"><b class="bd bd-in">{IN_IC}</b>登录</span><span{b} style="flex:1"><b class="bd bd-up">{UP_IC}</b>注册</span></div>'
 
 
 # ---------------- PC ----------------
@@ -134,7 +131,7 @@ m_style = COMMON + '''
 .pad{position:absolute;left:22px;right:22px}
 .ctx{border-radius:20px;padding:14px 16px}
 .inp{height:var(--m-input-h);font-size:14.5px}
-.seg2{height:var(--m-seg-h)}
+.cc-seg-lg{height:var(--m-seg-h)}
 .ck{width:22px;height:22px;border-radius:6px}.ck::before{content:"";position:absolute;inset:-11px}
 .cbtn::before{content:"";position:absolute;inset:-8px -4px;min-height:var(--m-touch)}
 .m-act-row{min-height:var(--m-touch)}

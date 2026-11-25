@@ -60,7 +60,7 @@ p2=f'''<div class="phone"><div class="scr">{status}
     <div class="grow"><div style="font-size:18px;font-weight:700;line-height:1.3">发起审批时点击分组，界面卡住</div>
     <div class="row g6" style="margin-top:6px;flex-wrap:wrap"><span class="tg" style="color:var(--ink-red);background:color-mix(in srgb,var(--red) 12%,transparent)">P1</span><span class="tg" style="color:var(--ink-blue);background:color-mix(in srgb,var(--blue) 12%,transparent)">待我审核 · 第 2 轮</span><span class="f12 t3">Bot-01</span></div></div>
   </div>
-  <div class="seg" style="margin-top:14px"><span class="on" style="flex:1;justify-content:center;white-space:nowrap;padding:0 4px">对话</span><span style="flex:1;justify-content:center;white-space:nowrap;padding:0 4px">改动 3</span><span style="flex:1;justify-content:center;white-space:nowrap;padding:0 4px">证据 4</span><span style="flex:1;justify-content:center;white-space:nowrap;padding:0 4px">日志</span><span style="flex:1;justify-content:center;white-space:nowrap;padding:0 4px">发布</span></div>
+  <div class="cc-m-seg" style="margin-top:14px"><span class="on" style="padding:0 4px">对话</span><span style="padding:0 4px">改动 3</span><span style="padding:0 4px">证据 4</span><span style="padding:0 4px">日志</span><span style="padding:0 4px">发布</span></div>
   <div class="dv"><span>第 1 轮 · 昨天 22:40 · 你打回了</span></div>
   <div class="row" style="justify-content:flex-end"><span class="ubub">第二个分组还是会卡，再看看。</span></div>
   <div class="dv"><span>第 2 轮 · 今天 14:10</span></div>

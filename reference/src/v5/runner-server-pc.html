@@ -41,9 +41,6 @@ html.dark .panel{
 .inp{height:var(--ctl-md);border-radius:var(--r-md);padding:0 12px;background:var(--well);border:1px solid var(--hair);display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--text)}
 .sel{height:var(--ctl-md);border-radius:var(--r-md);padding:0 12px;background:var(--glass-2);border:1px solid var(--border-ctl);box-shadow:var(--shadow-ctl);display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:600;color:var(--text)}
 .sel svg{color:var(--text-3);flex:none}
-.seg2{height:var(--ctl-md);border-radius:var(--r-md);padding:3px;background:var(--well);border:1px solid var(--hair);display:flex;gap:2px;align-items:center}
-.seg2 span{flex:1;height:100%;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:600;color:var(--text-2);white-space:nowrap}
-.seg2 span.on{background:var(--seg-thumb);color:var(--text);box-shadow:var(--shadow-seg)}
 
 /* 终端命令块 */
 .term{border-radius:16px;background:#161925;color:#E6EAF4;padding:15px 18px 14px;border:1px solid rgba(255,255,255,.09);box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
@@ -100,7 +97,7 @@ html.dark .term{background:rgba(8,10,18,.78)}
       <div class="grid3">
         <div class="fld-b"><span class="flb">节点名称</span><div class="inp mono">shanghai-ci-01</div></div>
         <div class="fld-b"><span class="flb">可见范围</span><div class="sel"><span>全团队共用（默认）</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></div></div>
-        <div class="fld-b"><span class="flb">安装方式</span><div class="seg2"><span class="on">一键脚本</span><span>Docker Compose</span></div></div>
+        <div class="fld-b"><span class="flb">安装方式</span><div class="cc-seg" style="display:flex;width:100%"><span class="on" style="flex:1">一键脚本</span><span style="flex:1">Docker Compose</span></div></div>
       </div>
 
       <div class="sec-h">

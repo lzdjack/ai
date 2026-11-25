@@ -721,7 +721,7 @@ def p_rollback():
   <div class="flabel" style="padding:0 6px">应用</div>
   <div class="row g10" style="margin:0 4px;padding:9px 10px;border-radius:var(--r-md);background:var(--glass-2);border:1px solid var(--border-ctl);box-shadow:var(--shadow-ctl)"><span class="ic-box" style="width:26px;height:26px;border-radius:7px;background:linear-gradient(160deg,#5AA0FF,#1F6FFF)">{I("globe",14)}</span><div class="col grow"><span class="f13 w6">Tita_Static</span><span class="f11 t3">Apollo 配置中心</span></div>{I("chevd",13,style="color:var(--text-3)")}</div>
   <div class="flabel" style="padding:0 6px;margin-top:12px">环境 · 集群 · Namespace</div>
-  <div class="seg" style="margin:0 4px"><span class="on" style="flex:1;justify-content:center;color:var(--ink-red)">PRO 正式</span><span style="flex:1;justify-content:center">TEST 测试</span></div>
+  <div class="cc-seg cc-seg-sm" style="margin:0 4px;display:flex"><span class="on" style="flex:1;color:var(--ink-red)">PRO 正式</span><span style="flex:1">TEST 测试</span></div>
   <div class="row g6 f12 t2" style="padding:8px 8px 0"><span class="chip2">default</span><span class="chip2">application</span></div>
   <div class="g10h" style="padding-top:16px">发布历史 · 选择回到哪一次</div>
   <div class="col g2">{hs}</div>
@@ -822,7 +822,7 @@ def p_skills():
   <div class="col grow" style="min-width:0"><h1>页面交互回归 · 我的版本</h1><div class="f12 t3" style="margin-top:2px">验证 Skill · 复制自内置 v1 · 草稿已自动保存 15:02 · 手机可接着写</div></div>
   <span class="btn2 a-sec" style="background:var(--fill)">{I("history",14)}版本</span><span class="btn2" style="background:var(--btn-pri-bg);color:#fff">保存草稿</span></div></header>
 <div class="col g12 grow" style="padding:16px 22px;min-height:0;overflow:hidden">
-  <div class="row g12"><div class="grow"><div class="flabel">名称</div><div class="field">页面交互回归 · 我的版本</div></div><div style="width:150px"><div class="flabel">类型</div><div class="seg"><span style="flex:1;justify-content:center">编码</span><span class="on" style="flex:1;justify-content:center">验证</span></div></div></div>
+  <div class="row g12"><div class="grow"><div class="flabel">名称</div><div class="field">页面交互回归 · 我的版本</div></div><div style="width:150px"><div class="flabel">类型</div><div class="cc-seg" style="display:flex;width:100%"><span style="flex:1">编码</span><span class="on" style="flex:1">验证</span></div></div></div>
   <div><div class="flabel">用途（Bot 判断何时使用）</div><div class="field">审批、考勤等表单页面的交互类 Bug，复现和复测都按页面操作留证据。</div></div>
   <div class="col grow" style="min-height:0"><div class="row g8"><span class="flabel grow" style="margin:0">规则正文</span><span class="f12 t3">Markdown · 16 行</span></div>
     <div class="code" style="margin-top:6px;border-radius:14px;background:var(--glass-2);border:1px solid var(--stroke);padding:8px 0;font-size:12.5px;flex:1;overflow:hidden">{bl}</div></div>
@@ -1382,7 +1382,7 @@ def p_pubbefore():
             + _crow(CK("orange", "!"), "测试分支上已有别人的 4 个提交", "来自 TK-20802 等 2 单 · 会一起打进包里", "查看 ›"))
     tester = f'''<div class="card" style="width:300px;flex:none;padding:14px 16px;display:flex;flex-direction:column">
       <div class="row g8"><span class="sec grow">测试人</span><span class="f11 t3">Tita 单没有提单测试人</span></div>
-      <div class="row g10" style="margin-top:10px;padding:8px 10px;border-radius:var(--r-md);background:var(--glass-2);border:1.5px solid var(--focus-ring);box-shadow:0 0 0 3px var(--focus-halo)"><span class="av" style="width:30px;height:30px;font-size:11px;background:linear-gradient(150deg,#7FB2FF,#4C7DF0)">王某</span><div class="col grow"><span class="f13 w6">王某</span><span class="f11 t3">第 1 轮复测人 · 账号 kq-staff-03</span></div>{I("chevd",13,style="color:var(--text-3)")}</div>
+      <div class="row g10" style="margin-top:10px;padding:8px 10px;border-radius:var(--r-md);background:var(--glass-2);border:1px solid var(--focus-ring);box-shadow:0 0 0 3px var(--focus-halo)"><span class="av" style="width:30px;height:30px;font-size:11px;background:linear-gradient(150deg,#7FB2FF,#4C7DF0)">王某</span><div class="col grow"><span class="f13 w6">王某</span><span class="f11 t3">第 1 轮复测人 · 账号 kq-staff-03</span></div>{I("chevd",13,style="color:var(--text-3)")}</div>
       <span class="grow"></span>
       <button class="abtn a-pri" style="width:100%;justify-content:center;height:36px;margin-top:10px">{I("pkg",14)}发布到测试环境</button>
       <div class="row g6 f12 t3" style="margin-top:8px">{I("key",12)}<span class="grow">用你的 Apollo 账号 <span class="mono t2">lin.x</span></span><span class="lnk">改 ›</span></div>
@@ -1618,11 +1618,11 @@ def p_skimport():
     dlg = f'''<div class="scrim"></div>
 <div class="dlg" style="left:50%;top:50%;width:680px;transform:translate(-50%,-50%);padding:22px 24px">
   <div class="row g10"><span class="ic-box" style="background:linear-gradient(160deg,#C58BFF,#6A3DF0)">{I("download",16,2.2)}</span><div class="col grow"><span class="f18 w7">导入 Skill</span><span class="f12 t3">导入后先是草稿，在编辑器里看过、启用到项目才生效</span></div><span class="cc-close">{I("x",15,2.2)}</span></div>
-  <div class="seg" style="margin-top:16px"><span class="on" style="flex:1;justify-content:center">文件 .md / .txt</span><span style="flex:1;justify-content:center">GitLab 文件链接</span><span style="flex:1;justify-content:center">粘贴文字</span></div>
+  <div class="cc-seg" style="margin-top:16px;display:flex;width:100%"><span class="on" style="flex:1">文件 .md / .txt</span><span style="flex:1">GitLab 文件链接</span><span style="flex:1">粘贴文字</span></div>
   <div class="row g10" style="margin-top:12px;padding:12px 14px;border-radius:14px;border:1.5px dashed color-mix(in srgb,var(--blue) 45%,transparent);background:color-mix(in srgb,var(--blue) 5%,transparent)">{I("file",18,style="color:var(--ink-blue)")}<div class="col grow"><span class="f13 w6">团队前端规范.md</span><span class="f12 t3">6 KB · 42 行 · 拖进来或点这里换一个</span></div><span class="tag tg-g">已读出</span></div>
   <div class="row g12" style="margin-top:14px">
     <div class="col grow" style="min-width:0"><div class="flabel">名称（取自第一个标题）</div><div class="field">表单开发规范</div></div>
-    <div style="width:170px;flex:none"><div class="flabel">类型</div><div class="seg"><span class="on" style="flex:1;justify-content:center">编码</span><span style="flex:1;justify-content:center">验证</span></div></div></div>
+    <div style="width:170px;flex:none"><div class="flabel">类型</div><div class="cc-seg" style="display:flex;width:100%"><span class="on" style="flex:1">编码</span><span style="flex:1">验证</span></div></div></div>
   <div class="flabel" style="margin-top:12px">用途（Bot 判断什么时候用，取自第一段，可改）</div><div class="field">审批、考勤这类表单页面都按这份来。</div>
   <div class="row g8" style="margin-top:12px"><span class="flabel grow" style="margin:0">正文预览</span><span class="f12 t3">前 6 行</span></div>
   <div class="code" style="margin-top:6px;border-radius:12px;background:var(--well);border:1px solid var(--hair);padding:6px 0;font-size:12.5px">{pl}</div>
@@ -1691,7 +1691,7 @@ html:not(.dark) .el .no{color:#fff}
 </div>'''
 
     # 2 搜索 / 筛选没有结果
-    srch = f'''<div class="row g6" style="height:30px;margin:0 4px 6px;padding:0 9px;border-radius:var(--r-sm);background:var(--well);border:1.5px solid var(--focus-ring);box-shadow:0 0 0 3px var(--focus-halo)">{I("search",13,style="color:var(--ink-blue)")}<span class="f12 grow">导出</span>{I("x",12,style="color:var(--text-3)")}</div>
+    srch = f'''<div class="row g6" style="height:30px;margin:0 4px 6px;padding:0 9px;border-radius:var(--r-sm);background:var(--glass-2);border:1px solid var(--focus-ring);box-shadow:0 0 0 3px var(--focus-halo)">{I("search",13,style="color:var(--ink-blue)")}<span class="f12 grow">导出</span>{I("x",12,style="color:var(--text-3)")}</div>
 <div class="row g6" style="padding:0 4px 2px"><span class="tag tg-t">修复中</span><span class="f11 t3">筛选 1 项</span></div>'''
     t2 = mini_list("工单", ("我的", "全部"), srch) + f'''<div class="ec">
   {ibox("linear-gradient(160deg,#B7BDC8,#8A92A0)","search")}
