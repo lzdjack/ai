@@ -739,7 +739,7 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
       <thead><tr><th>组件类别</th><th>标准类名</th><th>锁定视觉规格</th><th>禁用红线</th></tr></thead>
       <tbody>
         <tr><td><b>下拉选择（钦定基准）</b></td><td><code>.cc-select</code> / <code>.cc-menu</code></td><td>高 36px（sm 34 / lg 40）、圆角 10px、<code>--glass-2</code> + <code>1px --stroke</code>；左侧可选状态点/头像 + 主值 13/600 + 次说明 11.5/text-3 撑开 + 右对齐单向 <code>chevd 13px</code></td><td>严禁箭头贴字、严禁画成无边框 <code>--fill</code>、严禁箭头外加小方盒底色</td></tr>
-        <tr><td><b>文本输入 / 搜索</b></td><td><code>.cc-input</code> / <code>.cc-search</code></td><td>微凹 <code>--fill</code> 底面（与轻浮起下拉一眼区分）；聚焦转 <code>--glass-2</code> + 蓝描边与 3px 蓝晕；报错转红边红晕</td><td>严禁在搜索框内不设防抖直接打远端 API（统一 300ms）</td></tr>
+        <tr><td><b>文本输入 / 搜索</b></td><td><code>.cc-input</code> / <code>.cc-search</code></td><td>同源微凹内嵌容器（Apple HIG）：<code>--fill</code> + <code>1px --hair</code> 细描边（与轻浮起下拉一眼区分）；聚焦转 <code>--glass-2</code> + 蓝描边与 3px 蓝晕；搜索框有输入时右侧浮现清除 <code>×</code></td><td>普通输入与搜索严禁一处有边一处无边；搜索框统一 300ms 防抖</td></tr>
         <tr><td><b>按钮 / 分段 / 开关</b></td><td><code>.cc-btn</code> / <code>.cc-seg</code> / <code>.cc-switch</code></td><td>按钮 5 语义（pri/sec/glass/red/ghost）× 3 高度（28/34/40px）；分段 <code>--fill</code> 槽 + <code>--glass-2</code> 滑块；开关 38×22px</td><td>同一底部操作栏最多 1 个 <code>pri</code> 蓝色主按钮</td></tr>
         <tr><td><b>浮层与抽屉尺寸</b></td><td><code>.cc-drawer</code> / <code>.cc-drawer-sm</code></td><td>配置/编辑抽屉统一右侧 <b>640–660px</b> 模态（<code>.cc-scrim</code>）；向导 AI 帮手统一右侧 <b>440px</b> 非模态（<code>.cc-scrim-light</code>）；轻确认弹窗居中 <b>520–560px</b></td><td>严禁在向导中点击「问 AI」整页跳走丢失表单</td></tr>
       </tbody>

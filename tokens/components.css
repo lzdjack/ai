@@ -57,27 +57,24 @@ html.dark .cc-menu-item.is-selected{background:color-mix(in srgb,var(--blue) 22%
 html.dark .cc-menu-item.is-selected .cc-mi-main b{color:#7DC4FF}
 .cc-menu-item .cc-mi-main em{font-style:normal;font-size:11px;color:var(--text-3);margin-top:1px}
 
-/* ---------- 2. 文本输入 / 搜索框（微凹底，与 --glass-2 下拉形成明确区分） ---------- */
-.cc-input{
+/* ---------- 2. 文本输入 / 搜索框（同源微凹内嵌容器，符合 Apple HIG，与 --glass-2 下拉区分） ---------- */
+.cc-input,.cc-search{
   height:36px;padding:0 12px;border-radius:10px;
-  background:var(--fill);border:1px solid transparent;
+  background:var(--fill);border:1px solid var(--hair);
   display:flex;align-items:center;gap:8px;min-width:0;
   font-size:13px;color:var(--text);
+  transition:border-color .15s ease,box-shadow .15s ease,background .15s ease;
 }
+.cc-input-sm,.cc-search-sm{height:34px;padding:0 11px;border-radius:9px;font-size:12.5px}
 .cc-input-lg{height:40px;padding:0 13px;border-radius:11px;font-size:13.5px}
-.cc-input.is-focus{
-  background:var(--glass-2);border-color:var(--blue);
+.cc-search{color:var(--text-3)}
+.cc-input.is-focus,.cc-search.is-focus{
+  background:var(--glass-2);border-color:var(--blue);color:var(--text);
   box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 18%,transparent);
 }
 .cc-input.is-error{
   background:var(--glass-2);border-color:var(--red);
   box-shadow:0 0 0 3px color-mix(in srgb,var(--red) 16%,transparent);
-}
-.cc-search{
-  height:34px;padding:0 11px;border-radius:10px;
-  background:var(--fill);border:1px solid var(--hair);
-  display:flex;align-items:center;gap:7px;min-width:0;
-  font-size:12.5px;color:var(--text-3);
 }
 
 /* ---------- 3. 分段控件 & 开关 ---------- */
