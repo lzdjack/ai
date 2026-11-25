@@ -23,8 +23,8 @@ EXTRA_CSS = '''
 .mk-item.on .mk-sub{color:rgba(255,255,255,.84)!important}
 .mk-item.on .mk-bd{background:rgba(255,255,255,.22)!important;color:#fff!important}
 .mk-bd{height:17px;padding:0 6px;border-radius:5px;font-size:10px;font-weight:700;display:inline-flex;align-items:center;white-space:nowrap;flex:none}
-.slot-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
-.slot-c{padding:11px 13px;border-radius:14px;background:var(--fill);border:1px solid var(--hair)}
+.slot-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;margin-top:10px}
+.slot-c{padding:11px 13px;border-radius:14px;background:var(--fill);border:1px solid var(--hair);min-width:0;overflow:hidden}
 .cmd-row{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:11px;background:var(--fill);font-size:12.5px}
 .cmd-row+.cmd-row{margin-top:7px}
 .cmd-k{font-family:"SF Mono",ui-monospace,monospace;font-weight:700;color:var(--blue);min-width:118px;flex:none}
@@ -58,26 +58,27 @@ def mrow(name, sub, icon_svg, bg, badge, badge_cls="tg-g", on=False, action_txt=
 
 left = f'''<section class="glass pn" style="width:296px;flex:none;padding:16px 10px 10px">
   <div class="row" style="padding:0 8px 8px">
-    <span class="f18 w7 grow">模块市场</span>
-    <span class="btn2 sm" style="background:var(--fill);color:var(--text)">{I("plus",13,2.3)}私有模块</span>
+    <span class="f18 w7 grow">插件市场</span>
+    <span class="btn2 sm" style="background:var(--fill);color:var(--text)">{I("plus",13,2.3)}私有插件</span>
   </div>
-  <div class="row g8" style="margin:0 6px;height:32px;padding:0 10px;border-radius:10px;background:var(--fill);color:var(--text-3)">{I("search",14)}<span class="f12">搜索模块、连接器、MCP…</span></div>
+  <div class="row g8" style="margin:0 6px;height:32px;padding:0 10px;border-radius:10px;background:var(--fill);color:var(--text-3)">{I("search",14)}<span class="f12">搜索插件、连接器、主题、MCP…</span></div>
   <div class="seg" style="margin:10px 6px 2px;padding:2px">
-    <span class="on" style="height:26px;font-size:12px;flex:1">全部 7</span>
-    <span style="height:26px;font-size:12px;flex:1">已安装 3</span>
+    <span class="on" style="height:26px;font-size:12px;flex:1">全部 8</span>
+    <span style="height:26px;font-size:12px;flex:1">已安装 4</span>
     <span style="height:26px;font-size:12px;flex:1">企业私有</span>
   </div>
 
-  <div class="g10h">已安装 · 默认启用<span>3</span></div>
-  {mrow("紧急回滚（Apollo）", "Dock 回滚入口 · 历史发布与差异回退", SVG_RB, "linear-gradient(160deg,#FF8A7A,#E0281E)", "默认安装", "tg-g", on=True)}
-  {mrow("发布流水线（Tita）", "Dock 发布 + 工单发布标签 · craft 映射", SVG_BOX, "linear-gradient(160deg,#FFC54D,#FF7A00)", "默认安装", "tg-g")}
-  {mrow("Pi 修复引擎（runtime-pi）", "核心默认引擎 · 多模型与流式交互", SVG_PI, "linear-gradient(155deg,#5E8BFF,#8B5CF6)", "核心默认", "tg-b")}
+  <div class="g10h">已安装 · 含官方预装<span>4</span></div>
+  {mrow("紧急回滚（Apollo）", "views + connectors · 回滚与差异预览", SVG_RB, "linear-gradient(160deg,#FF8A7A,#E0281E)", "默认安装", "tg-g", on=True)}
+  {mrow("发布流水线（Tita）", "views + craft · 发测试与正式流水线", SVG_BOX, "linear-gradient(160deg,#FFC54D,#FF7A00)", "默认安装", "tg-g")}
+  {mrow("GitLab / Jira 连接器", "connectors · 鉴权归「设置 → 连接器」", SVG_PLUG, "linear-gradient(155deg,#38BDF8,#2563EB)", "官方预装", "tg-b")}
+  {mrow("Pi 修复引擎（runtime-pi）", "runtimes · 多模型与流式交互", SVG_PI, "linear-gradient(155deg,#5E8BFF,#8B5CF6)", "核心默认", "tg-b")}
 
-  <div class="g10h">可安装 · 官方与扩展<span>4</span></div>
-  {mrow("灰度放量（Canary）", "5%→50%→100% 流量大盘 · 沙箱微应用", SVG_WAVE, "linear-gradient(155deg,#34D399,#059669)", "", "", action_txt="安装")}
-  {mrow("通用 CI/CD 命令发布", "craft 映射任意公司 build/deploy", SVG_TERM, "linear-gradient(155deg,#38BDF8,#2563EB)", "", "", action_txt="安装")}
-  {mrow("外部 CLI 引擎（ACP）", "可选插件 · 复用 Claude Code / Codex", SVG_PLUG, "linear-gradient(155deg,#64748B,#334155)", "", "", action_txt="安装")}
-  {mrow("飞书 / 钉钉审批联动", "L2 MCP · 审核与发布推送群审批卡", SVG_MSG, "linear-gradient(155deg,#60A5FA,#4F46E5)", "", "", action_txt="安装")}
+  <div class="g10h">可安装 · 扩展生态<span>4</span></div>
+  {mrow("Token 费用检测", "topbar.widgets + 插件设置 · 预算熔断", SVG_WAVE, "linear-gradient(155deg,#34D399,#059669)", "", "", action_txt="安装")}
+  {mrow("高对比暗夜主题", "themes · 自动归「外观与语言」单选", SVG_TERM, "linear-gradient(155deg,#A855F7,#6366F1)", "", "", action_txt="安装")}
+  {mrow("外部 CLI 引擎（ACP）", "runtimes · 复用 Claude Code / Codex", SVG_PLUG, "linear-gradient(155deg,#64748B,#334155)", "", "", action_txt="安装")}
+  {mrow("飞书 / 钉钉审批联动", "connectors + mcp · 群审批卡", SVG_MSG, "linear-gradient(155deg,#60A5FA,#4F46E5)", "", "", action_txt="安装")}
 </section>'''
 
 main = f'''<main class="glass pn grow" style="min-width:0;padding:18px 22px;gap:12px">
@@ -89,16 +90,16 @@ main = f'''<main class="glass pn grow" style="min-width:0;padding:18px 22px;gap:
         <span class="tag tg-g">已安装 · 默认安装</span>
         <span class="tag tg-n mono">v1.2.0</span>
       </div>
-      <div class="f12 t2" style="line-height:1.5">官方扩展插件 <span class="mono t3">plugins/module-rollback-apollo</span> · L1 流水线 + L2 MCP · 独立提供发布历史查看、配置连带差异预览与一键回滚，不需要时可随时停用卸载。</div>
+      <div class="f12 t2" style="line-height:1.5">官方扩展插件 <span class="mono t3">plugins/module-rollback-apollo</span> · 遵循 5 贡献点协议（<span class="mono">views / connectors / capabilities</span>），不展示令牌明文，鉴权实例归口「设置 → 连接器」。</div>
     </div>
     <div class="row g8" style="flex:none">
-      <button class="btn2" style="background:color-mix(in srgb,var(--blue) 13%,transparent);color:var(--blue)">模块设置</button>
+      <button class="btn2" style="background:color-mix(in srgb,var(--blue) 13%,transparent);color:var(--blue)">插件设置</button>
       <button class="btn2" style="background:color-mix(in srgb,var(--red) 11%,transparent);color:var(--red)">停用卸载</button>
     </div>
   </div>
 
   <div class="card" style="padding:13px 16px">
-    <div class="row"><span class="sec">挂载的云匠扩展位（6 黄金插座）</span><span class="grow"></span><span class="f12 t3">卸载后自动隐藏，零核心代码残留</span></div>
+    <div class="row"><span class="sec">声明的贡献点与扩展插座</span><span class="grow"></span><span class="f12 t3">按 manifest 自动归位 · 卸载零核心残留</span></div>
     <div class="slot-grid">
       <div class="slot-c">
         <div class="row g6"><span class="tag tg-r mono">dock.items</span><span class="f13 w6 ell">左侧 Dock · 紧急回滚</span></div>
@@ -113,7 +114,7 @@ main = f'''<main class="glass pn grow" style="min-width:0;padding:18px 22px;gap:
         <div class="f12 t3" style="margin-top:5px">区分「配置已回退 / 业务恢复待验证 / 已恢复」三段状态</div>
       </div>
       <div class="slot-c">
-        <div class="row g6"><span class="tag tg-p mono">settings.connectors</span><span class="f13 w6 ell">设置 · 个人 Apollo 凭据</span></div>
+        <div class="row g6"><span class="tag tg-p mono">connectors</span><span class="f13 w6 ell">鉴权归「设置 → 连接器」 ›</span></div>
         <div class="f12 t3" style="margin-top:5px">复用本人 Apollo 账号执行与审计，需输入 PROD 二次确认</div>
       </div>
     </div>
@@ -160,15 +161,15 @@ right = f'''<aside class="glass pn" style="width:288px;flex:none;padding:16px 14
   </div>
 
   <div class="card" style="padding:13px 14px">
-    <div class="mini">企业自研模块接入</div>
-    <div class="f12 t2" style="line-height:1.6">其他公司不用 Apollo 时，可直接卸载本插件，改用 L1 YAML 映射 <span class="mono">kubectl rollout undo</span> 或挂接自有回滚 MCP 插件。</div>
+    <div class="mini">企业自研与新物种插件</div>
+    <div class="f12 t2" style="line-height:1.6">外部鉴权自动进「设置 → 连接器」，主题进「外观与语言」；Token 费用检测等任意新物种零代码自动落入「插件设置」通用 Schema 抽屉。</div>
     <div class="row g8" style="margin-top:11px">
-      <span class="btn2 sm grow" style="background:var(--blue);color:#fff">导入私有模块</span>
+      <span class="btn2 sm grow" style="background:var(--blue);color:#fff">导入私有插件</span>
       <span class="btn2 sm" style="background:var(--fill);color:var(--text)">SDK 文档</span>
     </div>
   </div>
 </aside>'''
 
-html = page("模块市场 · PC", "mkt", EXTRA_CSS + left + main + right)
+html = page("插件市场 · PC", "mkt", EXTRA_CSS + left + main + right)
 (OUT / "pc-market.html").write_text(html, encoding="utf-8")
-print("ok: pc-market.html (Rollback plugin focus)")
+print("ok: pc-market.html (Plugin Market unified)")

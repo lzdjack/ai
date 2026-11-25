@@ -854,9 +854,10 @@ def p_skills():
 # =====================================================================
 # 11. 设置 · 项目（= 开工准备：每项配置的当前值 + Bot 实测，点「改」打开对应编辑面板）
 # =====================================================================
-# 设置左菜单（所有设置页共用一份）
+# 设置左菜单（按工作空间 / 项目 / 个人永久锁死，不随新插件类型膨胀；所有设置页共用）
 SET_NAV = [("spark", "linear-gradient(160deg,#C58BFF,#6A3DF0)", "全局 AI", ""),
            ("server", "linear-gradient(155deg,#34D399,#059669)", "执行器", "2"),
+           ("link", "linear-gradient(160deg,#38BDF8,#2563EB)", "连接器", "5"),
            ("layers", "linear-gradient(160deg,#5AA0FF,#1F6FFF)", "项目", "4"),
            ("inbox", "linear-gradient(160deg,#4FD6E6,#16A3C0)", "来源采集", "!"), ("users", "linear-gradient(160deg,#5EDB7A,#28B04F)", "成员与身份", "1"),
            ("key", "linear-gradient(160deg,#FFC15A,#F08A00)", "我的账号", ""), ("bell", "linear-gradient(160deg,#FF8A7A,#E0281E)", "通知", "")]
@@ -890,9 +891,9 @@ def p_settings():
         return f'<button class="btn2 sm {cls}"{sty}>{t}</button>'
 
     g1 = "".join([
-        item("ok", "仓库与分支", "项目管理员", '<span class="mono">tita-okr-web</span> master / dev-okr · <span class="mono">tita-ui-kit</span> main / test · <span class="mono">tita-main</span> 只验证', done("10:20 实测通过")),
-        item("ok", "安装依赖与构建", "Bot 自查", '<span class="mono">pnpm i &amp;&amp; pnpm build-prod</span> 在内网服务器上通过，用时 3 分 12 秒', done("10:24 实测通过")),
-        item("ok", "MR 审核人", "项目管理员", '合入测试分支：工单的修复人 · 合回主分支：林某', done("已设置")),
+        item("ok", "代码来源与读写权限", "项目管理员", '可修改：<span class="mono">tita-okr-web</span>（GitLab · AI 推测 master/dev-okr）· 仅查看：<span class="mono">tita-ui-kit</span>（GitHub）、<span class="mono">tita-okr-api</span>（宿主机禁写）', done("10:20 实测通过")),
+        item("ok", "安装依赖与构建", "AI 推测 · Bot 实测", '<span class="mono">pnpm i &amp;&amp; pnpm build-prod</span>（AI 扫仓自动推测，构建通过 3 分 12 秒 · 可微调）', done("10:24 实测通过")),
+        item("ok", "MR 审核人", "默认规则", '合入测试分支：工单的修复人（默认）· 合回主分支：林某（项目负责人）', done("已设置")),
     ])
     g2 = "".join([
         item("ok", "环境", "项目管理员", '测试 <span class="mono">test.tita.work/okr</span> · 联调 · 正式 <span class="mono">www.tita.com/okr</span>，都能打开', done("10:25 实测通过")),
@@ -965,8 +966,9 @@ def p_aiset():
     <div class="kv2"><span class="t2">主力模型</span><span class="f13 w6">gpt-6.2-sol</span></div>
     <div class="kv2"><span class="t2">连接方式</span><span class="row g8"><span class="f13">公司网关</span><span class="mono f12 t2">https://ai-gateway.tita.cloud</span></span></div>
     <div class="kv2"><span class="t2">访问令牌</span><span class="row g8"><span class="mono f12 t2">•••••••••••• 3f9a</span><span class="f12 t3">加密存在内网服务器上，只给 Bot 用</span></span></div></div>
-  <div class="card" style="padding:12px 16px 6px"><div class="row g8" style="margin-bottom:2px"><span class="sec grow">Bot 用的账号</span><span class="f12 t3">合入、发布、回滚用各人自己的账号 · Jira、Tita 采集账号</span><span class="f12 lnk">在来源采集改 ›</span></div>
-    <div class="kv2"><span class="t2">GitLab</span><span class="row g8"><span class="mono f13 w6">bot-fix</span><span class="mono f12 t2">•••• 91d0</span><span class="f12 t3">拉代码、推 fix/、提 MR · 不给合入权限</span><span class="row g4 f12" style="color:var(--green)">{I("check",12,3)}已连通</span><span class="f12 lnk">换令牌</span></span></div></div>
+  <div class="card" style="padding:12px 16px 6px"><div class="row g8" style="margin-bottom:2px"><span class="sec grow">引擎插件与外部连接</span><span class="f12 t3">按 5 贡献点分工 · 0% 重复配置</span><span class="f12 lnk">去插件市场 ›</span></div>
+    <div class="kv2"><span class="t2">引擎扩展</span><span class="row g8"><span class="f13">按 <span class="mono">runtimes</span> 契约动态装载</span><span class="f12 t3">安装 ACP / Claude Code / Codex 后此处自动出现</span></span></div>
+    <div class="kv2"><span class="t2">外部鉴权</span><span class="row g8"><span class="f13">GitLab · GitHub · 本机目录 · Jira · Tita</span><span class="f12 lnk">统一在「设置 → 连接器」管理 ›</span></span></div></div>
   <div class="card" style="padding:12px 16px 4px"><div class="row g8" style="margin-bottom:2px"><span class="sec grow">Bot 可以自己做的事</span><span class="f12 t3">没勾的要等人点</span></div>
     {act(CK, "复现问题", "在目标环境用登记过的账号操作页面")}
     {act(CK, "改代码、提交到修复分支", "只在 fix/ 分支上提交，不碰主分支和测试分支")}
@@ -2209,6 +2211,149 @@ def p_newticket():
         '<div class="card" style="padding:12px 14px;opacity:.45"><div class="mini">经过</div><div class="f12 t3">正在新建手动工单…</div></div>') + overlay
 
 
+def p_connectors():
+    """设置 · 连接器（外部平台鉴权与本机代码源唯一运维总览 · 与首次步骤器第 1 步同源）。"""
+    css = '''<style>
+.cgrp{display:flex;align-items:center;gap:8px;margin-top:4px}
+.cgrp b{font-size:13px;font-weight:700}
+.cgrp .csub{font-size:11.5px;color:var(--text-3)}
+.c2g{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.cc{border-radius:15px;padding:13px 15px;background:var(--glass-2);border:1px solid var(--stroke);display:flex;flex-direction:column;gap:8px;min-width:0}
+.cc.cc-err{border:1.5px solid color-mix(in srgb,var(--red) 62%,transparent);background:color-mix(in srgb,var(--red) 6%,var(--glass-2))}
+.cc.cc-dash{background:transparent;border:1.5px dashed color-mix(in srgb,var(--text) 18%,transparent);justify-content:center;gap:6px}
+.cic2{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:800;flex:none}
+.cft{display:flex;align-items:center;gap:8px;padding-top:8px;border-top:1px solid var(--hair);font-size:11.5px;color:var(--text-3)}
+.cft .ca{margin-left:auto;color:var(--blue);font-weight:600;white-space:nowrap}
+.fbar{display:flex;align-items:center;gap:8px}
+.fc{height:28px;padding:0 11px;border-radius:9px;font-size:12px;font-weight:600;color:var(--text-2);background:var(--fill);display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.fc.on{background:var(--blue);color:#fff}
+.fc em{font-style:normal;opacity:.72;font-size:11px;font-weight:500}
+.catrow{display:flex;align-items:center;gap:8px;padding:6px 0;border-top:1px solid var(--hair);font-size:12px}
+.catrow:first-child{border-top:0}
+</style>'''
+    main = css + f'''<main class="glass pn grow" style="min-width:0">
+<header class="thead">
+  <div class="row g10">
+    <div class="col grow" style="min-width:0">
+      <h1>连接器</h1>
+      <div class="f12 t3" style="margin-top:2px">外部平台鉴权与本机代码源 · 由插件市场「连接器类插件」驱动 · 与首次步骤器同源</div>
+    </div>
+    <button class="btn2 a-sec" style="background:var(--fill)">{I("pkg",14)}插件市场装更多 ›</button>
+    <button class="btn2 a-pri">{I("plus",14,2.4)}新建连接器</button>
+  </div>
+</header>
+<div class="col g10 grow" style="padding:14px 22px;min-height:0;overflow:hidden">
+  <div class="fbar">
+    <span class="fc on">全部<em>5</em></span>
+    <span class="fc">代码存储<em>2</em></span>
+    <span class="fc">工单平台<em>2</em></span>
+    <span class="fc">发布与通知<em>1</em></span>
+    <span class="grow"></span>
+    <span class="chip2" style="height:28px;font-size:12px">共享范围：全部 {I("chevd",12)}</span>
+  </div>
+
+  <div class="cgrp"><b>代码存储</b><span class="mono f11 t3">code_source</span><span class="csub">· 自动出现在开工引导第 1 步</span></div>
+  <div class="c2g">
+    <div class="cc">
+      <div class="row g10">
+        <span class="cic2" style="background:linear-gradient(155deg,#FF8A4C,#E24329)">G</span>
+        <div class="grow" style="min-width:0">
+          <div class="row g6"><b class="f13" style="white-space:nowrap">公司 GitLab</b><span class="tag tg-n" style="height:18px;font-size:10.5px">公司共用</span><span class="tag tg-b" style="height:18px;font-size:10.5px">官方</span></div>
+          <div class="mono f11 t3 ell" style="margin-top:2px">https://git.tita.cloud</div>
+        </div>
+        <span class="tag tg-g">鉴权通过</span>
+      </div>
+      <div class="f12 t2 ell">令牌 <span class="mono">bot-fix</span> · 读写分支、禁合入主干 · 28 个仓库</div>
+      <div class="cft"><span>已关联 3 个项目</span><span class="ca">鉴权设置 ›</span></div>
+    </div>
+    <div class="cc">
+      <div class="row g10">
+        <span class="cic2" style="background:linear-gradient(155deg,#5AA0FF,#2B6BFF)">{I("folder",16,2)}</span>
+        <div class="grow" style="min-width:0">
+          <div class="row g6"><b class="f13" style="white-space:nowrap">本机代码目录</b><span class="tag tg-p" style="height:18px;font-size:10.5px">本机执行器</span></div>
+          <div class="mono f11 t3 ell" style="margin-top:2px">~/workspace</div>
+        </div>
+        <span class="tag tg-g">已授权</span>
+      </div>
+      <div class="f12 t2 ell">免远端令牌 · 自动走 <span class="mono">worktree</span> 隔离不脏工作区</div>
+      <div class="cft"><span>识别 4 个本地 Git 仓</span><span class="ca">增减目录 ›</span></div>
+    </div>
+  </div>
+
+  <div class="cgrp"><b>工单平台</b><span class="mono f11 t3">ticket_source</span><span class="csub">· 自动出现在开工引导第 1 步（可选）</span></div>
+  <div class="c2g">
+    <div class="cc">
+      <div class="row g10">
+        <span class="cic2" style="background:linear-gradient(155deg,#4C9AFF,#0052CC)">J</span>
+        <div class="grow" style="min-width:0">
+          <div class="row g6"><b class="f13" style="white-space:nowrap">公司 Jira</b><span class="tag tg-n" style="height:18px;font-size:10.5px">公司共用</span><span class="tag tg-b" style="height:18px;font-size:10.5px">官方</span></div>
+          <div class="mono f11 t3 ell" style="margin-top:2px">https://jira.tita.cloud</div>
+        </div>
+        <span class="tag tg-g">鉴权通过</span>
+      </div>
+      <div class="f12 t2 ell">只读采集 · 自动收「AI修复」状态（每 2 分钟同步）</div>
+      <div class="cft"><span>2 分钟前正常同步</span><span class="ca">改鉴权 / 触发 ›</span></div>
+    </div>
+    <div class="cc cc-err">
+      <div class="row g10">
+        <span class="cic2" style="background:linear-gradient(155deg,#5AA0FF,#1F6FFF)">Tita</span>
+        <div class="grow" style="min-width:0">
+          <div class="row g6"><b class="f13" style="white-space:nowrap">Tita 工单</b><span class="tag tg-n" style="height:18px;font-size:10.5px">公司共用</span><span class="tag tg-b" style="height:18px;font-size:10.5px">官方</span></div>
+          <div class="mono f11 t3 ell" style="margin-top:2px">https://openapi.tita.work</div>
+        </div>
+        <span class="tag tg-r">令牌已过期</span>
+      </div>
+      <div class="f12 ell" style="color:var(--red)">已断 22 分钟 · <span class="mono">401 token expired</span>（恢复后补收）</div>
+      <div class="cft"><span class="t2">仅影响 Tita 自动收单</span><span style="margin-left:auto"><button class="btn2 sm a-pri" style="height:24px;padding:0 11px;font-size:11.5px">更新令牌</button></span></div>
+    </div>
+  </div>
+
+  <div class="cgrp"><b>发布与通知</b><span class="mono f11 t3">release_provider · notify_approval</span><span class="csub">· 不混入首次引导，按需启用</span></div>
+  <div class="c2g">
+    <div class="cc">
+      <div class="row g10">
+        <span class="cic2" style="background:linear-gradient(155deg,#FF8A7A,#E0281E)">{I("history",16,2)}</span>
+        <div class="grow" style="min-width:0">
+          <div class="row g6"><b class="f13" style="white-space:nowrap">Apollo 配置</b><span class="tag tg-o" style="height:18px;font-size:10.5px">仅我自己</span><span class="tag tg-t" style="height:18px;font-size:10.5px">市场</span></div>
+          <div class="mono f11 t3 ell" style="margin-top:2px">https://apollo.tita.work</div>
+        </div>
+        <span class="tag tg-g">鉴权通过</span>
+      </div>
+      <div class="f12 t2 ell">本人账号 <span class="mono">lin.x</span> · 发布与回滚均以本人身份写回留痕</div>
+      <div class="cft"><span>测试 / 正式环境</span><span class="ca">更新账号 ›</span></div>
+    </div>
+    <div class="cc cc-dash">
+      <div class="row g6"><span style="color:var(--blue)">{I("plus",15,2.4)}</span><b class="f13">接入更多外部平台</b></div>
+      <div class="f12 t3" style="line-height:1.5">去插件市场装 GitHub / Gitee / 禅道 / 飞书审批，或直接配「通用 Git / Webhook / L2 MCP」连接器</div>
+      <div class="row g6" style="margin-top:2px"><span class="tag tg-n" style="height:19px;font-size:10.5px">通用 Git</span><span class="tag tg-n" style="height:19px;font-size:10.5px">Webhook 映射</span><span class="tag tg-p" style="height:19px;font-size:10.5px">自定义 MCP</span></div>
+    </div>
+  </div>
+</div>
+</main>'''
+    right = aside(
+        f'''<div class="card" style="padding:12px 14px;background:color-mix(in srgb,var(--blue) 7%,var(--glass-2));border:1px solid color-mix(in srgb,var(--blue) 22%,transparent)">
+  <div class="row g6"><span style="color:var(--blue)">{I("rocket",14)}</span><span class="f13 w7 grow">跳过首次向导怎么补配？</span></div>
+  <div class="f12 t2" style="margin-top:6px;line-height:1.6">在这里补建连接器完成鉴权，再去「设置 → 项目」划定<b>可修改 / 仅查看</b>即可开工；数据与首次向导完全同源。</div>
+  <button class="btn2 sm a-pri" style="width:100%;justify-content:center;margin-top:10px;height:30px">继续未完成的开工向导 ›</button></div>''',
+        f'''<div class="card" style="padding:12px 14px">
+  <div class="mini">插件按能力标签自动归类</div>
+  <div class="f12 t3" style="margin-bottom:6px;line-height:1.5">无需官方写死白名单，插件 <span class="mono">manifest</span> 声明以下类别即自动出现在对应位置：</div>
+  <div>
+    <div class="catrow"><span class="tag tg-g" style="height:19px;font-size:10.5px">code_source</span><span class="t2 grow">代码存储 · 进向导第 1 步</span></div>
+    <div class="catrow"><span class="tag tg-b" style="height:19px;font-size:10.5px">ticket_source</span><span class="t2 grow">工单平台 · 进向导第 1 步</span></div>
+    <div class="catrow"><span class="tag tg-o" style="height:19px;font-size:10.5px">release</span><span class="t2 grow">发布回滚 · 不混入向导</span></div>
+    <div class="catrow"><span class="tag tg-p" style="height:19px;font-size:10.5px">notify</span><span class="t2 grow">审批通知 · 不混入向导</span></div>
+  </div></div>''',
+        f'''<div class="card" style="padding:12px 14px">
+  <div class="mini">非官方平台 3 档兼容</div>
+  <div class="f12 t2" style="line-height:1.65">
+    <b>1. 零代码通用兜底</b>：通用 Git（任意 URL + Token/SSH）与 Webhook 字段映射。<br>
+    <b>2. 标准 MCP</b>：企业自研平台暴露 4～5 个标准 Tool 即接入。<br>
+    <b>3. 市场插件</b>：按 <span class="mono">authSchema</span> 自动渲染鉴权抽屉。
+  </div></div>''')
+    return set_left("连接器") + main + right
+
+
 PAGES = {
     "ai": ("AI 助手", "ai", p_ai()),
     "newticket": ("手动新建工单", "chat", p_newticket()),
@@ -2231,6 +2376,7 @@ PAGES = {
     "settings": ("设置 · 项目", "set", p_settings()),
     "aiset": ("设置 · 全局 AI", "set", p_aiset()),
     "runners": ("设置 · 执行器", "set", p_runners()),
+    "connectors": ("设置 · 连接器", "set", p_connectors()),
     "source": ("设置 · 来源采集", "set", p_source()),
     "members": ("设置 · 成员与身份", "set", p_members()),
     "notify": ("设置 · 通知", "set", p_notify()),

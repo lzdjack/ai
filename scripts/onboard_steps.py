@@ -1,397 +1,635 @@
-"""第一次使用步骤器：第 1、2、4、5、6、7 步的内容（第 3 步在 gen-onboard.py 里）。
-STEP_PAGES(page, CHECK) → {"1": html, "2": html, ...}
+"""第一次使用步骤器（精简 4 步）：第 1 步连接器与鉴权（含新建连接器抽屉）、第 2 步授权项目与代码、第 4 步 AI 体检并开工，及管理员专属第 0 步连接 AI。
+STEP_PAGES(page, CHECK) → {"1": html, "1-new": html, "2": html, "4": html}
 """
 
 X = '''<style>
-.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.pc{border-radius:16px;padding:14px 16px;background:var(--fill);border:1.5px solid transparent;position:relative;min-width:0}
-.pc.on{background:var(--glass-2);border-color:var(--blue);box-shadow:0 8px 20px -12px color-mix(in srgb,var(--blue) 70%,transparent)}
-.pc.add{display:flex;align-items:center;justify-content:center;gap:8px;font-size:13.5px;color:var(--text-3);background:transparent;border:1.5px dashed color-mix(in srgb,var(--text) 18%,transparent)}
-.pc b{font-size:15.5px}
-.rdo{width:18px;height:18px;border-radius:50%;border:1.5px solid color-mix(in srgb,var(--text) 25%,transparent);flex:none}
-.rdo.on{border:0;background:var(--blue);box-shadow:inset 0 0 0 5px var(--blue),inset 0 0 0 9px #fff}
-.cbx2{width:18px;height:18px;border-radius:5px;border:1.5px solid color-mix(in srgb,var(--text) 25%,transparent);flex:none;display:flex;align-items:center;justify-content:center}
-.cbx2.on{border:0;background:var(--blue);color:#fff}
-.sel{justify-content:space-between}
-.gl{width:22px;height:22px;border-radius:6px;background:#FC6D26;color:#fff;font-size:11px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;flex:none}
-.jr{width:22px;height:22px;border-radius:6px;background:#2684FF;color:#fff;font-size:11px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;flex:none}
-.tt2{width:22px;height:22px;border-radius:6px;background:linear-gradient(160deg,#5AA0FF,#2F6BFF);color:#fff;font-size:10px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;flex:none}
-.rp{display:grid;grid-template-columns:1fr 128px 128px 156px 132px;gap:8px 10px;align-items:center}
-.rp .inp{height:40px;font-size:13.5px}
-.dep{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.dfl{flex-wrap:nowrap;gap:6px}.dfl .dn{padding:0 10px;gap:6px}.dn{display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 12px;border-radius:10px;background:var(--glass-2);border:1px solid var(--stroke);font-size:13px}
-.arw{color:var(--text-3)}
+.sech{display:flex;align-items:center;gap:8px;margin-top:18px;margin-bottom:9px}
+.sech b{font-size:13.5px;font-weight:700}
+.sech .sub{font-size:12px;color:var(--text-3)}
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.ccard{border-radius:16px;padding:13px 15px;background:var(--glass-2);border:1.5px solid color-mix(in srgb,var(--green) 36%,transparent);box-shadow:0 6px 18px -12px color-mix(in srgb,var(--green) 45%,transparent);display:flex;flex-direction:column;gap:8px;min-width:0}
+.ccard.opt{border-color:color-mix(in srgb,var(--blue) 30%,transparent);box-shadow:0 6px 18px -12px color-mix(in srgb,var(--blue) 35%,transparent)}
+.ccard.addc{background:transparent;border:1.5px dashed color-mix(in srgb,var(--text) 18%,transparent);box-shadow:none;justify-content:center;align-items:flex-start;gap:6px}
+.cic{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:800;flex:none}
+.okpill{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600;color:var(--green);white-space:nowrap}
+.cmeta{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text-2);min-width:0}
+.cfoot{display:flex;align-items:center;gap:8px;padding-top:8px;border-top:1px solid var(--hair);font-size:12px;color:var(--text-3)}
+.cfoot .act{margin-left:auto;color:var(--blue);font-weight:600;white-space:nowrap}
+.qadd{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:nowrap}
+.qbtn{height:32px;padding:0 11px;border-radius:10px;background:var(--fill);border:1px solid var(--hair);display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--text-2);white-space:nowrap}
+.qdot{width:17px;height:17px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:800;flex:none}
+.stat-pill{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 10px;border-radius:9px;font-size:12px;font-weight:600;white-space:nowrap}
+.sp-g{background:color-mix(in srgb,var(--green) 13%,transparent);color:var(--green)}
+.sp-b{background:color-mix(in srgb,var(--blue) 13%,transparent);color:var(--blue)}
+
+/* 第 2 步：多来源聚合与三态读写权限 */
+.ptbar{display:flex;align-items:center;gap:8px;margin-top:16px}
+.srcsel{height:34px;padding:0 10px;border-radius:10px;background:var(--glass-2);border:1px solid var(--stroke);display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;white-space:nowrap;flex:none}
+.sdots{display:inline-flex;align-items:center}
+.sdots i{width:16px;height:16px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:9px;font-weight:800;font-style:normal;border:1.5px solid var(--glass-2)}
+.sdots i+i{margin-left:-4px}
+.srch2{height:34px;flex:1;min-width:140px;border-radius:10px;background:var(--fill);padding:0 11px;display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--text-3);border:1px solid var(--hair)}
+.fchip{height:30px;padding:0 10px;border-radius:9px;font-size:12px;font-weight:600;color:var(--text-2);background:var(--fill);display:inline-flex;align-items:center;gap:4px;white-space:nowrap;flex:none}
+.fchip.on{background:var(--blue);color:#fff}
+.fchip em{font-style:normal;opacity:.72;font-size:11px;font-weight:500}
+.addbtn{height:34px;padding:0 12px;border-radius:10px;background:var(--fill);border:1px solid var(--hair);font-size:12.5px;font-weight:600;color:var(--text);display:inline-flex;align-items:center;gap:5px;white-space:nowrap;flex:none}
+.plist{display:flex;flex-direction:column;gap:10px;margin-top:11px;flex:1;min-height:0}
+.sgrp{display:flex;flex-direction:column;gap:6px}
+.sgh{display:flex;align-items:center;gap:7px;padding:0 3px;font-size:12px}
+.sgh b{font-size:12.5px;font-weight:700;color:var(--text)}
+.sgh .surl{font-size:11.5px;color:var(--text-3)}
+.sgh .scnt{height:18px;padding:0 6px;border-radius:6px;background:color-mix(in srgb,var(--text) 7%,transparent);font-size:11px;font-weight:600;color:var(--text-2);display:inline-flex;align-items:center}
+.sgh .sadd{margin-left:auto;font-size:11.5px;font-weight:600;color:var(--blue);white-space:nowrap}
+.prow{border-radius:14px;padding:9px 13px;background:var(--fill);border:1.5px solid transparent;display:flex;align-items:center;gap:12px;min-width:0}
+.prow.rw{background:var(--glass-2);border-color:color-mix(in srgb,var(--green) 42%,transparent);box-shadow:0 6px 18px -12px color-mix(in srgb,var(--green) 55%,transparent)}
+.prow.ro{background:var(--glass-2);border-color:color-mix(in srgb,var(--blue) 38%,transparent);box-shadow:0 6px 18px -12px color-mix(in srgb,var(--blue) 45%,transparent)}
+.prow.off{opacity:.72}
+.pic{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;flex:none;font-size:12.5px;font-weight:800}
+.pinfo{flex:1;min-width:0}
+.ptop{display:flex;align-items:center;gap:7px;min-width:0}
+.ptop b{font-size:14.5px;font-weight:700;white-space:nowrap}
+.src-pill{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:var(--text-2);background:color-mix(in srgb,var(--text) 6%,transparent);padding:2px 7px 2px 3px;border-radius:6px;white-space:nowrap}
+.sdot{width:16px;height:16px;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:9px;font-weight:800;flex:none}
+.pmeta{display:flex;align-items:center;gap:6px;margin-top:4px;font-size:12px;color:var(--text-2);min-width:0;white-space:nowrap}
+.ai-bdg{display:inline-flex;align-items:center;gap:3px;height:20px;padding:0 6px;border-radius:6px;font-size:11px;font-weight:600;color:var(--purple);background:color-mix(in srgb,var(--purple) 12%,transparent);flex:none}
+.ro-bdg{display:inline-flex;align-items:center;gap:3px;height:20px;padding:0 6px;border-radius:6px;font-size:11px;font-weight:600;color:var(--blue);background:color-mix(in srgb,var(--blue) 12%,transparent);flex:none}
+.okchip{display:inline-flex;align-items:center;gap:3px;color:var(--green);font-size:11.5px;font-weight:600;flex:none}
+.tune{font-size:12px;font-weight:600;color:var(--blue);margin-left:auto;padding-left:6px;flex:none;white-space:nowrap}
+.pseg{display:inline-flex;padding:3px;border-radius:11px;background:color-mix(in srgb,var(--text) 6%,transparent);flex:none;gap:2px}
+.pseg span{height:28px;padding:0 11px;border-radius:8px;font-size:12px;font-weight:600;color:var(--text-3);display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.pseg span.s-ro{background:var(--blue);color:#fff;box-shadow:0 4px 12px -4px color-mix(in srgb,var(--blue) 85%,transparent)}
+.pseg span.s-rw{background:var(--green);color:#fff;box-shadow:0 4px 12px -4px color-mix(in srgb,var(--green) 85%,transparent)}
+html.dark .pseg{background:rgba(255,255,255,.07)}
+.rmb{width:28px;height:28px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;color:var(--text-3);background:transparent;flex:none}
+.pickbtn{height:34px;padding:0 13px;border-radius:10px;background:var(--blue);color:#fff;font-size:12.5px;font-weight:600;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex:none;box-shadow:0 6px 16px -8px color-mix(in srgb,var(--blue) 85%,transparent)}
+.pickmore{border-radius:14px;padding:11px 15px;border:1.5px dashed color-mix(in srgb,var(--text) 16%,transparent);display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--text-2)}
+
+/* 第 4 步与管理员第 0 步 */
 .obx{border-radius:16px;padding:14px 16px;background:var(--fill)}
 .kv3{display:flex;align-items:center;gap:10px;margin-top:10px}
-.kv3>span:first-child{width:72px;white-space:nowrap;flex:none;font-size:12.5px;color:var(--text-3)}
-.kv3 .inp{height:36px;flex:1;font-size:13.5px}
-.mp{display:grid;grid-template-columns:1fr 24px 1fr;gap:8px 12px;align-items:center}
-.mp .inp{height:36px;font-size:13.5px}
-.pvw{border:1px dashed var(--hair);border-radius:14px;padding:12px 16px 6px}.pvh{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-2);padding-bottom:8px}.tk{display:flex;align-items:center;gap:10px;height:36px;font-size:13px;color:var(--text-2);border-top:1px solid var(--hair)}
-.skc{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:14px;background:var(--fill);border:1.5px solid transparent}
-.skc.on{background:var(--glass-2);border-color:color-mix(in srgb,var(--blue) 55%,transparent)}
-.skc b{font-size:14px}.skadd{display:flex;gap:10px;align-items:center;padding:12px 14px;border-radius:14px;border:1.5px dashed var(--hair);color:var(--blue);font-size:13.5px}.skadd .t3{margin-left:auto}
-.ic3{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;color:#fff;flex:none}
-.pubc{border-radius:16px;padding:14px 16px;background:var(--fill);flex:1;min-width:0}
-.chk3{display:flex;align-items:center;gap:12px;padding:9px 0;border-top:1px solid var(--hair);font-size:13.5px}
+.kv3>span:first-child{width:76px;white-space:nowrap;flex:none;font-size:12.5px;color:var(--text-3)}
+.kv3 .inp{height:38px;flex:1;font-size:13.5px}
+.chk3{display:flex;align-items:center;gap:12px;padding:8px 0;border-top:1px solid var(--hair);font-size:13.5px}
 .chk3:first-child{border-top:0}
 .ck3{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;flex:none}
-.big-ok{display:flex;align-items:center;gap:16px;padding:16px 20px;border-radius:18px;background:color-mix(in srgb,var(--green) 10%,var(--glass-2));border:1px solid color-mix(in srgb,var(--green) 30%,transparent)}
+.big-ok{display:flex;align-items:center;gap:16px;padding:14px 18px;border-radius:18px;background:color-mix(in srgb,var(--green) 10%,var(--glass-2));border:1px solid color-mix(in srgb,var(--green) 30%,transparent)}
+.tk{display:flex;align-items:center;gap:8px;height:34px;padding:0 10px;border-radius:10px;font-size:12.5px;color:var(--text-2);background:var(--glass-2)}
 </style>'''
 
 
 def STEP_PAGES(page, CHECK):
     def I(n, s=16, w=None, st=""):
         return f'<i data-i="{n}" data-s="{s}"' + (f' data-w="{w}"' if w else '') + (f' style="{st}"' if st else '') + '></i>'
-    OK = f'<span class="okt">{CHECK}'
-    CHD = I("chevd", 14)
 
-    # ---------------- 1 选择项目 ----------------
-    def proj(name, line, sub, st, on=False):
-        stc = {"ok": '<span class="tag tg-g">已就绪</span>', "no": '<span class="tag tg-n">未准备</span>'}[st]
-        return f'''<div class="pc{' on' if on else ''}"><div class="row g8"><span class="rdo{' on' if on else ''}"></span><b>{name}</b><span class="grow"></span>{stc}</div>
-<div class="f12 t3" style="margin:6px 0 0 26px">{line}</div><div class="f12 t2" style="margin:3px 0 0 26px">{sub}</div></div>'''
+    # ---------------- 1 连接器与鉴权 ----------------
     s1 = X + f'''
-      <div style="margin-top:20px">
-        <div class="lab">你能看到的项目<span>来自你的 Jira / GitLab 账号权限</span></div>
-        <div class="g3">
-          {proj("审批", "协同办公", "林某 准备过 · 可以直接用", "ok")}
-          {proj("考勤", "人事", "王某 准备过 · 可以直接用", "ok")}
-          {proj("OKR", "人才发展", "还没人准备", "no", True)}
-          {proj("绩效", "人才发展", "还没人准备", "no")}
-          {proj("薪酬", "人事", "还没人准备", "no")}
-          <div class="pc add">{I("plus",16)}新建项目</div>
+      <div class="sech">
+        <b>代码来源</b>
+        <span class="tag tg-b" style="height:19px;font-size:10.5px">至少 1 个</span>
+        <span class="sub">自动筛出插件市场中 <span class="mono">code_source</span> 类连接器 · 鉴权后拉取仓库与推测分支</span>
+      </div>
+      <div class="cgrid">
+        <div class="ccard">
+          <div class="row g10">
+            <span class="cic" style="background:linear-gradient(155deg,#FF8A4C,#E24329)">G</span>
+            <div class="grow" style="min-width:0">
+              <div class="row g6"><b class="f14">公司 GitLab</b><span class="tag tg-n" style="height:18px;font-size:10.5px">公司共用</span></div>
+              <div class="mono f12 t3 ell" style="margin-top:2px">https://git.tita.cloud</div>
+            </div>
+            <span class="okpill">{CHECK}鉴权通过</span>
+          </div>
+          <div class="cmeta">{I("shield",13,st="color:var(--green)")}<span class="ell">令牌 <span class="mono">bot-fix</span> · 读写分支，无合入主干权限</span></div>
+          <div class="cfoot"><span>可见 28 个仓库</span><span class="act">鉴权配置 ›</span></div>
+        </div>
+        <div class="ccard">
+          <div class="row g10">
+            <span class="cic" style="background:linear-gradient(155deg,#5AA0FF,#2B6BFF)">{I("folder",17,2)}</span>
+            <div class="grow" style="min-width:0">
+              <div class="row g6"><b class="f14">本机代码目录</b><span class="tag tg-p" style="height:18px;font-size:10.5px">本机执行器</span></div>
+              <div class="mono f12 t3 ell" style="margin-top:2px">~/workspace</div>
+            </div>
+            <span class="okpill">{CHECK}已授权</span>
+          </div>
+          <div class="cmeta">{I("branch",13,st="color:var(--blue)")}<span class="ell">免远端令牌 · 自动走 <span class="mono">worktree</span> 隔离不脏工作区</span></div>
+          <div class="cfoot"><span>识别 4 个本地 Git 仓</span><span class="act">增减目录 ›</span></div>
         </div>
       </div>
-      <div class="note" style="margin-top:22px">{I("layers",15,st="color:var(--blue);margin-top:1px")}<span>一次准备一个项目。已就绪的项目别人准备过，不用再填；其他项目之后在「设置 → 项目」里加。</span></div>'''
-    p1 = page(1, "先选一个要交给 Bot 的项目", "接下来几步都是为这个项目准备的：代码在哪、去哪复现、收哪些单、按什么规则修", s1,
-              "代码仓库", skip=False, prev=False)
 
-    # ---------------- 2 代码仓库 ----------------
-    def repo(path, mb, tb, cmd, st):
-        return f'''<div class="inp"><span class="gl">G</span><span class="mono grow ell">{path}</span></div>
-<div class="inp sel"><span class="mono f12 ell">{mb}</span>{CHD}</div>
-<div class="inp{' sel' if tb != '—' else ''}"><span class="mono f12 ell">{tb}</span>{CHD if tb != '—' else ''}</div>
-<div class="inp"><span class="mono f12 ell">{cmd}</span></div>
-<div>{st}</div>'''
-    def bn(t, tag=None, tc="tg-n", mono=True):
-        return f'<span class="dn"><span class="{'mono' if mono else ''}">{t}</span>' + (f'<span class="tag {tc}">{tag}</span>' if tag else '') + '</span>'
-    ARW = f'<span class="arw">{I("arrowr",16)}</span>'
-    s2 = X + f'''
-      <div style="margin-top:20px">
-        <div class="lab">仓库<span>从公司 GitLab 里选，数量不限 · 每个仓库的主分支、测试分支各自填 · 构建命令 Bot 从 package.json 推测，可以改</span></div>
-        <div class="rp"><div class="rh">GitLab 仓库</div><div class="rh">主分支</div><div class="rh">测试分支</div><div class="rh">构建命令</div><div class="rh">Bot 实测</div>
-          {repo("fe/tita-okr-web", "master", "dev-okr", "pnpm build-prod", OK + '构建通过 3:12</span>')}
-          {repo("fe/tita-ui-kit", "main", "test", "pnpm build:lib", '<span class="ing"><span class="spin"></span>正在构建 1:05</span>')}
-          {repo("fe/tita-main", "master", "—", "—", OK + '能拉取</span>')}
-        </div>
-        <div class="f13 lnk" style="margin-top:10px">+ 从 GitLab 选择仓库</div>
+      <div class="qadd">
+        <span class="f12 t3" style="white-space:nowrap">继续添加：</span>
+        <span class="qbtn"><span class="qdot" style="background:#1F2328">GH</span>+ GitHub</span>
+        <span class="qbtn"><span class="qdot" style="background:#C71D23">码</span>+ Gitee</span>
+        <span class="qbtn"><span class="qdot" style="background:#FC6D26">G</span>+ 企业 GitLab</span>
+        <span class="qbtn"><span class="qdot" style="background:#3B82F6">{I("folder",10,2.4)}</span>+ 本机目录</span>
+        <span class="qbtn"><span class="qdot" style="background:linear-gradient(155deg,#A855F7,#6366F1)">{I("pkg",10,2.4)}</span>+ 插件市场 / 通用接入</span>
       </div>
-      <div style="margin-top:20px">
-        <div class="lab">修一张单时分支怎么走<span>进测试分支、回主分支都要提 MR 审核，Bot 不能自己合 · 每个仓库用自己的分支</span></div>
-        <div class="obx"><div class="dep dfl">
-          {bn("主分支", mono=False)}{ARW}{bn("fix/OKR-2381", "拉出修复分支", "tg-b")}{ARW}{bn("测试分支", "审核后合入，发测试", "tg-p", False)}{ARW}{bn("主分支", "测过再审核合回，发正式", "tg-g", False)}
-        </div>
-        <div class="row g12" style="margin-top:12px;padding-top:12px;border-top:1px solid var(--hair)">
-          <span class="f13 w6" style="flex:none">MR 审核人</span>
-          <div class="kv3 grow" style="margin:0"><span style="width:auto">合入测试分支</span><div class="inp sel">工单的修复人{CHD}</div></div>
-          <div class="kv3 grow" style="margin:0"><span style="width:auto">合回主分支</span><div class="inp sel">林某{CHD}</div></div>
-        </div></div>
-      </div>
-      <div class="note" style="margin-top:22px">{I("key",15,st="color:var(--blue);margin-top:1px")}<span>Bot 用管理员开好的 GitLab 账号 <span class="mono">bot-fix</span> 拉代码、建分支、提 MR，不用你的账号。</span></div>'''
-    p2 = page(2, "Bot 要改哪些代码", "选好仓库，告诉 Bot 主分支和测试分支；构建不过的仓库 Bot 改不了", s2, "环境与账号", skip=False)
 
-    # ---------------- 4 工单来源 ----------------
-    s4 = X + f'''
-      <div class="row g12" style="margin-top:20px;align-items:stretch">
-        <div class="obx grow"><div class="row g8"><span class="jr">J</span><b class="f15">Jira</b><span class="f12 t3">测试提的 Bug</span><span class="grow"></span>{OK}现在有 2 张</span></div>
-          <div class="kv3"><span>项目</span><div class="inp sel">OKR · 目标管理{CHD}</div></div>
-          <div class="kv3"><span>收单状态</span><div class="inp sel">AI修复{CHD}</div></div></div>
-        <div class="obx grow"><div class="row g8"><span class="tt2">Tita</span><b class="f15">Tita 工单</b><span class="f12 t3">线上问题</span><span class="grow"></span>{OK}现在有 1 张</span></div>
-          <div class="kv3"><span>产品</span><div class="inp sel">OKR{CHD}</div></div>
-          <div class="kv3"><span>收单节点</span><div class="inp sel">AI干活{CHD}</div></div></div>
+      <div class="sech" style="margin-top:18px">
+        <b>工单平台</b>
+        <span class="tag tg-n" style="height:19px;font-size:10.5px">可选 · 可跳过</span>
+        <span class="sub">自动筛出 <span class="mono">ticket_source</span> 类连接器 · 不接也能直接进工作台点「+」手动建单</span>
       </div>
-      <div style="margin-top:20px">
-        <div class="lab">每个来源的单去哪个环境复现<span>在这里统一设置，选第 3 步填过的环境 · 不读工单里的环境字段</span></div>
-        <div class="mp">
-          <div class="inp"><span class="jr" style="width:20px;height:20px;font-size:10px;margin-right:8px">J</span>Jira 工单<span class="t3 f12" style="margin-left:8px">测试提的 Bug</span></div><span class="arw">{I("arrowr",16)}</span><div class="inp sel">测试环境{CHD}</div>
-          <div class="inp"><span class="tt2" style="margin-right:8px">Tita</span>Tita 工单<span class="t3 f12" style="margin-left:8px">线上问题</span></div><span class="arw">{I("arrowr",16)}</span><div class="inp sel">正式环境{CHD}</div>
+      <div class="cgrid">
+        <div class="ccard opt">
+          <div class="row g10">
+            <span class="cic" style="background:linear-gradient(155deg,#4C9AFF,#0052CC)">J</span>
+            <div class="grow" style="min-width:0">
+              <div class="row g6"><b class="f14">公司 Jira</b><span class="tag tg-n" style="height:18px;font-size:10.5px">公司共用</span></div>
+              <div class="mono f12 t3 ell" style="margin-top:2px">https://jira.tita.cloud</div>
+            </div>
+            <span class="okpill">{CHECK}鉴权通过</span>
+          </div>
+          <div class="cmeta">{I("inbox",13,st="color:var(--blue)")}<span class="ell">只读采集 · 自动收状态为「AI修复」的 Bug（当前 2 张）</span></div>
+          <div class="cfoot"><span>每 2 分钟同步</span><span class="act">改鉴权 / 触发条件 ›</span></div>
+        </div>
+        <div class="ccard addc">
+          <div class="row g8" style="color:var(--text)">{I("plus",16,st="color:var(--blue)")}<b class="f14">添加更多工单连接器</b></div>
+          <div class="f12 t3" style="line-height:1.55">支持 Tita 工单、GitHub Issues、插件市场第三方连接器或通用 Webhook / MCP；也可先跳过直接手动建单</div>
+          <div class="row g6" style="margin-top:2px">
+            <span class="tag tg-b" style="height:20px;font-size:11px">+ Tita 工单</span>
+            <span class="tag tg-n" style="height:20px;font-size:11px">+ GitHub Issues</span>
+            <span class="tag tg-p" style="height:20px;font-size:11px">+ 插件市场 / MCP</span>
+          </div>
         </div>
       </div>
-      <div style="margin-top:20px">
-        <div class="pvw">
-          <div class="pvh">{I("eye",15,st="color:var(--text-3)")}<span>按上面的设置，现在能收到这 3 张，开工后会自动开始。这里只是预览，不用改。</span></div>
-          <div class="tk"><span class="sc10 sc-j">Jira</span><span class="mono f12 t3">OKR-412</span><span class="grow ell">对齐视图里子目标重复显示</span><span class="f12 t3">测试环境 · 审核人 林某</span></div>
-          <div class="tk"><span class="sc10 sc-j">Jira</span><span class="mono f12 t3">OKR-418</span><span class="grow ell">目标导入后截止日期错一天</span><span class="f12 t3">测试环境 · 审核人 林某</span></div>
-          <div class="tk"><span class="sc10 sc-t">Tita</span><span class="mono f12 t3">TK-20902</span><span class="grow ell">目标进度导出缺少部门</span><span class="f12 t3">正式环境 · 审核人 周某</span></div>
-        </div>
+
+      <div class="note" style="margin-top:auto;margin-bottom:14px">
+        {I("lock",15,st="color:var(--blue);margin-top:1px")}
+        <span><b>凭证安全隔离：</b>所有连接器令牌采用「公钥加密入库、私钥仅在执行器解出」，接口层拿不到明文；管理员配好「公司共用」连接器后，团队成员直接复用，之后随时可在「设置 → 连接器」增改。</span>
       </div>'''
-    p4 = page(4, "收哪些单交给 Bot", "Bot 定期去 Jira 和 Tita 收单，符合条件的才接；审核人是工单里的修复人", s4, "Skills")
+    foot1 = (f'<span class="stat-pill sp-g">{I("check",13,2.8)}代码源 2 个已鉴权</span>'
+             f'<span class="stat-pill sp-b">{I("inbox",13)}工单源 1 个（可选）</span>'
+             '<span class="f12 t3">下一步从已鉴权来源拉取项目列表</span><span class="grow"></span>'
+             '<button class="bigb pri">下一步：授权项目与代码<i data-i="chevr" data-s="16" data-w="2.4"></i></button>')
+    why1 = ("key", "为什么先建连接器？", "没有鉴权凭证就无法从 GitLab、GitHub、Gitee 或 Jira 拉取项目数据；管理员配好公司级连接器后，团队成员直接复用无需重填。")
+    p1 = page(1, "先接通代码和工单来源", "支持同时接入多个企业私有平台、公有代码托管、插件市场连接器或本机目录；鉴权通过后下一步拉取项目",
+              s1, foot=foot1, why=why1, chip="怎么填令牌？问 AI")
 
-    # ---------------- 5 Skills ----------------
-    def sk(name, desc, tag, on, ic, bg):
-        return f'''<div class="skc{' on' if on else ''}"><span class="cbx2{' on' if on else ''}">{CHECK if on else ''}</span>
-<div class="grow"><div class="row g8"><span class="ic3" style="background:{bg};width:22px;height:22px;border-radius:7px">{I(ic,12,2)}</span><b>{name}</b>{tag}</div><div class="f12 t2" style="margin-top:4px">{desc}</div></div></div>'''
-    MY = '<span class="tag tg-p">我的</span>'
-    BI = '<span class="tag tg-n">内置</span>'
-    TM = '<span class="tag tg-t">团队</span>'
-    CB = "linear-gradient(160deg,#5AA0FF,#1F6FFF)"
-    VB = "linear-gradient(160deg,#5EDB7A,#28B04F)"
-    s5 = X + f'''
-      <div class="row g16" style="margin-top:20px;align-items:flex-start">
-        <div class="grow col g8"><div class="lab" style="margin-bottom:2px">编码<span>管 Bot 怎么改</span></div>
-          {sk("最小改动修复", "只改与根因相关的代码，不顺手重构", BI, True, "code", CB)}
-          {sk("组件包升级", "只升本次需要的版本，锁文件一起更新", BI, True, "code", CB)}
-          <div class="skadd">{I("plus",15)}写一条自己的编码规则<span class="f12 t3">写完出现在这里，标「我的」</span></div>
-        </div>
-        <div class="grow col g8"><div class="lab" style="margin-bottom:2px">验证<span>管修完怎么验</span></div>
-          {sk("页面交互回归", "目标环境复现，改动版本上再复测一遍", BI, True, "eye", VB)}
-          {sk("接口回归", "调用相关接口，核对返回有没有变", BI, False, "eye", VB)}
-          <div class="skadd">{I("plus",15)}写一条自己的验证规则<span class="f12 t3">写完出现在这里，标「我的」</span></div>
-        </div>
-      </div>
-      <div class="row g10" style="margin-top:18px">
-        <span class="chip2">{I("spark",13,st="color:var(--purple)")}让 AI 读 OKR 的代码，帮你起草一条</span><span class="f12 t3">起草完你确认了才会启用</span>
-      </div>
-      <div class="note" style="margin-top:16px">{I("layers",15,st="color:var(--blue);margin-top:1px")}<span>第一次用只有系统内置的，够用就直接下一步。自己写的当场加进列表，不用离开步骤器，之后也能在 Skills 里改。</span></div>'''
-    p5 = page(5, "Bot 按什么规则改、怎么验", "Skills 是写给 Bot 的规则。系统内置的直接能用，有自己的规则也可以在这里写", s5, "扩展模块")
-
-    # ---------------- 5 · 写一条自己的规则（弹出面板） ----------------
-    rule = [("1", "## 什么时候用", "h"), ("2", "OKR 页面里和表单有关的 Bug：录入、校验、提交。", ""), ("3", "", ""),
-            ("4", "## 怎么改", "ha"), ("5", "1. 表单统一用 @tita/ui 的 TitaForm，不手写输入框和样式。", "add"),
-            ("6", "2. 新字段照 configs 的写法加，参考 objective/form.config.ts。", "add"),
-            ("7", "3. 校验规则写进 configs，不在 onSubmit 里另写一套。", "add"),
-            ("8", "4. 改完在表单页提交一次，看校验和提示对不对。", "add")]
-    rl = "".join(f'<div class="cl{" add" if t in ("add","ha") else ""}" style="line-height:26px"><span class="n">{n}</span><span class="c" style="padding-left:8px;{"color:var(--purple);font-weight:600" if t in ("h","ha") else ""}">{c}</span></div>' for n, c, t in rule)
+    # ---------------- 1-new 新建连接器鉴权抽屉 ----------------
     DRW = f'''<style>
-.scr{{position:fixed;inset:0;z-index:30;background:rgba(15,20,40,.28);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}}
-html.dark .scr{{background:rgba(0,0,0,.45)}}
-.drw{{position:fixed;z-index:31;top:20px;right:20px;bottom:20px;width:700px;border-radius:26px;display:flex;flex-direction:column;overflow:hidden;
-  background:rgba(255,255,255,.95);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);box-shadow:0 30px 80px -20px rgba(10,20,60,.45),0 0 0 1px var(--stroke)}}
-html.dark .drw{{background:rgba(36,38,52,.96)}}
-.drw .dh{{display:flex;gap:12px;align-items:center;padding:20px 22px 16px;border-bottom:1px solid var(--hair)}}
-.drw .db{{flex:1;display:flex;flex-direction:column;gap:14px;padding:18px 22px;min-height:0}}
-.drw .df{{display:flex;align-items:center;gap:10px;padding:14px 22px;border-top:1px solid var(--hair)}}
-.xb{{width:32px;height:32px;border-radius:50%;background:var(--fill);display:flex;align-items:center;justify-content:center;color:var(--text-2)}}
+.scr{{position:fixed;inset:0;z-index:30;background:rgba(15,20,40,.28);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}}
+html.dark .scr{{background:rgba(0,0,0,.48)}}
+.drw{{position:fixed;z-index:31;top:24px;right:24px;bottom:24px;width:660px;border-radius:26px;display:flex;flex-direction:column;overflow:hidden;
+  background:rgba(255,255,255,.96);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);box-shadow:0 30px 80px -20px rgba(10,20,60,.45),0 0 0 1px var(--stroke)}}
+html.dark .drw{{background:rgba(34,36,50,.96)}}
+.drw .dh{{display:flex;gap:12px;align-items:center;padding:20px 24px 16px;border-bottom:1px solid var(--hair)}}
+.drw .db{{flex:1;display:flex;flex-direction:column;gap:15px;padding:18px 24px;min-height:0;overflow:hidden}}
+.drw .df{{display:flex;align-items:center;gap:10px;padding:14px 24px;border-top:1px solid var(--hair)}}
+.xb{{width:32px;height:32px;border-radius:50%;background:var(--fill);display:flex;align-items:center;justify-content:center;color:var(--text-2);flex:none}}
+.ic3{{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:#fff;flex:none;font-size:15px;font-weight:800}}
+.flab{{font-size:12.5px;font-weight:700;color:var(--text-2);margin-bottom:7px;display:flex;align-items:center;gap:6px}}
+.flab span{{font-weight:400;color:var(--text-3);font-size:11.5px}}
+.pgrid{{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}}
+.pitem{{height:40px;border-radius:11px;background:var(--fill);border:1.5px solid transparent;display:flex;align-items:center;justify-content:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--text-2)}}
+.pitem.on{{background:var(--glass-2);border-color:var(--blue);color:var(--text);box-shadow:0 6px 16px -10px color-mix(in srgb,var(--blue) 65%,transparent)}}
+.pdot{{width:18px;height:18px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:800;flex:none}}
+.dinp{{height:40px;border-radius:11px;background:var(--fill);display:flex;align-items:center;gap:9px;padding:0 13px;font-size:13.5px;color:var(--text);min-width:0}}
+.dinp.foc{{background:var(--glass-2);box-shadow:0 0 0 2px var(--blue),0 0 0 5px color-mix(in srgb,var(--blue) 16%,transparent)}}
+.seg2{{display:flex;padding:3px;border-radius:11px;background:var(--fill);gap:2px}}
+.seg2 span{{flex:1;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;gap:5px;font-size:12.5px;font-weight:600;color:var(--text-2)}}
+.seg2 span.on{{background:var(--glass-2);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.12)}}
+html.dark .seg2 span.on{{background:rgba(255,255,255,.15)}}
+.vbox{{border-radius:16px;padding:13px 16px;background:color-mix(in srgb,var(--green) 8%,var(--fill));border:1px solid color-mix(in srgb,var(--green) 28%,transparent)}}
+.vrow{{display:flex;align-items:center;gap:9px;font-size:12.5px;padding:4px 0;color:var(--text)}}
+.vck{{width:17px;height:17px;border-radius:50%;background:var(--green);color:#fff;display:inline-flex;align-items:center;justify-content:center;flex:none}}
 </style>
 <div class="scr"></div>
 <div class="drw">
-  <div class="dh"><span class="ic3" style="background:{CB};width:40px;height:40px;border-radius:11px">{I("code",20,2)}</span>
-    <div class="grow"><div style="font-size:18px;font-weight:800">写一条自己的编码规则</div><div class="f12 t3" style="margin-top:3px">只给「OKR」用 · 保存后加进第 5 步的列表，标「我的」并勾上</div></div>
-    <span class="xb">{I("x",16,2.2)}</span></div>
-  <div class="db">
-    <div><div class="flabel">名称</div><div class="field">复用公司表单组件</div></div>
-    <div><div class="flabel">用途（Bot 判断什么时候用）</div><div class="field">OKR 页面里和表单有关的 Bug：录入、校验、提交。</div></div>
-    <div><div class="row g8"><span class="flabel grow" style="margin:0">规则正文</span><span class="f12 t3">Markdown · 8 行</span></div>
-      <div class="code" style="margin-top:6px;border-radius:14px;background:var(--glass-2);border:1px solid var(--stroke);padding:8px 0;font-size:12.5px">{rl}</div></div>
-    <div class="gbord" style="padding:14px 16px 12px">
-      <div class="row g8"><span class="aid" style="width:22px;height:22px;border-radius:7px">{I("spark",12)}</span><span class="f13 w7 grow">AI 帮你写</span><span class="f12 t3">读的是 fe/tita-okr-web</span></div>
-      <div class="me" style="font-size:12.5px;padding:8px 12px;margin-top:10px;max-width:100%;width:fit-content;margin-left:auto">起草一条：表单都用公司组件库来写</div>
-      <div class="f12 t2" style="margin-top:10px;line-height:1.6">读了 23 个表单，22 个用的是 TitaForm。已起草第 4–8 行（绿色），先看一遍再决定：</div>
-      <div class="row g8" style="margin-top:8px"><span class="btn2 sm" style="background:var(--blue);color:#fff;padding:0 18px">采用</span><span class="btn2 sm a-sec" style="background:var(--fill);padding:0 18px">放弃</span></div></div>
-  </div>
-  <div class="df"><button class="bigb secb">取消</button><span class="grow"></span><span class="f12 t3">从下一张单开始生效，之后在 Skills 里也能改</span><button class="bigb pri">保存并加到列表</button></div>
-</div>'''
-    p5n = p5.replace('</div><script src="icons.js">', DRW + '</div><script src="icons.js">', 1)
-
-    # ---------------- 6 扩展模块（模块市场 · 抗 50+ 插件：默认推荐 + 搜索分类 + 限高滚动 + 全量抽屉） ----------------
-    MOD_CSS = '''<style>
-.mbar{display:flex;align-items:center;gap:8px;margin-bottom:10px}
-.msrch{width:214px;height:32px;border-radius:10px;background:var(--fill);padding:0 10px;display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--text-3);flex:none;border:1px solid var(--hair)}
-.mchips{display:flex;align-items:center;gap:5px;min-width:0}
-.mch{height:28px;padding:0 10px;border-radius:9px;font-size:12px;font-weight:600;color:var(--text-2);background:var(--fill);display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
-.mch.on{background:var(--blue);color:#fff}
-.mch em{font-style:normal;opacity:.7;font-size:11px;font-weight:500}
-.mall{margin-left:auto;font-size:12.5px;font-weight:600;color:var(--blue);white-space:nowrap;display:inline-flex;align-items:center;gap:2px}
-.mscroll{position:relative;height:224px;overflow:hidden;padding:2px 0 0 0}
-.mclip{height:100%;overflow:hidden;-webkit-mask-image:linear-gradient(180deg,#000 0%,#000 72%,transparent 100%);mask-image:linear-gradient(180deg,#000 0%,#000 72%,transparent 100%)}
-.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.mc{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:13px;background:var(--fill);border:1.5px solid transparent}
-.mc.on{background:var(--glass-2);border-color:color-mix(in srgb,var(--blue) 60%,transparent);box-shadow:0 6px 16px -10px color-mix(in srgb,var(--blue) 65%,transparent)}
-.mslot{font-size:10.5px;color:var(--text-3);margin-top:4px;display:flex;align-items:center;gap:5px;white-space:nowrap}
-.mslot i{width:5px;height:5px;border-radius:50%;background:var(--text-3);opacity:.5;display:inline-block;flex:none}
-.mslot.is-dk{color:var(--blue);font-weight:600}.mslot.is-dk i{background:var(--blue);opacity:1}
-</style>'''
-
-    def rec_card(ic, bg, name, desc, foot):
-        return f'''<div class="skc on" style="flex-direction:column;gap:0;padding:11px 14px">
-  <div class="row g10" style="width:100%;align-items:flex-start">
-    <span class="ic3" style="width:32px;height:32px;border-radius:9px;background:{bg}">{I(ic,16,2)}</span>
-    <div class="col grow" style="min-width:0;gap:2px">
-      <div class="row g6"><b class="ell">{name}</b><span class="tag tg-b">官方</span><span class="tag tg-g">默认推荐</span></div>
-      <div class="f12 t2 ell">{desc}</div>
+  <div class="dh">
+    <span class="ic3" style="background:linear-gradient(155deg,#FF8A4C,#E24329)">G</span>
+    <div class="grow">
+      <div style="font-size:18px;font-weight:800">新建代码连接器</div>
+      <div class="f12 t3" style="margin-top:2px">表单按插件 <span class="mono">authSchema</span> 自动渲染 · 鉴权通过后下一步即可拉取该平台仓库</div>
     </div>
-    <span class="cbx2 on" style="margin-top:2px">{CHECK}</span>
+    <span class="xb">{I("x",16,2.2)}</span>
   </div>
-  <div class="row g6" style="width:100%;margin-top:7px;padding-top:6px;border-top:1px solid var(--hair);font-size:11.5px;color:var(--blue)">
-    <span class="grow">{foot}</span><span class="f11 t3">占 Dock · 可取消</span>
-  </div>
-</div>'''
-
-    def mkt_card(ic, bg, name, tag, desc, slot, dk=False, on=False):
-        t_txt, t_cls = tag
-        return f'''<div class="mc{' on' if on else ''}">
-  <span class="ic3" style="width:30px;height:30px;border-radius:9px;background:{bg}">{I(ic,15,2)}</span>
-  <div class="col grow" style="min-width:0;gap:2px">
-    <div class="row g6"><b class="f13 ell">{name}</b><span class="tag {t_cls}" style="height:18px;font-size:10.5px">{t_txt}</span></div>
-    <div class="f12 t2 ell">{desc}</div>
-    <div class="mslot{' is-dk' if dk else ''}"><i></i>{slot}</div>
-  </div>
-  <span class="cbx2{' on' if on else ''}" style="margin-top:2px">{CHECK if on else ''}</span>
-</div>'''
-
-    s6_mod = X + MOD_CSS + f'''
-      <div style="margin-top:14px">
-        <div class="lab" style="margin-bottom:7px">默认推荐<span>核心修 Bug 永远内置 · 以下 2 个推荐模块已默认勾选，不需要可直接取消</span></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-          {rec_card("history", "linear-gradient(160deg,#FF8A7A,#FF453A 55%,#E0281E)", "紧急回滚（Apollo）",
-                    "预览 Apollo 配置差异、一键回退与业务回读校验", "✓ 将在第 7 步顺手配好 Apollo 应用与回滚账号")}
-          {rec_card("pkg", "linear-gradient(160deg,#FFC54D,#FF9A1F 55%,#FF7A00)", "发布流水线（Tita）",
-                    "接管 craft build / release，支持工单内一键发测试与正式", "✓ 将在第 7 步顺手配好打包与发布命令")}
-        </div>
+  <div class="db">
+    <div>
+      <div class="flab">连接器插件<span>默认显示官方预装，其他平台可从插件市场安装或选通用 Git / MCP</span></div>
+      <div class="pgrid">
+        <div class="pitem on"><span class="pdot" style="background:#FC6D26">G</span>GitLab</div>
+        <div class="pitem"><span class="pdot" style="background:#1F2328">GH</span>GitHub</div>
+        <div class="pitem"><span class="pdot" style="background:#C71D23">码</span>Gitee</div>
+        <div class="pitem"><span class="pdot" style="background:#3B82F6">{I("folder",10,2.4)}</span>本机</div>
+        <div class="pitem"><span class="pdot" style="background:#7C3AED">{I("pkg",10,2.4)}</span>通用/MCP</div>
       </div>
-      <div style="margin-top:14px">
-        <div class="lab" style="margin-bottom:7px">模块市场 · 按需加装<span>支持搜索与分类筛选，也可点右侧浏览全量市场</span></div>
-        <div class="mbar">
-          <div class="msrch">{I("search",13)}<span>搜索 48 个市场模块…</span></div>
-          <div class="mchips">
-            <span class="mch on">热门</span>
-            <span class="mch">发布<em>12</em></span>
-            <span class="mch">连接器<em>18</em></span>
-            <span class="mch">审批<em>8</em></span>
-            <span class="mch">自研<em>10</em></span>
+    </div>
+    <div class="row g12">
+      <div class="grow"><div class="flab">连接器名称</div><div class="dinp">公司 GitLab（私有部署）</div></div>
+      <div style="width:230px;flex:none"><div class="flab">共享范围</div><div class="seg2"><span class="on">公司共用</span><span>仅我自己</span></div></div>
+    </div>
+    <div>
+      <div class="flab">服务地址<span>企业私有部署填内网域名，公有云保持默认即可</span></div>
+      <div class="dinp">{I("globe",15,st="color:var(--text-3)")}<span class="mono grow">https://git.tita.cloud</span></div>
+    </div>
+    <div>
+      <div class="flab">鉴权方式<span>推荐给 Bot 专号签发 Access Token，不给合入主干权限</span></div>
+      <div class="seg2">
+        <span class="on">{I("key",13)}Access Token</span>
+        <span>{I("shield",13)}OAuth 一键授权</span>
+        <span>{I("terminal",13)}SSH Key</span>
+      </div>
+    </div>
+    <div>
+      <div class="flab">访问令牌（Token）<span>公钥加密保存，仅执行器可解</span></div>
+      <div class="row g10">
+        <div class="dinp foc grow">{I("lock",14,st="color:var(--blue)")}<span class="mono grow">glpat-•••••••••••••••••• 91d0</span></div>
+        <button class="bigb secb" style="height:40px;background:var(--glass-2);border:1px solid var(--stroke)">{I("zap",14,st="color:var(--blue)")}重新验证</button>
+      </div>
+    </div>
+    <div class="vbox">
+      <div class="row g8" style="margin-bottom:6px"><b class="f13" style="color:var(--green)">鉴权验证通过 · 用时 340ms</b><span class="grow"></span><span class="f12 t3">Bot-02 实测</span></div>
+      <div class="vrow"><span class="vck">{I("check",11,3)}</span><span>服务地址连通，API v4 响应正常</span></div>
+      <div class="vrow"><span class="vck">{I("check",11,3)}</span><span>识别身份：<span class="mono">bot-fix</span> · 具备 <span class="mono">read_api / read_repository / write_repository</span></span></div>
+      <div class="vrow"><span class="vck">{I("check",11,3)}</span><span>安全校验：<b>无合入主干权限</b>（符合最小权限原则），可拉取 <b>28 个仓库</b></span></div>
+    </div>
+  </div>
+  <div class="df">
+    <button class="bigb secb" style="height:42px">取消</button>
+    <span class="grow"></span>
+    <span class="f12 t3">保存后团队成员可直接复用此连接器</span>
+    <button class="bigb pri" style="height:42px">保存并拉取仓库</button>
+  </div>
+</div>'''
+    p1_new = p1.replace('</div><script src="icons.js">', DRW + '</div><script src="icons.js">', 1)
+
+    # ---------------- 2 授权项目与代码权限（仅保留用户主动筛选留下的仓库） ----------------
+    s2 = X + f'''
+      <div class="ptbar">
+        <span class="pickbtn">{I("plus",14,2.4)}从已连来源挑选仓库</span>
+        <div class="srch2">{I("search",14)}<span>在已选的 4 个仓库中筛选…</span></div>
+        <span class="fchip on">已选<em>4</em></span>
+        <span class="fchip">可修改<em>2</em></span>
+        <span class="fchip">仅查看<em>2</em></span>
+      </div>
+
+      <div class="plist">
+        <!-- 分组 1：公司 GitLab -->
+        <div class="sgrp">
+          <div class="sgh">
+            <span class="sdot" style="background:#FC6D26;width:18px;height:18px;font-size:10px">G</span>
+            <b>公司 GitLab</b>
+            <span class="mono surl">https://git.tita.cloud</span>
+            <span class="scnt">已选 2 / 28</span>
+            <span class="sadd">+ 从此来源挑选 ›</span>
           </div>
-          <span class="mall">浏览全部 48 个 {I("chevr",13)}</span>
+          <div class="prow rw">
+            <span class="pic" style="background:linear-gradient(155deg,#5AA0FF,#1F6FFF)">OKR</span>
+            <div class="pinfo">
+              <div class="ptop">
+                <b>OKR · 目标管理</b>
+                <span class="src-pill" style="padding:2px 7px"><span class="mono">fe/tita-okr-web</span></span>
+                <span class="okchip">{I("check",13,2.8)}已探测</span>
+              </div>
+              <div class="pmeta">
+                <span class="ai-bdg">{I("spark",11)}AI 推测</span>
+                <span class="ell"><span class="mono">master</span> → <span class="mono">dev-okr</span> · <span class="mono">pnpm build-prod</span> · 规范 <span class="mono">AGENTS.md</span></span>
+                <span class="tune">微调 ›</span>
+              </div>
+            </div>
+            <div class="pseg"><span>{I("eye",12)}仅查看</span><span class="s-rw">{I("edit",12)}可修改</span></div>
+            <span class="rmb" title="移出授权列表">{I("x",14)}</span>
+          </div>
+          <div class="prow ro">
+            <span class="pic" style="background:linear-gradient(155deg,#4FD6E6,#0E8FB3)">API</span>
+            <div class="pinfo">
+              <div class="ptop">
+                <b>OKR 后端服务</b>
+                <span class="src-pill" style="padding:2px 7px"><span class="mono">be/tita-okr-api</span></span>
+                <span class="tag tg-b" style="height:19px;font-size:10.5px">接口参考</span>
+              </div>
+              <div class="pmeta">
+                <span class="ro-bdg">{I("lock",11)}只读隔离</span>
+                <span class="ell">辅助核对接口字段、错误码与权限逻辑，宿主机硬拦截写入与推送</span>
+              </div>
+            </div>
+            <div class="pseg"><span class="s-ro">{I("eye",12)}仅查看</span><span>{I("edit",12)}可修改</span></div>
+            <span class="rmb" title="移出授权列表">{I("x",14)}</span>
+          </div>
         </div>
-        <div class="mscroll">
-          <div class="mclip"><div class="mgrid">
-            {mkt_card("msg", "linear-gradient(160deg,#4FD6E6,#16A3C0)", "飞书 / 企微审批卡点", ("社区", "tg-t"),
-                      "正式发版或回滚前发审批卡，同意后放行", "审批卡点 · 不占 Dock", dk=False, on=True)}
-            {mkt_card("zap", "linear-gradient(160deg,#C58BFF,#6A3DF0)", "灰度放量与金丝雀", ("官方", "tg-n"),
-                      "按流量比例切流，核心指标异常自动回退", "独立入口 · 占 Dock", dk=True, on=False)}
-            {mkt_card("git", "linear-gradient(160deg,#64748B,#334155)", "GitHub Actions 构建", ("官方", "tg-n"),
-                      "复用现有 Workflow 接管 craft build / verify", "命令槽 · 不占 Dock", dk=False, on=False)}
-            {mkt_card("terminal", "linear-gradient(155deg,#34D399,#0284C7)", "自定义 CLI / MCP 适配器", ("企业自研", "tg-p"),
-                      "L1 YAML 或标准 MCP 接入公司内部工具", "MCP / 命令槽 · 不占 Dock", dk=False, on=False)}
-            {mkt_card("alert", "linear-gradient(160deg,#FB7185,#E11D48)", "Sentry 线上报错联动", ("官方", "tg-n"),
-                      "自动关联堆栈与 SourceMap，一键触发修单", "连接器 · 不占 Dock", dk=False, on=False)}
-            {mkt_card("bell", "linear-gradient(160deg,#FBBF24,#D97706)", "Slack / 钉钉值班播报", ("社区", "tg-t"),
-                      "发布失败与 P1 阻塞自动推送研发值班群", "通知槽 · 不占 Dock", dk=False, on=False)}
-          </div></div>
-        </div>
-      </div>
-      <div class="note" style="margin-top:11px;padding:8px 12px">{I("layers",14,st="color:var(--blue);margin-top:1px")}<span><b>多模块不拥挤：</b>选 3 个及以上时，第 7 步自动按模块分子标签逐个配置（可单独跳过）；左侧 Dock 最多直出 4 个插件图标，超出自动收入「更多模块」文件夹。</span></div>'''
-    foot6m = ('<button class="bigb secb"><i data-i="chevl" data-s="16" data-w="2.4"></i>上一步</button><span class="grow"></span>'
-              '<span class="tag tg-b" style="height:28px;padding:0 11px;font-size:12px">已选 3 个（默认 2 + 市场 1）</span>'
-              '<button class="bigb pri">下一步：配置 3 个模块<i data-i="chevr" data-s="16" data-w="2.4"></i></button>')
-    p6_mod = page(6, "挑选并启用需要的扩展模块", "推荐模块开箱即用，市场插件支持快搜、分类与全量抽屉勾选，下一步一次性配好", s6_mod, foot=foot6m)
 
-    # ---------------- 7 发布与回滚配置（由第 6 步已选模块动态展开，可选） ----------------
-    def kv(k, v, sel=True, extra="", hint=""):
-        h = f'<span class="f12 t3" style="margin-left:auto;flex:none;padding-left:10px">{hint}</span>' if hint else ""
-        return f'<div class="kv3"><span>{k}</span><div class="inp{" sel" if sel else ""}"><span class="ell">{v}</span>{h}{CHD if sel else ""}</div>{extra}</div>'
-    s7_pub = X + f'''
-      <div class="row g12" style="margin-top:20px;align-items:stretch">
-        <div class="pubc"><div class="row g8"><b class="f15">测试环境</b><span class="tag tg-b">发布流水线</span><span class="grow"></span><span class="f12 t3">修完一键发测试</span></div>
-          {kv("打包上传", '<span class="mono f12">tita build</span>', False, hint="在测试分支上打")}
-          {kv("发布到测试", '<span class="mono f12">tita release --app www --env TEST</span>', False)}
-          {kv("发测试的人", "工单修复人", hint="可改成指定的人或任何人")}
-          <div class="f12 t3" style="margin:10px 0 0 82px;line-height:1.6">版本号不用填，tita release 从包里读。发完 Bot 核对测试环境 Apollo 里的提交号，对上了才通知测试人。</div></div>
-        <div class="pubc"><div class="row g8"><b class="f15">正式环境与回滚</b><span class="tag tg-r">紧急回滚</span><span class="grow"></span><span class="f12 t3">测试通过才能发</span></div>
-          {kv("打包上传", '<span class="mono f12">tita build</span>', False, hint="合回主分支后重新打")}
-          {kv("发布到正式", '<span class="mono f12">tita release --app www --env PROD</span>', False)}
-          {kv("正式发布人", "任何人", hint="可以改成指定的人")}
-          {kv("紧急回滚", "Apollo · Tita_Static", hint="只回滚配置")}
-          {kv("谁能回滚", "同正式发布人", hint="可改 · 测试环境不限")}</div>
-      </div>
-      <div class="pubc" style="margin-top:14px;flex:none">
-        <div class="row g8"><b class="f15">你的账号</b><span class="tag tg-n">只给你用</span><span class="grow"></span><span class="f12 t3">合入 MR 用你的 GitLab，发布、回滚用你的 Apollo，记的都是本人</span></div>
-        <div class="row g10" style="margin-top:12px">
-          <div class="inp grow" style="flex:1.3"><span class="t3 f12" style="flex:none">GitLab 令牌</span><span class="mono f13" style="letter-spacing:1px">•••••••••• 7c2e</span></div>
-          <div class="inp grow"><span class="t3 f12" style="flex:none">Apollo 用户名</span><span class="mono f13">lin.x</span></div>
-          <div class="inp grow"><span class="t3 f12" style="flex:none">密码</span><span class="mono f13" style="letter-spacing:2px">••••••••</span></div>
-          <button class="btn2 a-sec" style="background:var(--glass-2);flex:none">{I("zap",14)}试连接</button>
+        <!-- 分组 2：本机代码目录 -->
+        <div class="sgrp">
+          <div class="sgh">
+            <span class="sdot" style="background:#3B82F6;width:18px;height:18px">{I("folder",10,2.5)}</span>
+            <b>本机代码目录</b>
+            <span class="mono surl">~/workspace</span>
+            <span class="scnt">已选 1 / 4</span>
+            <span class="sadd">+ 从此来源挑选 ›</span>
+          </div>
+          <div class="prow rw">
+            <span class="pic" style="background:linear-gradient(155deg,#5EDB7A,#22A748)">审批</span>
+            <div class="pinfo">
+              <div class="ptop">
+                <b>审批 · 协同办公</b>
+                <span class="src-pill" style="padding:2px 7px"><span class="mono">~/workspace/approval-web</span></span>
+                <span class="okchip">{I("check",13,2.8)}已探测</span>
+              </div>
+              <div class="pmeta">
+                <span class="ai-bdg">{I("spark",11)}AI 推测</span>
+                <span class="ell"><span class="mono">main</span> → <span class="mono">test</span> · <span class="mono">pnpm build</span> · 本机 <span class="mono">worktree</span> 隔离修改</span>
+                <span class="tune">微调 ›</span>
+              </div>
+            </div>
+            <div class="pseg"><span>{I("eye",12)}仅查看</span><span class="s-rw">{I("edit",12)}可修改</span></div>
+            <span class="rmb" title="移出授权列表">{I("x",14)}</span>
+          </div>
         </div>
-        <div class="row g10" style="margin-top:10px">{OK}都已连通 · OKR 能合入两个分支、能发测试和正式</span><span class="grow"></span><span class="f12 t3">存到「设置 → 我的账号」· 其他人第一次用到时再配</span></div>
-      </div>
-      <div class="note" style="margin-top:14px">{I("rocket",15,st="color:var(--blue);margin-top:1px")}<span>由第 6 步勾选的「发布流水线 + 紧急回滚」模块动态展开；也可先跳过，不影响 Bot 修代码，之后在「设置 → 项目」或「模块市场」里补配。</span></div>'''
-    foot7p = ('<button class="bigb secb"><i data-i="chevl" data-s="16" data-w="2.4"></i>上一步</button><span class="grow"></span>'
-              '<button class="bigb secb">先跳过</button><button class="bigb pri">保存，下一步：检查并开工<i data-i="chevr" data-s="16" data-w="2.4"></i></button>')
-    p7_pub = page(7, "配置已选的发布与回滚模块", "按第 6 步勾选的模块展开 · 填好之后，修复人能在工单里一键发测试，并在 Dock 使用紧急回滚", s7_pub, foot=foot7p)
 
-    # ---------------- 8 检查并开工 ----------------
+        <!-- 分组 3：GitHub -->
+        <div class="sgrp">
+          <div class="sgh">
+            <span class="sdot" style="background:#1F2328;width:18px;height:18px;font-size:9px">GH</span>
+            <b>GitHub</b>
+            <span class="mono surl">github.com/tita-org</span>
+            <span class="scnt">已选 1 / 14</span>
+            <span class="sadd">+ 从此来源挑选 ›</span>
+          </div>
+          <div class="prow ro">
+            <span class="pic" style="background:linear-gradient(155deg,#B78BFF,#7B42F6)">UI</span>
+            <div class="pinfo">
+              <div class="ptop">
+                <b>基础组件库 · @tita/ui</b>
+                <span class="src-pill" style="padding:2px 7px"><span class="mono">tita-org/ui-kit</span></span>
+                <span class="tag tg-b" style="height:19px;font-size:10.5px">共享参考</span>
+              </div>
+              <div class="pmeta">
+                <span class="ro-bdg">{I("lock",11)}只读隔离</span>
+                <span class="ell">供 Bot 跨仓查组件 API 与主题变量，宿主机硬拦截任何代码写入与提 PR</span>
+              </div>
+            </div>
+            <div class="pseg"><span class="s-ro">{I("eye",12)}仅查看</span><span>{I("edit",12)}可修改</span></div>
+            <span class="rmb" title="移出授权列表">{I("x",14)}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="note" style="margin-bottom:10px;padding:8px 13px">
+        {I("shield",15,st="color:var(--blue);margin-top:1px")}
+        <span><b>按连接器分组 · 最小授权：</b>Bot 只访问你从各连接器主动选入的这 4 个仓库，且仅在「可修改」仓拉 <span class="mono">fix/</span> 分支提 MR（合入仍需真人审）；修单时自动路由到对应项目。</span>
+      </div>'''
+    foot2 = ('<button class="bigb secb"><i data-i="chevl" data-s="16" data-w="2.4"></i>上一步</button>'
+             f'<span class="stat-pill sp-g">{I("edit",13)}可修改 2 个</span>'
+             f'<span class="stat-pill sp-b">{I("eye",13)}仅查看 2 个</span><span class="grow"></span>'
+             '<button class="bigb pri">下一步：环境与账号<i data-i="chevr" data-s="16" data-w="2.4"></i></button>')
+    why2 = ("spark", "只留你选中的仓库", "大公司连接器里往往有上百个仓库，这里绝不平铺全量清单；你通过搜索按需挑出相关项目，再切「可修改 / 仅查看」即可。")
+    p2 = page(2, "挑选要授权给 Bot 的项目与权限", "点「+ 从已连来源挑选仓库」搜索添加；这里只保留你选中的仓库，分支与构建命令自动推测",
+              s2, foot=foot2, why=why2, chip="不知道怎么选？问 AI")
+
+    # ---------------- 2-pick 从已连连接器搜索挑选仓库抽屉 ----------------
+    def pk_row(name, path, desc, picked=False, mode="可修改"):
+        cb = f'<span class="pkc on">{CHECK}</span>' if picked else '<span class="pkc"></span>'
+        bd = (f'<span class="tag {"tg-g" if mode=="可修改" else "tg-b"}" style="height:20px;font-size:11px">已加入 · {mode}</span>'
+              if picked else '<span class="f11 t3">未选</span>')
+        return f'''<div class="pkr{" on" if picked else ""}">{cb}<div class="grow" style="min-width:0">
+          <div class="row g8"><b class="f13">{name}</b><span class="mono f11 t3 ell">{path}</span></div>
+          <div class="f12 t3 ell" style="margin-top:2px">{desc}</div></div>{bd}</div>'''
+
+    PICK_DRW = f'''<style>
+.scr{{position:fixed;inset:0;z-index:30;background:rgba(15,20,40,.28);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}}
+html.dark .scr{{background:rgba(0,0,0,.48)}}
+.drw{{position:fixed;z-index:31;top:24px;right:24px;bottom:24px;width:660px;border-radius:26px;display:flex;flex-direction:column;overflow:hidden;
+  background:rgba(255,255,255,.96);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);box-shadow:0 30px 80px -20px rgba(10,20,60,.45),0 0 0 1px var(--stroke)}}
+html.dark .drw{{background:rgba(34,36,50,.96)}}
+.drw .dh{{display:flex;gap:12px;align-items:center;padding:18px 24px 14px;border-bottom:1px solid var(--hair)}}
+.drw .db{{flex:1;display:flex;flex-direction:column;gap:12px;padding:16px 24px;min-height:0;overflow:hidden}}
+.drw .df{{display:flex;align-items:center;gap:10px;padding:14px 24px;border-top:1px solid var(--hair)}}
+.xb{{width:32px;height:32px;border-radius:50%;background:var(--fill);display:flex;align-items:center;justify-content:center;color:var(--text-2);flex:none}}
+.ic3{{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:#fff;flex:none;font-size:15px;font-weight:800}}
+.ctabs{{display:flex;gap:8px;align-items:center}}
+.ctab{{height:34px;padding:0 12px;border-radius:10px;background:var(--fill);font-size:12.5px;font-weight:600;color:var(--text-2);display:inline-flex;align-items:center;gap:6px;white-space:nowrap}}
+.ctab.on{{background:var(--blue);color:#fff}}
+.ctab em{{font-style:normal;opacity:.75;font-size:11px}}
+.pksrch{{height:38px;border-radius:11px;background:var(--glass-2);border:1.5px solid var(--blue);box-shadow:0 0 0 4px color-mix(in srgb,var(--blue) 14%,transparent);padding:0 12px;display:flex;align-items:center;gap:8px;font-size:13px}}
+.pkg{{font-size:11.5px;font-weight:700;color:var(--text-3);margin-top:4px;display:flex;align-items:center;gap:6px}}
+.pkr{{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:13px;background:var(--fill);border:1.5px solid transparent}}
+.pkr.on{{background:var(--glass-2);border-color:color-mix(in srgb,var(--blue) 45%,transparent)}}
+.pkc{{width:18px;height:18px;border-radius:6px;border:1.5px solid color-mix(in srgb,var(--text) 24%,transparent);display:inline-flex;align-items:center;justify-content:center;flex:none}}
+.pkc.on{{border:0;background:var(--blue);color:#fff}}
+.pklist{{display:flex;flex-direction:column;gap:7px;flex:1;min-height:0;overflow:hidden;-webkit-mask-image:linear-gradient(180deg,#000 0%,#000 86%,transparent 100%);mask-image:linear-gradient(180deg,#000 0%,#000 86%,transparent 100%)}}
+</style>
+<div class="scr"></div>
+<div class="drw">
+  <div class="dh">
+    <span class="ic3" style="background:linear-gradient(155deg,#5AA0FF,#1F6FFF)">{I("search",18,2.2)}</span>
+    <div class="grow">
+      <div style="font-size:18px;font-weight:800">从已连来源挑选仓库</div>
+      <div class="f12 t3" style="margin-top:2px">按连接器与关键词主动筛选，勾选的仓库才会留到第 2 步授权列表</div>
+    </div>
+    <span class="xb">{I("x",16,2.2)}</span>
+  </div>
+  <div class="db">
+    <div class="ctabs">
+      <span class="ctab on">G 公司 GitLab <em>28</em></span>
+      <span class="ctab">GH GitHub <em>14</em></span>
+      <span class="ctab">{I("folder",13)}本机目录 <em>4</em></span>
+      <span class="grow"></span>
+      <span class="f12 lnk">+ 新增连接器</span>
+    </div>
+    <div class="pksrch">
+      {I("search",15,st="color:var(--blue)")}
+      <span class="grow">okr</span>
+      <span class="tag tg-n" style="height:20px;font-size:11px">命中 4 / 28 个</span>
+      {I("x",14,st="color:var(--text-3)")}
+    </div>
+    <div class="pklist">
+      <div class="pkg">{I("folder",12)}Group: fe（前端业务线）</div>
+      {pk_row("OKR · 目标管理", "fe/tita-okr-web", "最近提交 2 小时前 · TypeScript / React · 默认分支 master", True, "可修改")}
+      {pk_row("OKR 移动端 H5", "fe/tita-okr-h5", "最近提交 5 天前 · Vue 3 · 默认分支 main", False)}
+      <div class="pkg">{I("folder",12)}Group: be（后端服务）</div>
+      {pk_row("OKR 后端服务", "be/tita-okr-api", "最近提交 1 小时前 · Go / Gin · 默认分支 master", True, "仅查看")}
+      {pk_row("OKR 数据报表服务", "be/tita-okr-report", "最近提交 12 天前 · Java / SpringBoot · 默认分支 master", False)}
+      <div class="pkg">{I("folder",12)}未匹配搜索词的其余 24 个仓库已折叠</div>
+      {pk_row("薪酬 · 人事", "fe/tita-payroll-web", "输入其他关键词或清空搜索即可继续挑选", False)}
+    </div>
+  </div>
+  <div class="df">
+    <span class="f12 t2">新加入的仓库默认设为<b>仅查看</b>，回到列表可随时切「可修改」</span>
+    <span class="grow"></span>
+    <button class="bigb secb" style="height:40px">取消</button>
+    <button class="bigb pri" style="height:40px">确认保留（共 4 个）</button>
+  </div>
+</div>'''
+    p2_pick = p2.replace('</div><script src="icons.js">', PICK_DRW + '</div><script src="icons.js">', 1)
+
+    # ---------------- 2-tune 点击「微调 ›」右侧抽屉 ----------------
+    TUNE_DRW = f'''<style>
+.scr{{position:fixed;inset:0;z-index:30;background:rgba(15,20,40,.28);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}}
+html.dark .scr{{background:rgba(0,0,0,.48)}}
+.drw{{position:fixed;z-index:31;top:24px;right:24px;bottom:24px;width:640px;border-radius:26px;display:flex;flex-direction:column;overflow:hidden;
+  background:rgba(255,255,255,.96);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);box-shadow:0 30px 80px -20px rgba(10,20,60,.45),0 0 0 1px var(--stroke)}}
+html.dark .drw{{background:rgba(34,36,50,.96)}}
+.drw .dh{{display:flex;gap:12px;align-items:center;padding:18px 24px 14px;border-bottom:1px solid var(--hair)}}
+.drw .db{{flex:1;display:flex;flex-direction:column;gap:13px;padding:16px 24px;min-height:0;overflow:hidden}}
+.drw .df{{display:flex;align-items:center;gap:10px;padding:14px 24px;border-top:1px solid var(--hair)}}
+.xb{{width:32px;height:32px;border-radius:50%;background:var(--fill);display:flex;align-items:center;justify-content:center;color:var(--text-2);flex:none}}
+.ic3{{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:#fff;flex:none;font-size:13px;font-weight:800}}
+.flab{{font-size:12.5px;font-weight:700;color:var(--text-2);margin-bottom:6px;display:flex;align-items:center;gap:6px}}
+.flab .rst{{margin-left:auto;font-weight:600;color:var(--blue);font-size:11.5px}}
+.dinp{{height:38px;border-radius:11px;background:var(--fill);display:flex;align-items:center;gap:8px;padding:0 12px;font-size:13px;color:var(--text);min-width:0}}
+.dinp.ov{{background:var(--glass-2);border:1.5px solid color-mix(in srgb,var(--blue) 55%,transparent)}}
+.tsec{{border-radius:15px;padding:12px 14px;background:var(--fill);display:flex;flex-direction:column;gap:10px}}
+.tsec-h{{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--text)}}
+.aid2{{display:inline-flex;align-items:center;gap:3px;height:18px;padding:0 6px;border-radius:5px;font-size:10.5px;font-weight:600;color:var(--purple);background:color-mix(in srgb,var(--purple) 13%,transparent)}}
+.ov2{{display:inline-flex;align-items:center;gap:3px;height:18px;padding:0 6px;border-radius:5px;font-size:10.5px;font-weight:600;color:var(--blue);background:color-mix(in srgb,var(--blue) 13%,transparent)}}
+</style>
+<div class="scr"></div>
+<div class="drw">
+  <div class="dh">
+    <span class="ic3" style="background:linear-gradient(155deg,#5AA0FF,#1F6FFF)">OKR</span>
+    <div class="grow" style="min-width:0">
+      <div class="row g8"><span style="font-size:17px;font-weight:800">微调仓库配置</span><span class="tag tg-g" style="height:20px;font-size:11px">可修改</span></div>
+      <div class="f12 t3 mono ell" style="margin-top:2px">公司 GitLab · fe/tita-okr-web · 探测于 10:20</div>
+    </div>
+    <span class="xb">{I("x",16,2.2)}</span>
+  </div>
+  <div class="db">
+    <!-- 1. 归属项目与权限 -->
+    <div class="tsec">
+      <div class="tsec-h"><span>归属项目</span><span class="f11 t3" style="font-weight:400">支持多仓并入同一平级项目；修单时 Bot 自动路由</span></div>
+      <div class="row g10">
+        <div class="grow">
+          <div class="flab">项目名称<span class="aid2">{I("spark",10)}AI 推测</span></div>
+          <div class="dinp" style="background:var(--glass-2)"><span>OKR · 目标管理</span><span class="grow"></span>{I("chevd",13,st="color:var(--text-3)")}</div>
+        </div>
+        <div style="width:188px;flex:none">
+          <div class="flab">权限模式</div>
+          <div class="dinp" style="background:var(--glass-2);color:var(--green);font-weight:600">{I("edit",13)}<span class="grow">可修改（推 fix/）</span>{I("chevd",13,st="color:var(--text-3)")}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. 分支与试构建覆盖 -->
+    <div class="tsec">
+      <div class="tsec-h"><span>分支与试构建命令</span><span class="f11 t3" style="font-weight:400">人工覆盖项标蓝，后续重探测不冲掉</span><span class="rst" style="margin-left:auto;font-size:11.5px;color:var(--blue);font-weight:600">恢复全部 AI 推测</span></div>
+      <div class="row g10">
+        <div class="grow">
+          <div class="flab">主干分支<span class="aid2">{I("spark",10)}默认分支</span></div>
+          <div class="dinp" style="background:var(--glass-2)"><span class="mono grow">master</span>{I("chevd",13,st="color:var(--text-3)")}</div>
+        </div>
+        <div class="grow">
+          <div class="flab">测试分支<span class="aid2">{I("spark",10)}命中 dev-*</span></div>
+          <div class="dinp" style="background:var(--glass-2)"><span class="mono grow">dev-okr</span>{I("chevd",13,st="color:var(--text-3)")}</div>
+        </div>
+      </div>
+      <div class="row g10">
+        <div style="width:150px;flex:none">
+          <div class="flab">包管理器<span class="aid2">lockfile</span></div>
+          <div class="dinp" style="background:var(--glass-2)"><span class="mono grow">pnpm</span>{I("chevd",13,st="color:var(--text-3)")}</div>
+        </div>
+        <div class="grow">
+          <div class="flab">试构建命令（不上传产物）<span class="ov2">已人工覆盖</span><span class="rst">还原推测</span></div>
+          <div class="dinp ov"><span class="mono grow">pnpm build-prod --no-sourcemap</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. 代码规范与 MR 审核人 -->
+    <div class="tsec">
+      <div class="tsec-h"><span>代码规范与默认 MR 审核人</span></div>
+      <div class="row g8 f12 t2" style="padding:7px 10px;border-radius:10px;background:var(--glass-2)">
+        {I("file",14,st="color:var(--purple)")}
+        <span class="grow ell">自动读取仓库根目录 <span class="mono">AGENTS.md</span> 与 <span class="mono">.eslintrc.cjs</span>，并启用内置「最小改动修复」</span>
+        <span class="tag tg-g" style="height:19px;font-size:10.5px">已生效</span>
+      </div>
+      <div class="row g10">
+        <div class="grow">
+          <div class="flab">合入测试分支审核人</div>
+          <div class="dinp" style="background:var(--glass-2)"><span class="grow">工单修复人（默认）</span>{I("chevd",13,st="color:var(--text-3)")}</div>
+        </div>
+        <div class="grow">
+          <div class="flab">合回主干分支审核人</div>
+          <div class="dinp" style="background:var(--glass-2)"><span class="grow">林某（项目负责人）</span>{I("chevd",13,st="color:var(--text-3)")}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g8 f12" style="padding:9px 12px;border-radius:12px;background:color-mix(in srgb,var(--green) 10%,transparent);color:var(--green)">
+      {I("check",14,2.8)}
+      <span class="grow">上次试构建通过 · <span class="mono">pnpm build-prod</span> · 3 分 12 秒（修改命令后建议重新试构建）</span>
+    </div>
+  </div>
+  <div class="df">
+    <button class="bigb secb" style="height:40px">取消</button>
+    <span class="grow"></span>
+    <button class="bigb secb" style="height:40px;background:var(--glass-2);border:1px solid var(--stroke)">仅保存</button>
+    <button class="bigb pri" style="height:40px">{I("zap",14)}保存并试构建</button>
+  </div>
+</div>'''
+    p2_tune = p2.replace('</div><script src="icons.js">', TUNE_DRW + '</div><script src="icons.js">', 1)
+
+    # ---------------- 4 AI 体检并开工 ----------------
     def c(st, t, r):
         bg = {"ok": "var(--green)", "wn": "var(--orange)", "sk": "color-mix(in srgb,var(--text) 25%,transparent)"}[st]
         g = {"ok": CHECK, "wn": "!", "sk": "–"}[st]
         rc = {"ok": "var(--text-3)", "wn": "var(--orange)", "sk": "var(--text-3)"}[st]
-        return f'<div class="chk3" style="padding:7.5px 0"><span class="ck3" style="background:{bg};font-size:12px;font-weight:800">{g}</span><span class="grow">{t}</span><span class="f12" style="color:{rc}">{r}</span></div>'
-    s8 = X + f'''
-      <div class="big-ok" style="margin-top:16px;padding:14px 18px">
+        return f'<div class="chk3"><span class="ck3" style="background:{bg};font-size:12px;font-weight:800">{g}</span><span class="grow">{t}</span><span class="f12" style="color:{rc}">{r}</span></div>'
+
+    s4 = X + f'''
+      <div class="big-ok" style="margin-top:18px">
         <span class="ck3" style="width:44px;height:44px;background:var(--green)">{I("check",22,3)}</span>
-        <div class="grow"><div class="f16 w7">必需条件全部通过，可以开工了</div><div class="f13 t2" style="margin-top:3px">Bot-02 实际跑了一遍 · 用时 4 分 38 秒 · 今天 10:42</div></div>
+        <div class="grow"><div class="f16 w7">必需条件全部通过，可以开工了</div><div class="f13 t2" style="margin-top:3px">Bot-02 实际跑了一遍自动探测与体检 · 用时 3 分 52 秒 · 今天 10:42</div></div>
         <span class="f12 lnk">看完整日志 ›</span>
       </div>
       <div class="row g12" style="margin-top:14px;align-items:flex-start">
-        <div class="obx grow" style="padding:4px 16px">
-          {c("ok", "AI 已连接 · Pi · gpt-6.2-sol", "管理员配置")}
-          {c("ok", "拉取 3 个仓库，构建 2 个", "4 分 02 秒")}
-          {c("ok", "打开 3 个环境", "都能打开")}
-          {c("ok", "账号试登录", "6 个成功")}
-          {c("wn", "正式环境 · OKR 管理员 Cookie 已过期", "不挡开工，用到时提醒你")}
-          {c("ok", "收单条件", "能收到 3 张")}
-          {c("ok", "Skills", "3 个已启用")}
-          {c("ok", "扩展模块", "已启用 2 个（发布流水线、紧急回滚）")}
-          {c("ok", "你的 GitLab、Apollo 账号", "都已连通 · 没配不挡开工")}
-          {c("sk", "发布与回滚配置", "已跳过 · 之后在项目或模块市场补配")}
+        <div class="obx grow" style="padding:6px 16px">
+          {c("ok", "AI 引擎已连通 · Pi（默认内置 · gpt-6.2-sol）", "管理员已配置")}
+          {c("ok", "连接器鉴权 · GitLab、GitHub、本机目录、Jira", "全部通过")}
+          {c("ok", "可修改仓库（2 个）· 自动推测分支与构建通过", "3 分 18 秒")}
+          {c("ok", "仅查看仓库（2 个）· 只读索引完成，宿主机硬禁写", "只读隔离")}
+          {c("ok", "已自动读取仓库规范（AGENTS.md / ESLint）+ 内置 Skills", "免手配直接生效")}
+          {c("ok", "环境与账号 · 3 个环境打开，6 个账号登录成功", "测试 / 联调 / 正式")}
+          {c("wn", "正式环境 · OKR 管理员 Cookie 已过期", "不挡开工，用到时提醒")}
+          {c("sk", "发布与回滚、自定义主题 / 费用监控等插件", "按需在插件市场启用")}
         </div>
-        <div class="obx" style="width:270px;flex:none">
-          <div class="f13 w7">开工后</div>
-          <div class="f12 t2" style="margin-top:6px;line-height:1.6">已收的 3 张单马上开始，进度在工作台里看；手机会收到「待你审核」通知。</div>
+        <div class="obx" style="width:276px;flex:none">
+          <div class="f13 w7">开工后怎么干活</div>
+          <div class="f12 t2" style="margin-top:6px;line-height:1.6">已接 Jira 自动收单的 2 张单马上开始修，AI 自动匹配目标项目；你也可以随时点「+」手动新建工单。</div>
           <div class="col g6" style="margin-top:10px">
-            <div class="tk" style="background:var(--glass-2);height:34px;font-size:12.5px"><span class="sc10 sc-j">Jira</span><span class="grow ell">对齐视图里子目标重复显示</span></div>
-            <div class="tk" style="background:var(--glass-2);height:34px;font-size:12.5px"><span class="sc10 sc-j">Jira</span><span class="grow ell">目标导入截止日期错一天</span></div>
-            <div class="tk" style="background:var(--glass-2);height:34px;font-size:12.5px"><span class="sc10 sc-t">Tita</span><span class="grow ell">目标进度导出缺少部门</span></div>
+            <div class="tk"><span class="sc10 sc-j">Jira</span><span class="grow ell">OKR-412 对齐视图子目标重复</span></div>
+            <div class="tk"><span class="sc10 sc-j">Jira</span><span class="grow ell">OKR-418 目标导入日期错一天</span></div>
           </div>
+          <div class="f12 t3" style="margin-top:12px;padding-top:10px;border-top:1px solid var(--hair);line-height:1.55">想加发版回滚、皮肤主题或自定义 Skills，随时去左侧 Dock「插件市场 / Skills」或「设置」按需开启。</div>
         </div>
       </div>'''
-    foot8 = ('<button class="bigb secb"><i data-i="chevl" data-s="16" data-w="2.4"></i>上一步</button><span class="grow"></span>'
-             '<span class="f13 t3" style="margin-right:6px">之后在「设置 → 项目」或「模块市场」随时改</span>'
-             '<button class="bigb pri">开始接单，进入工作台<i data-i="chevr" data-s="16" data-w="2.4"></i></button>')
-    p8 = page(8, "Bot 把条件实际跑了一遍", "每一项都是真的去拉代码、打开环境、登录账号、收单，不是只看填没填", s8, foot=foot8)
+    foot4 = ('<button class="bigb secb"><i data-i="chevl" data-s="16" data-w="2.4"></i>上一步</button><span class="grow"></span>'
+             '<span class="f13 t3" style="margin-right:6px">随时可在「设置 → 连接器 / 项目」调整</span>'
+             '<button class="bigb pri">开始使用，进入工作台<i data-i="chevr" data-s="16" data-w="2.4"></i></button>')
+    why4 = ("spark", "4 步即可零负担开工", "内置 Skills 与仓库规范默认生效；发布回滚、UI 主题、Token 费用监控等扩展插件不挡首次开工，用到时再从插件市场装。")
+    p4 = page(4, "AI 自动体检通过，可以开工了", "拉代码、推测构建、只读权限隔离、环境试登录全部真实跑通，不是只看表单填没填",
+              s4, foot=foot4, why=why4)
 
-    return {"1": p1, "2": p2, "4": p4, "5": p5, "5-new": p5n, "6": p6_mod, "7": p7_pub, "8": p8}
-
+    return {"1": p1, "1-new": p1_new, "2": p2, "2-pick": p2_pick, "2-tune": p2_tune, "4": p4}
 
 
 def ai_step(page, CHECK):
-    """管理员专用的第 1 步：连接 AI。"""
+    """管理员专用的前置第 0 步：连接 AI 引擎（不再混入硬编码 GitLab 账号）。"""
     def I(n, s=16, w=None, st=None):
         return f'<i data-i="{n}" data-s="{s}"' + (f' data-w="{w}"' if w else '') + (f' style="{st}"' if st else '') + '></i>'
     CHD = I("chevd", 14)
     OK = f'<span class="okt">{CHECK}'
+
     def row(k, v):
         return f'<div class="kv3" style="margin-top:12px"><span>{k}</span>{v}</div>'
+
     body = X + f'''
       <div class="obx" style="margin-top:20px;padding:18px 20px">
         {row("AI 引擎", f'<div class="inp sel">Pi（默认内置 · 多模型）{CHD}</div>')}
-        {row("模型", f'<div class="inp sel">gpt-6.2-sol{CHD}</div>')}
+        {row("主力模型", f'<div class="inp sel">gpt-6.2-sol{CHD}</div>')}
+        {row("快速模型", f'<div class="inp sel">gpt-6.2-mini（报错解读 / 翻译 / 轻问答）{CHD}</div>')}
         {row("连接方式", '<div class="seg" style="flex:1"><span class="on" style="flex:1;justify-content:center">公司网关</span><span style="flex:1;justify-content:center">API Key</span></div>')}
         {row("网关地址", '<div class="inp"><span class="mono f12">https://ai-gateway.tita.cloud</span></div>')}
         {row("访问令牌", '<div class="inp"><span class="mono f12">•••••••••••••••• 3f9a</span></div>')}
-        <div class="row g10" style="margin:16px 0 0 82px">
+        <div class="row g10" style="margin:16px 0 0 86px">
           <button class="btn2 a-sec" style="background:var(--glass-2)">{I("zap",14)}试一下</button>
-          {OK}已连通 · Bot-02 实际调用了一次，1.2 秒</span>
+          {OK}已连通 · Bot-02 实际调用了一次（1.2 秒），4 项模型能力探测完成</span>
         </div>
       </div>
-      <div class="obx" style="margin-top:14px;padding:14px 20px">
-        <div class="row g8"><b class="f15">Bot 用的 GitLab 账号</b><span class="grow"></span><span class="f12 t3">拉代码、推 fix/、提 MR，不给合入权限 · 令牌都加密存在内网服务器上 · Jira、Tita 采集账号在「来源采集」配</span></div>
-        {row("账号", '<div class="inp"><span class="mono f13">bot-fix</span><span class="f12 t3" style="margin-left:auto">从令牌识别</span></div>')}
-        {row("访问令牌", '<div class="inp"><span class="mono f12">•••••••••••••••• 91d0</span></div>')}
-        <div class="row g10" style="margin:14px 0 0 82px">
-          <button class="btn2 a-sec" style="background:var(--glass-2)">{I("zap",14)}试连接</button>
-          {OK}已连通 · 能拉取、能提 MR，没有合入权限（正好）</span>
-        </div>
+      <div class="note" style="margin-top:16px">
+        {I("link",15,st="color:var(--blue);margin-top:1px")}
+        <span><b>外部工具统一走连接器：</b>GitLab、GitHub、Gitee、Jira、Tita 等平台鉴权不再写死在这里，下一步「连接器与鉴权」中统一接入，并支持本机代码目录与插件市场扩展。</span>
       </div>
 '''
-    return page(1, "先把 AI 和 Bot 账号接上", "Bot 靠它们读工单、改代码。全公司接一次，所有项目共用；只有管理员会看到这一步", body,
-                "选择项目", skip=False, prev=False)
+    why0 = ("spark", "管理员一次性配置", "AI 引擎全工作空间共用，仅首次登录的管理员可见；其他团队成员登录后直接从「连接器与鉴权」开始。")
+    return page(1, "先把工作空间的 AI 接上", "全公司接一次，所有项目共用；后续想切外部 CLI 引擎（ACP / Claude Code / Codex），在插件市场安装即可",
+                body, "连接器与鉴权", skip=False, prev=False, why=why0)

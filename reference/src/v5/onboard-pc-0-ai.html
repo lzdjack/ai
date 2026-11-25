@@ -5,25 +5,27 @@
 .root{display:block;background:var(--wall)}
 .top{position:absolute;left:32px;right:32px;top:22px;display:flex;align-items:center;gap:12px}
 .wz{position:absolute;left:120px;right:120px;top:80px;bottom:36px;border-radius:30px;display:flex;overflow:hidden}
-.sl{width:300px;flex:none;padding:24px 24px 20px;border-right:1px solid var(--hair);background:color-mix(in srgb,var(--text) 2.5%,transparent);display:flex;flex-direction:column}
-.st2{display:flex;gap:13px;position:relative;padding-bottom:15px}
+.sl{width:300px;flex:none;padding:26px 24px 22px;border-right:1px solid var(--hair);background:color-mix(in srgb,var(--text) 2.5%,transparent);display:flex;flex-direction:column}
+.st2{display:flex;gap:13px;position:relative;padding-bottom:20px}
 .st2:not(:last-child)::after{content:"";position:absolute;left:12.5px;top:28px;bottom:3px;width:1.5px;background:var(--hair)}
 .st2.done::after{background:color-mix(in srgb,var(--green) 55%,transparent)}
 .sc2{width:26px;height:26px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:800}
 .done .sc2{background:var(--green);color:#fff}
 .cur .sc2{background:var(--blue);color:#fff;box-shadow:0 0 0 5px color-mix(in srgb,var(--blue) 20%,transparent)}
 .todo .sc2{border:1.5px solid color-mix(in srgb,var(--text) 22%,transparent);color:var(--text-3)}
-.st2 b{display:block;font-size:14px;font-weight:600;line-height:26px}
+.st2 b{display:block;font-size:14.5px;font-weight:600;line-height:26px}
 .todo b{color:var(--text-2);font-weight:500}
 .cur b{color:var(--blue);font-weight:700}
-.st2 em{display:block;font-style:normal;font-size:12px;color:var(--text-3);margin-top:-1px}
+.st2 em{display:block;font-style:normal;font-size:12px;color:var(--text-3);margin-top:1px;line-height:1.45}
 .done em{color:var(--text-2)}
 .skip .sc2{background:var(--fill);color:var(--text-3)}
 .skip b{color:var(--text-2);font-weight:500}
 .st2.skip::after{background:color-mix(in srgb,var(--green) 55%,transparent)}
+.why{border-radius:14px;padding:12px 13px;background:color-mix(in srgb,var(--purple) 7%,var(--fill));border:1px solid color-mix(in srgb,var(--purple) 18%,transparent);font-size:12px;line-height:1.55;color:var(--text-2);margin-bottom:18px}
+.why .wh{display:flex;align-items:center;gap:6px;font-weight:700;color:var(--text);margin-bottom:5px;font-size:12.5px}
 .fm{flex:1;min-width:0;display:flex;flex-direction:column}
-.fb{flex:1;padding:30px 40px 0;min-height:0;overflow:hidden}
-.ff{display:flex;align-items:center;gap:12px;padding:16px 40px;border-top:1px solid var(--hair)}
+.fb{flex:1;padding:26px 36px 0;min-height:0;overflow:hidden;display:flex;flex-direction:column}
+.ff{display:flex;align-items:center;gap:12px;padding:16px 36px;border-top:1px solid var(--hair)}
 .lab{font-size:13.5px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:8px}
 .lab span{font-weight:400;font-size:12px;color:var(--text-3)}
 .inp{height:44px;border-radius:12px;background:var(--fill);display:flex;align-items:center;gap:10px;padding:0 13px;font-size:14px;color:var(--text);min-width:0}
@@ -44,26 +46,18 @@
 .pm-e{color:var(--green)}.pm-e>i{color:var(--green)}
 .pm-v{color:var(--blue)}.pm-v>i{color:var(--blue)}
 .pm-l{color:var(--text-3);background:transparent;box-shadow:inset 0 0 0 1px var(--hair)}
-.menu{position:absolute;right:0;top:44px;width:290px;z-index:5;border-radius:14px;padding:6px;background:var(--glass-2);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);border:1px solid var(--stroke);box-shadow:0 24px 50px -16px rgba(10,20,60,.45)}
-html:not(.dark) .menu{background:rgba(255,255,255,.96)}html.dark .menu{background:rgba(44,46,60,.96)}
-.mi{display:flex;gap:10px;align-items:flex-start;padding:9px 10px;border-radius:10px}
-.mi>i:first-child{margin-top:2px;color:var(--text-2)}
-.mi.on{background:color-mix(in srgb,var(--blue) 10%,transparent)}
-.mi b{display:block;font-size:13.5px}.mi em{display:block;font-style:normal;font-size:12px;color:var(--text-3);margin-top:2px}
 .rt .inp{height:38px}
 .rsel{font-weight:600;font-size:13.5px;padding:0 10px 0 12px}
 .rh{font-size:12px;color:var(--text-3);padding:0 2px 6px}
-.rl{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600}
 .envs{display:grid;grid-template-columns:1fr 1fr 1fr 120px;gap:10px}
 .env{border-radius:14px;padding:11px 13px;background:var(--fill);border:1.5px solid transparent;min-width:0}
 .env b{font-size:14px}
 .env.on{background:var(--glass-2);border-color:var(--blue);box-shadow:0 6px 16px -10px color-mix(in srgb,var(--blue) 70%,transparent)}
 .env.add{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-size:13px;color:var(--text-3);background:transparent;border:1.5px dashed color-mix(in srgb,var(--text) 18%,transparent)}
-.ta{border-radius:12px;background:var(--fill);padding:11px 13px;font-size:14px;line-height:1.6;color:var(--text);min-height:48px}
 .bigb{height:44px;border-radius:13px;border:0;font-size:14.5px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 20px;white-space:nowrap}
 .pri{background:var(--blue);color:#fff;box-shadow:0 10px 22px -10px color-mix(in srgb,var(--blue) 85%,transparent)}
 .secb{background:var(--fill);color:var(--text)}
-.note{display:flex;gap:9px;align-items:flex-start;font-size:12.5px;color:var(--text-2);line-height:1.55;padding:10px 12px;border-radius:12px;background:color-mix(in srgb,var(--blue) 7%,transparent)}
+.note{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;color:var(--text-2);line-height:1.5;padding:9px 13px;border-radius:13px;background:color-mix(in srgb,var(--blue) 7%,transparent)}
 .pbar{height:4px;border-radius:2px;background:var(--fill);overflow:hidden}
 .pbar i{display:block;height:100%;border-radius:2px;background:linear-gradient(90deg,#4F8BFF,#9B5CFF)}
 </style></head><body><div class="root">
@@ -76,80 +70,114 @@ html:not(.dark) .menu{background:rgba(255,255,255,.96)}html.dark .menu{backgroun
 <div class="wz glass">
   <aside class="sl">
     <div class="f12 t3">第一次使用</div>
-    <div style="font-size:21px;font-weight:800;margin-top:4px">把项目准备好</div>
-    <div class="f12 t2" style="margin-top:6px;line-height:1.55">填完后 Bot 会实际跑一遍检查，<br>都通过才开始接单</div>
-    <div style="margin-top:18px"><div class="st2 cur"><span class="sc2">1</span><div><b>连接 AI</b><em>全公司接一次，只有管理员看到</em></div></div><div class="st2 todo"><span class="sc2">2</span><div><b>选择项目</b><em>要准备哪个项目</em></div></div><div class="st2 todo"><span class="sc2">3</span><div><b>代码仓库</b><em>Bot 改哪些代码、怎么构建</em></div></div><div class="st2 todo"><span class="sc2">4</span><div><b>环境与账号</b><em>测试、线上各自的地址和账号</em></div></div><div class="st2 todo"><span class="sc2">5</span><div><b>工单来源</b><em>Jira / Tita 收哪些单</em></div></div><div class="st2 todo"><span class="sc2">6</span><div><b>Skills</b><em>编码和验证规则</em></div></div><div class="st2 todo"><span class="sc2">7</span><div><b>扩展模块</b><em>默认推荐 + 模块市场按需装</em></div></div><div class="st2 todo"><span class="sc2">8</span><div><b>发布与回滚配置</b><em>按已选模块展开，可先跳过</em></div></div><div class="st2 todo"><span class="sc2">9</span><div><b>检查并开工</b><em>Bot 把条件实际跑一遍</em></div></div></div>
+    <div style="font-size:21px;font-weight:800;margin-top:4px">接入工具与权限</div>
+    <div class="f12 t2" style="margin-top:6px;line-height:1.55">只填 AI 猜不出的鉴权与权限边界，<br>其余由 Bot 自动探测与匹配</div>
+    <div style="margin-top:22px"><div class="st2 cur"><span class="sc2">1</span><div><b>连接 AI</b><em>全公司接一次，只有管理员看到</em></div></div><div class="st2 todo"><span class="sc2">2</span><div><b>连接器与鉴权</b><em>接代码平台、本机目录或工单源</em></div></div><div class="st2 todo"><span class="sc2">3</span><div><b>授权项目与代码</b><em>拉取仓库，划定可修改 / 仅查看</em></div></div><div class="st2 todo"><span class="sc2">4</span><div><b>环境与账号</b><em>复现入口与数据权限 · 可跳过</em></div></div><div class="st2 todo"><span class="sc2">5</span><div><b>AI 体检并开工</b><em>试拉取与构建，通过即开干</em></div></div></div>
     <div class="grow"></div>
-    <div class="row f12 t3" style="margin-bottom:8px"><span class="grow">第 1 步，共 9 步</span><span>已完成 0 步</span></div>
-    <div class="pbar"><i style="width:0%"></i></div>
+    <div class="why"><div class="wh"><i data-i="spark" data-s="13" style="color:var(--purple)"></i>管理员一次性配置</div>AI 引擎全工作空间共用，仅首次登录的管理员可见；其他团队成员登录后直接从「连接器与鉴权」开始。</div>
+    <div class="row f12 t3" style="margin-bottom:8px"><span class="grow">第 1 步，共 5 步</span><span>已完成 0 步</span></div>
+    <div class="pbar"><i style="width:20%"></i></div>
   </aside>
   <section class="fm">
     <div class="fb">
       <div class="row g10">
         <div class="grow"><div class="f12" style="color:var(--blue);font-weight:700">第 1 步 · 连接 AI</div>
-          <div style="font-size:24px;font-weight:800;margin-top:6px">先把 AI 和 Bot 账号接上</div>
-          <div class="f13 t2" style="margin-top:6px">Bot 靠它们读工单、改代码。全公司接一次，所有项目共用；只有管理员会看到这一步</div></div>
+          <div style="font-size:24px;font-weight:800;margin-top:5px">先把工作空间的 AI 接上</div>
+          <div class="f13 t2" style="margin-top:5px">全公司接一次，所有项目共用；后续想切外部 CLI 引擎（ACP / Claude Code / Codex），在插件市场安装即可</div></div>
         <span class="chip2" style="align-self:flex-start"><i data-i="spark" data-s="13" style="color:var(--purple)"></i>不知道填什么？问 AI</span>
       </div>
 <style>
-.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.pc{border-radius:16px;padding:14px 16px;background:var(--fill);border:1.5px solid transparent;position:relative;min-width:0}
-.pc.on{background:var(--glass-2);border-color:var(--blue);box-shadow:0 8px 20px -12px color-mix(in srgb,var(--blue) 70%,transparent)}
-.pc.add{display:flex;align-items:center;justify-content:center;gap:8px;font-size:13.5px;color:var(--text-3);background:transparent;border:1.5px dashed color-mix(in srgb,var(--text) 18%,transparent)}
-.pc b{font-size:15.5px}
-.rdo{width:18px;height:18px;border-radius:50%;border:1.5px solid color-mix(in srgb,var(--text) 25%,transparent);flex:none}
-.rdo.on{border:0;background:var(--blue);box-shadow:inset 0 0 0 5px var(--blue),inset 0 0 0 9px #fff}
-.cbx2{width:18px;height:18px;border-radius:5px;border:1.5px solid color-mix(in srgb,var(--text) 25%,transparent);flex:none;display:flex;align-items:center;justify-content:center}
-.cbx2.on{border:0;background:var(--blue);color:#fff}
-.sel{justify-content:space-between}
-.gl{width:22px;height:22px;border-radius:6px;background:#FC6D26;color:#fff;font-size:11px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;flex:none}
-.jr{width:22px;height:22px;border-radius:6px;background:#2684FF;color:#fff;font-size:11px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;flex:none}
-.tt2{width:22px;height:22px;border-radius:6px;background:linear-gradient(160deg,#5AA0FF,#2F6BFF);color:#fff;font-size:10px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;flex:none}
-.rp{display:grid;grid-template-columns:1fr 128px 128px 156px 132px;gap:8px 10px;align-items:center}
-.rp .inp{height:40px;font-size:13.5px}
-.dep{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.dfl{flex-wrap:nowrap;gap:6px}.dfl .dn{padding:0 10px;gap:6px}.dn{display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 12px;border-radius:10px;background:var(--glass-2);border:1px solid var(--stroke);font-size:13px}
-.arw{color:var(--text-3)}
+.sech{display:flex;align-items:center;gap:8px;margin-top:18px;margin-bottom:9px}
+.sech b{font-size:13.5px;font-weight:700}
+.sech .sub{font-size:12px;color:var(--text-3)}
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.ccard{border-radius:16px;padding:13px 15px;background:var(--glass-2);border:1.5px solid color-mix(in srgb,var(--green) 36%,transparent);box-shadow:0 6px 18px -12px color-mix(in srgb,var(--green) 45%,transparent);display:flex;flex-direction:column;gap:8px;min-width:0}
+.ccard.opt{border-color:color-mix(in srgb,var(--blue) 30%,transparent);box-shadow:0 6px 18px -12px color-mix(in srgb,var(--blue) 35%,transparent)}
+.ccard.addc{background:transparent;border:1.5px dashed color-mix(in srgb,var(--text) 18%,transparent);box-shadow:none;justify-content:center;align-items:flex-start;gap:6px}
+.cic{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:800;flex:none}
+.okpill{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600;color:var(--green);white-space:nowrap}
+.cmeta{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text-2);min-width:0}
+.cfoot{display:flex;align-items:center;gap:8px;padding-top:8px;border-top:1px solid var(--hair);font-size:12px;color:var(--text-3)}
+.cfoot .act{margin-left:auto;color:var(--blue);font-weight:600;white-space:nowrap}
+.qadd{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:nowrap}
+.qbtn{height:32px;padding:0 11px;border-radius:10px;background:var(--fill);border:1px solid var(--hair);display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--text-2);white-space:nowrap}
+.qdot{width:17px;height:17px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:800;flex:none}
+.stat-pill{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 10px;border-radius:9px;font-size:12px;font-weight:600;white-space:nowrap}
+.sp-g{background:color-mix(in srgb,var(--green) 13%,transparent);color:var(--green)}
+.sp-b{background:color-mix(in srgb,var(--blue) 13%,transparent);color:var(--blue)}
+
+/* 第 2 步：多来源聚合与三态读写权限 */
+.ptbar{display:flex;align-items:center;gap:8px;margin-top:16px}
+.srcsel{height:34px;padding:0 10px;border-radius:10px;background:var(--glass-2);border:1px solid var(--stroke);display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;white-space:nowrap;flex:none}
+.sdots{display:inline-flex;align-items:center}
+.sdots i{width:16px;height:16px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:9px;font-weight:800;font-style:normal;border:1.5px solid var(--glass-2)}
+.sdots i+i{margin-left:-4px}
+.srch2{height:34px;flex:1;min-width:140px;border-radius:10px;background:var(--fill);padding:0 11px;display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--text-3);border:1px solid var(--hair)}
+.fchip{height:30px;padding:0 10px;border-radius:9px;font-size:12px;font-weight:600;color:var(--text-2);background:var(--fill);display:inline-flex;align-items:center;gap:4px;white-space:nowrap;flex:none}
+.fchip.on{background:var(--blue);color:#fff}
+.fchip em{font-style:normal;opacity:.72;font-size:11px;font-weight:500}
+.addbtn{height:34px;padding:0 12px;border-radius:10px;background:var(--fill);border:1px solid var(--hair);font-size:12.5px;font-weight:600;color:var(--text);display:inline-flex;align-items:center;gap:5px;white-space:nowrap;flex:none}
+.plist{display:flex;flex-direction:column;gap:10px;margin-top:11px;flex:1;min-height:0}
+.sgrp{display:flex;flex-direction:column;gap:6px}
+.sgh{display:flex;align-items:center;gap:7px;padding:0 3px;font-size:12px}
+.sgh b{font-size:12.5px;font-weight:700;color:var(--text)}
+.sgh .surl{font-size:11.5px;color:var(--text-3)}
+.sgh .scnt{height:18px;padding:0 6px;border-radius:6px;background:color-mix(in srgb,var(--text) 7%,transparent);font-size:11px;font-weight:600;color:var(--text-2);display:inline-flex;align-items:center}
+.sgh .sadd{margin-left:auto;font-size:11.5px;font-weight:600;color:var(--blue);white-space:nowrap}
+.prow{border-radius:14px;padding:9px 13px;background:var(--fill);border:1.5px solid transparent;display:flex;align-items:center;gap:12px;min-width:0}
+.prow.rw{background:var(--glass-2);border-color:color-mix(in srgb,var(--green) 42%,transparent);box-shadow:0 6px 18px -12px color-mix(in srgb,var(--green) 55%,transparent)}
+.prow.ro{background:var(--glass-2);border-color:color-mix(in srgb,var(--blue) 38%,transparent);box-shadow:0 6px 18px -12px color-mix(in srgb,var(--blue) 45%,transparent)}
+.prow.off{opacity:.72}
+.pic{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;flex:none;font-size:12.5px;font-weight:800}
+.pinfo{flex:1;min-width:0}
+.ptop{display:flex;align-items:center;gap:7px;min-width:0}
+.ptop b{font-size:14.5px;font-weight:700;white-space:nowrap}
+.src-pill{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:var(--text-2);background:color-mix(in srgb,var(--text) 6%,transparent);padding:2px 7px 2px 3px;border-radius:6px;white-space:nowrap}
+.sdot{width:16px;height:16px;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:9px;font-weight:800;flex:none}
+.pmeta{display:flex;align-items:center;gap:6px;margin-top:4px;font-size:12px;color:var(--text-2);min-width:0;white-space:nowrap}
+.ai-bdg{display:inline-flex;align-items:center;gap:3px;height:20px;padding:0 6px;border-radius:6px;font-size:11px;font-weight:600;color:var(--purple);background:color-mix(in srgb,var(--purple) 12%,transparent);flex:none}
+.ro-bdg{display:inline-flex;align-items:center;gap:3px;height:20px;padding:0 6px;border-radius:6px;font-size:11px;font-weight:600;color:var(--blue);background:color-mix(in srgb,var(--blue) 12%,transparent);flex:none}
+.okchip{display:inline-flex;align-items:center;gap:3px;color:var(--green);font-size:11.5px;font-weight:600;flex:none}
+.tune{font-size:12px;font-weight:600;color:var(--blue);margin-left:auto;padding-left:6px;flex:none;white-space:nowrap}
+.pseg{display:inline-flex;padding:3px;border-radius:11px;background:color-mix(in srgb,var(--text) 6%,transparent);flex:none;gap:2px}
+.pseg span{height:28px;padding:0 11px;border-radius:8px;font-size:12px;font-weight:600;color:var(--text-3);display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.pseg span.s-ro{background:var(--blue);color:#fff;box-shadow:0 4px 12px -4px color-mix(in srgb,var(--blue) 85%,transparent)}
+.pseg span.s-rw{background:var(--green);color:#fff;box-shadow:0 4px 12px -4px color-mix(in srgb,var(--green) 85%,transparent)}
+html.dark .pseg{background:rgba(255,255,255,.07)}
+.rmb{width:28px;height:28px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;color:var(--text-3);background:transparent;flex:none}
+.pickbtn{height:34px;padding:0 13px;border-radius:10px;background:var(--blue);color:#fff;font-size:12.5px;font-weight:600;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex:none;box-shadow:0 6px 16px -8px color-mix(in srgb,var(--blue) 85%,transparent)}
+.pickmore{border-radius:14px;padding:11px 15px;border:1.5px dashed color-mix(in srgb,var(--text) 16%,transparent);display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--text-2)}
+
+/* 第 4 步与管理员第 0 步 */
 .obx{border-radius:16px;padding:14px 16px;background:var(--fill)}
 .kv3{display:flex;align-items:center;gap:10px;margin-top:10px}
-.kv3>span:first-child{width:72px;white-space:nowrap;flex:none;font-size:12.5px;color:var(--text-3)}
-.kv3 .inp{height:36px;flex:1;font-size:13.5px}
-.mp{display:grid;grid-template-columns:1fr 24px 1fr;gap:8px 12px;align-items:center}
-.mp .inp{height:36px;font-size:13.5px}
-.pvw{border:1px dashed var(--hair);border-radius:14px;padding:12px 16px 6px}.pvh{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-2);padding-bottom:8px}.tk{display:flex;align-items:center;gap:10px;height:36px;font-size:13px;color:var(--text-2);border-top:1px solid var(--hair)}
-.skc{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:14px;background:var(--fill);border:1.5px solid transparent}
-.skc.on{background:var(--glass-2);border-color:color-mix(in srgb,var(--blue) 55%,transparent)}
-.skc b{font-size:14px}.skadd{display:flex;gap:10px;align-items:center;padding:12px 14px;border-radius:14px;border:1.5px dashed var(--hair);color:var(--blue);font-size:13.5px}.skadd .t3{margin-left:auto}
-.ic3{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;color:#fff;flex:none}
-.pubc{border-radius:16px;padding:14px 16px;background:var(--fill);flex:1;min-width:0}
-.chk3{display:flex;align-items:center;gap:12px;padding:9px 0;border-top:1px solid var(--hair);font-size:13.5px}
+.kv3>span:first-child{width:76px;white-space:nowrap;flex:none;font-size:12.5px;color:var(--text-3)}
+.kv3 .inp{height:38px;flex:1;font-size:13.5px}
+.chk3{display:flex;align-items:center;gap:12px;padding:8px 0;border-top:1px solid var(--hair);font-size:13.5px}
 .chk3:first-child{border-top:0}
 .ck3{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;flex:none}
-.big-ok{display:flex;align-items:center;gap:16px;padding:16px 20px;border-radius:18px;background:color-mix(in srgb,var(--green) 10%,var(--glass-2));border:1px solid color-mix(in srgb,var(--green) 30%,transparent)}
+.big-ok{display:flex;align-items:center;gap:16px;padding:14px 18px;border-radius:18px;background:color-mix(in srgb,var(--green) 10%,var(--glass-2));border:1px solid color-mix(in srgb,var(--green) 30%,transparent)}
+.tk{display:flex;align-items:center;gap:8px;height:34px;padding:0 10px;border-radius:10px;font-size:12.5px;color:var(--text-2);background:var(--glass-2)}
 </style>
       <div class="obx" style="margin-top:20px;padding:18px 20px">
         <div class="kv3" style="margin-top:12px"><span>AI 引擎</span><div class="inp sel">Pi（默认内置 · 多模型）<i data-i="chevd" data-s="14"></i></div></div>
-        <div class="kv3" style="margin-top:12px"><span>模型</span><div class="inp sel">gpt-6.2-sol<i data-i="chevd" data-s="14"></i></div></div>
+        <div class="kv3" style="margin-top:12px"><span>主力模型</span><div class="inp sel">gpt-6.2-sol<i data-i="chevd" data-s="14"></i></div></div>
+        <div class="kv3" style="margin-top:12px"><span>快速模型</span><div class="inp sel">gpt-6.2-mini（报错解读 / 翻译 / 轻问答）<i data-i="chevd" data-s="14"></i></div></div>
         <div class="kv3" style="margin-top:12px"><span>连接方式</span><div class="seg" style="flex:1"><span class="on" style="flex:1;justify-content:center">公司网关</span><span style="flex:1;justify-content:center">API Key</span></div></div>
         <div class="kv3" style="margin-top:12px"><span>网关地址</span><div class="inp"><span class="mono f12">https://ai-gateway.tita.cloud</span></div></div>
         <div class="kv3" style="margin-top:12px"><span>访问令牌</span><div class="inp"><span class="mono f12">•••••••••••••••• 3f9a</span></div></div>
-        <div class="row g10" style="margin:16px 0 0 82px">
+        <div class="row g10" style="margin:16px 0 0 86px">
           <button class="btn2 a-sec" style="background:var(--glass-2)"><i data-i="zap" data-s="14"></i>试一下</button>
-          <span class="okt"><i data-i="check" data-s="14" data-w="3"></i>已连通 · Bot-02 实际调用了一次，1.2 秒</span>
+          <span class="okt"><i data-i="check" data-s="14" data-w="3"></i>已连通 · Bot-02 实际调用了一次（1.2 秒），4 项模型能力探测完成</span>
         </div>
       </div>
-      <div class="obx" style="margin-top:14px;padding:14px 20px">
-        <div class="row g8"><b class="f15">Bot 用的 GitLab 账号</b><span class="grow"></span><span class="f12 t3">拉代码、推 fix/、提 MR，不给合入权限 · 令牌都加密存在内网服务器上 · Jira、Tita 采集账号在「来源采集」配</span></div>
-        <div class="kv3" style="margin-top:12px"><span>账号</span><div class="inp"><span class="mono f13">bot-fix</span><span class="f12 t3" style="margin-left:auto">从令牌识别</span></div></div>
-        <div class="kv3" style="margin-top:12px"><span>访问令牌</span><div class="inp"><span class="mono f12">•••••••••••••••• 91d0</span></div></div>
-        <div class="row g10" style="margin:14px 0 0 82px">
-          <button class="btn2 a-sec" style="background:var(--glass-2)"><i data-i="zap" data-s="14"></i>试连接</button>
-          <span class="okt"><i data-i="check" data-s="14" data-w="3"></i>已连通 · 能拉取、能提 MR，没有合入权限（正好）</span>
-        </div>
+      <div class="note" style="margin-top:16px">
+        <i data-i="link" data-s="15" style="color:var(--blue);margin-top:1px"></i>
+        <span><b>外部工具统一走连接器：</b>GitLab、GitHub、Gitee、Jira、Tita 等平台鉴权不再写死在这里，下一步「连接器与鉴权」中统一接入，并支持本机代码目录与插件市场扩展。</span>
       </div>
 
     </div>
-    <div class="ff"><span class="grow"></span><button class="bigb pri">下一步：选择项目<i data-i="chevr" data-s="16" data-w="2.4"></i></button></div>
+    <div class="ff"><span class="grow"></span><button class="bigb pri">下一步：连接器与鉴权<i data-i="chevr" data-s="16" data-w="2.4"></i></button></div>
   </section>
 </div>
 </div><script src="icons.js"></script></body></html>

@@ -1,0 +1,353 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>第一次使用 · 授权项目与代码</title>
+<link rel="stylesheet" href="../v3/base.css"><link rel="stylesheet" href="../v4/apple.css"><link rel="stylesheet" href="pc.css">
+<script>(function(){var q=new URLSearchParams(location.search);if(q.get('mode')==='dark')document.documentElement.classList.add('dark')})()</script>
+<style>
+.root{display:block;background:var(--wall)}
+.top{position:absolute;left:32px;right:32px;top:22px;display:flex;align-items:center;gap:12px}
+.wz{position:absolute;left:120px;right:120px;top:80px;bottom:36px;border-radius:30px;display:flex;overflow:hidden}
+.sl{width:300px;flex:none;padding:26px 24px 22px;border-right:1px solid var(--hair);background:color-mix(in srgb,var(--text) 2.5%,transparent);display:flex;flex-direction:column}
+.st2{display:flex;gap:13px;position:relative;padding-bottom:20px}
+.st2:not(:last-child)::after{content:"";position:absolute;left:12.5px;top:28px;bottom:3px;width:1.5px;background:var(--hair)}
+.st2.done::after{background:color-mix(in srgb,var(--green) 55%,transparent)}
+.sc2{width:26px;height:26px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:800}
+.done .sc2{background:var(--green);color:#fff}
+.cur .sc2{background:var(--blue);color:#fff;box-shadow:0 0 0 5px color-mix(in srgb,var(--blue) 20%,transparent)}
+.todo .sc2{border:1.5px solid color-mix(in srgb,var(--text) 22%,transparent);color:var(--text-3)}
+.st2 b{display:block;font-size:14.5px;font-weight:600;line-height:26px}
+.todo b{color:var(--text-2);font-weight:500}
+.cur b{color:var(--blue);font-weight:700}
+.st2 em{display:block;font-style:normal;font-size:12px;color:var(--text-3);margin-top:1px;line-height:1.45}
+.done em{color:var(--text-2)}
+.skip .sc2{background:var(--fill);color:var(--text-3)}
+.skip b{color:var(--text-2);font-weight:500}
+.st2.skip::after{background:color-mix(in srgb,var(--green) 55%,transparent)}
+.why{border-radius:14px;padding:12px 13px;background:color-mix(in srgb,var(--purple) 7%,var(--fill));border:1px solid color-mix(in srgb,var(--purple) 18%,transparent);font-size:12px;line-height:1.55;color:var(--text-2);margin-bottom:18px}
+.why .wh{display:flex;align-items:center;gap:6px;font-weight:700;color:var(--text);margin-bottom:5px;font-size:12.5px}
+.fm{flex:1;min-width:0;display:flex;flex-direction:column}
+.fb{flex:1;padding:26px 36px 0;min-height:0;overflow:hidden;display:flex;flex-direction:column}
+.ff{display:flex;align-items:center;gap:12px;padding:16px 36px;border-top:1px solid var(--hair)}
+.lab{font-size:13.5px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.lab span{font-weight:400;font-size:12px;color:var(--text-3)}
+.inp{height:44px;border-radius:12px;background:var(--fill);display:flex;align-items:center;gap:10px;padding:0 13px;font-size:14px;color:var(--text);min-width:0}
+.inp>i{color:var(--text-3)}
+.inp.focus{background:var(--glass-2);box-shadow:0 0 0 2px var(--blue),0 0 0 5px color-mix(in srgb,var(--blue) 18%,transparent)}
+.dots{letter-spacing:3px;font-size:15px}
+.okt{display:inline-flex;align-items:center;gap:5px;color:var(--green);font-size:12.5px;font-weight:600;white-space:nowrap}
+.ing{display:inline-flex;align-items:center;gap:7px;color:var(--blue);font-size:12.5px;font-weight:600;white-space:nowrap}
+.spin{width:13px;height:13px;border-radius:50%;border:2px solid color-mix(in srgb,var(--blue) 25%,transparent);border-top-color:var(--blue);flex:none}
+.rt{display:grid;grid-template-columns:140px 1fr 160px 128px 116px;gap:8px 10px;align-items:center}
+.au{background:transparent;box-shadow:inset 0 0 0 1px var(--hair)}
+.aut{flex:none;font-size:11px;font-weight:600;color:var(--purple);background:color-mix(in srgb,var(--purple) 12%,transparent);height:20px;padding:0 6px;border-radius:6px;display:inline-flex;align-items:center}
+.cr{gap:8px;padding:0 10px;font-size:13px}
+.crt{flex:none;height:20px;padding:0 6px;border-radius:6px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;background:color-mix(in srgb,var(--text) 8%,transparent);color:var(--text-2)}
+.cr-x{box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--orange) 70%,transparent);color:var(--orange)}
+.wnt{color:var(--orange);font-size:12.5px;font-weight:600;white-space:nowrap}
+.pm{font-size:13px;gap:7px;padding:0 10px}
+.pm-e{color:var(--green)}.pm-e>i{color:var(--green)}
+.pm-v{color:var(--blue)}.pm-v>i{color:var(--blue)}
+.pm-l{color:var(--text-3);background:transparent;box-shadow:inset 0 0 0 1px var(--hair)}
+.rt .inp{height:38px}
+.rsel{font-weight:600;font-size:13.5px;padding:0 10px 0 12px}
+.rh{font-size:12px;color:var(--text-3);padding:0 2px 6px}
+.envs{display:grid;grid-template-columns:1fr 1fr 1fr 120px;gap:10px}
+.env{border-radius:14px;padding:11px 13px;background:var(--fill);border:1.5px solid transparent;min-width:0}
+.env b{font-size:14px}
+.env.on{background:var(--glass-2);border-color:var(--blue);box-shadow:0 6px 16px -10px color-mix(in srgb,var(--blue) 70%,transparent)}
+.env.add{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-size:13px;color:var(--text-3);background:transparent;border:1.5px dashed color-mix(in srgb,var(--text) 18%,transparent)}
+.bigb{height:44px;border-radius:13px;border:0;font-size:14.5px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 20px;white-space:nowrap}
+.pri{background:var(--blue);color:#fff;box-shadow:0 10px 22px -10px color-mix(in srgb,var(--blue) 85%,transparent)}
+.secb{background:var(--fill);color:var(--text)}
+.note{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;color:var(--text-2);line-height:1.5;padding:9px 13px;border-radius:13px;background:color-mix(in srgb,var(--blue) 7%,transparent)}
+.pbar{height:4px;border-radius:2px;background:var(--fill);overflow:hidden}
+.pbar i{display:block;height:100%;border-radius:2px;background:linear-gradient(90deg,#4F8BFF,#9B5CFF)}
+</style></head><body><div class="root">
+<div class="top">
+  <img src="logo.svg" width="40" height="40" alt="" style="margin:-4px">
+  <span class="tt"><b>云匠</b><em>CloudCraft</em></span>
+  <span class="grow"></span>
+  <span class="f13 t2">稍后再填，先进入工作台 ›</span>
+</div>
+<div class="wz glass">
+  <aside class="sl">
+    <div class="f12 t3">第一次使用</div>
+    <div style="font-size:21px;font-weight:800;margin-top:4px">接入工具与权限</div>
+    <div class="f12 t2" style="margin-top:6px;line-height:1.55">只填 AI 猜不出的鉴权与权限边界，<br>其余由 Bot 自动探测与匹配</div>
+    <div style="margin-top:22px"><div class="st2 done"><span class="sc2"><i data-i="check" data-s="14" data-w="3"></i></span><div><b>连接器与鉴权</b><em>GitLab · GitHub · 本机 · Jira</em></div></div><div class="st2 cur"><span class="sc2">2</span><div><b>授权项目与代码</b><em>拉取仓库，划定可修改 / 仅查看</em></div></div><div class="st2 todo"><span class="sc2">3</span><div><b>环境与账号</b><em>复现入口与数据权限 · 可跳过</em></div></div><div class="st2 todo"><span class="sc2">4</span><div><b>AI 体检并开工</b><em>试拉取与构建，通过即开干</em></div></div></div>
+    <div class="grow"></div>
+    <div class="why"><div class="wh"><i data-i="spark" data-s="13" style="color:var(--purple)"></i>只留你选中的仓库</div>大公司连接器里往往有上百个仓库，这里绝不平铺全量清单；你通过搜索按需挑出相关项目，再切「可修改 / 仅查看」即可。</div>
+    <div class="row f12 t3" style="margin-bottom:8px"><span class="grow">第 2 步，共 4 步</span><span>已完成 1 步</span></div>
+    <div class="pbar"><i style="width:50%"></i></div>
+  </aside>
+  <section class="fm">
+    <div class="fb">
+      <div class="row g10">
+        <div class="grow"><div class="f12" style="color:var(--blue);font-weight:700">第 2 步 · 授权项目与代码</div>
+          <div style="font-size:24px;font-weight:800;margin-top:5px">挑选要授权给 Bot 的项目与权限</div>
+          <div class="f13 t2" style="margin-top:5px">点「+ 从已连来源挑选仓库」搜索添加；这里只保留你选中的仓库，分支与构建命令自动推测</div></div>
+        <span class="chip2" style="align-self:flex-start"><i data-i="spark" data-s="13" style="color:var(--purple)"></i>不知道怎么选？问 AI</span>
+      </div>
+<style>
+.sech{display:flex;align-items:center;gap:8px;margin-top:18px;margin-bottom:9px}
+.sech b{font-size:13.5px;font-weight:700}
+.sech .sub{font-size:12px;color:var(--text-3)}
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.ccard{border-radius:16px;padding:13px 15px;background:var(--glass-2);border:1.5px solid color-mix(in srgb,var(--green) 36%,transparent);box-shadow:0 6px 18px -12px color-mix(in srgb,var(--green) 45%,transparent);display:flex;flex-direction:column;gap:8px;min-width:0}
+.ccard.opt{border-color:color-mix(in srgb,var(--blue) 30%,transparent);box-shadow:0 6px 18px -12px color-mix(in srgb,var(--blue) 35%,transparent)}
+.ccard.addc{background:transparent;border:1.5px dashed color-mix(in srgb,var(--text) 18%,transparent);box-shadow:none;justify-content:center;align-items:flex-start;gap:6px}
+.cic{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:800;flex:none}
+.okpill{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600;color:var(--green);white-space:nowrap}
+.cmeta{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text-2);min-width:0}
+.cfoot{display:flex;align-items:center;gap:8px;padding-top:8px;border-top:1px solid var(--hair);font-size:12px;color:var(--text-3)}
+.cfoot .act{margin-left:auto;color:var(--blue);font-weight:600;white-space:nowrap}
+.qadd{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:nowrap}
+.qbtn{height:32px;padding:0 11px;border-radius:10px;background:var(--fill);border:1px solid var(--hair);display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--text-2);white-space:nowrap}
+.qdot{width:17px;height:17px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:800;flex:none}
+.stat-pill{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 10px;border-radius:9px;font-size:12px;font-weight:600;white-space:nowrap}
+.sp-g{background:color-mix(in srgb,var(--green) 13%,transparent);color:var(--green)}
+.sp-b{background:color-mix(in srgb,var(--blue) 13%,transparent);color:var(--blue)}
+
+/* 第 2 步：多来源聚合与三态读写权限 */
+.ptbar{display:flex;align-items:center;gap:8px;margin-top:16px}
+.srcsel{height:34px;padding:0 10px;border-radius:10px;background:var(--glass-2);border:1px solid var(--stroke);display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;white-space:nowrap;flex:none}
+.sdots{display:inline-flex;align-items:center}
+.sdots i{width:16px;height:16px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:9px;font-weight:800;font-style:normal;border:1.5px solid var(--glass-2)}
+.sdots i+i{margin-left:-4px}
+.srch2{height:34px;flex:1;min-width:140px;border-radius:10px;background:var(--fill);padding:0 11px;display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--text-3);border:1px solid var(--hair)}
+.fchip{height:30px;padding:0 10px;border-radius:9px;font-size:12px;font-weight:600;color:var(--text-2);background:var(--fill);display:inline-flex;align-items:center;gap:4px;white-space:nowrap;flex:none}
+.fchip.on{background:var(--blue);color:#fff}
+.fchip em{font-style:normal;opacity:.72;font-size:11px;font-weight:500}
+.addbtn{height:34px;padding:0 12px;border-radius:10px;background:var(--fill);border:1px solid var(--hair);font-size:12.5px;font-weight:600;color:var(--text);display:inline-flex;align-items:center;gap:5px;white-space:nowrap;flex:none}
+.plist{display:flex;flex-direction:column;gap:10px;margin-top:11px;flex:1;min-height:0}
+.sgrp{display:flex;flex-direction:column;gap:6px}
+.sgh{display:flex;align-items:center;gap:7px;padding:0 3px;font-size:12px}
+.sgh b{font-size:12.5px;font-weight:700;color:var(--text)}
+.sgh .surl{font-size:11.5px;color:var(--text-3)}
+.sgh .scnt{height:18px;padding:0 6px;border-radius:6px;background:color-mix(in srgb,var(--text) 7%,transparent);font-size:11px;font-weight:600;color:var(--text-2);display:inline-flex;align-items:center}
+.sgh .sadd{margin-left:auto;font-size:11.5px;font-weight:600;color:var(--blue);white-space:nowrap}
+.prow{border-radius:14px;padding:9px 13px;background:var(--fill);border:1.5px solid transparent;display:flex;align-items:center;gap:12px;min-width:0}
+.prow.rw{background:var(--glass-2);border-color:color-mix(in srgb,var(--green) 42%,transparent);box-shadow:0 6px 18px -12px color-mix(in srgb,var(--green) 55%,transparent)}
+.prow.ro{background:var(--glass-2);border-color:color-mix(in srgb,var(--blue) 38%,transparent);box-shadow:0 6px 18px -12px color-mix(in srgb,var(--blue) 45%,transparent)}
+.prow.off{opacity:.72}
+.pic{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;flex:none;font-size:12.5px;font-weight:800}
+.pinfo{flex:1;min-width:0}
+.ptop{display:flex;align-items:center;gap:7px;min-width:0}
+.ptop b{font-size:14.5px;font-weight:700;white-space:nowrap}
+.src-pill{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:var(--text-2);background:color-mix(in srgb,var(--text) 6%,transparent);padding:2px 7px 2px 3px;border-radius:6px;white-space:nowrap}
+.sdot{width:16px;height:16px;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:9px;font-weight:800;flex:none}
+.pmeta{display:flex;align-items:center;gap:6px;margin-top:4px;font-size:12px;color:var(--text-2);min-width:0;white-space:nowrap}
+.ai-bdg{display:inline-flex;align-items:center;gap:3px;height:20px;padding:0 6px;border-radius:6px;font-size:11px;font-weight:600;color:var(--purple);background:color-mix(in srgb,var(--purple) 12%,transparent);flex:none}
+.ro-bdg{display:inline-flex;align-items:center;gap:3px;height:20px;padding:0 6px;border-radius:6px;font-size:11px;font-weight:600;color:var(--blue);background:color-mix(in srgb,var(--blue) 12%,transparent);flex:none}
+.okchip{display:inline-flex;align-items:center;gap:3px;color:var(--green);font-size:11.5px;font-weight:600;flex:none}
+.tune{font-size:12px;font-weight:600;color:var(--blue);margin-left:auto;padding-left:6px;flex:none;white-space:nowrap}
+.pseg{display:inline-flex;padding:3px;border-radius:11px;background:color-mix(in srgb,var(--text) 6%,transparent);flex:none;gap:2px}
+.pseg span{height:28px;padding:0 11px;border-radius:8px;font-size:12px;font-weight:600;color:var(--text-3);display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.pseg span.s-ro{background:var(--blue);color:#fff;box-shadow:0 4px 12px -4px color-mix(in srgb,var(--blue) 85%,transparent)}
+.pseg span.s-rw{background:var(--green);color:#fff;box-shadow:0 4px 12px -4px color-mix(in srgb,var(--green) 85%,transparent)}
+html.dark .pseg{background:rgba(255,255,255,.07)}
+.rmb{width:28px;height:28px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;color:var(--text-3);background:transparent;flex:none}
+.pickbtn{height:34px;padding:0 13px;border-radius:10px;background:var(--blue);color:#fff;font-size:12.5px;font-weight:600;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex:none;box-shadow:0 6px 16px -8px color-mix(in srgb,var(--blue) 85%,transparent)}
+.pickmore{border-radius:14px;padding:11px 15px;border:1.5px dashed color-mix(in srgb,var(--text) 16%,transparent);display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--text-2)}
+
+/* 第 4 步与管理员第 0 步 */
+.obx{border-radius:16px;padding:14px 16px;background:var(--fill)}
+.kv3{display:flex;align-items:center;gap:10px;margin-top:10px}
+.kv3>span:first-child{width:76px;white-space:nowrap;flex:none;font-size:12.5px;color:var(--text-3)}
+.kv3 .inp{height:38px;flex:1;font-size:13.5px}
+.chk3{display:flex;align-items:center;gap:12px;padding:8px 0;border-top:1px solid var(--hair);font-size:13.5px}
+.chk3:first-child{border-top:0}
+.ck3{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;flex:none}
+.big-ok{display:flex;align-items:center;gap:16px;padding:14px 18px;border-radius:18px;background:color-mix(in srgb,var(--green) 10%,var(--glass-2));border:1px solid color-mix(in srgb,var(--green) 30%,transparent)}
+.tk{display:flex;align-items:center;gap:8px;height:34px;padding:0 10px;border-radius:10px;font-size:12.5px;color:var(--text-2);background:var(--glass-2)}
+</style>
+      <div class="ptbar">
+        <span class="pickbtn"><i data-i="plus" data-s="14" data-w="2.4"></i>从已连来源挑选仓库</span>
+        <div class="srch2"><i data-i="search" data-s="14"></i><span>在已选的 4 个仓库中筛选…</span></div>
+        <span class="fchip on">已选<em>4</em></span>
+        <span class="fchip">可修改<em>2</em></span>
+        <span class="fchip">仅查看<em>2</em></span>
+      </div>
+
+      <div class="plist">
+        <!-- 分组 1：公司 GitLab -->
+        <div class="sgrp">
+          <div class="sgh">
+            <span class="sdot" style="background:#FC6D26;width:18px;height:18px;font-size:10px">G</span>
+            <b>公司 GitLab</b>
+            <span class="mono surl">https://git.tita.cloud</span>
+            <span class="scnt">已选 2 / 28</span>
+            <span class="sadd">+ 从此来源挑选 ›</span>
+          </div>
+          <div class="prow rw">
+            <span class="pic" style="background:linear-gradient(155deg,#5AA0FF,#1F6FFF)">OKR</span>
+            <div class="pinfo">
+              <div class="ptop">
+                <b>OKR · 目标管理</b>
+                <span class="src-pill" style="padding:2px 7px"><span class="mono">fe/tita-okr-web</span></span>
+                <span class="okchip"><i data-i="check" data-s="13" data-w="2.8"></i>已探测</span>
+              </div>
+              <div class="pmeta">
+                <span class="ai-bdg"><i data-i="spark" data-s="11"></i>AI 推测</span>
+                <span class="ell"><span class="mono">master</span> → <span class="mono">dev-okr</span> · <span class="mono">pnpm build-prod</span> · 规范 <span class="mono">AGENTS.md</span></span>
+                <span class="tune">微调 ›</span>
+              </div>
+            </div>
+            <div class="pseg"><span><i data-i="eye" data-s="12"></i>仅查看</span><span class="s-rw"><i data-i="edit" data-s="12"></i>可修改</span></div>
+            <span class="rmb" title="移出授权列表"><i data-i="x" data-s="14"></i></span>
+          </div>
+          <div class="prow ro">
+            <span class="pic" style="background:linear-gradient(155deg,#4FD6E6,#0E8FB3)">API</span>
+            <div class="pinfo">
+              <div class="ptop">
+                <b>OKR 后端服务</b>
+                <span class="src-pill" style="padding:2px 7px"><span class="mono">be/tita-okr-api</span></span>
+                <span class="tag tg-b" style="height:19px;font-size:10.5px">接口参考</span>
+              </div>
+              <div class="pmeta">
+                <span class="ro-bdg"><i data-i="lock" data-s="11"></i>只读隔离</span>
+                <span class="ell">辅助核对接口字段、错误码与权限逻辑，宿主机硬拦截写入与推送</span>
+              </div>
+            </div>
+            <div class="pseg"><span class="s-ro"><i data-i="eye" data-s="12"></i>仅查看</span><span><i data-i="edit" data-s="12"></i>可修改</span></div>
+            <span class="rmb" title="移出授权列表"><i data-i="x" data-s="14"></i></span>
+          </div>
+        </div>
+
+        <!-- 分组 2：本机代码目录 -->
+        <div class="sgrp">
+          <div class="sgh">
+            <span class="sdot" style="background:#3B82F6;width:18px;height:18px"><i data-i="folder" data-s="10" data-w="2.5"></i></span>
+            <b>本机代码目录</b>
+            <span class="mono surl">~/workspace</span>
+            <span class="scnt">已选 1 / 4</span>
+            <span class="sadd">+ 从此来源挑选 ›</span>
+          </div>
+          <div class="prow rw">
+            <span class="pic" style="background:linear-gradient(155deg,#5EDB7A,#22A748)">审批</span>
+            <div class="pinfo">
+              <div class="ptop">
+                <b>审批 · 协同办公</b>
+                <span class="src-pill" style="padding:2px 7px"><span class="mono">~/workspace/approval-web</span></span>
+                <span class="okchip"><i data-i="check" data-s="13" data-w="2.8"></i>已探测</span>
+              </div>
+              <div class="pmeta">
+                <span class="ai-bdg"><i data-i="spark" data-s="11"></i>AI 推测</span>
+                <span class="ell"><span class="mono">main</span> → <span class="mono">test</span> · <span class="mono">pnpm build</span> · 本机 <span class="mono">worktree</span> 隔离修改</span>
+                <span class="tune">微调 ›</span>
+              </div>
+            </div>
+            <div class="pseg"><span><i data-i="eye" data-s="12"></i>仅查看</span><span class="s-rw"><i data-i="edit" data-s="12"></i>可修改</span></div>
+            <span class="rmb" title="移出授权列表"><i data-i="x" data-s="14"></i></span>
+          </div>
+        </div>
+
+        <!-- 分组 3：GitHub -->
+        <div class="sgrp">
+          <div class="sgh">
+            <span class="sdot" style="background:#1F2328;width:18px;height:18px;font-size:9px">GH</span>
+            <b>GitHub</b>
+            <span class="mono surl">github.com/tita-org</span>
+            <span class="scnt">已选 1 / 14</span>
+            <span class="sadd">+ 从此来源挑选 ›</span>
+          </div>
+          <div class="prow ro">
+            <span class="pic" style="background:linear-gradient(155deg,#B78BFF,#7B42F6)">UI</span>
+            <div class="pinfo">
+              <div class="ptop">
+                <b>基础组件库 · @tita/ui</b>
+                <span class="src-pill" style="padding:2px 7px"><span class="mono">tita-org/ui-kit</span></span>
+                <span class="tag tg-b" style="height:19px;font-size:10.5px">共享参考</span>
+              </div>
+              <div class="pmeta">
+                <span class="ro-bdg"><i data-i="lock" data-s="11"></i>只读隔离</span>
+                <span class="ell">供 Bot 跨仓查组件 API 与主题变量，宿主机硬拦截任何代码写入与提 PR</span>
+              </div>
+            </div>
+            <div class="pseg"><span class="s-ro"><i data-i="eye" data-s="12"></i>仅查看</span><span><i data-i="edit" data-s="12"></i>可修改</span></div>
+            <span class="rmb" title="移出授权列表"><i data-i="x" data-s="14"></i></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="note" style="margin-bottom:10px;padding:8px 13px">
+        <i data-i="shield" data-s="15" style="color:var(--blue);margin-top:1px"></i>
+        <span><b>按连接器分组 · 最小授权：</b>Bot 只访问你从各连接器主动选入的这 4 个仓库，且仅在「可修改」仓拉 <span class="mono">fix/</span> 分支提 MR（合入仍需真人审）；修单时自动路由到对应项目。</span>
+      </div>
+    </div>
+    <div class="ff"><button class="bigb secb"><i data-i="chevl" data-s="16" data-w="2.4"></i>上一步</button><span class="stat-pill sp-g"><i data-i="edit" data-s="13"></i>可修改 2 个</span><span class="stat-pill sp-b"><i data-i="eye" data-s="13"></i>仅查看 2 个</span><span class="grow"></span><button class="bigb pri">下一步：环境与账号<i data-i="chevr" data-s="16" data-w="2.4"></i></button></div>
+  </section>
+</div>
+<style>
+.scr{position:fixed;inset:0;z-index:30;background:rgba(15,20,40,.28);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+html.dark .scr{background:rgba(0,0,0,.48)}
+.drw{position:fixed;z-index:31;top:24px;right:24px;bottom:24px;width:660px;border-radius:26px;display:flex;flex-direction:column;overflow:hidden;
+  background:rgba(255,255,255,.96);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);box-shadow:0 30px 80px -20px rgba(10,20,60,.45),0 0 0 1px var(--stroke)}
+html.dark .drw{background:rgba(34,36,50,.96)}
+.drw .dh{display:flex;gap:12px;align-items:center;padding:18px 24px 14px;border-bottom:1px solid var(--hair)}
+.drw .db{flex:1;display:flex;flex-direction:column;gap:12px;padding:16px 24px;min-height:0;overflow:hidden}
+.drw .df{display:flex;align-items:center;gap:10px;padding:14px 24px;border-top:1px solid var(--hair)}
+.xb{width:32px;height:32px;border-radius:50%;background:var(--fill);display:flex;align-items:center;justify-content:center;color:var(--text-2);flex:none}
+.ic3{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:#fff;flex:none;font-size:15px;font-weight:800}
+.ctabs{display:flex;gap:8px;align-items:center}
+.ctab{height:34px;padding:0 12px;border-radius:10px;background:var(--fill);font-size:12.5px;font-weight:600;color:var(--text-2);display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.ctab.on{background:var(--blue);color:#fff}
+.ctab em{font-style:normal;opacity:.75;font-size:11px}
+.pksrch{height:38px;border-radius:11px;background:var(--glass-2);border:1.5px solid var(--blue);box-shadow:0 0 0 4px color-mix(in srgb,var(--blue) 14%,transparent);padding:0 12px;display:flex;align-items:center;gap:8px;font-size:13px}
+.pkg{font-size:11.5px;font-weight:700;color:var(--text-3);margin-top:4px;display:flex;align-items:center;gap:6px}
+.pkr{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:13px;background:var(--fill);border:1.5px solid transparent}
+.pkr.on{background:var(--glass-2);border-color:color-mix(in srgb,var(--blue) 45%,transparent)}
+.pkc{width:18px;height:18px;border-radius:6px;border:1.5px solid color-mix(in srgb,var(--text) 24%,transparent);display:inline-flex;align-items:center;justify-content:center;flex:none}
+.pkc.on{border:0;background:var(--blue);color:#fff}
+.pklist{display:flex;flex-direction:column;gap:7px;flex:1;min-height:0;overflow:hidden;-webkit-mask-image:linear-gradient(180deg,#000 0%,#000 86%,transparent 100%);mask-image:linear-gradient(180deg,#000 0%,#000 86%,transparent 100%)}
+</style>
+<div class="scr"></div>
+<div class="drw">
+  <div class="dh">
+    <span class="ic3" style="background:linear-gradient(155deg,#5AA0FF,#1F6FFF)"><i data-i="search" data-s="18" data-w="2.2"></i></span>
+    <div class="grow">
+      <div style="font-size:18px;font-weight:800">从已连来源挑选仓库</div>
+      <div class="f12 t3" style="margin-top:2px">按连接器与关键词主动筛选，勾选的仓库才会留到第 2 步授权列表</div>
+    </div>
+    <span class="xb"><i data-i="x" data-s="16" data-w="2.2"></i></span>
+  </div>
+  <div class="db">
+    <div class="ctabs">
+      <span class="ctab on">G 公司 GitLab <em>28</em></span>
+      <span class="ctab">GH GitHub <em>14</em></span>
+      <span class="ctab"><i data-i="folder" data-s="13"></i>本机目录 <em>4</em></span>
+      <span class="grow"></span>
+      <span class="f12 lnk">+ 新增连接器</span>
+    </div>
+    <div class="pksrch">
+      <i data-i="search" data-s="15" style="color:var(--blue)"></i>
+      <span class="grow">okr</span>
+      <span class="tag tg-n" style="height:20px;font-size:11px">命中 4 / 28 个</span>
+      <i data-i="x" data-s="14" style="color:var(--text-3)"></i>
+    </div>
+    <div class="pklist">
+      <div class="pkg"><i data-i="folder" data-s="12"></i>Group: fe（前端业务线）</div>
+      <div class="pkr on"><span class="pkc on"><i data-i="check" data-s="14" data-w="3"></i></span><div class="grow" style="min-width:0">
+          <div class="row g8"><b class="f13">OKR · 目标管理</b><span class="mono f11 t3 ell">fe/tita-okr-web</span></div>
+          <div class="f12 t3 ell" style="margin-top:2px">最近提交 2 小时前 · TypeScript / React · 默认分支 master</div></div><span class="tag tg-g" style="height:20px;font-size:11px">已加入 · 可修改</span></div>
+      <div class="pkr"><span class="pkc"></span><div class="grow" style="min-width:0">
+          <div class="row g8"><b class="f13">OKR 移动端 H5</b><span class="mono f11 t3 ell">fe/tita-okr-h5</span></div>
+          <div class="f12 t3 ell" style="margin-top:2px">最近提交 5 天前 · Vue 3 · 默认分支 main</div></div><span class="f11 t3">未选</span></div>
+      <div class="pkg"><i data-i="folder" data-s="12"></i>Group: be（后端服务）</div>
+      <div class="pkr on"><span class="pkc on"><i data-i="check" data-s="14" data-w="3"></i></span><div class="grow" style="min-width:0">
+          <div class="row g8"><b class="f13">OKR 后端服务</b><span class="mono f11 t3 ell">be/tita-okr-api</span></div>
+          <div class="f12 t3 ell" style="margin-top:2px">最近提交 1 小时前 · Go / Gin · 默认分支 master</div></div><span class="tag tg-b" style="height:20px;font-size:11px">已加入 · 仅查看</span></div>
+      <div class="pkr"><span class="pkc"></span><div class="grow" style="min-width:0">
+          <div class="row g8"><b class="f13">OKR 数据报表服务</b><span class="mono f11 t3 ell">be/tita-okr-report</span></div>
+          <div class="f12 t3 ell" style="margin-top:2px">最近提交 12 天前 · Java / SpringBoot · 默认分支 master</div></div><span class="f11 t3">未选</span></div>
+      <div class="pkg"><i data-i="folder" data-s="12"></i>未匹配搜索词的其余 24 个仓库已折叠</div>
+      <div class="pkr"><span class="pkc"></span><div class="grow" style="min-width:0">
+          <div class="row g8"><b class="f13">薪酬 · 人事</b><span class="mono f11 t3 ell">fe/tita-payroll-web</span></div>
+          <div class="f12 t3 ell" style="margin-top:2px">输入其他关键词或清空搜索即可继续挑选</div></div><span class="f11 t3">未选</span></div>
+    </div>
+  </div>
+  <div class="df">
+    <span class="f12 t2">新加入的仓库默认设为<b>仅查看</b>，回到列表可随时切「可修改」</span>
+    <span class="grow"></span>
+    <button class="bigb secb" style="height:40px">取消</button>
+    <button class="bigb pri" style="height:40px">确认保留（共 4 个）</button>
+  </div>
+</div></div><script src="icons.js"></script></body></html>
