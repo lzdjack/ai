@@ -180,7 +180,7 @@ html.dark .island{
   flex:none;
 }
 .isl-r{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text-3);white-space:nowrap}
-.isl-pct{font-family:"SF Mono",ui-monospace,monospace;font-size:13px;font-weight:700;color:var(--blue)}
+.isl-pct{font-family:"SF Mono",ui-monospace,monospace;font-size:13px;font-weight:700;color:var(--ink-blue)}
 .isl-bot{
   display:flex;align-items:center;justify-content:space-between;gap:10px;
   margin-top:11px;padding-top:10px;border-top:1px solid var(--hair);font-size:12px;
@@ -191,7 +191,7 @@ html.dark .island{
 .dot.run{width:18px;border-radius:99px;background:linear-gradient(90deg,var(--blue),var(--teal))}
 .step-cnt{margin-left:5px;font-family:"SF Mono",ui-monospace,monospace;font-size:11.5px;color:var(--text-3)}
 .isl-mono{font-family:"SF Mono",ui-monospace,monospace;font-size:11.5px;color:var(--text-3);white-space:nowrap}
-.isl-lnk{color:var(--blue);font-weight:600;font-size:12px;white-space:nowrap}
+.isl-lnk{color:var(--ink-blue);font-weight:600;font-size:12px;white-space:nowrap}
 
 /* 底部克制操作区 */
 .bottom{
@@ -199,7 +199,7 @@ html.dark .island{
   display:flex;flex-direction:column;align-items:center;gap:12px;z-index:2;
 }
 .ghost-btn{
-  height:42px;padding:0 24px;border-radius:99px;
+  height:var(--ctl-lg);padding:0 24px;border-radius:99px;
   display:inline-flex;align-items:center;gap:8px;
   font-size:13.5px;font-weight:600;color:var(--text);
   background:var(--glass);
@@ -213,7 +213,7 @@ html.dark .ghost-btn{
 }
 .sub-links{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--text-3)}
 .vbar{width:1px;height:11px;background:var(--hair);display:inline-block}
-.sub-links .lnk{color:var(--blue);font-weight:600}
+.sub-links .lnk{color:var(--ink-blue);font-weight:600}
 '''
 
 ARR = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 5l7 7-7 7"/></svg>'

@@ -15,6 +15,7 @@
 
   /* —— WCAG 2.1 AA 语义文字/图标专用色（在 glass / glass-2 / 光斑上均 ≥ 4.5:1） —— */
   --ink-blue:#005CC5;--ink-green:#137333;--ink-orange:#9A4D00;--ink-red:#B91C1C;--ink-purple:#7E22CE;--ink-teal:#0A6678;
+  --ink-text-3:var(--text-3); /* 供按语义色名拼接的模板兜底（灰色状态） */
 
   /* —— 主按钮 / 成功按钮 / 危险实底按钮高对比实底（#fff 白字 ≥ 4.8:1）与开关开启色 —— */
   --btn-pri-bg:#0066D6;--btn-pri-hover:#0055B8;--btn-pri-active:#004699;

@@ -27,12 +27,11 @@ EXTRA_CSS = '''
 .slot-c{padding:11px 13px;border-radius:14px;background:var(--fill);border:1px solid var(--hair);min-width:0;overflow:hidden}
 .cmd-row{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:11px;background:var(--fill);font-size:12.5px}
 .cmd-row+.cmd-row{margin-top:7px}
-.cmd-k{font-family:"SF Mono",ui-monospace,monospace;font-weight:700;color:var(--blue);min-width:118px;flex:none}
+.cmd-k{font-family:"SF Mono",ui-monospace,monospace;font-weight:700;color:var(--ink-blue);min-width:118px;flex:none}
 .cmd-v{font-family:"SF Mono",ui-monospace,monospace;color:var(--text);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .cmd-n{font-size:11.5px;color:var(--text-3);white-space:nowrap;flex:none}
-.mcp-chip{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 11px;border-radius:9px;background:color-mix(in srgb,var(--purple) 11%,transparent);color:var(--purple);font-family:"SF Mono",ui-monospace,monospace;font-size:12px;font-weight:600}
-html:not(.dark) .mcp-chip{color:#7C3AED}
-.inst-pill{height:24px;padding:0 9px;border-radius:8px;font-size:11.5px;font-weight:600;display:inline-flex;align-items:center;gap:4px;color:var(--blue);background:color-mix(in srgb,var(--blue) 12%,transparent)}
+.mcp-chip{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 11px;border-radius:9px;background:color-mix(in srgb,var(--purple) 11%,transparent);color:var(--ink-purple);font-family:"SF Mono",ui-monospace,monospace;font-size:12px;font-weight:600}
+.inst-pill{height:24px;padding:0 9px;border-radius:8px;font-size:11.5px;font-weight:600;display:inline-flex;align-items:center;gap:4px;color:var(--ink-blue);background:color-mix(in srgb,var(--blue) 12%,transparent)}
 </style>
 '''
 
@@ -61,7 +60,7 @@ left = f'''<section class="glass pn" style="width:296px;flex:none;padding:16px 1
     <span class="f18 w7 grow">插件市场</span>
     <span class="btn2 sm" style="background:var(--fill);color:var(--text)">{I("plus",13,2.3)}私有插件</span>
   </div>
-  <div class="row g8" style="margin:0 6px;height:32px;padding:0 10px;border-radius:10px;background:var(--fill);color:var(--text-3)">{I("search",14)}<span class="f12">搜索插件、连接器、主题、MCP…</span></div>
+  <div class="row g8" style="margin:0 6px;height:var(--ctl-sm);padding:0 10px;border-radius:var(--r-sm);background:var(--well);border:1px solid var(--hair);color:var(--text-3)">{I("search",14)}<span class="f12">搜索插件、连接器、主题、MCP…</span></div>
   <div class="seg" style="margin:10px 6px 2px;padding:2px">
     <span class="on" style="height:26px;font-size:12px;flex:1">全部 8</span>
     <span style="height:26px;font-size:12px;flex:1">已安装 4</span>
@@ -93,8 +92,8 @@ main = f'''<main class="glass pn grow" style="min-width:0;padding:18px 22px;gap:
       <div class="f12 t2" style="line-height:1.5">官方扩展插件 <span class="mono t3">plugins/module-rollback-apollo</span> · 遵循 5 贡献点协议（<span class="mono">views / connectors / capabilities</span>），不展示令牌明文，鉴权实例归口「设置 → 连接器」。</div>
     </div>
     <div class="row g8" style="flex:none">
-      <button class="btn2" style="background:color-mix(in srgb,var(--blue) 13%,transparent);color:var(--blue)">插件设置</button>
-      <button class="btn2" style="background:color-mix(in srgb,var(--red) 11%,transparent);color:var(--red)">停用卸载</button>
+      <button class="btn2" style="background:color-mix(in srgb,var(--blue) 13%,transparent);color:var(--ink-blue)">插件设置</button>
+      <button class="btn2" style="background:color-mix(in srgb,var(--red) 11%,transparent);color:var(--ink-red)">停用卸载</button>
     </div>
   </div>
 
@@ -141,10 +140,10 @@ main = f'''<main class="glass pn grow" style="min-width:0;padding:18px 22px;gap:
 right = f'''<aside class="glass pn" style="width:288px;flex:none;padding:16px 14px;gap:12px">
   <div class="card" style="padding:13px 14px">
     <div class="mini">权限授权（最小权限）</div>
-    <div class="kv2"><span class="t2">读工单与版本</span><span class="f12 w6" style="color:var(--green)">✓ tickets:read</span></div>
-    <div class="kv2"><span class="t2">调用浏览器验证</span><span class="f12 w6" style="color:var(--green)">✓ browser:verify</span></div>
-    <div class="kv2"><span class="t2">发送关不掉通知</span><span class="f12 w6" style="color:var(--green)">✓ notify:alert</span></div>
-    <div class="kv2"><span class="t2">写回滚审计卡</span><span class="f12 w6" style="color:var(--green)">✓ post_card</span></div>
+    <div class="kv2"><span class="t2">读工单与版本</span><span class="f12 w6" style="color:var(--ink-green)">✓ tickets:read</span></div>
+    <div class="kv2"><span class="t2">调用浏览器验证</span><span class="f12 w6" style="color:var(--ink-green)">✓ browser:verify</span></div>
+    <div class="kv2"><span class="t2">发送关不掉通知</span><span class="f12 w6" style="color:var(--ink-green)">✓ notify:alert</span></div>
+    <div class="kv2"><span class="t2">写回滚审计卡</span><span class="f12 w6" style="color:var(--ink-green)">✓ post_card</span></div>
     <div class="f12 t3" style="margin-top:8px;line-height:1.55">严禁直连主库；回滚记录存隔离表 <span class="mono">module_records</span>。</div>
   </div>
 
@@ -164,7 +163,7 @@ right = f'''<aside class="glass pn" style="width:288px;flex:none;padding:16px 14
     <div class="mini">企业自研与新物种插件</div>
     <div class="f12 t2" style="line-height:1.6">外部鉴权自动进「设置 → 连接器」，主题进「外观与语言」；Token 费用检测等任意新物种零代码自动落入「插件设置」通用 Schema 抽屉。</div>
     <div class="row g8" style="margin-top:11px">
-      <span class="btn2 sm grow" style="background:var(--blue);color:#fff">导入私有插件</span>
+      <span class="btn2 sm grow" style="background:var(--btn-pri-bg);color:#fff">导入私有插件</span>
       <span class="btn2 sm" style="background:var(--fill);color:var(--text)">SDK 文档</span>
     </div>
   </div>

@@ -34,7 +34,7 @@ TOPBAR = f'''<div class="tbar">
   <div class="tright">
     <span class="pill glass tpill">{I("bot",13)}3 个 Bot 在线</span>
     <span class="pill glass tpill"><span class="dot" style="width:7px;height:7px;color:var(--green)"></span>Jira · 2 分钟前</span>
-    <span class="pill glass tpill" style="color:var(--orange)"><span class="dot" style="width:7px;height:7px"></span>Tita 采集失败 · 重试中</span>
+    <span class="pill glass tpill" style="color:var(--ink-orange)"><span class="dot" style="width:7px;height:7px;background:var(--orange)"></span>Tita 采集失败 · 重试中</span>
     <span class="av" style="width:34px;height:34px;font-size:13px;background:linear-gradient(160deg,#FFC9A8,#F08F7A);color:#5A2414">林</span>
   </div>
 </div>'''
@@ -76,7 +76,7 @@ def trow(t, on=False, right_override=None):
         rr = f'<span class="tm10">{r}</span>'
     else:
         rr = ""
-    sc = f' style="color:var(--{subc})"' if subc else ""
+    sc = f' style="color:var(--ink-{subc})"' if subc else ""
     pg = f'<span class="pg10"><i style="width:{prog}%"></i></span>' if prog else ""
     return (f'<div class="r10{" on" if on else ""}">{avatar(nm, gr, st)}<div class="grow" style="min-width:0">'
             f'<div class="row g6"><span class="t10 ell grow">{title}</span>{rr}</div>'
@@ -85,7 +85,7 @@ def trow(t, on=False, right_override=None):
 
 def ticket_list(sel="20871"):
     h = ['<section class="glass pn" style="width:300px;flex:none;padding:16px 10px 10px">',
-         f'<div class="row g8" style="padding:0 8px 2px"><span class="f18 w7">工单</span><span class="f13 t3">8</span><span style="width:24px;height:24px;border-radius:7px;background:var(--blue);color:#fff;display:inline-flex;align-items:center;justify-content:center;flex:none" title="手动新建工单">{I("plus",13,2.6)}</span><span class="grow"></span><div class="seg" style="padding:2px"><span class="on" style="height:24px;padding:0 10px;font-size:12px">我的</span><span style="height:24px;padding:0 10px;font-size:12px">全部</span></div></div>']
+         f'<div class="row g8" style="padding:0 8px 2px"><span class="f18 w7">工单</span><span class="f13 t3">8</span><span style="width:24px;height:24px;border-radius:7px;background:var(--btn-pri-bg);color:#fff;display:inline-flex;align-items:center;justify-content:center;flex:none" title="手动新建工单">{I("plus",13,2.6)}</span><span class="grow"></span><div class="seg" style="padding:2px"><span class="on" style="height:24px;padding:0 10px;font-size:12px">我的</span><span style="height:24px;padding:0 10px;font-size:12px">全部</span></div></div>']
     for g, cls, rows in TICKETS:
         h.append(f'<div class="g10h{" " + cls if cls else ""}">{g}<span>{len(rows)}</span></div>')
         h += [trow(t, t[0] == sel, "" if t[0] == sel and t[7].startswith("dot") else None) for t in rows]
@@ -94,7 +94,7 @@ def ticket_list(sel="20871"):
 
 
 def ticket_head(tabs_on="对话", title="审批中心：发起审批时点击分组，界面卡住", tid="TK-20871", meta=None, pill=('p-blue', '待我审核 · 第 2 轮'), src="TITA", extra_right=""):
-    meta = meta or f'{tid} · <span style="color:var(--red)">P1</span> · 审批 / 发起审批 · 修复人 林某 · 执行 Bot-01'
+    meta = meta or f'{tid} · <span style="color:var(--ink-red);font-weight:700">P1</span> · 审批 / 发起审批 · 修复人 林某 · 执行 Bot-01'
     tabs = [("对话", ""), ("代码改动", "3"), ("证据", "4"), ("执行日志", ""), ("发布", "")]
     th = "".join(f'<span{" class=\"on\"" if n == tabs_on else ""}>{n}{(" <b>" + c + "</b>") if c else ""}</span>' for n, c in tabs)
     return f'''<header class="thead">

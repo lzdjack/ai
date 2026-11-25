@@ -18,44 +18,43 @@ CHECK = I("check", 13, 3)
 STYLE = '''
 .board{width:1880px;gap:44px}
 .top2{position:absolute;left:0;right:0;top:54px;padding:0 18px}
-.bot2{position:absolute;left:16px;right:16px;bottom:30px;display:flex;gap:10px;align-items:center}
+.bot2{position:absolute;left:16px;right:16px;bottom:30px;display:flex;gap:12px;align-items:center}
 .bot2 .bigbtn{width:auto;margin:0}
-.pri{background:var(--blue);color:#fff;box-shadow:0 10px 22px -10px color-mix(in srgb,var(--blue) 85%,transparent)}
+.pri{background:var(--btn-pri-bg);color:#fff;box-shadow:0 10px 22px -10px color-mix(in srgb,var(--btn-pri-bg) 85%,transparent)}
 .mbtn-sec{background:var(--fill);color:var(--text)}
-.kk{font-size:12px;color:var(--blue);font-weight:700}
+.kk{font-size:12px;color:var(--ink-blue);font-weight:700}
 .h1{font-size:24px;font-weight:800;margin-top:4px}
 .pbar{height:4px;border-radius:2px;background:var(--fill);overflow:hidden}
 .pbar i{display:block;height:100%;border-radius:2px;background:linear-gradient(90deg,#4F8BFF,#9B5CFF)}
-.st3{display:flex;gap:12px;align-items:center;padding:12px 14px;border-top:1px solid var(--hair)}
+.st3{display:flex;gap:12px;align-items:center;min-height:var(--m-row-h);padding:10px 14px;border-top:1px solid var(--hair)}
 .st3:first-child{border-top:0}
 .sc3{width:26px;height:26px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
 .s-done .sc3{background:var(--green);color:#fff}
-.s-cur .sc3{background:var(--blue);color:#fff;box-shadow:0 0 0 4px color-mix(in srgb,var(--blue) 20%,transparent)}
+.s-cur .sc3{background:var(--btn-pri-bg);color:#fff;box-shadow:0 0 0 4px color-mix(in srgb,var(--blue) 20%,transparent)}
 .s-todo .sc3{border:1.5px solid color-mix(in srgb,var(--text) 22%,transparent);color:var(--text-3)}
 .st3 b{display:block;font-size:15px;font-weight:600}
-.s-cur b{color:var(--blue)}
+.s-cur b{color:var(--ink-blue)}
 .s-todo b{color:var(--text-2);font-weight:500}
 .st3 em{display:block;font-style:normal;font-size:12px;color:var(--text-3);margin-top:2px}
 .lst{border-radius:18px;overflow:hidden}
 .ech{display:flex;gap:8px;overflow:hidden}
-.ec{flex:none;height:34px;padding:0 12px;border-radius:17px;display:inline-flex;align-items:center;gap:6px;font-size:13px;background:var(--fill);color:var(--text-2)}
-.ec.on{background:var(--blue);color:#fff;font-weight:600}
+.ec{flex:none;height:36px;padding:0 12px;border-radius:18px;display:inline-flex;align-items:center;gap:6px;font-size:13px;background:var(--fill);color:var(--text-2)}
+.ec.on{background:var(--btn-pri-bg);color:#fff;font-weight:600}
 .ac{border-radius:16px;padding:12px 14px}
 .chp{display:inline-flex;align-items:center;gap:4px;height:22px;padding:0 7px;border-radius:7px;font-size:11.5px;font-weight:600;white-space:nowrap}
 .c-n{background:color-mix(in srgb,var(--text) 8%,transparent);color:var(--text-2)}
-.c-e{background:color-mix(in srgb,var(--green) 15%,transparent);color:var(--green)}
-.c-v{background:color-mix(in srgb,var(--blue) 13%,transparent);color:var(--blue)}
-.c-p{background:color-mix(in srgb,var(--purple) 12%,transparent);color:var(--purple)}
-.c-o{background:color-mix(in srgb,var(--orange) 15%,transparent);color:var(--orange)}
-.okt{display:inline-flex;align-items:center;gap:4px;color:var(--green);font-size:12px;font-weight:600;white-space:nowrap}
-.ing{display:inline-flex;align-items:center;gap:6px;color:var(--blue);font-size:12px;font-weight:600;white-space:nowrap}
+.c-e{background:color-mix(in srgb,var(--green) 15%,transparent);color:var(--ink-green)}
+.c-v{background:color-mix(in srgb,var(--blue) 13%,transparent);color:var(--ink-blue)}
+.c-p{background:color-mix(in srgb,var(--purple) 12%,transparent);color:var(--ink-purple)}
+.c-o{background:color-mix(in srgb,var(--orange) 15%,transparent);color:var(--ink-orange)}
+.okt{display:inline-flex;align-items:center;gap:4px;color:var(--ink-green);font-size:12px;font-weight:600;white-space:nowrap}
+.ing{display:inline-flex;align-items:center;gap:6px;color:var(--ink-blue);font-size:12px;font-weight:600;white-space:nowrap}
 .spin{width:12px;height:12px;border-radius:50%;border:2px solid color-mix(in srgb,var(--blue) 25%,transparent);border-top-color:var(--blue);flex:none}
-.sg{display:flex;padding:3px;border-radius:11px;background:var(--fill)}
-.sg span{flex:1;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;gap:5px;font-size:13px;color:var(--text-2)}
-.sg span.on{background:#fff;color:var(--text);font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,.12)}
-html.dark .sg span.on{background:rgba(255,255,255,.16)}
-.sel2{display:flex;align-items:center;justify-content:space-between;height:42px;border-radius:12px;background:var(--fill);padding:0 12px;font-size:14px}
-.ckk{border-radius:12px;background:var(--fill);padding:10px 12px;font-size:12px;line-height:1.5;color:var(--text-2);word-break:break-all;box-shadow:0 0 0 2px var(--blue),0 0 0 5px color-mix(in srgb,var(--blue) 18%,transparent)}
+.sg{display:flex;height:var(--m-seg-h);padding:3px;border-radius:12px;background:var(--fill)}
+.sg span{flex:1;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;gap:5px;font-size:13px;color:var(--text-2)}
+.sg span.on{background:var(--seg-thumb);color:var(--text);font-weight:600;box-shadow:var(--shadow-seg)}
+.sel2{display:flex;align-items:center;justify-content:space-between;height:var(--m-input-h);border-radius:12px;background:var(--glass-2);border:1px solid var(--border-ctl);box-shadow:var(--shadow-ctl);padding:0 13px;font-size:14.5px;font-weight:600}
+.ckk{border-radius:12px;background:var(--glass-2);border:1px solid var(--focus-ring);padding:10px 12px;font-size:12px;line-height:1.5;color:var(--text-2);word-break:break-all;box-shadow:0 0 0 3px var(--focus-halo)}
 .ck3{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;flex:none;font-size:11px;font-weight:800}
 .rw{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--hair);font-size:13px}
 .rw:first-child{border-top:0}
@@ -137,7 +136,7 @@ p3 = phone(f'''
 def rw(st, t, r):
     bg = {"ok": "var(--green)", "wn": "var(--orange)", "sk": "color-mix(in srgb,var(--text) 25%,transparent)"}[st]
     g = {"ok": CHECK, "wn": "!", "sk": "–"}[st]
-    rc = {"ok": "var(--text-3)", "wn": "var(--orange)", "sk": "var(--text-3)"}[st]
+    rc = {"ok": "var(--text-3)", "wn": "var(--ink-orange)", "sk": "var(--text-3)"}[st]
     return f'<div class="rw"><span class="ck3" style="background:{bg}">{g}</span><span class="grow">{t}</span><span class="f12" style="color:{rc}">{r}</span></div>'
 p4 = phone(f'''
 <div class="top2">

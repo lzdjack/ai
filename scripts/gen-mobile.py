@@ -26,13 +26,13 @@ p1=f'''<div class="phone"><div class="scr">{status}
   <div class="row" style="margin-top:6px"><div class="grow"><div class="cap">11月20日 周四</div><div class="lgt">工单</div></div><span class="me">林</span></div>
   <div class="row g8" style="margin-top:12px">
     <span class="chip glass"><span class="dt" style="background:var(--green)"></span>3 个 Bot 在线</span>
-    <span class="chip glass" style="color:var(--orange)"><span class="dt" style="background:var(--orange)"></span>Tita 采集重试中</span>
+    <span class="chip glass" style="color:var(--ink-orange)"><span class="dt" style="background:var(--orange)"></span>Tita 采集重试中</span>
   </div>
-  <div class="search glass"><i data-i="search" data-s="16"></i><span class="grow">搜索工单、MR、发布</span><i data-i="filter" data-s="16"></i></div>
+  <div class="search"><i data-i="search" data-s="16"></i><span class="grow">搜索工单、MR、发布</span><i data-i="filter" data-s="16"></i></div>
   <div class="stats">
     <div class="stat glass on"><b>2</b><span>等你决定</span></div>
-    <div class="stat glass"><b style="color:var(--orange)">1</b><span>Bot 在问你</span></div>
-    <div class="stat glass"><b style="color:var(--teal)">2</b><span>修复中</span></div>
+    <div class="stat glass"><b style="color:var(--ink-orange)">1</b><span>Bot 在问你</span></div>
+    <div class="stat glass"><b style="color:var(--ink-teal)">2</b><span>修复中</span></div>
   </div>
   <div class="gh">等你决定<span>2</span><em>全部 8 ›</em></div>
   <div class="grp glass">
@@ -41,7 +41,7 @@ p1=f'''<div class="phone"><div class="scr">{status}
   </div>
   <div class="gh">Bot 在问你<span>1</span></div>
   <div class="grp glass">
-    {row('李娜','#F5A3C7,#D96BA0','orange','考勤部门筛选失效','t','复现用哪个角色？','<span class="ud" style="background:var(--orange)"></span>','style="color:var(--orange)"')}
+    {row('李娜','#F5A3C7,#D96BA0','orange','考勤部门筛选失效','t','复现用哪个角色？','<span class="ud" style="background:var(--orange)"></span>','style="color:var(--ink-orange)"')}
   </div>
   <div class="gh">Bot 修复中<span>2</span></div>
   <div class="grp glass">
@@ -58,7 +58,7 @@ p2=f'''<div class="phone"><div class="scr">{status}
   <div class="row g12" style="align-items:flex-start">
     <span class="appic ic-tita" style="width:44px;height:44px;border-radius:12px;font-size:10px;font-weight:800">TITA</span>
     <div class="grow"><div style="font-size:18px;font-weight:700;line-height:1.3">发起审批时点击分组，界面卡住</div>
-    <div class="row g6" style="margin-top:6px;flex-wrap:wrap"><span class="tg" style="color:var(--red);background:color-mix(in srgb,var(--red) 12%,transparent)">P1</span><span class="tg" style="color:var(--blue);background:color-mix(in srgb,var(--blue) 12%,transparent)">待我审核 · 第 2 轮</span><span class="f12 t3">Bot-01</span></div></div>
+    <div class="row g6" style="margin-top:6px;flex-wrap:wrap"><span class="tg" style="color:var(--ink-red);background:color-mix(in srgb,var(--red) 12%,transparent)">P1</span><span class="tg" style="color:var(--ink-blue);background:color-mix(in srgb,var(--blue) 12%,transparent)">待我审核 · 第 2 轮</span><span class="f12 t3">Bot-01</span></div></div>
   </div>
   <div class="seg" style="margin-top:14px"><span class="on" style="flex:1;justify-content:center;white-space:nowrap;padding:0 4px">对话</span><span style="flex:1;justify-content:center;white-space:nowrap;padding:0 4px">改动 3</span><span style="flex:1;justify-content:center;white-space:nowrap;padding:0 4px">证据 4</span><span style="flex:1;justify-content:center;white-space:nowrap;padding:0 4px">日志</span><span style="flex:1;justify-content:center;white-space:nowrap;padding:0 4px">发布</span></div>
   <div class="dv"><span>第 1 轮 · 昨天 22:40 · 你打回了</span></div>
@@ -68,18 +68,18 @@ p2=f'''<div class="phone"><div class="scr">{status}
   <div class="dcard glass">
     <div class="row"><span class="grow" style="font-size:15px;font-weight:700">第 2 轮交付：已修复</span><span class="f11 t3">14:52</span></div>
     <div class="kv"><b>根因</b>切换分组时旧请求晚返回，覆盖新数据导致卡死。</div>
-    <div class="kv"><b>回应上轮</b>加了请求取消，复测分组 2、3 <span style="color:var(--green);font-weight:600">✓ 已处理</span></div>
+    <div class="kv"><b>回应上轮</b>加了请求取消，复测分组 2、3 <span style="color:var(--ink-green);font-weight:600">✓ 已处理</span></div>
     <div class="row g8" style="margin-top:10px">
       <div class="col g4 grow" style="min-width:0"><div class="shw"><div class="shot" data-s="before" style="width:230px;height:150px"></div></div><span class="f11 t3">修复前 · 已看</span></div>
-      <div class="col g4 grow" style="min-width:0"><div class="shw" style="box-shadow:0 0 0 2px var(--green)"><div class="shot" data-s="after" style="width:230px;height:150px"></div></div><span class="f11 t3">修复后 · <span style="color:var(--blue)">未看</span></span></div>
+      <div class="col g4 grow" style="min-width:0"><div class="shw" style="box-shadow:0 0 0 2px var(--green)"><div class="shot" data-s="after" style="width:230px;height:150px"></div></div><span class="f11 t3">修复后 · <span style="color:var(--ink-blue);font-weight:600">未看</span></span></div>
     </div>
     <div class="chk"><span class="ok2">✓</span>进入发起审批<span class="ok2" style="margin-left:10px">✓</span>点击分组 1、2、3</div>
-    <div class="chk" style="color:var(--orange)"><span class="ok2" style="background:var(--orange)">!</span>管理员角色未测 · 缺账号</div>
-    <div class="row g6 f12 t2" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--hair)"><i data-i="git" data-s="14"></i>3 个文件 <span style="color:var(--green)">+38</span><span style="color:var(--red)">−12</span><span class="grow"></span><span style="color:var(--blue)">看改动 ›</span></div>
+    <div class="chk" style="color:var(--ink-orange)"><span class="ok2" style="background:var(--orange)">!</span>管理员角色未测 · 缺账号</div>
+    <div class="row g6 f12 t2" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--hair)"><i data-i="git" data-s="14"></i>3 个文件 <span style="color:var(--ink-green);font-weight:600">+38</span><span style="color:var(--ink-red);font-weight:600">−12</span><span class="grow"></span><span style="color:var(--ink-blue);font-weight:600">看改动 ›</span></div>
   </div>
 </div>
 <div class="dock2 glass">
-  <div class="row g8"><button class="abtn a-red" style="flex:1;height:44px;justify-content:center;border-radius:14px"><i data-i="undo" data-s="15"></i>打回</button><button class="abtn a-pri" style="flex:1.6;height:44px;justify-content:center;border-radius:14px"><i data-i="check" data-s="16" data-w="2.6"></i>审核通过</button></div>
+  <div class="row g12"><button class="abtn a-red" style="flex:1;height:44px;justify-content:center;border-radius:14px"><i data-i="undo" data-s="15"></i>打回</button><button class="abtn a-pri" style="flex:1.6;height:44px;justify-content:center;border-radius:14px"><i data-i="check" data-s="16" data-w="2.6"></i>审核通过</button></div>
   <div class="cmp"><span class="aitag"><span class="aid"><i data-i="spark" data-s="11"></i></span>本单 AI</span><span class="grow t3 ell">问这张单，或让 Bot 再做点什么…</span><span class="snd"><i data-i="arrowup" data-s="15" data-w="2.4"></i></span></div>
 </div>
 <div class="home"></div></div></div>'''
@@ -108,105 +108,7 @@ p3=f'''<div class="phone"><div class="scr">{status}
 {tabbar('ai',3)}<div class="home"></div></div></div>'''
 
 html=f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>移动端 · 苹果毛玻璃</title>
-<link rel="stylesheet" href="../v3/base.css"><link rel="stylesheet" href="apple.css">
-<style>
-body{{margin:0;background:#E6E9F0;font-family:var(--font);color:var(--text)}}
-html.dark body{{background:#05060C}}
-.board{{width:1440px;height:1000px;display:flex;align-items:center;justify-content:center;gap:56px;position:relative;
-  background:radial-gradient(700px 500px at 15% 20%,rgba(160,190,255,.45),transparent 60%),radial-gradient(700px 500px at 85% 80%,rgba(255,190,220,.4),transparent 60%)}}
-html.dark .board{{background:radial-gradient(700px 500px at 15% 20%,rgba(60,80,200,.35),transparent 60%),radial-gradient(700px 500px at 85% 80%,rgba(160,50,160,.25),transparent 60%)}}
-.col3{{display:flex;flex-direction:column;align-items:center;gap:18px}}
-.lbl{{font-size:15px;font-weight:600;color:var(--text-2)}}.lbl em{{font-style:normal;font-weight:400;color:var(--text-3);margin-left:8px;font-size:13px}}
-.phone{{width:390px;height:844px;border-radius:58px;padding:11px;background:#111;box-shadow:0 0 0 1.5px #3a3a3e,0 40px 80px -30px rgba(20,30,70,.55),inset 0 0 0 2px #2a2a2e}}
-.scr{{position:relative;width:100%;height:100%;border-radius:47px;overflow:hidden;background:var(--wall);background-size:cover}}
-.scr::before{{content:"";position:absolute;left:50%;top:11px;width:122px;height:35px;margin-left:-61px;border-radius:20px;background:#000;z-index:30}}
-.sbar{{height:50px;display:flex;align-items:center;justify-content:space-between;padding:6px 30px 0 34px;font-size:16px;font-weight:600;position:relative;z-index:20}}
-.sbi{{display:flex;gap:6px;align-items:center}}
-.home{{position:absolute;left:50%;bottom:8px;width:134px;height:5px;margin-left:-67px;border-radius:3px;background:var(--text);opacity:.85;z-index:40}}
-.pad{{padding:0 16px}}
-.grow{{flex:1}}.row{{display:flex;align-items:center}}.col{{display:flex;flex-direction:column}}
-.g4{{gap:4px}}.g6{{gap:6px}}.g8{{gap:8px}}.g12{{gap:12px}}
-.ell{{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
-.f11{{font-size:11px}}.f12{{font-size:12px}}.f13{{font-size:13px}}.f14{{font-size:14px}}.t2{{color:var(--text-2)}}.t3{{color:var(--text-3)}}
-.cap{{font-size:12.5px;color:var(--text-3);font-weight:600}}
-.lgt{{font-size:32px;font-weight:800;letter-spacing:.3px;line-height:1.15;margin-top:2px}}
-.me{{width:38px;height:38px;border-radius:50%;background:linear-gradient(160deg,#FFC9A8,#F08F7A);color:#5A2414;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}}
-.chip{{height:28px;padding:0 11px;border-radius:14px;display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--text-2);box-shadow:none}}
-.dt{{width:6px;height:6px;border-radius:50%}}
-.search{{margin-top:12px;height:40px;border-radius:12px;display:flex;align-items:center;gap:8px;padding:0 12px;color:var(--text-3);font-size:14.5px;box-shadow:none}}
-.stats{{display:flex;gap:8px;margin-top:12px}}
-.stat{{flex:1;border-radius:16px;padding:10px 12px;display:flex;flex-direction:column;box-shadow:none}}
-.stat b{{font-size:24px;font-weight:800;color:var(--blue);line-height:1.1}}.stat span{{font-size:12px;color:var(--text-2);margin-top:2px}}
-.stat.on{{background:var(--glass-2);box-shadow:0 8px 18px -10px rgba(20,40,110,.45)}}
-.gh{{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--text-3);padding:16px 6px 7px}}
-.gh span{{min-width:18px;height:16px;padding:0 5px;border-radius:8px;background:var(--fill);font-size:10.5px;display:inline-flex;align-items:center;justify-content:center;color:var(--text-2)}}
-.gh em{{margin-left:auto;font-style:normal;color:var(--blue);font-weight:500}}
-.grp{{border-radius:18px;padding:4px;box-shadow:none}}
-.lr{{display:flex;gap:11px;padding:10px 10px;border-radius:14px;align-items:center;position:relative}}
-.lr+.lr::after{{content:"";position:absolute;left:61px;right:10px;top:0;height:1px;background:var(--hair)}}
-.lr.on{{background:linear-gradient(180deg,#3B8BFF,#1F6FFF);box-shadow:0 8px 18px -10px rgba(31,111,255,.9)}}
-.lr.on+.lr::after{{display:none}}
-.lr.on .lt,.lr.on .ls,.lr.on .tm{{color:#fff!important}}.lr.on .ls,.lr.on .tm{{opacity:.85}}
-.lr.on .sc{{background:rgba(255,255,255,.22);color:#fff;box-shadow:none}}
-.lr.on .av2 i{{box-shadow:0 0 0 2px #fff}}.lr.on .av2{{box-shadow:0 0 0 2px rgba(255,255,255,.55)}}
-.mn{{min-width:0}}
-.lt{{font-size:15px;font-weight:600}}.ls{{font-size:12.5px;color:var(--text-3)}}.tm{{font-size:11.5px;color:var(--text-3);flex:none}}
-.av2{{position:relative;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;flex:none;white-space:nowrap}}
-.av2 i{{position:absolute;right:-1px;bottom:-1px;width:12px;height:12px;border-radius:50%;box-shadow:0 0 0 2.5px var(--glass-2)}}
-.sc{{flex:none;height:17px;padding:0 5px;border-radius:5px;font-size:10px;font-weight:700;display:inline-flex;align-items:center}}
-.sc-t{{background:color-mix(in srgb,#2F6BFF 13%,transparent);color:#2F6BFF}}
-.sc-j{{background:color-mix(in srgb,#0C66E4 10%,transparent);color:#0B5BD3;box-shadow:inset 0 0 0 1px color-mix(in srgb,#0C66E4 25%,transparent)}}
-html.dark .sc-t{{color:#7FA7FF}}html.dark .sc-j{{color:#6FA8FF}}
-.ud{{width:9px;height:9px;border-radius:50%;background:var(--blue);flex:none}}
-.pg{{display:block;height:3px;border-radius:2px;background:var(--fill);margin-top:7px;overflow:hidden}}.pg i{{display:block;height:100%;border-radius:2px}}
-.go{{flex:none;height:26px;padding:0 11px;border-radius:13px;background:var(--blue);color:#fff;font-size:12px;font-weight:600;display:inline-flex;align-items:center}}
-/* tab bar */
-.tabbar{{position:absolute;left:14px;right:14px;bottom:24px;height:70px;border-radius:26px;display:flex;align-items:center;justify-content:space-around;padding:0 10px;z-index:25}}
-.tb{{position:relative;width:46px;height:46px;display:flex;align-items:center;justify-content:center}}
-.ap{{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;transform:scale(.92);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -1px 1px rgba(0,0,0,.12),0 6px 14px -6px rgba(0,0,0,.4)}}
-.ap::before{{content:"";position:absolute;left:0;right:0;top:0;height:50%;background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,0))}}
-.ap svg{{position:relative;z-index:1;filter:drop-shadow(0 1.5px 1.5px rgba(0,0,0,.18))}}
-.tb.on{{z-index:2}}.tb.on .ap{{transform:scale(1.14) translateY(-3px);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 2px 4px rgba(0,0,0,.08),0 14px 24px -8px rgba(20,50,120,.55)}}
-html.dark .tb.on .ap{{box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 16px 26px -8px rgba(0,0,0,.8)}}
-.tb>b{{position:absolute;top:-4px;right:-5px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:#FF3B30;color:#fff;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;z-index:3;box-shadow:0 0 0 2px var(--glass-2)}}
-.ap-ai{{background:#141530}}.ap-ai::after{{content:"";position:absolute;inset:6px;border-radius:50%;background:conic-gradient(from 210deg,#4F8BFF,#9B5CFF,#FF5FA8,#FFB14A,#4FD1FF,#4F8BFF);filter:blur(5px)}}
-.ap-chat{{background:linear-gradient(180deg,#fff,#E8EEF7)}}html.dark .ap-chat{{background:linear-gradient(180deg,#3A4157,#262B3C)}}
-.ap-pub{{background:linear-gradient(160deg,#FFC54D,#FF9A1F 55%,#FF7A00)}}.ap-rb{{background:linear-gradient(160deg,#FF8A7A,#FF453A 55%,#E0281E)}}.ap-sk{{background:linear-gradient(160deg,#C58BFF,#8E5CFF 55%,#6A3DF0)}}
-/* detail */
-.nav{{height:46px;display:flex;align-items:center;padding:0 14px;gap:8px}}
-.bk{{display:flex;align-items:center;gap:2px;color:var(--blue);font-size:16px;width:90px}}
-.nb2{{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:none;color:var(--text-2)}}
-.nav .nb2{{margin-left:54px}}
-.tg{{height:22px;padding:0 8px;border-radius:7px;font-size:11.5px;font-weight:700;display:inline-flex;align-items:center}}
-.dv{{display:flex;align-items:center;gap:10px;margin:14px 0 10px;font-size:11.5px;color:var(--text-3)}}.dv::before,.dv::after{{content:"";flex:1;height:1px;background:var(--hair)}}
-.ubub{{max-width:78%;padding:9px 14px;border-radius:18px 18px 6px 18px;background:linear-gradient(180deg,#3B8BFF,#1F6FFF);color:#fff;font-size:14.5px;box-shadow:0 8px 18px -10px rgba(31,111,255,.9)}}
-.steps{{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:14px;box-shadow:none;font-size:12.5px;color:var(--text-2)}}
-.sp2{{display:inline-flex;align-items:center;gap:4px}}.ok{{width:15px;height:15px;border-radius:50%;background:var(--green);color:#fff;font-size:9px;display:inline-flex;align-items:center;justify-content:center}}
-.dcard{{margin-top:10px;border-radius:20px;padding:14px;background:var(--glass-2)}}
-.kv{{font-size:13px;color:var(--text-2);margin-top:7px;line-height:1.5}}.kv b{{color:var(--text);margin-right:8px}}
-.chk{{display:flex;align-items:center;gap:6px;font-size:12.5px;margin-top:9px}}
-.ok2{{width:16px;height:16px;border-radius:50%;background:var(--green);color:#fff;font-size:10px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex:none}}
-.dock2{{position:absolute;left:10px;right:10px;bottom:22px;border-radius:26px;padding:10px;display:flex;flex-direction:column;gap:8px;z-index:25}}
-.cmp,.aicmp{{height:44px;border-radius:14px;background:var(--fill);display:flex;align-items:center;gap:8px;padding:0 6px 0 6px;font-size:14px}}
-.aitag{{display:inline-flex;align-items:center;gap:5px;height:30px;padding:0 9px 0 4px;border-radius:10px;background:color-mix(in srgb,var(--purple) 12%,transparent);font-size:12.5px;font-weight:700;flex:none}}
-.aid{{width:22px;height:22px;border-radius:7px;background:linear-gradient(135deg,#5E8BFF,#B157F0);color:#fff;display:inline-flex;align-items:center;justify-content:center}}
-.snd{{width:34px;height:34px;border-radius:11px;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;flex:none}}
-.snd.ai{{background:linear-gradient(135deg,#4F8BFF,#9B5CFF 55%,#FF5FA8)}}
-.shw{{width:100%;height:96px;border-radius:10px;overflow:hidden;position:relative}}
-.shw .shot{{transform:scale(.64);transform-origin:0 0;border-radius:14px}}
-.botav{{background:linear-gradient(160deg,#5E8BFF,#B157F0);color:#fff;display:flex;align-items:center;justify-content:center;flex:none}}
-/* ai */
-.hero{{display:flex;flex-direction:column;align-items:center;text-align:center;margin-top:22px}}
-.orb{{width:68px;height:68px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.7) 0,rgba(255,255,255,0) 35%),conic-gradient(from 210deg,#4F8BFF,#9B5CFF,#FF5FA8,#FFB14A,#4FD1FF,#4F8BFF);box-shadow:0 12px 30px -8px rgba(155,92,255,.7),0 0 40px -6px rgba(255,95,168,.5)}}
-.sugs{{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:16px}}
-.sug{{height:32px;padding:0 13px;border-radius:16px;display:inline-flex;align-items:center;font-size:13px;color:var(--text-2);box-shadow:none}}
-.aians{{margin-top:12px}}
-.aicmp{{position:absolute;left:14px;right:14px;bottom:106px;height:50px;border-radius:18px;padding:0 7px 0 16px;z-index:24;font-size:14.5px;
-  background:var(--glass-2);box-shadow:0 0 0 1.5px transparent,0 10px 26px -12px rgba(120,80,220,.55)}}
-.aicmp::before{{content:"";position:absolute;inset:-1.5px;border-radius:19.5px;padding:1.5px;background:linear-gradient(90deg,#4F8BFF,#9B5CFF,#FF5FA8);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}}
-.aicmp .snd{{width:38px;height:38px;border-radius:13px}}
-</style>
+<link rel="stylesheet" href="../v3/base.css"><link rel="stylesheet" href="apple.css"><link rel="stylesheet" href="../v5/m.css">
 <script>(function(){{var q=new URLSearchParams(location.search);if(q.get('mode')==='dark')document.documentElement.classList.add('dark')}})()</script>
 </head><body><div class="board">
 <div class="col3">{p1}<div class="lbl">工单列表<em>首页 · 按「等你做什么」分组</em></div></div>

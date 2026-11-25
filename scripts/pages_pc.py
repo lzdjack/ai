@@ -49,7 +49,7 @@ def p_ai():
     <div class="me">哪几张在等我审核？。</div>
     <div class="col g8">
       <div class="row g8"><span class="aid" style="width:22px;height:22px;border-radius:7px">{I("spark",12)}</span><span class="f12 t3">AI 助手 · 查了你名下 8 张工单的最新一轮验证记录</span></div>
-      <div class="f14" style="line-height:1.6">有 <b>2 张</b>待你审核。按浏览器验证情况排序，<b style="color:var(--orange)">执行受阻</b>的放在最前：</div>
+      <div class="f14" style="line-height:1.6">有 <b>2 张</b>待你审核。按浏览器验证情况排序，<b style="color:var(--ink-orange)">执行受阻</b>的放在最前：</div>
       <div class="card" style="padding:4px;width:640px">
         {tk("20855","执行受阻","o","处理")}
         {tk("20871","已通过 3/4","g")}
@@ -63,8 +63,8 @@ def p_ai():
         <div class="row g8"><span class="sc10 sc-j">Jira</span><span class="f14 w7 grow">进度条切换周期不刷新 · 第 2 轮复测</span><span class="f12 t3">发起人 林某 · 14:26</span></div>
         <div class="f13 t2" style="margin-top:6px">补充条件：<b style="color:var(--text)">普通员工</b> · 重点检查<b style="color:var(--text)">切换到第二个周期</b>后进度条是否刷新</div>
         <div class="row g10" style="margin-top:12px">
-          <span class="row g6 f12 w6" style="color:var(--green)">{CK()}已提交给 Bot-02</span><span style="width:28px;height:2px;background:var(--green)"></span>
-          <span class="row g6 f12 w6" style="color:var(--teal)"><span class="ck" style="background:var(--teal);box-shadow:0 0 0 4px color-mix(in srgb,var(--teal) 22%,transparent)">{I("loader",11,2.6)}</span>正在执行 · 浏览器复测</span><span style="width:28px;height:2px;background:var(--hair)"></span>
+          <span class="row g6 f12 w6" style="color:var(--ink-green)">{CK()}已提交给 Bot-02</span><span style="width:28px;height:2px;background:var(--green)"></span>
+          <span class="row g6 f12 w6" style="color:var(--ink-teal)"><span class="ck" style="background:var(--teal);box-shadow:0 0 0 4px color-mix(in srgb,var(--teal) 22%,transparent)">{I("loader",11,2.6)}</span>正在执行 · 浏览器复测</span><span style="width:28px;height:2px;background:var(--hair)"></span>
           <span class="row g6 f12 t3"><span class="ck" style="background:var(--fill)"></span>已有验证结果</span>
           <span class="grow"></span><span class="f12 lnk">在工单中查看 ›</span>
         </div>
@@ -72,7 +72,7 @@ def p_ai():
     </div>
   </div>
   <div style="padding:6px 40px 18px">
-    <div class="row g8" style="margin-bottom:10px"><span class="sug">{I("spark",12,style="color:var(--purple)")}本周哪些 Bug 修复失败过？</span><span class="sug">{I("spark",12,style="color:var(--purple)")}今天 Tita 收单正常吗？</span><span class="sug">{I("spark",12,style="color:var(--purple)")}TK-20790 测试和正式各是什么版本</span></div>
+    <div class="row g8" style="margin-bottom:10px"><span class="sug">{I("spark",12,style="color:var(--ink-purple)")}本周哪些 Bug 修复失败过？</span><span class="sug">{I("spark",12,style="color:var(--ink-purple)")}今天 Tita 收单正常吗？</span><span class="sug">{I("spark",12,style="color:var(--ink-purple)")}TK-20790 测试和正式各是什么版本</span></div>
     <div class="gbord row g10" style="height:54px;padding:0 7px 0 18px"><span class="f14 t3 grow">问所有工单、发布、收单情况，或让 AI 帮你办…</span>{I("mic",17,style="color:var(--text-3)")}{I("paperclip",17,style="color:var(--text-3)")}<span class="snd ai" style="width:40px;height:40px;border-radius:13px">{I("arrowup",17,2.4)}</span></div>
   </div>
 </main>'''
@@ -87,7 +87,7 @@ def p_ai():
         f'''<div class="card" style="padding:12px 14px"><div class="mini">按你的权限办事</div>
   <div class="kv2"><span class="t2">查询</span><span class="f12 t3">直接回答</span></div>
   <div class="kv2"><span class="t2">单项操作</span><span class="f12 t3">对象明确就办</span></div>
-  <div class="kv2"><span class="t2">批量审核 · 改规则</span><span class="f12" style="color:var(--orange)">先列影响再确认</span></div>
+  <div class="kv2"><span class="t2">批量审核 · 改规则</span><span class="f12" style="color:var(--ink-orange)">先列影响再确认</span></div>
   <div class="kv2"><span class="t2">可见项目</span><span class="f12 t3">审批 · OKR · 考勤</span></div></div>''')
     return "".join(left) + main + right
 
@@ -132,9 +132,9 @@ def p_code():
     ft = [f'<div class="ftree">',
           f'<div class="row g6" style="padding:2px 8px 8px">{I("folder",14,style="color:var(--text-3)")}<span class="f12 w6 grow">tita-approval-web</span><span class="f11 t3">3 个文件</span></div>']
     for st, nm, dirn, a, d, on, seen in files:
-        ft.append(f'<div class="frow{" on" if on else ""}"><span class="st st-{st}">{st.upper()}</span><div class="col grow" style="min-width:0;line-height:1.2"><span class="w6 ell">{nm}</span><span class="f11 t3 ell">{dirn}</span></div><span class="f11 num" style="color:var(--green)">{a}</span><span class="f11 num" style="color:var(--red)">{d}</span></div>')
+        ft.append(f'<div class="frow{" on" if on else ""}"><span class="st st-{st}">{st.upper()}</span><div class="col grow" style="min-width:0;line-height:1.2"><span class="w6 ell">{nm}</span><span class="f11 t3 ell">{dirn}</span></div><span class="f11 num" style="color:var(--ink-green)">{a}</span><span class="f11 num" style="color:var(--ink-red)">{d}</span></div>')
     ft.append(f'''<div class="row g6" style="padding:14px 8px 8px">{I("folder",14,style="color:var(--text-3)")}<span class="f12 w6 grow">tita-ui-kit</span><span class="f11 t3">第 2 个仓库</span></div>
-<div class="col g4" style="margin:0 4px;padding:10px;border-radius:10px;background:color-mix(in srgb,var(--orange) 12%,transparent)"><span class="row g6 f12 w6" style="color:var(--orange)">{I("lock",13)}差异未加载</span><span class="f11 t2" style="line-height:1.5">Bot-01 的只读令牌无此仓库权限。缺失范围：1 个提交，文件数未知，不代表没有改动。</span></div>
+<div class="col g4" style="margin:0 4px;padding:10px;border-radius:10px;background:color-mix(in srgb,var(--orange) 12%,transparent)"><span class="row g6 f12 w6" style="color:var(--ink-orange)">{I("lock",13)}差异未加载</span><span class="f11 t2" style="line-height:1.5">Bot-01 的只读令牌无此仓库权限。缺失范围：1 个提交，文件数未知，不代表没有改动。</span></div>
 <span class="grow"></span>
 <div class="col g6" style="padding:10px 8px 4px;border-top:1px solid var(--hair)"><div class="row"><span class="f12 t2 grow">已看文件</span><span class="f12 w6">1 / 3</span></div><span class="pg10" style="margin:0"><i style="width:33%;background:var(--blue)"></i></span></div>
 </div>''')
@@ -164,7 +164,7 @@ def p_code():
         if r[1] == 49:
             body += thread
     diff = f'''<div class="grow col" style="min-width:0">
-  <div class="row g8" style="height:42px;padding:0 14px;border-bottom:1px solid var(--hair)"><span class="st st-m" style="width:16px;height:16px;border-radius:4px;font-size:10px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center">M</span><span class="mono f12 w6">src/approval/GroupPicker.tsx</span><span class="f12 num" style="color:var(--green)">+18</span><span class="f12 num" style="color:var(--red)">−8</span><span class="grow"></span><span class="f12 lnk">查看修复后的完整文件</span><span class="cbx on" style="width:16px;height:16px;border-radius:4px">{I("check",11,3)}</span><span class="f12 t2">已看</span></div>
+  <div class="row g8" style="height:42px;padding:0 14px;border-bottom:1px solid var(--hair)"><span class="st st-m" style="width:16px;height:16px;border-radius:4px;font-size:10px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center">M</span><span class="mono f12 w6">src/approval/GroupPicker.tsx</span><span class="f12 num" style="color:var(--ink-green)">+18</span><span class="f12 num" style="color:var(--ink-red)">−8</span><span class="grow"></span><span class="f12 lnk">查看修复后的完整文件</span><span class="cbx on" style="width:16px;height:16px;border-radius:4px">{I("check",11,3)}</span><span class="f12 t2">已看</span></div>
   <div class="hunk"><span>@@ −38,11 +38,15 @@ export function GroupPicker</span><span class="grow"></span><span>{I("chevd",12)} 展开上方 37 行</span></div>
   <div class="code" style="flex:1;min-height:0;overflow:hidden;padding-top:2px">{body}</div>
   <div class="hunk" style="border-top:1px solid var(--hair)"><span>@@ −112,6 +116,10 @@ function MemberList</span><span class="grow"></span><span>{I("chevd",12)} 展开</span></div>
@@ -191,7 +191,7 @@ def p_evidence():
         sh = f'<div class="shot" data-s="{kind}" data-cap="{cap}" style="height:200px{extra}"></div>'
         s = '<span class="t3">已查阅</span>' if seen else '<span class="lnk w6">未查阅</span>'
         return f'<div class="col g8" style="flex:1;min-width:0">{sh}<div class="row g6"><span class="tag tg-{pc}">{purpose}</span><span class="f12 ell grow">{cap.split(" · ")[0] if "·" in cap else cap}</span><span class="f12">{s}</span></div></div>'
-    miss = f'''<div class="col g8" style="flex:1;min-width:0"><div class="col" style="height:200px;border-radius:14px;border:1.5px dashed color-mix(in srgb,var(--orange) 55%,transparent);background:color-mix(in srgb,var(--orange) 6%,transparent);align-items:center;justify-content:center;gap:6px;color:var(--orange)">{I("alert",22)}<span class="f13 w6">管理员角色未测</span><span class="f12 t2">缺少测试账号，未产生证据</span></div><div class="row g6"><span class="tag tg-o">待确认</span><span class="f12 grow t2">需要你补账号或接受</span><span class="f12 lnk">补充</span></div></div>'''
+    miss = f'''<div class="col g8" style="flex:1;min-width:0"><div class="col" style="height:200px;border-radius:14px;border:1.5px dashed color-mix(in srgb,var(--orange) 55%,transparent);background:color-mix(in srgb,var(--orange) 6%,transparent);align-items:center;justify-content:center;gap:6px;color:var(--ink-orange)">{I("alert",22)}<span class="f13 w6">管理员角色未测</span><span class="f12 t2">缺少测试账号，未产生证据</span></div><div class="row g6"><span class="tag tg-o">待确认</span><span class="f12 grow t2">需要你补账号或接受</span><span class="f12 lnk">补充</span></div></div>'''
     steps = [("进入发起审批", "普通员工 kq-staff-03 打开 /approval/start", "g", "通过", "录屏 0:00–0:06"),
              ("点击分组 1 → 2 → 3", "依次点击，每次等成员列表加载完", "g", "通过", "录屏 0:12–0:31"),
              ("切换后仍可选择审批人", "在分组 3 选中「何嘉明」，弹窗可关闭", "g", "通过", "截图 2"),
@@ -229,7 +229,7 @@ def p_log():
     ps = ""
     for i, (n, s, t) in enumerate(pipe):
         g = {"ok": "✓", "err": "!", "wait": str(i + 1)}[s]
-        ps += f'<div class="pst{" done" if s=="ok" else ""}"><span class="pdot pd-{s}">{g}</span><span class="f13 w6"{" style=\"color:var(--red)\"" if s=="err" else ""}>{n}</span><span class="f11 t3">{t}</span></div>'
+        ps += f'<div class="pst{" done" if s=="ok" else ""}"><span class="pdot pd-{s}">{g}</span><span class="f13 w6"{" style=\"color:var(--ink-red)\"" if s=="err" else ""}>{n}</span><span class="f11 t3">{t}</span></div>'
     err = '''<span class="d">[14:32:07] verify  goto https://test.tita.work/okr/progress?period=2026Q4</span>
 <span class="d">[14:32:09] verify  login as okr-staff-07 (role: 普通员工)</span>
 <span class="h"><span class="e">Error: Navigation blocked — 403 Forbidden</span></span>    at checkAccess (okr-web/src/router/guard.ts:88:11)
@@ -243,7 +243,7 @@ def p_log():
   <div class="card" style="padding:16px 10px 12px"><div class="pipe">{ps}</div></div>
   <div class="row g14 grow" style="align-items:stretch;min-height:0">
     <div class="col g10 grow" style="min-width:0">
-      <div class="row g8"><span class="sec" style="color:var(--red)">浏览器验证失败</span><span class="tag tg-r">退出码 1</span><span class="tag tg-n mono">guard.ts:88</span><span class="grow"></span>
+      <div class="row g8"><span class="sec" style="color:var(--ink-red)">浏览器验证失败</span><span class="tag tg-r">退出码 1</span><span class="tag tg-n mono">guard.ts:88</span><span class="grow"></span>
         <div class="seg" style="padding:2px"><span class="on" style="height:26px;font-size:12px">第 2 次 · 14:32</span><span style="height:26px;font-size:12px">第 1 次 · 13:58</span></div></div>
       <div class="err">{err}</div>
       <div class="row g8"><span class="btn2 sm a-sec" style="background:var(--fill)">{I("copy",13)}复制报错</span><span class="btn2 sm a-sec" style="background:var(--fill)">{I("terminal",13)}展开这次尝试的上下文日志 · 218 行</span><span class="btn2 sm a-sec" style="background:var(--fill)">{I("image",13)}失败时截图</span><span class="grow"></span><span class="f11 t3">凭据在展示、复制和 AI 引用前已脱敏</span></div>
@@ -252,8 +252,8 @@ def p_log():
         <div class="log">
           <div class="ln"><span class="ts">200</span><span class="ts">14:31:52</span><span class="lv t3">INFO</span><span class="t2">skill 页面交互回归 v1 · step 1/4 进入进度页</span></div>
           <div class="ln"><span class="ts">203</span><span class="ts">14:32:05</span><span class="lv t3">INFO</span><span class="t2">browser ready · chromium 132 · viewport 1440×900</span></div>
-          <div class="ln" style="background:color-mix(in srgb,var(--purple) 10%,transparent);margin:0 -14px;padding:0 14px"><span class="ts">204</span><span class="ts">14:32:07</span><span class="lv" style="color:var(--orange)">WARN</span><span>GET /api/okr/period?id=2026Q4 → 403 (118ms)</span></div>
-          <div class="ln" style="background:color-mix(in srgb,var(--purple) 10%,transparent);margin:0 -14px;padding:0 14px"><span class="ts">209</span><span class="ts">14:32:09</span><span class="lv" style="color:var(--red)">ERROR</span><span>router guard rejected: role=普通员工 lacks okr.progress.view</span></div>
+          <div class="ln" style="background:color-mix(in srgb,var(--purple) 10%,transparent);margin:0 -14px;padding:0 14px"><span class="ts">204</span><span class="ts">14:32:07</span><span class="lv" style="color:var(--ink-orange)">WARN</span><span>GET /api/okr/period?id=2026Q4 → 403 (118ms)</span></div>
+          <div class="ln" style="background:color-mix(in srgb,var(--purple) 10%,transparent);margin:0 -14px;padding:0 14px"><span class="ts">209</span><span class="ts">14:32:09</span><span class="lv" style="color:var(--ink-red)">ERROR</span><span>router guard rejected: role=普通员工 lacks okr.progress.view</span></div>
           <div class="ln"><span class="ts">212</span><span class="ts">14:32:48</span><span class="lv t3">INFO</span><span class="t2">screenshot saved · fail-2.png · 已关联第 2 轮</span></div>
         </div></div>
       <div class="card flat" style="padding:10px 14px">
@@ -265,8 +265,8 @@ def p_log():
       <div class="card" style="padding:14px 16px">
         <div class="row g8"><span class="aid" style="width:22px;height:22px;border-radius:7px">{I("spark",12)}</span><span class="f13 w7 grow">AI 解读</span><span class="tag tg-o">根因待核实</span></div>
         <div class="col g8 f13" style="margin-top:10px;line-height:1.55">
-          <div><b style="color:var(--green)">能确认</b>　复测受阻：okr-staff-07 无权进入进度页。</div>
-          <div><b style="color:var(--orange)">不能确认</b>　代码改动是否生效，页面没打开。</div>
+          <div><b style="color:var(--ink-green)">能确认</b>　复测受阻：okr-staff-07 无权进入进度页。</div>
+          <div><b style="color:var(--ink-orange)">不能确认</b>　代码改动是否生效，页面没打开。</div>
           <div><b>下一步</b>　换一个有 OKR 查看权限的普通员工账号，或在原单补充测试账号。</div>
         </div>
         <div class="f12 t3" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--hair)">依据：第 2 次尝试日志 第 204–211 行 · 失败截图 1</div>
@@ -274,7 +274,7 @@ def p_log():
       <div class="card" style="padding:14px 16px">
         <div class="f13 w7">需要你</div>
         <div class="field" style="margin-top:8px;font-size:13px">换账号 <span class="mono">okr-staff-12</span>，密码在原单附件里<span style="display:inline-block;width:1.5px;height:15px;background:var(--blue);vertical-align:-2px;margin-left:1px"></span></div>
-        <div class="row g8" style="margin-top:10px"><span class="btn2 a-pri grow" style="background:var(--blue);color:#fff">{I("refresh",14)}补充后让 Bot 重试</span><span class="btn2 a-sec" style="background:var(--fill)">人工接手</span></div>
+        <div class="row g8" style="margin-top:10px"><span class="btn2 a-pri grow" style="background:var(--btn-pri-bg);color:#fff">{I("refresh",14)}补充后让 Bot 重试</span><span class="btn2 a-sec" style="background:var(--fill)">人工接手</span></div>
         <div class="f11 t3" style="margin-top:8px">重试复用已完成的复现、定位和改代码，不会新建 MR。</div>
       </div>
     </div>
@@ -289,7 +289,7 @@ def p_log():
 # =====================================================================
 def p_ask():
     main = f'''<main class="glass pn grow" style="min-width:0">
-{ticket_head("对话", title="考勤：按部门筛选后列表没有变化", tid="TK-20862", pill=("p-orange","需要协助 · Bot 在问你"), meta='TK-20862 · <span style="color:var(--orange)">P2</span> · 考勤 / 打卡记录 · 修复人 林某 · 执行 Bot-03')}
+{ticket_head("对话", title="考勤：按部门筛选后列表没有变化", tid="TK-20862", pill=("p-orange","需要协助 · Bot 在问你"), meta='TK-20862 · <span style="color:var(--ink-orange)">P2</span> · 考勤 / 打卡记录 · 修复人 林某 · 执行 Bot-03')}
 <div class="col g12 grow" style="padding:12px 26px 6px;min-height:0;justify-content:flex-end;overflow:hidden;-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 56px);mask-image:linear-gradient(180deg,transparent 0,#000 56px)">
   <div class="card flat" style="padding:12px 16px;margin-left:40px">
     <div class="row g8"><span class="sc10 sc-t">Tita</span><span class="f13 w7 grow">原单 · 客户反馈</span><span class="f12 t3">反馈人 李娜 · 今天 11:02 · 附件 2</span></div>
@@ -320,7 +320,7 @@ def p_ask():
     right = aside(
         f'''<div class="card" style="padding:12px 14px"><div class="mini">经过</div>
   <div class="tlx"><div class="rail"><span class="bul" style="background:var(--green)"></span><i></i></div><div style="padding-bottom:8px"><div class="f13 w6">接单 · 已通知你</div><div class="f12 t3">今天 13:18 · 节点「AI干活」</div></div></div>
-  <div class="tlx"><div class="rail"><span class="bul" style="background:var(--orange);box-shadow:0 0 0 4px color-mix(in srgb,var(--orange) 20%,transparent)"></span></div><div><div class="f13 w6" style="color:var(--orange)">需要协助 · 等你回复</div><div class="f12 t3">缺复现角色 · 34 分钟前</div></div></div></div>''',
+  <div class="tlx"><div class="rail"><span class="bul" style="background:var(--orange);box-shadow:0 0 0 4px color-mix(in srgb,var(--orange) 20%,transparent)"></span></div><div><div class="f13 w6" style="color:var(--ink-orange)">需要协助 · 等你回复</div><div class="f12 t3">缺复现角色 · 34 分钟前</div></div></div></div>''',
         f'''<div class="card" style="padding:8px 14px"><div class="mini" style="margin:4px 0 2px">本轮采用</div>
   <div class="kv2"><span class="t2">工单材料</span><span class="f12 t3">原单 + 附件 2</span></div>
   <div class="kv2"><span class="t2">你的补充</span><span class="f12 t3">暂无</span></div>
@@ -359,12 +359,12 @@ def p_reject():
   <div class="flabel" style="margin-top:16px">截图 / 录屏</div>
   <div class="row g10"><div class="shw" style="width:120px;height:78px"><div class="shot" data-s="before" data-cap="none" style="transform:scale(.522)"></div></div><div class="col" style="width:120px;height:74px;border-radius:12px;border:1.5px dashed var(--hair);align-items:center;justify-content:center;gap:4px;color:var(--text-3)">{I("plus",18)}<span class="f11">截图或录屏</span></div>
     <div class="col g6 grow" style="padding-left:6px"><div class="row g8"><span class="cbx on">{I("check",12,3)}</span><span class="f13">要求下一轮用「管理员」复测</span></div><div class="row g8"><span class="cbx on">{I("check",12,3)}</span><span class="f13">重新提交时展示相对本轮的改动</span></div></div></div>
-  <div class="row g10" style="margin-top:20px;padding-top:16px;border-top:1px solid var(--hair)"><span class="f12 t3 grow">打回后 Bot-01 会读取：本条意见 · 代码位置 1 · 截图 1</span><span class="btn2 a-sec" style="background:var(--fill);height:38px">取消</span><span class="btn2" style="height:38px;padding:0 18px;background:var(--red);color:#fff;box-shadow:0 8px 20px -8px color-mix(in srgb,var(--red) 80%,transparent)">{I("undo",14)}打回并通知 Bot</span></div>
+  <div class="row g10" style="margin-top:20px;padding-top:16px;border-top:1px solid var(--hair)"><span class="f12 t3 grow">打回后 Bot-01 会读取：本条意见 · 代码位置 1 · 截图 1</span><span class="btn2 a-sec" style="background:var(--fill);height:36px">取消</span><span class="btn2" style="height:36px;padding:0 18px;background:var(--btn-danger-bg);color:#fff;box-shadow:0 8px 20px -8px color-mix(in srgb,var(--red) 80%,transparent)">{I("undo",14)}打回并通知 Bot</span></div>
 </div>'''
     right = aside(f'''<div class="card" style="padding:12px 14px"><div class="mini">经过</div>
   <div class="tlx"><div class="rail"><span class="bul" style="background:var(--green)"></span><i></i></div><div style="padding-bottom:8px"><div class="f13 w6">接单 · 已通知你</div><div class="f12 t3">昨天 21:52</div></div></div>
   <div class="tlx"><div class="rail"><span class="bul" style="background:var(--red)"></span><i></i></div><div style="padding-bottom:8px"><div class="f13 w6">第 1 轮 · 你打回了</div><div class="f12 t3">“第二个分组还是会卡”</div></div></div>
-  <div class="tlx"><div class="rail"><span class="bul" style="background:var(--blue)"></span></div><div><div class="f13 w6" style="color:var(--blue)">第 2 轮 · 等你审核</div><div class="f12 t3">8 分钟前</div></div></div></div>''',
+  <div class="tlx"><div class="rail"><span class="bul" style="background:var(--blue)"></span></div><div><div class="f13 w6" style="color:var(--ink-blue)">第 2 轮 · 等你审核</div><div class="f12 t3">8 分钟前</div></div></div></div>''',
         '''<div class="card" style="padding:8px 14px"><div class="mini" style="margin:4px 0 2px">各项进度</div><div class="kv2"><span class="t2">代码审核</span><span class="pill p-blue" style="height:22px">等你</span></div><div class="kv2"><span class="t2">原平台确认</span><span class="f12 t3">未确认</span></div></div>''')
     return ticket_list() + chat_main_dim() + right + '<!--OVERLAY-->' + dlg
 
@@ -390,7 +390,7 @@ def pub_list(sel):
                 r = r.replace('<span class="tm10">dot-r</span>', '' if t[0] == sel else '<span class="ud10" style="background:var(--red)"></span>')
             h.append(r)
     h.append('<span class="grow"></span>')
-    h.append(f'<div class="row g8" style="margin:8px 6px 2px;padding:10px 12px;border-radius:12px;background:var(--fill)">{I("spark",14,style="color:var(--purple)")}<span class="f12 t2">也可以对 AI 说「把这轮发到测试」</span></div>')
+    h.append(f'<div class="row g8" style="margin:8px 6px 2px;padding:10px 12px;border-radius:12px;background:var(--fill)">{I("spark",14,style="color:var(--ink-purple)")}<span class="f12 t2">也可以对 AI 说「把这轮发到测试」</span></div>')
     h.append("</section>")
     return "".join(h)
 
@@ -403,11 +403,11 @@ def p_release(in_ticket=True):
 <div class="row g10" style="padding:10px 0;border-top:1px solid var(--hair)">{CK("orange","!")}<div class="col grow" style="min-width:0"><span class="f13 w6">还会带上别人的 4 个提交</span><span class="f12 t3 ell">来自 TK-20802 等 2 单 · 通知里一并列出</span></div><span class="f12 lnk">查看 ›</span></div>'''
     def env(name, cur, nxt, state, stc, note, on=True):
         grad = "linear-gradient(160deg,#4FD6E6,#16A3C0)" if on else "linear-gradient(160deg,#A9AEB8,#6E737D)"
-        ver = f'<span class="mono f15 w6">{cur}</span><span class="t3">{I("arrowr",14)}</span><span class="mono f15 w7" style="color:var(--blue)">{nxt}</span>' if nxt else f'<span class="mono f15 w6">{cur}</span>'
+        ver = f'<span class="mono f15 w6">{cur}</span><span class="t3">{I("arrowr",14)}</span><span class="mono f15 w7" style="color:var(--ink-blue)">{nxt}</span>' if nxt else f'<span class="mono f15 w6">{cur}</span>'
         return f'''<div class="col g6" style="flex:1;min-width:0{"" if on else ";opacity:.8"}">
   <div class="row g8"><span class="ic-box" style="width:22px;height:22px;border-radius:7px;background:{grad}">{I("server",12)}</span><span class="f13 w7">{name}</span><span class="tag tg-{stc}">{state}</span></div>
   <div class="row g8">{ver}<span class="f12 t3 grow ell" style="text-align:right">{note}</span></div></div>'''
-    PILL = '<span class="pill" style="color:var(--teal);background:color-mix(in srgb,var(--teal) 15%,transparent)">发布中 · 4/5</span>'
+    PILL = '<span class="pill" style="color:var(--ink-teal);background:color-mix(in srgb,var(--teal) 15%,transparent)">发布中 · 4/5</span>'
     if in_ticket:
         head = ticket_head("发布", pill=("p-green", "审核通过 · 第 2 轮"))
         subrow = f'''  <div class="row g10"><span class="f16 w7">第 2 轮 → 测试环境</span><span class="f12 t3 grow">发布任务 R-0412 · 发起人 林某 · 15:00 · 关掉客户端不影响</span><span class="f12 lnk">历次发布 2 ›</span>
@@ -478,7 +478,7 @@ def pub_head(icon_bg, icon, title, sub, pill, bar):
 
 
 def pill_c(c, t):
-    return f'<span class="pill" style="color:var(--{c});background:color-mix(in srgb,var(--{c}) 15%,transparent)">{t}</span>'
+    return f'<span class="pill" style="color:var(--ink-{c});background:color-mix(in srgb,var(--{c}) 15%,transparent)">{t}</span>'
 
 
 def p_prod():
@@ -488,7 +488,7 @@ def p_prod():
     ps = "".join(f'<div class="pst{" done" if s=="ok" else ""}"><span class="pdot pd-{s}">{"✓" if s=="ok" else str(i+1)}</span><span class="f13 w6">{n}</span><span class="f11 t3">{t}</span></div>' for i, (n, s, t) in enumerate(pipe))
 
     def env(name, cur, nxt, state, stc, note, grad, dim=False):
-        ver = f'<span class="mono f15 w6">{cur}</span><span class="t3">{I("arrowr",14)}</span><span class="f13 w6" style="color:var(--blue)">{nxt}</span>' if nxt else f'<span class="mono f15 w6">{cur}</span>'
+        ver = f'<span class="mono f15 w6">{cur}</span><span class="t3">{I("arrowr",14)}</span><span class="f13 w6" style="color:var(--ink-blue)">{nxt}</span>' if nxt else f'<span class="mono f15 w6">{cur}</span>'
         return f'''<div class="col g6" style="flex:1;min-width:0{";opacity:.8" if dim else ""}">
   <div class="row g8"><span class="ic-box" style="width:22px;height:22px;border-radius:7px;background:{grad}">{I("server",12)}</span><span class="f13 w7">{name}</span><span class="tag tg-{stc}">{state}</span></div>
   <div class="row g8">{ver}<span class="f12 t3 grow ell" style="text-align:right">{note}</span></div></div>'''
@@ -539,7 +539,7 @@ def p_waittest():
     ps = "".join(f'<div class="pst done"><span class="pdot pd-ok">✓</span><span class="f13 w6">{n}</span><span class="f11 t3">{t}</span></div>' for n, s, t in pipe)
 
     def env(name, cur, nxt, state, stc, note, grad, dim=False):
-        ver = f'<span class="mono f15 w6">{cur}</span><span class="t3">{I("arrowr",14)}</span><span class="mono f15 w7" style="color:var(--blue)">{nxt}</span>' if nxt else f'<span class="mono f15 w6">{cur}</span>'
+        ver = f'<span class="mono f15 w6">{cur}</span><span class="t3">{I("arrowr",14)}</span><span class="mono f15 w7" style="color:var(--ink-blue)">{nxt}</span>' if nxt else f'<span class="mono f15 w6">{cur}</span>'
         return f'''<div class="col g6" style="flex:1;min-width:0{";opacity:.8" if dim else ""}">
   <div class="row g8"><span class="ic-box" style="width:22px;height:22px;border-radius:7px;background:{grad}">{I("server",12)}</span><span class="f13 w7">{name}</span><span class="tag tg-{stc}">{state}</span></div>
   <div class="row g8">{ver}<span class="f12 t3 grow ell" style="text-align:right">{note}</span></div></div>'''
@@ -571,7 +571,7 @@ def p_waittest():
     right = aside(
         f'''<div class="card" style="padding:12px 14px;box-shadow:0 0 0 2px color-mix(in srgb,var(--blue) 55%,transparent)"><div class="mini">测试记录</div>
   <div class="row g8" style="padding:6px 0"><span class="tag tg-b">等复测</span><span class="mono f12">2.18.0-fix.2</span><span class="f12 t3 grow" style="text-align:right">你 · 现在</span></div>
-  <div class="row g8" style="margin:4px 0 8px"><button class="abtn" style="flex:1;justify-content:center;height:34px;background:var(--green);color:#fff">{I("check",14,2.6)}通过</button><button class="abtn a-red" style="flex:1;justify-content:center;height:34px">{I("undo",14)}打回</button></div>
+  <div class="row g8" style="margin:4px 0 8px"><button class="abtn" style="flex:1;justify-content:center;height:36px;background:var(--btn-ok-bg);color:#fff">{I("check",14,2.6)}通过</button><button class="abtn a-red" style="flex:1;justify-content:center;height:36px">{I("undo",14)}打回</button></div>
   <div class="row g8" style="padding:6px 0;border-top:1px solid var(--hair)"><span class="tag tg-r">打回</span><span class="mono f12">2.18.0-fix.1</span><span class="f12 t3 grow" style="text-align:right">你 · 昨天</span></div>
   <div class="f12 t3" style="margin-top:2px">“第二个分组还是卡” · 已归入第 1 轮</div></div>''',
         f'''<div class="card" style="padding:12px 14px"><div class="mini">发布到正式环境</div>
@@ -594,7 +594,7 @@ def p_pubfail():
     lst = pub_list("pubf").replace('<span class="f13 t3" style="margin-left:8px;flex:1">5</span>', '<span class="f13 t3" style="margin-left:8px;flex:1">6</span>')
     PUBS = keep
     pipe = [("合入测试分支", "ok", "林某审核通过"), ("打包上传", "err", "tita build · 退出码 1"), ("发布到测试", "wait", "没执行"), ("核对生效", "wait", "没执行"), ("通知测试人", "wait", "不会发")]
-    ps = "".join(f'<div class="pst{" done" if s=="ok" else ""}"><span class="pdot pd-{s}">{"✓" if s=="ok" else ("!" if s=="err" else str(i+1))}</span><span class="f13 w6"{" style=\"color:var(--red)\"" if s=="err" else ""}>{n}</span><span class="f11 t3">{t}</span></div>' for i, (n, s, t) in enumerate(pipe))
+    ps = "".join(f'<div class="pst{" done" if s=="ok" else ""}"><span class="pdot pd-{s}">{"✓" if s=="ok" else ("!" if s=="err" else str(i+1))}</span><span class="f13 w6"{" style=\"color:var(--ink-red)\"" if s=="err" else ""}>{n}</span><span class="f11 t3">{t}</span></div>' for i, (n, s, t) in enumerate(pipe))
 
     def env(name, cur, nxt, state, stc, note, grad, dim=False):
         ver = f'<span class="mono f15 w6">{cur}</span><span class="t3">{I("arrowr",14)}</span><span class="mono f15 w6 t3" style="text-decoration:line-through">{nxt}</span>' if nxt else f'<span class="mono f15 w6">{cur}</span>'
@@ -612,20 +612,20 @@ def p_pubfail():
   <div class="card row g16" style="padding:12px 16px;align-items:stretch">{env("测试环境","1.6.0-fix.3","1.6.0-fix.4","没变","n","没受影响","linear-gradient(160deg,#4FD6E6,#16A3C0)")}<span style="width:1px;background:var(--hair)"></span>{env("正式环境","1.5.8","","未发布","n","测试通过 → 合回主分支 → 重新打包","linear-gradient(160deg,#A9AEB8,#6E737D)",True)}</div>
   <div class="card" style="padding:16px 10px 12px"><div class="pipe">{ps}</div></div>
   <div class="row g14" style="align-items:stretch">
-    <div class="card grow" style="padding:14px 16px 12px;min-width:0"><div class="row g8"><span class="sec grow" style="color:var(--red);white-space:nowrap">打包上传失败</span><span class="btn2 sm a-sec" style="background:var(--fill)">{I("copy",13)}复制</span><span class="btn2 sm a-sec" style="background:var(--fill)">完整日志</span></div>{err}
-      <div class="f12 ell" style="margin-top:8px;padding:8px 10px;border-radius:10px;background:color-mix(in srgb,var(--purple) 8%,transparent)"><b style="color:var(--purple)">AI 解读 · 待核实</b>　别人改了 <span class="mono">TaxResult</span> 类型</div></div>
+    <div class="card grow" style="padding:14px 16px 12px;min-width:0"><div class="row g8"><span class="sec grow" style="color:var(--ink-red);white-space:nowrap">打包上传失败</span><span class="btn2 sm a-sec" style="background:var(--fill)">{I("copy",13)}复制</span><span class="btn2 sm a-sec" style="background:var(--fill)">完整日志</span></div>{err}
+      <div class="f12 ell" style="margin-top:8px;padding:8px 10px;border-radius:10px;background:color-mix(in srgb,var(--purple) 8%,transparent)"><b style="color:var(--ink-purple)">AI 解读 · 待核实</b>　别人改了 <span class="mono">TaxResult</span> 类型</div></div>
     <div class="card" style="width:300px;flex:none;padding:14px 16px;display:flex;flex-direction:column">
       <div class="sec">测试人</div>
       <div class="row g10" style="margin-top:10px;padding:8px 10px;border-radius:12px;background:var(--fill)"><span class="av" style="width:30px;height:30px;font-size:11px;background:linear-gradient(150deg,#7FB2FF,#4C7DF0)">王某</span><div class="col grow"><span class="f13 w6">王某</span><span class="f11 t3">没通知 · 版本没变</span></div></div>
       <span class="grow"></span>
-      <button class="abtn a-pri" style="width:100%;justify-content:center;height:38px;margin-top:12px">{I("refresh",14)}从打包上传重试</button>
+      <button class="abtn a-pri" style="width:100%;justify-content:center;height:36px;margin-top:12px">{I("refresh",14)}从打包上传重试</button>
       <div class="f12 t3" style="margin-top:8px;line-height:1.5">用已合入的代码重打，不重新提 MR；重复点只会回到这个任务。</div>
     </div>
   </div>
   <div class="card" style="padding:12px 16px 4px"><div class="row g8" style="margin-bottom:6px"><span class="sec grow">阶段明细</span><span class="f12 t3">每步单独记录 · 失败从失败处重试</span></div>
     <style>.tbl.tc td{{padding:7px 10px;white-space:nowrap}}</style><table class="tbl tc"><thead><tr><th style="width:15%">阶段</th><th>做了什么</th><th style="width:16%">时间</th><th style="width:11%">结果</th></tr></thead><tbody>
     <tr><td class="w6">合入测试分支</td><td class="t2">MR <span class="mono">!77</span> · 林某审核 · 合入后 <span class="mono">4c1e9a2</span></td><td class="mono f12 t3">15:06</td><td><span class="tag tg-g">成功</span></td></tr>
-    <tr><td class="w6" style="color:var(--red)">打包上传</td><td class="t2"><span class="mono">tita build</span> · <span class="mono">pnpm build-prod</span> 退出码 1，没上传</td><td class="mono f12 t3">15:10 – 15:12</td><td><span class="tag tg-r">失败</span></td></tr>
+    <tr><td class="w6" style="color:var(--ink-red)">打包上传</td><td class="t2"><span class="mono">tita build</span> · <span class="mono">pnpm build-prod</span> 退出码 1，没上传</td><td class="mono f12 t3">15:10 – 15:12</td><td><span class="tag tg-r">失败</span></td></tr>
     <tr><td class="w6 t3">发布到测试</td><td class="t3"><span class="mono">tita release --app www --env TEST</span></td><td class="mono f12 t3">—</td><td><span class="tag tg-n">没执行</span></td></tr>
     <tr><td class="w6 t3">核对生效</td><td class="t3">打包成功后再核对提交号</td><td class="mono f12 t3">—</td><td><span class="tag tg-n">没执行</span></td></tr>
     </tbody></table></div>
@@ -641,7 +641,7 @@ def p_pubfail():
   <button class="abtn a-sec" style="width:100%;justify-content:center;height:36px;margin-top:8px;opacity:.55">{I("rocket",14)}发布到正式环境</button>
   <div class="f12 t3" style="margin-top:8px">正式发布人：任何人 · 主分支重新打包</div></div>''',
         f'''<div class="card" style="padding:12px 14px"><div class="mini">执行日志 · 最后 3 行</div>
-  <div class="log t2"><div class="ln"><span class="ts">15:12:31</span>calc.ts(88,14) TS2322</div><div class="ln" style="color:var(--red)"><span class="ts">15:12:31</span>exit code 1</div><div class="ln"><span class="ts">15:12:32</span>已通知林某：打包失败</div></div>
+  <div class="log t2"><div class="ln"><span class="ts">15:12:31</span>calc.ts(88,14) TS2322</div><div class="ln" style="color:var(--ink-red)"><span class="ts">15:12:31</span>exit code 1</div><div class="ln"><span class="ts">15:12:32</span>已通知林某：打包失败</div></div>
   <div class="f12 lnk" style="margin-top:6px">查看完整日志 ›</div></div>''')
     return lst + main + right
 
@@ -683,10 +683,10 @@ def p_bundle():
   {g}
   <div class="row g14" style="align-items:stretch;min-height:0">
     <div class="col g8 grow" style="min-width:0">
-      <div class="row g8"><span class="sec" style="color:var(--red)">B 构建失败</span><span class="tag tg-n mono">NodeEditor.tsx:126</span><span class="grow"></span><span class="btn2 sm a-sec" style="background:var(--fill)">{I("copy",13)}复制</span><span class="btn2 sm a-sec" style="background:var(--fill)">{I("terminal",13)}完整日志</span></div>
+      <div class="row g8"><span class="sec" style="color:var(--ink-red)">B 构建失败</span><span class="tag tg-n mono">NodeEditor.tsx:126</span><span class="grow"></span><span class="btn2 sm a-sec" style="background:var(--fill)">{I("copy",13)}复制</span><span class="btn2 sm a-sec" style="background:var(--fill)">{I("terminal",13)}完整日志</span></div>
       <div class="err" style="font-size:11.5px;line-height:19px">{err}</div>
-      <div class="row g10"><div class="ains grow f12 t2" style="line-height:1.55"><b style="color:var(--purple)">AI 建议 · 待核实</b>　C 1.4.3 把 <span class="mono">onGroupChange</span> 改名为 <span class="mono">onChange</span>，B 仍在用旧名。依据：C 的改动 GroupPicker.tsx:12、构建日志第 88 行。</div>
-      <span class="btn2" style="height:38px;background:var(--blue);color:#fff">{I("refresh",14)}从 B 构建重试</span></div>
+      <div class="row g10"><div class="ains grow f12 t2" style="line-height:1.55"><b style="color:var(--ink-purple)">AI 建议 · 待核实</b>　C 1.4.3 把 <span class="mono">onGroupChange</span> 改名为 <span class="mono">onChange</span>，B 仍在用旧名。依据：C 的改动 GroupPicker.tsx:12、构建日志第 88 行。</div>
+      <span class="btn2" style="height:36px;background:var(--btn-pri-bg);color:#fff">{I("refresh",14)}从 B 构建重试</span></div>
       <div class="card" style="padding:8px 14px 2px"><table class="tbl"><thead><tr><th>未完成</th><th>仓库</th><th>当前生效</th><th>目标</th><th>状态</th></tr></thead><tbody>{rows}</tbody></table></div>
     </div>
     <div class="col g10" style="width:330px;flex:none">
@@ -694,7 +694,7 @@ def p_bundle():
         <div class="row g8"><span class="tag tg-n">未发送</span><span class="f12 t2">等 B 生效、主站入口核实后发送</span></div>
         <div class="f12 t3" style="margin-top:6px">将附版本清单：C 1.4.3 · A 3.8.2 · B 2.4.1</div></div>
       <div class="card" style="padding:12px 14px"><div class="mini">重试会怎么做</div>
-        <div class="f12 t2" style="line-height:1.7">先核对 C、A 的产物仍可用，再从 B 构建继续，不重发 C。<br><span style="color:var(--orange)">若要改 C 的源码，会发 1.4.4，并把 A、B 重新标为待更新。</span></div>
+        <div class="f12 t2" style="line-height:1.7">先核对 C、A 的产物仍可用，再从 B 构建继续，不重发 C。<br><span style="color:var(--ink-orange)">若要改 C 的源码，会发 1.4.4，并把 A、B 重新标为待更新。</span></div>
         <div class="row g8" style="margin-top:8px;padding-top:8px;border-top:1px solid var(--hair)"><span class="f12 t3 grow">尝试 #2 15:20 B 构建失败 · #1 15:02 C 发布超时</span><span class="f12 lnk">对照</span></div></div>
     </div></div>
   </div>
@@ -721,7 +721,7 @@ def p_rollback():
   <div class="flabel" style="padding:0 6px">应用</div>
   <div class="row g10" style="margin:0 4px;padding:9px 10px;border-radius:12px;background:var(--fill)"><span class="ic-box" style="width:26px;height:26px;border-radius:7px;background:linear-gradient(160deg,#5AA0FF,#1F6FFF)">{I("globe",14)}</span><div class="col grow"><span class="f13 w6">Tita_Static</span><span class="f11 t3">Apollo 配置中心</span></div>{I("chevd",14,style="color:var(--text-3)")}</div>
   <div class="flabel" style="padding:0 6px;margin-top:12px">环境 · 集群 · Namespace</div>
-  <div class="seg" style="margin:0 4px"><span class="on" style="flex:1;justify-content:center;color:var(--red)">PRO 正式</span><span style="flex:1;justify-content:center">TEST 测试</span></div>
+  <div class="seg" style="margin:0 4px"><span class="on" style="flex:1;justify-content:center;color:var(--ink-red)">PRO 正式</span><span style="flex:1;justify-content:center">TEST 测试</span></div>
   <div class="row g6 f12 t2" style="padding:8px 8px 0"><span class="chip2" style="height:24px;font-size:12px">default</span><span class="chip2" style="height:24px;font-size:12px">application</span></div>
   <div class="g10h" style="padding-top:16px">发布历史 · 选择回到哪一次</div>
   <div class="col g2">{hs}</div>
@@ -739,7 +739,7 @@ def p_rollback():
     for k, a, b, t, s in diff:
         bg = {"chg": "color-mix(in srgb,var(--blue) 7%,transparent)", "warn": "color-mix(in srgb,var(--orange) 10%,transparent)", "same": "transparent"}[t]
         tc = {"chg": "b", "warn": "o", "same": "n"}[t]
-        dr += f'<tr style="background:{bg}"><td class="mono f12">{k}</td><td class="mono f12"{" style=\"color:var(--red);text-decoration:line-through;text-decoration-color:color-mix(in srgb,var(--red) 50%,transparent)\"" if t!="same" else " class=\"t3\""}>{a}</td><td class="mono f12 w6"{" style=\"color:var(--green)\"" if t!="same" else ""}>{b}</td><td><span class="tag tg-{tc}">{s}</span></td></tr>'
+        dr += f'<tr style="background:{bg}"><td class="mono f12">{k}</td><td class="mono f12"{" style=\"color:var(--ink-red);text-decoration:line-through;text-decoration-color:color-mix(in srgb,var(--red) 50%,transparent)\"" if t!="same" else " class=\"t3\""}>{a}</td><td class="mono f12 w6"{" style=\"color:var(--ink-green)\"" if t!="same" else ""}>{b}</td><td><span class="tag tg-{tc}">{s}</span></td></tr>'
     main = f'''<main class="glass pn grow" style="min-width:0">
 <header class="thead"><div class="row g12"><span class="ic-box" style="width:40px;height:40px;border-radius:11px;background:linear-gradient(160deg,#FF8A7A,#E0281E)">{I("history",20,2)}</span>
   <div class="col grow" style="min-width:0"><h1 class="ell">PRO 回到 11-18 21:40 的发布</h1><div class="f12 t3" style="margin-top:2px">Tita_Static · default · application · 当前 approval-web 3.8.2 → 目标 3.8.1 · 选它是因为有 7 天验证通过记录</div></div></div>
@@ -747,7 +747,7 @@ def p_rollback():
 <div class="col g14 grow" style="padding:16px 22px;min-height:0;overflow:hidden">
   <div class="card" style="padding:12px 14px 4px"><div class="row g8" style="margin-bottom:6px"><span class="sec grow">配置差异</span><span class="f12 t3">Apollo 按整个 Namespace 回退 · 5 项中 3 项会变化</span></div>
     <table class="tbl"><thead><tr><th style="width:32%">配置项</th><th>当前</th><th>回滚后</th><th style="width:16%">说明</th></tr></thead><tbody>{dr}</tbody></table></div>
-  <div class="row g10" style="padding:12px 14px;border-radius:14px;background:color-mix(in srgb,var(--orange) 12%,transparent)">{I("alert",18,style="color:var(--orange)")}<div class="f13" style="line-height:1.55"><b>会连带恢复 feature.kanban.v2 = false</b>　这是 11-19 单独打开的看板新版开关，回退后看板会回到旧版。</div></div>
+  <div class="row g10" style="padding:12px 14px;border-radius:14px;background:color-mix(in srgb,var(--orange) 12%,transparent)">{I("alert",18,style="color:var(--ink-orange)")}<div class="f13" style="line-height:1.55"><b>会连带恢复 feature.kanban.v2 = false</b>　这是 11-19 单独打开的看板新版开关，回退后看板会回到旧版。</div></div>
   <div class="row g14" style="align-items:stretch">
     <div class="card grow" style="padding:12px 14px"><div class="mini">实际会变化的应用和资源</div>
       <div class="kv2"><span class="row g8"><span class="sc10 sc-t">应用</span>approval-web</span><span class="mono f12">3.8.2 → 3.8.1</span></div>
@@ -756,7 +756,7 @@ def p_rollback():
       <div class="kv2"><span class="t2">组件 tita-ui-kit</span><span class="row g6 f12">{CK()}3.8.1 使用 1.4.2，仍可用</span></div>
       <div class="kv2"><span class="t2">子项目 workflow-web</span><span class="f12 t3">不受影响</span></div></div>
   </div>
-  <div class="card" style="padding:12px 14px"><div class="row g8" style="margin-bottom:4px"><span class="mini grow" style="margin:0">回滚后的业务验证（项目回滚验证规则）</span><span class="row g6 f12 t3">{I("spark",12,style="color:var(--purple)")}预览由 AI 准备，执行需要你确认</span></div>
+  <div class="card" style="padding:12px 14px"><div class="row g8" style="margin-bottom:4px"><span class="mini grow" style="margin:0">回滚后的业务验证（项目回滚验证规则）</span><span class="row g6 f12 t3">{I("spark",12,style="color:var(--ink-purple)")}预览由 AI 准备，执行需要你确认</span></div>
     <div class="row g14 f13" style="margin-top:6px"><span class="row g6"><span class="tag tg-n">1</span>入口 /approval 实际加载 3.8.1 资源</span><span class="row g6"><span class="tag tg-n">2</span>发起审批页能打开、能选审批人</span><span class="row g6"><span class="tag tg-n">3</span>看板旧版正常</span></div></div>
 </div>
 </main>'''
@@ -764,13 +764,13 @@ def p_rollback():
         f'''<div class="card" style="padding:14px 16px">
   <div class="row g8"><span class="sec grow">确认回滚</span><span class="tag tg-r">PRO 正式环境</span></div>
   <div class="kv2" style="margin-top:6px"><span class="t2">当前</span><span class="mono f13">3.8.2</span></div>
-  <div class="kv2"><span class="t2">目标</span><span class="mono f13 w7" style="color:var(--green)">3.8.1</span></div>
+  <div class="kv2"><span class="t2">目标</span><span class="mono f13 w7" style="color:var(--ink-green)">3.8.1</span></div>
   <div class="kv2"><span class="t2">影响</span><span class="f12">3 项配置 · 1 个应用</span></div>
   <div class="flabel" style="margin-top:10px">回滚理由</div>
   <div class="field" style="font-size:12.5px">审批发起页白屏，先回退再让 Bot 查根因</div>
   <div class="flabel" style="margin-top:10px">输入 PRO 确认</div>
   <div class="field focus mono" style="font-size:13px">PRO<span style="display:inline-block;width:1.5px;height:15px;background:var(--blue);vertical-align:-2px"></span></div>
-  <button class="abtn" style="width:100%;justify-content:center;height:40px;margin-top:12px;background:var(--red);color:#fff;box-shadow:0 8px 20px -8px color-mix(in srgb,var(--red) 80%,transparent)">{I("history",15)}确认回滚到 3.8.1</button>
+  <button class="abtn" style="width:100%;justify-content:center;height:40px;margin-top:12px;background:var(--btn-danger-bg);color:#fff;box-shadow:0 8px 20px -8px color-mix(in srgb,var(--red) 80%,transparent)">{I("history",15)}确认回滚到 3.8.1</button>
   <div class="row g6 f12 t3" style="margin-top:8px">{I("key",12)}<span class="grow">用你的 Apollo 账号 <span class="mono t2">lin.x</span></span><span class="lnk">改 ›</span></div>
   <div class="f11 t3" style="margin-top:8px;line-height:1.5">确认时如线上版本已变化，会刷新差异让你重新确认。</div></div>''',
         f'''<div class="card" style="padding:12px 14px"><div class="mini">执行后分别显示</div>
@@ -791,7 +791,7 @@ def skills_left(sel="页面交互回归 · 我的版本"):
         dt = '<span class="tag" style="background:rgba(255,255,255,.22);color:#fff">草稿</span>' if (draft and on) else ('<span class="tag tg-o">草稿</span>' if draft else "")
         return f'<div class="row g10" style="padding:10px;border-radius:14px;align-items:flex-start;{st}"><span class="ic-box" style="width:32px;height:32px;background:{bg}{";box-shadow:0 0 0 2px rgba(255,255,255,.55)" if on else ""}">{I(ic,16,2)}</span><div class="col grow" style="min-width:0"><div class="row g6"><span class="t10 ell grow">{name}</span>{dt}</div><span class="f12 ell" style="opacity:.7;margin-top:2px">{desc}</span><span class="f11" style="opacity:.6;margin-top:3px">{kind} · {src} · {used}</span></div></div>'
     left = f'''<section class="glass pn" style="width:300px;flex:none;padding:16px 10px 10px">
-      <div class="row g8" style="padding:0 8px 8px"><span class="f18 w7 grow">Skills</span><span class="btn2 sm" style="background:var(--blue);color:#fff">{I("plus",13,2.4)}在线新建</span><span class="btn2 sm a-sec" style="background:var(--fill)">{I("download",13)}导入</span></div>
+      <div class="row g8" style="padding:0 8px 8px"><span class="f18 w7 grow">Skills</span><span class="btn2 sm" style="background:var(--btn-pri-bg);color:#fff">{I("plus",13,2.4)}在线新建</span><span class="btn2 sm a-sec" style="background:var(--fill)">{I("download",13)}导入</span></div>
       <div class="seg" style="margin:0 6px"><span class="on" style="flex:1;justify-content:center;height:26px;font-size:12px">全部 6</span><span style="flex:1;justify-content:center;height:26px;font-size:12px">编码 3</span><span style="flex:1;justify-content:center;height:26px;font-size:12px">验证 3</span></div>
       <div class="g10h">我的<span>3</span></div>
       {sk("页面交互回归 · 我的版本","按复现路径回归，等列表加载完再点","验证","复制自内置","草稿 v2",sel=="页面交互回归 · 我的版本",True)}
@@ -816,11 +816,11 @@ def p_skills():
             ("12", "3. 只构建成功不算通过，必须有页面操作证据。", ""), ("13", "", ""),
             ("14", "## 证据", "h"), ("15", "- 修前复现、修后复测各一段录屏，注明环境、版本和账号角色。", ""),
             ("16", "- 未执行的步骤写明原因，交付时列为待确认项。", "")]
-    bl = "".join(f'<div class="cl{" add" if t=="add" else ""}" style="line-height:24px"><span class="n">{n}</span><span class="c" style="padding-left:8px;{"color:var(--purple);font-weight:600" if t=="h" else ""}">{c.replace("+ ","").replace("**","")}</span></div>' for n, c, t in body)
+    bl = "".join(f'<div class="cl{" add" if t=="add" else ""}" style="line-height:24px"><span class="n">{n}</span><span class="c" style="padding-left:8px;{"color:var(--ink-purple);font-weight:600" if t=="h" else ""}">{c.replace("+ ","").replace("**","")}</span></div>' for n, c, t in body)
     main = f'''<main class="glass pn grow" style="min-width:0">
 <header class="thead"><div class="row g10"><span class="ic-box" style="width:40px;height:40px;border-radius:11px;background:linear-gradient(160deg,#5EDB7A,#28B04F)">{I("eye",20,2)}</span>
   <div class="col grow" style="min-width:0"><h1>页面交互回归 · 我的版本</h1><div class="f12 t3" style="margin-top:2px">验证 Skill · 复制自内置 v1 · 草稿已自动保存 15:02 · 手机可接着写</div></div>
-  <span class="btn2 a-sec" style="background:var(--fill)">{I("history",14)}版本</span><span class="btn2" style="background:var(--blue);color:#fff">保存草稿</span></div></header>
+  <span class="btn2 a-sec" style="background:var(--fill)">{I("history",14)}版本</span><span class="btn2" style="background:var(--btn-pri-bg);color:#fff">保存草稿</span></div></header>
 <div class="col g12 grow" style="padding:16px 22px;min-height:0;overflow:hidden">
   <div class="row g12"><div class="grow"><div class="flabel">名称</div><div class="field">页面交互回归 · 我的版本</div></div><div style="width:150px"><div class="flabel">类型</div><div class="seg"><span style="flex:1;justify-content:center">编码</span><span class="on" style="flex:1;justify-content:center">验证</span></div></div></div>
   <div><div class="flabel">用途（Bot 判断何时使用）</div><div class="field">审批、考勤等表单页面的交互类 Bug，复现和复测都按页面操作留证据。</div></div>
@@ -833,7 +833,7 @@ def p_skills():
   <div class="row g8"><span class="aid" style="width:22px;height:22px;border-radius:7px">{I("spark",12)}</span><span class="f13 w7 grow">AI 帮你改</span></div>
   <div class="me" style="font-size:12.5px;padding:8px 12px;margin-top:10px;max-width:100%">加一条：切换分组后要等列表加载完再点</div>
   <div class="f12 t2" style="margin-top:10px;line-height:1.6">已在第 7 行加入草稿（绿色）。先检查再决定是否采用：</div>
-  <div class="row g8" style="margin-top:8px"><span class="btn2 sm grow" style="background:var(--blue);color:#fff">采用</span><span class="btn2 sm a-sec grow" style="background:var(--fill)">放弃</span></div></div>''',
+  <div class="row g8" style="margin-top:8px"><span class="btn2 sm grow" style="background:var(--btn-pri-bg);color:#fff">采用</span><span class="btn2 sm a-sec grow" style="background:var(--fill)">放弃</span></div></div>''',
         f'''<div class="card" style="padding:12px 14px"><div class="mini">启用到项目</div>
   <div class="row g8" style="padding:6px 0"><span class="cbx on">{I("check",12,3)}</span><span class="f13 grow">审批</span><span class="f12 t3">替换内置 v1</span></div>
   <div class="row g8" style="padding:6px 0"><span class="cbx"></span><span class="f13 grow">考勤</span><span class="f12 t3">未启用</span></div>
@@ -865,10 +865,10 @@ SET_NAV = [("spark", "linear-gradient(160deg,#C58BFF,#6A3DF0)", "全局 AI", "")
 
 def p_settings():
     nav = SET_NAV
-    nv = "".join(f'<div class="sn{" on" if n=="项目" else ""}"><span class="si" style="background:{bg}">{I(ic,14,2)}</span>{n}<em{" style=\"color:var(--orange)\"" if e=="!" else ""}>{e}</em></div>' for ic, bg, n, e in nav)
+    nv = "".join(f'<div class="sn{" on" if n=="项目" else ""}"><span class="si" style="background:{bg}">{I(ic,14,2)}</span>{n}<em{" style=\"color:var(--ink-orange)\"" if e=="!" else ""}>{e}</em></div>' for ic, bg, n, e in nav)
     def pj(name, st, c, on=False):
         sty = ' style="background:var(--glass-2);font-weight:600;box-shadow:0 0 0 .5px var(--hair)"' if on else ''
-        return f'<div class="sn"{sty}><span class="pdt" style="background:var(--{c})"></span>{name}<em style="color:var(--{c})">{st}</em></div>'
+        return f'<div class="sn"{sty}><span class="pdt" style="background:var(--{c})"></span>{name}<em style="color:var(--ink-{c})">{st}</em></div>'
     left = f'''<section class="glass pn" style="width:240px;flex:none;padding:16px 4px 10px">
   <div class="row" style="padding:0 14px 6px"><span class="f18 w7">设置</span></div>{nv}
   <div class="g10h" style="padding-left:14px">项目</div>
@@ -897,7 +897,7 @@ def p_settings():
     ])
     g2 = "".join([
         item("ok", "环境", "项目管理员", '测试 <span class="mono">test.tita.work/okr</span> · 联调 · 正式 <span class="mono">www.tita.com/okr</span>，都能打开', done("10:25 实测通过")),
-        item("no", "环境账号", "项目管理员", '测试环境 5 个账号能登录　<b style="color:var(--red)">OKR 管理员：没有账号</b>，复现大部分 OKR Bug 要用它', todo("填写账号")),
+        item("no", "环境账号", "项目管理员", '测试环境 5 个账号能登录　<b style="color:var(--ink-red)">OKR 管理员：没有账号</b>，复现大部分 OKR Bug 要用它', todo("填写账号")),
     ])
     g3 = "".join([
         item("ok", "工单来源", "管理员", 'Jira OKR「AI修复」→ 测试环境；Tita「AI干活」→ 正式环境', done("2 分钟前收单")),
@@ -909,7 +909,7 @@ def p_settings():
 
     main = f'''<main class="glass pn grow" style="min-width:0">
 <header class="thead"><div class="row g10"><div class="col grow"><h1>项目 · OKR</h1><div class="f12 t3" style="margin-top:2px">人才发展 · 你是项目管理员 · 和第一次使用的步骤器是同一份数据</div></div>
-  <span class="chip2">{I("spark",13,style="color:var(--purple)")}也可以问 AI「OKR 还差什么才能开工？」</span></div>
+  <span class="chip2">{I("spark",13,style="color:var(--ink-purple)")}也可以问 AI「OKR 还差什么才能开工？」</span></div>
 </header>
 <div class="col g8 grow" style="padding:10px 22px;min-height:0;overflow:hidden">
   <div class="sum" style="padding:8px 18px">
@@ -928,12 +928,12 @@ def p_settings():
              ("ok","用「普通员工」登录","4 秒"),("no","用「OKR 管理员」登录","没有账号")]
     def stp(st, t, r):
         c = {"ok":"green","no":"red","wn":"orange"}[st]
-        return f'<div class="row g8 f13" style="height:27px"><span class="dot" style="width:7px;height:7px;color:var(--{c})"></span><span class="grow">{t}</span><span class="f12" style="color:{"var(--text-3)" if st=="ok" else f"var(--{c})"}">{r}</span></div>'
+        return f'<div class="row g8 f13" style="height:27px"><span class="dot" style="width:7px;height:7px;color:var(--{c})"></span><span class="grow">{t}</span><span class="f12" style="color:{"var(--text-3)" if st=="ok" else f"var(--ink-{c})"}">{r}</span></div>'
     right = aside(
         f'''<div class="card" style="padding:12px 14px"><div class="mini">没准备好时会怎样</div>
-  <div class="f13 t2" style="line-height:1.6">OKR 的单照常收进来，标为<b style="color:var(--orange);white-space:nowrap">「等开工准备」</b>，先不派给 Bot，补齐后自动开始。</div>
-  <div class="row g10" style="margin-top:10px;padding:9px 10px;border-radius:12px;background:var(--fill)"><span class="sc10 sc-j">Jira</span><span class="f13 grow ell">OKR-412 对齐视图里子目标重复显示</span><span class="f12" style="color:var(--orange)">等待中</span></div>
-  <div class="row g10" style="margin-top:6px;padding:9px 10px;border-radius:12px;background:var(--fill)"><span class="sc10 sc-t">Tita</span><span class="f13 grow ell">目标进度导出缺少部门</span><span class="f12" style="color:var(--orange)">等待中</span></div></div>''',
+  <div class="f13 t2" style="line-height:1.6">OKR 的单照常收进来，标为<b style="color:var(--ink-orange);white-space:nowrap">「等开工准备」</b>，先不派给 Bot，补齐后自动开始。</div>
+  <div class="row g10" style="margin-top:10px;padding:9px 10px;border-radius:12px;background:var(--fill)"><span class="sc10 sc-j">Jira</span><span class="f13 grow ell">OKR-412 对齐视图里子目标重复显示</span><span class="f12" style="color:var(--ink-orange)">等待中</span></div>
+  <div class="row g10" style="margin-top:6px;padding:9px 10px;border-radius:12px;background:var(--fill)"><span class="sc10 sc-t">Tita</span><span class="f13 grow ell">目标进度导出缺少部门</span><span class="f12" style="color:var(--ink-orange)">等待中</span></div></div>''',
         f'''<div class="card" style="padding:12px 14px"><div class="row"><span class="mini grow" style="margin:0">最近一次检查</span><span class="f12 t3">今天 10:20 · Bot-02</span></div>
   <div style="margin-top:8px">{"".join(stp(*x) for x in steps)}</div>
   <div class="f12 lnk" style="margin-top:8px">看完整日志 ›</div></div>''')
@@ -946,7 +946,7 @@ def p_settings():
 # =====================================================================
 def p_aiset():
     nav = SET_NAV
-    nv = "".join(f'<div class="sn{" on" if n=="全局 AI" else ""}"><span class="si" style="background:{bg}">{I(ic,14,2)}</span>{n}<em{" style=\"color:var(--orange)\"" if e=="!" else ""}>{e}</em></div>' for ic, bg, n, e in nav)
+    nv = "".join(f'<div class="sn{" on" if n=="全局 AI" else ""}"><span class="si" style="background:{bg}">{I(ic,14,2)}</span>{n}<em{" style=\"color:var(--ink-orange)\"" if e=="!" else ""}>{e}</em></div>' for ic, bg, n, e in nav)
     left = f'''<section class="glass pn" style="width:240px;flex:none;padding:16px 4px 10px">
   <div class="row" style="padding:0 14px 6px"><span class="f18 w7">设置</span></div>{nv}
 </section>'''
@@ -959,9 +959,9 @@ def p_aiset():
         return f'<span class="tag {"tg-b" if on else "tg-n"}" style="height:28px;padding:0 12px;font-size:12.5px">{t}</span>'
     main = f'''<main class="glass pn grow" style="min-width:0">
 <header class="thead"><div class="row g10"><div class="col grow"><h1>全局 AI</h1><div class="f12 t3" style="margin-top:2px">所有项目共用 · 只有管理员能改 · 改了从下一张单开始生效</div></div>
-  <span class="chip2">{I("spark",13,style="color:var(--purple)")}也可以问 AI「连续受阻几次会找人？」</span></div></header>
+  <span class="chip2">{I("spark",13,style="color:var(--ink-purple)")}也可以问 AI「连续受阻几次会找人？」</span></div></header>
 <div class="col g12 grow" style="padding:14px 22px;min-height:0;overflow:hidden">
-  <div class="card" style="padding:12px 16px 6px"><div class="row g8" style="margin-bottom:4px"><span class="sec grow">连接</span><span class="row g6 f12" style="color:var(--green)">{I("check",13,3)}已连通 · 今天 10:12 试过，1.2 秒</span><span class="btn2 sm a-sec" style="background:var(--fill);margin-left:8px">{I("refresh",13)}再试一下</span></div>
+  <div class="card" style="padding:12px 16px 6px"><div class="row g8" style="margin-bottom:4px"><span class="sec grow">连接</span><span class="row g6 f12" style="color:var(--ink-green)">{I("check",13,3)}已连通 · 今天 10:12 试过，1.2 秒</span><span class="btn2 sm a-sec" style="background:var(--fill);margin-left:8px">{I("refresh",13)}再试一下</span></div>
     <div class="kv2"><span class="t2">AI 引擎</span><span class="f13 w6">Pi（默认内置 · 多模型）</span></div>
     <div class="kv2"><span class="t2">主力模型</span><span class="f13 w6">gpt-6.2-sol</span></div>
     <div class="kv2"><span class="t2">连接方式</span><span class="row g8"><span class="f13">公司网关</span><span class="mono f12 t2">https://ai-gateway.tita.cloud</span></span></div>
@@ -985,7 +985,7 @@ def p_aiset():
         f'''<div class="card" style="padding:12px 14px"><div class="mini">运行情况</div>
   <div class="kv2"><span class="t2">在线的 Bot</span><span class="f13 w6">3 个</span></div>
   <div class="kv2"><span class="t2">今天调用</span><span class="f13">126 次</span></div>
-  <div class="kv2"><span class="t2">失败</span><span class="f13" style="color:var(--green)">0 次</span></div>
+  <div class="kv2"><span class="t2">失败</span><span class="f13" style="color:var(--ink-green)">0 次</span></div>
   <div class="kv2"><span class="t2">平均响应</span><span class="f13">1.4 秒</span></div></div>''',
         f'''<div class="card" style="padding:12px 14px"><div class="mini">最近改动</div>
   <div class="f13" style="line-height:1.6">林某 把模型换成 gpt-6.2-sol</div><div class="f12 t3">11-18 16:20 · 进行中的 2 张单沿用旧模型</div>
@@ -998,7 +998,7 @@ def p_aiset():
 # =====================================================================
 def set_left(sel):
     nav = SET_NAV
-    nv = "".join(f'<div class="sn{" on" if n==sel else ""}"><span class="si" style="background:{bg}">{I(ic,14,2)}</span>{n}<em{" style=\"color:var(--orange)\"" if e=="!" else ""}>{e}</em></div>' for ic, bg, n, e in nav)
+    nv = "".join(f'<div class="sn{" on" if n==sel else ""}"><span class="si" style="background:{bg}">{I(ic,14,2)}</span>{n}<em{" style=\"color:var(--ink-orange)\"" if e=="!" else ""}>{e}</em></div>' for ic, bg, n, e in nav)
     return f'''<section class="glass pn" style="width:240px;flex:none;padding:16px 4px 10px">
   <div class="row" style="padding:0 14px 6px"><span class="f18 w7">设置</span></div>{nv}
 </section>'''
@@ -1013,8 +1013,8 @@ def p_source():
   <div class="row g8" style="margin-top:8px"><span class="grow"></span><button class="btn2 sm a-sec" style="background:var(--fill)">{I("refresh",13)}立即采集</button></div></div>'''
     tita = f'''<div class="card" style="flex:1;min-width:0;padding:14px 16px 10px;box-shadow:0 0 0 2px color-mix(in srgb,var(--red) 55%,transparent)">
   <div class="row g10"><span class="appic ic-tita" style="width:30px;height:30px;border-radius:9px;font-size:8.5px">TITA</span><span class="f15 w7 grow">Tita 工单</span><span class="tag tg-r">采集失败</span></div>
-  <div style="margin-top:8px">{kv("最近成功", '14:40 · <span style="color:var(--red)">已断 22 分钟</span>')}{kv("自动重试", "3 次都失败 · 下次 15:06")}</div>
-  <div class="log t2" style="margin-top:8px;padding:8px 10px;border-radius:10px;background:color-mix(in srgb,var(--red) 7%,transparent)"><div class="ln"><span class="ts">15:02:11</span>GET /openapi/workorder/list → <b style="color:var(--red)">401</b></div><div class="ln"><span class="ts"></span>{{"code":40101,"msg":"token expired"}}</div></div>
+  <div style="margin-top:8px">{kv("最近成功", '14:40 · <span style="color:var(--ink-red)">已断 22 分钟</span>')}{kv("自动重试", "3 次都失败 · 下次 15:06")}</div>
+  <div class="log t2" style="margin-top:8px;padding:8px 10px;border-radius:10px;background:color-mix(in srgb,var(--red) 7%,transparent)"><div class="ln"><span class="ts">15:02:11</span>GET /openapi/workorder/list → <b style="color:var(--ink-red)">401</b></div><div class="ln"><span class="ts"></span>{{"code":40101,"msg":"token expired"}}</div></div>
   <div class="row g8" style="margin-top:10px"><span class="f12 t3 grow">接入令牌过期了</span><button class="btn2 sm a-sec" style="background:var(--fill)">立即重试</button><button class="btn2 sm a-pri">更新令牌</button></div></div>'''
     rows = [("15:00", "j", "OKR-412", "对齐视图里子目标重复显示", "OKR", "o", "已收 · 等开工准备", ""),
             ("14:58", "j", "OKR-3320", "目标对齐后父目标不更新", "OKR", "r", "没收成 · 确定不了真人修复人", "去处理 ›"),
@@ -1026,7 +1026,7 @@ def p_source():
     tb = "".join(f'''<tr><td class="mono f12 t3">{t}</td><td><span class="sc10 sc-{s}">{"Jira" if s=="j" else "Tita"}</span></td><td><span class="mono f12 w6">{n}</span> <span class="t2">{ti}</span></td><td class="t2">{pj}</td><td><span class="tag tg-{c}">{r}</span></td><td class="lnk w6" style="text-align:right">{a}</td></tr>''' for t, s, n, ti, pj, c, r, a in rows)
     main = f'''<main class="glass pn grow" style="min-width:0">
 <header class="thead"><div class="row g10"><div class="col grow"><h1>来源采集</h1><div class="f12 t3" style="margin-top:2px">单子有没有收进来 · 管理员维护 · 各项目收哪些单在「项目 → 工单来源」里设</div></div>
-  <span class="chip2">{I("spark",13,style="color:var(--purple)")}也可以问 AI「今天 Tita 漏收了吗？」</span></div></header>
+  <span class="chip2">{I("spark",13,style="color:var(--ink-purple)")}也可以问 AI「今天 Tita 漏收了吗？」</span></div></header>
 <div class="col g14 grow" style="padding:14px 22px;min-height:0;overflow:hidden">
   <div class="row g14" style="align-items:stretch">{jira}{tita}</div>
   <div class="card" style="padding:12px 16px 4px"><div class="row g8" style="margin-bottom:6px"><span class="sec grow">最近收单</span><span class="seg" style="padding:2px"><span class="on" style="height:24px;font-size:12px">全部</span><span style="height:24px;font-size:12px">没收成 1</span><span style="height:24px;font-size:12px">重复跳过</span></span></div>
@@ -1038,7 +1038,7 @@ def p_source():
         return f'<div class="col g4" style="padding:8px 0;border-top:1px solid var(--hair)"><div class="row"><span class="f13 w6 grow">{p}</span><span class="f12 lnk">改 ›</span></div><span class="f12 {c}">{j}</span><span class="f12 {c}">{t}</span></div>'
     right = aside(
         f'''<div class="card" style="padding:12px 14px"><div class="mini">今天</div>
-  <div class="row g8" style="margin-top:8px"><div class="col grow"><span style="font-size:24px;line-height:1.2" class="w7">12</span><span class="f11 t3">收到</span></div><div class="col grow"><span class="w7" style="font-size:24px;line-height:1.2;color:var(--green)">9</span><span class="f11 t3">建了任务</span></div><div class="col grow"><span style="font-size:24px;line-height:1.2" class="w7 t3">2</span><span class="f11 t3">重复</span></div><div class="col grow"><span class="w7" style="font-size:24px;line-height:1.2;color:var(--red)">1</span><span class="f11 t3">没收成</span></div></div></div>''',
+  <div class="row g8" style="margin-top:8px"><div class="col grow"><span style="font-size:24px;line-height:1.2" class="w7">12</span><span class="f11 t3">收到</span></div><div class="col grow"><span class="w7" style="font-size:24px;line-height:1.2;color:var(--ink-green)">9</span><span class="f11 t3">建了任务</span></div><div class="col grow"><span style="font-size:24px;line-height:1.2" class="w7 t3">2</span><span class="f11 t3">重复</span></div><div class="col grow"><span class="w7" style="font-size:24px;line-height:1.2;color:var(--ink-red)">1</span><span class="f11 t3">没收成</span></div></div></div>''',
         f'''<div class="card" style="padding:12px 14px 4px"><div class="mini">各项目收哪些单</div>
   {cond("审批", "Jira APR「AI修复」→ 测试环境", "Tita 审批「AI干活」→ 正式环境")}
   {cond("考勤", "Jira KQ「AI修复」→ 测试环境", "Tita 考勤「AI干活」→ 正式环境")}
@@ -1066,7 +1066,7 @@ def p_members():
          ("陈晨", "#FFD27F,#F0A23C", "chen@company.com", "陈晨 · chenchen", "陈晨", "审批", "成员", "g", "正常"),
          ("张某", "#8FD8C9,#3FAE9A", "zhang@company.com", "张某 · zhang", "张某", "审批 OKR", "成员", "g", "正常"),
          ("李娜", "#F7A8D0,#E0609E", "lina@company.com", "李娜 · lina", "李娜", "考勤", "成员", "g", "正常"),
-         ("周某", "#B5E3A0,#5FB84A", "zhou@company.com", "周某 · zhou", '<span style="color:var(--orange)">未关联</span>', "考勤", "成员", "g", "正常"),
+         ("周某", "#B5E3A0,#5FB84A", "zhou@company.com", "周某 · zhou", '<span style="color:var(--ink-orange)">未关联</span>', "考勤", "成员", "g", "正常"),
          ("赵磊", "#C8CCD4,#8A909B", "zhao@company.com", "赵磊 · zhaolei", "赵磊", "考勤", "成员", "n", "已停用")]
     tb = "".join(f'''<tr{" style=\"opacity:.6\"" if s=="已停用" else ""}><td><div class="row g8">{av(n,g)}<span class="w6">{n}</span></div></td><td class="mono f11 t2">{a}</td><td class="f12 t2">{j}</td><td class="f12 t2">{t}</td><td class="f12 t2">{p}</td><td>{"<span class=\"tag tg-b\">空间管理员</span>" if r=="空间管理员" else (f"<span class=\"tag tg-p\">{r}</span>" if r.startswith("负责人") else "<span class=\"f12 t3\">成员</span>")}</td><td><span class="tag tg-{c}">{s}</span></td></tr>''' for n, g, a, j, t, p, r, c, s in M)
     main = f'''<main class="glass pn grow" style="min-width:0">
@@ -1106,10 +1106,10 @@ def p_notify():
           ("紧急回滚结果", "我发起或我负责的项目", L, L), ("待原平台确认", "每天 18:00 汇总一次", T(False), T(True))]
     rows = "".join(f'<div class="row g10" style="padding:7px 0;border-top:1px solid var(--hair)"><div class="row g10 grow" style="min-width:0"><span class="f13 w6" style="width:170px;flex:none">{a}</span><span class="f12 t3 ell">{b}</span></div><div style="width:110px;display:flex;justify-content:center">{c}</div><div style="width:110px;display:flex;justify-content:center">{d}</div></div>' for a, b, c, d in ev)
     def dev(ic, n, d, st, c, act):
-        return f'<div class="row g10" style="padding:10px 0;border-top:1px solid var(--hair)"><span class="ic-box" style="width:30px;height:30px;border-radius:9px;background:linear-gradient(160deg,#A9AEB8,#6E737D)">{I(ic,15)}</span><div class="col grow"><span class="f13 w6">{n}</span><span class="f12 t3">{d}</span></div><span class="f12" style="color:var(--{c})">{st}</span><span class="f12 lnk w6" style="width:96px;text-align:right">{act}</span></div>'
+        return f'<div class="row g10" style="padding:10px 0;border-top:1px solid var(--hair)"><span class="ic-box" style="width:30px;height:30px;border-radius:9px;background:linear-gradient(160deg,#A9AEB8,#6E737D)">{I(ic,15)}</span><div class="col grow"><span class="f13 w6">{n}</span><span class="f12 t3">{d}</span></div><span class="f12" style="color:var(--ink-{c})">{st}</span><span class="f12 lnk w6" style="width:96px;text-align:right">{act}</span></div>'
     main = f'''<main class="glass pn grow" style="min-width:0">
 <header class="thead"><div class="row g10"><div class="col grow"><h1>通知</h1><div class="f12 t3" style="margin-top:2px">你自己的设置 · 只影响你收到什么 · 错过的通知都能在待办里找到</div></div>
-  <span class="chip2">{I("spark",13,style="color:var(--purple)")}也可以对 AI 说「晚上别推测试结果」</span></div></header>
+  <span class="chip2">{I("spark",13,style="color:var(--ink-purple)")}也可以对 AI 说「晚上别推测试结果」</span></div></header>
 <div class="col g14 grow" style="padding:14px 22px;min-height:0;overflow:hidden">
   <div class="card" style="padding:12px 16px 6px"><div class="row g10"><span class="sec grow">什么事通知我</span><span class="f12 t3" style="width:110px;text-align:center">PC 桌面提醒</span><span class="f12 t3" style="width:110px;text-align:center">手机推送</span></div>{rows}
     <div class="row g6 f12 t3" style="padding:8px 0 4px;border-top:1px solid var(--hair)">{I("lock",12)}发布失败和回滚结果关不掉，出了问题一定要有人知道</div></div>
@@ -1187,7 +1187,7 @@ html:not(.dark) .el .no{color:#fff}
       <div class="row g8 f12 t2">{I("msgq",14,style="color:var(--text-3)")}需要权限请联系项目管理员</div>
     </div>
     <div class="f12 t3" style="line-height:1.6;padding:0 2px">工单列表、搜索和 AI 助手里也查不到这张单。</div>
-    <button class="abtn a-sec" style="height:38px;justify-content:center">回到我的工单</button>
+    <button class="abtn a-sec" style="height:36px;justify-content:center">回到我的工单</button>
   </div>
 </div>'''
 
@@ -1215,7 +1215,7 @@ html:not(.dark) .el .no{color:#fff}
 <div class="col grow g10" style="padding:12px 18px 0;min-height:0">
   <div class="row" style="justify-content:flex-end"><div class="col" style="align-items:flex-end;gap:4px">
     <span class="f11 t3">你 · 在昨天的对话里</span>
-    <span style="padding:8px 12px;border-radius:14px 14px 4px 14px;background:var(--blue);color:#fff;font-size:13px">打回吧，分组按钮点完还是会闪一下</span></div></div>
+    <span style="padding:8px 12px;border-radius:14px 14px 4px 14px;background:var(--btn-pri-bg);color:#fff;font-size:13px">打回吧，分组按钮点完还是会闪一下</span></div></div>
   <div class="row g10" style="align-items:flex-start">
     <span class="aid" style="margin-top:2px">{I("spark",13)}</span>
     <div class="card col g8 grow" style="padding:11px 13px;min-width:0">
@@ -1232,11 +1232,11 @@ html:not(.dark) .el .no{color:#fff}
     # 4 审核中有新提交
     t4 = mini_head("审批中心：发起审批时点击分组，界面卡住", 'TK-20871 · 修复人 林某 · 第 2 轮', '<span class="pill p-blue" style="flex:none">待我审核 · 第 2 轮</span>', "代码改动") + f'''
 <div class="col grow g6" style="padding:10px 18px 0;min-height:0">
-  <div class="ebar" style="padding:8px 14px;background:color-mix(in srgb,var(--orange) 13%,transparent)">{I("git",16,style="color:var(--orange)")}
+  <div class="ebar" style="padding:8px 14px;background:color-mix(in srgb,var(--orange) 13%,transparent)">{I("git",16,style="color:var(--ink-orange)")}
     <div class="col grow" style="min-width:0"><span class="f13 w6">Bot 刚又提交了 <span class="mono">b71e0d2</span></span><span class="f12 t2">15:06 · 1 个文件 · 你正在看的是 <span class="mono">a3f9c21</span></span></div>
     <span class="btn2 sm a-sec" style="background:var(--glass-2)">只看新增的</span><span class="btn2 sm a-pri">切到最新</span></div>
   <div class="col" style="gap:2px">
-    <div class="row g8" style="padding:3px 10px;border-radius:10px"><span class="st st-m" style="width:16px;height:16px;border-radius:4px;font-size:10px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center">M</span><span class="f13 w6">GroupPicker.tsx</span><span class="tag tg-o">有新改动 · 要重看</span><span class="grow"></span><span class="f11 num" style="color:var(--green)">+1</span><span class="f11 num" style="color:var(--red)">−1</span></div>
+    <div class="row g8" style="padding:3px 10px;border-radius:10px"><span class="st st-m" style="width:16px;height:16px;border-radius:4px;font-size:10px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center">M</span><span class="f13 w6">GroupPicker.tsx</span><span class="tag tg-o">有新改动 · 要重看</span><span class="grow"></span><span class="f11 num" style="color:var(--ink-green)">+1</span><span class="f11 num" style="color:var(--ink-red)">−1</span></div>
     <div class="row g8" style="padding:3px 10px;border-radius:10px"><span class="st st-m" style="width:16px;height:16px;border-radius:4px;font-size:10px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center">M</span><span class="f13 w6">useMembers.ts</span><span class="tag tg-g">已看 · 没变</span><span class="grow"></span><span class="f11 t3">保留已看</span></div>
   </div>
   <div class="mono" style="font-size:11.5px;line-height:21px;border-radius:10px;overflow:hidden;border:1px solid var(--hair)">
@@ -1247,8 +1247,8 @@ html:not(.dark) .el .no{color:#fff}
 </div>
 <div class="row g8" style="padding:10px 18px;border-top:1px solid var(--hair)">
   <span class="f12 t3 grow">要通过的是最新的 <span class="mono">b71e0d2</span></span>
-  <button class="abtn a-red" style="height:34px;font-size:13px">{I("undo",13)}打回</button>
-  <button class="abtn a-sec" style="height:34px;font-size:13px;opacity:.55">{I("check",14,2.6)}看完新改动才能通过</button></div>'''
+  <button class="abtn a-red" style="height:36px;font-size:13px">{I("undo",13)}打回</button>
+  <button class="abtn a-sec" style="height:36px;font-size:13px;opacity:.55">{I("check",14,2.6)}看完新改动才能通过</button></div>'''
 
     body = '<div class="eb">' + tile(1, "无权查看", "换了账号，或项目权限被撤销", t1) + tile(2, "登录过期", "点链接或通知时，登录后回原处", t2) \
         + tile(3, "状态已经变了", "旧对话、旧页面里的操作不改写已有结果", t3) + tile(4, "审核中有新提交", "通过的永远是最新的那个提交", t4) + "</div>"
@@ -1259,7 +1259,7 @@ html:not(.dark) .el .no{color:#fff}
 # 链路补图（docs/05 第五节）：修复中 · 发测试前 · 合回主分支 MR 审核 · 待原平台确认
 # =====================================================================
 EMPTY_CK = '<span class="ck" style="background:var(--fill)"></span>'
-NB2 = '<span style="width:20px;height:20px;border-radius:50%;background:color-mix(in srgb,var(--purple) 14%,transparent);color:var(--purple);font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none">{}</span>'
+NB2 = '<span style="width:20px;height:20px;border-radius:50%;background:color-mix(in srgb,var(--purple) 14%,transparent);color:var(--ink-purple);font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none">{}</span>'
 
 
 def _pipe(steps):
@@ -1267,7 +1267,7 @@ def _pipe(steps):
     for i, (n, s, t) in enumerate(steps):
         if s == "ask":
             dot = f'<span class="pdot" style="background:var(--orange);box-shadow:0 0 0 5px color-mix(in srgb,var(--orange) 22%,transparent)">{i+1}</span>'
-            out.append(f'<div class="pst">{dot}<span class="f13 w6" style="color:var(--orange)">{n}</span><span class="f11 t3">{t}</span></div>')
+            out.append(f'<div class="pst">{dot}<span class="f13 w6" style="color:var(--ink-orange)">{n}</span><span class="f11 t3">{t}</span></div>')
             continue
         g = "✓" if s == "ok" else (I("loader", 14, 2.6) if s == "run" else str(i + 1))
         out.append(f'<div class="pst{" done" if s=="ok" else ""}"><span class="pdot pd-{s}">{g}</span><span class="f13 w6">{n}</span><span class="f11 t3">{t}</span></div>')
@@ -1276,7 +1276,7 @@ def _pipe(steps):
 
 def _env(name, cur, nxt, state, stc, note, grad, dim=False, nxt_mono=True):
     if nxt:
-        nx = f'<span class="{"mono f15 w7" if nxt_mono else "f13 w6"}" style="color:var(--blue)">{nxt}</span>'
+        nx = f'<span class="{"mono f15 w7" if nxt_mono else "f13 w6"}" style="color:var(--ink-blue)">{nxt}</span>'
         ver = f'<span class="mono f15 w6">{cur}</span><span class="t3">{I("arrowr",14)}</span>{nx}'
     else:
         ver = f'<span class="mono f15 w6">{cur}</span>'
@@ -1315,13 +1315,13 @@ def _prod_card(c1, c2, c3, label3="合回主分支 · MR 审核通过", on=False
 # ---------- 3 Bot 修复中 ----------
 def p_working():
     head = ticket_head("对话", title="考勤：导出月报后部门名显示乱码", tid="TK-20840",
-                       meta='TK-20840 · <span style="color:var(--orange)">P2</span> · 考勤 / 月报导出 · 修复人 林某 · 执行 Bot-02',
+                       meta='TK-20840 · <span style="color:var(--ink-orange)">P2</span> · 考勤 / 月报导出 · 修复人 林某 · 执行 Bot-02',
                        pill=("p-teal", "AI 修复中 · 第 1 轮"))
-    head = head.replace('class="pill p-teal" style="flex:none"', 'class="pill" style="flex:none;color:var(--teal);background:color-mix(in srgb,var(--teal) 15%,transparent)"')
+    head = head.replace('class="pill p-teal" style="flex:none"', 'class="pill" style="flex:none;color:var(--ink-teal);background:color-mix(in srgb,var(--teal) 15%,transparent)"')
     steps = [("ok", "读工单"), ("ok", "复现"), ("ok", "定位"), ("ok", "改代码"), ("ok", "试构建"), ("run", "修后验证")]
-    sb = "".join(f'<span style="white-space:nowrap" class="stp{" w6" if s=="run" else ""}"{" style=\"color:var(--teal)\"" if s=="run" else ""}>{CK() if s=="ok" else I("loader",14,2.6)}{n}</span>' for s, n in steps)
+    sb = "".join(f'<span style="white-space:nowrap" class="stp{" w6" if s=="run" else ""}"{" style=\"color:var(--ink-teal)\"" if s=="run" else ""}>{CK() if s=="ok" else I("loader",14,2.6)}{n}</span>' for s, n in steps)
     acts = [("15:31", "用 hr-admin-02 登录测试环境", "ok"), ("15:33", "导出「研发中心」考勤月报", "ok"), ("15:34", "打开 Excel，核对「部门」列", "ok"), ("15:35", "导出「全公司」· 你刚才的补充", "run")]
-    al = "".join(f'<div class="row g8 f12" style="padding:4px 0"><span class="mono t3" style="width:38px">{t}</span>{CK() if s=="ok" else I("loader",13,2.6,style="color:var(--teal)")}<span class="{"t2" if s=="ok" else "w6"}"{" style=\"color:var(--teal)\"" if s=="run" else ""}>{a}</span></div>' for t, a, s in acts)
+    al = "".join(f'<div class="row g8 f12" style="padding:4px 0"><span class="mono t3" style="width:38px">{t}</span>{CK() if s=="ok" else I("loader",13,2.6,style="color:var(--ink-teal)")}<span class="{"t2" if s=="ok" else "w6"}"{" style=\"color:var(--ink-teal)\"" if s=="run" else ""}>{a}</span></div>' for t, a, s in acts)
     main = f'''<main class="glass pn grow" style="min-width:0">
 {head}
 <div class="col g12 grow" style="padding:12px 26px 6px;min-height:0;justify-content:flex-end;overflow:hidden;-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 56px);mask-image:linear-gradient(180deg,transparent 0,#000 56px)">
@@ -1339,7 +1339,7 @@ def p_working():
           <div class="col" style="flex:none"><div style="width:210px;border-radius:10px;overflow:hidden;border:1px solid var(--hair);background:var(--glass-2);font-size:11.5px">
             <div class="row g6" style="padding:5px 8px;background:color-mix(in srgb,var(--green) 14%,transparent)"><span style="width:10px;height:10px;border-radius:2px;background:#1E8E3E"></span><span class="w6 f11">考勤月报-全公司.xlsx</span></div>
             <div style="display:grid;grid-template-columns:52px 1fr 40px"><span style="padding:4px 8px;border-top:1px solid var(--hair);font-weight:600;color:var(--text-3)">姓名</span><span style="padding:4px 8px;border-top:1px solid var(--hair);font-weight:600;color:var(--text-3)">部门</span><span style="padding:4px 8px;border-top:1px solid var(--hair);font-weight:600;color:var(--text-3)">出勤</span><span style="padding:4px 8px;border-top:1px solid var(--hair)">张伟</span><span style="padding:4px 8px;border-top:1px solid var(--hair);background:color-mix(in srgb,var(--green) 10%,transparent)">研发中心</span><span style="padding:4px 8px;border-top:1px solid var(--hair)">22</span><span style="padding:4px 8px;border-top:1px solid var(--hair)">李娜</span><span style="padding:4px 8px;border-top:1px solid var(--hair);background:color-mix(in srgb,var(--green) 10%,transparent)">产品部</span><span style="padding:4px 8px;border-top:1px solid var(--hair)">21</span><span style="padding:4px 8px;border-top:1px solid var(--hair)">…</span><span style="padding:4px 8px;border-top:1px solid var(--hair)">…</span><span style="padding:4px 8px;border-top:1px solid var(--hair)">…</span></div>
-            <div class="f11" style="padding:4px 8px;color:var(--teal);border-top:1px solid var(--hair)">实时画面 · 15:35</div></div></div>
+            <div class="f11" style="padding:4px 8px;color:var(--ink-teal);border-top:1px solid var(--hair)">实时画面 · 15:35</div></div></div>
           <div class="col grow" style="min-width:0">{al}</div>
         </div>
         <div class="row g8 f12 t2" style="margin-top:8px;padding-top:9px;border-top:1px solid var(--hair)">已做完：修前复现 1 张截图 · 根因在导出时没写 UTF-8 BOM · 改了 2 个文件 <span class="mono">7c2e1a9</span><span class="grow"></span><span class="lnk">展开过程 ›</span></div>
@@ -1358,10 +1358,10 @@ def p_working():
   <div class="tlx"><div class="rail"><span class="bul" style="background:var(--green)"></span><i></i></div><div style="padding-bottom:8px"><div class="f13 w6">接单 · 已通知你</div><div class="f12 t3">14:02 · 节点「AI干活」</div></div></div>
   <div class="tlx"><div class="rail"><span class="bul" style="background:var(--green)"></span><i></i></div><div style="padding-bottom:8px"><div class="f13 w6">复现到了</div><div class="f12 t3">14:31 · 修前截图 1 张</div></div></div>
   <div class="tlx"><div class="rail"><span class="bul" style="background:var(--green)"></span><i></i></div><div style="padding-bottom:8px"><div class="f13 w6">改代码 · 试构建通过</div><div class="f12 t3">15:20 · <span class="mono">7c2e1a9</span></div></div></div>
-  <div class="tlx"><div class="rail"><span class="bul" style="background:var(--teal);box-shadow:0 0 0 4px color-mix(in srgb,var(--teal) 20%,transparent)"></span></div><div><div class="f13 w6" style="color:var(--teal)">修后验证中</div><div class="f12 t3">3 / 4 · 还要约 5 分钟</div></div></div></div>''',
+  <div class="tlx"><div class="rail"><span class="bul" style="background:var(--teal);box-shadow:0 0 0 4px color-mix(in srgb,var(--teal) 20%,transparent)"></span></div><div><div class="f13 w6" style="color:var(--ink-teal)">修后验证中</div><div class="f12 t3">3 / 4 · 还要约 5 分钟</div></div></div></div>''',
         f'''<div class="card" style="padding:8px 14px"><div class="mini" style="margin:4px 0 2px">本轮采用</div>
   <div class="kv2"><span class="t2">工单材料</span><span class="f12 t3">原单 + 附件 1</span></div>
-  <div class="kv2"><span class="t2">你的补充</span><span class="f12" style="color:var(--green)">1 条 · 已采纳</span></div>
+  <div class="kv2"><span class="t2">你的补充</span><span class="f12" style="color:var(--ink-green)">1 条 · 已采纳</span></div>
   <div class="kv2"><span class="t2">验证账号</span><span class="f12 mono">hr-admin-02</span></div>
   <div class="kv2"><span class="t2">验证 Skill</span><span class="f12">页面交互回归 v1</span></div></div>''',
         f'''<div class="card" style="padding:12px 14px"><div class="mini">接下来</div>
@@ -1384,7 +1384,7 @@ def p_pubbefore():
       <div class="row g8"><span class="sec grow">测试人</span><span class="f11 t3">Tita 单没有提单测试人</span></div>
       <div class="row g10" style="margin-top:10px;padding:8px 10px;border-radius:12px;background:var(--glass-2);box-shadow:0 0 0 2px var(--blue)"><span class="av" style="width:30px;height:30px;font-size:11px;background:linear-gradient(150deg,#7FB2FF,#4C7DF0)">王某</span><div class="col grow"><span class="f13 w6">王某</span><span class="f11 t3">第 1 轮复测人 · 账号 kq-staff-03</span></div>{I("chevd",14,style="color:var(--text-3)")}</div>
       <span class="grow"></span>
-      <button class="abtn a-pri" style="width:100%;justify-content:center;height:38px;margin-top:10px">{I("pkg",14)}发布到测试环境</button>
+      <button class="abtn a-pri" style="width:100%;justify-content:center;height:36px;margin-top:10px">{I("pkg",14)}发布到测试环境</button>
       <div class="row g6 f12 t3" style="margin-top:8px">{I("key",12)}<span class="grow">用你的 Apollo 账号 <span class="mono t2">lin.x</span></span><span class="lnk">改 ›</span></div>
       <div class="f12 t3" style="margin-top:7px;line-height:1.5">发测试的人：修复人（项目可改）· 关掉也会继续</div>
     </div>'''
@@ -1421,14 +1421,14 @@ def p_mrmain():
     pipe = _pipe([("合回主分支", "ask", "等你审核 MR !322"), ("打包上传", "wait", "tita build"), ("发布到正式", "wait", "tita release"), ("核对生效", "wait", "读 Apollo 提交号"), ("通知", "wait", "对上后发送")])
     env = f'''<div class="card row g16" style="padding:12px 16px;align-items:stretch">{_env("正式环境","2.17.4","合入后重新打包","未发布","n","在 master 上打包",PROD_G,nxt_mono=False)}<span style="width:1px;background:var(--hair)"></span>{_env("测试环境","2.18.0-fix.1","","复测通过","g","王某 · 今天 11:20",TEST_G,True)}</div>'''
     files = [("ApprovalRevoke.tsx", "+12", "−3"), ("useApprovalState.ts", "+5", "−1")]
-    fl = "".join(f'<div class="row g8" style="padding:4px 0 4px 30px"><span class="st st-m" style="width:15px;height:15px;border-radius:4px;font-size:9.5px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center">M</span><span class="f12 mono">{n}</span><span class="f11 num" style="color:var(--green)">{a}</span><span class="f11 num" style="color:var(--red)">{d}</span></div>' for n, a, d in files)
+    fl = "".join(f'<div class="row g8" style="padding:4px 0 4px 30px"><span class="st st-m" style="width:15px;height:15px;border-radius:4px;font-size:9.5px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center">M</span><span class="f12 mono">{n}</span><span class="f11 num" style="color:var(--ink-green)">{a}</span><span class="f11 num" style="color:var(--ink-red)">{d}</span></div>' for n, a, d in files)
     left = (_crow(CK(), "本单改动和测试时一样", '2 个文件 · 和测过的 2.18.0-fix.1 逐行一致', "看逐行 ›")
             + _crow(CK("orange", "!"), "还会带上别人的 1 个提交", "TK-20802 列表排序 · 已在测试环境测过", "查看 ›"))
     review = f'''<div class="card" style="width:300px;flex:none;padding:14px 16px;display:flex;flex-direction:column;box-shadow:0 0 0 2px color-mix(in srgb,var(--orange) 55%,transparent)">
       <div class="row g8"><span class="sec grow">MR 审核</span><span class="tag tg-o">等你</span></div>
       <div class="row g10" style="margin-top:10px;padding:8px 10px;border-radius:12px;background:var(--fill)"><span class="av" style="width:30px;height:30px;font-size:11px;background:linear-gradient(150deg,#FFC9A8,#F08F7A);color:#5A2414">林</span><div class="col grow"><span class="f13 w6">你 · 林某</span><span class="f11 t3">项目设的「合回主分支」审核人</span></div></div>
       <span class="grow"></span>
-      <div class="row g8" style="margin-top:12px"><button class="abtn a-red" style="height:38px;flex:none;padding:0 14px">{I("undo",14)}打回</button><button class="abtn a-pri" style="height:38px;flex:1;justify-content:center;padding:0 10px">{I("check",15,2.6)}通过并合入</button></div>
+      <div class="row g8" style="margin-top:12px"><button class="abtn a-red" style="height:36px;flex:none;padding:0 14px">{I("undo",14)}打回</button><button class="abtn a-pri" style="height:36px;flex:1;justify-content:center;padding:0 10px">{I("check",15,2.6)}通过并合入</button></div>
       <div class="row g6 f12 t3" style="margin-top:8px">{I("key",12)}<span class="grow">用你的 GitLab 账号 <span class="mono t2">lin.x</span> 合入</span><span class="lnk">改 ›</span></div>
       <div class="f12 t3" style="margin-top:6px;line-height:1.5">打回到修复人和 Bot，改了要重新测</div>
     </div>'''
@@ -1462,7 +1462,7 @@ def p_mrmain():
 # ---------- 13 待原平台确认 ----------
 def p_confirm():
     head = ticket_head("对话", title="审批单撤回后状态错乱", tid="TK-20790",
-                       meta='TK-20790 · <span style="color:var(--orange)">P2</span> · 审批 / 撤回 · 修复人 林某 · 执行 Bot-01',
+                       meta='TK-20790 · <span style="color:var(--ink-orange)">P2</span> · 审批 / 撤回 · 修复人 林某 · 执行 Bot-01',
                        pill=("p-green", "审核通过 · 待原平台确认"))
     st = lambda c, t, s: f'<div class="row g10" style="padding:7px 12px;border-radius:12px;background:var(--fill)">{CK(c) if c else EMPTY_CK}<span class="f13 w6">{t}</span><span class="grow"></span><span class="f12 t3">{s}</span></div>'
     main = f'''<main class="glass pn grow" style="min-width:0">
@@ -1498,7 +1498,7 @@ def p_confirm():
     right = aside(
         f'''<div class="card" style="padding:12px 14px"><div class="mini">修复完成 · 由你点</div>
   <div class="row g8 f13" style="padding:6px 0">{EMPTY_CK}<span class="grow">正式环境已生效</span><span class="f12 t3">等发布</span></div>
-  <div class="row g8 f13" style="padding:6px 0;border-top:1px solid var(--hair)">{EMPTY_CK}<span class="grow">原平台已确认</span><span class="f12" style="color:var(--purple)">等你</span></div>
+  <div class="row g8 f13" style="padding:6px 0;border-top:1px solid var(--hair)">{EMPTY_CK}<span class="grow">原平台已确认</span><span class="f12" style="color:var(--ink-purple)">等你</span></div>
   <button class="abtn a-sec" style="width:100%;justify-content:center;height:36px;margin-top:8px">{I("check",14,2.6)}修复完成</button>
   <div class="f12 t3" style="margin-top:7px;line-height:1.5">工单负责人点了才算完成；还有没做完的会再提醒一次</div></div>''',
         f'''<div class="card" style="padding:12px 14px"><div class="mini">环境版本</div>
@@ -1513,7 +1513,7 @@ def p_confirm():
 # ---------- 9 → 10 复测通过 · 等修复人点「合回主分支」 ----------
 def p_pubpassed():
     head = ticket_head("发布", title="审批单撤回后状态错乱", tid="TK-20790",
-                       meta='TK-20790 · <span style="color:var(--orange)">P2</span> · 审批 / 撤回 · 修复人 林某 · 执行 Bot-01',
+                       meta='TK-20790 · <span style="color:var(--ink-orange)">P2</span> · 审批 / 撤回 · 修复人 林某 · 执行 Bot-01',
                        pill=("p-green", "审核通过 · 复测通过"))
     subrow = f'''  <div class="row g10"><span class="f16 w7">第 1 轮 → 测试环境</span><span class="f12 t3 grow">发布任务 R-0409 · 已生效 · 王某 11:20 复测通过</span><span class="f12 lnk">历次发布 1 ›</span>
     {pill_c("green", "复测通过")}</div>
@@ -1524,7 +1524,7 @@ def p_pubpassed():
             + _crow(CK("orange", "!"), "还带了别人的 1 个提交", "TK-20802 列表排序 · 合回时再比一次", "查看 ›"))
     tester = f'''<div class="card" style="width:300px;flex:none;padding:14px 16px">
       <div class="sec">测试人</div>
-      <div class="row g10" style="margin-top:10px;padding:8px 10px;border-radius:12px;background:var(--fill)"><span class="av" style="width:30px;height:30px;font-size:11px;background:linear-gradient(150deg,#7FB2FF,#4C7DF0)">王某</span><div class="col grow"><span class="f13 w6">王某</span><span class="f11" style="color:var(--green)">复测通过 · 11:20</span></div></div>
+      <div class="row g10" style="margin-top:10px;padding:8px 10px;border-radius:12px;background:var(--fill)"><span class="av" style="width:30px;height:30px;font-size:11px;background:linear-gradient(150deg,#7FB2FF,#4C7DF0)">王某</span><div class="col grow"><span class="f13 w6">王某</span><span class="f11" style="color:var(--ink-green)">复测通过 · 11:20</span></div></div>
       <div class="f12 t2" style="margin-top:10px;line-height:1.6">“撤回后状态正常，列表也刷新了” · 附录屏 1 段</div>
     </div>'''
     ok = '<span class="tag tg-g">成功</span>'
@@ -1575,7 +1575,7 @@ def p_skhistory():
             ("8", "## 规则", "h"), ("9", "1. 优先用 TitaForm 和公司组件库。", ""),
             ("10", "2. 弹窗里的表单也用 TitaForm。", "add"),
             ("11", "3. 校验提示用组件自带的，不另写。", "")]
-    dl = "".join(f'<div class="cl{" add" if t=="add" else ""}" style="line-height:24px"><span class="n">{n}</span><span class="s">{"+" if t=="add" else ""}</span><span class="c" style="padding-left:4px;{"color:var(--purple);font-weight:600" if t=="h" else ""}">{c}</span></div>' for n, c, t in diff)
+    dl = "".join(f'<div class="cl{" add" if t=="add" else ""}" style="line-height:24px"><span class="n">{n}</span><span class="s">{"+" if t=="add" else ""}</span><span class="c" style="padding-left:4px;{"color:var(--ink-purple);font-weight:600" if t=="h" else ""}">{c}</span></div>' for n, c, t in diff)
     dl = dl.replace('<div class="cl" style="line-height:24px"><span class="n">5</span><span class="s"></span>', '<div class="cl del" style="line-height:24px"><span class="n">5</span><span class="s">−</span>', 1)
     used = [("TK-20871", "第 2 轮", "v3", "今天 14:10"), ("TK-20871", "第 1 轮", "v2", "昨天 21:52"), ("KQ-1180", "第 1 轮", "v2", "11-16")]
     ul = "".join(f'<tr><td class="mono">{a}</td><td>{b}</td><td><span class="tag tg-n">{c}</span></td><td class="mono f12 t3">{d}</td><td><span class="f12 lnk">看当时正文 ›</span></td></tr>' for a, b, c, d in used)
@@ -1614,22 +1614,22 @@ def p_skimport():
     body = p_skills()
     prev = [("1", "# 表单开发规范", "h"), ("2", "审批、考勤这类表单页面都按这份来。", ""), ("3", "", ""), ("4", "## 规则", "h"),
             ("5", "1. 表单统一用 TitaForm，不手写 input。", ""), ("6", "2. 测试账号 test01 / ********", "mask")]
-    pl = "".join(f'<div class="cl" style="line-height:22px{";background:color-mix(in srgb,var(--orange) 12%,transparent)" if t=="mask" else ""}"><span class="n">{n}</span><span class="c" style="padding-left:8px;{"color:var(--purple);font-weight:600" if t=="h" else ""}">{c}</span></div>' for n, c, t in prev)
+    pl = "".join(f'<div class="cl" style="line-height:22px{";background:color-mix(in srgb,var(--orange) 12%,transparent)" if t=="mask" else ""}"><span class="n">{n}</span><span class="c" style="padding-left:8px;{"color:var(--ink-purple);font-weight:600" if t=="h" else ""}">{c}</span></div>' for n, c, t in prev)
     dlg = f'''<div class="scrim"></div>
 <div class="dlg" style="left:50%;top:50%;width:680px;transform:translate(-50%,-50%);padding:22px 24px">
   <div class="row g10"><span class="ic-box" style="background:linear-gradient(160deg,#C58BFF,#6A3DF0)">{I("download",16,2.2)}</span><div class="col grow"><span class="f18 w7">导入 Skill</span><span class="f12 t3">导入后先是草稿，在编辑器里看过、启用到项目才生效</span></div><span class="t3">{I("x",18,2)}</span></div>
   <div class="seg" style="margin-top:16px"><span class="on" style="flex:1;justify-content:center">文件 .md / .txt</span><span style="flex:1;justify-content:center">GitLab 文件链接</span><span style="flex:1;justify-content:center">粘贴文字</span></div>
-  <div class="row g10" style="margin-top:12px;padding:12px 14px;border-radius:14px;border:1.5px dashed color-mix(in srgb,var(--blue) 45%,transparent);background:color-mix(in srgb,var(--blue) 5%,transparent)">{I("file",18,style="color:var(--blue)")}<div class="col grow"><span class="f13 w6">团队前端规范.md</span><span class="f12 t3">6 KB · 42 行 · 拖进来或点这里换一个</span></div><span class="tag tg-g">已读出</span></div>
+  <div class="row g10" style="margin-top:12px;padding:12px 14px;border-radius:14px;border:1.5px dashed color-mix(in srgb,var(--blue) 45%,transparent);background:color-mix(in srgb,var(--blue) 5%,transparent)">{I("file",18,style="color:var(--ink-blue)")}<div class="col grow"><span class="f13 w6">团队前端规范.md</span><span class="f12 t3">6 KB · 42 行 · 拖进来或点这里换一个</span></div><span class="tag tg-g">已读出</span></div>
   <div class="row g12" style="margin-top:14px">
     <div class="col grow" style="min-width:0"><div class="flabel">名称（取自第一个标题）</div><div class="field">表单开发规范</div></div>
     <div style="width:170px;flex:none"><div class="flabel">类型</div><div class="seg"><span class="on" style="flex:1;justify-content:center">编码</span><span style="flex:1;justify-content:center">验证</span></div></div></div>
   <div class="flabel" style="margin-top:12px">用途（Bot 判断什么时候用，取自第一段，可改）</div><div class="field">审批、考勤这类表单页面都按这份来。</div>
   <div class="row g8" style="margin-top:12px"><span class="flabel grow" style="margin:0">正文预览</span><span class="f12 t3">前 6 行</span></div>
   <div class="code" style="margin-top:6px;border-radius:12px;background:var(--fill);padding:6px 0;font-size:12.5px">{pl}</div>
-  <div class="row g8 f12" style="margin-top:10px;padding:8px 12px;border-radius:10px;background:color-mix(in srgb,var(--orange) 12%,transparent);color:var(--orange)">{I("alert",14)}<span class="grow">第 6 行像是账号密码，已换成 ********，不会存进 Skill</span></div>
+  <div class="row g8 f12" style="margin-top:10px;padding:8px 12px;border-radius:10px;background:color-mix(in srgb,var(--orange) 12%,transparent);color:var(--ink-orange)">{I("alert",14)}<span class="grow">第 6 行像是账号密码，已换成 ********，不会存进 Skill</span></div>
   <div class="row g10" style="margin-top:12px;padding:10px 12px;border-radius:12px;background:var(--fill)"><span class="f13 w6 grow">和「复用表单组件」内容很像</span>
     <span class="row g6 f13"><span class="radio on"></span>新建一个 Skill</span><span class="row g6 f13" style="margin-left:10px"><span class="radio"></span>作为它的 v4</span></div>
-  <div class="row g10" style="margin-top:18px;padding-top:14px;border-top:1px solid var(--hair)"><span class="f12 t3 grow">导入不会启用到任何项目</span><span class="btn2 a-sec" style="background:var(--fill);height:38px">取消</span><span class="btn2" style="background:var(--blue);color:#fff;height:38px;padding:0 18px">导入为草稿，打开编辑</span></div>
+  <div class="row g10" style="margin-top:18px;padding-top:14px;border-top:1px solid var(--hair)"><span class="f12 t3 grow">导入不会启用到任何项目</span><span class="btn2 a-sec" style="background:var(--fill);height:36px">取消</span><span class="btn2" style="background:var(--btn-pri-bg);color:#fff;height:36px;padding:0 18px">导入为草稿，打开编辑</span></div>
 </div>'''
     return body + "<!--OVERLAY-->" + dlg
 
@@ -1698,7 +1698,7 @@ html:not(.dark) .el .no{color:#fff}
   <div class="eh">「我的 · 修复中」里没有「导出」</div>
   <div class="f13 t2" style="margin-top:6px">搜的是标题、工单号和原单内容</div>
   <div class="row g8" style="margin-top:14px"><span class="btn2 sm a-pri">在全部里找 · 2 张</span><span class="btn2 sm a-sec" style="background:var(--fill)">清除筛选</span></div>
-  <div class="row g8 f12 t2" style="margin-top:16px;padding:8px 10px;border-radius:10px;background:var(--fill)">{I("spark",13,style="color:var(--purple)")}<span class="grow">也可以问 AI 助手：「上周和导出有关的单」</span></div>
+  <div class="row g8 f12 t2" style="margin-top:16px;padding:8px 10px;border-radius:10px;background:var(--fill)">{I("spark",13,style="color:var(--ink-purple)")}<span class="grow">也可以问 AI 助手：「上周和导出有关的单」</span></div>
   <div class="f12 t3" style="margin-top:8px">已完成的单也能搜到；没有权限的单不显示</div>
 </div>'''
 
@@ -1708,7 +1708,7 @@ html:not(.dark) .el .no{color:#fff}
   <div class="eh">还没有发布记录</div>
   <div class="f13 t2" style="margin-top:6px">单审核通过后，发布记录会出现在这里</div>
   <div class="row g6" style="margin-top:14px"><span class="chip">审核通过</span><span class="arr">→</span><span class="chip">发测试</span><span class="arr">→</span><span class="chip">复测通过</span><span class="arr">→</span><span class="chip">发正式</span></div>
-  <div class="row g10" style="margin-top:16px;padding:10px 12px;border-radius:12px;background:color-mix(in srgb,var(--orange) 13%,transparent)">{I("alert",15,style="color:var(--orange)")}
+  <div class="row g10" style="margin-top:16px;padding:10px 12px;border-radius:12px;background:color-mix(in srgb,var(--orange) 13%,transparent)">{I("alert",15,style="color:var(--ink-orange)")}
     <div class="col grow" style="min-width:0"><span class="f13 w6">发布配置还没填</span><span class="f12 t2">开工时跳过了 · 不影响修单，发测试前要填好</span></div>
     <span class="btn2 sm a-sec" style="background:var(--glass-2)">去填</span></div>
 </div>'''
@@ -1787,7 +1787,7 @@ def p_empty2():
     # 2 紧急回滚 · 没有可回滚的
     left2 = f'''<div class="ml"><div class="hd"><b class="grow">紧急回滚</b><span class="tag tg-r">值班</span></div>
 <div class="row g8" style="margin:0 4px;padding:7px 8px;border-radius:10px;background:var(--fill)"><span class="ic-box" style="width:22px;height:22px;border-radius:6px;background:linear-gradient(160deg,#5AA0FF,#1F6FFF)">{I("globe",12)}</span><span class="f12 w6 grow ell">okr-web</span>{I("chevd",11,style="color:var(--text-3)")}</div>
-<div class="seg" style="margin:8px 4px 0;padding:2px"><span class="on" style="flex:1;justify-content:center;height:22px;font-size:11px;color:var(--red)">PRO 正式</span><span style="flex:1;justify-content:center;height:22px;font-size:11px">TEST 测试</span></div>
+<div class="seg" style="margin:8px 4px 0;padding:2px"><span class="on" style="flex:1;justify-content:center;height:22px;font-size:11px;color:var(--ink-red)">PRO 正式</span><span style="flex:1;justify-content:center;height:22px;font-size:11px">TEST 测试</span></div>
 <div class="g10h" style="padding-top:12px">发布历史<span>1</span></div>
 <div class="row g8" style="padding:7px 8px;border-radius:10px"><div class="col grow" style="min-width:0"><span class="f12 w6 ell">okr-web 2.1.0 上线</span><span class="f11 t3">11-19 20:30</span></div><span class="tag tg-r">当前生效</span></div>
 <div class="ph s"></div><span class="grow"></span></div>'''
@@ -1818,7 +1818,7 @@ def p_empty2():
   {ibox("linear-gradient(160deg,#B7BDC8,#8A92A0)","rocket")}
   <div class="eh">这张单还没发布</div>
   <div class="f13 t2" style="margin-top:6px">第 2 轮等你审核，通过后在这里发到测试环境</div>
-  <div class="row g6" style="margin-top:14px"><span class="chip" style="background:color-mix(in srgb,var(--blue) 14%,transparent);color:var(--blue)">审核通过</span><span class="arr">→</span><span class="chip">合入测试分支</span><span class="arr">→</span><span class="chip">打包</span><span class="arr">→</span><span class="chip">发测试</span></div>
+  <div class="row g6" style="margin-top:14px"><span class="chip" style="background:color-mix(in srgb,var(--blue) 14%,transparent);color:var(--ink-blue)">审核通过</span><span class="arr">→</span><span class="chip">合入测试分支</span><span class="arr">→</span><span class="chip">打包</span><span class="arr">→</span><span class="chip">发测试</span></div>
   <div class="row g8" style="margin-top:14px"><span class="btn2 sm a-pri">去审核代码</span></div>
   <div class="f12 t3" style="margin-top:14px">第 1 轮被你打回，没有发布过</div>
 </div>'''
@@ -1902,7 +1902,7 @@ def p_queue():
 
     # 4 现在谁在修、谁在排
     def bot(n, tid, what, pct):
-        return f'<div class="qx"><span class="ic-box" style="width:26px;height:26px;border-radius:8px;background:linear-gradient(160deg,#5FE0D0,#13A8A0)">{I("bot",13,2)}</span><span class="f13 w6" style="width:52px">{n}</span><span class="mono f12 t2">{tid}</span><span class="f12 t2 grow ell">{what}</span><span class="f12 num" style="color:var(--teal)">{pct}</span></div>'
+        return f'<div class="qx"><span class="ic-box" style="width:26px;height:26px;border-radius:8px;background:linear-gradient(160deg,#5FE0D0,#13A8A0)">{I("bot",13,2)}</span><span class="f13 w6" style="width:52px">{n}</span><span class="mono f12 t2">{tid}</span><span class="f12 t2 grow ell">{what}</span><span class="f12 num" style="color:var(--ink-teal)">{pct}</span></div>'
     def q(i, tid, title, tags, eta):
         return f'<div class="qx"><span class="qn">{i}</span><span class="mono f12 t2">{tid}</span><span class="f13 grow ell">{title}</span>{tags}<span class="f12 t3" style="width:44px;text-align:right">{eta}</span></div>'
     t4 = f'''<div class="ec" style="padding:0 26px">
@@ -1937,7 +1937,7 @@ def p_approve():
   <div class="row g10"><span class="ic-box" style="background:linear-gradient(160deg,#5AA0FF,#1F6FFF)">{I("check",16,2.6)}</span><div class="col grow"><span class="f18 w7">审核通过第 2 轮</span><span class="f12 t3">TK-20871 · 审核对象 <span class="mono">a3f9c21</span> · 改了 2 个文件</span></div></div>
   <div class="flabel" style="margin-top:18px">Bot 已验证 3 项</div>
   <div class="col g6" style="padding:10px 12px;border-radius:12px;background:var(--fill)">{ok("普通员工切换分组不再卡住")}{ok("分组 2、3 切换后列表正确")}{ok("刷新后停在原来的分组")}</div>
-  <div class="flabel" style="margin-top:16px;color:var(--orange)">还有 1 项没测 · 待人工复测</div>
+  <div class="flabel" style="margin-top:16px;color:var(--ink-orange)">还有 1 项没测 · 待人工复测</div>
   <div class="col g8" style="padding:12px 14px;border-radius:12px;background:color-mix(in srgb,var(--orange) 11%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--orange) 35%,transparent)">
     <div class="row g8"><span class="ck" style="background:var(--orange);width:16px;height:16px;font-size:10px">!</span><span class="f14 w6 grow">「管理员」切到「销售部」不卡</span><span class="f12 lnk">先登记账号，让 Bot 补测 ›</span></div>
     <div class="f12 t2" style="padding-left:24px">没测的原因：项目里没有登记管理员账号，Bot 没能登录</div>
@@ -1946,7 +1946,7 @@ def p_approve():
   <div class="row g10" style="padding:10px 12px;border-radius:12px;border:1px solid var(--hair)">{I("bell",15,style="color:var(--text-3)")}
     <div class="col grow" style="min-width:0"><span class="f12 t3">复测通知里会写</span><span class="f13"><span class="tag tg-o" style="margin-right:6px">重点测</span>「管理员」切到「销售部」不卡（Bot 没测过）</span></div></div>
   <div class="row g8" style="margin-top:16px"><span class="cbx on">{I("check",12,3)}</span><span class="f14 w6">我知道有 1 项没测，交给测试人重点测</span><span class="grow"></span><span class="f12 t3">不勾不能通过</span></div>
-  <div class="row g10" style="margin-top:18px;padding-top:16px;border-top:1px solid var(--hair)"><span class="f12 t3 grow">通过后可以发测试，同时生成「待原平台确认」</span><span class="btn2 a-sec" style="background:var(--fill);height:38px">取消</span><span class="btn2 a-pri" style="height:38px">{I("check",14,2.6)}审核通过 a3f9c21</span></div>
+  <div class="row g10" style="margin-top:18px;padding-top:16px;border-top:1px solid var(--hair)"><span class="f12 t3 grow">通过后可以发测试，同时生成「待原平台确认」</span><span class="btn2 a-sec" style="background:var(--fill);height:36px">取消</span><span class="btn2 a-pri" style="height:36px">{I("check",14,2.6)}审核通过 a3f9c21</span></div>
 </div>'''
     return base + '<!--OVERLAY-->' + dlg
 
@@ -1956,7 +1956,7 @@ def p_approve():
 # =====================================================================
 def p_myacct():
     def yes(t="能"):
-        return f'<span class="row g4 f12 w6" style="color:var(--green);justify-content:center">{I("check",12,3)}{t}</span>'
+        return f'<span class="row g4 f12 w6" style="color:var(--ink-green);justify-content:center">{I("check",12,3)}{t}</span>'
     def no(t="不能"):
         return f'<span class="f12 t3" style="text-align:center;display:block">{t}</span>'
     def mrow(p, a, b, c, d, note=""):
@@ -1968,7 +1968,7 @@ def p_myacct():
         return f'<div class="row g10" style="padding:8px 0;border-top:1px solid var(--hair)"><span class="ic-box" style="width:28px;height:28px;border-radius:8px;background:{bg}">{I(ic,14)}</span><div class="col grow" style="gap:1px"><span class="f13 w6">{t}</span><span class="f12 t3">{d}</span></div></div>'
     def acct(logo, title, ok, fields, btn, foot):
         return f'''<div class="card grow" style="padding:12px 16px 14px;min-width:0">
-    <div class="row g8">{logo}<span class="sec grow">{title}</span><span class="row g6 f12" style="color:var(--green)">{I("check",13,3)}{ok}</span></div>
+    <div class="row g8">{logo}<span class="sec grow">{title}</span><span class="row g6 f12" style="color:var(--ink-green)">{I("check",13,3)}{ok}</span></div>
     {fields}
     <div class="row g10" style="margin-top:12px"><span class="btn2 a-sec" style="height:32px">{I("zap",13)}{btn}</span><span class="f12 t3 grow ell">{foot}</span></div></div>'''
     GL = '<span style="width:20px;height:20px;border-radius:6px;background:#FC6D26;color:#fff;font-size:11px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;flex:none">G</span>'
@@ -1979,7 +1979,7 @@ def p_myacct():
     <div class="grow"><div class="flabel">密码</div><div class="field mono" style="font-size:13px;letter-spacing:2px">••••••••••</div></div></div>'''
     main = f'''<main class="glass pn grow" style="min-width:0">
 <header class="thead"><div class="row g10"><div class="col grow"><h1>我的账号</h1><div class="f12 t3" style="margin-top:2px">只给你用 · 合入 MR、发布、回滚都用你本人的账号</div></div>
-  <span class="chip2">{I("spark",13,style="color:var(--purple)")}也可以问 AI「我能合哪些分支？」</span></div></header>
+  <span class="chip2">{I("spark",13,style="color:var(--ink-purple)")}也可以问 AI「我能合哪些分支？」</span></div></header>
 <div class="col g14 grow" style="padding:14px 22px;min-height:0;overflow:hidden">
   <div class="card" style="padding:10px 16px">
     <div class="row g12"><span class="av" style="width:34px;height:34px;font-size:13px;background:linear-gradient(150deg,#FFB38A,#F0703C)">林</span>
@@ -2027,7 +2027,7 @@ def p_acctneed():
   </div>
   <div class="row g8 f13" style="margin-top:12px;padding:9px 12px;border-radius:12px;background:color-mix(in srgb,var(--green) 10%,transparent)"><span class="ck" style="background:var(--green);width:16px;height:16px">{I("check",10,3.2)}</span><span class="grow">登录成功 · 审批测试环境能发布</span><span class="f12 t3">刚刚试过</span></div>
   <div class="row g8 f12 t3" style="margin-top:12px;line-height:1.55">{I("lock",13)}<span>加密存在内网服务器上，存到「设置 → 我的账号」，下次不用再填。第一次合入 MR 时同样会让你配 GitLab 令牌。</span></div>
-  <div class="row g10" style="margin-top:18px;padding-top:16px;border-top:1px solid var(--hair)"><span class="f12 t3 grow">测试人：王某 · 测试环境 · 审批</span><span class="btn2 a-sec" style="background:var(--fill);height:38px">取消</span><span class="btn2 a-pri" style="height:38px">{I("pkg",14)}保存并发布到测试环境</span></div>
+  <div class="row g10" style="margin-top:18px;padding-top:16px;border-top:1px solid var(--hair)"><span class="f12 t3 grow">测试人：王某 · 测试环境 · 审批</span><span class="btn2 a-sec" style="background:var(--fill);height:36px">取消</span><span class="btn2 a-pri" style="height:36px">{I("pkg",14)}保存并发布到测试环境</span></div>
 </div>'''
     return base + '<!--OVERLAY-->' + dlg
 
@@ -2035,7 +2035,7 @@ def p_acctneed():
 def p_runners():
     """设置 · 执行器（跳过首次选择后的补配入口 + 随时切换本机 / 自有服务器 / 云端 Pro）。"""
     nav = SET_NAV
-    nv = "".join(f'<div class="sn{" on" if n=="执行器" else ""}"><span class="si" style="background:{bg}">{I(ic,14,2)}</span>{n}<em{" style=\"color:var(--orange)\"" if e=="!" else ""}>{e}</em></div>' for ic, bg, n, e in nav)
+    nv = "".join(f'<div class="sn{" on" if n=="执行器" else ""}"><span class="si" style="background:{bg}">{I(ic,14,2)}</span>{n}<em{" style=\"color:var(--ink-orange)\"" if e=="!" else ""}>{e}</em></div>' for ic, bg, n, e in nav)
     left = f'''<section class="glass pn" style="width:240px;flex:none;padding:16px 4px 10px">
   <div class="row" style="padding:0 14px 6px"><span class="f18 w7">设置</span></div>{nv}
 </section>'''
@@ -2047,7 +2047,7 @@ def p_runners():
   <div class="row g12" style="align-items:flex-start">
     <span class="ic-box" style="width:38px;height:38px;border-radius:11px;background:{bg};flex:none">{I(ic,18,2)}</span>
     <div class="col grow" style="min-width:0;gap:4px">
-      <div class="row g8"><span class="f15 w7">{name}</span>{bds}<span class="grow"></span><span class="row g6 f12 w6" style="color:var(--{stc})"><span class="dot" style="width:7px;height:7px;color:var(--{stc})"></span>{status}</span></div>
+      <div class="row g8"><span class="f15 w7">{name}</span>{bds}<span class="grow"></span><span class="row g6 f12 w6" style="color:var(--ink-{stc})"><span class="dot" style="width:7px;height:7px;color:var(--{stc})"></span>{status}</span></div>
       <div class="f12 t2">{meta}</div>
       <div class="row g10" style="margin-top:6px;padding-top:8px;border-top:1px solid var(--hair)">
         <span class="f12 t3 grow ell">{sub}</span>{actions}
@@ -2100,7 +2100,7 @@ def p_runners():
 </main>'''
 
     def slot_row(lbl, val, pct, col):
-        return f'''<div style="margin-top:9px"><div class="row f12"><span class="t2 grow">{lbl}</span><span class="mono w6" style="color:var(--{col})">{val}</span></div>
+        return f'''<div style="margin-top:9px"><div class="row f12"><span class="t2 grow">{lbl}</span><span class="mono w6" style="color:var(--ink-{col})">{val}</span></div>
   <div style="height:5px;border-radius:3px;background:var(--fill);margin-top:4px;overflow:hidden"><div style="width:{pct}%;height:100%;border-radius:3px;background:var(--{col})"></div></div></div>'''
 
     right = aside(
@@ -2112,7 +2112,7 @@ def p_runners():
   <div class="f11 t3" style="margin-top:10px;line-height:1.5">浏览器空闲 2 分钟自动休眠释放内存；打包与发布共用构建槽且发布优先。</div></div>''',
         f'''<div class="card" style="padding:12px 14px"><div class="mini">快速挂载新服务器</div>
   <div class="f12 t2" style="line-height:1.55">在任意 Linux / macOS 服务器跑一行命令即可自动扩容算力池，纯出站 WSS 零入站端口。</div>
-  <button class="abtn a-sec" style="width:100%;justify-content:center;height:34px;margin-top:10px;background:var(--fill)">{I("terminal",13)}获取一行安装命令</button></div>''',
+  <button class="abtn a-sec" style="width:100%;justify-content:center;height:36px;margin-top:10px;background:var(--fill)">{I("terminal",13)}获取一行安装命令</button></div>''',
         f'''<div class="card" style="padding:12px 14px"><div class="mini">切换机器会丢数据吗？</div>
   <div class="f12 t2" style="line-height:1.6">不会。工单、项目配置、Skills、会话树与证据全部持久化在云端，执行器纯无状态，随时换机或重装 <b>0 丢数</b>。</div></div>''')
     return left + main + right
@@ -2158,7 +2158,7 @@ def p_newticket():
       <div class="row g14">
         <div class="col g6 grow">
           <span class="f12 w6 t2">复现环境</span>
-          <div class="row g8" style="height:36px;padding:0 12px;border-radius:10px;background:var(--glass-2);border:1px solid var(--stroke)">
+          <div class="row g8" style="height:36px;padding:0 12px;border-radius:10px;background:var(--glass-2);border:1px solid var(--border-ctl);box-shadow:var(--shadow-ctl)">
             <span class="dot" style="width:7px;height:7px;color:var(--green)"></span>
             <span class="f13 w6">测试环境</span>
             <span class="mono f11 t3 grow ell">test.tita.work/approval</span>
@@ -2167,7 +2167,7 @@ def p_newticket():
         </div>
         <div class="col g6" style="width:220px;flex:none">
           <span class="f12 w6 t2">真人修复人（审核人）</span>
-          <div class="row g8" style="height:36px;padding:0 10px;border-radius:10px;background:var(--glass-2);border:1px solid var(--stroke)">
+          <div class="row g8" style="height:36px;padding:0 10px;border-radius:10px;background:var(--glass-2);border:1px solid var(--border-ctl);box-shadow:var(--shadow-ctl)">
             <span class="av" style="width:22px;height:22px;font-size:10px;background:linear-gradient(160deg,#FFC9A8,#F08F7A);color:#5A2414">林</span>
             <span class="f13 w6 grow">林某（我）</span>
             {I("chevd",13,style="color:var(--text-3)")}
@@ -2178,7 +2178,7 @@ def p_newticket():
       <!-- 标题 -->
       <div class="col g6">
         <span class="f12 w6 t2">问题标题</span>
-        <div class="row" style="height:38px;padding:0 12px;border-radius:10px;background:var(--glass-2);border:1px solid color-mix(in srgb,var(--blue) 55%,transparent)">
+        <div class="row" style="height:36px;padding:0 12px;border-radius:10px;background:var(--glass-2);border:1px solid var(--focus-ring);box-shadow:0 0 0 3px var(--focus-halo)">
           <span class="f13.5 w5" style="font-size:13.5px">审批单批量导出时，部门名称包含斜杠导致文件名被截断</span>
         </div>
       </div>
@@ -2186,7 +2186,7 @@ def p_newticket():
       <!-- 问题说明与复现步骤 -->
       <div class="col g6">
         <div class="row"><span class="f12 w6 t2 grow">复现步骤与期望结果</span><span class="f11 t3">越具体，Bot 一次修对率越高</span></div>
-        <div style="padding:10px 12px;border-radius:11px;background:var(--glass-2);border:1px solid var(--stroke);font-size:13px;line-height:1.65;color:var(--text-2)">
+        <div style="padding:10px 12px;border-radius:10px;background:var(--well);border:1px solid var(--hair);font-size:13px;line-height:1.65;color:var(--text-2)">
           1. 用普通员工进入「审批中心 → 我发起的」，筛选「研发/前端组」<br>
           2. 勾选 3 条审批单，点击右上角「批量导出 Excel」<br>
           <b style="color:var(--text)">实际</b>：下载文件名只剩「前端组.xlsx」，斜杠前全部丢失；<b style="color:var(--text)">期望</b>：自动转义非法路径字符。
@@ -2195,7 +2195,7 @@ def p_newticket():
 
       <!-- 附件与截图 -->
       <div class="row g10" style="padding:9px 12px;border-radius:11px;background:var(--fill)">
-        <span class="ic-box" style="width:28px;height:28px;border-radius:8px;background:color-mix(in srgb,var(--blue) 14%,transparent);color:var(--blue)">{I("paperclip",14)}</span>
+        <span class="ic-box" style="width:28px;height:28px;border-radius:8px;background:color-mix(in srgb,var(--blue) 14%,transparent);color:var(--ink-blue)">{I("paperclip",14)}</span>
         <div class="col grow" style="min-width:0"><span class="f12.5 w6" style="font-size:12.5px">export-filename-bug.png</span><span class="f11 t3">428 KB · 作为修前参考材料交给 Bot</span></div>
         <span class="btn2 sm a-sec" style="background:var(--glass-2)">{I("plus",12,2.4)}添加截图 / 录屏</span>
       </div>
@@ -2223,10 +2223,10 @@ def p_connectors():
 .cc.cc-dash{background:transparent;border:1.5px dashed color-mix(in srgb,var(--text) 18%,transparent);justify-content:center;gap:6px}
 .cic2{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:800;flex:none}
 .cft{display:flex;align-items:center;gap:8px;padding-top:8px;border-top:1px solid var(--hair);font-size:11.5px;color:var(--text-3)}
-.cft .ca{margin-left:auto;color:var(--blue);font-weight:600;white-space:nowrap}
+.cft .ca{margin-left:auto;color:var(--ink-blue);font-weight:600;white-space:nowrap}
 .fbar{display:flex;align-items:center;gap:8px}
 .fc{height:28px;padding:0 11px;border-radius:9px;font-size:12px;font-weight:600;color:var(--text-2);background:var(--fill);display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
-.fc.on{background:var(--blue);color:#fff}
+.fc.on{background:var(--btn-pri-bg);color:#fff}
 .fc em{font-style:normal;opacity:.72;font-size:11px;font-weight:500}
 .catrow{display:flex;align-items:center;gap:8px;padding:6px 0;border-top:1px solid var(--hair);font-size:12px}
 .catrow:first-child{border-top:0}
@@ -2303,7 +2303,7 @@ def p_connectors():
         </div>
         <span class="tag tg-r">令牌已过期</span>
       </div>
-      <div class="f12 ell" style="color:var(--red)">已断 22 分钟 · <span class="mono">401 token expired</span>（恢复后补收）</div>
+      <div class="f12 ell" style="color:var(--ink-red)">已断 22 分钟 · <span class="mono">401 token expired</span>（恢复后补收）</div>
       <div class="cft"><span class="t2">仅影响 Tita 自动收单</span><span style="margin-left:auto"><button class="btn2 sm a-pri" style="height:24px;padding:0 11px;font-size:11.5px">更新令牌</button></span></div>
     </div>
   </div>
@@ -2323,7 +2323,7 @@ def p_connectors():
       <div class="cft"><span>测试 / 正式环境</span><span class="ca">更新账号 ›</span></div>
     </div>
     <div class="cc cc-dash">
-      <div class="row g6"><span style="color:var(--blue)">{I("plus",15,2.4)}</span><b class="f13">接入更多外部平台</b></div>
+      <div class="row g6"><span style="color:var(--ink-blue)">{I("plus",15,2.4)}</span><b class="f13">接入更多外部平台</b></div>
       <div class="f12 t3" style="line-height:1.5">去插件市场装 GitHub / Gitee / 禅道 / 飞书审批，或直接配「通用 Git / Webhook / L2 MCP」连接器</div>
       <div class="row g6" style="margin-top:2px"><span class="tag tg-n" style="height:19px;font-size:10.5px">通用 Git</span><span class="tag tg-n" style="height:19px;font-size:10.5px">Webhook 映射</span><span class="tag tg-p" style="height:19px;font-size:10.5px">自定义 MCP</span></div>
     </div>
@@ -2332,7 +2332,7 @@ def p_connectors():
 </main>'''
     right = aside(
         f'''<div class="card" style="padding:12px 14px;background:color-mix(in srgb,var(--blue) 7%,var(--glass-2));border:1px solid color-mix(in srgb,var(--blue) 22%,transparent)">
-  <div class="row g6"><span style="color:var(--blue)">{I("rocket",14)}</span><span class="f13 w7 grow">跳过首次向导怎么补配？</span></div>
+  <div class="row g6"><span style="color:var(--ink-blue)">{I("rocket",14)}</span><span class="f13 w7 grow">跳过首次向导怎么补配？</span></div>
   <div class="f12 t2" style="margin-top:6px;line-height:1.6">在这里补建连接器完成鉴权，再去「设置 → 项目」划定<b>可修改 / 仅查看</b>即可开工；数据与首次向导完全同源。</div>
   <button class="btn2 sm a-pri" style="width:100%;justify-content:center;margin-top:10px;height:30px">继续未完成的开工向导 ›</button></div>''',
         f'''<div class="card" style="padding:12px 14px">

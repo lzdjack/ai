@@ -11,11 +11,11 @@
 .st2.done::after{background:color-mix(in srgb,var(--green) 55%,transparent)}
 .sc2{width:26px;height:26px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:800}
 .done .sc2{background:var(--green);color:#fff}
-.cur .sc2{background:var(--blue);color:#fff;box-shadow:0 0 0 5px color-mix(in srgb,var(--blue) 20%,transparent)}
+.cur .sc2{background:var(--btn-pri-bg);color:#fff;box-shadow:0 0 0 5px color-mix(in srgb,var(--blue) 20%,transparent)}
 .todo .sc2{border:1.5px solid color-mix(in srgb,var(--text) 22%,transparent);color:var(--text-3)}
 .st2 b{display:block;font-size:14.5px;font-weight:600;line-height:26px}
 .todo b{color:var(--text-2);font-weight:500}
-.cur b{color:var(--blue);font-weight:700}
+.cur b{color:var(--ink-blue);font-weight:700}
 .st2 em{display:block;font-style:normal;font-size:12px;color:var(--text-3);margin-top:1px;line-height:1.45}
 .done em{color:var(--text-2)}
 .skip .sc2{background:var(--fill);color:var(--text-3)}
@@ -28,34 +28,34 @@
 .ff{display:flex;align-items:center;gap:12px;padding:16px 36px;border-top:1px solid var(--hair)}
 .lab{font-size:13.5px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:8px}
 .lab span{font-weight:400;font-size:12px;color:var(--text-3)}
-.inp{height:44px;border-radius:12px;background:var(--fill);display:flex;align-items:center;gap:10px;padding:0 13px;font-size:14px;color:var(--text);min-width:0}
+.inp{height:var(--ctl-lg);border-radius:var(--r-lg);background:var(--well);border:1px solid var(--hair);display:flex;align-items:center;gap:10px;padding:0 13px;font-size:14px;color:var(--text);min-width:0}
 .inp>i{color:var(--text-3)}
-.inp.focus{background:var(--glass-2);box-shadow:0 0 0 2px var(--blue),0 0 0 5px color-mix(in srgb,var(--blue) 18%,transparent)}
+.inp.focus{background:var(--glass-2);border-color:var(--focus-ring);box-shadow:0 0 0 3px var(--focus-halo)}
 .dots{letter-spacing:3px;font-size:15px}
-.okt{display:inline-flex;align-items:center;gap:5px;color:var(--green);font-size:12.5px;font-weight:600;white-space:nowrap}
-.ing{display:inline-flex;align-items:center;gap:7px;color:var(--blue);font-size:12.5px;font-weight:600;white-space:nowrap}
+.okt{display:inline-flex;align-items:center;gap:5px;color:var(--ink-green);font-size:12.5px;font-weight:600;white-space:nowrap}
+.ing{display:inline-flex;align-items:center;gap:7px;color:var(--ink-blue);font-size:12.5px;font-weight:600;white-space:nowrap}
 .spin{width:13px;height:13px;border-radius:50%;border:2px solid color-mix(in srgb,var(--blue) 25%,transparent);border-top-color:var(--blue);flex:none}
 .rt{display:grid;grid-template-columns:140px 1fr 160px 128px 116px;gap:8px 10px;align-items:center}
-.au{background:transparent;box-shadow:inset 0 0 0 1px var(--hair)}
-.aut{flex:none;font-size:11px;font-weight:600;color:var(--purple);background:color-mix(in srgb,var(--purple) 12%,transparent);height:20px;padding:0 6px;border-radius:6px;display:inline-flex;align-items:center}
+.au{background:transparent;border:1px solid var(--hair)}
+.aut{flex:none;font-size:11px;font-weight:600;color:var(--ink-purple);background:color-mix(in srgb,var(--purple) 12%,transparent);height:20px;padding:0 6px;border-radius:6px;display:inline-flex;align-items:center}
 .cr{gap:8px;padding:0 10px;font-size:13px}
 .crt{flex:none;height:20px;padding:0 6px;border-radius:6px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;background:color-mix(in srgb,var(--text) 8%,transparent);color:var(--text-2)}
-.cr-x{box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--orange) 70%,transparent);color:var(--orange)}
-.wnt{color:var(--orange);font-size:12.5px;font-weight:600;white-space:nowrap}
-.pm{font-size:13px;gap:7px;padding:0 10px}
-.pm-e{color:var(--green)}.pm-e>i{color:var(--green)}
-.pm-v{color:var(--blue)}.pm-v>i{color:var(--blue)}
-.pm-l{color:var(--text-3);background:transparent;box-shadow:inset 0 0 0 1px var(--hair)}
-.rt .inp{height:38px}
-.rsel{font-weight:600;font-size:13.5px;padding:0 10px 0 12px}
+.cr-x{border-color:color-mix(in srgb,var(--orange) 70%,transparent);color:var(--ink-orange)}
+.wnt{color:var(--ink-orange);font-size:12.5px;font-weight:600;white-space:nowrap}
+.pm{font-size:13px;gap:7px;padding:0 10px;background:var(--glass-2);border:1px solid var(--border-ctl);box-shadow:var(--shadow-ctl)}
+.pm-e{color:var(--ink-green);font-weight:600}.pm-e>i:first-child{color:var(--ink-green)}
+.pm-v{color:var(--ink-blue);font-weight:600}.pm-v>i:first-child{color:var(--ink-blue)}
+.pm-l{color:var(--text-3);background:transparent;border:1px solid var(--hair);box-shadow:none}
+.rt .inp{height:var(--ctl-md);border-radius:var(--r-md)}
+.rsel{font-weight:600;font-size:13.5px;padding:0 10px 0 12px;background:var(--glass-2);border:1px solid var(--border-ctl);box-shadow:var(--shadow-ctl)}
 .rh{font-size:12px;color:var(--text-3);padding:0 2px 6px}
 .envs{display:grid;grid-template-columns:1fr 1fr 1fr 120px;gap:10px}
 .env{border-radius:14px;padding:11px 13px;background:var(--fill);border:1.5px solid transparent;min-width:0}
 .env b{font-size:14px}
 .env.on{background:var(--glass-2);border-color:var(--blue);box-shadow:0 6px 16px -10px color-mix(in srgb,var(--blue) 70%,transparent)}
 .env.add{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-size:13px;color:var(--text-3);background:transparent;border:1.5px dashed color-mix(in srgb,var(--text) 18%,transparent)}
-.bigb{height:44px;border-radius:13px;border:0;font-size:14.5px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 20px;white-space:nowrap}
-.pri{background:var(--blue);color:#fff;box-shadow:0 10px 22px -10px color-mix(in srgb,var(--blue) 85%,transparent)}
+.bigb{height:var(--ctl-lg);border-radius:var(--r-lg);border:0;font-size:14px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 20px;white-space:nowrap}
+.pri{background:var(--btn-pri-bg);color:#fff;box-shadow:0 10px 22px -10px color-mix(in srgb,var(--btn-pri-bg) 85%,transparent)}
 .secb{background:var(--fill);color:var(--text)}
 .note{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;color:var(--text-2);line-height:1.5;padding:9px 13px;border-radius:13px;background:color-mix(in srgb,var(--blue) 7%,transparent)}
 .pbar{height:4px;border-radius:2px;background:var(--fill);overflow:hidden}
@@ -81,7 +81,7 @@
   <section class="fm">
     <div class="fb">
       <div class="row g10">
-        <div class="grow"><div class="f12" style="color:var(--blue);font-weight:700">第 3 步 · 环境与账号</div>
+        <div class="grow"><div class="f12" style="color:var(--ink-blue);font-weight:700">第 3 步 · 环境与账号</div>
           <div style="font-size:24px;font-weight:800;margin-top:5px">Bot 在哪儿复现、用谁的身份登录</div>
           <div class="f13 t2" style="margin-top:5px">工单在哪个环境发现的，Bot 就去哪个环境按数据权限复现；纯代码修复可先跳过</div></div>
         <span class="chip2" style="align-self:flex-start"><i data-i="spark" data-s="13" style="color:var(--purple)"></i>不知道填什么？问 AI</span>

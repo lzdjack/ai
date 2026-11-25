@@ -11,35 +11,35 @@ X = '''<style>
 .ccard.opt{border-color:color-mix(in srgb,var(--blue) 30%,transparent);box-shadow:0 6px 18px -12px color-mix(in srgb,var(--blue) 35%,transparent)}
 .ccard.addc{background:transparent;border:1.5px dashed color-mix(in srgb,var(--text) 18%,transparent);box-shadow:none;justify-content:center;align-items:flex-start;gap:6px}
 .cic{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:800;flex:none}
-.okpill{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600;color:var(--green);white-space:nowrap}
+.okpill{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600;color:var(--ink-green);white-space:nowrap}
 .cmeta{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text-2);min-width:0}
 .cfoot{display:flex;align-items:center;gap:8px;padding-top:8px;border-top:1px solid var(--hair);font-size:12px;color:var(--text-3)}
-.cfoot .act{margin-left:auto;color:var(--blue);font-weight:600;white-space:nowrap}
+.cfoot .act{margin-left:auto;color:var(--ink-blue);font-weight:600;white-space:nowrap}
 .qadd{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:nowrap}
-.qbtn{height:32px;padding:0 11px;border-radius:10px;background:var(--fill);border:1px solid var(--hair);display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--text-2);white-space:nowrap}
+.qbtn{height:var(--ctl-sm);padding:0 11px;border-radius:var(--r-sm);background:var(--fill);border:1px solid var(--hair);display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--text-2);white-space:nowrap}
 .qdot{width:17px;height:17px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:800;flex:none}
 .stat-pill{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 10px;border-radius:9px;font-size:12px;font-weight:600;white-space:nowrap}
-.sp-g{background:color-mix(in srgb,var(--green) 13%,transparent);color:var(--green)}
-.sp-b{background:color-mix(in srgb,var(--blue) 13%,transparent);color:var(--blue)}
+.sp-g{background:color-mix(in srgb,var(--green) 13%,transparent);color:var(--ink-green)}
+.sp-b{background:color-mix(in srgb,var(--blue) 13%,transparent);color:var(--ink-blue)}
 
 /* 第 2 步：多来源聚合与三态读写权限 */
 .ptbar{display:flex;align-items:center;gap:8px;margin-top:16px}
-.srcsel{height:34px;padding:0 10px;border-radius:10px;background:var(--glass-2);border:1px solid var(--stroke);display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;white-space:nowrap;flex:none}
+.srcsel{height:var(--ctl-md);padding:0 10px;border-radius:var(--r-md);background:var(--glass-2);border:1px solid var(--border-ctl);box-shadow:var(--shadow-ctl);display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;white-space:nowrap;flex:none}
 .sdots{display:inline-flex;align-items:center}
 .sdots i{width:16px;height:16px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:9px;font-weight:800;font-style:normal;border:1.5px solid var(--glass-2)}
 .sdots i+i{margin-left:-4px}
-.srch2{height:34px;flex:1;min-width:140px;border-radius:10px;background:var(--fill);padding:0 11px;display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--text-3);border:1px solid var(--hair)}
-.fchip{height:30px;padding:0 10px;border-radius:9px;font-size:12px;font-weight:600;color:var(--text-2);background:var(--fill);display:inline-flex;align-items:center;gap:4px;white-space:nowrap;flex:none}
-.fchip.on{background:var(--blue);color:#fff}
+.srch2{height:var(--ctl-md);flex:1;min-width:140px;border-radius:var(--r-md);background:var(--well);padding:0 11px;display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--text-3);border:1px solid var(--hair)}
+.fchip{height:var(--ctl-sm);padding:0 10px;border-radius:var(--r-sm);font-size:12px;font-weight:600;color:var(--text-2);background:var(--fill);display:inline-flex;align-items:center;gap:4px;white-space:nowrap;flex:none}
+.fchip.on{background:var(--btn-pri-bg);color:#fff}
 .fchip em{font-style:normal;opacity:.72;font-size:11px;font-weight:500}
-.addbtn{height:34px;padding:0 12px;border-radius:10px;background:var(--fill);border:1px solid var(--hair);font-size:12.5px;font-weight:600;color:var(--text);display:inline-flex;align-items:center;gap:5px;white-space:nowrap;flex:none}
+.addbtn{height:var(--ctl-md);padding:0 12px;border-radius:var(--r-md);background:var(--fill);border:1px solid var(--hair);font-size:12.5px;font-weight:600;color:var(--text);display:inline-flex;align-items:center;gap:5px;white-space:nowrap;flex:none}
 .plist{display:flex;flex-direction:column;gap:10px;margin-top:11px;flex:1;min-height:0}
 .sgrp{display:flex;flex-direction:column;gap:6px}
 .sgh{display:flex;align-items:center;gap:7px;padding:0 3px;font-size:12px}
 .sgh b{font-size:12.5px;font-weight:700;color:var(--text)}
 .sgh .surl{font-size:11.5px;color:var(--text-3)}
 .sgh .scnt{height:18px;padding:0 6px;border-radius:6px;background:color-mix(in srgb,var(--text) 7%,transparent);font-size:11px;font-weight:600;color:var(--text-2);display:inline-flex;align-items:center}
-.sgh .sadd{margin-left:auto;font-size:11.5px;font-weight:600;color:var(--blue);white-space:nowrap}
+.sgh .sadd{margin-left:auto;font-size:11.5px;font-weight:600;color:var(--ink-blue);white-space:nowrap}
 .prow{border-radius:14px;padding:9px 13px;background:var(--fill);border:1.5px solid transparent;display:flex;align-items:center;gap:12px;min-width:0}
 .prow.rw{background:var(--glass-2);border-color:color-mix(in srgb,var(--green) 42%,transparent);box-shadow:0 6px 18px -12px color-mix(in srgb,var(--green) 55%,transparent)}
 .prow.ro{background:var(--glass-2);border-color:color-mix(in srgb,var(--blue) 38%,transparent);box-shadow:0 6px 18px -12px color-mix(in srgb,var(--blue) 45%,transparent)}
@@ -51,17 +51,17 @@ X = '''<style>
 .src-pill{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:var(--text-2);background:color-mix(in srgb,var(--text) 6%,transparent);padding:2px 7px 2px 3px;border-radius:6px;white-space:nowrap}
 .sdot{width:16px;height:16px;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:9px;font-weight:800;flex:none}
 .pmeta{display:flex;align-items:center;gap:6px;margin-top:4px;font-size:12px;color:var(--text-2);min-width:0;white-space:nowrap}
-.ai-bdg{display:inline-flex;align-items:center;gap:3px;height:20px;padding:0 6px;border-radius:6px;font-size:11px;font-weight:600;color:var(--purple);background:color-mix(in srgb,var(--purple) 12%,transparent);flex:none}
-.ro-bdg{display:inline-flex;align-items:center;gap:3px;height:20px;padding:0 6px;border-radius:6px;font-size:11px;font-weight:600;color:var(--blue);background:color-mix(in srgb,var(--blue) 12%,transparent);flex:none}
-.okchip{display:inline-flex;align-items:center;gap:3px;color:var(--green);font-size:11.5px;font-weight:600;flex:none}
-.tune{font-size:12px;font-weight:600;color:var(--blue);margin-left:auto;padding-left:6px;flex:none;white-space:nowrap}
+.ai-bdg{display:inline-flex;align-items:center;gap:3px;height:20px;padding:0 6px;border-radius:6px;font-size:11px;font-weight:600;color:var(--ink-purple);background:color-mix(in srgb,var(--purple) 12%,transparent);flex:none}
+.ro-bdg{display:inline-flex;align-items:center;gap:3px;height:20px;padding:0 6px;border-radius:6px;font-size:11px;font-weight:600;color:var(--ink-blue);background:color-mix(in srgb,var(--blue) 12%,transparent);flex:none}
+.okchip{display:inline-flex;align-items:center;gap:3px;color:var(--ink-green);font-size:11.5px;font-weight:600;flex:none}
+.tune{font-size:12px;font-weight:600;color:var(--ink-blue);margin-left:auto;padding-left:6px;flex:none;white-space:nowrap}
 .pseg{display:inline-flex;padding:3px;border-radius:11px;background:color-mix(in srgb,var(--text) 6%,transparent);flex:none;gap:2px}
 .pseg span{height:28px;padding:0 11px;border-radius:8px;font-size:12px;font-weight:600;color:var(--text-3);display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
-.pseg span.s-ro{background:var(--blue);color:#fff;box-shadow:0 4px 12px -4px color-mix(in srgb,var(--blue) 85%,transparent)}
-.pseg span.s-rw{background:var(--green);color:#fff;box-shadow:0 4px 12px -4px color-mix(in srgb,var(--green) 85%,transparent)}
+.pseg span.s-ro{background:var(--btn-pri-bg);color:#fff;box-shadow:0 4px 12px -4px color-mix(in srgb,var(--btn-pri-bg) 85%,transparent)}
+.pseg span.s-rw{background:var(--btn-ok-bg);color:#fff;box-shadow:0 4px 12px -4px color-mix(in srgb,var(--btn-ok-bg) 85%,transparent)}
 html.dark .pseg{background:rgba(255,255,255,.07)}
 .rmb{width:28px;height:28px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;color:var(--text-3);background:transparent;flex:none}
-.pickbtn{height:34px;padding:0 13px;border-radius:10px;background:var(--blue);color:#fff;font-size:12.5px;font-weight:600;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex:none;box-shadow:0 6px 16px -8px color-mix(in srgb,var(--blue) 85%,transparent)}
+.pickbtn{height:var(--ctl-md);padding:0 13px;border-radius:var(--r-md);background:var(--btn-pri-bg);color:#fff;font-size:12.5px;font-weight:600;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex:none;box-shadow:0 6px 16px -8px color-mix(in srgb,var(--btn-pri-bg) 85%,transparent)}
 .pickmore{border-radius:14px;padding:11px 15px;border:1.5px dashed color-mix(in srgb,var(--text) 16%,transparent);display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--text-2)}
 
 /* 第 4 步与管理员第 0 步 */
@@ -99,7 +99,7 @@ def STEP_PAGES(page, CHECK):
             </div>
             <span class="okpill">{CHECK}鉴权通过</span>
           </div>
-          <div class="cmeta">{I("shield",13,st="color:var(--green)")}<span class="ell">令牌 <span class="mono">bot-fix</span> · 读写分支，无合入主干权限</span></div>
+          <div class="cmeta">{I("shield",13,st="color:var(--ink-green)")}<span class="ell">令牌 <span class="mono">bot-fix</span> · 读写分支，无合入主干权限</span></div>
           <div class="cfoot"><span>可见 28 个仓库</span><span class="act">鉴权配置 ›</span></div>
         </div>
         <div class="ccard">
@@ -111,7 +111,7 @@ def STEP_PAGES(page, CHECK):
             </div>
             <span class="okpill">{CHECK}已授权</span>
           </div>
-          <div class="cmeta">{I("branch",13,st="color:var(--blue)")}<span class="ell">免远端令牌 · 自动走 <span class="mono">worktree</span> 隔离不脏工作区</span></div>
+          <div class="cmeta">{I("branch",13,st="color:var(--ink-blue)")}<span class="ell">免远端令牌 · 自动走 <span class="mono">worktree</span> 隔离不脏工作区</span></div>
           <div class="cfoot"><span>识别 4 个本地 Git 仓</span><span class="act">增减目录 ›</span></div>
         </div>
       </div>
@@ -140,11 +140,11 @@ def STEP_PAGES(page, CHECK):
             </div>
             <span class="okpill">{CHECK}鉴权通过</span>
           </div>
-          <div class="cmeta">{I("inbox",13,st="color:var(--blue)")}<span class="ell">只读采集 · 自动收状态为「AI修复」的 Bug（当前 2 张）</span></div>
+          <div class="cmeta">{I("inbox",13,st="color:var(--ink-blue)")}<span class="ell">只读采集 · 自动收状态为「AI修复」的 Bug（当前 2 张）</span></div>
           <div class="cfoot"><span>每 2 分钟同步</span><span class="act">改鉴权 / 触发条件 ›</span></div>
         </div>
         <div class="ccard addc">
-          <div class="row g8" style="color:var(--text)">{I("plus",16,st="color:var(--blue)")}<b class="f14">添加更多工单连接器</b></div>
+          <div class="row g8" style="color:var(--text)">{I("plus",16,st="color:var(--ink-blue)")}<b class="f14">添加更多工单连接器</b></div>
           <div class="f12 t3" style="line-height:1.55">支持 Tita 工单、GitHub Issues、插件市场第三方连接器或通用 Webhook / MCP；也可先跳过直接手动建单</div>
           <div class="row g6" style="margin-top:2px">
             <span class="tag tg-b" style="height:20px;font-size:11px">+ Tita 工单</span>
@@ -155,7 +155,7 @@ def STEP_PAGES(page, CHECK):
       </div>
 
       <div class="note" style="margin-top:auto;margin-bottom:14px">
-        {I("lock",15,st="color:var(--blue);margin-top:1px")}
+        {I("lock",15,st="color:var(--ink-blue);margin-top:1px")}
         <span><b>凭证安全隔离：</b>所有连接器令牌采用「公钥加密入库、私钥仅在执行器解出」，接口层拿不到明文；管理员配好「公司共用」连接器后，团队成员直接复用，之后随时可在「设置 → 连接器」增改。</span>
       </div>'''
     foot1 = (f'<span class="stat-pill sp-g">{I("check",13,2.8)}代码源 2 个已鉴权</span>'
@@ -184,15 +184,14 @@ html.dark .drw{{background:rgba(34,36,50,.96)}}
 .pitem{{height:40px;border-radius:11px;background:var(--fill);border:1.5px solid transparent;display:flex;align-items:center;justify-content:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--text-2)}}
 .pitem.on{{background:var(--glass-2);border-color:var(--blue);color:var(--text);box-shadow:0 6px 16px -10px color-mix(in srgb,var(--blue) 65%,transparent)}}
 .pdot{{width:18px;height:18px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:800;flex:none}}
-.dinp{{height:40px;border-radius:11px;background:var(--fill);display:flex;align-items:center;gap:9px;padding:0 13px;font-size:13.5px;color:var(--text);min-width:0}}
-.dinp.foc{{background:var(--glass-2);box-shadow:0 0 0 2px var(--blue),0 0 0 5px color-mix(in srgb,var(--blue) 16%,transparent)}}
-.seg2{{display:flex;padding:3px;border-radius:11px;background:var(--fill);gap:2px}}
-.seg2 span{{flex:1;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;gap:5px;font-size:12.5px;font-weight:600;color:var(--text-2)}}
-.seg2 span.on{{background:var(--glass-2);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.12)}}
-html.dark .seg2 span.on{{background:rgba(255,255,255,.15)}}
+.dinp{{height:var(--ctl-lg);border-radius:var(--r-lg);background:var(--well);border:1px solid var(--hair);display:flex;align-items:center;gap:9px;padding:0 13px;font-size:13.5px;color:var(--text);min-width:0}}
+.dinp.foc{{background:var(--glass-2);border-color:var(--focus-ring);box-shadow:0 0 0 3px var(--focus-halo)}}
+.seg2{{display:flex;padding:3px;border-radius:var(--r-lg);background:var(--fill);gap:2px;height:var(--ctl-lg)}}
+.seg2 span{{flex:1;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;gap:5px;font-size:12.5px;font-weight:600;color:var(--text-2)}}
+.seg2 span.on{{background:var(--seg-thumb);color:var(--text);box-shadow:var(--shadow-seg)}}
 .vbox{{border-radius:16px;padding:13px 16px;background:color-mix(in srgb,var(--green) 8%,var(--fill));border:1px solid color-mix(in srgb,var(--green) 28%,transparent)}}
 .vrow{{display:flex;align-items:center;gap:9px;font-size:12.5px;padding:4px 0;color:var(--text)}}
-.vck{{width:17px;height:17px;border-radius:50%;background:var(--green);color:#fff;display:inline-flex;align-items:center;justify-content:center;flex:none}}
+.vck{{width:17px;height:17px;border-radius:50%;background:var(--btn-ok-bg);color:#fff;display:inline-flex;align-items:center;justify-content:center;flex:none}}
 </style>
 <div class="scr"></div>
 <div class="drw">
@@ -234,12 +233,12 @@ html.dark .seg2 span.on{{background:rgba(255,255,255,.15)}}
     <div>
       <div class="flab">访问令牌（Token）<span>公钥加密保存，仅执行器可解</span></div>
       <div class="row g10">
-        <div class="dinp foc grow">{I("lock",14,st="color:var(--blue)")}<span class="mono grow">glpat-•••••••••••••••••• 91d0</span></div>
-        <button class="bigb secb" style="height:40px;background:var(--glass-2);border:1px solid var(--stroke)">{I("zap",14,st="color:var(--blue)")}重新验证</button>
+        <div class="dinp foc grow">{I("lock",14,st="color:var(--ink-blue)")}<span class="mono grow">glpat-•••••••••••••••••• 91d0</span></div>
+        <button class="bigb secb" style="height:40px;background:var(--glass-2);border:1px solid var(--stroke)">{I("zap",14,st="color:var(--ink-blue)")}重新验证</button>
       </div>
     </div>
     <div class="vbox">
-      <div class="row g8" style="margin-bottom:6px"><b class="f13" style="color:var(--green)">鉴权验证通过 · 用时 340ms</b><span class="grow"></span><span class="f12 t3">Bot-02 实测</span></div>
+      <div class="row g8" style="margin-bottom:6px"><b class="f13" style="color:var(--ink-green)">鉴权验证通过 · 用时 340ms</b><span class="grow"></span><span class="f12 t3">Bot-02 实测</span></div>
       <div class="vrow"><span class="vck">{I("check",11,3)}</span><span>服务地址连通，API v4 响应正常</span></div>
       <div class="vrow"><span class="vck">{I("check",11,3)}</span><span>识别身份：<span class="mono">bot-fix</span> · 具备 <span class="mono">read_api / read_repository / write_repository</span></span></div>
       <div class="vrow"><span class="vck">{I("check",11,3)}</span><span>安全校验：<b>无合入主干权限</b>（符合最小权限原则），可拉取 <b>28 个仓库</b></span></div>
@@ -262,7 +261,7 @@ html.dark .tsec2{{background:rgba(255,255,255,.038)}}
 .tsec2-h{{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:var(--text)}}
 .flab2{{font-size:11.5px;font-weight:600;color:var(--text-3);margin-bottom:5px;display:flex;align-items:center;gap:6px}}
 .mtags{{display:flex;align-items:center;gap:6px;flex-wrap:nowrap;height:36px;padding:0 9px;border-radius:10px;background:var(--glass-2);border:1px solid var(--stroke)}}
-.mchip{{height:22px;padding:0 7px;border-radius:6px;background:color-mix(in srgb,var(--blue) 14%,transparent);color:var(--blue);font-size:11.5px;font-weight:600;display:inline-flex;align-items:center;gap:4px;white-space:nowrap}}
+.mchip{{height:22px;padding:0 7px;border-radius:6px;background:color-mix(in srgb,var(--blue) 14%,transparent);color:var(--ink-blue);font-size:11.5px;font-weight:600;display:inline-flex;align-items:center;gap:4px;white-space:nowrap}}
 html.dark .mchip{{color:#7DC4FF;background:color-mix(in srgb,var(--blue) 22%,transparent)}}
 .jqlbar{{padding:7px 10px;border-radius:9px;background:var(--fill);border:1px solid var(--hair);display:flex;align-items:center;gap:8px;font-size:11.5px}}
 .drybox{{border-radius:14px;padding:11px 13px;background:color-mix(in srgb,var(--green) 8%,var(--fill));border:1px solid color-mix(in srgb,var(--green) 28%,transparent);display:flex;flex-direction:column;gap:6px}}
@@ -298,7 +297,7 @@ html.dark .mchip{{color:#7DC4FF;background:color-mix(in srgb,var(--blue) 22%,tra
           <div class="cc-input">{I("lock",13,st="color:var(--text-3)")}<span class="mono grow t2">•••••••••••••••••• 8k2m</span><span class="f11 t3">已加密</span></div>
         </div>
         <div style="align-self:flex-end">
-          <button class="cc-btn cc-btn-glass" style="height:36px">{I("zap",13,st="color:var(--blue)")}测试连接</button>
+          <button class="cc-btn cc-btn-glass" style="height:36px">{I("zap",13,st="color:var(--ink-blue)")}测试连接</button>
         </div>
       </div>
     </div>
@@ -358,7 +357,7 @@ html.dark .mchip{{color:#7DC4FF;background:color-mix(in srgb,var(--blue) 22%,tra
   </div>
 
   <div class="cc-drawer-ft">
-    <button class="cc-btn cc-btn-ghost" style="color:var(--red);padding:0 8px">停用 / 删除</button>
+    <button class="cc-btn cc-btn-ghost" style="color:var(--ink-red);padding:0 8px">停用 / 删除</button>
     <span class="grow"></span>
     <button class="cc-btn cc-btn-lg cc-btn-sec">取消</button>
     <button class="cc-btn cc-btn-lg cc-btn-glass">{I("search",14)}试采预览</button>
@@ -376,12 +375,12 @@ html.dark .mchip{{color:#7DC4FF;background:color-mix(in srgb,var(--blue) 22%,tra
 .ctxbar{{padding:9px 16px;background:color-mix(in srgb,var(--purple) 7%,transparent);border-bottom:1px solid var(--hair);display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--text-2)}}
 .qqs{{display:flex;flex-wrap:wrap;gap:6px}}
 .qq{{height:27px;padding:0 10px;border-radius:9px;background:var(--fill);border:1px solid var(--hair);font-size:11.5px;font-weight:600;color:var(--text-2);display:inline-flex;align-items:center;gap:5px}}
-.qq.on{{background:color-mix(in srgb,var(--purple) 14%,transparent);border-color:color-mix(in srgb,var(--purple) 34%,transparent);color:var(--purple)}}
+.qq.on{{background:color-mix(in srgb,var(--purple) 14%,transparent);border-color:color-mix(in srgb,var(--purple) 34%,transparent);color:var(--ink-purple)}}
 html.dark .qq.on{{color:#D4A5FF}}
 .umsg{{align-self:flex-end;max-width:88%;padding:9px 13px;border-radius:16px 16px 5px 16px;background:linear-gradient(180deg,#3B8BFF,#1F6FFF);color:#fff;font-size:13px;line-height:1.5;box-shadow:0 8px 16px -10px rgba(31,111,255,.85)}}
 .amsg{{border-radius:16px 16px 16px 5px;padding:12px 13px;background:var(--glass-2);border:1px solid var(--stroke);display:flex;flex-direction:column;gap:9px;font-size:12.5px;line-height:1.55;color:var(--text)}}
 .stepb{{display:flex;gap:8px;align-items:flex-start;font-size:12px;color:var(--text-2)}}
-.snm{{width:18px;height:18px;border-radius:50%;background:color-mix(in srgb,var(--blue) 16%,transparent);color:var(--blue);font-size:10.5px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;flex:none;margin-top:1px}}
+.snm{{width:18px;height:18px;border-radius:50%;background:color-mix(in srgb,var(--blue) 16%,transparent);color:var(--ink-blue);font-size:10.5px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;flex:none;margin-top:1px}}
 .pbox{{border-radius:11px;padding:9px 11px;background:var(--fill);border:1px solid var(--hair);display:flex;flex-direction:column;gap:5px}}
 .prow2{{display:flex;align-items:center;gap:7px;font-size:12px}}
 .actcard{{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:12px;background:color-mix(in srgb,var(--blue) 10%,var(--glass-2));border:1px solid color-mix(in srgb,var(--blue) 32%,transparent)}}
@@ -401,7 +400,7 @@ html.dark .qq.on{{color:#D4A5FF}}
   </div>
 
   <div class="ctxbar">
-    {I("layers",13,st="color:var(--purple)")}
+    {I("layers",13,st="color:var(--ink-purple)")}
     <span class="grow ell">上下文：<b>第 1 步 · 连接器与鉴权</b>（已连 GitLab · 本机 · Jira）</span>
   </div>
 
@@ -424,10 +423,10 @@ html.dark .qq.on{{color:#D4A5FF}}
       <div class="stepb"><span class="snm">3</span><span>按下方清单勾选作用域后复制生成的 <span class="mono">glpat-…</span> 令牌：</span></div>
 
       <div class="pbox">
-        <div class="prow2"><span style="color:var(--green);font-weight:800">✓</span><span class="mono w6">read_api</span><span class="f11 t3 grow">拉取仓库列表、查分支与提 MR</span></div>
-        <div class="prow2"><span style="color:var(--green);font-weight:800">✓</span><span class="mono w6">read_repository</span><span class="f11 t3 grow">只读克隆代码与查规范</span></div>
-        <div class="prow2"><span style="color:var(--green);font-weight:800">✓</span><span class="mono w6">write_repository</span><span class="f11 t3 grow">仅推 <span class="mono">fix/</span> 修复分支</span></div>
-        <div class="prow2" style="padding-top:4px;border-top:1px solid var(--hair)"><span style="color:var(--red);font-weight:800">✕</span><span class="f11" style="color:var(--red);font-weight:600">切勿授予 Maintainer 合入受保护主干权限</span></div>
+        <div class="prow2"><span style="color:var(--ink-green);font-weight:800">✓</span><span class="mono w6">read_api</span><span class="f11 t3 grow">拉取仓库列表、查分支与提 MR</span></div>
+        <div class="prow2"><span style="color:var(--ink-green);font-weight:800">✓</span><span class="mono w6">read_repository</span><span class="f11 t3 grow">只读克隆代码与查规范</span></div>
+        <div class="prow2"><span style="color:var(--ink-green);font-weight:800">✓</span><span class="mono w6">write_repository</span><span class="f11 t3 grow">仅推 <span class="mono">fix/</span> 修复分支</span></div>
+        <div class="prow2" style="padding-top:4px;border-top:1px solid var(--hair)"><span style="color:var(--ink-red);font-weight:800">✕</span><span class="f11" style="color:var(--ink-red);font-weight:600">切勿授予 Maintainer 合入受保护主干权限</span></div>
       </div>
 
       <div class="actcard">
@@ -566,7 +565,7 @@ html.dark .qq.on{{color:#D4A5FF}}
       </div>
 
       <div class="note" style="margin-bottom:10px;padding:8px 13px">
-        {I("shield",15,st="color:var(--blue);margin-top:1px")}
+        {I("shield",15,st="color:var(--ink-blue);margin-top:1px")}
         <span><b>按连接器分组 · 最小授权：</b>Bot 只访问你从各连接器主动选入的这 4 个仓库，且仅在「可修改」仓拉 <span class="mono">fix/</span> 分支提 MR（合入仍需真人审）；修单时自动路由到对应项目。</span>
       </div>'''
     foot2 = ('<button class="bigb secb"><i data-i="chevl" data-s="16" data-w="2.4"></i>上一步</button>'
@@ -599,14 +598,14 @@ html.dark .drw{{background:rgba(34,36,50,.96)}}
 .ic3{{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:#fff;flex:none;font-size:15px;font-weight:800}}
 .ctabs{{display:flex;gap:8px;align-items:center}}
 .ctab{{height:34px;padding:0 12px;border-radius:10px;background:var(--fill);font-size:12.5px;font-weight:600;color:var(--text-2);display:inline-flex;align-items:center;gap:6px;white-space:nowrap}}
-.ctab.on{{background:var(--blue);color:#fff}}
+.ctab.on{{background:var(--btn-pri-bg);color:#fff}}
 .ctab em{{font-style:normal;opacity:.75;font-size:11px}}
 .pksrch{{height:38px;border-radius:11px;background:var(--glass-2);border:1.5px solid var(--blue);box-shadow:0 0 0 4px color-mix(in srgb,var(--blue) 14%,transparent);padding:0 12px;display:flex;align-items:center;gap:8px;font-size:13px}}
 .pkg{{font-size:11.5px;font-weight:700;color:var(--text-3);margin-top:4px;display:flex;align-items:center;gap:6px}}
 .pkr{{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:13px;background:var(--fill);border:1.5px solid transparent}}
 .pkr.on{{background:var(--glass-2);border-color:color-mix(in srgb,var(--blue) 45%,transparent)}}
 .pkc{{width:18px;height:18px;border-radius:6px;border:1.5px solid color-mix(in srgb,var(--text) 24%,transparent);display:inline-flex;align-items:center;justify-content:center;flex:none}}
-.pkc.on{{border:0;background:var(--blue);color:#fff}}
+.pkc.on{{border:0;background:var(--btn-pri-bg);color:#fff}}
 .pklist{{display:flex;flex-direction:column;gap:7px;flex:1;min-height:0;overflow:hidden;-webkit-mask-image:linear-gradient(180deg,#000 0%,#000 86%,transparent 100%);mask-image:linear-gradient(180deg,#000 0%,#000 86%,transparent 100%)}}
 </style>
 <div class="scr"></div>
@@ -628,7 +627,7 @@ html.dark .drw{{background:rgba(34,36,50,.96)}}
       <span class="f12 lnk">+ 新增连接器</span>
     </div>
     <div class="pksrch">
-      {I("search",15,st="color:var(--blue)")}
+      {I("search",15,st="color:var(--ink-blue)")}
       <span class="grow">okr</span>
       <span class="tag tg-n" style="height:20px;font-size:11px">命中 4 / 28 个</span>
       {I("x",14,st="color:var(--text-3)")}
@@ -666,13 +665,14 @@ html.dark .drw{{background:rgba(34,36,50,.96)}}
 .xb{{width:32px;height:32px;border-radius:50%;background:var(--fill);display:flex;align-items:center;justify-content:center;color:var(--text-2);flex:none}}
 .ic3{{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:#fff;flex:none;font-size:13px;font-weight:800}}
 .flab{{font-size:12.5px;font-weight:700;color:var(--text-2);margin-bottom:6px;display:flex;align-items:center;gap:6px}}
-.flab .rst{{margin-left:auto;font-weight:600;color:var(--blue);font-size:11.5px}}
-.dinp{{height:38px;border-radius:11px;background:var(--fill);display:flex;align-items:center;gap:8px;padding:0 12px;font-size:13px;color:var(--text);min-width:0}}
+.flab .rst{{margin-left:auto;font-weight:600;color:var(--ink-blue);font-size:11.5px}}
+.dinp{{height:var(--ctl-md);border-radius:var(--r-md);background:var(--well);border:1px solid var(--hair);display:flex;align-items:center;gap:8px;padding:0 12px;font-size:13px;color:var(--text);min-width:0}}
 .dinp.ov{{background:var(--glass-2);border:1.5px solid color-mix(in srgb,var(--blue) 55%,transparent)}}
+.dsel{{height:var(--ctl-md);border-radius:var(--r-md);background:var(--glass-2);border:1px solid var(--border-ctl);box-shadow:var(--shadow-ctl);display:flex;align-items:center;gap:8px;padding:0 12px;font-size:13px;font-weight:600;color:var(--text);min-width:0}}
 .tsec{{border-radius:15px;padding:12px 14px;background:var(--fill);display:flex;flex-direction:column;gap:10px}}
 .tsec-h{{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--text)}}
-.aid2{{display:inline-flex;align-items:center;gap:3px;height:18px;padding:0 6px;border-radius:5px;font-size:10.5px;font-weight:600;color:var(--purple);background:color-mix(in srgb,var(--purple) 13%,transparent)}}
-.ov2{{display:inline-flex;align-items:center;gap:3px;height:18px;padding:0 6px;border-radius:5px;font-size:10.5px;font-weight:600;color:var(--blue);background:color-mix(in srgb,var(--blue) 13%,transparent)}}
+.aid2{{display:inline-flex;align-items:center;gap:3px;height:18px;padding:0 6px;border-radius:5px;font-size:10.5px;font-weight:600;color:var(--ink-purple);background:color-mix(in srgb,var(--purple) 13%,transparent)}}
+.ov2{{display:inline-flex;align-items:center;gap:3px;height:18px;padding:0 6px;border-radius:5px;font-size:10.5px;font-weight:600;color:var(--ink-blue);background:color-mix(in srgb,var(--blue) 13%,transparent)}}
 </style>
 <div class="scr"></div>
 <div class="drw">
@@ -691,32 +691,32 @@ html.dark .drw{{background:rgba(34,36,50,.96)}}
       <div class="row g10">
         <div class="grow">
           <div class="flab">项目名称<span class="aid2">{I("spark",10)}AI 推测</span></div>
-          <div class="dinp" style="background:var(--glass-2)"><span>OKR · 目标管理</span><span class="grow"></span>{I("chevd",13,st="color:var(--text-3)")}</div>
+          <div class="dsel"><span>OKR · 目标管理</span><span class="grow"></span>{I("chevd",13,st="color:var(--text-3)")}</div>
         </div>
         <div style="width:188px;flex:none">
           <div class="flab">权限模式</div>
-          <div class="dinp" style="background:var(--glass-2);color:var(--green);font-weight:600">{I("edit",13)}<span class="grow">可修改（推 fix/）</span>{I("chevd",13,st="color:var(--text-3)")}</div>
+          <div class="dsel" style="color:var(--ink-green)">{I("edit",13)}<span class="grow">可修改（推 fix/）</span>{I("chevd",13,st="color:var(--text-3)")}</div>
         </div>
       </div>
     </div>
 
     <!-- 2. 分支与试构建覆盖 -->
     <div class="tsec">
-      <div class="tsec-h"><span>分支与试构建命令</span><span class="f11 t3" style="font-weight:400">人工覆盖项标蓝，后续重探测不冲掉</span><span class="rst" style="margin-left:auto;font-size:11.5px;color:var(--blue);font-weight:600">恢复全部 AI 推测</span></div>
+      <div class="tsec-h"><span>分支与试构建命令</span><span class="f11 t3" style="font-weight:400">人工覆盖项标蓝，后续重探测不冲掉</span><span class="rst" style="margin-left:auto;font-size:11.5px;color:var(--ink-blue);font-weight:600">恢复全部 AI 推测</span></div>
       <div class="row g10">
         <div class="grow">
           <div class="flab">主干分支<span class="aid2">{I("spark",10)}默认分支</span></div>
-          <div class="dinp" style="background:var(--glass-2)"><span class="mono grow">master</span>{I("chevd",13,st="color:var(--text-3)")}</div>
+          <div class="dsel"><span class="mono grow">master</span>{I("chevd",13,st="color:var(--text-3)")}</div>
         </div>
         <div class="grow">
           <div class="flab">测试分支<span class="aid2">{I("spark",10)}命中 dev-*</span></div>
-          <div class="dinp" style="background:var(--glass-2)"><span class="mono grow">dev-okr</span>{I("chevd",13,st="color:var(--text-3)")}</div>
+          <div class="dsel"><span class="mono grow">dev-okr</span>{I("chevd",13,st="color:var(--text-3)")}</div>
         </div>
       </div>
       <div class="row g10">
         <div style="width:150px;flex:none">
           <div class="flab">包管理器<span class="aid2">lockfile</span></div>
-          <div class="dinp" style="background:var(--glass-2)"><span class="mono grow">pnpm</span>{I("chevd",13,st="color:var(--text-3)")}</div>
+          <div class="dsel"><span class="mono grow">pnpm</span>{I("chevd",13,st="color:var(--text-3)")}</div>
         </div>
         <div class="grow">
           <div class="flab">试构建命令（不上传产物）<span class="ov2">已人工覆盖</span><span class="rst">还原推测</span></div>
@@ -729,23 +729,23 @@ html.dark .drw{{background:rgba(34,36,50,.96)}}
     <div class="tsec">
       <div class="tsec-h"><span>代码规范与默认 MR 审核人</span></div>
       <div class="row g8 f12 t2" style="padding:7px 10px;border-radius:10px;background:var(--glass-2)">
-        {I("file",14,st="color:var(--purple)")}
+        {I("file",14,st="color:var(--ink-purple)")}
         <span class="grow ell">自动读取仓库根目录 <span class="mono">AGENTS.md</span> 与 <span class="mono">.eslintrc.cjs</span>，并启用内置「最小改动修复」</span>
         <span class="tag tg-g" style="height:19px;font-size:10.5px">已生效</span>
       </div>
       <div class="row g10">
         <div class="grow">
           <div class="flab">合入测试分支审核人</div>
-          <div class="dinp" style="background:var(--glass-2)"><span class="grow">工单修复人（默认）</span>{I("chevd",13,st="color:var(--text-3)")}</div>
+          <div class="dsel"><span class="grow">工单修复人（默认）</span>{I("chevd",13,st="color:var(--text-3)")}</div>
         </div>
         <div class="grow">
           <div class="flab">合回主干分支审核人</div>
-          <div class="dinp" style="background:var(--glass-2)"><span class="grow">林某（项目负责人）</span>{I("chevd",13,st="color:var(--text-3)")}</div>
+          <div class="dsel"><span class="grow">林某（项目负责人）</span>{I("chevd",13,st="color:var(--text-3)")}</div>
         </div>
       </div>
     </div>
 
-    <div class="row g8 f12" style="padding:9px 12px;border-radius:12px;background:color-mix(in srgb,var(--green) 10%,transparent);color:var(--green)">
+    <div class="row g8 f12" style="padding:9px 12px;border-radius:12px;background:color-mix(in srgb,var(--green) 10%,transparent);color:var(--ink-green);font-weight:600">
       {I("check",14,2.8)}
       <span class="grow">上次试构建通过 · <span class="mono">pnpm build-prod</span> · 3 分 12 秒（修改命令后建议重新试构建）</span>
     </div>
@@ -827,7 +827,7 @@ def ai_step(page, CHECK):
         </div>
       </div>
       <div class="note" style="margin-top:16px">
-        {I("link",15,st="color:var(--blue);margin-top:1px")}
+        {I("link",15,st="color:var(--ink-blue);margin-top:1px")}
         <span><b>外部工具统一走连接器：</b>GitLab、GitHub、Gitee、Jira、Tita 等平台鉴权不再写死在这里，下一步「连接器与鉴权」中统一接入，并支持本机代码目录与插件市场扩展。</span>
       </div>
 '''

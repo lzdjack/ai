@@ -38,9 +38,9 @@ html.dark .panel{
 .bd-pro{height:21px;padding:0 8px;border-radius:6px;font-size:11px;font-weight:700;color:#fff;background:linear-gradient(90deg,#8B5CF6,#6366F1);display:inline-flex;align-items:center}
 
 .mode-bar{margin-top:18px;display:flex;align-items:center;gap:12px}
-.seg2{height:38px;border-radius:12px;padding:3px;background:var(--fill);display:inline-flex;gap:3px}
-.seg2 span{padding:0 16px;border-radius:9px;display:inline-flex;align-items:center;font-size:13px;font-weight:600;color:var(--text-2);white-space:nowrap}
-.seg2 span.on{background:var(--glass-2);color:var(--text);box-shadow:0 2px 8px -2px rgba(0,0,0,.15)}
+.seg2{height:var(--ctl-md);border-radius:var(--r-md);padding:3px;background:var(--fill);display:inline-flex;gap:3px}
+.seg2 span{padding:0 16px;border-radius:7px;display:inline-flex;align-items:center;font-size:13px;font-weight:600;color:var(--text-2);white-space:nowrap}
+.seg2 span.on{background:var(--seg-thumb);color:var(--text);box-shadow:var(--shadow-seg)}
 
 .cols{display:grid;grid-template-columns:1.18fr 1fr;gap:18px;margin-top:16px;align-items:stretch}
 .plans{display:flex;flex-direction:column;gap:12px}
@@ -63,16 +63,17 @@ html.dark .plan.on{background:color-mix(in srgb,#8B5CF6 14%,rgba(30,32,48,.82))}
 .plan.on .sp{background:color-mix(in srgb,#8B5CF6 12%,var(--fill));color:var(--text)}
 
 .side{border-radius:18px;padding:18px 20px;background:var(--glass-2);border:1px solid var(--stroke);display:flex;flex-direction:column;gap:14px}
-.flb{font-size:11.5px;font-weight:600;color:var(--text-3);margin-bottom:6px}
-.inp{height:38px;border-radius:11px;padding:0 12px;background:var(--fill);border:1px solid var(--hair);display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--text)}
+.flb{font-size:11.5px;font-weight:600;color:var(--text-2);margin-bottom:6px}
+.sel{height:var(--ctl-md);border-radius:var(--r-md);padding:0 12px;background:var(--glass-2);border:1px solid var(--border-ctl);box-shadow:var(--shadow-ctl);display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:600;color:var(--text)}
+.sel svg{color:var(--text-3);flex:none}
 .chk-list{display:flex;flex-direction:column;gap:9px}
 .chk-r{display:flex;align-items:flex-start;gap:8px;font-size:12.5px;line-height:1.5;color:var(--text-2)}
 .ck-g{width:17px;height:17px;border-radius:50%;background:var(--green);color:#fff;display:inline-flex;align-items:center;justify-content:center;flex:none;margin-top:1px}
 .redeem{margin-top:auto;padding:10px 12px;border-radius:12px;background:color-mix(in srgb,var(--blue) 7%,transparent);border:1px dashed color-mix(in srgb,var(--blue) 32%,transparent);display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-2)}
-.redeem b{color:var(--blue)}
+.redeem b{color:var(--ink-blue)}
 
 .foot{margin-top:20px;padding-top:16px;border-top:1px solid var(--hair);display:flex;align-items:center;gap:10px}
-.f-btn{height:42px;padding:0 20px;border-radius:13px;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
+.f-btn{height:var(--ctl-lg);padding:0 20px;border-radius:var(--r-lg);font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
 .f-sec{background:var(--fill);color:var(--text)}
 .f-pri{background:linear-gradient(135deg,#8B5CF6,#4F46E5);color:#fff;box-shadow:0 12px 26px -8px rgba(99,102,241,.72)}
 
@@ -151,7 +152,7 @@ HTML = f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>
         <div class="side">
           <div>
             <div class="flb">托管节点区域</div>
-            <div class="inp"><span>华东 · 上海（推荐 · 延迟 18ms）</span>{CHEVD}</div>
+            <div class="sel"><span>华东 · 上海（推荐 · 延迟 18ms）</span>{CHEVD}</div>
           </div>
           <div>
             <div class="flb">隔离与安全承诺</div>
@@ -162,7 +163,7 @@ HTML = f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>
             </div>
           </div>
           <div class="redeem">
-            <span style="color:var(--blue);display:flex">{KEY}</span>
+            <span style="color:var(--ink-blue);display:flex">{KEY}</span>
             <span class="grow">已有团队 Pro 额度或私有部署许可？<b>切到上方「兑换码」直接激活 ›</b></span>
           </div>
         </div>
