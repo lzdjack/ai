@@ -69,6 +69,7 @@ html.dark .pseg{background:rgba(255,255,255,.07)}
 .kv3{display:flex;align-items:center;gap:10px;margin-top:10px}
 .kv3>span:first-child{width:76px;white-space:nowrap;flex:none;font-size:12.5px;color:var(--text-3)}
 .kv3 .inp{height:38px;flex:1;font-size:13.5px}
+.kv3 .inp.sel{justify-content:space-between;background:var(--glass-2);border:1px solid var(--stroke)}
 .chk3{display:flex;align-items:center;gap:12px;padding:8px 0;border-top:1px solid var(--hair);font-size:13.5px}
 .chk3:first-child{border-top:0}
 .ck3{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;flex:none}
@@ -252,6 +253,206 @@ html.dark .seg2 span.on{{background:rgba(255,255,255,.15)}}
   </div>
 </div>'''
     p1_new = p1.replace('</div><script src="icons.js">', DRW + '</div><script src="icons.js">', 1)
+
+    # ---------------- 1-ticket 工单连接器：改鉴权 / 触发条件 + 试采预览抽屉（严格复用组件库 .cc-*） ----------------
+    CHEV = f'<span class="cc-sel-caret">{I("chevd",13)}</span>'
+    TICKET_DRW = f'''<style>
+.tsec2{{border-radius:15px;padding:12px 14px;background:color-mix(in srgb,var(--text) 4%,transparent);border:1px solid var(--hair);display:flex;flex-direction:column;gap:9px}}
+html.dark .tsec2{{background:rgba(255,255,255,.038)}}
+.tsec2-h{{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:var(--text)}}
+.flab2{{font-size:11.5px;font-weight:600;color:var(--text-3);margin-bottom:5px;display:flex;align-items:center;gap:6px}}
+.mtags{{display:flex;align-items:center;gap:6px;flex-wrap:nowrap;height:36px;padding:0 9px;border-radius:10px;background:var(--glass-2);border:1px solid var(--stroke)}}
+.mchip{{height:22px;padding:0 7px;border-radius:6px;background:color-mix(in srgb,var(--blue) 14%,transparent);color:var(--blue);font-size:11.5px;font-weight:600;display:inline-flex;align-items:center;gap:4px;white-space:nowrap}}
+html.dark .mchip{{color:#7DC4FF;background:color-mix(in srgb,var(--blue) 22%,transparent)}}
+.jqlbar{{padding:7px 10px;border-radius:9px;background:var(--fill);border:1px solid var(--hair);display:flex;align-items:center;gap:8px;font-size:11.5px}}
+.drybox{{border-radius:14px;padding:11px 13px;background:color-mix(in srgb,var(--green) 8%,var(--fill));border:1px solid color-mix(in srgb,var(--green) 28%,transparent);display:flex;flex-direction:column;gap:6px}}
+.dryit{{display:flex;align-items:center;gap:8px;padding:6px 9px;border-radius:9px;background:var(--glass-2);font-size:12px}}
+</style>
+<div class="cc-scrim"></div>
+<div class="cc-drawer">
+  <div class="cc-drawer-hd">
+    <span class="ic3" style="background:linear-gradient(155deg,#4FA3FF,#1D6FE0)">J</span>
+    <div class="grow" style="min-width:0">
+      <div class="row g8"><span style="font-size:17px;font-weight:800">编辑工单连接器 · 公司 Jira</span><span class="cc-tag cc-tag-n">公司共用</span><span class="cc-tag cc-tag-g">鉴权通过</span></div>
+      <div class="f11 t3" style="margin-top:2px">共用 <span class="mono">ConnectorDrawer</span>（工单源额外渲染 <span class="mono">triggerSchema</span> + 试采预览）· 令牌留空不覆盖</div>
+    </div>
+    <span class="cc-close">{I("x",16,2.2)}</span>
+  </div>
+
+  <div class="cc-drawer-bd" style="gap:11px;padding:14px 22px">
+    <div class="tsec2">
+      <div class="tsec2-h"><span>1. 平台连接与只读鉴权</span><span class="f11 t3" style="font-weight:400">平台类型锁定只读</span><span class="okpill" style="margin-left:auto;font-size:11.5px">{I("check",12,3)}bot-jira · 只读 6 项目 · 210ms</span></div>
+      <div class="row g10">
+        <div class="grow" style="min-width:0">
+          <div class="flab2">Jira 服务地址</div>
+          <div class="cc-input">{I("globe",14,st="color:var(--text-3)")}<span class="mono ell">https://jira.tita.cloud</span></div>
+        </div>
+        <div style="width:208px;flex:none">
+          <div class="flab2">认证方式</div>
+          <div class="cc-select"><span class="cc-sel-val">PAT 访问令牌</span><span class="cc-sel-sp"></span>{CHEV}</div>
+        </div>
+      </div>
+      <div class="row g10">
+        <div class="grow" style="min-width:0">
+          <div class="flab2">只读采集令牌<span>编辑态不回传明文，留空保存沿用原密文</span></div>
+          <div class="cc-input">{I("lock",13,st="color:var(--text-3)")}<span class="mono grow t2">•••••••••••••••••• 8k2m</span><span class="f11 t3">已加密</span></div>
+        </div>
+        <div style="align-self:flex-end">
+          <button class="cc-btn cc-btn-glass" style="height:36px">{I("zap",13,st="color:var(--blue)")}测试连接</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tsec2">
+      <div class="tsec2-h"><span>2. 自动收单触发条件（Trigger）</span><span class="f11 t3" style="font-weight:400">决定哪些单自动流进云匠</span>
+        <div class="cc-seg" style="margin-left:auto;flex:none"><span class="on" style="height:26px;padding:0 10px;font-size:11.5px">轮询 · 每 2 分钟</span><span style="height:26px;padding:0 10px;font-size:11.5px">Webhook</span></div>
+      </div>
+      <div>
+        <div class="flab2">监听的 Jira 项目<span>实时拉自当前账号可见的 6 个项目，免手敲 Key</span></div>
+        <div class="mtags">
+          <span class="mchip">OKR · 目标管理 ×</span>
+          <span class="mchip">APR · 审批 ×</span>
+          <span class="mchip">KQ · 考勤 ×</span>
+          <span class="f11 lnk w6" style="margin-left:auto;white-space:nowrap">+ 添加项目</span>
+        </div>
+      </div>
+      <div class="row g10">
+        <div class="grow" style="min-width:0">
+          <div class="flab2">触发状态（命中即收单）</div>
+          <div class="cc-select"><span style="width:7px;height:7px;border-radius:50%;background:var(--blue);flex:none"></span><span class="cc-sel-val">AI修复</span><span class="cc-sel-sp"></span>{CHEV}</div>
+        </div>
+        <div class="grow" style="min-width:0">
+          <div class="flab2">工单类型</div>
+          <div class="cc-select"><span class="cc-sel-val">Bug（缺陷）</span><span class="cc-sel-sp"></span>{CHEV}</div>
+        </div>
+        <div class="grow" style="min-width:0">
+          <div class="flab2">默认复现环境</div>
+          <div class="cc-select"><span style="width:7px;height:7px;border-radius:50%;background:var(--green);flex:none"></span><span class="cc-sel-val">测试环境</span><span class="cc-sel-sp"></span>{CHEV}</div>
+        </div>
+      </div>
+      <div class="jqlbar">
+        <span class="cc-tag cc-tag-p">生成 JQL</span>
+        <span class="mono t2 ell grow">project in (OKR, APR, KQ) AND status = "AI修复" AND issuetype = Bug</span>
+        <span class="f11 lnk w6" style="white-space:nowrap">切手写 JQL</span>
+      </div>
+      <div class="f11 t3">角色映射：真人修复人 = <b style="color:var(--text-2)">Jira 经办人</b> · 复测人 = <b style="color:var(--text-2)">提单人（发测试前可换）</b></div>
+    </div>
+
+    <div class="drybox">
+      <div class="row g8">
+        <span class="okpill" style="font-size:12.5px">{I("check",13,3)}试采预览命中 2 张待修 Bug</span>
+        <span class="f11 t3">仅预演不建单 · 防误配把历史旧单全灌进来</span>
+        <span class="f11 lnk w6" style="margin-left:auto">重新试采</span>
+      </div>
+      <div class="dryit">
+        <span class="sc10 sc-j">OKR-412</span>
+        <span class="w6 grow ell">对齐视图里子目标重复显示</span>
+        <span class="f11 t3">经办人 林某 · 提单人 王某</span>
+      </div>
+      <div class="dryit">
+        <span class="sc10 sc-j">OKR-418</span>
+        <span class="w6 grow ell">目标导入后日期偏移一天</span>
+        <span class="f11 t3">经办人 周某 · 提单人 李娜</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="cc-drawer-ft">
+    <button class="cc-btn cc-btn-ghost" style="color:var(--red);padding:0 8px">停用 / 删除</button>
+    <span class="grow"></span>
+    <button class="cc-btn cc-btn-lg cc-btn-sec">取消</button>
+    <button class="cc-btn cc-btn-lg cc-btn-glass">{I("search",14)}试采预览</button>
+    <button class="cc-btn cc-btn-lg cc-btn-pri">保存鉴权与触发条件</button>
+  </div>
+</div>'''
+    p1_ticket = p1.replace('</div><script src="icons.js">', TICKET_DRW + '</div><script src="icons.js">', 1)
+
+    # ---------------- 1-ai 向导 AI 帮手（点右上「✦ 怎么填令牌？问 AI」右侧 440px 非模态浮层） ----------------
+    AI_DRW = f'''<style>
+.aidrw-b{{border:1px solid color-mix(in srgb,var(--purple) 28%,var(--stroke))}}
+.aorb{{width:34px;height:34px;border-radius:11px;background:#141530;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;flex:none;box-shadow:0 6px 14px -6px rgba(100,80,255,.8)}}
+.aorb::before{{content:"";position:absolute;inset:4px;border-radius:50%;background:conic-gradient(from 210deg,#4F8BFF,#9B5CFF,#FF5FA8,#FFB14A,#4FD1FF,#4F8BFF);filter:blur(4px)}}
+.aorb svg,.aorb i{{position:relative;z-index:1;color:#fff}}
+.ctxbar{{padding:9px 16px;background:color-mix(in srgb,var(--purple) 7%,transparent);border-bottom:1px solid var(--hair);display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--text-2)}}
+.qqs{{display:flex;flex-wrap:wrap;gap:6px}}
+.qq{{height:27px;padding:0 10px;border-radius:9px;background:var(--fill);border:1px solid var(--hair);font-size:11.5px;font-weight:600;color:var(--text-2);display:inline-flex;align-items:center;gap:5px}}
+.qq.on{{background:color-mix(in srgb,var(--purple) 14%,transparent);border-color:color-mix(in srgb,var(--purple) 34%,transparent);color:var(--purple)}}
+html.dark .qq.on{{color:#D4A5FF}}
+.umsg{{align-self:flex-end;max-width:88%;padding:9px 13px;border-radius:16px 16px 5px 16px;background:linear-gradient(180deg,#3B8BFF,#1F6FFF);color:#fff;font-size:13px;line-height:1.5;box-shadow:0 8px 16px -10px rgba(31,111,255,.85)}}
+.amsg{{border-radius:16px 16px 16px 5px;padding:12px 13px;background:var(--glass-2);border:1px solid var(--stroke);display:flex;flex-direction:column;gap:9px;font-size:12.5px;line-height:1.55;color:var(--text)}}
+.stepb{{display:flex;gap:8px;align-items:flex-start;font-size:12px;color:var(--text-2)}}
+.snm{{width:18px;height:18px;border-radius:50%;background:color-mix(in srgb,var(--blue) 16%,transparent);color:var(--blue);font-size:10.5px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;flex:none;margin-top:1px}}
+.pbox{{border-radius:11px;padding:9px 11px;background:var(--fill);border:1px solid var(--hair);display:flex;flex-direction:column;gap:5px}}
+.prow2{{display:flex;align-items:center;gap:7px;font-size:12px}}
+.actcard{{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:12px;background:color-mix(in srgb,var(--blue) 10%,var(--glass-2));border:1px solid color-mix(in srgb,var(--blue) 32%,transparent)}}
+.acmp{{padding:12px 14px 14px;border-top:1px solid var(--hair)}}
+.ainp{{height:42px;border-radius:13px;padding:0 5px 0 12px;background:var(--glass-2);border:1.5px solid color-mix(in srgb,var(--purple) 40%,var(--stroke));display:flex;align-items:center;gap:8px}}
+.asnd{{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#4F8BFF,#9B5CFF 55%,#FF5FA8);color:#fff;display:flex;align-items:center;justify-content:center;flex:none}}
+</style>
+<div class="cc-scrim-light"></div>
+<div class="cc-drawer cc-drawer-sm aidrw-b">
+  <div class="cc-drawer-hd" style="padding:16px 18px 13px">
+    <span class="aorb">{I("spark",16,2)}</span>
+    <div class="grow" style="min-width:0">
+      <div class="row g6"><b style="font-size:15px;font-weight:800">向导 AI 帮手</b><span class="cc-tag cc-tag-p">就地浮层 · 不丢表单</span></div>
+      <div class="f11 t3" style="margin-top:1px">自动感知当前步骤与已连通状态，支持一键帮填</div>
+    </div>
+    <span class="cc-close" style="width:30px;height:30px">{I("x",15,2.2)}</span>
+  </div>
+
+  <div class="ctxbar">
+    {I("layers",13,st="color:var(--purple)")}
+    <span class="grow ell">上下文：<b>第 1 步 · 连接器与鉴权</b>（已连 GitLab · 本机 · Jira）</span>
+  </div>
+
+  <div class="cc-drawer-bd" style="padding:14px 16px;gap:11px">
+    <div>
+      <div class="f11 t3 w6" style="margin-bottom:6px">常见疑问（点一下直接答）</div>
+      <div class="qqs">
+        <span class="qq on">GitLab 令牌怎么生成？</span>
+        <span class="qq">Jira 只读令牌和 JQL 怎么写？</span>
+        <span class="qq">本机目录会改乱我当前分支吗？</span>
+      </div>
+    </div>
+
+    <div class="umsg">GitLab 令牌怎么生成？要勾哪些权限才安全？</div>
+
+    <div class="amsg">
+      <div>按最小权限原则，推荐给 Bot 专用账号（如 <span class="mono">bot-fix</span>）签发令牌，<b>不要给合入主干权限</b>：</div>
+      <div class="stepb"><span class="snm">1</span><span>打开 <span class="mono">https://git.tita.cloud</span> → 右上头像 → <b>Edit Profile → Access Tokens</b></span></div>
+      <div class="stepb"><span class="snm">2</span><span>点击 <b>Add new token</b>，名称填 <span class="mono">cloudcraft-bot</span>，有效期建议 90 天</span></div>
+      <div class="stepb"><span class="snm">3</span><span>按下方清单勾选作用域后复制生成的 <span class="mono">glpat-…</span> 令牌：</span></div>
+
+      <div class="pbox">
+        <div class="prow2"><span style="color:var(--green);font-weight:800">✓</span><span class="mono w6">read_api</span><span class="f11 t3 grow">拉取仓库列表、查分支与提 MR</span></div>
+        <div class="prow2"><span style="color:var(--green);font-weight:800">✓</span><span class="mono w6">read_repository</span><span class="f11 t3 grow">只读克隆代码与查规范</span></div>
+        <div class="prow2"><span style="color:var(--green);font-weight:800">✓</span><span class="mono w6">write_repository</span><span class="f11 t3 grow">仅推 <span class="mono">fix/</span> 修复分支</span></div>
+        <div class="prow2" style="padding-top:4px;border-top:1px solid var(--hair)"><span style="color:var(--red);font-weight:800">✕</span><span class="f11" style="color:var(--red);font-weight:600">切勿授予 Maintainer 合入受保护主干权限</span></div>
+      </div>
+
+      <div class="actcard">
+        <span class="ic3" style="width:28px;height:28px;border-radius:8px;font-size:12px;background:linear-gradient(155deg,#FF8A4C,#E24329)">G</span>
+        <div class="grow" style="min-width:0">
+          <div class="f12 w7">拿到令牌了？就地打开配置</div>
+          <div class="f11 t3">自动预选 GitLab · Access Token</div>
+        </div>
+        <span class="cc-btn cc-btn-sm cc-btn-pri" style="height:26px">去填令牌 ›</span>
+      </div>
+    </div>
+
+    <div class="cc-banner cc-banner-warn" style="margin-top:auto">
+      <span><b style="color:var(--text)">冷启动兜底：</b>在管理员第 0 步尚未连通 AI 模型时点「问 AI」，自动降级为<b>内置离线交互式引导卡</b>（公司网关 / OpenAI / Ollama 填法），绝不报 500 死循环。</span>
+    </div>
+  </div>
+
+  <div class="acmp">
+    <div class="ainp">
+      <span class="f12 t3 grow">继续追问，如「Jira 401 报错怎么查？」</span>
+      <span class="asnd">{I("arrowup",15,2.4)}</span>
+    </div>
+  </div>
+</div>'''
+    p1_ai = p1.replace('</div><script src="icons.js">', AI_DRW + '</div><script src="icons.js">', 1)
 
     # ---------------- 2 授权项目与代码权限（仅保留用户主动筛选留下的仓库） ----------------
     s2 = X + f'''
@@ -599,14 +800,14 @@ html.dark .drw{{background:rgba(34,36,50,.96)}}
     p4 = page(4, "AI 自动体检通过，可以开工了", "拉代码、推测构建、只读权限隔离、环境试登录全部真实跑通，不是只看表单填没填",
               s4, foot=foot4, why=why4)
 
-    return {"1": p1, "1-new": p1_new, "2": p2, "2-pick": p2_pick, "2-tune": p2_tune, "4": p4}
+    return {"1": p1, "1-new": p1_new, "1-ticket": p1_ticket, "1-ai": p1_ai, "2": p2, "2-pick": p2_pick, "2-tune": p2_tune, "4": p4}
 
 
 def ai_step(page, CHECK):
     """管理员专用的前置第 0 步：连接 AI 引擎（不再混入硬编码 GitLab 账号）。"""
     def I(n, s=16, w=None, st=None):
         return f'<i data-i="{n}" data-s="{s}"' + (f' data-w="{w}"' if w else '') + (f' style="{st}"' if st else '') + '></i>'
-    CHD = I("chevd", 14)
+    CHEV = f'<span class="cc-sel-caret">{I("chevd",13)}</span>'
     OK = f'<span class="okt">{CHECK}'
 
     def row(k, v):
@@ -614,12 +815,12 @@ def ai_step(page, CHECK):
 
     body = X + f'''
       <div class="obx" style="margin-top:20px;padding:18px 20px">
-        {row("AI 引擎", f'<div class="inp sel">Pi（默认内置 · 多模型）{CHD}</div>')}
-        {row("主力模型", f'<div class="inp sel">gpt-6.2-sol{CHD}</div>')}
-        {row("快速模型", f'<div class="inp sel">gpt-6.2-mini（报错解读 / 翻译 / 轻问答）{CHD}</div>')}
+        {row("AI 引擎", f'<div class="cc-select cc-select-lg grow"><span style="width:7px;height:7px;border-radius:50%;background:var(--purple);flex:none"></span><span class="cc-sel-val">Pi</span><span class="cc-sel-sub">默认内置 · 多模型</span>{CHEV}</div>')}
+        {row("主力模型", f'<div class="cc-select cc-select-lg grow"><span style="width:7px;height:7px;border-radius:50%;background:var(--green);flex:none"></span><span class="cc-sel-val mono">gpt-6.2-sol</span><span class="cc-sel-sub">公司网关 · 深度推理与多文件修单</span>{CHEV}</div>')}
+        {row("快速模型", f'<div class="cc-select cc-select-lg grow"><span class="cc-sel-val mono">gpt-6.2-mini</span><span class="cc-sel-sub">报错解读 / 翻译 / 轻问答</span>{CHEV}</div>')}
         {row("连接方式", '<div class="seg" style="flex:1"><span class="on" style="flex:1;justify-content:center">公司网关</span><span style="flex:1;justify-content:center">API Key</span></div>')}
-        {row("网关地址", '<div class="inp"><span class="mono f12">https://ai-gateway.tita.cloud</span></div>')}
-        {row("访问令牌", '<div class="inp"><span class="mono f12">•••••••••••••••• 3f9a</span></div>')}
+        {row("网关地址", '<div class="cc-input cc-input-lg grow"><span class="mono f12">https://ai-gateway.tita.cloud</span></div>')}
+        {row("访问令牌", '<div class="cc-input cc-input-lg grow"><span class="mono f12">•••••••••••••••• 3f9a</span></div>')}
         <div class="row g10" style="margin:16px 0 0 86px">
           <button class="btn2 a-sec" style="background:var(--glass-2)">{I("zap",14)}试一下</button>
           {OK}已连通 · Bot-02 实际调用了一次（1.2 秒），4 项模型能力探测完成</span>

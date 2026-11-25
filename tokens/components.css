@@ -1,0 +1,172 @@
+/* ================================================================
+   云匠（CLOUDCRAFT）· 标准组件库（Component Library · 唯一真相源）
+   依赖：tokens/theme.css（禁止写死未登记颜色，所有色值一律走 token）
+   规则：新增或修改任何页面组件必须复用本文件类名与尺寸规范，严禁单页自造变体
+   ================================================================ */
+
+/* ---------- 1. 下拉选择（用户钦定基准：对标 PC-手动新建工单） ----------
+   结构：[可选左侧状态点/头像/图标] + [主值 13/600] + [可选次说明 11.5/text-3 grow] + [右对齐 chevd 13px]
+   红线：箭头严格靠右对齐（中间由 flex:1 撑开，绝不贴字），不加多余小方盒底色 */
+.cc-select{
+  height:36px;padding:0 12px;border-radius:10px;
+  background:var(--glass-2);border:1px solid var(--stroke);
+  display:flex;align-items:center;gap:8px;min-width:0;
+  font-size:13px;color:var(--text);cursor:pointer;
+  transition:border-color .15s ease,box-shadow .15s ease;
+}
+.cc-select-sm{height:34px;padding:0 10px;border-radius:9px;font-size:12.5px}
+.cc-select-lg{height:40px;padding:0 13px;border-radius:11px;font-size:13.5px}
+.cc-select .cc-sel-val{font-weight:600;color:var(--text);white-space:nowrap}
+.cc-select .cc-sel-sub{flex:1;min-width:0;font-size:11.5px;color:var(--text-3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cc-select .cc-sel-sp{flex:1;min-width:0}
+.cc-select .cc-sel-caret{flex:none;color:var(--text-3);display:inline-flex;align-items:center;margin-left:auto}
+.cc-select.is-focus,.cc-select.is-open{
+  border-color:var(--blue);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 18%,transparent);
+}
+.cc-select.is-green{border-color:color-mix(in srgb,var(--green) 40%,transparent);color:var(--green)}
+.cc-select.is-green .cc-sel-val{color:var(--green)}
+.cc-select.is-blue{border-color:color-mix(in srgb,var(--blue) 40%,transparent);color:var(--blue)}
+.cc-select.is-blue .cc-sel-val{color:var(--blue)}
+.cc-select.is-disabled{opacity:.55;cursor:not-allowed}
+
+/* 下拉展开态毛玻璃菜单 */
+.cc-menu{
+  border-radius:14px;padding:5px;
+  background:rgba(255,255,255,.94);
+  backdrop-filter:blur(36px) saturate(185%);-webkit-backdrop-filter:blur(36px) saturate(185%);
+  border:1px solid var(--stroke);
+  box-shadow:0 18px 40px -14px rgba(15,23,42,.24),0 2px 6px rgba(15,23,42,.06);
+  display:flex;flex-direction:column;gap:2px;
+}
+html.dark .cc-menu{
+  background:rgba(34,37,50,.94);
+  border:1px solid rgba(255,255,255,.15);
+  box-shadow:0 22px 46px -12px rgba(0,0,0,.72),0 2px 8px rgba(0,0,0,.38);
+}
+.cc-menu-item{
+  display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:9px;
+  font-size:12.5px;color:var(--text);min-width:0;
+}
+.cc-menu-item.is-selected{background:color-mix(in srgb,var(--blue) 14%,transparent)}
+html.dark .cc-menu-item.is-selected{background:color-mix(in srgb,var(--blue) 22%,transparent)}
+.cc-menu-item .cc-mi-ck{width:14px;flex:none;display:inline-flex;align-items:center;justify-content:center;color:var(--blue)}
+.cc-menu-item .cc-mi-main{flex:1;min-width:0;display:flex;flex-direction:column}
+.cc-menu-item .cc-mi-main b{font-weight:600;color:var(--text)}
+.cc-menu-item.is-selected .cc-mi-main b{color:var(--blue)}
+html.dark .cc-menu-item.is-selected .cc-mi-main b{color:#7DC4FF}
+.cc-menu-item .cc-mi-main em{font-style:normal;font-size:11px;color:var(--text-3);margin-top:1px}
+
+/* ---------- 2. 文本输入 / 搜索框（微凹底，与 --glass-2 下拉形成明确区分） ---------- */
+.cc-input{
+  height:36px;padding:0 12px;border-radius:10px;
+  background:var(--fill);border:1px solid transparent;
+  display:flex;align-items:center;gap:8px;min-width:0;
+  font-size:13px;color:var(--text);
+}
+.cc-input-lg{height:40px;padding:0 13px;border-radius:11px;font-size:13.5px}
+.cc-input.is-focus{
+  background:var(--glass-2);border-color:var(--blue);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 18%,transparent);
+}
+.cc-input.is-error{
+  background:var(--glass-2);border-color:var(--red);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--red) 16%,transparent);
+}
+.cc-search{
+  height:34px;padding:0 11px;border-radius:10px;
+  background:var(--fill);border:1px solid var(--hair);
+  display:flex;align-items:center;gap:7px;min-width:0;
+  font-size:12.5px;color:var(--text-3);
+}
+
+/* ---------- 3. 分段控件 & 开关 ---------- */
+.cc-seg{display:inline-flex;padding:3px;border-radius:11px;background:var(--fill);gap:2px}
+.cc-seg>span{
+  height:28px;padding:0 13px;border-radius:8px;
+  display:inline-flex;align-items:center;justify-content:center;gap:5px;
+  font-size:12.5px;font-weight:500;color:var(--text-2);white-space:nowrap;
+}
+.cc-seg>span.on{
+  background:var(--glass-2);color:var(--text);font-weight:600;
+  box-shadow:0 1px 3px rgba(0,0,0,.12);
+}
+html.dark .cc-seg>span.on{background:rgba(255,255,255,.15)}
+
+.cc-switch{
+  width:38px;height:22px;border-radius:11px;background:var(--fill);
+  position:relative;flex:none;display:inline-block;
+}
+.cc-switch::after{
+  content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;
+  border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.22);
+}
+.cc-switch.on{background:var(--green)}
+.cc-switch.on::after{left:18px}
+
+/* ---------- 4. 按钮系统（5 种语义 × 3 种高度：28 / 34 / 40px） ---------- */
+.cc-btn{
+  height:34px;padding:0 14px;border-radius:10px;border:0;
+  font-size:13px;font-weight:600;white-space:nowrap;flex:none;
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;
+}
+.cc-btn-sm{height:28px;padding:0 10px;border-radius:8px;font-size:12px}
+.cc-btn-lg{height:40px;padding:0 18px;border-radius:12px;font-size:14px}
+.cc-btn-pri{background:var(--blue);color:#fff;box-shadow:0 8px 18px -9px color-mix(in srgb,var(--blue) 85%,transparent)}
+.cc-btn-sec{background:var(--fill);color:var(--text)}
+.cc-btn-glass{background:var(--glass-2);color:var(--text);border:1px solid var(--stroke)}
+.cc-btn-red{background:color-mix(in srgb,var(--red) 13%,transparent);color:var(--red)}
+.cc-btn-ghost{background:transparent;color:var(--text-2)}
+
+/* ---------- 5. 标签（圆角 6px）& 状态胶囊（全圆角） ---------- */
+.cc-tag{
+  display:inline-flex;align-items:center;gap:4px;height:20px;padding:0 7px;
+  border-radius:6px;font-size:11px;font-weight:600;white-space:nowrap;flex:none;
+}
+.cc-tag-b{color:var(--blue);background:color-mix(in srgb,var(--blue) 13%,transparent)}
+.cc-tag-g{color:var(--green);background:color-mix(in srgb,var(--green) 15%,transparent)}
+.cc-tag-o{color:var(--orange);background:color-mix(in srgb,var(--orange) 15%,transparent)}
+.cc-tag-r{color:var(--red);background:color-mix(in srgb,var(--red) 13%,transparent)}
+.cc-tag-p{color:var(--purple);background:color-mix(in srgb,var(--purple) 13%,transparent)}
+.cc-tag-t{color:var(--teal);background:color-mix(in srgb,var(--teal) 15%,transparent)}
+.cc-tag-n{color:var(--text-2);background:var(--fill)}
+html:not(.dark) .cc-tag-g{color:#1E8E3E}
+html:not(.dark) .cc-tag-o{color:#B25E00}
+html:not(.dark) .cc-tag-t{color:#0E8196}
+
+.cc-pill{
+  display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;
+  border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap;flex:none;
+}
+
+/* ---------- 6. 卡片、提示横幅与抽屉/弹窗尺寸规范 ---------- */
+.cc-card{border-radius:18px;background:var(--glass-2);border:1px solid var(--stroke);padding:16px}
+.cc-card-flat{border-radius:15px;background:var(--fill);border:1px solid transparent;padding:12px 14px}
+
+.cc-banner{
+  display:flex;align-items:flex-start;gap:9px;padding:9px 12px;border-radius:12px;
+  font-size:12px;line-height:1.55;color:var(--text-2);
+}
+.cc-banner-info{background:color-mix(in srgb,var(--blue) 8%,transparent);border:1px solid color-mix(in srgb,var(--blue) 22%,transparent)}
+.cc-banner-ok{background:color-mix(in srgb,var(--green) 9%,transparent);border:1px solid color-mix(in srgb,var(--green) 26%,transparent);color:var(--green)}
+.cc-banner-warn{background:color-mix(in srgb,var(--orange) 9%,transparent);border:1px solid color-mix(in srgb,var(--orange) 26%,transparent)}
+.cc-banner-err{background:color-mix(in srgb,var(--red) 9%,transparent);border:1px solid color-mix(in srgb,var(--red) 28%,transparent);color:var(--red)}
+
+/* 右侧抽屉：配置/编辑统一 640~660px 模态；AI 帮手统一 440px 非模态 */
+.cc-scrim{position:fixed;inset:0;z-index:30;background:rgba(15,20,40,.28);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+html.dark .cc-scrim{background:rgba(0,0,0,.50)}
+.cc-scrim-light{position:fixed;inset:0;z-index:30;background:rgba(12,16,32,.14);pointer-events:none}
+html.dark .cc-scrim-light{background:rgba(0,0,0,.28)}
+.cc-drawer{
+  position:fixed;z-index:31;top:22px;right:24px;bottom:22px;width:660px;border-radius:26px;
+  display:flex;flex-direction:column;overflow:hidden;
+  background:rgba(255,255,255,.96);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);
+  box-shadow:0 30px 80px -20px rgba(10,20,60,.45),0 0 0 1px var(--stroke);
+}
+html.dark .cc-drawer{background:rgba(32,34,48,.96)}
+.cc-drawer-sm{width:440px}
+.cc-drawer-hd{display:flex;gap:12px;align-items:center;padding:18px 22px 14px;border-bottom:1px solid var(--hair)}
+.cc-drawer-bd{flex:1;display:flex;flex-direction:column;gap:13px;padding:16px 22px;min-height:0;overflow:hidden}
+.cc-drawer-ft{display:flex;align-items:center;gap:10px;padding:13px 22px;border-top:1px solid var(--hair)}
+.cc-close{width:32px;height:32px;border-radius:50%;background:var(--fill);display:flex;align-items:center;justify-content:center;color:var(--text-2);flex:none}
+.ic3{width:38px;height:38px;border-radius:11px;display:inline-flex;align-items:center;justify-content:center;color:#fff;flex:none;font-size:15px;font-weight:800}

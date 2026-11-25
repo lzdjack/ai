@@ -153,6 +153,7 @@ html.dark .pseg{background:rgba(255,255,255,.07)}
 .kv3{display:flex;align-items:center;gap:10px;margin-top:10px}
 .kv3>span:first-child{width:76px;white-space:nowrap;flex:none;font-size:12.5px;color:var(--text-3)}
 .kv3 .inp{height:38px;flex:1;font-size:13.5px}
+.kv3 .inp.sel{justify-content:space-between;background:var(--glass-2);border:1px solid var(--stroke)}
 .chk3{display:flex;align-items:center;gap:12px;padding:8px 0;border-top:1px solid var(--hair);font-size:13.5px}
 .chk3:first-child{border-top:0}
 .ck3{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;flex:none}
@@ -160,12 +161,12 @@ html.dark .pseg{background:rgba(255,255,255,.07)}
 .tk{display:flex;align-items:center;gap:8px;height:34px;padding:0 10px;border-radius:10px;font-size:12.5px;color:var(--text-2);background:var(--glass-2)}
 </style>
       <div class="obx" style="margin-top:20px;padding:18px 20px">
-        <div class="kv3" style="margin-top:12px"><span>AI 引擎</span><div class="inp sel">Pi（默认内置 · 多模型）<i data-i="chevd" data-s="14"></i></div></div>
-        <div class="kv3" style="margin-top:12px"><span>主力模型</span><div class="inp sel">gpt-6.2-sol<i data-i="chevd" data-s="14"></i></div></div>
-        <div class="kv3" style="margin-top:12px"><span>快速模型</span><div class="inp sel">gpt-6.2-mini（报错解读 / 翻译 / 轻问答）<i data-i="chevd" data-s="14"></i></div></div>
+        <div class="kv3" style="margin-top:12px"><span>AI 引擎</span><div class="cc-select cc-select-lg grow"><span style="width:7px;height:7px;border-radius:50%;background:var(--purple);flex:none"></span><span class="cc-sel-val">Pi</span><span class="cc-sel-sub">默认内置 · 多模型</span><span class="cc-sel-caret"><i data-i="chevd" data-s="13"></i></span></div></div>
+        <div class="kv3" style="margin-top:12px"><span>主力模型</span><div class="cc-select cc-select-lg grow"><span style="width:7px;height:7px;border-radius:50%;background:var(--green);flex:none"></span><span class="cc-sel-val mono">gpt-6.2-sol</span><span class="cc-sel-sub">公司网关 · 深度推理与多文件修单</span><span class="cc-sel-caret"><i data-i="chevd" data-s="13"></i></span></div></div>
+        <div class="kv3" style="margin-top:12px"><span>快速模型</span><div class="cc-select cc-select-lg grow"><span class="cc-sel-val mono">gpt-6.2-mini</span><span class="cc-sel-sub">报错解读 / 翻译 / 轻问答</span><span class="cc-sel-caret"><i data-i="chevd" data-s="13"></i></span></div></div>
         <div class="kv3" style="margin-top:12px"><span>连接方式</span><div class="seg" style="flex:1"><span class="on" style="flex:1;justify-content:center">公司网关</span><span style="flex:1;justify-content:center">API Key</span></div></div>
-        <div class="kv3" style="margin-top:12px"><span>网关地址</span><div class="inp"><span class="mono f12">https://ai-gateway.tita.cloud</span></div></div>
-        <div class="kv3" style="margin-top:12px"><span>访问令牌</span><div class="inp"><span class="mono f12">•••••••••••••••• 3f9a</span></div></div>
+        <div class="kv3" style="margin-top:12px"><span>网关地址</span><div class="cc-input cc-input-lg grow"><span class="mono f12">https://ai-gateway.tita.cloud</span></div></div>
+        <div class="kv3" style="margin-top:12px"><span>访问令牌</span><div class="cc-input cc-input-lg grow"><span class="mono f12">•••••••••••••••• 3f9a</span></div></div>
         <div class="row g10" style="margin:16px 0 0 86px">
           <button class="btn2 a-sec" style="background:var(--glass-2)"><i data-i="zap" data-s="14"></i>试一下</button>
           <span class="okt"><i data-i="check" data-s="14" data-w="3"></i>已连通 · Bot-02 实际调用了一次（1.2 秒），4 项模型能力探测完成</span>
