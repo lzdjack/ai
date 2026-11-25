@@ -378,8 +378,8 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
         <tbody>
           <tr><td><span class="ap ap-ai" style="width:30px;height:30px;border-radius:9px;display:inline-flex;transform:none"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M10 3l1.9 5.6 5.6 1.9-5.6 1.9L10 18l-1.9-5.6L2.5 10.5l5.6-1.9z"/></svg></span></td><td><b>AI 助手</b>（全局）</td><td>跨工单、发布、收单情况提问和办事；回答里直接给可点的工单</td><td>1.3、1.4</td><td><span class="pill p-green">PC 和移动端已出</span></td></tr>
           <tr><td><span class="ap ap-chat" style="width:30px;height:30px;border-radius:9px;display:inline-flex;transform:none"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M9.6 3.2c-4 0-7.2 2.6-7.2 5.8 0 1.7.9 3.2 2.3 4.2l-.6 3 3.5-1.7c.6.2 1.3.2 2 .2 4 0 7.2-2.6 7.2-5.8S13.6 3.2 9.6 3.2z" fill="#1673FF"/></svg></span></td><td><b>对话</b>（工单）</td><td>工单列表 + 工单对话 + 右侧信息栏；代码改动、证据、执行日志、发布 tab</td><td>2、3、3.1、4、5、6</td><td><span class="pill p-green">PC 和移动端已出</span></td></tr>
-          <tr><td><span class="ap ap-pub" style="width:30px;height:30px;border-radius:9px;display:inline-flex;transform:none"></span></td><td><b>发布</b>（默认可选模块）</td><td>发测试 / 正式环境、可测通知、测试结果、跨项目大包明细、报错（模块市场可启停）</td><td>5.1、5.2、5.3</td><td><span class="pill p-green">PC 和移动端已出</span></td></tr>
-          <tr><td><span class="ap ap-rb" style="width:30px;height:30px;border-radius:9px;display:inline-flex;transform:none"></span></td><td><b>紧急回滚</b>（默认可选模块）</td><td>Apollo 回滚：选环境 → 预览差异 → 确认 → 回读和业务验证（模块市场标杆插件）</td><td>5.4</td><td><span class="pill p-green">PC 和移动端已出</span></td></tr>
+          <tr><td><span class="ap ap-pub" style="width:30px;height:30px;border-radius:9px;display:inline-flex;transform:none"></span></td><td><b>发布</b>（默认可选插件）</td><td>发测试 / 正式环境、可测通知、测试结果、跨项目大包明细、报错（插件市场可启停）</td><td>5.1、5.2、5.3</td><td><span class="pill p-green">PC 和移动端已出</span></td></tr>
+          <tr><td><span class="ap ap-rb" style="width:30px;height:30px;border-radius:9px;display:inline-flex;transform:none"></span></td><td><b>紧急回滚</b>（默认可选插件）</td><td>Apollo 回滚：选环境 → 预览差异 → 确认 → 回读和业务验证（插件市场标杆插件）</td><td>5.4</td><td><span class="pill p-green">PC 和移动端已出</span></td></tr>
           <tr><td><span class="ap ap-sk" style="width:30px;height:30px;border-radius:9px;display:inline-flex;transform:none"></span></td><td><b>Skills</b></td><td>在线新建、导入、编辑、草稿、按项目启用、版本回看与四道防膨胀治理</td><td>4</td><td><span class="pill p-green">PC 和移动端已出</span></td></tr>
           <tr><td><span class="ap ap-mkt" style="width:30px;height:30px;border-radius:9px;display:inline-flex;transform:none"></span></td><td><b>插件市场</b>（设置正上方）</td><td>统一安装/启停发布、紧急回滚、连接器、AI 引擎、UI 主题与 Token 费用检测等插件，提供通用兜底「插件设置」抽屉（移动端收进「设置 → 插件市场」）</td><td>技术 §12</td><td><span class="pill p-green">PC 和移动端已出</span></td></tr>
           <tr><td><span class="ap ap-set" style="width:30px;height:30px;border-radius:9px;display:inline-flex;transform:none"></span></td><td><b>设置</b></td><td>全局 AI（Pi）、执行器、<b>连接器（外部鉴权与本机代码源总览）</b>、项目（可修改/仅查看与 AI 自动推测）、来源采集、成员与身份（含免 SMTP 邀请）、我的账号、通知</td><td>1.2、4</td><td><span class="pill p-green">PC 和移动端已出</span></td></tr>
@@ -495,7 +495,7 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
           <li>不加小圆点、托盘、描边环、光条或悬停提示</li>
           <li>红色数字角标在右上角</li>
           <li>AI 助手放在最上面，和功能图标之间有分隔线</li>
-          <li>模块市场固定在设置正上方；外挂插件图标最多直出 4 个，超出聚合进「更多模块」文件夹</li>
+          <li>插件市场固定在设置正上方；外挂插件图标最多直出 4 个，超出聚合进「更多插件」文件夹</li>
           <li>设置固定在最底部</li>
         </ul>
       </div>
@@ -630,7 +630,7 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
 <!-- ========== 5 移动端 ========== -->
 <section class="pane" id="p-mobile" data-pane="mobile">
   <h2 class="ttl">第 5 步 · 移动端</h2>
-  <p class="sub">首页三屏：工单列表、工单对话（审核）、AI 助手；下面是闪屏、登录、步骤器以及其余 10 张（30 屏，含模块市场与无在线执行器轻引导）。每台手机 390 × 844，和 PC 用同一套主题。</p>
+  <p class="sub">首页三屏：工单列表、工单对话（审核）、AI 助手；下面是闪屏、登录、步骤器以及其余 10 张（30 屏，含插件市场与无在线执行器轻引导）。每台手机 390 × 844，和 PC 用同一套主题。</p>
   <p class="toggle-note">把鼠标移到红色编号上，下面对应的说明会高亮。</p>
   <div class="shot" id="mshot">
     <img class="img-l" src="reference/images/移动端-亮色.png" alt="移动端 亮色">
@@ -713,7 +713,7 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
         <tr><td class="no">列表用 TITA/JIRA 方块、浅色符号圆</td><td>和菜单图标撞在一起；「图标我不是很喜欢」</td><td class="yes">提单人头像加状态点</td></tr>
         <tr><td class="no">静态图里画悬停提示</td><td>压住了列表内容</td><td class="yes">静态图不画悬停提示</td></tr>
         <tr><td class="no">散落多个独立 HTML 查阅文档</td><td>「以后都放到一个 HTML 文档里面，不需要到处乱找」</td><td class="yes">全部汇入唯一的 <code>index.html</code></td></tr>
-        <tr><td class="no">一切皆插件、核心全拆成松散模块随意组装</td><td>跨模块事务失控、前端体验割裂、开发成倍膨胀</td><td class="yes">「厚核心 + 轻插件」黄金分割线（核心焊死，外围进模块市场）</td></tr>
+        <tr><td class="no">一切皆插件、核心全拆成松散模块随意组装</td><td>跨模块事务失控、前端体验割裂、开发成倍膨胀</td><td class="yes">「厚核心 + 轻插件」黄金分割线（核心焊死，外围进插件市场）</td></tr>
       </tbody>
     </table></div>
   </div>
@@ -769,7 +769,7 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
       <li><b>已定（2026-11-23）</b>：纳入五项体验与工程增强（打回沉淀 Skill 与四道防 Token 膨胀闸门、审核前一键本地产物预览、手机端 10 秒极速审核交付卡、历史相似 Bug 雷达、Bot 效能与卡点度量埋点），详见「技术设计」5.9 与第 8 节</li>
       <li><b>已定（2026-11-24）</b>：品牌更名为「云匠 / CLOUDCRAFT」（保留原图标，冬青黑 + Optima 蓝紫渐变）；多语言采用「单源强类型代码生成 + 前后端全量 AI 自动补译（零人工）+ 高危审计原文固化」，首批简中 + 英文，详见「技术设计」第 9 节</li>
       <li><b>已定（2026-11-24）</b>：采用 <b>4C 8G 资源分槽 + 三档无状态执行器</b>（个人默认 PC 内置本机执行器免 Docker 零云算力；团队自有服务器 WSS 443 出站；云端 Pro 按需托管）与 <b>CDP 抓帧 + VFR H.264 MP4 + <code>replay.json</code></b> 证据流水线，详见「技术设计」§5.2～§5.3a</li>
-      <li><b>已定（2026-11-24）</b>：确立 <b>「厚核心 + 轻插件」黄金分割线</b>、6 黄金 UI 插座、<code>craft</code> 三级命令映射与插件防爆三层约束；以「紧急回滚（Apollo）」为模块市场官方首发标杆插件，详见「技术设计」第 7、12、13 节</li>
+      <li><b>已定（2026-11-24）</b>：确立 <b>「厚核心 + 轻插件」黄金分割线</b>、5 正交贡献点 / 6 黄金 UI 插座、<code>craft</code> 三级命令映射与插件防爆三层约束；以「紧急回滚（Apollo）」为插件市场官方首发标杆插件，详见「技术设计」第 7、12、13 节</li>
       <li><b>已定（2026-11-24 锁版）</b>：一期补齐<b>手动新建工单（<code>M-&lt;序号&gt;</code>）</b>、<b>免 SMTP 一次性邀请/重置密码链接</b>、<b>四项 AI 飞轮守卫</b>（Hard/Soft 机审前置门禁、影响面 <code>L0/L1/L2</code> 分级、防篡改验证棘轮、<code>Repo Atlas</code>）与 <b>6 项零重构预留钩子</b>（UI 零露出）；二期（M4）以插件落地 <b>AI-Native 跨项目需求变更集（无损 72% 抽屉 + QA 联调 Ajv/Zod 0 幻觉归因 + Expand-Contract 波次发布）</b>，详见「技术设计」§2、§5.7、§10.1、第 14 节</li>
       <li><b>待定</b>：用一条真实的「组件包 → 子项目 → 主站」链路评审大包清单；Tita 工单查询接口字段、Apollo 登录/开放接口与外网远程访问方案待实测确认</li>
     </ol>
@@ -924,7 +924,7 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
   annotate('pcshot','pclegend',[
     [1.7,3.6,'顶栏 · logo 和标题','44px 蓝紫渐变 logo，加两行标题「云匠 / CLOUDCRAFT」（冬青黑 + Optima 蓝紫渐变）；logo 和下方菜单竖直对齐'],
     [65.4,3.6,'顶栏 · 状态胶囊','Bot 在线数、Jira 最近采集时间、Tita 采集失败（橙色）。对应需求「采集失败要可见」'],
-    [1.5,26,'Dock 菜单','只放图标的彩色 Dock：AI 助手 / 对话 / 发布 / 回滚 / Skills，底部为模块市场（绿青）与设置。选中的放大加悬浮，红色数字角标'],
+    [1.5,26,'Dock 菜单','只放图标的彩色 Dock：AI 助手 / 对话 / 发布 / 回滚 / Skills，底部为插件市场（绿青）与设置。选中的放大加悬浮，红色数字角标'],
     [7.4,15.2,'工单列表 · 分组','按「等你做什么」分组：等你决定 → Bot 在问你 → Bot 修复中 → 待原平台确认 → 需要处理'],
     [28.2,19.6,'工单列表 · 行','提单人头像加状态点、来源标签、状态说明；选中行蓝底白字；修复中带进度条'],
     [29.2,10.5,'工单头部','来源、标题、编号、P1、修复人、执行 Bot；右上「待我审核 · 第 2 轮」；下面是「对话 / 代码改动 / 证据 / 执行日志 / 发布」'],

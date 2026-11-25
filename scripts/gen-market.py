@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""生成 PC 模块市场页面：reference/src/v5/pc-market.html（1440×900）
+"""生成 PC 插件市场页面：reference/src/v5/pc-market.html（1440×900）
 复用 shell_pc.py 定稿外壳（顶栏 + Dock + 三栏苹果毛玻璃骨架）。
 以「紧急回滚（Apollo 发布历史）」作为默认安装的官方插件验证第 12 节动态模块底座：
 挂载 6 黄金插座、craft 回滚指令映射、标准 MCP 能力、最小权限授权、可自由停用卸载。
