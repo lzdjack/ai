@@ -38,6 +38,6 @@
 docs/        需求原文、设计主题、决策记录、出图流程、修复流转方案、链路流转、技术设计方案
 tokens/      theme.css（全部颜色和组件 token）
 reference/   源文件（src/v4 主界面、src/v5 其余页面）和图（images/、images/pages/）
-scripts/     render.sh（HTML → PNG）；gen-pages.py + shell_pc.py + pages_pc.py（PC 页面）；gen-market.py（模块市场）；gen-phase2.py（二期 M4 隔离蓝图）；gen-runner-select.py / gen-runner-init.py / gen-runner-server.py / gen-runner-pro.py（执行环境三路径）；gen-flow.py（链路总图）；gen-splash.py（闪屏）；gen-login.py（登录与注册）；gen-onboard.py + onboard_steps.py、gen-onboard-m.py（第一次使用的步骤器）；gen-mobile.py、gen-mobile-pages.py + shell_m.py（移动端）；build-index.py + tech_diagrams.py + index.template.html（生成唯一的 index.html 集合）
+scripts/     render.sh（HTML → PNG）；gen-pages.py + shell_pc.py + pages_pc.py（PC 页面）；gen-market.py（插件市场）；gen-phase2.py（二期 M4 隔离蓝图）；gen-runner-select.py / gen-runner-init.py / gen-runner-server.py / gen-runner-pro.py（执行环境三路径）；gen-flow.py（链路总图）；gen-splash.py（闪屏）；gen-login.py（登录与注册）；gen-onboard.py + onboard_steps.py、gen-onboard-m.py（第一次使用的步骤器）；gen-mobile.py、gen-mobile-pages.py + shell_m.py（移动端）；build-index.py + tech_diagrams.py + index.template.html（生成唯一的 index.html 集合）
 index.html   唯一总览集合页（生成产物，不要直接改；全部文档与设计统一汇入此处）
 ```
