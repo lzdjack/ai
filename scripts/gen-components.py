@@ -95,14 +95,14 @@ HTML = f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>
           <div class="cc-field-hd"><span>展开态（<span class="mono">.is-open</span> + L3 悬浮菜单 <span class="mono">.cc-menu</span> · 含禁用/危险/高反差嵌套标）</span></div>
           <div class="cc-select is-open" style="margin-bottom:6px">
             <span class="cc-dot" style="background:var(--green)"></span>
-            <span class="cc-sel-val mono">gpt-6.2-sol</span>
-            <span class="cc-sel-sub">公司网关 · 主力修单模型</span>
+            <span class="cc-sel-val mono">deepseek-r1-gateway</span>
+            <span class="cc-sel-sub">自定义网关 · 主力修单模型</span>
             {CHEV}
           </div>
           <div class="cc-menu">
             <div class="cc-menu-item is-selected">
               <span class="cc-mi-ck">{CK}</span>
-              <div class="cc-mi-main"><b class="mono">gpt-6.2-sol</b><em>公司网关 · 主力修单与多文件推理</em></div>
+              <div class="cc-mi-main"><b class="mono">deepseek-r1-gateway</b><em>自定义网关 · 主力修单与多文件推理</em></div>
               <span class="cc-tag cc-tag-b">推荐</span>
             </div>
             <div class="cc-menu-item">

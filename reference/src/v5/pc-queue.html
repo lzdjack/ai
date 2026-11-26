@@ -41,12 +41,12 @@ html:not(.dark) .el .no{color:#fff}
   <span class="pill glass" style="align-self:flex-start;height:30px;padding:0 12px"><i data-i="bot" data-s="13"></i>3 个 Bot 都在忙 · 3 张排队</span>
   <div class="f12 t3" style="margin-top:6px">顶栏胶囊，点开是右边第 4 块</div>
   <div class="card" style="padding:12px 14px;margin-top:14px">
-    <div class="f13 w7">排队顺序（固定）</div>
+    <div class="f13 w7">排队顺序（默认可配置）</div>
     <div class="qx"><span class="qn">1</span><span class="f13 grow">P1 最先</span><span class="tag tg-r">P1</span></div>
     <div class="qx"><span class="qn">2</span><span class="f13 grow">同级里打回重修的在前</span><span class="tag tg-o">打回重修</span></div>
     <div class="qx"><span class="qn">3</span><span class="f13 grow">再按进来的先后</span><span class="tag tg-n">先来先到</span></div>
   </div>
-  <div class="f12 t3" style="margin-top:10px;line-height:1.6">优先级取自原单；顺序不能手动拖。</div>
+  <div class="f12 t3" style="margin-top:10px;line-height:1.6">支持项目设定默认序及授权人员紧急置顶。</div>
 </div></section></div><div class="et"><div class="el"><span class="no">2</span><b>工单 · 排队中</b><em>排队的单打开后</em></div><section class="glass ep v"><header class="thead"><div class="row g10"><span class="appic ic-tita" style="width:32px;height:32px;font-size:9px;border-radius:9px">TITA</span>
 <div class="col grow" style="min-width:0"><h1 class="ell">审批中心：流程图节点不显示</h1><div class="f12 t3 ell" style="margin-top:1px">TK-20880 · 修复人 王芳 · 第 2 轮</div></div><span class="pill p-gray" style="flex:none">排队中 · 第 2</span></div></header>
 <div class="col grow g10" style="padding:12px 18px 0;min-height:0">
@@ -66,11 +66,11 @@ html:not(.dark) .el .no{color:#fff}
   <div class="row g8"><span class="f12 t3">设置 · 全局 AI</span><span class="tag tg-n">只有管理员能改</span></div>
   <div class="card" style="padding:4px 14px;margin-top:10px">
     <div class="qx" style="padding:10px 0"><div class="col grow"><span class="f14 w6">同时修几张</span><span class="f12 t3">多出来的单排队；现在 3 个 Bot 在线</span></div><div class="stp"><span>−</span><b>3</b><span>+</span></div></div>
-    <div class="qx" style="padding:10px 0"><div class="col grow"><span class="f14 w6">排队顺序</span><span class="f12 t3">P1 最先 → 打回重修 → 先来先到</span></div><span class="row g6 f12 t3"><i data-i="lock" data-s="12"></i>固定</span></div>
-    <div class="qx" style="padding:10px 0"><div class="col grow"><span class="f14 w6">收单</span><span class="f12 t3">每 2 分钟采一次，新单 5 分钟内开始修并通知</span></div></div>
-    <div class="qx" style="padding:10px 0"><div class="col grow"><span class="f14 w6">采集异常</span><span class="f12 t3">超过 15 分钟没采到：顶栏变橙，来源采集页标红</span></div></div>
+    <div class="qx" style="padding:10px 0"><div class="col grow"><span class="f14 w6">排队顺序</span><span class="f12 t3">P1 最先 → 打回重修 → 先来先到</span></div><span class="row g6 f12 lnk">自定义 ›</span></div>
+    <div class="qx" style="padding:10px 0"><div class="col grow"><span class="f14 w6">收单</span><span class="f12 t3">默认每 2 分钟采一次（可按连接器调整）</span></div></div>
+    <div class="qx" style="padding:10px 0"><div class="col grow"><span class="f14 w6">采集异常</span><span class="f12 t3">超过可配阈值（默认 15 分钟）顶栏告警</span></div></div>
   </div>
-  <div class="f12 t3" style="margin-top:10px">改了从下一张单开始生效，正在修的不受影响</div>
+  <div class="f12 t3" style="margin-top:10px">改了从下一轮 / 下一张单开始生效，正在修的不受影响</div>
 </div></section></div><div class="et"><div class="el"><span class="no">4</span><b>谁在修、谁在排</b><em>顶栏胶囊点开 / 全局 AI 运行情况</em></div><section class="glass ep"><div class="ec" style="padding:0 26px">
   <div class="row g8"><span class="f12 t3">设置 · 全局 AI · 运行情况</span></div>
   <div class="card" style="padding:4px 14px;margin-top:10px">

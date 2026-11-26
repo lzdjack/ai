@@ -1,0 +1,144 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>项目流程模板与节点 Skills · 云匠</title>
+<link rel="stylesheet" href="../v3/base.css"><link rel="stylesheet" href="../v4/apple.css"><link rel="stylesheet" href="pc.css">
+<script>(function(){var q=new URLSearchParams(location.search);if(q.get('mode')==='dark')document.documentElement.classList.add('dark')})()</script>
+</head><body><div class="root">
+<div class="tbar">
+  <div class="br"><span class="lg"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7.2L3.6 12 8 16.8"/><path d="M16 7.2l4.4 4.8-4.4 4.8" opacity=".6"/><path d="M9.6 12.3l1.8 1.8 3.2-4"/></svg><svg class="spk" width="11" height="11" viewBox="0 0 24 24" fill="#fff"><path d="M12 1l2.6 8.4L23 12l-8.4 2.6L12 23l-2.6-8.4L1 12l8.4-2.6z"/></svg></span><span class="tt"><b>云匠</b><em>CloudCraft</em></span></div>
+  <div class="grow row" style="justify-content:center"><div class="glass tsearch"><i data-i="search" data-s="15"></i><span class="f13 grow">搜索工单、MR、发布记录</span><span class="kbd" style="border-color:var(--hair)">⌘F</span></div></div>
+  <div class="tright">
+    <span class="pill glass tpill"><i data-i="bot" data-s="13"></i>3 个 Bot 在线</span><span class="pill glass tpill"><span class="dot" style="width:7px;height:7px;background:var(--green)"></span>Jira · 2 分钟前</span><span class="pill glass tpill" style="color:var(--ink-orange)"><span class="dot" style="width:7px;height:7px;background:var(--orange)"></span>Tita 采集失败 · 重试中</span>
+    <span class="av" style="width:34px;height:34px;font-size:13px;background:linear-gradient(160deg,#FFC9A8,#F08F7A);color:#5A2414">林</span>
+  </div>
+</div>
+<div class="panels"><section class="glass pn" style="width:240px;flex:none;padding:16px 4px 10px">
+  <div class="row" style="padding:0 14px 6px"><span class="f18 w7">设置</span></div><div class="sn"><span class="si" style="background:linear-gradient(160deg,#C58BFF,#6A3DF0)"><i data-i="spark" data-s="14" data-w="2"></i></span>全局 AI<em></em></div><div class="sn"><span class="si" style="background:linear-gradient(155deg,#34D399,#059669)"><i data-i="server" data-s="14" data-w="2"></i></span>执行器<em>2</em></div><div class="sn"><span class="si" style="background:linear-gradient(160deg,#38BDF8,#2563EB)"><i data-i="link" data-s="14" data-w="2"></i></span>连接器<em>5</em></div><div class="sn on"><span class="si" style="background:linear-gradient(160deg,#5AA0FF,#1F6FFF)"><i data-i="layers" data-s="14" data-w="2"></i></span>项目<em>4</em></div><div class="sn"><span class="si" style="background:linear-gradient(160deg,#4FD6E6,#16A3C0)"><i data-i="inbox" data-s="14" data-w="2"></i></span>来源采集<em style="color:var(--ink-orange)">!</em></div><div class="sn"><span class="si" style="background:linear-gradient(160deg,#5EDB7A,#28B04F)"><i data-i="users" data-s="14" data-w="2"></i></span>成员与身份<em>1</em></div><div class="sn"><span class="si" style="background:linear-gradient(160deg,#FFC15A,#F08A00)"><i data-i="key" data-s="14" data-w="2"></i></span>我的账号<em></em></div><div class="sn"><span class="si" style="background:linear-gradient(160deg,#FF8A7A,#E0281E)"><i data-i="bell" data-s="14" data-w="2"></i></span>通知<em></em></div>
+</section><main class="glass pn grow" style="min-width:0">
+<header class="thead">
+  <div class="row g10">
+    <div class="col grow">
+      <div class="row g10"><h1>项目 · OKR</h1><span class="cc-seg cc-seg-xs"><span>开工条件</span><span class="on">流程模板与节点 Skills</span></span></div>
+      <div class="f12 t3" style="margin-top:3px">配置优先于写死 · 支持增删改序流程节点，并为单个 AI 节点挂载专属 <span class="mono">skill_ids[]</span> 与工具边界（下一轮生效）</div>
+    </div>
+    <button class="cc-btn cc-btn-sm cc-btn-glass"><i data-i="plus" data-s="13" data-w="2.4"></i>新增节点</button>
+    <button class="cc-btn cc-btn-sm cc-btn-pri"><i data-i="check" data-s="13" data-w="2.6"></i>发布新版本 v4</button>
+  </div>
+</header>
+<div class="col g10 grow" style="padding:12px 20px;min-height:0;overflow:hidden">
+  <div class="row g8" style="padding:8px 12px;border-radius:12px;background:var(--fill);white-space:nowrap">
+    <span class="f12 w7 t2" style="white-space:nowrap">预设模板：</span>
+    <span class="pill p-blue" style="height:26px;font-size:12px">标准前端（当前）</span>
+    <span class="pill p-gray" style="height:26px;font-size:12px">后端 / SDK 单测</span>
+    <span class="pill p-gray" style="height:26px;font-size:12px">极简单主干 MR</span>
+    <span class="pill p-gray" style="height:26px;font-size:12px">企业高合规定制</span>
+    <span class="grow"></span>
+    <span class="f11 t3">v3 在用 · 修改将生成 v4</span>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;flex:1;min-height:0">
+    <div class="col g8" style="min-height:0">
+      <div class="f12 w7 t3">阶段一 · AI 执行环节（<span class="mono">execution</span>）</div>
+      <div class="card row g10" style="padding:10px 12px;align-items:flex-start;">
+  <span class="qn" style="width:22px;height:22px;border-radius:7px;background:var(--fill);color:var(--text-2);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none">1</span>
+  <div class="col grow" style="min-width:0;gap:5px">
+    <div class="row g6" style="min-width:0"><span class="tag tg-t" style="height:17px;font-size:10px;white-space:nowrap">AI 执行</span><span class="f13 w7 ell">读单与复现定位</span><span class="grow"></span><span class="tag tg-n" style="height:18px;font-size:10px;white-space:nowrap">共享 KV</span><span class="cc-switch on" style="transform:scale(.82)"></span></div>
+    <div class="f12 t2 ell">按来源快照与 Playwright/单测定位根因</div>
+    <div class="row g6" style="flex-wrap:wrap"><span class="tag tg-p" style="height:18px;font-size:10px"><i data-i="layers" data-s="10"></i> 最小改动红线 v2</span><span class="tag tg-p" style="height:18px;font-size:10px"><i data-i="layers" data-s="10"></i> OKR 权限上下文</span></div>
+  </div>
+</div>
+      <div class="card row g10" style="padding:10px 12px;align-items:flex-start;">
+  <span class="qn" style="width:22px;height:22px;border-radius:7px;background:var(--fill);color:var(--text-2);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none">2</span>
+  <div class="col grow" style="min-width:0;gap:5px">
+    <div class="row g6" style="min-width:0"><span class="tag tg-t" style="height:17px;font-size:10px;white-space:nowrap">AI 执行</span><span class="f13 w7 ell">代码改动与离线构建</span><span class="grow"></span><span class="tag tg-n" style="height:18px;font-size:10px;white-space:nowrap">共享 KV</span><span class="cc-switch on" style="transform:scale(.82)"></span></div>
+    <div class="f12 t2 ell">在 --network=none 容器内改代码并跑试构建</div>
+    <div class="row g6" style="flex-wrap:wrap"><span class="tag tg-p" style="height:18px;font-size:10px"><i data-i="layers" data-s="10"></i> 禁止弱化断言 v1</span><span class="tag tg-p" style="height:18px;font-size:10px"><i data-i="layers" data-s="10"></i> Tailwind/Token 规范</span></div>
+  </div>
+</div>
+      <div class="card row g10" style="padding:10px 12px;align-items:flex-start;border-color:var(--focus-ring);box-shadow:0 0 0 3px var(--focus-halo);background:var(--glass-2)">
+  <span class="qn" style="width:22px;height:22px;border-radius:7px;background:var(--btn-pri-bg);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none">3</span>
+  <div class="col grow" style="min-width:0;gap:5px">
+    <div class="row g6" style="min-width:0"><span class="tag tg-t" style="height:17px;font-size:10px;white-space:nowrap">AI 执行</span><span class="f13 w7 ell">修后浏览器验证</span><span class="grow"></span><span class="tag tg-n" style="height:18px;font-size:10px;white-space:nowrap">共享 KV</span><span class="cc-switch on" style="transform:scale(.82)"></span></div>
+    <div class="f12 t2 ell">局部产物替换验证业务断言与 Console 0 报错</div>
+    <div class="row g6" style="flex-wrap:wrap"><span class="tag tg-p" style="height:18px;font-size:10px"><i data-i="layers" data-s="10"></i> 页面交互回归 v1</span><span class="tag tg-p" style="height:18px;font-size:10px"><i data-i="layers" data-s="10"></i> 金额精度核验</span></div>
+  </div>
+</div>
+      <div class="card row g10" style="padding:10px 12px;align-items:flex-start;">
+  <span class="qn" style="width:22px;height:22px;border-radius:7px;background:var(--fill);color:var(--text-2);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none">4</span>
+  <div class="col grow" style="min-width:0;gap:5px">
+    <div class="row g6" style="min-width:0"><span class="tag tg-t" style="height:17px;font-size:10px;white-space:nowrap">AI 执行</span><span class="f13 w7 ell">结构化交付与硬门禁</span><span class="grow"></span><span class="tag tg-n" style="height:18px;font-size:10px;white-space:nowrap">共享 KV</span><span class="cc-switch on" style="transform:scale(.82)"></span></div>
+    <div class="f12 t2 ell">汇总 round_repo_slices 与验证证据卡入审</div>
+    <div class="row g6" style="flex-wrap:wrap"><span class="tag tg-p" style="height:18px;font-size:10px"><i data-i="layers" data-s="10"></i> 交付摘要格式 v1</span></div>
+  </div>
+</div>
+    </div>
+    <div class="col g8" style="min-height:0">
+      <div class="f12 w7 t3">阶段二 · 审后交付环节（<span class="mono">delivery</span>）</div>
+      <div class="card row g10" style="padding:10px 12px;align-items:flex-start;">
+  <span class="qn" style="width:22px;height:22px;border-radius:7px;background:var(--fill);color:var(--text-2);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none">5</span>
+  <div class="col grow" style="min-width:0;gap:5px">
+    <div class="row g6" style="min-width:0"><span class="tag tg-b" style="height:17px;font-size:10px;white-space:nowrap">审后交付</span><span class="f13 w7 ell">代码审查与 L0-L2 分级</span><span class="grow"></span><span class="tag tg-n" style="height:18px;font-size:10px;white-space:nowrap">共享 KV</span><span class="cc-switch on" style="transform:scale(.82)"></span></div>
+    <div class="f12 t2 ell">人工逐行查看 Diff 并确认影响面风险等级</div>
+    <div class="row g6" style="flex-wrap:wrap"><span class="tag tg-p" style="height:18px;font-size:10px"><i data-i="layers" data-s="10"></i> L2 高危路径清单</span></div>
+  </div>
+</div>
+      <div class="card row g10" style="padding:10px 12px;align-items:flex-start;">
+  <span class="qn" style="width:22px;height:22px;border-radius:7px;background:var(--fill);color:var(--text-2);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none">6</span>
+  <div class="col grow" style="min-width:0;gap:5px">
+    <div class="row g6" style="min-width:0"><span class="tag tg-b" style="height:17px;font-size:10px;white-space:nowrap">审后交付</span><span class="f13 w7 ell">环境分支 MR 与复测</span><span class="grow"></span><span class="tag tg-n" style="height:18px;font-size:10px;white-space:nowrap">共享 KV</span><span class="cc-switch on" style="transform:scale(.82)"></span></div>
+    <div class="f12 t2 ell">冲突自动开 port/ 分支 · 发 TEST 并通知复测</div>
+    <div class="row g6" style="flex-wrap:wrap"><span class="tag tg-p" style="height:18px;font-size:10px"><i data-i="layers" data-s="10"></i> 测试环境发版检查</span></div>
+  </div>
+</div>
+      <div class="card row g10" style="padding:10px 12px;align-items:flex-start;">
+  <span class="qn" style="width:22px;height:22px;border-radius:7px;background:var(--fill);color:var(--text-2);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none">7</span>
+  <div class="col grow" style="min-width:0;gap:5px">
+    <div class="row g6" style="min-width:0"><span class="tag tg-b" style="height:17px;font-size:10px;white-space:nowrap">审后交付</span><span class="f13 w7 ell">合回主分支 → 正式发布</span><span class="grow"></span><span class="tag tg-n" style="height:18px;font-size:10px;white-space:nowrap">共享 KV</span><span class="cc-switch on" style="transform:scale(.82)"></span></div>
+    <div class="f12 t2 ell">重打主分支包 + 输入 env_code 确认后发 PROD</div>
+    <div class="row g6" style="flex-wrap:wrap"><span class="tag tg-p" style="height:18px;font-size:10px"><i data-i="layers" data-s="10"></i> PROD 发布前不倒退核对</span></div>
+  </div>
+</div>
+      <div class="card row g10" style="padding:10px 12px;align-items:flex-start;">
+  <span class="qn" style="width:22px;height:22px;border-radius:7px;background:var(--fill);color:var(--text-2);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none">8</span>
+  <div class="col grow" style="min-width:0;gap:5px">
+    <div class="row g6" style="min-width:0"><span class="tag tg-b" style="height:17px;font-size:10px;white-space:nowrap">审后交付</span><span class="f13 w7 ell">高危合规会签（可选）</span><span class="grow"></span><span class="tag tg-n" style="height:18px;font-size:10px;white-space:nowrap">共享 KV</span><span class="cc-switch" style="transform:scale(.82)"></span></div>
+    <div class="f12 t2 ell">涉及金额/RBAC 变更时可选加设额外审批节点</div>
+    <div class="row g6" style="flex-wrap:wrap"><span class="tag tg-p" style="height:18px;font-size:10px"><i data-i="layers" data-s="10"></i> 合规会签说明</span></div>
+  </div>
+</div>
+    </div>
+  </div>
+</div></main><aside class="glass pn" style="width:316px;flex:none;padding:16px 16px;display:flex;flex-direction:column;gap:11px">
+  <div class="row g8"><span class="tag tg-t">节点配置</span><span class="f15 w7 grow">3 · 修后浏览器验证</span></div>
+  <div class="cc-field">
+    <div class="cc-field-hd"><span>上下文传递模式（T-08b）</span></div>
+    <div class="cc-seg cc-seg-xs" style="width:100%;display:flex"><span class="on" style="flex:1">共享 KV + Handoff 摘要</span><span style="flex:1">独立上下文检查点</span></div>
+  </div>
+  <div class="cc-field">
+    <div class="cc-field-hd"><span>本节点挂载专属 Skills（仅跑此步激活）</span><span class="lnk f11">+ 选 Skill</span></div>
+    <div class="col g6" style="padding:8px 10px;border-radius:11px;background:var(--well);border:1px solid var(--hair)">
+      <div class="row g8 f12"><span class="cbx on"><i data-i="check" data-s="11" data-w="3"></i></span><span class="w6 grow">页面交互回归 v1</span><span class="f11 t3 mono">320t</span></div>
+      <div class="row g8 f12"><span class="cbx on"><i data-i="check" data-s="11" data-w="3"></i></span><span class="w6 grow">金额精度核验红线</span><span class="f11 t3 mono">210t</span></div>
+      <div class="row g8 f12 t3"><span class="cbx"></span><span class="grow">后端 SQL 索引审查</span><span class="f11 mono">未绑</span></div>
+    </div>
+  </div>
+  <div class="cc-field">
+    <div class="cc-field-hd"><span>节点指令补充（<span class="mono">node_instructions</span>）</span></div>
+    <div style="padding:9px 10px;border-radius:10px;background:var(--well);border:1px solid var(--hair);font-size:12px;line-height:1.55;color:var(--text-2)">
+      必须验证切换分组后 Console 0 新增报错、以及导出文件名无非法字符；若验证策略为 test_suite 则跳过浏览器工具。
+    </div>
+  </div>
+  <div class="cc-field">
+    <div class="cc-field-hd"><span>允许工具白名单（<span class="mono">allowed_tools</span>）</span></div>
+    <div class="row g6" style="flex-wrap:wrap">
+      <span class="tag tg-b">browser_login</span><span class="tag tg-b">browser_action</span><span class="tag tg-b">save_evidence</span><span class="tag tg-g">submit_delivery</span>
+    </div>
+  </div>
+  <span class="grow"></span>
+  <div class="row g8 f11 t2" style="padding:9px 10px;border-radius:10px;background:color-mix(in srgb,var(--orange) 9%,transparent);border:1px solid color-mix(in srgb,var(--orange) 28%,transparent);line-height:1.5">
+    <i data-i="clock" data-s="13" style="color:var(--ink-orange);flex:none"></i>
+    <span><b>生效时机：</b>发布后从<b>下一轮（next_round）</b>开始生效；当前运行中轮次仍锁定启动时的模板快照 v3。</span>
+  </div>
+</aside></div>
+<nav class="dockv glass" aria-label="主菜单"><span class="dki"><span class="ap ap-ai"><svg width="24" height="24" viewBox="0 0 24 24" fill="#fff"><path d="M10 3l1.9 5.6 5.6 1.9-5.6 1.9L10 18l-1.9-5.6L2.5 10.5l5.6-1.9z"/><path d="M18 13.5l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9z" opacity=".8"/></svg></span></span><span class="dsep"></span><span class="dki"><span class="ap ap-chat"><svg width="30" height="30" viewBox="0 0 24 24"><defs><linearGradient id="cb1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6CC4FF"/><stop offset="1" stop-color="#1673FF"/></linearGradient></defs><path d="M15 9.6c3.4 0 6.1 2.2 6.1 4.9 0 1.4-.7 2.6-1.8 3.5l.5 2.5-2.9-1.4c-.6.2-1.2.3-1.9.3-3.4 0-6.1-2.2-6.1-4.9s2.7-4.9 6.1-4.9z" fill="#B9DBFF"/><path d="M9.6 3.2c-4 0-7.2 2.6-7.2 5.8 0 1.7.9 3.2 2.3 4.2l-.6 3 3.5-1.7c.6.2 1.3.2 2 .2 4 0 7.2-2.6 7.2-5.8S13.6 3.2 9.6 3.2z" fill="url(#cb1)"/><circle cx="6.8" cy="9" r="1" fill="#fff"/><circle cx="9.6" cy="9" r="1" fill="#fff"/><circle cx="12.4" cy="9" r="1" fill="#fff"/></svg></span><b>4</b></span><span class="dki"><span class="ap ap-pub"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 2.6l8.4 4.7L12 12 3.6 7.3z" fill="#FFE2A8"/><path d="M3.6 7.3L12 12v9.4l-8.4-4.7z" fill="#fff" opacity=".95"/><path d="M20.4 7.3L12 12v9.4l8.4-4.7z" fill="#fff" opacity=".7"/><path d="M7.8 4.9l8.4 4.7v3.2" stroke="#FF8A00" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".7"/></svg></span><b>1</b></span><span class="dki"><span class="ap ap-rb"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3.8 4.8v4.4h4.4"/><path d="M4.2 9.2A8.3 8.3 0 1 1 3.9 13.6"/><path d="M12 8v4.2l2.7 1.7"/></svg></span></span><span class="dki"><span class="ap ap-sk"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 13.2l8.6-4.4L12 4.4 3.4 8.8z" fill="#fff"/><path d="M3.4 12.6L12 17l8.6-4.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".75"/><path d="M3.4 16.2L12 20.6l8.6-4.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".5"/></svg></span></span><span class="grow"></span><span class="dki"><span class="ap ap-mkt"><svg width="24" height="24" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7.2" height="7.2" rx="2.2" fill="#fff"/><rect x="13.3" y="3.5" width="7.2" height="7.2" rx="2.2" fill="#fff" opacity=".82"/><rect x="3.5" y="13.3" width="7.2" height="7.2" rx="2.2" fill="#fff" opacity=".82"/><path d="M16.9 13.2l1.1 2.7 2.7 1.1-2.7 1.1-1.1 2.7-1.1-2.7-2.7-1.1 2.7-1.1z" fill="#fff"/></svg></span></span><span class="dki on"><span class="ap ap-set"><svg width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="gr1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#D9DCE3"/></linearGradient></defs><path d="M12 1.8l1.6 2.4 2.8-.7.5 2.9 2.8.9-.9 2.8 2.2 1.9-2.2 1.9.9 2.8-2.8.9-.5 2.9-2.8-.7L12 22.2l-1.6-2.4-2.8.7-.5-2.9-2.8-.9.9-2.8-2.2-1.9 2.2-1.9-.9-2.8 2.8-.9.5-2.9 2.8.7z" fill="url(#gr1)"/><circle cx="12" cy="12" r="5.2" fill="#8D919B"/><circle cx="12" cy="12" r="2.6" fill="#E9EBF0"/></svg></span></span></nav>
+
+</div>
+<script src="../v3/shots.js"></script><script src="icons.js"></script>
+</body></html>

@@ -19,25 +19,33 @@ DOCK_ICONS = {
 }
 
 
-def dock(sel):
+def dock(sel, has_rb=True):
     def it(k, badge=""):
         b = f"<b>{badge}</b>" if badge else ""
         return f'<span class="dki{" on" if k == sel else ""}"><span class="ap ap-{k}">{DOCK_ICONS[k]}</span>{b}</span>'
+    rb_item = it("rb") if has_rb else ""
     return ('<nav class="dockv glass" aria-label="主菜单">' + it("ai") + '<span class="dsep"></span>'
-            + it("chat", "4") + it("pub", "1") + it("rb") + it("sk") + '<span class="grow"></span>'
+            + it("chat", "4") + it("pub", "1") + rb_item + it("sk") + '<span class="grow"></span>'
             + it("mkt") + it("set") + "</nav>")
 
 
-TOPBAR = f'''<div class="tbar">
-  <div class="br">{LOGO}<span class="tt"><b>云匠</b><em>CloudCraft</em></span></div>
+def make_topbar(ws_pill="", right_extra=None):
+    pills = (
+        f'<span class="pill glass tpill">{I("bot",13)}3 个 Bot 在线</span>'
+        '<span class="pill glass tpill"><span class="dot" style="width:7px;height:7px;background:var(--green)"></span>Jira · 2 分钟前</span>'
+        '<span class="pill glass tpill" style="color:var(--ink-orange)"><span class="dot" style="width:7px;height:7px;background:var(--orange)"></span>Tita 采集失败 · 重试中</span>'
+    ) if right_extra is None else right_extra
+    return f'''<div class="tbar">
+  <div class="br">{LOGO}<span class="tt"><b>云匠</b><em>CloudCraft</em></span>{ws_pill}</div>
   <div class="grow row" style="justify-content:center"><div class="glass tsearch">{I("search",15)}<span class="f13 grow">搜索工单、MR、发布记录</span><span class="kbd" style="border-color:var(--hair)">⌘F</span></div></div>
   <div class="tright">
-    <span class="pill glass tpill">{I("bot",13)}3 个 Bot 在线</span>
-    <span class="pill glass tpill"><span class="dot" style="width:7px;height:7px;background:var(--green)"></span>Jira · 2 分钟前</span>
-    <span class="pill glass tpill" style="color:var(--ink-orange)"><span class="dot" style="width:7px;height:7px;background:var(--orange)"></span>Tita 采集失败 · 重试中</span>
+    {pills}
     <span class="av" style="width:34px;height:34px;font-size:13px;background:linear-gradient(160deg,#FFC9A8,#F08F7A);color:#5A2414">林</span>
   </div>
 </div>'''
+
+
+TOPBAR = make_topbar()
 
 # 工单数据：id, 头像名, 渐变, 状态色, 标题, 来源, 说明, 右侧, 说明颜色, 进度
 TICKETS = [

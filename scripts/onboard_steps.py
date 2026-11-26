@@ -671,17 +671,17 @@ html.dark .tsec2{{background:rgba(255,255,255,.038)}}
           <div class="dsel"><span class="mono grow">master</span>{I("chevd",13,st="color:var(--text-3)")}</div>
         </div>
         <div class="grow">
-          <div class="flab">测试分支<span class="aid2">{I("spark",10)}命中 dev-*</span></div>
+          <div class="flab">测试分支<span class="aid2">{I("spark",10)}可选 · 留空走主干</span></div>
           <div class="dsel"><span class="mono grow">dev-okr</span>{I("chevd",13,st="color:var(--text-3)")}</div>
         </div>
       </div>
       <div class="row g10">
-        <div style="width:150px;flex:none">
-          <div class="flab">包管理器<span class="aid2">lockfile</span></div>
-          <div class="dsel"><span class="mono grow">pnpm</span>{I("chevd",13,st="color:var(--text-3)")}</div>
+        <div style="width:170px;flex:none">
+          <div class="flab">工具链适配<span class="aid2">lock / mod</span></div>
+          <div class="dsel"><span class="mono grow">pnpm (多语言支持)</span>{I("chevd",13,st="color:var(--text-3)")}</div>
         </div>
         <div class="grow">
-          <div class="flab">试构建命令（不上传产物）<span class="ov2">已人工覆盖</span><span class="rst">还原推测</span></div>
+          <div class="flab">验证 / 试构建命令（不上传产物）<span class="ov2">已人工覆盖</span><span class="rst">还原推测</span></div>
           <div class="dinp ov"><span class="mono grow">pnpm build-prod --no-sourcemap</span></div>
         </div>
       </div>
@@ -689,10 +689,10 @@ html.dark .tsec2{{background:rgba(255,255,255,.038)}}
 
     <!-- 3. 代码规范与 MR 审核人 -->
     <div class="tsec">
-      <div class="tsec-h"><span>代码规范与默认 MR 审核人</span></div>
+      <div class="tsec-h"><span>验证策略、规范与默认审核人</span></div>
       <div class="row g8 f12 t2" style="padding:7px 10px;border-radius:10px;background:var(--glass-2)">
         {I("file",14,st="color:var(--ink-purple)")}
-        <span class="grow ell">自动读取仓库根目录 <span class="mono">AGENTS.md</span> 与 <span class="mono">.eslintrc.cjs</span>，并启用内置「最小改动修复」</span>
+        <span class="grow ell">自动识别 <span class="mono">AGENTS.md</span> · 验证策略 <span class="mono">browser_dist_replace</span>（后端支持 <span class="mono">test_suite</span>）</span>
         <span class="tag tg-g" style="height:19px;font-size:10.5px">已生效</span>
       </div>
       <div class="row g10">
@@ -736,14 +736,14 @@ html.dark .tsec2{{background:rgba(255,255,255,.038)}}
       </div>
       <div class="row g12" style="margin-top:14px;align-items:flex-start">
         <div class="obx grow" style="padding:6px 16px">
-          {c("ok", "AI 引擎已连通 · Pi（默认内置 · gpt-6.2-sol）", "管理员已配置")}
+          {c("ok", "AI 引擎已连通 · Pi（默认内置 · 自定义多模型）", "管理员已配置")}
           {c("ok", "连接器鉴权 · GitLab、GitHub、本机目录、Jira", "全部通过")}
           {c("ok", "可修改仓库（2 个）· 自动推测分支与构建通过", "3 分 18 秒")}
           {c("ok", "仅查看仓库（2 个）· 只读索引完成，宿主机硬禁写", "只读隔离")}
           {c("ok", "已自动读取仓库规范（AGENTS.md / ESLint）+ 内置 Skills", "免手配直接生效")}
           {c("ok", "环境与账号 · 3 个环境打开，6 个账号登录成功", "测试 / 联调 / 正式")}
           {c("wn", "正式环境 · OKR 管理员 Cookie 已过期", "不挡开工，用到时提醒")}
-          {c("sk", "发布与回滚、自定义主题 / 费用监控等插件", "按需在插件市场启用")}
+          {c("sk", "紧急回滚（Apollo）、自定义主题 / 费用监控等扩展插件", "按需在插件市场启用")}
         </div>
         <div class="obx" style="width:276px;flex:none">
           <div class="f13 w7">开工后怎么干活</div>
@@ -752,7 +752,7 @@ html.dark .tsec2{{background:rgba(255,255,255,.038)}}
             <div class="tk"><span class="sc10 sc-j">Jira</span><span class="grow ell">OKR-412 对齐视图子目标重复</span></div>
             <div class="tk"><span class="sc10 sc-j">Jira</span><span class="grow ell">OKR-418 目标导入日期错一天</span></div>
           </div>
-          <div class="f12 t3" style="margin-top:12px;padding-top:10px;border-top:1px solid var(--hair);line-height:1.55">想加发版回滚、皮肤主题或自定义 Skills，随时去左侧 Dock「插件市场 / Skills」或「设置」按需开启。</div>
+          <div class="f12 t3" style="margin-top:12px;padding-top:10px;border-top:1px solid var(--hair);line-height:1.55">想加紧急回滚、皮肤主题或自定义 Skills，随时去左侧 Dock「插件市场 / Skills」或「设置」按需开启。</div>
         </div>
       </div>'''
     foot4 = ('<button class="bigb secb"><i data-i="chevl" data-s="16" data-w="2.4"></i>上一步</button><span class="grow"></span>'
@@ -778,10 +778,10 @@ def ai_step(page, CHECK):
     body = X + f'''
       <div class="obx" style="margin-top:20px;padding:18px 20px">
         {row("AI 引擎", f'<div class="cc-select cc-select-lg grow"><span style="width:7px;height:7px;border-radius:50%;background:var(--purple);flex:none"></span><span class="cc-sel-val">Pi</span><span class="cc-sel-sub">默认内置 · 多模型</span>{CHEV}</div>')}
-        {row("主力模型", f'<div class="cc-select cc-select-lg grow"><span style="width:7px;height:7px;border-radius:50%;background:var(--green);flex:none"></span><span class="cc-sel-val mono">gpt-6.2-sol</span><span class="cc-sel-sub">公司网关 · 深度推理与多文件修单</span>{CHEV}</div>')}
-        {row("快速模型", f'<div class="cc-select cc-select-lg grow"><span class="cc-sel-val mono">gpt-6.2-mini</span><span class="cc-sel-sub">报错解读 / 翻译 / 轻问答</span>{CHEV}</div>')}
-        {row("连接方式", '<div class="cc-seg cc-seg-lg" style="flex:1;display:flex"><span class="on" style="flex:1">公司网关</span><span style="flex:1">API Key</span></div>')}
-        {row("网关地址", '<div class="cc-input cc-input-lg grow"><span class="mono f12">https://ai-gateway.tita.cloud</span></div>')}
+        {row("主力模型", f'<div class="cc-select cc-select-lg grow"><span style="width:7px;height:7px;border-radius:50%;background:var(--green);flex:none"></span><span class="cc-sel-val mono">claude-4.5-sonnet / 自定义</span><span class="cc-sel-sub">OpenAI 兼容网关 · 支持费率覆写</span>{CHEV}</div>')}
+        {row("快速模型", f'<div class="cc-select cc-select-lg grow"><span class="cc-sel-val mono">qwen3-coder-flash</span><span class="cc-sel-sub">报错解读 / i18n 补译 / 轻问答</span>{CHEV}</div>')}
+        {row("连接方式", '<div class="cc-seg cc-seg-lg" style="flex:1;display:flex"><span class="on" style="flex:1">自定义网关</span><span style="flex:1">API Key</span></div>')}
+        {row("网关地址", '<div class="cc-input cc-input-lg grow"><span class="mono f12">https://ai-gateway.example.com</span></div>')}
         {row("访问令牌", '<div class="cc-input cc-input-lg grow"><span class="mono f12">•••••••••••••••• 3f9a</span></div>')}
         <div class="row g10" style="margin:16px 0 0 86px">
           <button class="cc-btn cc-btn-glass">{I("zap",14)}试一下</button>

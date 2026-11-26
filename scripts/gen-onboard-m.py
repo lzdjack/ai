@@ -145,7 +145,7 @@ p4 = phone(f'''
     <span class="ck3" style="width:38px;height:38px;background:var(--btn-ok-bg)">{I("check",19,3)}</span>
     <div class="grow"><div class="f16 w7">可以开工了</div><div class="f12 t2" style="margin-top:2px">Bot-02 自动探测与体检 · 3 分 52 秒</div></div></div>
   <div class="glass" style="border-radius:18px;padding:4px 14px;margin-top:10px">
-    {rw("ok", "AI 引擎已连通", "Pi · gpt-6.2-sol")}
+    {rw("ok", "AI 引擎已连通", "Pi · 多模型网关")}
     {rw("ok", "连接器鉴权（4 个）", "全部通过")}
     {rw("ok", "可修改仓（2）推测构建", "通过")}
     {rw("ok", "仅查看仓（2）只读隔离", "宿主机禁写")}

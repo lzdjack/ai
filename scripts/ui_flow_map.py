@@ -298,7 +298,19 @@ JOURNEYS = [
                             pin(33.4, 71.2, 33.2, 4.9, "env_sel", "确认加入「星辰研发中心 · OKR 产研」", "ok"),
                             pin(33.4, 77.0, 33.2, 4.0, "g_ai", "忽略本次，记录口令指纹不再重弹", "info"),
                         ],
-                        note="复制微信/飞书中的邀请链接（cc.intra/join/...）或口令（#CC-7M9P#）切回云匠即拦截弹出确认卡；支持 Deep Link（cloudcraft://join）直唤，消费或忽略后不重复打扰。",
+                        note="复制微信/飞书中的邀请链接（cc.intra/join/...）或口令（#CC-8K4P-9M2X-Q7R5#）切回云匠即拦截弹出确认卡；支持 Deep Link（cloudcraft://join）直唤，消费或忽略后不重复打扰。",
+                    ),
+                    variant(
+                        "⑤ 顶栏空间切换 & 原地升级团队抽屉 (PC)",
+                        "reference/images/pages/PC-顶栏空间切换与邀请抽屉",
+                        pins=[pin(15.0, 2.0, 12.0, 3.0, "g_set_mem:0", "工作空间 ≥2 切换与原地升级", "ok")],
+                        note="仅当可用空间 ≥ 2 时在顶栏露出切换胶囊；支持原地把 personal 无损升级为团队 organization 空间。",
+                    ),
+                    variant(
+                        "⑥ 邀请失效 / 邮箱不匹配 & 安全交接兜底 (PC)",
+                        "reference/images/pages/PC-邀请失效与切号",
+                        pins=[pin(56.0, 42.0, 12.0, 4.0, "login", "切号重登 / 安全交接", "warn")],
+                        note="覆盖 24h 链接过期、当前邮箱与受邀邮箱不匹配引导切号、M2/M3 #token= 交接确认页及私有部署初始改密态。",
                     ),
                 ],
             ),
@@ -711,20 +723,35 @@ JOURNEYS = [
                 ] + _pc_tk_tabs_pins("evid") + _pc_dock_pins("chat"),
             ),
             node(
-                "tk_edge", 3, 4, "边界状态（并发与权限保护）", "无权查看 · 登录过期 · 已被他人审过 · 新提交", "done", "PC 4 合 1", "shield",
+                "tk_edge", 3, 4, "边界状态（并发与运行态逃生）", "无权查看 / 过期 / Hard Gate 失败豁免 / 我来接手 / no_code_fix", "done", "PC 2 张 8 态", "shield",
                 "reference/images/pages/PC-边界状态",
                 [("info", "「回到我的工单」 → 主列表", "tk_main"), ("warn", "「登录并回到 TK-20871」 → 登录页", "login"), ("info", "「去发布看进度」 → 发布详情", "rel_tk"), ("ok", "「换个账号」 → 设置·我的账号", "g_set_mem:1")],
-                "4 个保护态同图展示：无权查看、登录已过期、已被他人审核/状态变更、期间有新提交必须看最新代码。",
-                pins=[
-                    pin(42.1, 19.9, 3.7, 2.2, "g_set_mem:1", "换个账号", "info"),
-                    pin(25.6, 34.3, 21.2, 4.0, "tk_main", "回到我的工单", "ok"),
-                    pin(91.8, 16.6, 2.8, 2.2, "login", "换账号登录", "info"),
-                    pin(72.9, 27.1, 22.6, 4.4, "login", "登录并回到原单", "warn"),
-                    pin(6.7, 78.8, 8.2, 3.1, "rel_tk", "去「发布」看进度", "info"),
-                    pin(15.5, 78.8, 10.8, 3.1, "rel_wait", "复测时让王某重点看这点", "info"),
-                    pin(84.2, 69.8, 5.8, 3.1, "tk_code", "只看新增的改动", "info"),
-                    pin(90.7, 69.8, 4.9, 3.1, "tk_code", "切到最新提交 Diff", "info"),
-                    pin(78.1, 91.7, 5.7, 4.0, "tk_reject", "打回", "gap"),
+                variants=[
+                    variant(
+                        "① 基础边界 4 态（无权 / 过期 / 变更 / 新提交）",
+                        "reference/images/pages/PC-边界状态",
+                        pins=[
+                            pin(42.1, 19.9, 3.7, 2.2, "g_set_mem:1", "换个账号", "info"),
+                            pin(25.6, 34.3, 21.2, 4.0, "tk_main", "回到我的工单", "ok"),
+                            pin(91.8, 16.6, 2.8, 2.2, "login", "换账号登录", "info"),
+                            pin(72.9, 27.1, 22.6, 4.4, "login", "登录并回到原单", "warn"),
+                            pin(6.7, 78.8, 8.2, 3.1, "rel_tk", "去「发布」看进度", "info"),
+                            pin(15.5, 78.8, 10.8, 3.1, "rel_wait", "复测时让王某重点看这点", "info"),
+                            pin(84.2, 69.8, 5.8, 3.1, "tk_code", "只看新增的改动", "info"),
+                            pin(90.7, 69.8, 4.9, 3.1, "tk_code", "切到最新提交 Diff", "info"),
+                            pin(78.1, 91.7, 5.7, 4.0, "tk_reject", "打回", "gap"),
+                        ],
+                        note="无权查看、登录已过期、已被他人审核/状态变更、期间有新提交必须看最新代码。",
+                    ),
+                    variant(
+                        "② 工作台边界补全（2x 门禁阻断 / 人工接手 / no_code_fix / 消歧）",
+                        "reference/images/pages/PC-工作台-边界补全",
+                        pins=[
+                            pin(34.0, 44.0, 12.0, 4.0, "tk_working", "Hard Gate 豁免或继续修", "warn"),
+                            pin(82.0, 44.0, 12.0, 4.0, "tk_main", "人工交付 self_delivery", "ok"),
+                        ],
+                        note="覆盖 Hard Gate 连续 2 次失败双出口、我来接手 human_takeover、无代码改动结单 no_code_fix 及 ask_user 底栏/独立凭据弹窗。",
+                    ),
                 ],
             ),
             node(
@@ -1010,18 +1037,30 @@ JOURNEYS = [
                 ] + _pc_dock_pins("sk"),
             ),
             node(
-                "g_market", 2, 3, "插件市场（5 贡献点架构）", "装卸发布/回滚/连接器/引擎/UI 主题/费用插件", "done", "PC 主页", "pkg",
+                "g_market", 2, 3, "插件市场与运行态规范", "5 贡献点协议 · 停用只读 · 5s 超时 · 超限折叠", "done", "PC 2 视图", "pkg",
                 "reference/images/pages/PC-插件市场",
-                [("warn", "点「鉴权归设置→连接器 ›」", "g_set_conn"), ("info", "看贡献点「左侧 Dock / 工单操作 / 发布」", "rel_rb"), ("ok", "左侧 Dock 可跳回工作台或设置", "g_set_conn")],
-                pins=[
-                    pin(11.9, 32.8, 14.6, 5.2, "rel_dock", "发布流水线（Tita）→ 发布", "info"),
-                    pin(11.9, 39.2, 14.6, 5.2, "g_set_conn", "GitLab / Jira 连接器运维", "info"),
-                    pin(64.1, 9.4, 5.6, 4.0, "g_market", "通用 Schema 插件设置预览", "info"),
-                    pin(70.3, 9.4, 5.6, 4.0, "g_set_conn", "停用卸载后连接器下线", "warn"),
-                    pin(38.6, 28.7, 8.8, 2.2, "rel_rb", "已贡献入口：紧急回滚", "info"),
-                    pin(62.3, 28.7, 10.0, 2.2, "tk_main", "工单操作 · 关联回滚查因", "info"),
-                    pin(60.5, 39.5, 11.2, 2.2, "g_set_conn", "鉴权归「设置 → 连接器」 ›", "warn"),
-                ] + _pc_dock_pins("mkt"),
+                [("warn", "点「鉴权归设置→连接器 ›」", "g_set_conn"), ("info", "看贡献点「左侧 Dock / 工单操作 / 发布」", "rel_rb"), ("ok", "查看插件运行态边界规范", "g_market:1")],
+                variants=[
+                    variant(
+                        "① 插件市场主页（5 贡献点）",
+                        "reference/images/pages/PC-插件市场",
+                        pins=[
+                            pin(11.9, 32.8, 14.6, 5.2, "g_set_conn", "Tita / Apollo 部署连接器 → 连接器", "info"),
+                            pin(11.9, 39.2, 14.6, 5.2, "g_set_conn", "GitLab / Jira 连接器运维", "info"),
+                            pin(64.1, 9.4, 5.6, 4.0, "g_market", "通用 Schema 插件设置预览", "info"),
+                            pin(70.3, 9.4, 5.6, 4.0, "g_set_conn", "停用卸载后连接器下线", "warn"),
+                            pin(38.6, 28.7, 8.8, 2.2, "rel_rb", "已贡献入口：紧急回滚", "info"),
+                            pin(62.3, 28.7, 10.0, 2.2, "tk_main", "工单操作 · 关联回滚查因", "info"),
+                            pin(60.5, 39.5, 11.2, 2.2, "g_set_conn", "鉴权归「设置 → 连接器」 ›", "warn"),
+                        ] + _pc_dock_pins("mkt"),
+                    ),
+                    variant(
+                        "② 插件运行态与超限折叠规范",
+                        "reference/images/pages/PC-插件运行态规范",
+                        pins=[],
+                        note="展示停用后历史快照只读、5s 超时隔离重试、Dock >4 / 顶栏 >2 折叠及个人空间无损保留。",
+                    ),
+                ],
             ),
             node(
                 "g_set_conn", 2, 4, "设置 · 连接器（鉴权运维总览）", "与插件市场 0% 重叠 · 已鉴权实例状态与续期", "done", "设置子页", "link",
@@ -1038,19 +1077,33 @@ JOURNEYS = [
                 ] + _pc_set_nav_pins("conn") + _pc_dock_pins("set"),
             ),
             node(
-                "g_set_proj", 3, 3, "设置 · 项目（开工准备同源）", "仓库权限/构建/环境账号实测 + 最近一次检查", "done", "设置子页", "sliders",
+                "g_set_proj", 3, 3, "设置 · 项目（开工条件 + 流程模板）", "仓库/构建/环境实测 + 自定义节点工作流 & 节点 Skills", "done", "设置 2 视图", "sliders",
                 "reference/images/pages/PC-设置",
-                [("reuse", "点仓库「改」/「填写账号」 → 复用步骤 2/3 抽屉", "step3:2"), ("info", "点右栏「看完整日志 ›」 → 体检日志抽屉", "chk_log")],
-                pins=[
-                    pin(56.4, 10.2, 19.4, 3.1, "g_ai", "问 AI「OKR 还差什么才能开工？」", "info"),
-                    pin(64.5, 19.1, 9.9, 4.0, "step4", "让 Bot 重新检查 → 体检页", "ok"),
-                    pin(67.1, 32.1, 7.5, 2.4, "s2_drw:1", "微调项目与试构建（复用）", "info"),
-                    pin(69.8, 63.1, 4.8, 3.1, "step3:2", "填写环境账号（添加抽屉）", "warn"),
-                    pin(67.9, 74.8, 6.7, 2.4, "g_set_src", "工单来源采集配置 改 ›", "info"),
-                    pin(68.7, 81.5, 5.8, 2.4, "g_skills", "本项目启用 Skills 改 ›", "info"),
-                    pin(70.6, 87.9, 3.9, 3.1, "g_set_conn", "发布配置 去配置 ›", "warn"),
-                    pin(80.4, 56.6, 16.0, 2.1, "chk_log", "看完整日志 ›（体检日志抽屉）", "info"),
-                ] + _pc_set_nav_pins("proj") + _pc_dock_pins("set"),
+                [("reuse", "点仓库「改」/「填写账号」 → 复用步骤 2/3 抽屉", "step3:2"), ("info", "切「流程模板与节点 Skills」 → T-08b 定制", "g_set_proj:1"), ("info", "点右栏「看完整日志 ›」 → 体检日志抽屉", "chk_log")],
+                variants=[
+                    variant(
+                        "① 项目开工条件总览",
+                        "reference/images/pages/PC-设置",
+                        pins=[
+                            pin(56.4, 10.2, 19.4, 3.1, "g_ai", "问 AI「OKR 还差什么才能开工？」", "info"),
+                            pin(64.5, 19.1, 9.9, 4.0, "step4", "让 Bot 重新检查 → 体检页", "ok"),
+                            pin(67.1, 32.1, 7.5, 2.4, "s2_drw:1", "微调项目与试构建（复用）", "info"),
+                            pin(69.8, 63.1, 4.8, 3.1, "step3:2", "填写环境账号（添加抽屉）", "warn"),
+                            pin(67.9, 74.8, 6.7, 2.4, "g_set_src", "工单来源采集配置 改 ›", "info"),
+                            pin(68.7, 81.5, 5.8, 2.4, "g_set_proj:1", "工作流与节点 Skills ›", "info"),
+                            pin(70.6, 87.9, 3.9, 3.1, "g_set_conn", "发布配置 去配置 ›", "warn"),
+                            pin(80.4, 56.6, 16.0, 2.1, "chk_log", "看完整日志 ›（体检日志抽屉）", "info"),
+                        ] + _pc_set_nav_pins("proj") + _pc_dock_pins("set"),
+                    ),
+                    variant(
+                        "② 流程模板与节点绑定 Skills（T-08b）",
+                        "reference/images/pages/PC-设置-项目-流程模板",
+                        pins=[
+                            pin(34.0, 9.4, 5.5, 2.5, "g_set_proj:0", "切回「开工条件」", "info"),
+                        ] + _pc_set_nav_pins("proj") + _pc_dock_pins("set"),
+                        note="4 套预设模板 + 增删改序 execution/delivery 节点 + 为单节点绑定专属 skill_ids[] 与工具范围，修改从下一轮生效。",
+                    ),
+                ],
             ),
             node(
                 "g_set_run", 3, 4, "设置 · 执行器（算力池）", "本机 / 团队服务器 / 云端 Pro 状态与调度", "done", "设置子页", "server",
@@ -1085,9 +1138,9 @@ JOURNEYS = [
                 ] + _pc_set_nav_pins("src") + _pc_dock_pins("set"),
             ),
             node(
-                "g_set_mem", 5, 3, "设置 · 组织与成员 + 角色权限 + 账号通知（含抽屉与 /admin）", "部门默认继承 / 角色与模板克隆 / Guest Fail-Closed / 停用交接 / Web /admin 蓝图", "done", "设置 9 视图", "user",
+                "g_set_mem", 5, 3, "设置 · 组织与成员 + 角色权限 + 账号通知（含抽屉与 /admin）", "部门默认继承 / 角色与模板克隆 / 纯 RBAC 作用域隔离 / 停用交接 / Web /admin 蓝图", "done", "设置 9 视图", "user",
                 "reference/images/pages/PC-设置-成员与身份",
-                [("info", "顶部分段「角色与权限 7」 → 角色权限矩阵", "g_set_mem:7"), ("info", "复制 `join/...` 部门邀请链接 → 邀请加入页", "auth_recover:1"), ("ok", "点「编辑默认配置 / 添加成员 / 停用交接 / /admin ↗」", "g_set_mem:3")],
+                [("info", "顶部分段「角色与权限 7」 → 角色权限矩阵", "g_set_mem:7"), ("info", "复制 `join/...` 部门邀请链接 → 邀请加入页", "auth_recover:1"), ("ok", "点「编辑默认配置 / 添加成员 / 停用交接」", "g_set_mem:3")],
                 variants=[
                     variant(
                         "① 成员与身份（部门树与列表）",
@@ -1095,12 +1148,12 @@ JOURNEYS = [
                         pins=[
                             pin(39.87, 9.41, 6.22, 2.44, "g_set_mem:7", "切「角色与权限 7」", "ok"),
                             pin(61.02, 10.06, 10.64, 3.56, "auth_recover:1", "生成本部门 24h 免 SMTP 邀请链接", "info"),
-                            pin(72.36, 10.06, 6.46, 3.56, "g_set_mem:4", "添加成员（主部门 / 外包 Guest）", "ok"),
+                            pin(72.36, 10.06, 6.46, 3.56, "g_set_mem:4", "添加成员（主部门 / 协作者）", "ok"),
                             pin(72.49, 24.04, 5.7, 2.07, "g_set_mem:3", "编辑部门默认配置 ›", "ok"),
                             pin(71.2, 92.2, 7.6, 2.8, "g_set_mem:5", "停用与待办交接 ›", "warn"),
-                            pin(25.2, 86.2, 12.6, 9.2, "g_set_mem:6", "企业管理后台 (/admin) ↗", "info"),
+                            pin(25.2, 86.2, 12.6, 9.2, "g_set_mem:7", "角色与权限矩阵 (7) ›", "info"),
                         ] + _pc_set_nav_pins("mem") + _pc_dock_pins("set"),
-                        note="部门树 + 部门默认继承摘要 + 顶部切「角色与权限」 + 外包 Guest 隔离 + 免 SMTP 邀请 + 管理者 `/admin` 入口。",
+                        note="部门树 + 部门默认继承摘要 + 顶部切「角色与权限」 + 外部协作者按 RBAC 作用域收敛 + 免 SMTP 邀请。",
                     ),
                     variant(
                         "② 我的账号",
@@ -1129,7 +1182,7 @@ JOURNEYS = [
                             pin(83.23, 92.67, 3.37, 3.56, "g_set_mem:0", "取消", "info"),
                             pin(87.15, 92.67, 9.79, 3.56, "g_set_mem:0", "保存部门默认配置", "ok"),
                         ],
-                        note="配置部门默认项目权限（ADDITIVE_UNION）、共享只读连接器与 Skills；个人凭据与安全门禁硬红线锁定。",
+                        note="配置部门默认项目权限（并集叠加）、共享只读连接器与 Skills；个人凭据与安全门禁硬红线锁定。",
                     ),
                     variant(
                         "⑤ 抽屉 · 添加 / 编辑成员",
@@ -1141,7 +1194,7 @@ JOURNEYS = [
                             pin(84.93, 92.67, 3.37, 3.56, "g_set_mem:0", "取消", "info"),
                             pin(88.85, 92.67, 8.09, 3.56, "g_set_mem:0", "保存成员配置", "ok"),
                         ],
-                        note="设置主部门、虚线借调到期日、外包 Guest Fail-Closed 门禁、Allow/Deny 绑定与外部 ID；SaaS 自动隐藏代改密。",
+                        note="设置主部门、虚线借调到期日、低权协作者 RBAC 作用域收敛、Allow/Deny 绑定与外部 ID；SaaS 自动隐藏代改密。",
                     ),
                     variant(
                         "⑥ 抽屉 · 停用与待办交接",
@@ -1172,7 +1225,7 @@ JOURNEYS = [
                             pin(67.76, 70.09, 10.44, 3.11, "g_set_mem:4", "按角色批量添加成员", "info"),
                             pin(25.2, 86.2, 13.6, 9.0, "g_set_mem:8", "高级策略 (/admin/role-policies) ↗", "info"),
                         ] + _pc_set_nav_pins("mem") + _pc_dock_pins("set"),
-                        note="Core 不可卸载 8 域 + 已安装连接器/市场插件动态贡献（manifest.permissions）；5 内置（安全锁）+ 模板克隆（代码合入协同专员 / QA），新装与重装遵循 Fail-Closed 门禁与升级不自动提权。",
+                        note="Core 不可卸载 9 域（含修单、MR 与内置发布流）+ 已安装连接器/市场插件动态贡献（manifest.permissions）；5 内置（安全锁）+ 模板克隆（代码合入协同专员 / QA），新装与重装遵循 Fail-Closed 门禁与升级不自动提权。",
                     ),
                     variant(
                         "⑨ 企业管理后台 · 角色策略中心 (M2/M3 Allow/Deny)",
@@ -1182,7 +1235,7 @@ JOURNEYS = [
                             pin(90.74, 3.69, 6.83, 2.07, "g_set_mem:7", "返回桌面「角色与权限」↗", "ok"),
                             pin(85.8, 10.53, 11.36, 3.56, "g_set_mem:8", "新建自定义角色 / 显式 DENY 策略", "info"),
                         ],
-                        note="M2/M3 Web `/admin` 规则引擎蓝图：五重 AND 优先级栈（含 Tier 0 插件生命周期门禁，消除假绿灯）、按命名空间隔离的显式 DENY 清单及 ActionGate 实态试算模拟器。",
+                        note="M2/M3 Web `/admin` 规则引擎蓝图：四重 AND 优先级栈（含 Tier 0 插件生命周期门禁，消除假绿灯）、按命名空间隔离的显式 DENY 清单及 ActionGate 实态试算模拟器。",
                     ),
                 ],
             ),
@@ -1369,7 +1422,15 @@ JOURNEYS = [
                             pin(39.38, 78.43, 22.64, 4.8, "m_home", "P2 确定指派给 张伟", "ok"),
                             pin(70.46, 80.84, 23.33, 4.8, "m_set:4", "P3 确认停用并移交给 张某", "gap"),
                         ],
-                        note="手机端禁用编辑组织树，专注按部门筛选、外包 Guest 隔离展示、同名待确认选人及停用成员待办一键交接 Sheet。",
+                        note="手机端禁用编辑组织树，专注按部门筛选、RBAC 作用域隔离展示、同名待确认选人及停用成员待办一键交接 Sheet。",
+                    ),
+                    variant(
+                        "⑥ 移动端 · 运行态与异常补齐 (3 屏)",
+                        "reference/images/pages/移动端-运行态与异常补齐",
+                        pins=[
+                            pin(50.0, 74.0, 22.0, 4.8, "m_home", "保存个人凭据并继续", "ok"),
+                        ],
+                        note="就地个人凭据弹窗 Sheet、独立「无权查看」拦截页、L2 高危锁默认锁定与可配全量展开滑块模式。",
                     ),
                 ],
             ),
@@ -1547,14 +1608,7 @@ GAP_ITEMS = [
         "p-green",
         "多租户组织架构 / 权限隔离 / 反孤岛加入 / 双面端交互全套（6 张新图 + 2 升级）",
         "PC-设置-成员与身份 / PC-组织-* / PC-已注册成员确认加入 / 移动端-组织与成员 / PC-企业管理后台-蓝图",
-        "经 2 轮 6 位专家 Agent 碰撞审计定案：升级「PC-注册」与「PC-设置-成员与身份」，新增「PC-已注册成员确认加入」防孤岛拦截、3 个标准化 `.cc-drawer`（部门默认设置/添加编辑成员与 Guest Fail-Closed/停用交接）、移动端 3 屏（只读目录/同名选人/停用交接 Sheet）及 M2/M3「Web /admin 企业管理后台蓝图」。",
-    ),
-    (
-        "已补齐 ✓",
-        "p-green",
-        "剪贴板邀请链接/口令智能识别与 Deep Link 直唤（PC + 移动端 2 张新图）",
-        "PC-剪贴板识别邀请 / 移动端-剪贴板识别邀请",
-        "补齐复制微信/飞书邀请链接（cc.intra/join/...）或短口令（#CC-...#）切回云匠时的自动拦截体验：支持 iOS 16+ Pattern 无感探测、已登录一键确认入驻、未登录直达设密加入、已消费/忽略指纹去重防反复弹窗与 ≥2 空间切换胶囊激活。",
+        "经多轮专家审计与工作流去硬编码升级：PC 组织与权限移除 Guest 特判并对齐 4 重 AND ActionGate；新增「PC-顶栏空间切换与邀请抽屉」「PC-邀请失效与切号」「PC-设置-项目-流程模板（T-08b 节点工作流 + 节级 Skills）」「PC-工作台-边界补全（Hard Gate 双出口 / 我来接手 / no_code_fix / 提问消歧）」「PC-插件运行态规范」与「移动端-运行态与异常补齐」。",
     ),
 ]
 
@@ -1648,7 +1702,7 @@ def render_ui_flow_section() -> str:
     <div class="kpi glass"><b>{total_boards} 张板</b><span>{total_boards * 2} 张亮/暗图资产已校验</span></div>
     <div class="kpi glass"><b>5 条旅程 · {total_nodes} 节点</b><span>{total_edges} 条主干连线 · PC + 移动端全覆盖</span></div>
     <div class="kpi glass"><b style="color:var(--ink-green)">全图热区直达</b><span>DOM 实测 + 5 路截图审校</span></div>
-    <div class="kpi glass"><b style="color:var(--ink-red)">2 处显式缺口</b><span>外加 2 处轻复用 · 全站闭环已核验</span></div>
+    <div class="kpi glass"><b style="color:var(--ink-green)">0 处显式缺口</b><span>含可定制节点工作流与全链路边界补全 · 100% 闭环</span></div>
   </div>
 
   <div class="card glass mt">

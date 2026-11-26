@@ -72,29 +72,29 @@ ARCH_SVG = """<figure class="diagram glass-sub">
   <!-- 右列：隔离执行器 -->
   <rect x="546" y="60" width="156" height="82" rx="12" class="dg-box b-teal"/>
   <text x="624" y="86" text-anchor="middle" class="dg-t">Bot 执行器 × N</text>
-  <text x="624" y="105" text-anchor="middle" class="dg-s">Pi 内核 + git + Playwright</text>
-  <text x="624" y="123" text-anchor="middle" class="dg-s">独立容器 · 零凭据 · 机审门禁</text>
+  <text x="624" y="105" text-anchor="middle" class="dg-s">Pi + 动态流程 · 节级 Skills</text>
+  <text x="624" y="123" text-anchor="middle" class="dg-s">断网容器 · 零凭据 · 机审门禁</text>
 
   <rect x="546" y="168" width="156" height="82" rx="12" class="dg-box b-orange"/>
-  <text x="624" y="194" text-anchor="middle" class="dg-t">发布执行器</text>
-  <text x="624" y="213" text-anchor="middle" class="dg-s">tita CLI + 个人账号</text>
-  <text x="624" y="231" text-anchor="middle" class="dg-s">MR 合入 / 发布 / 回滚</text>
+  <text x="624" y="194" text-anchor="middle" class="dg-t">交付 / 发布执行器</text>
+  <text x="624" y="213" text-anchor="middle" class="dg-s">craft 槽 + 个人执行凭据</text>
+  <text x="624" y="231" text-anchor="middle" class="dg-s">MR 合入 / 发布 / 可选回滚</text>
 
   <!-- 外部连接器系统节点 -->
   <rect x="774" y="54" width="158" height="36" rx="10" class="dg-box b-ext"/>
-  <text x="853" y="77" text-anchor="middle" class="dg-t">Jira / Tita / 手建单</text>
+  <text x="853" y="77" text-anchor="middle" class="dg-t">工单源连接器 / 手建单</text>
 
   <rect x="774" y="102" width="158" height="36" rx="10" class="dg-box b-ext"/>
-  <text x="853" y="125" text-anchor="middle" class="dg-t">GitLab / GitHub 仓库</text>
+  <text x="853" y="125" text-anchor="middle" class="dg-t">代码源连接器 (Git / PR)</text>
 
   <rect x="774" y="150" width="158" height="36" rx="10" class="dg-box b-ext"/>
   <text x="853" y="173" text-anchor="middle" class="dg-t">多模型网关 / Pi-AI</text>
 
   <rect x="774" y="198" width="158" height="36" rx="10" class="dg-box b-ext"/>
-  <text x="853" y="221" text-anchor="middle" class="dg-t">OSS 静态资源</text>
+  <text x="853" y="221" text-anchor="middle" class="dg-t">制品 / 静态资源存储</text>
 
   <rect x="774" y="246" width="158" height="36" rx="10" class="dg-box b-ext"/>
-  <text x="853" y="269" text-anchor="middle" class="dg-t">Apollo 配置中心</text>
+  <text x="853" y="269" text-anchor="middle" class="dg-t">部署与配置插件 (可选)</text>
 
   <!-- 连线 -->
   <!-- 用户端 → 接口服务 -->
@@ -158,13 +158,18 @@ ER_SVG = """<figure class="diagram glass-sub">
   <text x="84" y="133" text-anchor="middle" class="dg-t">projects</text>
   <text x="84" y="149" text-anchor="middle" class="dg-s">平级项目 + risk_rules</text>
 
+  <rect x="28" y="170" width="112" height="68" rx="10" class="dg-box b-teal"/>
+  <text x="84" y="190" text-anchor="middle" class="dg-t">workflow_templates</text>
+  <text x="84" y="206" text-anchor="middle" class="dg-s">workflow_nodes</text>
+  <text x="84" y="221" text-anchor="middle" class="dg-s">节点绑定 skill_ids[]</text>
+
   <rect x="164" y="52" width="110" height="40" rx="10" class="dg-box b-gray"/>
-  <text x="219" y="69" text-anchor="middle" class="dg-t">repos</text>
+  <text x="219" y="69" text-anchor="middle" class="dg-t">repos · targets</text>
   <text x="219" y="84" text-anchor="middle" class="dg-s">仓库 + Repo Atlas</text>
 
   <rect x="164" y="102" width="110" height="40" rx="10" class="dg-box b-gray"/>
   <text x="219" y="119" text-anchor="middle" class="dg-t">environments</text>
-  <text x="219" y="134" text-anchor="middle" class="dg-s">环境 → env_accounts</text>
+  <text x="219" y="134" text-anchor="middle" class="dg-s">env_code · env_tier</text>
 
   <rect x="164" y="152" width="110" height="40" rx="10" class="dg-box b-gray"/>
   <text x="219" y="169" text-anchor="middle" class="dg-t">skills</text>
@@ -172,24 +177,24 @@ ER_SVG = """<figure class="diagram glass-sub">
 
   <rect x="164" y="202" width="110" height="40" rx="10" class="dg-box b-gray"/>
   <text x="219" y="219" text-anchor="middle" class="dg-t">release_configs</text>
-  <text x="219" y="234" text-anchor="middle" class="dg-s">发布与审核人配置</text>
+  <text x="219" y="234" text-anchor="middle" class="dg-s">craft 槽与审核人</text>
 
   <rect x="164" y="252" width="110" height="46" rx="10" class="dg-box b-orange"/>
   <text x="219" y="271" text-anchor="middle" class="dg-t">connectors</text>
-  <text x="219" y="287" text-anchor="middle" class="dg-s">→ triggers（含个人）</text>
+  <text x="219" y="287" text-anchor="middle" class="dg-s">→ triggers · envelopes</text>
 
   <rect x="28" y="252" width="112" height="46" rx="10" class="dg-box b-blue"/>
-  <text x="84" y="271" text-anchor="middle" class="dg-t">users</text>
-  <text x="84" y="287" text-anchor="middle" class="dg-s">独立邮箱账号</text>
+  <text x="84" y="271" text-anchor="middle" class="dg-t">users · runner_keys</text>
+  <text x="84" y="287" text-anchor="middle" class="dg-s">独立邮箱 + 信封密钥</text>
 
   <rect x="28" y="316" width="112" height="58" rx="10" class="dg-box b-gray"/>
   <text x="84" y="337" text-anchor="middle" class="dg-t">identities</text>
-  <text x="84" y="353" text-anchor="middle" class="dg-s">Jira / Tita / Git</text>
+  <text x="84" y="353" text-anchor="middle" class="dg-s">connector_id + ext_id</text>
   <text x="84" y="366" text-anchor="middle" class="dg-s">外部 ID 映射</text>
 
   <rect x="164" y="316" width="110" height="58" rx="10" class="dg-box b-gray"/>
-  <text x="219" y="338" text-anchor="middle" class="dg-t">project_members</text>
-  <text x="219" y="355" text-anchor="middle" class="dg-s">负责人 / 成员</text>
+  <text x="219" y="338" text-anchor="middle" class="dg-t">roles · role_bindings</text>
+  <text x="219" y="355" text-anchor="middle" class="dg-s">Deny-Overrides · org_units</text>
   <text x="219" y="368" text-anchor="middle" class="dg-s">workspace_members</text>
 
   <!-- 配置区连线：workspaces → projects & connectors；projects → repos/env/skills/release_configs/triggers -->
@@ -225,7 +230,7 @@ ER_SVG = """<figure class="diagram glass-sub">
 
   <rect x="488" y="56" width="126" height="54" rx="12" class="dg-box b-teal"/>
   <text x="551" y="76" text-anchor="middle" class="dg-t">rounds</text>
-  <text x="551" y="91" text-anchor="middle" class="dg-s">delivery_payload</text>
+  <text x="551" y="91" text-anchor="middle" class="dg-s">round_node_runs[]</text>
   <text x="551" y="104" text-anchor="middle" class="dg-s">+ round_repo_slices</text>
 
   <rect x="488" y="128" width="126" height="44" rx="10" class="dg-box b-gray"/>
@@ -263,24 +268,24 @@ ER_SVG = """<figure class="diagram glass-sub">
 
   <rect x="670" y="56" width="124" height="58" rx="12" class="dg-box b-orange"/>
   <text x="732" y="77" text-anchor="middle" class="dg-t">release_tasks</text>
-  <text x="732" y="93" text-anchor="middle" class="dg-s">repo_id · bundle_id</text>
-  <text x="732" y="106" text-anchor="middle" class="dg-s">TEST / PROD · rev</text>
+  <text x="732" y="93" text-anchor="middle" class="dg-s">repo_id · env_code</text>
+  <text x="732" y="106" text-anchor="middle" class="dg-s">ticket_node_runs[]</text>
 
   <rect x="816" y="54" width="118" height="44" rx="10" class="dg-box b-gray"/>
   <text x="875" y="73" text-anchor="middle" class="dg-t">release_steps</text>
-  <text x="875" y="88" text-anchor="middle" class="dg-s">5 步命令与日志</text>
+  <text x="875" y="88" text-anchor="middle" class="dg-s">可配节点命令与日志</text>
 
   <rect x="816" y="110" width="118" height="44" rx="10" class="dg-box b-gray"/>
   <text x="875" y="129" text-anchor="middle" class="dg-t">merge_requests</text>
-  <text x="875" y="144" text-anchor="middle" class="dg-s">测试 / 主分支 MR</text>
+  <text x="875" y="144" text-anchor="middle" class="dg-s">环境 / 主干 MR · port/</text>
 
   <rect x="816" y="166" width="118" height="44" rx="10" class="dg-box b-green"/>
   <text x="875" y="185" text-anchor="middle" class="dg-t">test_records</text>
   <text x="875" y="200" text-anchor="middle" class="dg-s">绑定包版本复测</text>
 
   <rect x="670" y="224" width="264" height="50" rx="10" class="dg-box b-red"/>
-  <text x="802" y="245" text-anchor="middle" class="dg-t">rollbacks（紧急回滚）</text>
-  <text x="802" y="261" text-anchor="middle" class="dg-s">Apollo 配置回退 · 回读 · 业务验证</text>
+  <text x="802" y="245" text-anchor="middle" class="dg-t">rollbacks（可选插件 · 紧急回滚）</text>
+  <text x="802" y="261" text-anchor="middle" class="dg-s">配置回退 · 回读 · 业务验证 · 独立权限</text>
 
   <!-- 4. 原平台确认 -->
   <rect x="654" y="306" width="294" height="92" rx="16" class="dg-zone z-main"/>

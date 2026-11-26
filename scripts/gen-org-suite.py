@@ -96,7 +96,7 @@ def build_org_defaults():
         <b style="color:var(--text)">Plane B 个人执行凭据禁止继承</b>：凡声明 <span class="mono">credential_class='personal_exec'</span>（如个人代码写令牌、发布回滚凭据），均由 DB CHECK 锁定 <span class="mono">scope='user'</span>，部门与管理员严禁代填或代审。
       </div>
       <div class="row g10" style="padding-top:4px;border-top:1px solid var(--hair)">
-        <span class="f12 grow">禁止外包 Guest 访问部门共享测试账号</span>
+        <span class="f12 grow">低权协作成员按 RBAC 作用域严格隔离（禁越部门借用共享测试账号）</span>
         <span class="cc-switch on is-disabled"></span>
       </div>
     </div>
@@ -119,17 +119,17 @@ def build_member_edit():
     <span class="av" style="width:36px;height:36px;font-size:13px;background:linear-gradient(150deg,#A5B4FC,#6366F1)">宋工</span>
     <div class="col grow">
       <div class="f17 w7">编辑成员 · 宋工</div>
-      <div class="f12 t3" style="margin-top:2px">独立邮箱账号 <span class="mono">song@vendor.io</span> · 支持虚线借调、外包 Fail-Closed 隔离</div>
+      <div class="f12 t3" style="margin-top:2px">独立邮箱账号 <span class="mono">song@vendor.io</span> · 支持虚线借调、纯 RBAC 角色与作用域隔离</div>
     </div>
     <span class="cc-close">{I("x",15,2.2)}</span>
   </div>
   <div class="cc-drawer-bd" style="gap:10px">
     <div style="display:grid;grid-template-columns:1fr 1.35fr;gap:10px">
       <div class="cc-field">
-        <div class="cc-field-hd">成员类型（Membership Class）</div>
+        <div class="cc-field-hd">预设权限模板</div>
         <div class="cc-seg cc-seg-sm">
-          <span>正式 Member</span>
-          <span class="on" style="color:var(--ink-orange)">外包 Guest</span>
+          <span>标准成员</span>
+          <span class="on" style="color:var(--ink-orange)">外部低权协作者</span>
         </div>
       </div>
       <div class="cc-field">
@@ -145,7 +145,7 @@ def build_member_edit():
     <div class="row g8" style="padding:8px 11px;border-radius:11px;background:color-mix(in srgb,var(--orange) 9%,var(--glass-2));border:1px solid color-mix(in srgb,var(--orange) 35%,transparent)">
       {I("shield",15,2.1,"color:var(--ink-orange);flex:none")}
       <div class="f11 t2" style="line-height:1.5">
-        <b style="color:var(--ink-orange)">Guest Fail-Closed 门禁生效：</b>外包访客自动屏蔽全空间成员名单、完整组织树、共享参考仓库与跨项目 AI 检索，<b>仅可见下方明确授予的单个项目/工单</b>。
+        <b style="color:var(--ink-orange)">纯 RBAC 作用域收敛生效：</b>该模板默认关闭全空间成员树、共享参考仓与跨项目 AI 检索，<b>纯靠 `role_bindings` 白名单与项目作用域控制</b>（无身份特判）。
       </div>
     </div>
 
@@ -328,14 +328,14 @@ def build_pc_roles():
     {ritem("空间管理员", "2", tag=("禁代审", "tg-r"))}
     {ritem("项目负责人", "3")}
     {ritem("研发成员", "12")}
-    {ritem("外包访客 Guest", "2", tag=("隔离", "tg-o"))}
+    {ritem("外部低权协作者", "2", tag=("作用域", "tg-o"))}
     <div class="ot-h" style="margin-top:6px"><span class="grow">轻量自定义（2 · 模板克隆）</span></div>
     {ritem("代码合入协同专员", "2", sub="克隆自 研发成员 · 仅补合入权限", on=True)}
     {ritem("QA 验收员", "2", sub="克隆自 研发成员 · 仅复测与退回")}
     <span class="grow"></span>
     <div class="admin-portal" data-pin="admin-roles-portal">
-      <div class="row g6"><span class="f12 w7" style="color:var(--ink-blue)">高级策略 (Allow/Deny)</span><span class="grow"></span>{I("ext",12,style="color:var(--ink-blue)")}</div>
-      <div class="t3" style="font-size:10.5px;line-height:1.4">M2 Web <span class="mono">/admin/role-policies</span></div>
+      <div class="row g6"><span class="f12 w7" style="color:var(--ink-blue)">Deny-Overrides 生效中</span><span class="grow"></span>{I("shield",12,style="color:var(--ink-blue)")}</div>
+      <div class="t3" style="font-size:10.5px;line-height:1.4">新装插件默认 Fail-Closed 不自动放权</div>
     </div>
   </div>
   <div class="role-main">
@@ -343,24 +343,24 @@ def build_pc_roles():
       <span class="ic-box" style="width:28px;height:28px;border-radius:8px;background:linear-gradient(155deg,#5AA0FF,#1F6FFF)">{I("layers",14)}</span>
       <div class="col grow" style="min-width:0">
         <div class="row g8" style="flex-wrap:wrap;row-gap:4px"><span class="f13 w7" style="white-space:nowrap">代码合入协同专员</span><span class="tag tg-p" style="height:18px;font-size:10px">模板克隆 · base: member</span><span class="tag tg-g" style="height:18px;font-size:10px">新装插件默认 Fail-Closed</span></div>
-        <div class="f11 t3" style="margin-top:2px">仅存显式白名单；安全红线（禁代审、个人写凭据隔离、Guest 门禁）永不可解锁</div>
+        <div class="f11 t3" style="margin-top:2px">仅存显式白名单与 Deny-Overrides；安全红线（禁代审、个人写凭据隔离）永不可解锁</div>
       </div>
       <button class="cc-btn cc-btn-xs cc-btn-glass">重命名</button>
       <button class="cc-btn cc-btn-xs cc-btn-pri">{I("check",12,2.5)}保存权限</button>
     </div>
 
-    <div class="grp-lbl"><span>一、Core 不可卸载基础权限（8 核心域 · 永远存在）</span></div>
+    <div class="grp-lbl"><span>一、Core 不可卸载基础权限（9 核心域 · 含工单、MR 与内置发布流）</span></div>
     <div class="pgrid">
       <div class="pcard">
-        <div class="ph0">{I("code",13,style="color:var(--ink-blue)")}<span>工单、代码与审核红线</span></div>
+        <div class="ph0">{I("code",13,style="color:var(--ink-blue)")}<span>工单、MR 与内置发布红线</span></div>
         {perm_row("查看项目与 Bug 单 (ticket:read)", "按所属部门与项目可见范围隔离", "on")}
-        {perm_row("响应 Bot 提问 / 提交补充", "在授权项目中触发修改与重跑", "on")}
+        {perm_row("响应 Bot / 发起内置发布任务", "授权项目内提修、发测试与正式流水线", "on")}
         {perm_row("代审他人代码 (review_code)", "始终锁死仅 ticket_assignees", "locked_off")}
       </div>
       <div class="pcard">
         <div class="ph0">{I("shield",13,style="color:var(--ink-red)")}<span>组织、全局 AI 与凭据安全锁</span></div>
-        {perm_row("查看部门树与同事目录", "Fail-Closed：Guest 克隆模板永锁关闭", "on")}
-        {perm_row("管理全局 AI / 部门架构 / 成员", "仅限空间管理员管理", "off")}
+        {perm_row("查看部门树与同事目录", "Fail-Closed：低权模板默认关闭", "on")}
+        {perm_row("管理全局 AI / 部门架构 / 成员", "仅限具备管理权限的角色", "off")}
         {perm_row("共享/代用他人个人写凭据", "personal_exec · DB 强锁 scope='user'", "locked_off")}
       </div>
     </div>
@@ -396,12 +396,12 @@ def build_pc_roles():
     right = aside(
         '''<div class="card" style="padding:12px 14px"><div class="row"><div class="mini grow" style="margin:0">动态插件权限契约</div><span class="tag tg-b">防硬编码</span></div>
   <div class="f12 t2" style="margin-top:6px;line-height:1.6">插件通过 <span class="mono">manifest.permissions</span> 声明 <span class="mono">ext:&lt;id&gt;:*</span> 键（禁止 <span class="mono">core:*</span>）。<b>未安装不渲染</b>；已停用置灰冻结不丢快照；新装插件对现有克隆角色默认 Fail-Closed。</div></div>''',
-        '''<div class="card" style="padding:12px 14px"><div class="mini">五重 AND 消除假绿灯</div>
+        '''<div class="card" style="padding:12px 14px"><div class="mini">四重 AND 消除假绿灯</div>
   <div class="f12 t2" style="margin-top:6px;line-height:1.6">
     <b style="color:var(--text)">0. 插件状态</b>：已装且当前项目启用<br>
     <b style="color:var(--ink-red)">1. Core 安全锁</b>：代审 / scope='user'<br>
-    <b style="color:var(--text)">2. Guest 拦截</b>：仅白名单项目/单<br>
-    <b style="color:var(--text)">3. RBAC 绑定</b> + <b style="color:var(--text)">4. 本人个人凭据</b></div></div>''',
+    <b style="color:var(--text)">2. RBAC 矩阵</b>：Deny-Overrides + 作用域<br>
+    <b style="color:var(--text)">3. 本人凭据</b>：personal_exec 实时有效性</div></div>''',
         '''<div class="card" style="padding:12px 14px"><div class="mini">为什么用「模板克隆」</div>
   <div class="f12 t2" style="margin-top:6px;line-height:1.6">M1 按内置模板深拷贝白名单，既能按需放开业务协作权，又确保核心安全锁与新装高危插件不静默放权。</div></div>''',
         w=246,
@@ -494,7 +494,7 @@ def build_web_admin():
           <div class="tnode on" style="padding-left:40px">{I("layers",12)}<span>业务产研 · OKR 与审批</span><span class="f11" style="margin-left:auto;color:var(--ink-blue)">22 人</span></div>
           <div class="tnode" style="padding-left:60px">{I("users",12)}<span>OKR 前端一组（主部门）</span><span class="f11 t3" style="margin-left:auto">6 人</span></div>
           <div class="tnode" style="padding-left:60px">{I("users",12)}<span>审批重构虚线借调组</span><span class="tag tg-b" style="height:17px;font-size:10px;margin-left:auto">expires 12/31</span></div>
-          <div class="tnode" style="padding-left:40px">{I("layers",12)}<span>外包协作专项池（Guest）</span><span class="tag tg-o" style="height:17px;font-size:10px;margin-left:auto">Fail-Closed</span></div>
+          <div class="tnode" style="padding-left:40px">{I("layers",12)}<span>外部协作专项池</span><span class="tag tg-o" style="height:17px;font-size:10px;margin-left:auto">受限作用域</span></div>
           <div class="tnode" style="padding-left:22px">{I("chevd",12)}<span>商业化事业部（独立工作空间）</span><span class="f11 t3" style="margin-left:auto">16 人</span></div>
         </div>
         <div class="f11 t3" style="line-height:1.5">树节点写操作加 <span class="mono">pg_advisory_xact_lock('org_tree:'||ws_id)</span> 防并发成环；SCIM 与手工节点均标注来源与外部 ID。</div>
@@ -542,7 +542,7 @@ def build_web_admin():
           <div class="row g8 f11 t2" style="padding:6px 8px;border-radius:8px;background:var(--well)">
             <span class="tag tg-r" style="height:17px;font-size:10px">security_audit</span>
             <span class="mono">15:02</span>
-            <span class="grow ell">林某 将 宋工 设为外包 Guest（Fail-Closed）并完成赵磊待审单移交</span>
+            <span class="grow ell">林某 将 宋工 绑定为「外部低权协作者」并完成赵磊待审单移交 · 经 #token= 安全交接入 /admin</span>
             <span class="tag tg-n" style="height:17px;font-size:10px">仅管理员</span>
           </div>
         </div>
@@ -577,7 +577,7 @@ def build_web_admin_roles():
     body = f'''<div class="row g10">
       <div class="col grow">
         <div class="row g8"><span class="f20 w7">角色策略中心（Allow / Deny 规则引擎）</span><span class="tag tg-p">企业蓝图 M2 / M3</span></div>
-        <div class="f12 t3" style="margin-top:2px">在 M1 权限基础上叠加五重 AND 门禁、显式拒绝（<span class="mono">effect='deny'</span>）与动态插件跨作用域试算</div>
+        <div class="f12 t3" style="margin-top:2px">在 M1 权限基础上叠加四重 AND 门禁、显式拒绝（<span class="mono">effect='deny'</span>）与动态插件跨作用域试算</div>
       </div>
       <button class="cc-btn cc-btn-sm cc-btn-glass">{I("shield",13)}策略合规试算</button>
       <button class="cc-btn cc-btn-sm cc-btn-pri">{I("plus",13,2.4)}新建自定义角色 / 策略</button>
@@ -585,15 +585,14 @@ def build_web_admin_roles():
     <div class="wgrid">
       <div class="wcard">
         <div class="row g8">
-          <span class="f14 w7 grow">五重 AND × Deny-Overrides 优先级栈</span>
+          <span class="f14 w7 grow">四重 AND × Deny-Overrides 优先级栈</span>
           <span class="tag tg-r">消假绿灯</span>
         </div>
         <div class="col g6">
           {stack_item(0, "插件生命周期门禁（enabled & 项目生效范围）", "未安装/已停用插件的 ext:* 动作第 0 层 403 阻断", "ink-purple")}
           {stack_item(1, "Core 安全不变量（不可配置）", "代审仅 ticket_assignees、personal_exec 凭据强制 scope='user'", "btn-danger-bg")}
-          {stack_item(2, "显式拒绝（role_bindings.effect = 'deny'）", "任一作用域命中 DENY 立即一票否决，压过部门与角色 ALLOW", "orange")}
-          {stack_item(3, "外包 Guest Fail-Closed 门禁", "仅白名单允许项放行，新装插件默认全拒", "orange")}
-          {stack_item(4, "角色 ALLOW ∩ 操作人个人凭据校验", "RBAC 放行后仍需本人「我的账号」有效 scope='user' 凭据", "btn-pri-bg")}
+          {stack_item(2, "RBAC 角色与显式拒绝（Deny-Overrides + 作用域）", "任一作用域命中 DENY 立即一票否决，无任何内置角色名特判", "orange")}
+          {stack_item(3, "操作人个人凭据实时校验", "RBAC 放行后仍需本人「我的账号」有效 scope='user' 凭据", "btn-pri-bg")}
         </div>
         <div class="card" style="padding:9px 11px;gap:3px;margin-top:auto">
           <div class="f11 w7">跨阶段零重构契约</div>
@@ -607,7 +606,7 @@ def build_web_admin_roles():
             <span class="f14 w7 grow">活跃策略绑定清单（<span class="mono">role_bindings</span>）</span>
             <span class="cc-seg cc-seg-xs"><span class="on">全部 4</span><span>仅 DENY 2</span><span>停用冻结 1</span></span>
           </div>
-          {rule_row("POL-01", "外包访客 Guest 池", "DENY", "全空间", "禁止读取共享参考仓库、全部成员目录及 ext:* 空间级插件")}
+          {rule_row("POL-01", "外部协作者（低权）", "DENY", "全空间", "禁止读取共享参考仓库、全部成员目录及 ext:* 空间级插件")}
           {rule_row("POL-02", "借调组（审批重构）", "DENY", "项目·审批", "禁止向 PROD 正式环境发起发布或变更（ext:release-*:prod） · 12/31 止")}
           {rule_row("POL-03", "紧急回滚插件（Apollo）", "ALLOW", "全空间", "ext:rollback-apollo:execute · 插件当前在工作空间停用", frozen=True)}
         </div>
@@ -615,13 +614,13 @@ def build_web_admin_roles():
         <div class="wcard" style="padding:12px 14px;gap:6px;flex:1">
           <div class="row g8">
             <span class="f14 w7 grow">有效权限合规试算器（ActionGate 实态模拟）</span>
-            <span class="cc-select cc-select-sm" style="width:186px"><span class="cc-sel-val">宋工（外包 Guest）</span><span class="cc-sel-sp"></span><span class="cc-sel-caret">{I("chevd",12)}</span></span>
+            <span class="cc-select cc-select-sm" style="width:186px"><span class="cc-sel-val">宋工（外部协作者）</span><span class="cc-sel-sp"></span><span class="cc-sel-caret">{I("chevd",12)}</span></span>
           </div>
           <div class="col" style="margin-top:2px">
             {sim_row("core:ticket:read", "ALLOW", "g", "命中 OKR 项目显式授权白名单")}
             {sim_row("ext:connector-gitlab:merge", "待补凭据", "o", "RBAC 允许但缺本人 scope='user' PAT（ActionGate 引导补配）")}
             {sim_row("ext:rollback-apollo:exec", "插件停用", "n", "第 0 层 PLUGIN_DISABLED 拦截（POL-03 快照保留但不放行）")}
-            {sim_row("core:repo:shared_ref", "DENIED", "r", "POL-01 Explicit DENY + Guest Fail-Closed 双重拦截")}
+            {sim_row("core:repo:shared_ref", "DENIED", "r", "POL-01 Explicit DENY 拦截（非授权项目范围）")}
             {sim_row("core:ticket:review_code", "LOCKED", "r", "Plane B 安全红线：仅当本人为 ticket_assignees 时允许")}
           </div>
         </div>
@@ -731,7 +730,7 @@ def m_p1_dir():
     {mrow("林某","#FFC9A8,#F08F7A",'<span class="tag tg-b">管理员</span>',"lin@company.com · 外部身份 2/2","正常")}
     {mrow("张某","#8FD8C9,#3FAE9A",'<span class="tag tg-p">负责人 · OKR</span>',"zhang@company.com · 手上 2 单","正常")}
     {mrow("陈晨","#FFD27F,#F0A23C",'<span class="tag tg-g">免配置</span>',"chen@company.com · 外部身份已绑","正常")}
-    {mrow("宋工","#A5B4FC,#6366F1",'<span class="tag tg-o">外包 Guest</span>',"song@vendor.io · 仅授权单（隔离）","正常")}
+    {mrow("宋工","#A5B4FC,#6366F1",'<span class="tag tg-o">外部协作者</span>',"song@vendor.io · 仅授权单（作用域）","正常")}
     {mrow("赵磊","#C8CCD4,#8A909B",'<span class="tag tg-n">已停用</span>',"1 张待审单待交接",f'<span style="color:var(--ink-orange);font-weight:600">交接</span>{I("chevr",14)}')}
   </div>
   <div class="card2" style="margin-top:12px;padding:10px 12px">
@@ -812,7 +811,7 @@ def m_p3_handoff():
 
 def build_m_org():
     phones = [
-        (m_p1_dir, "只读部门与成员目录", "按部门筛选 · 外包 Guest 隔离 · 禁用手机端编树"),
+        (m_p1_dir, "只读部门与成员目录", "按部门筛选 · RBAC 作用域隔离 · 禁用手机端编树"),
         (m_p2_resolve, "同名待确认选人", "OKR-3320 对不上号，按 external_id 精准绑定"),
         (m_p3_handoff, "停用待办一键交接", "先选接替人并同事务吊销登录态与个人 Runner"),
     ]

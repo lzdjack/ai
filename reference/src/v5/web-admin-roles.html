@@ -41,7 +41,7 @@
       <main class="wmain"><div class="row g10">
       <div class="col grow">
         <div class="row g8"><span class="f20 w7">角色策略中心（Allow / Deny 规则引擎）</span><span class="tag tg-p">企业蓝图 M2 / M3</span></div>
-        <div class="f12 t3" style="margin-top:2px">在 M1 权限基础上叠加五重 AND 门禁、显式拒绝（<span class="mono">effect='deny'</span>）与动态插件跨作用域试算</div>
+        <div class="f12 t3" style="margin-top:2px">在 M1 权限基础上叠加四重 AND 门禁、显式拒绝（<span class="mono">effect='deny'</span>）与动态插件跨作用域试算</div>
       </div>
       <button class="cc-btn cc-btn-sm cc-btn-glass"><i data-i="shield" data-s="13"></i>策略合规试算</button>
       <button class="cc-btn cc-btn-sm cc-btn-pri"><i data-i="plus" data-s="13" data-w="2.4"></i>新建自定义角色 / 策略</button>
@@ -49,7 +49,7 @@
     <div class="wgrid">
       <div class="wcard">
         <div class="row g8">
-          <span class="f14 w7 grow">五重 AND × Deny-Overrides 优先级栈</span>
+          <span class="f14 w7 grow">四重 AND × Deny-Overrides 优先级栈</span>
           <span class="tag tg-r">消假绿灯</span>
         </div>
         <div class="col g6">
@@ -63,15 +63,11 @@
 </div>
           <div class="row g10" style="padding:9px 11px;border-radius:11px;background:var(--well);border:1px solid var(--hair)">
   <span class="ck" style="background:var(--orange);width:20px;height:20px;font-size:11px;font-weight:800">2</span>
-  <div class="col grow" style="min-width:0"><span class="f12 w7">显式拒绝（role_bindings.effect = 'deny'）</span><span class="f11 t3">任一作用域命中 DENY 立即一票否决，压过部门与角色 ALLOW</span></div>
+  <div class="col grow" style="min-width:0"><span class="f12 w7">RBAC 角色与显式拒绝（Deny-Overrides + 作用域）</span><span class="f11 t3">任一作用域命中 DENY 立即一票否决，无任何内置角色名特判</span></div>
 </div>
           <div class="row g10" style="padding:9px 11px;border-radius:11px;background:var(--well);border:1px solid var(--hair)">
-  <span class="ck" style="background:var(--orange);width:20px;height:20px;font-size:11px;font-weight:800">3</span>
-  <div class="col grow" style="min-width:0"><span class="f12 w7">外包 Guest Fail-Closed 门禁</span><span class="f11 t3">仅白名单允许项放行，新装插件默认全拒</span></div>
-</div>
-          <div class="row g10" style="padding:9px 11px;border-radius:11px;background:var(--well);border:1px solid var(--hair)">
-  <span class="ck" style="background:var(--btn-pri-bg);width:20px;height:20px;font-size:11px;font-weight:800">4</span>
-  <div class="col grow" style="min-width:0"><span class="f12 w7">角色 ALLOW ∩ 操作人个人凭据校验</span><span class="f11 t3">RBAC 放行后仍需本人「我的账号」有效 scope='user' 凭据</span></div>
+  <span class="ck" style="background:var(--btn-pri-bg);width:20px;height:20px;font-size:11px;font-weight:800">3</span>
+  <div class="col grow" style="min-width:0"><span class="f12 w7">操作人个人凭据实时校验</span><span class="f11 t3">RBAC 放行后仍需本人「我的账号」有效 scope='user' 凭据</span></div>
 </div>
         </div>
         <div class="card" style="padding:9px 11px;gap:3px;margin-top:auto">
@@ -89,7 +85,7 @@
           <div class="row g8" style="padding:7px 10px;border-radius:10px;background:var(--fill)">
   <span class="mono f11 t3" style="width:52px;flex:none">POL-01</span>
   <span class="tag tg-r" style="height:18px;font-size:10px">DENY</span>
-  <div class="col grow" style="min-width:0"><span class="f12 w6 ell">外包访客 Guest 池 · 全空间</span><span class="f11 t3 ell">禁止读取共享参考仓库、全部成员目录及 ext:* 空间级插件</span></div>
+  <div class="col grow" style="min-width:0"><span class="f12 w6 ell">外部协作者（低权） · 全空间</span><span class="f11 t3 ell">禁止读取共享参考仓库、全部成员目录及 ext:* 空间级插件</span></div>
   <span class="lnk f11">编辑</span>
 </div>
           <div class="row g8" style="padding:7px 10px;border-radius:10px;background:var(--fill)">
@@ -109,7 +105,7 @@
         <div class="wcard" style="padding:12px 14px;gap:6px;flex:1">
           <div class="row g8">
             <span class="f14 w7 grow">有效权限合规试算器（ActionGate 实态模拟）</span>
-            <span class="cc-select cc-select-sm" style="width:186px"><span class="cc-sel-val">宋工（外包 Guest）</span><span class="cc-sel-sp"></span><span class="cc-sel-caret"><i data-i="chevd" data-s="12"></i></span></span>
+            <span class="cc-select cc-select-sm" style="width:186px"><span class="cc-sel-val">宋工（外部协作者）</span><span class="cc-sel-sp"></span><span class="cc-sel-caret"><i data-i="chevd" data-s="12"></i></span></span>
           </div>
           <div class="col" style="margin-top:2px">
             <div class="row g8" style="padding:6px 0;border-top:1px solid var(--hair)">
@@ -130,7 +126,7 @@
             <div class="row g8" style="padding:6px 0;border-top:1px solid var(--hair)">
   <span class="mono f11 w6" style="width:184px;flex:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">core:repo:shared_ref</span>
   <span class="tag tg-r" style="height:18px;font-size:10px">DENIED</span>
-  <span class="f11 t2 grow ell">POL-01 Explicit DENY + Guest Fail-Closed 双重拦截</span>
+  <span class="f11 t2 grow ell">POL-01 Explicit DENY 拦截（非授权项目范围）</span>
 </div>
             <div class="row g8" style="padding:6px 0;border-top:1px solid var(--hair)">
   <span class="mono f11 w6" style="width:184px;flex:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">core:ticket:review_code</span>

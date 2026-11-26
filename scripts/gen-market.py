@@ -67,10 +67,11 @@ left = f'''<section class="glass pn" style="width:296px;flex:none;padding:16px 1
     <span style="flex:1">企业私有</span>
   </div>
 
-  <div class="g10h">已安装 · 含官方预装<span>4</span></div>
-  {mrow("紧急回滚（Apollo）", "views + connectors · 回滚与差异预览", SVG_RB, "linear-gradient(160deg,#FF8A7A,#E0281E)", "默认安装", "tg-g", on=True)}
-  {mrow("发布流水线（Tita）", "views + craft · 发测试与正式流水线", SVG_BOX, "linear-gradient(160deg,#FFC54D,#FF7A00)", "默认安装", "tg-g")}
-  {mrow("GitLab / Jira 连接器", "connectors · 鉴权归「设置 → 连接器」", SVG_PLUG, "linear-gradient(155deg,#38BDF8,#2563EB)", "官方预装", "tg-b")}
+  <div class="g10h">已安装 · 按连接器与能力分类<span>5</span></div>
+  {mrow("紧急回滚（Apollo）", "views + connectors · 可选扩展（停用仅藏入口）", SVG_RB, "linear-gradient(160deg,#FF8A7A,#E0281E)", "默认安装", "tg-g", on=True)}
+  {mrow("Tita / Apollo 部署连接器", "release_provider + craft · 发布适配", SVG_BOX, "linear-gradient(160deg,#FFC54D,#FF7A00)", "官方预装", "tg-b")}
+  {mrow("GitLab 代码源连接器", "code_source · PR/MR 与 diff 同步", SVG_PLUG, "linear-gradient(155deg,#38BDF8,#2563EB)", "官方预装", "tg-b")}
+  {mrow("Jira 工单源连接器", "ticket_source · 条件触发与状态同步", SVG_MSG, "linear-gradient(155deg,#60A5FA,#4F46E5)", "官方预装", "tg-b")}
   {mrow("Pi 修复引擎（runtime-pi）", "runtimes · 多模型与流式交互", SVG_PI, "linear-gradient(155deg,#5E8BFF,#8B5CF6)", "核心默认", "tg-b")}
 
   <div class="g10h">可安装 · 扩展生态<span>4</span></div>
