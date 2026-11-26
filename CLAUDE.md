@@ -17,6 +17,7 @@
 
 - 风格固定为「苹果系 · 毛玻璃 · 对话流」，亮色和暗色两套都要。不要换风格，也不要另起一套主题。
 - 颜色、圆角、毛玻璃参数一律从 `tokens/theme.css` 取，不要自己编新的值。
+- **组件库铁律（2026-11-24 · PC + 移动端各 3 路多 Agent 审定）**：全部双端通用 UI 组件与 4 档 PC 标尺（`--ctl-xs 28 / sm 32 / md 36 / lg 40`）+ 移动端 44pt/48dp 标尺（`--m-input-h 46 / --m-row-h 48 / --m-btn-h 48`）、WCAG 2.1 AA 文字层（`--ink-*` / `--btn-pri-bg` / `--btn-ok-bg` / `--btn-danger-bg`）、Z-Index 契约（`10→90`）统一收口在 `tokens/theme.css` + `tokens/components.css` 与 `docs/01-设计主题.md` §16（高保真三板见 `PC-组件库规范`、`PC-组件库规范-2`、`移动端-组件库规范` 与 `index.html`「设计主题 → 标准组件库模块」）。**新增或修改任何 PC / 移动端页面必须严格复用 `.cc-*` / `.cc-m-*` 类名与标尺，严禁单页自造变体、严禁裸用 `--green/--orange/--blue` 写小字或白字实底按钮、严禁下拉箭头贴字或加小方盒、严禁移动端压缩行高低于 44pt**。
 - **滚动条全局规范**：滚动条一律**不占容器宽度（0px 悬浮）**，默认隐藏、鼠标移入或滚动时淡入、静止自动隐藏；PC 代码统一用 `<ScrollArea>`（禁裸用 Windows 占位滚动条），静态设计图默认隐藏滚动条、不画多余「框中框」外框，可滚区域用底部透明羽化遮罩暗示（见 `docs/01-设计主题.md` §2.6）。
 - 左侧菜单只放彩色 Dock 图标，不放文字；选中态只用「放大加悬浮」。
 - 工单列表用「提单人头像加状态点」；选中行用蓝色渐变实底。
@@ -36,8 +37,8 @@
 
 ```
 docs/        需求原文、设计主题、决策记录、出图流程、修复流转方案、链路流转、技术设计方案
-tokens/      theme.css（全部颜色和组件 token）
+tokens/      theme.css（全部颜色和组件 token）、components.css（标准组件库唯一样式真相源）
 reference/   源文件（src/v4 主界面、src/v5 其余页面）和图（images/、images/pages/）
-scripts/     render.sh（HTML → PNG）；gen-pages.py + shell_pc.py + pages_pc.py（PC 页面）；gen-market.py（插件市场）；gen-phase2.py（二期 M4 隔离蓝图）；gen-runner-select.py / gen-runner-init.py / gen-runner-server.py / gen-runner-pro.py（执行环境三路径）；gen-flow.py（链路总图）；gen-splash.py（闪屏）；gen-login.py（登录与注册）；gen-onboard.py + onboard_steps.py、gen-onboard-m.py（第一次使用的步骤器）；gen-mobile.py、gen-mobile-pages.py + shell_m.py（移动端）；build-index.py + tech_diagrams.py + index.template.html（生成唯一的 index.html 集合）
+scripts/     render.sh（HTML → PNG）；gen-components.py（标准组件库规范板）；gen-pages.py + shell_pc.py + pages_pc.py（PC 页面）；gen-market.py（插件市场）；gen-phase2.py（二期 M4 隔离蓝图）；gen-runner-select.py / gen-runner-init.py / gen-runner-server.py / gen-runner-pro.py（执行环境三路径）；gen-flow.py（链路总图）；gen-splash.py（闪屏）；gen-login.py（登录与注册）；gen-onboard.py + onboard_steps.py、gen-onboard-m.py（第一次使用的步骤器）；gen-mobile.py、gen-mobile-pages.py + shell_m.py（移动端）；build-index.py + tech_diagrams.py + index.template.html（生成唯一的 index.html 集合）
 index.html   唯一总览集合页（生成产物，不要直接改；全部文档与设计统一汇入此处）
 ```

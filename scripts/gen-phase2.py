@@ -14,19 +14,15 @@ SPEC_ICON = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x
 
 EXTRA_CSS = '''<style>
 .ap-spec{background:linear-gradient(155deg,#6366F1 0%,#4F46E5 55%,#0EA5E9 100%)}
-.c-pill{display:inline-flex;align-items:center;gap:4px;height:21px;padding:0 8px;border-radius:7px;font-size:11px;font-weight:700;white-space:nowrap;flex-shrink:0}
-.cp-b{background:color-mix(in srgb,var(--blue) 14%,transparent);color:var(--blue)}
-.cp-g{background:color-mix(in srgb,var(--green) 15%,transparent);color:var(--green)}
-.cp-o{background:color-mix(in srgb,var(--orange) 16%,transparent);color:var(--orange)}
-.cp-r{background:color-mix(in srgb,var(--red) 14%,transparent);color:var(--red)}
-.cp-p{background:color-mix(in srgb,var(--purple) 14%,transparent);color:var(--purple)}
-.cp-i{background:color-mix(in srgb,#6366F1 15%,transparent);color:#4F46E5}
-html.dark .cp-i{color:#A5B4FC}
+.c-pill{display:inline-flex;align-items:center;gap:4px;height:20px;padding:0 7px;border-radius:6px;font-size:11px;font-weight:700;white-space:nowrap;flex-shrink:0}
+.cp-b{background:color-mix(in srgb,var(--blue) 14%,transparent);color:var(--ink-blue)}
+.cp-g{background:color-mix(in srgb,var(--green) 15%,transparent);color:var(--ink-green)}
+.cp-o{background:color-mix(in srgb,var(--orange) 16%,transparent);color:var(--ink-orange)}
+.cp-r{background:color-mix(in srgb,var(--red) 14%,transparent);color:var(--ink-red)}
+.cp-p{background:color-mix(in srgb,var(--purple) 14%,transparent);color:var(--ink-purple)}
+.cp-i{background:color-mix(in srgb,var(--purple) 15%,transparent);color:var(--ink-purple)}
 .cp-n{background:var(--fill);color:var(--text-2)}
-html:not(.dark) .cp-g{color:#1E8E3E}html:not(.dark) .cp-o{color:#B25E00}
-.plus-btn{width:26px;height:26px;border-radius:8px;background:var(--blue);color:#fff;display:inline-flex;align-items:center;justify-content:center;flex:none}
-.seg{flex-shrink:0}
-.seg span{white-space:nowrap}
+.plus-btn{width:28px;height:28px;border-radius:var(--r-sm);background:var(--btn-pri-bg);color:#fff;display:inline-flex;align-items:center;justify-content:center;flex:none}
 /* 活原型预览与单跳提案 */
 .proto-box{border-radius:14px;padding:11px 13px;background:var(--surface);border:1px solid var(--hair);box-shadow:0 6px 18px -12px rgba(20,30,70,.25)}
 html.dark .proto-box{background:rgba(20,23,34,.85)}
@@ -34,48 +30,43 @@ html.dark .proto-box{background:rgba(20,23,34,.85)}
 .ptbl th{text-align:left;color:var(--text-3);font-weight:600;padding:4px 8px;border-bottom:1px solid var(--hair)}
 .ptbl td{padding:5px 8px;border-bottom:1px solid var(--hair)}
 .ptbl tr:last-child td{border-bottom:0}
-.ptbl .newc{background:color-mix(in srgb,var(--blue) 10%,transparent);color:var(--blue);font-weight:700;border-radius:5px}
+.ptbl .newc{background:color-mix(in srgb,var(--blue) 10%,transparent);color:var(--ink-blue);font-weight:700;border-radius:5px}
 .prop-row{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:12px;background:var(--fill);margin-top:7px}
 .prop-row.wait{background:color-mix(in srgb,var(--orange) 10%,var(--glass-2));box-shadow:inset 0 0 0 1.2px color-mix(in srgb,var(--orange) 45%,transparent)}
 /* 轻筛选胶囊 */
 .fstrip{display:flex;align-items:center;gap:5px;padding:4px 8px 6px}
-.fpill{height:24px;padding:0 9px;border-radius:999px;font-size:11.5px;font-weight:600;display:inline-flex;align-items:center;gap:4px;background:var(--fill);color:var(--text-2);white-space:nowrap}
-.fpill.on{background:color-mix(in srgb,var(--blue) 16%,transparent);color:var(--blue)}
+.fpill{height:var(--ctl-xs);padding:0 11px;border-radius:var(--r-full);font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:4px;background:var(--fill);color:var(--text-2);white-space:nowrap}
+.fpill.on{background:color-mix(in srgb,var(--blue) 16%,transparent);color:var(--ink-blue)}
 /* 角标 */
-.cs-chip{height:17px;padding:0 5px;border-radius:5px;font-size:10px;font-weight:700;display:inline-flex;align-items:center;white-space:nowrap;flex-shrink:0;background:rgba(99,102,241,.18);color:#4F46E5}
-html.dark .cs-chip{color:#A5B4FC}
+.cs-chip{height:20px;padding:0 6px;border-radius:6px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;white-space:nowrap;flex-shrink:0;background:color-mix(in srgb,var(--purple) 14%,transparent);color:var(--ink-purple)}
 .r10.on .cs-chip{background:rgba(255,255,255,.24);color:#fff}
-.p1-chip{height:17px;padding:0 5px;border-radius:5px;font-size:10px;font-weight:800;display:inline-flex;align-items:center;white-space:nowrap;flex-shrink:0;background:var(--red);color:#fff}
+.p1-chip{height:20px;padding:0 6px;border-radius:6px;font-size:11px;font-weight:800;display:inline-flex;align-items:center;white-space:nowrap;flex-shrink:0;background:var(--btn-danger-bg);color:#fff}
 .sub-row{margin-left:14px;border-left:2px solid color-mix(in srgb,var(--red) 40%,transparent);padding-left:6px;margin-top:-2px}
 /* 工单顶部变更集联动横条 */
-.cs-bar{display:flex;align-items:center;gap:7px;padding:7px 12px;border-radius:12px;background:color-mix(in srgb,#6366F1 10%,var(--glass-2));border:1px solid color-mix(in srgb,#6366F1 30%,transparent);font-size:12px}
-.cs-btn{height:24px;padding:0 9px;border-radius:7px;font-size:11.5px;font-weight:600;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;flex-shrink:0;background:var(--glass-2);border:1px solid var(--stroke);color:var(--text)}
-.cs-btn.pri{background:color-mix(in srgb,#6366F1 16%,transparent);border-color:color-mix(in srgb,#6366F1 34%,transparent);color:#4F46E5}
-html.dark .cs-btn.pri{color:#C7D2FE}
+.cs-bar{display:flex;align-items:center;gap:7px;padding:7px 12px;border-radius:12px;background:color-mix(in srgb,var(--purple) 10%,var(--glass-2));border:1px solid color-mix(in srgb,var(--purple) 30%,transparent);font-size:12px}
+.cs-btn{height:var(--ctl-xs);padding:0 10px;border-radius:var(--r-sm);font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:4px;white-space:nowrap;flex-shrink:0;background:var(--glass-2);border:1px solid var(--border-ctl);box-shadow:var(--shadow-ctl);color:var(--text)}
+.cs-btn.pri{background:color-mix(in srgb,var(--purple) 15%,transparent);border-color:color-mix(in srgb,var(--purple) 34%,transparent);color:var(--ink-purple)}
 /* 切片工单行 */
 .srow{display:flex;align-items:center;gap:10px;padding:10px 13px;border-radius:13px;background:var(--glass-2);border:1px solid var(--stroke)}
 .srow.hi{border-color:color-mix(in srgb,var(--blue) 55%,transparent)}
 /* 无损右侧毛玻璃抽屉 */
 .stage-rel{position:relative;flex:1;min-width:0;display:flex;gap:14px}
-.dim-scrim{position:absolute;inset:0;border-radius:22px;background:rgba(15,23,42,.10);z-index:10}
-html.dark .dim-scrim{background:rgba(2,6,23,.34)}
-.drawer{position:absolute;top:0;right:0;bottom:0;width:960px;z-index:20;border-radius:22px;display:flex;flex-direction:column;overflow:hidden;
-  background:color-mix(in srgb,var(--glass-1) 94%,transparent);
-  backdrop-filter:blur(34px) saturate(180%);-webkit-backdrop-filter:blur(34px) saturate(180%);
-  border:1px solid var(--stroke-hi);
-  box-shadow:-24px 0 60px -16px rgba(15,23,42,.26),0 10px 30px -12px rgba(15,23,42,.14)}
-html.dark .drawer{background:rgba(20,24,36,.92);box-shadow:-28px 0 68px -12px rgba(0,0,0,.62)}
+.dim-scrim{position:absolute;inset:0;border-radius:24px;background:var(--scrim);z-index:var(--z-scrim)}
+.drawer{position:absolute;top:0;right:0;bottom:0;width:960px;z-index:var(--z-drawer);border-radius:24px;display:flex;flex-direction:column;overflow:hidden;
+  background:var(--glass-overlay);
+  backdrop-filter:var(--blur-panel);-webkit-backdrop-filter:var(--blur-panel);
+  border:1px solid var(--stroke);
+  box-shadow:var(--shadow-dialog)}
 /* 契约字段表 */
 .cf-row{display:flex;align-items:center;justify-content:space-between;padding:5px 8px;border-radius:8px;background:var(--fill);font-size:11.5px;margin-top:5px}
 /* QA 断言行 */
 .qa-row{display:flex;align-items:center;gap:10px;padding:9px 13px;border-radius:12px;background:var(--glass-2);border:1px solid var(--stroke)}
 .qa-row.fail{background:color-mix(in srgb,var(--red) 7%,var(--glass-2));border-color:color-mix(in srgb,var(--red) 35%,transparent)}
 .qa-dot{width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fff;flex:none;font-size:11px;font-weight:800}
-.qa-ok{background:var(--green)}.qa-no{background:var(--red)}
+.qa-ok{background:var(--btn-ok-bg)}.qa-no{background:var(--btn-danger-bg)}
 .har-box{padding:9px 12px;border-radius:10px;background:var(--fill);font-size:11.5px;line-height:1.65}
-.har-ok{color:var(--green);font-weight:600}
-html:not(.dark) .har-ok{color:#1E8E3E}
-.har-bad{color:var(--red);font-weight:700}
+.har-ok{color:var(--ink-green);font-weight:600}
+.har-bad{color:var(--ink-red);font-weight:700}
 </style>'''
 
 
@@ -155,7 +146,7 @@ def build_1_spec():
       </div>
     </div>
     <div class="row g10" style="margin-top:11px">
-      <div class="seg"><span class="on">协作流</span><span>活原型</span><span>契约 3</span><span>切片 5</span><span>联调验收</span></div>
+      <div class="cc-seg"><span class="on">协作流</span><span>活原型</span><span>契约 3</span><span>切片 5</span><span>联调验收</span></div>
       <span class="grow"></span>
       <span class="f12 t3" style="white-space:nowrap">契约拍板即触发契约级真并行</span>
     </div>
@@ -181,7 +172,7 @@ def build_1_spec():
         <div class="row g8 f11 t3">
           <span class="mono">薪酬中心 / 月度算薪表 · 2026-11（Contract-as-Mock 驱动）</span>
           <span class="grow"></span>
-          <span style="color:var(--blue)">✦ 蓝色高亮为本次新增联动列</span>
+          <span style="color:var(--ink-blue)">✦ 蓝色高亮为本次新增联动列</span>
         </div>
         <table class="ptbl">
           <thead><tr><th>员工</th><th>异动生效日（组织人事）</th><th>基础薪资</th><th class="newc">绩效系数（绩效）</th><th class="newc">回款提成（CRM）</th><th>应发合计</th></tr></thead>
@@ -228,10 +219,10 @@ def build_1_spec():
       </div>
     </div>
 
-    <div class="row g8" style="margin-top:auto;padding:7px 10px;border-radius:14px;background:var(--fill)">
+    <div class="row g8" style="margin-top:auto;padding:7px 10px;border-radius:14px;background:var(--well);border:1px solid var(--hair)">
       <span class="aitag"><span class="aid">{I("spark",11)}</span>变更集 AI</span>
       <span class="f13 t3 grow ell">直接说修改意见（如：退单时 CRM 提成按负数冲红，并更新活原型与契约）…</span>
-      <span style="width:30px;height:30px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center">{I("arrowup",14,2.4)}</span>
+      <span style="width:30px;height:30px;border-radius:50%;background:var(--btn-pri-bg);color:#fff;display:flex;align-items:center;justify-content:center">{I("arrowup",14,2.4)}</span>
     </div>
   </div>
 </main>'''
@@ -239,9 +230,9 @@ def build_1_spec():
     right = '''<aside class="glass pn" style="width:292px;flex:none;padding:13px;display:flex;flex-direction:column;gap:10px">
   <div class="card" style="padding:11px 13px">
     <div class="row"><span class="mini grow" style="margin:0">独立接口契约版本</span><span class="c-pill cp-b">2 / 3 已冻结</span></div>
-    <div class="kv2" style="padding:4px 0"><span class="f12">绩效系数 DTO</span><span class="mono f11" style="color:var(--green)">#9f2a@v1 ✓</span></div>
-    <div class="kv2" style="padding:4px 0"><span class="f12">组织异动生效日</span><span class="mono f11" style="color:var(--green)">#4c18@v1 ✓</span></div>
-    <div class="kv2" style="padding:4px 0"><span class="f12">CRM 回款提成</span><span class="f11" style="color:var(--orange);font-weight:600">待 CRM 批准</span></div>
+    <div class="kv2" style="padding:4px 0"><span class="f12">绩效系数 DTO</span><span class="mono f11" style="color:var(--ink-green)">#9f2a@v1 ✓</span></div>
+    <div class="kv2" style="padding:4px 0"><span class="f12">组织异动生效日</span><span class="mono f11" style="color:var(--ink-green)">#4c18@v1 ✓</span></div>
+    <div class="kv2" style="padding:4px 0"><span class="f12">CRM 回款提成</span><span class="f11" style="color:var(--ink-orange);font-weight:600">待 CRM 批准</span></div>
     <div class="f11 t3" style="margin-top:6px;line-height:1.5">各接口独立演进，中途改动走 Contract RFC 升 v2，无关项目零打扰。</div>
   </div>
 
@@ -256,8 +247,8 @@ def build_1_spec():
 
   <div class="card" style="padding:11px 13px">
     <div class="mini" style="margin-bottom:4px">两层 RBAC 与隔离护栏</div>
-    <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">活原型与契约</span><span class="f11.5 w6" style="font-size:11.5px;color:var(--green)">4 方只读共享</span></div>
-    <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">源码 / 录屏 / 测试号</span><span class="mono f11" style="color:var(--blue)">project_only</span></div>
+    <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">活原型与契约</span><span class="f11.5 w6" style="font-size:11.5px;color:var(--ink-green)">4 方只读共享</span></div>
+    <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">源码 / 录屏 / 测试号</span><span class="mono f11" style="color:var(--ink-blue)">project_only</span></div>
     <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">并行联调策略</span><span class="f11.5 w6" style="font-size:11.5px">契约 Mock 先行</span></div>
   </div>
 </aside>'''
@@ -306,13 +297,13 @@ def build_2_drawer():
       </div>
     </div>
     <div class="row g10" style="margin-top:11px">
-      <div class="seg"><span>协作流</span><span>活原型</span><span>契约 3</span><span class="on">切片 5</span><span>联调验收</span></div>
+      <div class="cc-seg"><span>协作流</span><span>活原型</span><span>契约 3</span><span class="on">切片 5</span><span>联调验收</span></div>
     </div>
   </header>
   <div class="col g8" style="padding:12px 20px">
     <div class="srow"><span class="c-pill cp-g">绩效</span><span class="mono f12 w7">TK-901</span><span class="f13 w6 ell grow">开放季度绩效系数查询接口</span></div>
     <div class="srow"><span class="c-pill cp-p">组织人事</span><span class="mono f12 w7">TK-902</span><span class="f13 w6 ell grow">员工调岗异动事件补充 effectiveDate</span></div>
-    <div class="srow hi"><span class="c-pill cp-o">CRM</span><span class="mono f12 w7" style="color:var(--blue)">TK-903</span><span class="f13 w6 ell grow">订单回款推送销售提成明细</span></div>
+    <div class="srow hi"><span class="c-pill cp-o">CRM</span><span class="mono f12 w7" style="color:var(--ink-blue)">TK-903</span><span class="f13 w6 ell grow">订单回款推送销售提成明细</span></div>
     <div class="srow"><span class="c-pill cp-b">薪酬 API</span><span class="mono f12 w7">TK-904a</span><span class="f13 w6 ell grow">月度算薪引擎接入绩效与提成（契约 Mock 4/4）</span></div>
     <div class="srow"><span class="c-pill cp-b">薪酬 Web</span><span class="mono f12 w7">TK-904b</span><span class="f13 w6 ell grow">算薪明细表新增绩效与提成列（CDP Mock 过审）</span></div>
   </div>
@@ -332,7 +323,7 @@ def build_2_drawer():
   <div class="row grow" style="align-items:stretch;min-height:0;overflow:hidden">
     <div class="col g10 grow" style="padding:14px 18px;min-width:0;border-right:1px solid var(--hair)">
       <div class="row g8">
-        <div class="seg"><span class="on">对话</span><span>代码改动 2</span><span>证据 3</span><span>执行日志</span></div>
+        <div class="cc-seg"><span class="on">对话</span><span>代码改动 2</span><span>证据 3</span><span>执行日志</span></div>
         <span class="grow"></span>
         <span class="c-pill cp-b">待审核代码 · L1 中危</span>
       </div>
@@ -384,10 +375,10 @@ def build_2_drawer():
         </div>
       </div>
 
-      <div class="row g8" style="margin-top:auto;padding:7px 10px;border-radius:13px;background:var(--fill)">
+      <div class="row g8" style="margin-top:auto;padding:7px 10px;border-radius:13px;background:var(--well);border:1px solid var(--hair)">
         <span class="aitag"><span class="aid">{I("spark",11)}</span>本单 AI · TK-903</span>
         <span class="f12.5 t3 grow ell" style="font-size:12.5px">就地追问 CRM Agent 幂等键生成逻辑，Esc 一键退回变更集总览…</span>
-        <span style="width:28px;height:28px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center">{I("arrowup",13,2.4)}</span>
+        <span style="width:28px;height:28px;border-radius:50%;background:var(--btn-pri-bg);color:#fff;display:flex;align-items:center;justify-content:center">{I("arrowup",13,2.4)}</span>
       </div>
     </div>
 
@@ -399,8 +390,8 @@ def build_2_drawer():
         <div class="cf-row"><span class="mono w6">sellerId</span><span class="mono t3">string · req</span></div>
         <div class="cf-row"><span class="mono w6">amount</span><span class="mono t3">Decimal(12,2)</span></div>
         <div class="cf-row"><span class="mono w6">isRefund</span><span class="mono t3">bool · 退单负数</span></div>
-        <div class="cf-row"><span class="mono w6">idemKey</span><span class="mono" style="color:var(--green)">header ✓</span></div>
-        <button class="abtn a-sec" style="width:100%;justify-content:center;height:30px;margin-top:9px;background:var(--fill);font-size:11.5px;white-space:nowrap">发起契约 RFC（升 v2）</button>
+        <div class="cf-row"><span class="mono w6">idemKey</span><span class="mono" style="color:var(--ink-green)">header ✓</span></div>
+        <button class="cc-btn cc-btn-xs cc-btn-sec" style="width:100%;justify-content:center;margin-top:9px">发起契约 RFC（升 v2）</button>
       </div>
 
       <div class="card" style="padding:11px 13px">
@@ -428,10 +419,10 @@ def build_3_ticket():
 
     r_p1 = trow(p1_row, on=False).replace('<span class="sc10 sc-t">Tita</span>', '<span class="p1-chip">P1 救火</span>')
     r_crm = trow(crm_row, on=True).replace('<span class="sc10 sc-t">Tita</span>', '<span class="cs-chip">CS-089</span>')
-    r_bug = '<div class="sub-row">' + trow(bug_row, on=False).replace('<span class="sc10 sc-j">Jira</span>', '<span class="cs-chip" style="background:color-mix(in srgb,var(--red) 16%,transparent);color:var(--red)">联调 M-104</span>') + '</div>'
+    r_bug = '<div class="sub-row">' + trow(bug_row, on=False).replace('<span class="sc10 sc-j">Jira</span>', '<span class="cs-chip" style="background:color-mix(in srgb,var(--red) 16%,transparent);color:var(--ink-red)">联调 M-104</span>') + '</div>'
 
     left = ['<section class="glass pn" style="width:302px;flex:none;padding:16px 10px 10px">',
-            f'<div class="row g8" style="padding:0 8px 4px"><span class="f18 w7">工单</span><span class="f13 t3">9</span><span class="plus-btn">{I("plus",14,2.6)}</span><span class="grow"></span><div class="seg" style="padding:2px"><span class="on" style="height:24px;padding:0 10px;font-size:12px">我的</span><span style="height:24px;padding:0 10px;font-size:12px">全部</span></div></div>',
+            f'<div class="row g8" style="padding:0 8px 4px"><span class="f18 w7">工单</span><span class="f13 t3">9</span><span class="plus-btn">{I("plus",14,2.6)}</span><span class="grow"></span><div class="cc-seg cc-seg-xs"><span class="on">我的</span><span>全部</span></div></div>',
             '<div class="fstrip"><span class="fpill on">全部 9</span><span class="fpill">救火 Bug 5</span><span class="fpill">需求切片 4</span></div>',
             '<div class="g10h">等你决定<span>3</span></div>',
             r_p1,
@@ -457,11 +448,11 @@ def build_3_ticket():
       <span class="ic-box" style="width:40px;height:40px;border-radius:11px;background:linear-gradient(155deg,#F59E0B,#EA580C);font-size:12px;font-weight:800">CRM</span>
       <div class="col grow" style="min-width:0">
         <div class="row g8"><h1 class="ell">订单回款推送销售提成明细 POST /hook/commission</h1><span class="c-pill cp-b">待审代码 · L1 中危</span></div>
-        <div class="f12 t3" style="margin-top:2px">TK-903 · CRM 切片 · 修复人 张某 · <span style="color:var(--green)">源码/录屏仅 CRM 可见</span></div>
+        <div class="f12 t3" style="margin-top:2px">TK-903 · CRM 切片 · 修复人 张某 · <span style="color:var(--ink-green)">源码/录屏仅 CRM 可见</span></div>
       </div>
     </div>
     <div class="row g10" style="margin-top:10px">
-      <div class="seg"><span class="on">对话</span><span>代码改动 2</span><span>证据 3</span><span>执行日志</span><span>发布</span></div>
+      <div class="cc-seg"><span class="on">对话</span><span>代码改动 2</span><span>证据 3</span><span>执行日志</span><span>发布</span></div>
       <span class="grow"></span>
       <span class="f12 t3" style="white-space:nowrap">左审 Diff · 右核冻结契约</span>
     </div>
@@ -510,10 +501,10 @@ def build_3_ticket():
       </div>
     </div>
 
-    <div class="row g8" style="margin-top:auto;padding:7px 10px;border-radius:14px;background:var(--fill)">
+    <div class="row g8" style="margin-top:auto;padding:7px 10px;border-radius:14px;background:var(--well);border:1px solid var(--hair)">
       <span class="aitag"><span class="aid">{I("spark",11)}</span>本单 AI · TK-903</span>
       <span class="f13 t3 grow ell">问 CRM Agent 为什么这样写，或让它补充异常重试单测…</span>
-      <span style="width:30px;height:30px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center">{I("arrowup",14,2.4)}</span>
+      <span style="width:30px;height:30px;border-radius:50%;background:var(--btn-pri-bg);color:#fff;display:flex;align-items:center;justify-content:center">{I("arrowup",14,2.4)}</span>
     </div>
   </div>
 </main>'''
@@ -525,25 +516,25 @@ def build_3_ticket():
     <div class="cf-row" style="padding:4px 8px"><span class="mono w6">orderId / sellerId</span><span class="mono t3">string · req</span></div>
     <div class="cf-row" style="padding:4px 8px"><span class="mono w6">amount</span><span class="mono t3">Decimal · 退单&lt;0</span></div>
     <div class="cf-row" style="padding:4px 8px"><span class="mono w6">isRefund</span><span class="mono t3">bool · 退单标记</span></div>
-    <div class="cf-row" style="padding:4px 8px"><span class="mono w6">idemKey</span><span class="mono" style="color:var(--green)">header 幂等 ✓</span></div>
-    <button class="abtn a-sec" style="width:100%;justify-content:center;height:28px;margin-top:7px;background:var(--fill);font-size:11.5px;white-space:nowrap">发起契约 RFC（升 v2）</button>
+    <div class="cf-row" style="padding:4px 8px"><span class="mono w6">idemKey</span><span class="mono" style="color:var(--ink-green)">header 幂等 ✓</span></div>
+    <button class="cc-btn cc-btn-xs cc-btn-sec" style="width:100%;justify-content:center;height:28px;margin-top:7px">发起契约 RFC（升 v2）</button>
   </div>
 
   <div class="card" style="padding:11px 13px">
     <div class="row"><span class="mini grow" style="margin:0">兄弟切片进度（只读）</span><span class="c-pill cp-n">白名单</span></div>
     <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">绩效 · TK-901</span><span class="c-pill cp-g">已入 TEST</span></div>
     <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">人事 · TK-902</span><span class="c-pill cp-g">已入 TEST</span></div>
-    <div class="kv2" style="padding:3px 0"><span class="f11.5 w7" style="font-size:11.5px;color:var(--blue)">CRM · TK-903（本单）</span><span class="c-pill cp-b">待审代码</span></div>
+    <div class="kv2" style="padding:3px 0"><span class="f11.5 w7" style="font-size:11.5px;color:var(--ink-blue)">CRM · TK-903（本单）</span><span class="c-pill cp-b">待审代码</span></div>
     <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">薪酬 API · TK-904a</span><span class="c-pill cp-n">Mock 4/4</span></div>
     <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">薪酬 Web · TK-904b</span><span class="c-pill cp-n">Mock 过审</span></div>
-    <button class="abtn a-sec" style="width:100%;justify-content:center;height:30px;margin-top:8px;background:var(--fill);font-size:11.5px;white-space:nowrap">{I("plus",12,2.4)}提联调 Bug · 入待定责池</button>
+    <button class="cc-btn cc-btn-xs cc-btn-sec" style="width:100%;justify-content:center;margin-top:8px">{I("plus",12,2.4)}提联调 Bug · 入待定责池</button>
   </div>
 
   <div class="card" style="padding:11px 13px">
     <div class="mini" style="margin-bottom:4px">环境与发布约束</div>
     <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">工作分支</span><span class="mono f11.5" style="font-size:11.5px">fix/tk-903</span></div>
     <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">目标测试分支</span><span class="mono f11.5" style="font-size:11.5px">dev-crm</span></div>
-    <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">上线策略</span><span class="f11.5 w6" style="font-size:11.5px;color:var(--green)">波次 1 · 兼容先上</span></div>
+    <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">上线策略</span><span class="f11.5 w6" style="font-size:11.5px;color:var(--ink-green)">波次 1 · 兼容先上</span></div>
   </div>
 </aside>'''
 
@@ -591,7 +582,7 @@ def build_4_qa():
       </div>
     </div>
     <div class="row g10" style="margin-top:11px">
-      <div class="seg"><span>协作流</span><span>活原型</span><span>契约 3</span><span>切片 5</span><span class="on">联调验收</span></div>
+      <div class="cc-seg"><span>协作流</span><span>活原型</span><span>契约 3</span><span>切片 5</span><span class="on">联调验收</span></div>
       <span class="grow"></span>
       <span class="cs-btn pri">{I("play",11)}重跑全仓 E2E</span>
     </div>
@@ -639,15 +630,15 @@ def build_4_qa():
       <div class="row g8" style="margin-top:9px">
         <span class="btn2 sm a-pri">{I("check",13,2.6)}确认派给 CRM 生成工单</span>
         <span class="btn2 sm a-sec" style="background:var(--fill)">转契约 RFC 升 v2</span>
-        <span class="btn2 sm a-sec" style="background:var(--fill)">改派项目 ▾</span>
+        <span class="cc-select cc-select-xs"><span class="cc-sel-val">改派项目</span><span class="cc-sel-sp"></span><span class="cc-sel-caret">{I("chevd",13)}</span></span>
         <span class="f11 t3" style="margin-left:auto">确认后自动挂入 CRM 待办并支持审计转派</span>
       </div>
     </div>
 
     <div class="row g10" style="margin-top:auto;padding:9px 13px;border-radius:12px;background:color-mix(in srgb,var(--blue) 8%,transparent);font-size:11.5px;color:var(--text-2)">
-      <span style="color:var(--blue);display:flex">{I("rocket",15)}</span>
+      <span style="color:var(--ink-blue);display:flex">{I("rocket",15)}</span>
       <span class="grow"><b>安全发版波次（Expand-Contract + Flag）：</b>波次 1 绩效/人事/CRM 兼容增量先上 → 波次 2 薪酬关开关上线 → 验稳开 Flag（异常 0 秒关开关，<b>严禁自动级联全回滚</b>）。</span>
-      <span class="btn2 sm a-sec" style="background:var(--fill);opacity:.65;white-space:nowrap">编排 PROD 波次（差 1 项）</span>
+      <span class="cc-btn cc-btn-xs cc-btn-sec is-disabled" style="opacity:.46;white-space:nowrap">编排 PROD 波次（差 1 项）</span>
     </div>
   </div>
 </main>'''
@@ -664,8 +655,8 @@ def build_4_qa():
 
   <div class="card" style="padding:11px 13px">
     <div class="mini" style="margin-bottom:5px">跨项目 RBAC 隐私护栏</div>
-    <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">联调公共区</span><span class="f11.5 w6" style="font-size:11.5px;color:var(--green)">仅脱敏契约 Diff</span></div>
-    <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">录屏与堆栈</span><span class="mono f11" style="color:var(--blue)">project_only</span></div>
+    <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">联调公共区</span><span class="f11.5 w6" style="font-size:11.5px;color:var(--ink-green)">仅脱敏契约 Diff</span></div>
+    <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">录屏与堆栈</span><span class="mono f11" style="color:var(--ink-blue)">project_only</span></div>
     <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">全局 AI 聚合</span><span class="f11.5 w6" style="font-size:11.5px">按成员强裁剪</span></div>
   </div>
 

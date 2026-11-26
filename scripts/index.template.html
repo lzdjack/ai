@@ -7,23 +7,31 @@
 <style>
 :root{
   --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC",sans-serif;
+  --brand-grad:linear-gradient(90deg,#2563EB,#6D28D9);
   --blue:#007AFF;--green:#34C759;--orange:#FF9500;--red:#FF3B30;--purple:#AF52DE;--teal:#30B0C7;
-  --text:#1D1D1F;--text-2:rgba(29,29,31,.74);--text-3:rgba(29,29,31,.56);
+  --ink-blue:#005CC5;--ink-green:#137333;--ink-orange:#9A4D00;--ink-red:#B91C1C;--ink-purple:#7E22CE;--ink-teal:#0A6678;
+  --btn-pri-bg:#0066D6;--btn-pri-active:#004699;--btn-ok-bg:#157F3D;--btn-danger-bg:#C81E1E;
+  --text:#1D1D1F;--text-2:rgba(29,29,31,.74);--text-3:rgba(29,29,31,.66);
   --glass:rgba(255,255,255,.55);--glass-2:rgba(255,255,255,.8);--stroke:rgba(255,255,255,.75);--hair:rgba(0,0,0,.07);
+  --border-ctl:rgba(29,29,31,.15);--well:rgba(118,118,128,.12);--seg-thumb:rgba(255,255,255,.92);--shadow-seg:0 1px 3px rgba(0,0,0,.12);
   --fill:rgba(118,118,128,.12);--shadow:0 30px 60px -30px rgba(40,50,90,.3),0 2px 6px rgba(40,50,90,.05);
   --wall:radial-gradient(900px 600px at 8% 0%,#BFD5FF 0%,transparent 60%),radial-gradient(800px 600px at 92% 10%,#FFD3E6 0%,transparent 60%),radial-gradient(900px 700px at 70% 100%,#FFE3BF 0%,transparent 60%),radial-gradient(700px 600px at 10% 90%,#C7F0E4 0%,transparent 60%),#EEF1F8;
 }
 html.dark{
+  --brand-grad:linear-gradient(90deg,#7DD3FC,#C4B5FD);
   --blue:#0A84FF;--green:#30D158;--orange:#FF9F0A;--red:#FF453A;--purple:#BF5AF2;--teal:#40C8E0;
-  --text:#F5F5F7;--text-2:rgba(245,245,247,.76);--text-3:rgba(245,245,247,.56);
+  --ink-blue:#6BB8FF;--ink-green:#4CE073;--ink-orange:#FFB340;--ink-red:#FF948C;--ink-purple:#D79BFF;--ink-teal:#5CE1F5;
+  --btn-pri-bg:#006EE6;--btn-pri-active:#005AC2;--btn-ok-bg:#157F3D;--btn-danger-bg:#C81E1E;
+  --text:#F5F5F7;--text-2:rgba(245,245,247,.76);--text-3:rgba(245,245,247,.64);
   --glass:rgba(36,38,50,.55);--glass-2:rgba(58,60,74,.7);--stroke:rgba(255,255,255,.12);--hair:rgba(255,255,255,.08);
+  --border-ctl:rgba(255,255,255,.20);--well:rgba(118,118,128,.22);--seg-thumb:rgba(92,96,118,.88);--shadow-seg:0 1px 3px rgba(0,0,0,.35);
   --fill:rgba(118,118,128,.26);--shadow:0 30px 60px -24px rgba(0,0,0,.6),0 2px 6px rgba(0,0,0,.3);
   --wall:radial-gradient(900px 600px at 8% 0%,rgba(56,84,220,.5) 0%,transparent 60%),radial-gradient(800px 600px at 92% 10%,rgba(170,60,170,.4) 0%,transparent 60%),radial-gradient(900px 700px at 70% 100%,rgba(30,120,150,.4) 0%,transparent 60%),radial-gradient(700px 600px at 10% 90%,rgba(90,50,200,.35) 0%,transparent 60%),#0B0D18;
 }
 *{box-sizing:border-box}
 html,body{margin:0}
 body{font-family:var(--font);color:var(--text);background:var(--wall);background-attachment:fixed;font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh}
-a{color:var(--blue);text-decoration:none}
+a{color:var(--ink-blue);text-decoration:none}
 code{font-family:"SF Mono",ui-monospace,monospace;font-size:.92em;padding:1px 5px;border-radius:5px;background:var(--fill)}
 .glass{background:var(--glass);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);border:1px solid var(--stroke);box-shadow:var(--shadow)}
 .glass-sub{background:var(--glass-2);border:1px solid var(--stroke);border-radius:16px}
@@ -36,13 +44,12 @@ code{font-family:"SF Mono",ui-monospace,monospace;font-size:.92em;padding:1px 5p
   background:radial-gradient(90% 70% at 25% 0%,rgba(140,190,255,.9),transparent 60%),linear-gradient(155deg,#3478F6 0%,#4338CA 70%,#5B21B6 100%);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 6px 14px -6px rgba(67,56,202,.7)}
 .brand b{font-family:"Hiragino Sans GB","PingFang SC",sans-serif;font-size:18px;font-weight:600;letter-spacing:1.2px;display:inline-flex;align-items:baseline;gap:8px;line-height:1.2}
-.brand .ben{font-family:"Optima","Avenir Next",sans-serif;font-size:11.5px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;background:linear-gradient(90deg,#2563EB,#6D28D9);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-html.dark .brand .ben{background:linear-gradient(90deg,#7DD3FC,#C4B5FD);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.brand .ben{font-family:"Optima","Avenir Next",sans-serif;font-size:11.5px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;background:var(--brand-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .brand .bsep{font-size:13px;font-weight:500;color:var(--text-3);letter-spacing:0}
 .brand em{font-style:normal;font-size:12px;color:var(--text-3);display:block;margin-top:2px}
-.seg{display:flex;padding:3px;border-radius:11px;background:var(--fill);gap:2px}
-.seg button{all:unset;cursor:pointer;height:28px;padding:0 12px;border-radius:8px;display:flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--text-2);white-space:nowrap}
-.seg button.on{background:var(--glass-2);color:var(--text);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.seg{display:flex;height:36px;align-items:center;padding:3px;border-radius:10px;background:var(--well);border:1px solid var(--hair);gap:2px}
+.seg button{all:unset;cursor:pointer;height:100%;padding:0 12px;border-radius:7px;display:flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--text-2);white-space:nowrap}
+.seg button.on{background:var(--seg-thumb);color:var(--text);font-weight:600;box-shadow:var(--shadow-seg)}
 .toprow{display:flex;align-items:center;gap:16px}
 .grow{flex:1}
 
@@ -53,8 +60,8 @@ html.dark .brand .ben{background:linear-gradient(90deg,#7DD3FC,#C4B5FD);-webkit-
 .step i{font-style:normal;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;background:var(--fill);color:var(--text-2)}
 .step:hover{background:var(--fill)}
 .step.on{background:var(--glass-2);color:var(--text);box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 6px 16px -8px rgba(20,40,100,.4)}
-.step.on i{background:var(--blue);color:#fff}
-.step.done i{background:color-mix(in srgb,var(--green) 18%,transparent);color:var(--green)}
+.step.on i{background:var(--btn-pri-bg);color:#fff}
+.step.done i{background:color-mix(in srgb,var(--green) 18%,transparent);color:var(--ink-green)}
 .arrow{flex:none;align-self:center;color:var(--text-3);opacity:.5;font-size:12px}
 
 main{padding:28px 0 60px}
@@ -74,27 +81,26 @@ h4{font-size:15px;font-weight:700;margin:18px 0 8px}
 .kpi b{display:block;font-size:26px;font-weight:800;line-height:1.15}
 .kpi span{color:var(--text-2);font-size:13px}
 .pill{display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 9px;border-radius:12px;font-size:12px;font-weight:600;white-space:nowrap}
-.p-blue{color:var(--blue);background:color-mix(in srgb,var(--blue) 14%,transparent)}
-.p-green{color:var(--green);background:color-mix(in srgb,var(--green) 16%,transparent)}
-.p-orange{color:var(--orange);background:color-mix(in srgb,var(--orange) 16%,transparent)}
-.p-red{color:var(--red);background:color-mix(in srgb,var(--red) 14%,transparent)}
-.p-teal{color:var(--teal);background:color-mix(in srgb,var(--teal) 16%,transparent)}
-.p-purple{color:var(--purple);background:color-mix(in srgb,var(--purple) 14%,transparent)}
+.p-blue{color:var(--ink-blue);background:color-mix(in srgb,var(--blue) 14%,transparent)}
+.p-green{color:var(--ink-green);background:color-mix(in srgb,var(--green) 16%,transparent)}
+.p-orange{color:var(--ink-orange);background:color-mix(in srgb,var(--orange) 16%,transparent)}
+.p-red{color:var(--ink-red);background:color-mix(in srgb,var(--red) 14%,transparent)}
+.p-teal{color:var(--ink-teal);background:color-mix(in srgb,var(--teal) 16%,transparent)}
+.p-purple{color:var(--ink-purple);background:color-mix(in srgb,var(--purple) 14%,transparent)}
 .p-gray{color:var(--text-2);background:var(--fill)}
-html:not(.dark) .p-green{color:#1E8E3E}html:not(.dark) .p-orange{color:#B25E00}
 
 /* 二级切换栏 & 筛选胶囊 */
 .subbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin:0 0 18px}
-.subtabs{display:inline-flex;padding:4px;border-radius:14px;background:var(--glass);border:1px solid var(--stroke);gap:3px;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px)}
-.subtabs button{all:unset;cursor:pointer;height:32px;padding:0 14px;border-radius:10px;font-size:13.5px;font-weight:600;color:var(--text-2);transition:background .15s}
+.subtabs{display:inline-flex;height:36px;align-items:center;padding:3px;border-radius:10px;background:var(--well);border:1px solid var(--hair);gap:2px}
+.subtabs button{all:unset;cursor:pointer;height:100%;padding:0 14px;border-radius:7px;display:inline-flex;align-items:center;font-size:13px;font-weight:500;color:var(--text-2);transition:background .15s}
 .subtabs button:hover{color:var(--text)}
-.subtabs button.on{background:var(--glass-2);color:var(--text);box-shadow:0 2px 6px rgba(0,0,0,.1)}
+.subtabs button.on{background:var(--seg-thumb);color:var(--text);font-weight:600;box-shadow:var(--shadow-seg)}
 .subpane{display:none}.subpane.on{display:block;animation:fade .2s ease}
 
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
 .chip-btn{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:15px;font-size:12.5px;font-weight:600;color:var(--text-2);background:var(--fill);transition:all .15s}
 .chip-btn:hover{background:var(--glass-2);color:var(--text)}
-.chip-btn.on{background:var(--blue);color:#fff;box-shadow:0 6px 14px -6px color-mix(in srgb,var(--blue) 80%,transparent)}
+.chip-btn.on{background:var(--btn-pri-bg);color:#fff;box-shadow:0 6px 14px -6px color-mix(in srgb,var(--btn-pri-bg) 80%,transparent)}
 .chip-btn em{font-style:normal;opacity:.75;font-size:11.5px}
 
 table{width:100%;border-collapse:collapse;font-size:13.5px}
@@ -112,7 +118,7 @@ tr:last-child td{border-bottom:0}
 .toc a{display:block;padding:5px 10px;border-radius:8px;color:var(--text-2);font-size:13px;line-height:1.4}
 .toc a:hover{background:var(--fill)}
 .toc a.toc-l3{padding-left:22px;font-size:12.5px;color:var(--text-3)}
-.toc a.cur{background:color-mix(in srgb,var(--blue) 13%,transparent);color:var(--blue);font-weight:600}
+.toc a.cur{background:color-mix(in srgb,var(--blue) 13%,transparent);color:var(--ink-blue);font-weight:600}
 .md{border-radius:22px;padding:12px 30px 28px;min-width:0}
 .md h2{font-size:21px;font-weight:800;margin:26px 0 10px;padding-top:6px;scroll-margin-top:155px;display:flex;align-items:center;flex-wrap:wrap;gap:8px}
 .md h3{font-size:16.5px;margin:22px 0 8px;scroll-margin-top:155px;display:flex;align-items:center;flex-wrap:wrap;gap:8px}
@@ -125,8 +131,7 @@ tr:last-child td{border-bottom:0}
 .md-hr{border:0;height:1px;background:var(--hair);margin:24px 0}
 .md-quote{margin:14px 0;padding:12px 16px;border-radius:14px;background:color-mix(in srgb,var(--blue) 7%,var(--glass-2));border:1px solid var(--stroke);border-left:3px solid var(--blue);color:var(--text-2);font-size:13.5px}
 .h-pill{height:21px;padding:0 8px;font-size:11px;font-weight:600}
-.tag-tbd{display:inline-block;padding:0 6px;border-radius:6px;font-size:12px;font-weight:700;color:#B25E00;background:color-mix(in srgb,var(--orange) 18%,transparent)}
-html.dark .tag-tbd{color:var(--orange)}
+.tag-tbd{display:inline-block;padding:0 6px;border-radius:6px;font-size:12px;font-weight:700;color:var(--ink-orange);background:color-mix(in srgb,var(--orange) 18%,transparent)}
 pre.code{margin:12px 0;padding:14px 16px;border-radius:14px;background:var(--glass-2);border:1px solid var(--stroke);overflow-x:auto;font-family:"SF Mono",ui-monospace,monospace;font-size:12.5px;line-height:1.55;color:var(--text)}
 pre.code code{background:none;padding:0;font-size:inherit}
 details.md-fold{margin:12px 0;padding:10px 14px;border-radius:14px;background:var(--glass-2);border:1px solid var(--stroke)}
@@ -202,26 +207,25 @@ html.dark .ap.on{box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 16px 28px -8px
 .ap-sk{background:linear-gradient(160deg,#C58BFF,#8E5CFF 55%,#6A3DF0)}
 .ap-mkt{background:linear-gradient(155deg,#34D399 0%,#14B8A6 52%,#0284C7 100%)}
 .ap-set{background:linear-gradient(160deg,#A9AEB8,#6E737D)}
-.bd{position:absolute;top:-5px;right:-6px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:#FF3B30;color:#fff;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;z-index:3;box-shadow:0 0 0 2px var(--glass-2)}
+.bd{position:absolute;top:-5px;right:-6px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--btn-danger-bg);color:#fff;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;z-index:3;box-shadow:0 0 0 2px var(--glass-2)}
 .dk{position:relative}
 .sep{width:28px;height:1px;background:var(--hair)}
 .lrow{display:flex;gap:11px;padding:10px 12px;border-radius:14px;align-items:center;position:relative}
-.lrow.on{background:linear-gradient(180deg,#3B8BFF,#1F6FFF);box-shadow:0 8px 18px -10px rgba(31,111,255,.9);color:#fff}
+.lrow.on{background:linear-gradient(180deg,var(--btn-pri-bg),var(--btn-pri-active));box-shadow:0 8px 18px -10px color-mix(in srgb,var(--btn-pri-bg) 88%,transparent);color:#fff}
 .av{position:relative;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;flex:none;white-space:nowrap}
 .av i{position:absolute;right:-1px;bottom:-1px;width:12px;height:12px;border-radius:50%;box-shadow:0 0 0 2.5px var(--glass-2)}
 .lrow.on .av i{box-shadow:0 0 0 2px #fff}.lrow.on .av{box-shadow:0 0 0 2px rgba(255,255,255,.55)}
 .lt{font-size:13.5px;font-weight:600}.ls{font-size:12px;color:var(--text-3)}
 .lrow.on .ls{color:rgba(255,255,255,.85)}
 .sc{height:16px;padding:0 5px;border-radius:5px;font-size:10px;font-weight:700;display:inline-flex;align-items:center;margin-right:6px}
-.sc-t{background:color-mix(in srgb,#2F6BFF 13%,transparent);color:#2F6BFF}
-.sc-j{background:color-mix(in srgb,#0C66E4 10%,transparent);color:#0B5BD3;box-shadow:inset 0 0 0 1px color-mix(in srgb,#0C66E4 25%,transparent)}
-html.dark .sc-t{color:#7FA7FF}html.dark .sc-j{color:#6FA8FF}
+.sc-t{background:color-mix(in srgb,var(--blue) 13%,transparent);color:var(--ink-blue)}
+.sc-j{background:color-mix(in srgb,var(--blue) 10%,transparent);color:var(--ink-blue);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--blue) 26%,transparent)}
 .lrow.on .sc{background:rgba(255,255,255,.22);color:#fff;box-shadow:none}
 .btn{all:unset;height:40px;padding:0 18px;border-radius:12px;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:7px}
-.b-pri{background:var(--blue);color:#fff;box-shadow:0 8px 20px -8px color-mix(in srgb,var(--blue) 80%,transparent)}
-.b-red{background:color-mix(in srgb,var(--red) 12%,transparent);color:var(--red)}
+.b-pri{background:var(--btn-pri-bg);color:#fff;box-shadow:0 8px 20px -8px color-mix(in srgb,var(--btn-pri-bg) 80%,transparent)}
+.b-red{background:color-mix(in srgb,var(--red) 12%,transparent);color:var(--ink-red)}
 .b-sec{background:var(--fill);color:var(--text)}
-.ubub{display:inline-block;padding:9px 14px;border-radius:18px 18px 6px 18px;background:linear-gradient(180deg,#3B8BFF,#1F6FFF);color:#fff;box-shadow:0 8px 18px -10px rgba(31,111,255,.9)}
+.ubub{display:inline-block;padding:9px 14px;border-radius:18px 18px 6px 18px;background:linear-gradient(180deg,var(--btn-pri-bg),var(--btn-pri-active));color:#fff;box-shadow:0 8px 18px -10px color-mix(in srgb,var(--btn-pri-bg) 88%,transparent)}
 .aitag{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 10px 0 4px;border-radius:10px;background:color-mix(in srgb,var(--purple) 12%,transparent);font-size:13px;font-weight:700}
 .aid{width:22px;height:22px;border-radius:7px;background:linear-gradient(135deg,#5E8BFF,#B157F0);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px}
 .orb{width:44px;height:44px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.7) 0,rgba(255,255,255,0) 35%),conic-gradient(from 210deg,#4F8BFF,#9B5CFF,#FF5FA8,#FFB14A,#4FD1FF,#4F8BFF);box-shadow:0 8px 20px -6px rgba(155,92,255,.7)}
@@ -246,15 +250,16 @@ html.dark .sc-t{color:#7FA7FF}html.dark .sc-j{color:#6FA8FF}
 
 .next{display:flex;justify-content:space-between;margin-top:30px;gap:12px}
 .nb{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 18px;border-radius:14px;font-size:14px;font-weight:600}
-.nb.pri{background:var(--blue);color:#fff;box-shadow:0 8px 20px -8px color-mix(in srgb,var(--blue) 80%,transparent)}
-.nb.sec{background:var(--glass-2);border:1px solid var(--stroke)}
+.nb.pri{background:var(--btn-pri-bg);color:#fff;box-shadow:0 8px 20px -8px color-mix(in srgb,var(--btn-pri-bg) 80%,transparent)}
+.nb.sec{background:var(--glass-2);border:1px solid var(--border-ctl)}
 ul.clean{margin:0;padding-left:18px}ul.clean li{margin:5px 0}
-.no{color:var(--red);font-weight:700}.yes{color:var(--green);font-weight:700}
+.no{color:var(--ink-red);font-weight:700}.yes{color:var(--ink-green);font-weight:700}
 .gal{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
 @media (max-width:900px){.gal{grid-template-columns:1fr}}
 .gal figure{margin:0;border-radius:18px;overflow:hidden;background:var(--glass-2);border:1px solid var(--stroke)}
 .gal figure.hide{display:none}
-.gal img{display:block;width:100%;height:auto;cursor:zoom-in;background:var(--fill)}
+figure img,.gal img{display:block;width:100%;max-width:100%;height:auto;background:var(--fill)}
+.gal img{cursor:zoom-in}
 .gal figcaption{padding:10px 14px;font-size:13px;color:var(--text-2)}
 .gal figcaption b{color:var(--text)}
 .zoom{position:fixed;inset:0;z-index:99;background:rgba(0,0,0,.74);display:none;align-items:center;justify-content:center;padding:30px;cursor:zoom-out;backdrop-filter:blur(8px)}
@@ -519,6 +524,28 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
       <span class="pill p-blue">待我审核 · 第 2 轮</span><span class="pill p-orange">Tita 采集失败 · 重试中</span>
     </div>
   </div>
+
+  <div class="card glass mt" id="component-library">
+    <h3>标准组件库模块（Component Library · 3 路多 Agent 审定 · 唯一真相源）</h3>
+    <p class="sub" style="margin:0 0 12px">源码 <code>tokens/theme.css</code> + <code>tokens/components.css</code> + <code>docs/01-设计主题.md §16</code>（Apple Liquid Glass HIG × WCAG 2.1 AA ≥4.5:1 × 4px 网格）。全站控件统一 <b>4 档等高标尺（xs 28 / sm 32 / md 36 / lg 40，移动端 ≥44pt）</b>，下拉选择锁定 <code>.cc-select</code>（<code>--glass-2</code> + <code>--border-ctl</code> + 右对齐单向 <code>chevd 13px</code>，绝不贴字、不加小方盒）。</p>
+    <div class="gal" style="margin-bottom:14px">
+      <figure><img class="img-l" src="reference/images/pages/PC-组件库规范-亮色.png" alt="标准组件库规范 1 亮色"><img class="img-d" src="reference/images/pages/PC-组件库规范-暗色.png" alt="标准组件库规范 1 暗色"><figcaption><b>PC 组件库 1/2 · 基础表单、选择控件与 4 档尺寸标尺</b> · 下拉基准 &amp; L3 悬浮菜单 / 字段解剖 / 微凹输入·搜索·多行框 / 分段·开关·复选·单选 / 36px 同档等高实测 / 按钮 8 态 / WCAG AA 标签与角标</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/PC-组件库规范-2-亮色.png" alt="标准组件库规范 2 亮色"><img class="img-d" src="reference/images/pages/PC-组件库规范-2-暗色.png" alt="标准组件库规范 2 暗色"><figcaption><b>PC 组件库 2/2 · 导航、数据展示、反馈加载、浮层与无障碍红线</b> · Tabs / 表格与键值对 / 暗色终端指令块 / 4 态横幅 / Toast &amp; Tooltip / 骨架屏与空态 / 浮层比例示意图 / Z-Index 契约（10→80）与 44pt 触控红线</figcaption></figure>
+    </div>
+    <div class="gal" style="grid-template-columns:1fr;margin-bottom:14px">
+      <figure><img class="img-l" src="reference/images/pages/移动端-组件库规范-亮色.png" alt="移动端标准组件库规范 亮色"><img class="img-d" src="reference/images/pages/移动端-组件库规范-暗色.png" alt="移动端标准组件库规范 暗色"><figcaption><b>移动端组件库（3 屏 · iOS HIG + Android M3 + Flutter 1:1 映射）</b> · ① 基础控件与 44–48pt 触控标尺（3 列居中 NavBar / 46pt 输入·OTP·下拉 / 46×28pt 开关 / 12pt 间距吸底栏）；② 下拉刷新 + 选中行 + 10 秒审核卡 + <b>L2 高危锁横幅</b> + 悬浮 5-Tab；③ <code>z:70</code> 悬浮 Toast + 骨架屏 + 离线执行器 + <code>r:30px</code> Bottom Sheet（安全区 34pt）</figcaption></figure>
+    </div>
+    <div class="tw" style="margin:0"><table>
+      <thead><tr><th>维度 / 类别</th><th>标准 Token / 类名</th><th>行业审定锁定规格</th><th>禁用红线</th></tr></thead>
+      <tbody>
+        <tr><td><b>4 档统一尺寸标尺</b></td><td><code>--ctl-xs / sm / md / lg</code></td><td><b>xs 28px</b>（r:8）/ <b>sm 32px</b>（r:8）/ <b>md 36px 默认</b>（r:10）/ <b>lg 40px</b>（r:12），输入·搜索·下拉·分段·按钮同档 100% 等高；移动端 <code>--ctl-touch ≥ 44pt</code></td><td>严禁同行控件高低差 2px、严禁手写 inline height 补对齐、严禁把 PC 28–36px 照搬手机端</td></tr>
+        <tr><td><b>下拉选择（钦定基准）</b></td><td><code>.cc-select</code> / <code>.cc-menu</code></td><td><code>--glass-2</code> + <code>--border-ctl</code>（解决浅色抽屉白边隐形）+ 右对齐单向 <code>chevd 13px</code>；展开菜单走 L3 <code>--glass-elev</code>（94% 防透字，<code>z:60</code>），选中行嵌套标切换高反差底</td><td>严禁箭头贴字、严禁画成无边框凹槽、严禁在箭头外加小方盒</td></tr>
+        <tr><td><b>输入 / 搜索 / 多行框</b></td><td><code>.cc-input</code> / <code>.cc-search</code> / <code>.cc-textarea</code></td><td>同源 L-1 微凹内嵌容器（<code>--well</code> + <code>1px --hair</code>，暗色 <code>rgba(0,0,0,.26)</code> 真微凹）；聚焦转 <code>--glass-2</code> + 蓝晕；搜索框带清除 <code>×</code> 与 300ms 防抖</td><td>普通输入与搜索严禁一处有边一处无边；报错文案挂 <code>.cc-field-err</code> 不塞 placeholder</td></tr>
+        <tr><td><b>WCAG AA 与 8 态契约</b></td><td><code>--ink-*</code> / <code>--btn-pri-bg</code> / <code>--z-*</code></td><td>彩色文字统一 <code>--ink-*</code>（≥4.5:1）；<code>--text-3</code> 亮 .66 / 暗 .64；开关 <code>40×24px</code>；完整 8 态 + <code>:focus-visible</code> + <code>prefers-reduced-motion</code> + Z-Index <code>10→80</code></td><td>严禁裸用 <code>--green/--orange</code> 写小字；非模态 AI 帮手（440px）严禁锁死主表单</td></tr>
+        <tr><td><b>移动端原语与护栏</b></td><td><code>.cc-m-*</code> / <code>--m-*</code></td><td>全交互热区 ≥ <b>44pt / 48dp</b>（输入 46 / 行 48 / 主钮 48 / 开关 46×28）；实底成功/危险钮用 <code>--btn-ok-bg / --btn-danger-bg</code>；补齐 <b>L2 高危锁</b>、Flutter ≤3 层模糊预算与 Android 预测性返回</td><td>严禁压扁设置行至 38px、严禁 L2 高危单手机 10 秒速过、严禁单屏滥用 9 层实时模糊掉帧</td></tr>
+      </tbody>
+    </table></div>
+  </div>
   <div class="next"><button class="nb sec" data-go-tab="plan">← 上一步：方案与链路</button><button class="nb pri" data-go-tab="pc">下一步：PC 界面 →</button></div>
 </section>
 
@@ -533,7 +560,7 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
   </div>
   <div class="legend" id="pclegend"></div>
   <div class="card glass mt">
-    <h3>阶段一 · 启动、登录注册、执行环境（3 路径）与精简 4 步开工向导（16 张 · 按真实顺序 ① → ⑭）</h3>
+    <h3>阶段一 · 启动、登录注册、执行环境（3 路径）与精简 4 步开工向导（18 张 · 按真实顺序 ① → ⑭）</h3>
     <div class="gal">
       <figure><img class="img-l" src="reference/images/splash/PC-闪屏-亮色.png" alt="PC 闪屏"><img class="img-d" src="reference/images/splash/PC-闪屏-暗色.png" alt="PC 闪屏"><figcaption><b>① 启动 · PC 闪屏</b> · 图标 + 名称 + 真实加载步骤</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/PC-登录-亮色.png" alt="PC 登录 亮色"><img class="img-d" src="reference/images/pages/PC-登录-暗色.png" alt="PC 登录 暗色"><figcaption><b>② 登录</b> · 独立邮箱 + 密码登录，顶部分段切换登录 / 注册；GitLab / Jira / Tita 通过连接器接入</figcaption></figure>
@@ -544,7 +571,9 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
       <figure><img class="img-l" src="reference/images/pages/PC-开通云端托管Pro-亮色.png" alt="开通云端托管 Pro 亮色"><img class="img-d" src="reference/images/pages/PC-开通云端托管Pro-暗色.png" alt="开通云端托管 Pro 暗色"><figcaption><b>⑤c 路径 C · 开通云端托管算力 Pro</b> · Pro 个人 / Team 团队池套餐 + 企业兑换码绑定切换 + 机房区域与零落盘承诺</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/PC-步骤器-0-连接AI-亮色.png" alt="连接 AI 亮色"><img class="img-d" src="reference/images/pages/PC-步骤器-0-连接AI-暗色.png" alt="连接 AI 暗色"><figcaption><b>⑥ 开工 0 · 管理员连接 AI</b> · 只有管理员、且 AI 还没接时出现；只管 AI 引擎与网关，外部工具统一归下一步连接器</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/PC-步骤器-1-连接器与鉴权-亮色.png" alt="连接器与鉴权 亮色"><img class="img-d" src="reference/images/pages/PC-步骤器-1-连接器与鉴权-暗色.png" alt="连接器与鉴权 暗色"><figcaption><b>⑦ 开工 1 · 连接器与鉴权</b> · 自动筛出 <code>code_source / ticket_source</code> 连接器（GitLab / GitHub / Gitee / 本机目录 / Jira / Tita），公司共用管理员配一次全员复用</figcaption></figure>
-      <figure><img class="img-l" src="reference/images/pages/PC-步骤器-1-新建连接器鉴权-亮色.png" alt="新建连接器鉴权 亮色"><img class="img-d" src="reference/images/pages/PC-步骤器-1-新建连接器鉴权-暗色.png" alt="新建连接器鉴权 暗色"><figcaption><b>⑧ 开工 1 · 新建代码连接器鉴权抽屉</b> · 表单按插件 <code>authSchema</code> 自动渲染，Bot 实测连通、识别身份并校验无合入主干权限</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/PC-步骤器-1-新建连接器鉴权-亮色.png" alt="新建连接器鉴权 亮色"><img class="img-d" src="reference/images/pages/PC-步骤器-1-新建连接器鉴权-暗色.png" alt="新建连接器鉴权 暗色"><figcaption><b>⑧a 开工 1 · 新建代码连接器鉴权抽屉</b> · 表单按插件 <code>authSchema</code> 自动渲染，Bot 实测连通、识别身份并校验无合入主干权限</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/PC-步骤器-1-工单鉴权与触发条件-亮色.png" alt="工单连接器鉴权与触发条件 亮色"><img class="img-d" src="reference/images/pages/PC-步骤器-1-工单鉴权与触发条件-暗色.png" alt="工单连接器鉴权与触发条件 暗色"><figcaption><b>⑧b 开工 1 · 工单连接器鉴权与触发条件抽屉</b> · 复用 <code>ConnectorDrawer</code>，额外渲染触发条件（项目/状态/类型/JQL）与实时试采预览（仅预演不建单，防误收旧单）</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/PC-步骤器-1-向导AI帮手-亮色.png" alt="向导 AI 帮手浮层 亮色"><img class="img-d" src="reference/images/pages/PC-步骤器-1-向导AI帮手-暗色.png" alt="向导 AI 帮手浮层 暗色"><figcaption><b>⑧c 开工 1 · 向导 AI 帮手非模态浮层</b> · 点击右上「✦ 问 AI」右侧 440px 就地滑出不丢表单，带步骤上下文、最小权限清单与第 0 步未接 AI 时的离线引导兜底</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/PC-步骤器-2-授权项目与代码-亮色.png" alt="授权项目与代码 亮色"><img class="img-d" src="reference/images/pages/PC-步骤器-2-授权项目与代码-暗色.png" alt="授权项目与代码 暗色"><figcaption><b>⑨ 开工 2 · 授权项目与代码权限</b> · 仅保留用户主动筛选留下的仓库（不平铺全量数百仓），切换 <code>仅查看 / 可修改</code> 或移出，分支与构建由 AI 自动推测</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/PC-步骤器-2-挑选仓库-亮色.png" alt="从已连来源挑选仓库 亮色"><img class="img-d" src="reference/images/pages/PC-步骤器-2-挑选仓库-暗色.png" alt="从已连来源挑选仓库 暗色"><figcaption><b>⑩ 开工 2 · 从已连来源挑选仓库抽屉</b> · 按连接器分标签、按 Group 与关键词搜索当前连接器源（300ms 防抖），新加入默认「仅查看」防误授权</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/PC-步骤器-2-微调配置-亮色.png" alt="微调仓库配置 亮色"><img class="img-d" src="reference/images/pages/PC-步骤器-2-微调配置-暗色.png" alt="微调仓库配置 暗色"><figcaption><b>⑪ 开工 2 · 微调仓库配置抽屉</b> · 归属项目合并、主干/测试分支、试构建命令与 MR 审核人覆盖；人工覆盖不被重探测冲掉，支持一键还原与保存即试构建</figcaption></figure>
@@ -638,8 +667,9 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
   </div>
   <div class="legend" id="mlegend"></div>
   <div class="card glass mt">
-    <h3>启动、登录与步骤器（3 张）</h3>
+    <h3>组件库规范、启动、登录与步骤器（4 张）</h3>
     <div class="gal" style="grid-template-columns:1fr">
+      <figure><img class="img-l" src="reference/images/pages/移动端-组件库规范-亮色.png" alt="移动端组件库规范 亮色"><img class="img-d" src="reference/images/pages/移动端-组件库规范-暗色.png" alt="移动端组件库规范 暗色"><figcaption><b>移动端组件库规范（3 屏 · 3 路多 Agent 审定）</b> · 基础控件与 44–48pt 标尺 / 10 秒审核卡与 L2 高危锁 / Toast (z:70) 与 Bottom Sheet (z:40)</figcaption></figure>
       <figure><img class="img-l" src="reference/images/splash/移动端-闪屏-亮色.png" alt="移动端闪屏"><img class="img-d" src="reference/images/splash/移动端-闪屏-暗色.png" alt="移动端闪屏"><figcaption><b>移动端闪屏</b> · 启动 / 首次加载 / 从通知打开</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/移动端-登录-亮色.png" alt="移动端登录与注册 亮色"><img class="img-d" src="reference/images/pages/移动端-登录-暗色.png" alt="移动端登录与注册 暗色"><figcaption><b>移动端登录与注册（4 屏）</b> · 邮箱登录 / 邮箱注册（带验证码） / 密码错误 / 登录过期回到原工单</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/移动端-首次使用步骤器-亮色.png" alt="移动端步骤器 亮色"><img class="img-d" src="reference/images/pages/移动端-首次使用步骤器-暗色.png" alt="移动端步骤器 暗色"><figcaption><b>移动端步骤器（4 屏 · 精简 4 步）</b> · 步骤概览（连接器鉴权 → 授权项目代码 → 环境账号 → AI 体检）/ 环境与账号 / 添加账号（Cookie）/ AI 体检并开工</figcaption></figure>
@@ -747,7 +777,8 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
       <ul class="chk">
         <li class="done">产品需求（00）、修复流转（04）、链路流转（05）与链路总图</li>
         <li class="done">应用图标、PC 和移动端闪屏、独立登录与注册（PC 2 页 + 移动端 4 屏）</li>
-        <li class="done">PC 主界面 + 精简 4 步首次引导与步骤器（14 张，含执行环境 3 路径 + 连接器鉴权抽屉 + 多源可修改/仅查看权限）+ 其余功能页面（37 张，含「设置 → 连接器」「插件市场」、手动新建工单与免 SMTP 成员邀请）</li>
+        <li class="done">标准组件库模块（<code>tokens/components.css</code> + <code>docs/01 §16</code> + <code>PC-组件库规范</code> 亮暗展示板）</li>
+        <li class="done">PC 主界面 + 精简 4 步首次引导与步骤器（18 张，含执行环境 3 路径 + 代码/工单连接器鉴权与试采抽屉 + 向导 AI 帮手浮层 + 挑选仓库/微调抽屉）+ 其余功能页面（37 张，含「设置 → 连接器」「插件市场」、手动新建工单与免 SMTP 成员邀请）</li>
         <li class="done">移动端首页 3 屏 + 精简 4 步步骤器（4 屏）+ 其余功能页面（10 张 · 30 屏，含插件市场与无执行器轻引导）</li>
         <li class="done">技术设计方案第 0～14 节全锁版（含 <code>workspaces</code> 统一作用域、M1 六项零重构预留、四项 AI 飞轮守卫与二期跨项目需求变更集架构）</li>
         <li class="done">PC 选择执行环境 + 三路径接入页（本机初始化 / 连接自有服务器 / 开通云端 Pro）+ 设置→执行器（亮暗全套）</li>

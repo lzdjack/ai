@@ -11,18 +11,18 @@ sys.path.insert(0, str(ROOT / "scripts"))
 STYLE = '''
 .root{display:block;background:var(--wall)}
 .top{position:absolute;left:32px;right:32px;top:22px;display:flex;align-items:center;gap:12px}
-.wz{position:absolute;left:120px;right:120px;top:80px;bottom:36px;border-radius:30px;display:flex;overflow:hidden}
+.wz{position:absolute;left:120px;right:120px;top:80px;bottom:36px;border-radius:var(--r-panel);display:flex;overflow:hidden}
 .sl{width:300px;flex:none;padding:26px 24px 22px;border-right:1px solid var(--hair);background:color-mix(in srgb,var(--text) 2.5%,transparent);display:flex;flex-direction:column}
 .st2{display:flex;gap:13px;position:relative;padding-bottom:20px}
 .st2:not(:last-child)::after{content:"";position:absolute;left:12.5px;top:28px;bottom:3px;width:1.5px;background:var(--hair)}
 .st2.done::after{background:color-mix(in srgb,var(--green) 55%,transparent)}
 .sc2{width:26px;height:26px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:800}
 .done .sc2{background:var(--green);color:#fff}
-.cur .sc2{background:var(--blue);color:#fff;box-shadow:0 0 0 5px color-mix(in srgb,var(--blue) 20%,transparent)}
+.cur .sc2{background:var(--btn-pri-bg);color:#fff;box-shadow:0 0 0 5px color-mix(in srgb,var(--blue) 20%,transparent)}
 .todo .sc2{border:1.5px solid color-mix(in srgb,var(--text) 22%,transparent);color:var(--text-3)}
 .st2 b{display:block;font-size:14.5px;font-weight:600;line-height:26px}
 .todo b{color:var(--text-2);font-weight:500}
-.cur b{color:var(--blue);font-weight:700}
+.cur b{color:var(--ink-blue);font-weight:700}
 .st2 em{display:block;font-style:normal;font-size:12px;color:var(--text-3);margin-top:1px;line-height:1.45}
 .done em{color:var(--text-2)}
 .skip .sc2{background:var(--fill);color:var(--text-3)}
@@ -35,38 +35,38 @@ STYLE = '''
 .ff{display:flex;align-items:center;gap:12px;padding:16px 36px;border-top:1px solid var(--hair)}
 .lab{font-size:13.5px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:8px}
 .lab span{font-weight:400;font-size:12px;color:var(--text-3)}
-.inp{height:44px;border-radius:12px;background:var(--fill);display:flex;align-items:center;gap:10px;padding:0 13px;font-size:14px;color:var(--text);min-width:0}
+.inp{height:var(--ctl-lg);border-radius:var(--r-lg);background:var(--well);border:1px solid var(--hair);display:flex;align-items:center;gap:10px;padding:0 13px;font-size:14px;color:var(--text);min-width:0}
 .inp>i{color:var(--text-3)}
-.inp.focus{background:var(--glass-2);box-shadow:0 0 0 2px var(--blue),0 0 0 5px color-mix(in srgb,var(--blue) 18%,transparent)}
+.inp.focus{background:var(--glass-2);border-color:var(--focus-ring);box-shadow:0 0 0 3px var(--focus-halo)}
 .dots{letter-spacing:3px;font-size:15px}
-.okt{display:inline-flex;align-items:center;gap:5px;color:var(--green);font-size:12.5px;font-weight:600;white-space:nowrap}
-.ing{display:inline-flex;align-items:center;gap:7px;color:var(--blue);font-size:12.5px;font-weight:600;white-space:nowrap}
-.spin{width:13px;height:13px;border-radius:50%;border:2px solid color-mix(in srgb,var(--blue) 25%,transparent);border-top-color:var(--blue);flex:none}
+.okt{display:inline-flex;align-items:center;gap:5px;color:var(--ink-green);font-size:12.5px;font-weight:600;white-space:nowrap}
+.ing{display:inline-flex;align-items:center;gap:7px;color:var(--ink-blue);font-size:12.5px;font-weight:600;white-space:nowrap}
+.spin{width:13px;height:13px;border-radius:50%;border:2px solid color-mix(in srgb,var(--blue) 25%,transparent);border-top-color:var(--ink-blue);flex:none}
 .rt{display:grid;grid-template-columns:140px 1fr 160px 128px 116px;gap:8px 10px;align-items:center}
-.au{background:transparent;box-shadow:inset 0 0 0 1px var(--hair)}
-.aut{flex:none;font-size:11px;font-weight:600;color:var(--purple);background:color-mix(in srgb,var(--purple) 12%,transparent);height:20px;padding:0 6px;border-radius:6px;display:inline-flex;align-items:center}
+.au{background:transparent;border:1px dashed color-mix(in srgb,var(--text) 16%,transparent);color:var(--text-2)}
+.aut{flex:none;font-size:11px;font-weight:600;color:var(--ink-purple);background:color-mix(in srgb,var(--purple) 12%,transparent);height:20px;padding:0 6px;border-radius:6px;display:inline-flex;align-items:center}
 .cr{gap:8px;padding:0 10px;font-size:13px}
 .crt{flex:none;height:20px;padding:0 6px;border-radius:6px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;background:color-mix(in srgb,var(--text) 8%,transparent);color:var(--text-2)}
-.cr-x{box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--orange) 70%,transparent);color:var(--orange)}
-.wnt{color:var(--orange);font-size:12.5px;font-weight:600;white-space:nowrap}
-.pm{font-size:13px;gap:7px;padding:0 10px}
-.pm-e{color:var(--green)}.pm-e>i{color:var(--green)}
-.pm-v{color:var(--blue)}.pm-v>i{color:var(--blue)}
-.pm-l{color:var(--text-3);background:transparent;box-shadow:inset 0 0 0 1px var(--hair)}
-.rt .inp{height:38px}
-.rsel{font-weight:600;font-size:13.5px;padding:0 10px 0 12px}
+.cr-x{border-color:color-mix(in srgb,var(--orange) 70%,transparent);color:var(--ink-orange)}
+.wnt{color:var(--ink-orange);font-size:12.5px;font-weight:600;white-space:nowrap}
+.pm{font-size:13px;gap:7px;padding:0 10px;background:var(--glass-2);border:1px solid var(--border-ctl);box-shadow:var(--shadow-ctl)}
+.pm-e{color:var(--ink-green);font-weight:600}.pm-e>i:first-child{color:var(--ink-green)}
+.pm-v{color:var(--ink-blue);font-weight:600}.pm-v>i:first-child{color:var(--ink-blue)}
+.pm-l{color:var(--text-3);background:transparent;border:1px solid var(--hair);box-shadow:none}
+.rt .inp{height:var(--ctl-md);border-radius:var(--r-md)}
+.rsel{font-weight:600;font-size:13.5px;padding:0 10px 0 12px;background:var(--glass-2);border:1px solid var(--border-ctl);box-shadow:var(--shadow-ctl)}
 .rh{font-size:12px;color:var(--text-3);padding:0 2px 6px}
 .envs{display:grid;grid-template-columns:1fr 1fr 1fr 120px;gap:10px}
 .env{border-radius:14px;padding:11px 13px;background:var(--fill);border:1.5px solid transparent;min-width:0}
 .env b{font-size:14px}
 .env.on{background:var(--glass-2);border-color:var(--blue);box-shadow:0 6px 16px -10px color-mix(in srgb,var(--blue) 70%,transparent)}
 .env.add{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-size:13px;color:var(--text-3);background:transparent;border:1.5px dashed color-mix(in srgb,var(--text) 18%,transparent)}
-.bigb{height:44px;border-radius:13px;border:0;font-size:14.5px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 20px;white-space:nowrap}
-.pri{background:var(--blue);color:#fff;box-shadow:0 10px 22px -10px color-mix(in srgb,var(--blue) 85%,transparent)}
+.bigb{height:var(--ctl-lg);border-radius:var(--r-lg);border:0;font-size:14px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 20px;white-space:nowrap}
+.pri{background:var(--btn-pri-bg);color:#fff;box-shadow:0 10px 22px -10px color-mix(in srgb,var(--btn-pri-bg) 85%,transparent)}
 .secb{background:var(--fill);color:var(--text)}
 .note{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;color:var(--text-2);line-height:1.5;padding:9px 13px;border-radius:13px;background:color-mix(in srgb,var(--blue) 7%,transparent)}
-.pbar{height:4px;border-radius:2px;background:var(--fill);overflow:hidden}
-.pbar i{display:block;height:100%;border-radius:2px;background:linear-gradient(90deg,#4F8BFF,#9B5CFF)}
+.pbar{height:4px;border-radius:2px;background:var(--well);overflow:hidden}
+.pbar i{display:block;height:100%;border-radius:2px;background:linear-gradient(90deg,var(--blue),var(--purple))}
 '''
 
 CHECK = '<i data-i="check" data-s="14" data-w="3"></i>'
@@ -97,8 +97,8 @@ def sidebar(cur):
 OKS = '<span class="okt">' + CHECK + '登录成功</span>'
 ING = '<span class="ing"><span class="spin"></span>正在试登录…</span>'
 PERM = {
-    "edit": '<div class="inp pm pm-e"><i data-i="edit" data-s="15"></i><span class="grow">可以修改</span><i data-i="chevd" data-s="14"></i></div>',
-    "view": '<div class="inp pm pm-v"><i data-i="eye" data-s="15"></i><span class="grow">只能查看</span><i data-i="chevd" data-s="14"></i></div>',
+    "edit": '<div class="inp pm pm-e"><i data-i="edit" data-s="15"></i><span class="grow">可以修改</span><i data-i="chevd" data-s="13"></i></div>',
+    "view": '<div class="inp pm pm-v"><i data-i="eye" data-s="15"></i><span class="grow">只能查看</span><i data-i="chevd" data-s="13"></i></div>',
     "lock": '<div class="inp pm pm-l"><i data-i="lock" data-s="15"></i><span class="grow">只能查看</span></div>',
 }
 EXP = '<span class="wnt">已过期 · 去更新</span>'
@@ -129,7 +129,7 @@ def cred(c):
 def rows(env):
     out = []
     for r, a, t, pm, st, f, c in ACC[env]:
-        out.append(f'''<div class="inp rsel"><span class="grow ell">{r}</span><i data-i="chevd" data-s="14"></i></div>
+        out.append(f'''<div class="inp rsel"><span class="grow ell">{r}</span><i data-i="chevd" data-s="13"></i></div>
 {acct(a, c, f)}
 {cred(c)}
 <div>{PERM[pm]}</div>
@@ -154,15 +154,15 @@ def body(env):
       <div style="margin-top:18px">
         <div class="lab">环境<span>按需添加测试、联调或正式入口；纯代码逻辑修复可先跳过这一步</span></div>
         <div class="envs">{cards}<div class="env add"><i data-i="plus" data-s="18"></i>添加环境</div></div>
-        <div class="note" style="margin-top:10px;padding:8px 12px"><i data-i="git" data-s="15" style="color:var(--blue);margin-top:1px"></i><span><b>复现与复测规则：</b>测试 Bug 去测试环境复现；线上单去正式环境按账号数据权限复现；改完统一在测试环境做浏览器复测。</span></div>
+        <div class="note" style="margin-top:10px;padding:8px 12px"><i data-i="git" data-s="15" style="color:var(--ink-blue);margin-top:1px"></i><span><b>复现与复测规则：</b>测试 Bug 去测试环境复现；线上单去正式环境按账号数据权限复现；改完统一在测试环境做浏览器复测。</span></div>
       </div>
 
       <div style="margin-top:16px">
         <div class="lab">{l1}<span>{h1}</span></div>
         <div class="rt"><div class="rh">角色</div><div class="rh">账号</div><div class="rh">密码 / Cookie</div><div class="rh">数据权限</div><div class="rh">Bot 实测</div>{rows(env)}</div>
         <div class="row g16" style="margin-top:10px"><span class="f13 lnk grow">+ 添加账号</span>
-          <span class="row g6 f12 t3"><i data-i="eye" data-s="14" style="color:var(--blue)"></i><b class="t2">只能查看</b>只看页面，不点保存、提交、删除</span>
-          <span class="row g6 f12 t3"><i data-i="edit" data-s="14" style="color:var(--green)"></i><b class="t2">可以修改</b>能新增、编辑这个账号的数据</span></div>
+          <span class="row g6 f12 t3"><i data-i="eye" data-s="14" style="color:var(--ink-blue)"></i><b class="t2">只能查看</b>只看页面，不点保存、提交、删除</span>
+          <span class="row g6 f12 t3"><i data-i="edit" data-s="14" style="color:var(--ink-green)"></i><b class="t2">可以修改</b>能新增、编辑这个账号的数据</span></div>
       </div>
 
       <div class="note" style="margin-top:auto;margin-bottom:14px;background:var(--fill)"><i data-i="msgq" data-s="15" style="color:var(--text-3);margin-top:1px"></i><span><b>测试数据不用这里填：</b>由每张工单自己提供。工单里写的账号必须在这里登记过 Bot 才会登录；没登记的会停下来提醒你补录。</span></div>'''
@@ -175,7 +175,7 @@ def page(cur, title, sub, inner, nxt=None, skip=True, prev=True, foot=None, why=
     why_html = ""
     if why:
         wi, wt, wb = why
-        why_html = f'<div class="why"><div class="wh"><i data-i="{wi}" data-s="13" style="color:var(--purple)"></i>{wt}</div>{wb}</div>'
+        why_html = f'<div class="why"><div class="wh"><i data-i="{wi}" data-s="13" style="color:var(--ink-purple)"></i>{wt}</div>{wb}</div>'
     if foot is None:
         foot = (('<button class="bigb secb"><i data-i="chevl" data-s="16" data-w="2.4"></i>上一步</button>' if prev else '')
                 + '<span class="grow"></span>'
@@ -205,10 +205,10 @@ def page(cur, title, sub, inner, nxt=None, skip=True, prev=True, foot=None, why=
   <section class="fm">
     <div class="fb">
       <div class="row g10">
-        <div class="grow"><div class="f12" style="color:var(--blue);font-weight:700">第 {cur} 步 · {t}</div>
+        <div class="grow"><div class="f12" style="color:var(--ink-blue);font-weight:700">第 {cur} 步 · {t}</div>
           <div style="font-size:24px;font-weight:800;margin-top:5px">{title}</div>
           <div class="f13 t2" style="margin-top:5px">{sub}</div></div>
-        <span class="chip2" style="align-self:flex-start"><i data-i="spark" data-s="13" style="color:var(--purple)"></i>{chip}</span>
+        <span class="chip2" style="align-self:flex-start"><i data-i="spark" data-s="13" style="color:var(--ink-purple)"></i>{chip}</span>
       </div>
 {inner}
     </div>

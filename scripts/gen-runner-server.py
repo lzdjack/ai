@@ -10,7 +10,7 @@ OUT = ROOT / "reference" / "src" / "v5"
 
 STYLE = '''
 .root{display:block;background:var(--wall)}
-.top-l{position:absolute;left:32px;top:24px;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--text-2);padding:7px 13px;border-radius:11px;z-index:3}
+.top-l{position:absolute;left:32px;top:24px;display:inline-flex;align-items:center;gap:6px;height:var(--ctl-sm);padding:0 12px;border-radius:var(--r-sm);background:var(--glass-2);border:1px solid var(--border-ctl);box-shadow:var(--shadow-ctl);font-size:13px;font-weight:600;color:var(--text-2);z-index:3}
 .ver{position:absolute;right:32px;top:28px;font-size:12px;color:var(--text-3);letter-spacing:.3px;z-index:3}
 .aura{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);width:620px;height:620px;border-radius:50%;
   background:conic-gradient(from 160deg,#34D399,#0EA5E9,#3B8BFF,#10B981,#34D399);filter:blur(98px);opacity:.22;pointer-events:none}
@@ -35,28 +35,27 @@ html.dark .panel{
   background:linear-gradient(145deg,#34D399,#059669);box-shadow:0 12px 24px -8px rgba(5,150,105,.5),inset 0 1px 0 rgba(255,255,255,.4)}
 .hd-t{font-size:21px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:9px}
 .hd-s{font-size:13px;color:var(--text-2);margin-top:4px}
-.bd-team{height:21px;padding:0 8px;border-radius:6px;font-size:11px;font-weight:700;color:var(--green);background:color-mix(in srgb,var(--green) 14%,transparent);display:inline-flex;align-items:center}
+.bd-team{height:20px;padding:0 7px;border-radius:6px;font-size:11px;font-weight:700;color:var(--ink-green);background:color-mix(in srgb,var(--green) 14%,transparent);display:inline-flex;align-items:center}
 
 .sec-h{display:flex;align-items:center;gap:8px;margin-top:20px;margin-bottom:10px}
-.snum{width:20px;height:20px;border-radius:50%;background:color-mix(in srgb,var(--blue) 14%,transparent);color:var(--blue);font-size:11.5px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.snum{width:20px;height:20px;border-radius:50%;background:color-mix(in srgb,var(--blue) 14%,transparent);color:var(--ink-blue);font-size:11.5px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;flex:none}
 .sttl{font-size:13.5px;font-weight:700;color:var(--text)}
 .ssub{font-size:12px;color:var(--text-3);margin-left:auto}
 
 .grid3{display:grid;grid-template-columns:1.15fr 1fr 1.05fr;gap:12px}
 .fld-b{display:flex;flex-direction:column;gap:5px}
-.flb{font-size:11.5px;font-weight:600;color:var(--text-3)}
-.inp{height:38px;border-radius:11px;padding:0 12px;background:var(--fill);border:1px solid var(--hair);display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--text)}
-.seg2{height:38px;border-radius:11px;padding:3px;background:var(--fill);display:flex;gap:3px}
-.seg2 span{flex:1;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:600;color:var(--text-2);white-space:nowrap}
-.seg2 span.on{background:var(--glass-2);color:var(--text);box-shadow:0 2px 8px -2px rgba(0,0,0,.15)}
+.flb{font-size:11.5px;font-weight:600;color:var(--text-2)}
+.inp{height:var(--ctl-md);border-radius:var(--r-md);padding:0 12px;background:var(--well);border:1px solid var(--hair);display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--text)}
+.sel{height:var(--ctl-md);border-radius:var(--r-md);padding:0 12px;background:var(--glass-2);border:1px solid var(--border-ctl);box-shadow:var(--shadow-ctl);display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:600;color:var(--text)}
+.sel svg{color:var(--text-3);flex:none}
 
 /* 终端命令块 */
 .term{border-radius:16px;background:#161925;color:#E6EAF4;padding:15px 18px 14px;border:1px solid rgba(255,255,255,.09);box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
 html.dark .term{background:rgba(8,10,18,.78)}
 .term-top{display:flex;align-items:center;gap:8px;margin-bottom:10px}
 .term-tag{font-size:11px;font-weight:600;color:#94A3B8;background:rgba(255,255,255,.07);padding:3px 8px;border-radius:6px}
-.copy-btn{margin-left:auto;height:28px;padding:0 12px;border-radius:8px;background:var(--blue);color:#fff;font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:5px}
-.ref-btn{height:28px;padding:0 10px;border-radius:8px;background:rgba(255,255,255,.08);color:#CBD5E1;font-size:12px;font-weight:500;display:inline-flex;align-items:center;gap:4px}
+.copy-btn{margin-left:auto;height:var(--ctl-xs);padding:0 12px;border-radius:var(--r-sm);background:var(--btn-pri-bg);color:#fff;font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:5px}
+.ref-btn{height:var(--ctl-xs);padding:0 10px;border-radius:var(--r-sm);background:rgba(255,255,255,.08);color:#CBD5E1;font-size:12px;font-weight:500;display:inline-flex;align-items:center;gap:4px}
 .cmd{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:12.5px;line-height:1.72;white-space:pre;overflow:hidden}
 .cmd .c-p{color:#64748B}.cmd .c-k{color:#38BDF8}.cmd .c-f{color:#C084FC}.cmd .c-s{color:#34D399}
 .term-meta{display:flex;align-items:center;gap:14px;margin-top:11px;padding-top:10px;border-top:1px solid rgba(255,255,255,.08);font-size:11.5px;color:#94A3B8}
@@ -71,16 +70,16 @@ html.dark .term{background:rgba(8,10,18,.78)}
 }
 .pulse{width:12px;height:12px;border-radius:50%;background:var(--green);flex:none;box-shadow:0 0 0 5px color-mix(in srgb,var(--green) 24%,transparent)}
 .w-steps{display:flex;align-items:center;gap:10px;margin-left:auto;font-size:12px;color:var(--text-2);white-space:nowrap}
-.ws-ok{color:var(--green);font-weight:600}.ws-run{color:var(--blue);font-weight:600}.ws-dim{color:var(--text-3)}
+.ws-ok{color:var(--ink-green);font-weight:600}.ws-run{color:var(--ink-blue);font-weight:600}.ws-dim{color:var(--text-3)}
 
 /* 底部动作条 */
 .foot{margin-top:20px;padding-top:16px;border-top:1px solid var(--hair);display:flex;align-items:center;gap:10px}
-.f-btn{height:40px;padding:0 18px;border-radius:12px;font-size:13.5px;font-weight:600;display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+.f-btn{height:var(--ctl-lg);padding:0 18px;border-radius:var(--r-lg);font-size:13.5px;font-weight:600;display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
 .f-sec{background:var(--fill);color:var(--text)}
-.f-pri{background:var(--blue);color:#fff;box-shadow:0 10px 22px -8px color-mix(in srgb,var(--blue) 85%,transparent)}
+.f-pri{background:var(--btn-pri-bg);color:#fff;box-shadow:0 10px 22px -8px color-mix(in srgb,var(--btn-pri-bg) 85%,transparent)}
 
 .ft{position:absolute;left:0;right:0;bottom:26px;display:flex;justify-content:center;z-index:2}
-.pill{display:inline-flex;align-items:center;gap:7px;height:30px;padding:0 14px;border-radius:15px;font-size:12px;color:var(--text-2);box-shadow:none!important}
+.pill{display:inline-flex;align-items:center;gap:7px;height:26px;padding:0 12px;border-radius:var(--r-full);font-size:12px;font-weight:600;color:var(--text-2);box-shadow:none!important}
 '''
 
 BACK = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>'
@@ -88,7 +87,7 @@ SERVER = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="cu
 COPY = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>'
 REF = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 11-3.2-6.9"/><path d="M21 3v6h-6"/></svg>'
 SHIELD = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 5-3.5 8-7 9-3.5-1-7-4-7-9V6l7-3z"/><path d="M9.5 12l1.8 1.8 3.2-3.6"/></svg>'
-CHEVD = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>'
+CHEVD = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>'
 
 HTML = f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>连接自有 / 团队服务器 · PC</title>
 <link rel="stylesheet" href="../v3/base.css"><link rel="stylesheet" href="../v4/apple.css"><link rel="stylesheet" href="pc.css">
@@ -116,8 +115,8 @@ HTML = f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>
       </div>
       <div class="grid3">
         <div class="fld-b"><span class="flb">节点名称</span><div class="inp mono">shanghai-ci-01</div></div>
-        <div class="fld-b"><span class="flb">可见范围</span><div class="inp"><span>全团队共用（默认）</span>{CHEVD}</div></div>
-        <div class="fld-b"><span class="flb">安装方式</span><div class="seg2"><span class="on">一键脚本</span><span>Docker Compose</span></div></div>
+        <div class="fld-b"><span class="flb">可见范围</span><div class="sel"><span>全团队共用（默认）</span>{CHEVD}</div></div>
+        <div class="fld-b"><span class="flb">安装方式</span><div class="cc-seg" style="display:flex;width:100%"><span class="on" style="flex:1">一键脚本</span><span style="flex:1">Docker Compose</span></div></div>
       </div>
 
       <div class="sec-h">

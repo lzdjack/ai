@@ -1,0 +1,214 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>移动端 · 标准组件库规范（3 路多 Agent 审定）</title>
+<link rel="stylesheet" href="../v3/base.css"><link rel="stylesheet" href="m.css">
+<script>(function(){var q=new URLSearchParams(location.search);if(q.get('mode')==='dark')document.documentElement.classList.add('dark')})()</script>
+</head><body><div class="board"><div class="col3"><div class="phone"><div class="scr"><div class="sbar"><span>9:41</span><span class="sbi"><svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M8 2.2c2.4 0 4.6.9 6.2 2.5l1.2-1.2A10.4 10.4 0 0 0 8 .5 10.4 10.4 0 0 0 .6 3.5l1.2 1.2A8.7 8.7 0 0 1 8 2.2zm0 3.4c1.5 0 2.8.6 3.8 1.5L13 5.9a7 7 0 0 0-10 0l1.2 1.2c1-.9 2.3-1.5 3.8-1.5zM8 9l2-2a2.9 2.9 0 0 0-4 0z"/></svg><svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="17" height="8" rx="2" fill="currentColor"/><rect x="23.5" y="4" width="1.5" height="4" rx=".75" fill="currentColor" opacity=".4"/></svg></span></div>
+<div class="cc-m-nav">
+  <span class="cc-m-nav-back"><i data-i="chevr" data-s="19" style="transform:rotate(180deg)"></i>返回</span>
+  <span class="cc-m-nav-title">基础控件 · 44pt 标尺</span>
+  <span class="cc-m-nav-act glass"><i data-i="more" data-s="17"></i></span>
+</div>
+<div class="pad" style="display:flex;flex-direction:column;gap:9px;padding-top:4px">
+  <!-- 46px 搜索框（微凹 --well + 清除钮） -->
+  <div class="cc-m-search">
+    <i data-i="search" data-s="15" style="color:var(--text-3)"></i>
+    <span class="grow">okr-web</span>
+    <span class="cc-search-clear"><i data-i="x" data-s="10" data-w="2.8"></i></span>
+    <span class="cc-tag cc-tag-b" style="height:18px;font-size:11px">46pt</span>
+  </div>
+
+  <!-- OTP 聚焦输入（46px） + 错误态字段 -->
+  <div class="cc-m-input is-focus">
+    <i data-i="shield" data-s="15" style="color:var(--ink-blue)"></i>
+    <span class="mono w6 grow">482 910</span>
+    <span class="f12 w6" style="color:var(--ink-blue);white-space:nowrap">58s 重发</span>
+  </div>
+  <div class="cc-field" style="gap:4px">
+    <div class="cc-m-input is-error">
+      <i data-i="alert" data-s="15" style="color:var(--ink-red)"></i>
+      <span class="grow ell">lin@company</span>
+      <span class="f11 w6" style="color:var(--ink-red)">错误</span>
+    </div>
+    <div class="cc-field-err">邮箱格式不正确，请检查后重试</div>
+  </div>
+
+  <!-- 移动端下拉（46px · 轻浮 --glass-2 + --border-ctl） -->
+  <div class="cc-m-select">
+    <span class="cc-dot" style="background:var(--green)"></span>
+    <span class="cc-sel-val">测试环境</span>
+    <span class="cc-sel-sub mono">test.tita.work/okr</span>
+    <span class="cc-sel-caret"><i data-i="chevd" data-s="14"></i></span>
+  </div>
+
+  <!-- 移动端统一分段控件（40px 视觉 + 44pt 触控） -->
+  <div class="cc-m-seg">
+    <span>密码</span>
+    <span class="is-active">Cookie</span>
+    <span>Token</span>
+  </div>
+
+  <!-- Inset Grouped List：48px 行高 + 46×28pt Cupertino 开关 + 复选/单选 -->
+  <div class="cc-m-list glass">
+    <div class="cc-m-row">
+      <span class="grow f13 w6">推送到本机（48pt 行）</span>
+      <span class="cc-m-switch on"></span>
+    </div>
+    <div class="cc-m-row">
+      <span class="row g6 grow f13"><i data-i="lock" data-s="13" style="color:var(--text-3)"></i><span>发布失败提醒（锁死）</span></span>
+      <span class="cc-m-switch on is-disabled"></span>
+    </div>
+    <div class="cc-m-row" style="gap:14px">
+      <span class="row g6 f12"><span class="cc-m-checkbox is-checked"><i data-i="check" data-s="12" data-w="3"></i></span>已选</span>
+      <span class="row g6 f12"><span class="cc-m-checkbox"></span>未选</span>
+      <span class="row g6 f12"><span class="cc-m-radio is-checked"></span>单选</span>
+      <span class="row g6 f12"><span class="cc-m-radio"></span>未选</span>
+    </div>
+  </div>
+</div>
+
+<!-- 吸底操作栏（同心圆弧 26-10=16 · 打回/通过 12px 间距 · AA 高对比按钮） -->
+<div class="cc-m-bar glass">
+  <div class="row f11 t3" style="padding:0 4px"><span class="grow">吸底操作栏 · 间距 12pt · AA 按钮实底</span><span class="mono">44–48pt</span></div>
+  <div class="row" style="gap:12px">
+    <span class="cc-m-btn cc-m-btn-red" style="flex:1"><i data-i="undo" data-s="14"></i>打回</span>
+    <span class="cc-m-btn cc-m-btn-pri" style="flex:1.55"><i data-i="check" data-s="12" data-w="3"></i>审核通过 a3f9c21</span>
+  </div>
+  <div class="row" style="gap:10px">
+    <span class="cc-m-btn cc-m-btn-glass" style="flex:1;font-size:13px"><span class="cc-spinner cc-spinner-sm" style="color:var(--ink-blue)"></span>试连中…</span>
+    <span class="cc-m-btn cc-m-btn-ok" style="flex:1;font-size:13px"><i data-i="check" data-s="12" data-w="3"></i>复测通过</span>
+  </div>
+</div>
+<div class="home"></div></div></div><div class="lbl">基础控件与 44pt 标尺<em>NavBar · 输入 · 下拉 · 开关 · 吸底栏</em></div></div><div class="col3"><div class="phone"><div class="scr"><div class="sbar"><span>9:41</span><span class="sbi"><svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M8 2.2c2.4 0 4.6.9 6.2 2.5l1.2-1.2A10.4 10.4 0 0 0 8 .5 10.4 10.4 0 0 0 .6 3.5l1.2 1.2A8.7 8.7 0 0 1 8 2.2zm0 3.4c1.5 0 2.8.6 3.8 1.5L13 5.9a7 7 0 0 0-10 0l1.2 1.2c1-.9 2.3-1.5 3.8-1.5zM8 9l2-2a2.9 2.9 0 0 0-4 0z"/></svg><svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="17" height="8" rx="2" fill="currentColor"/><rect x="23.5" y="4" width="1.5" height="4" rx=".75" fill="currentColor" opacity=".4"/></svg></span></div>
+<div class="pad" style="padding-top:4px;display:flex;flex-direction:column;gap:9px">
+  <!-- 大标题 + 下拉刷新胶囊 -->
+  <div class="row">
+    <span style="font-size:24px;font-weight:800;letter-spacing:-.4px" class="grow">工单审核</span>
+    <span class="cc-m-ptr"><span class="cc-spinner cc-spinner-sm" style="color:var(--ink-blue)"></span>同步中…</span>
+  </div>
+
+  <!-- 分组列表：蓝色选中工单行 + 48px 设置行 -->
+  <div class="cc-m-list glass">
+    <div class="cc-m-ticket-row is-selected">
+      <span class="cc-avatar" style="width:36px;height:36px;background:linear-gradient(150deg,#F5A3C7,#D96BA0);box-shadow:0 0 0 2px rgba(255,255,255,.5)">王芳<i style="background:var(--blue);box-shadow:0 0 0 2px #fff"></i></span>
+      <div class="col grow" style="min-width:0">
+        <div class="row g6"><span class="f13 w7 grow ell">点击分组后界面卡住</span><span class="f11" style="opacity:.85">8 分钟</span></div>
+        <div class="row g6" style="margin-top:3px"><span class="cc-tag" style="background:rgba(255,255,255,.22);color:#fff;height:18px">Tita</span><span class="f11 ell" style="opacity:.88">第 2 轮交付 · 待我审核</span></div>
+      </div>
+    </div>
+    <div class="cc-m-row">
+      <span class="grow f13 w6">环境版本（48pt 标准行）</span>
+      <span class="cc-m-row-val mono">2.18.0-fix.2<i data-i="chevr" data-s="14" style="color:var(--text-3)"></i></span>
+    </div>
+  </div>
+
+  <!-- Bot 横向 4 步进度条 -->
+  <div class="steps glass" style="min-height:38px;padding:6px 10px;gap:8px;font-size:12px">
+    <span class="botav" style="width:22px;height:22px;border-radius:7px"><i data-i="bot" data-s="12"></i></span>
+    <span class="sp2"><i class="ok"><i data-i="check" data-s="9" data-w="3"></i></i>复现</span>
+    <span class="sp2"><i class="ok"><i data-i="check" data-s="9" data-w="3"></i></i>定位</span>
+    <span class="sp2"><i class="ok"><i data-i="check" data-s="9" data-w="3"></i></i>改码</span>
+    <span class="sp2"><i class="ok"><i data-i="check" data-s="9" data-w="3"></i></i>验证</span>
+  </div>
+
+  <!-- 10 秒极速审核卡 + L2 高危锁横幅（补齐 M3 规范空缺） -->
+  <div class="cc-m-review-card glass">
+    <div class="row g6">
+      <span class="f14 w7 grow">第 2 轮交付</span>
+      <span class="cc-tag cc-tag-g"><i data-i="check" data-s="12" data-w="3"></i>机审通过</span>
+      <span class="cc-tag cc-tag-r">L2 高危</span>
+    </div>
+    <div class="f12 t2" style="line-height:1.45"><b style="color:var(--text)">根因</b> 权限守卫未拦截跨租户回调 · <span class="mono f11" style="color:var(--ink-green)">+38</span> <span class="mono f11" style="color:var(--ink-red)">−12</span></div>
+    <div class="row g8">
+      <div style="flex:1;height:52px;border-radius:10px;background:var(--well);border:1px solid var(--hair);padding:7px 9px;display:flex;flex-direction:column;justify-content:space-between">
+        <span class="f11 t3">修前复现 · 已看</span>
+        <span class="mono f11" style="color:var(--ink-red)">403 漏拦截</span>
+      </div>
+      <div style="flex:1;height:52px;border-radius:10px;background:var(--well);border:2px solid var(--green);padding:6px 9px;display:flex;flex-direction:column;justify-content:space-between">
+        <span class="f11 w6" style="color:var(--ink-green)">修后复测 · 通过</span>
+        <span class="mono f11" style="color:var(--ink-green)">报错 3 → 0</span>
+      </div>
+    </div>
+    <div class="cc-m-l2-lock">
+      <i data-i="lock" data-s="14" data-w="2.2" style="margin-top:1px;flex:none"></i>
+      <span><b>L2 高危改动（命中 auth/ 核心路径）</b><br>手机端已禁用 10 秒速过，请去 PC 端逐行审 Diff</span>
+    </div>
+    <div class="row" style="gap:8px">
+      <span class="cc-m-btn cc-m-btn-locked" style="flex:1.15;font-size:12.5px"><i data-i="lock" data-s="13"></i>仅限 PC 审核</span>
+      <span class="cc-m-btn cc-m-btn-glass" style="flex:1;font-size:12.5px;color:var(--ink-blue)"><i data-i="ext" data-s="13"></i>发到 PC ›</span>
+    </div>
+  </div>
+</div>
+<div class="tabbar glass"><span class="tb"><span class="ap ap-ai"><svg width="24" height="24" viewBox="0 0 24 24" fill="#fff"><path d="M10 3l1.9 5.6 5.6 1.9-5.6 1.9L10 18l-1.9-5.6L2.5 10.5l5.6-1.9z"/><path d="M18 13.5l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9z" opacity=".8"/></svg></span></span><span class="tb on"><span class="ap ap-chat"><svg width="28" height="28" viewBox="0 0 24 24"><defs><linearGradient id="cb24" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6CC4FF"/><stop offset="1" stop-color="#1673FF"/></linearGradient></defs><path d="M15 9.6c3.4 0 6.1 2.2 6.1 4.9 0 1.4-.7 2.6-1.8 3.5l.5 2.5-2.9-1.4c-.6.2-1.2.3-1.9.3-3.4 0-6.1-2.2-6.1-4.9s2.7-4.9 6.1-4.9z" fill="#B9DBFF"/><path d="M9.6 3.2c-4 0-7.2 2.6-7.2 5.8 0 1.7.9 3.2 2.3 4.2l-.6 3 3.5-1.7c.6.2 1.3.2 2 .2 4 0 7.2-2.6 7.2-5.8S13.6 3.2 9.6 3.2z" fill="url(#cb24)"/><circle cx="6.8" cy="9" r="1" fill="#fff"/><circle cx="9.6" cy="9" r="1" fill="#fff"/><circle cx="12.4" cy="9" r="1" fill="#fff"/></svg></span><b>4</b></span><span class="tb"><span class="ap ap-pub"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 2.6l8.4 4.7L12 12 3.6 7.3z" fill="#FFE2A8"/><path d="M3.6 7.3L12 12v9.4l-8.4-4.7z" fill="#fff" opacity=".95"/><path d="M20.4 7.3L12 12v9.4l8.4-4.7z" fill="#fff" opacity=".7"/><path d="M7.8 4.9l8.4 4.7v3.2" stroke="#FF8A00" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".7"/></svg></span><b>1</b></span><span class="tb"><span class="ap ap-rb"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3.8 4.8v4.4h4.4"/><path d="M4.2 9.2A8.3 8.3 0 1 1 3.9 13.6"/><path d="M12 8v4.2l2.7 1.7"/></svg></span></span><span class="tb"><span class="ap ap-sk"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 13.2l8.6-4.4L12 4.4 3.4 8.8z" fill="#fff"/><path d="M3.4 12.6L12 17l8.6-4.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".75"/><path d="M3.4 16.2L12 20.6l8.6-4.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".5"/></svg></span></span></div>
+<div class="home"></div></div></div><div class="lbl">列表、审核卡与 5-Tab<em>下拉刷新 · 10 秒交付 · L2 高危锁</em></div></div><div class="col3"><div class="phone"><div class="scr"><div class="sbar"><span>9:41</span><span class="sbi"><svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M8 2.2c2.4 0 4.6.9 6.2 2.5l1.2-1.2A10.4 10.4 0 0 0 8 .5 10.4 10.4 0 0 0 .6 3.5l1.2 1.2A8.7 8.7 0 0 1 8 2.2zm0 3.4c1.5 0 2.8.6 3.8 1.5L13 5.9a7 7 0 0 0-10 0l1.2 1.2c1-.9 2.3-1.5 3.8-1.5zM8 9l2-2a2.9 2.9 0 0 0-4 0z"/></svg><svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="17" height="8" rx="2" fill="currentColor"/><rect x="23.5" y="4" width="1.5" height="4" rx=".75" fill="currentColor" opacity=".4"/></svg></span></div>
+<div class="pad" style="padding-top:8px;display:flex;flex-direction:column;gap:9px">
+  <!-- 悬浮 Toast（z:70，验证盖过遮罩与弹层） -->
+  <div class="cc-m-toast">
+    <i data-i="check" data-s="15" data-w="2.8" style="color:var(--ink-green)"></i>
+    <span class="w6 grow">已移除仓库 okr-web</span>
+    <span class="f12 w7" style="color:var(--ink-blue)">撤销</span>
+  </div>
+
+  <!-- 警告横幅 + 骨架屏 + 离线执行器条 -->
+  <div class="cc-banner cc-banner-warn" style="padding:8px 11px">
+    <i data-i="alert" data-s="14" style="margin-top:1px"></i>
+    <span><b>Tita 采集失败</b> · 自动重试中（2 分钟前）</span>
+  </div>
+  <div class="glass" style="border-radius:16px;padding:10px 12px;display:flex;align-items:center;gap:10px">
+    <span class="cc-skeleton" style="width:36px;height:36px;border-radius:50%;flex:none"></span>
+    <div class="col grow" style="gap:7px">
+      <span class="cc-skeleton" style="height:11px;width:58%"></span>
+      <span class="cc-skeleton" style="height:9px;width:86%"></span>
+    </div>
+  </div>
+  <div class="cc-empty-dashed" style="padding:9px 12px;border-radius:14px">
+    <span class="cc-dot" style="background:var(--orange)"></span>
+    <span class="f12 grow">本机执行器离线 · 新单安全排队等上线</span>
+  </div>
+</div>
+
+<div class="cc-m-scrim"></div>
+<div class="cc-m-sheet">
+  <div class="cc-m-sheet-grab"></div>
+  <div class="cc-m-sheet-hd">
+    <div class="col grow">
+      <span class="f17 w7">打回第 2 轮 · Bottom Sheet</span>
+      <span class="f11 t3">r:30px · --glass-overlay · z:40 · 避让 34pt 安全区</span>
+    </div>
+    <span class="cc-close"><i data-i="x" data-s="15" data-w="2.2"></i></span>
+  </div>
+
+  <div class="col" style="gap:9px">
+    <!-- 弹层内移动端下拉（46px） -->
+    <div class="cc-m-select">
+      <span class="cc-sel-val">问题分类</span>
+      <span class="cc-sel-sub">验证不充分 · 需补管理员复测</span>
+      <span class="cc-sel-caret"><i data-i="chevd" data-s="14"></i></span>
+    </div>
+
+    <!-- 聚焦多行输入（--glass-2 + 蓝圈） -->
+    <div class="cc-m-textarea is-focus">管理员切到「销售部」仍偶发卡顿，loading 遮罩未收起。</div>
+
+    <!-- 快捷理由芯片（gap ≥ 8pt） -->
+    <div class="row" style="gap:8px;flex-wrap:wrap">
+      <span class="cc-chip is-selected" style="height:32px">问题仍存在</span>
+      <span class="cc-chip" style="height:32px">改法不认可</span>
+      <span class="cc-chip" style="height:32px">缺少复测</span>
+    </div>
+
+    <!-- 44pt 复选行 -->
+    <div class="row" style="gap:10px;min-height:var(--m-touch)">
+      <span class="cc-m-checkbox is-checked"><i data-i="check" data-s="12" data-w="3"></i></span>
+      <span class="f13 grow">下一轮使用管理员账号补跑验证</span>
+    </div>
+
+    <!-- 2 步竖向微时间线 -->
+    <div class="cc-card-flat" style="padding:8px 11px;display:flex;flex-direction:column;gap:5px">
+      <div class="row g8 f12"><span class="ok2" style="background:var(--btn-ok-bg)"><i data-i="check" data-s="9" data-w="3"></i></span><span>附加代码位置 <span class="mono">GroupPicker.tsx:49</span></span></div>
+      <div class="row g8 f12 t2"><span class="cc-dot" style="background:var(--blue);margin:0 4px"></span><span>提交后立即通知 Bot-01 开始第 3 轮修复</span></div>
+    </div>
+
+    <!-- 48pt 高对比实底危险主按钮（--btn-danger-bg，5.74:1） -->
+    <span class="cc-m-btn cc-m-btn-lg cc-m-btn-danger" style="margin-top:2px"><i data-i="undo" data-s="15"></i>打回并通知 Bot 重修</span>
+    <div class="f11 t3" style="text-align:center">Flutter: <span class="mono">CcBottomSheet</span> · <span class="mono">SafeArea(bottom: 34pt)</span> · 支持下滑收起</div>
+  </div>
+</div>
+<div class="home"></div></div></div><div class="lbl">弹层、Toast 与空态<em>Toast(z:70) · 骨架 · Bottom Sheet</em></div></div></div><script src="icons.js"></script></body></html>
