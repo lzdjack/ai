@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>AI 助手</title>
+<link rel="stylesheet" href="../v3/base.css"><link rel="stylesheet" href="../v4/apple.css"><link rel="stylesheet" href="pc.css">
+<script>(function(){var q=new URLSearchParams(location.search);if(q.get('mode')==='dark')document.documentElement.classList.add('dark')})()</script>
+</head><body><div class="root">
+<div class="tbar">
+  <div class="br"><span class="lg"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7.2L3.6 12 8 16.8"/><path d="M16 7.2l4.4 4.8-4.4 4.8" opacity=".6"/><path d="M9.6 12.3l1.8 1.8 3.2-4"/></svg><svg class="spk" width="11" height="11" viewBox="0 0 24 24" fill="#fff"><path d="M12 1l2.6 8.4L23 12l-8.4 2.6L12 23l-2.6-8.4L1 12l8.4-2.6z"/></svg></span><span class="tt"><b>云匠</b><em>CloudCraft</em></span></div>
+  <div class="grow row" style="justify-content:center"><div class="glass tsearch"><i data-i="search" data-s="15"></i><span class="f13 grow">搜索工单、MR、发布记录</span><span class="kbd" style="border-color:var(--hair)">⌘F</span></div></div>
+  <div class="tright">
+    <span class="pill glass tpill"><i data-i="bot" data-s="13"></i>3 个 Bot 在线</span>
+    <span class="pill glass tpill"><span class="dot" style="width:7px;height:7px;background:var(--green)"></span>Jira · 2 分钟前</span>
+    <span class="pill glass tpill" style="color:var(--ink-orange)"><span class="dot" style="width:7px;height:7px;background:var(--orange)"></span>Tita 采集失败 · 重试中</span>
+    <span class="av" style="width:34px;height:34px;font-size:13px;background:linear-gradient(160deg,#FFC9A8,#F08F7A);color:#5A2414">林</span>
+  </div>
+</div>
+<div class="panels"><section class="glass pn" style="width:270px;flex:none;padding:16px 10px 10px"><div class="row" style="padding:0 8px 8px"><span class="f18 w7 grow">AI 助手</span><span class="btn2 sm a-sec" style="background:var(--fill)"><i data-i="plus" data-s="14" data-w="2.2"></i>新对话</span></div><div class="row g8" style="margin:0 6px;height:var(--ctl-sm);padding:0 10px;border-radius:var(--r-sm);background:var(--well);border:1px solid var(--hair);color:var(--text-3)"><i data-i="search" data-s="14"></i><span class="f12">搜索对话</span></div><div class="g10h">今天</div><div class="col" style="padding:9px 10px;border-radius:12px;gap:4px;background:linear-gradient(180deg,var(--btn-pri-bg),var(--btn-pri-active));color:#fff;box-shadow:0 8px 18px -10px color-mix(in srgb,var(--btn-pri-bg) 88%,transparent)"><span class="f13 w6 ell">现在有哪些单在等我？</span><span class="row g6"><span class="tag tg-n" style="height:18px;font-size:10.5px;background:rgba(255,255,255,.22);color:#fff">全局</span></span></div><div class="col" style="padding:9px 10px;border-radius:12px;gap:4px;"><span class="f13 w6 ell">用普通员工再测 TK-20855</span><span class="row g6"><span class="tag tg-n" style="height:18px;font-size:10.5px;">TK-20855</span></span></div><div class="col" style="padding:9px 10px;border-radius:12px;gap:4px;"><span class="f13 w6 ell">今天 Tita 收单正常吗？</span><span class="row g6"><span class="tag tg-n" style="height:18px;font-size:10.5px;">全局</span></span></div><div class="g10h">昨天</div><div class="col" style="padding:9px 10px;border-radius:12px;gap:4px;"><span class="f13 w6 ell">TK-20871 为什么又退回来了</span><span class="row g6"><span class="tag tg-n" style="height:18px;font-size:10.5px;">TK-20871</span></span></div><div class="col" style="padding:9px 10px;border-radius:12px;gap:4px;"><span class="f13 w6 ell">本周哪些 Bug 修复失败过</span><span class="row g6"><span class="tag tg-n" style="height:18px;font-size:10.5px;">全局</span></span></div><div class="col" style="padding:9px 10px;border-radius:12px;gap:4px;"><span class="f13 w6 ell">把验证 Skill 用到审批项目</span><span class="row g6"><span class="tag tg-n" style="height:18px;font-size:10.5px;">审批项目</span></span></div><div class="g10h">本周</div><div class="col" style="padding:9px 10px;border-radius:12px;gap:4px;"><span class="f13 w6 ell">这个 Bug 测试和正式各是什么版本</span><span class="row g6"><span class="tag tg-n" style="height:18px;font-size:10.5px;">TK-20790</span></span></div><div class="col" style="padding:9px 10px;border-radius:12px;gap:4px;"><span class="f13 w6 ell">组件发了为什么主站看不到</span><span class="row g6"><span class="tag tg-n" style="height:18px;font-size:10.5px;">大包</span></span></div></section><main class="glass pn grow" style="min-width:0">
+  <div class="row g10" style="padding:14px 22px;border-bottom:1px solid var(--hair)">
+    <span class="orb" style="width:30px;height:30px"><i data-i="spark" data-s="15" style="color:#fff"></i></span>
+    <span class="f16 w7">现在有哪些单在等我？</span><span class="grow"></span>
+    <span class="cc-select cc-select-sm"><i data-i="layers" data-s="13"></i><span class="cc-sel-val">关联：全局 · 我的工单</span><span class="cc-sel-sp"></span><span class="cc-sel-caret"><i data-i="chevd" data-s="13"></i></span></span>
+    <span class="cc-pill"><i data-i="monitor" data-s="13"></i>手机上可继续</span>
+  </div>
+  <div class="col g14 grow" style="padding:14px 40px 8px;min-height:0;justify-content:flex-end;overflow:hidden;-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 60px);mask-image:linear-gradient(180deg,transparent 0,#000 60px)">
+    <div class="me">哪几张在等我审核？。</div>
+    <div class="col g8">
+      <div class="row g8"><span class="aid" style="width:22px;height:22px;border-radius:7px"><i data-i="spark" data-s="12"></i></span><span class="f12 t3">AI 助手 · 查了你名下 8 张工单的最新一轮验证记录</span></div>
+      <div class="f14" style="line-height:1.6">有 <b>2 张</b>待你审核。按浏览器验证情况排序，<b style="color:var(--ink-orange)">执行受阻</b>的放在最前：</div>
+      <div class="card" style="padding:4px;width:640px">
+        <div class="r10"><span class="av10" style="width:34px;height:34px;font-size:11px;background:linear-gradient(150deg,#FFC38A,#F08A5D)">陈晨<i style="background:var(--orange)"></i></span><div class="grow" style="min-width:0"><div class="row g6"><span class="t10 ell grow">进度条切换周期不刷新</span></div><div class="row g6" style="margin-top:3px"><span class="sc10 sc-j">Jira</span><span class="tag tg-o" style="height:17px;font-size:10.5px">执行受阻</span><span class="d10 ell">验证受阻：账号进不去页面</span></div></div><span class="go" style="align-self:center">处理</span></div>
+        <div class="r10"><span class="av10" style="width:34px;height:34px;font-size:11px;background:linear-gradient(150deg,#7FB2FF,#4C7DF0)">王芳<i style="background:var(--blue)"></i></span><div class="grow" style="min-width:0"><div class="row g6"><span class="t10 ell grow">点击分组后界面卡住</span></div><div class="row g6" style="margin-top:3px"><span class="sc10 sc-t">Tita</span><span class="tag tg-g" style="height:17px;font-size:10.5px">已通过 3/4</span><span class="d10 ell">第 2 轮交付 · 验证 3/4</span></div></div><span class="go" style="align-self:center">去审核</span></div>
+      </div>
+      <div class="f12 t3">另有 1 张修复中（结果未知），未计入。<span class="lnk">在工单列表中查看 ›</span></div>
+    </div>
+    <div class="me">TK-20855 用普通员工再测一次，重点看切换第二个周期。</div>
+    <div class="col g8">
+      <div class="row g8"><span class="aid" style="width:22px;height:22px;border-radius:7px"><i data-i="spark" data-s="12"></i></span><span class="f12 t3">AI 助手 · 已代你在 TK-20855 补充条件</span></div>
+      <div class="card" style="width:640px;padding:14px 16px">
+        <div class="row g8"><span class="sc10 sc-j">Jira</span><span class="f14 w7 grow">进度条切换周期不刷新 · 第 2 轮复测</span><span class="f12 t3">发起人 林某 · 14:26</span></div>
+        <div class="f13 t2" style="margin-top:6px">补充条件：<b style="color:var(--text)">普通员工</b> · 重点检查<b style="color:var(--text)">切换到第二个周期</b>后进度条是否刷新</div>
+        <div class="row g10" style="margin-top:12px">
+          <span class="row g6 f12 w6" style="color:var(--ink-green)"><span class="ck" style="background:var(--btn-ok-bg)">✓</span>已提交给 Bot-02</span><span style="width:28px;height:2px;background:var(--green)"></span>
+          <span class="row g6 f12 w6" style="color:var(--ink-teal)"><span class="ck" style="background:#0A6678;box-shadow:0 0 0 4px color-mix(in srgb,var(--teal) 22%,transparent)"><i data-i="loader" data-s="11" data-w="2.6"></i></span>正在执行 · 浏览器复测</span><span style="width:28px;height:2px;background:var(--hair)"></span>
+          <span class="row g6 f12 t3"><span class="ck" style="background:var(--fill)"></span>已有验证结果</span>
+          <span class="grow"></span><span class="f12 lnk">在工单中查看 ›</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="padding:6px 40px 18px">
+    <div class="row g8" style="margin-bottom:10px"><span class="sug"><i data-i="spark" data-s="12" style="color:var(--ink-purple)"></i>本周哪些 Bug 修复失败过？</span><span class="sug"><i data-i="spark" data-s="12" style="color:var(--ink-purple)"></i>今天 Tita 收单正常吗？</span><span class="sug"><i data-i="spark" data-s="12" style="color:var(--ink-purple)"></i>TK-20790 测试和正式各是什么版本</span></div>
+    <div class="gbord row g10" style="height:54px;padding:0 7px 0 18px"><span class="f14 t3 grow">问所有工单、发布、收单情况，或让 AI 帮你办…</span><i data-i="mic" data-s="17" style="color:var(--text-3)"></i><i data-i="paperclip" data-s="17" style="color:var(--text-3)"></i><span class="snd ai" style="width:40px;height:40px;border-radius:13px"><i data-i="arrowup" data-s="17" data-w="2.4"></i></span></div>
+  </div>
+</main><aside class="glass pn" style="width:290px;flex:none;padding:16px 14px;gap:12px"><div class="card" style="padding:12px 14px"><div class="mini">当前关联</div>
+  <div class="row g10"><span class="ic-box" style="background:linear-gradient(160deg,#5E8BFF,#B157F0)"><i data-i="layers" data-s="16"></i></span><div class="grow"><div class="f13 w6">全局 · 我的工单</div><div class="f12 t3">8 张 · 3 个项目</div></div><span class="f12 lnk">切换</span></div>
+  <div class="f12 t3" style="margin-top:10px;line-height:1.6">从工单、项目或设置页进入时，这里会显示对应对象。</div></div><div class="card" style="padding:12px 14px"><div class="mini">本段对话已执行</div>
+  <div class="tlx"><div class="rail"><span class="bul" style="background:var(--green)"></span><i></i></div><div style="padding-bottom:8px"><div class="f13 w6">查询待审核工单</div><div class="f12 t3">只读 · 8 张 · 14:20</div></div></div>
+  <div class="tlx"><div class="rail"><span class="bul" style="background:var(--teal);box-shadow:0 0 0 4px color-mix(in srgb,var(--teal) 20%,transparent)"></span></div><div><div class="f13 w6">TK-20855 发起复测</div><div class="f12 t3">已提交给 Bot-02 · 执行中</div></div></div></div><div class="card" style="padding:12px 14px"><div class="mini">按你的权限办事</div>
+  <div class="kv2"><span class="t2">查询</span><span class="f12 t3">直接回答</span></div>
+  <div class="kv2"><span class="t2">单项操作</span><span class="f12 t3">对象明确就办</span></div>
+  <div class="kv2"><span class="t2">批量审核 · 改规则</span><span class="f12" style="color:var(--ink-orange)">先列影响再确认</span></div>
+  <div class="kv2"><span class="t2">可见项目</span><span class="f12 t3">审批 · OKR · 考勤</span></div></div></aside></div>
+<nav class="dockv glass" aria-label="主菜单"><span class="dki on"><span class="ap ap-ai"><svg width="24" height="24" viewBox="0 0 24 24" fill="#fff"><path d="M10 3l1.9 5.6 5.6 1.9-5.6 1.9L10 18l-1.9-5.6L2.5 10.5l5.6-1.9z"/><path d="M18 13.5l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9z" opacity=".8"/></svg></span></span><span class="dsep"></span><span class="dki"><span class="ap ap-chat"><svg width="30" height="30" viewBox="0 0 24 24"><defs><linearGradient id="cb1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6CC4FF"/><stop offset="1" stop-color="#1673FF"/></linearGradient></defs><path d="M15 9.6c3.4 0 6.1 2.2 6.1 4.9 0 1.4-.7 2.6-1.8 3.5l.5 2.5-2.9-1.4c-.6.2-1.2.3-1.9.3-3.4 0-6.1-2.2-6.1-4.9s2.7-4.9 6.1-4.9z" fill="#B9DBFF"/><path d="M9.6 3.2c-4 0-7.2 2.6-7.2 5.8 0 1.7.9 3.2 2.3 4.2l-.6 3 3.5-1.7c.6.2 1.3.2 2 .2 4 0 7.2-2.6 7.2-5.8S13.6 3.2 9.6 3.2z" fill="url(#cb1)"/><circle cx="6.8" cy="9" r="1" fill="#fff"/><circle cx="9.6" cy="9" r="1" fill="#fff"/><circle cx="12.4" cy="9" r="1" fill="#fff"/></svg></span><b>4</b></span><span class="dki"><span class="ap ap-pub"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 2.6l8.4 4.7L12 12 3.6 7.3z" fill="#FFE2A8"/><path d="M3.6 7.3L12 12v9.4l-8.4-4.7z" fill="#fff" opacity=".95"/><path d="M20.4 7.3L12 12v9.4l8.4-4.7z" fill="#fff" opacity=".7"/><path d="M7.8 4.9l8.4 4.7v3.2" stroke="#FF8A00" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".7"/></svg></span><b>1</b></span><span class="dki"><span class="ap ap-rb"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3.8 4.8v4.4h4.4"/><path d="M4.2 9.2A8.3 8.3 0 1 1 3.9 13.6"/><path d="M12 8v4.2l2.7 1.7"/></svg></span></span><span class="dki"><span class="ap ap-sk"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 13.2l8.6-4.4L12 4.4 3.4 8.8z" fill="#fff"/><path d="M3.4 12.6L12 17l8.6-4.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".75"/><path d="M3.4 16.2L12 20.6l8.6-4.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".5"/></svg></span></span><span class="grow"></span><span class="dki"><span class="ap ap-mkt"><svg width="24" height="24" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7.2" height="7.2" rx="2.2" fill="#fff"/><rect x="13.3" y="3.5" width="7.2" height="7.2" rx="2.2" fill="#fff" opacity=".82"/><rect x="3.5" y="13.3" width="7.2" height="7.2" rx="2.2" fill="#fff" opacity=".82"/><path d="M16.9 13.2l1.1 2.7 2.7 1.1-2.7 1.1-1.1 2.7-1.1-2.7-2.7-1.1 2.7-1.1z" fill="#fff"/></svg></span></span><span class="dki"><span class="ap ap-set"><svg width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="gr1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#D9DCE3"/></linearGradient></defs><path d="M12 1.8l1.6 2.4 2.8-.7.5 2.9 2.8.9-.9 2.8 2.2 1.9-2.2 1.9.9 2.8-2.8.9-.5 2.9-2.8-.7L12 22.2l-1.6-2.4-2.8.7-.5-2.9-2.8-.9.9-2.8-2.2-1.9 2.2-1.9-.9-2.8 2.8-.9.5-2.9 2.8.7z" fill="url(#gr1)"/><circle cx="12" cy="12" r="5.2" fill="#8D919B"/><circle cx="12" cy="12" r="2.6" fill="#E9EBF0"/></svg></span></span></nav>
+
+<style>
+.clip-modal{
+  position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:524px;border-radius:var(--r-panel);padding:22px 26px 22px;
+  background:var(--glass-overlay);border:1px solid var(--stroke);
+  backdrop-filter:var(--blur-panel);-webkit-backdrop-filter:var(--blur-panel);
+  box-shadow:var(--shadow-float);z-index:var(--z-drawer);
+  display:flex;flex-direction:column;gap:12px
+}
+.clip-src{
+  border-radius:13px;padding:10px 12px;background:var(--well);
+  border:1px dashed color-mix(in srgb,var(--blue) 38%,var(--border-ctl));
+  display:flex;flex-direction:column;gap:5px
+}
+.clip-org{
+  border-radius:15px;padding:13px 15px;
+  background:color-mix(in srgb,var(--blue) 7%,var(--glass-2));
+  border:1px solid color-mix(in srgb,var(--blue) 26%,transparent)
+}
+.clip-ft{
+  position:fixed;left:50%;bottom:24px;transform:translateX(-50%);
+  z-index:var(--z-drawer)
+}
+.clip-pill{
+  display:inline-flex;align-items:center;gap:7px;height:30px;padding:0 14px;
+  border-radius:var(--r-full);font-size:12px;font-weight:600;color:var(--text-2)
+}
+</style>
+<div class="cc-scrim"></div>
+<div class="clip-modal" role="dialog" aria-label="检测到剪贴板中的团队邀请">
+  <div class="row g8">
+    <span class="tag tg-b" style="height:22px"><i data-i="link" data-s="12" data-w="2.2"></i>检测到剪贴板团队邀请</span>
+    <span class="tag tg-g" style="height:22px"><i data-i="check" data-s="12" data-w="2.6"></i>已通过口令校验 · 防重拦截</span>
+    <span class="grow"></span>
+    <span class="cc-close"><i data-i="x" data-s="15" data-w="2.2"></i></span>
+  </div>
+
+  <div class="row g12" style="margin-top:2px">
+    <img src="logo.svg" width="52" height="52" alt="" style="flex:none">
+    <div class="col grow" style="min-width:0;gap:3px">
+      <div style="font-size:18px;font-weight:800;line-height:1.25">识别到「星辰研发中心」团队邀请</div>
+      <div class="f12 t2" style="line-height:1.45">切回云匠时自动识别复制的链接与口令，无需跳外链浏览器或重头注册</div>
+    </div>
+  </div>
+
+  <div class="clip-src">
+    <div class="row f11">
+      <span class="w6" style="color:var(--ink-blue);display:inline-flex;align-items:center;gap:5px"><i data-i="copy" data-s="12"></i>从系统剪贴板识别（微信 / 飞书复制文案）</span>
+      <span class="grow"></span>
+      <span class="t3">确认或忽略后不再重复提示</span>
+    </div>
+    <div class="f12 mono t2" style="line-height:1.5;word-break:break-all">
+      林某邀请你加入云匠「星辰研发中心·OKR 产研」：<span style="color:var(--ink-blue);font-weight:600">https://cc.intra/join/9f2a4c8d</span> · 口令 <span style="color:var(--text);font-weight:700">#CC-7M9P#</span>
+    </div>
+  </div>
+
+  <div class="clip-org">
+    <div class="row g10">
+      <span class="ic-box" style="width:36px;height:36px;border-radius:10px;background:linear-gradient(155deg,#5AA0FF,#1F6FFF)"><i data-i="users" data-s="18" data-w="2.2"></i></span>
+      <div class="col grow" style="min-width:0">
+        <div class="row g6"><span class="f15 w7">星辰研发中心</span><span class="tag tg-b" style="height:18px;font-size:10.5px">企业空间</span></div>
+        <div class="f11 t3" style="margin-top:2px">发起人：林某 · 一次性口令有效期剩余 23 小时</div>
+      </div>
+    </div>
+    <div class="col g6" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--hair)">
+      <div class="row f12"><span class="t3" style="width:86px;flex:none">预设主部门</span><span class="w6">OKR 产研</span></div>
+      <div class="row f12"><span class="t3" style="width:86px;flex:none">预设角色</span><span class="w6">研发成员（可审核分配给我的工单）</span></div>
+      <div class="row f12"><span class="t3" style="width:86px;flex:none">自动继承</span><span class="w6" style="color:var(--ink-green)">OKR(可改) · 审批(只读) · 共享连接器 · 3 项 Skills</span></div>
+    </div>
+  </div>
+
+  <div class="row g8 f11 t2" style="padding:8px 11px;border-radius:11px;background:var(--well);border:1px solid var(--hair);line-height:1.5">
+    <i data-i="layers" data-s="14" style="color:var(--ink-blue);flex:none"></i>
+    <span>当前已登录 <b style="color:var(--text)">alex@company.com</b>，确认即入驻并自动激活顶栏空间切换胶囊；若未登录则直达「设密并加入」页。</span>
+  </div>
+
+  <div class="col g8" style="margin-top:2px">
+    <button class="cc-btn cc-btn-lg cc-btn-pri" style="width:100%"><i data-i="check" data-s="15" data-w="2.6"></i>确认加入「星辰研发中心 · OKR 产研」</button>
+    <button class="cc-btn cc-btn-md cc-btn-glass" style="width:100%">忽略本次，不再重复识别此口令</button>
+  </div>
+</div>
+<div class="clip-ft"><span class="glass clip-pill"><i data-i="shield" data-s="13" style="color:var(--ink-green)"></i>支持 Deep Link (<span class="mono">cloudcraft://join</span>) 直唤，或复制链接回云匠自动拦截 · 校验后方显空间详情</span></div>
+</div>
+<script src="../v3/shots.js"></script><script src="icons.js"></script>
+</body></html>
