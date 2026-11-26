@@ -1103,6 +1103,14 @@ JOURNEYS = [
                         ] + _pc_set_nav_pins("proj") + _pc_dock_pins("set"),
                         note="4 套预设模板 + @xyflow/react 交互画布（增删连接线 / run_when 分支 / 退回弧）+ 为单节点绑定专属 skill_ids[] 与工具范围，修改从下一轮生效。",
                     ),
+                    variant(
+                        "③ 操作记录与数据恢复（统一软删 + 快照回滚）",
+                        "reference/images/pages/PC-设置-操作记录与数据回滚",
+                        pins=[
+                            pin(84.0, 8.8, 12.0, 3.8, "g_set_proj:0", "关闭返回项目设置", "info"),
+                        ],
+                        note="设置页右上角「操作记录」抽屉：全部变更记录与已软删可恢复列表、Before vs Current 字段对照、密文脱敏护栏及防冲突回滚。",
+                    ),
                 ],
             ),
             node(
