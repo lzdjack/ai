@@ -1,0 +1,92 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>移动端 · 完整文件与证据预览</title>
+<link rel="stylesheet" href="../v3/base.css"><link rel="stylesheet" href="../v4/apple.css"><link rel="stylesheet" href="m.css">
+<script>(function(){var q=new URLSearchParams(location.search);if(q.get('mode')==='dark')document.documentElement.classList.add('dark')})()</script>
+<style>
+.nav{min-height:var(--m-nav-h);display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 12px;gap:6px;position:relative;z-index:var(--z-sticky)}
+.bk{display:inline-flex;align-items:center;gap:2px;color:var(--ink-blue);font-size:15px;font-weight:500;min-height:var(--m-touch);justify-self:start;white-space:nowrap}
+.nav>*:nth-child(3){justify-self:end}
+.dock2{position:absolute;left:10px;right:10px;bottom:22px;border-radius:26px;padding:10px;display:flex;flex-direction:column;gap:8px;z-index:var(--z-dock)}
+.abtn{height:44px;border-radius:14px;border:0;font-size:14px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:0 14px;white-space:nowrap}
+.a-sec{background:var(--fill);color:var(--text)}
+.a-pri{background:var(--btn-pri-bg);color:#fff;box-shadow:0 8px 18px -10px color-mix(in srgb,var(--btn-pri-bg) 85%,transparent)}
+.a-red{background:var(--btn-danger-bg);color:#fff;box-shadow:0 8px 18px -10px color-mix(in srgb,var(--btn-danger-bg) 80%,transparent)}
+.kw{color:var(--ink-purple)}.fn{color:var(--ink-blue)}
+.shot .tita .tb{width:auto!important;height:auto!important;justify-content:flex-start!important}
+.shot .tagx.ok{width:auto!important;height:22px!important;border-radius:6px!important;padding:0 8px!important;white-space:nowrap!important}
+</style></head><body><div class="board">
+<div class="col3"><div class="phone"><div class="scr"><div class="sbar"><span>9:41</span><span class="sbi"><svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M8 2.2c2.4 0 4.6.9 6.2 2.5l1.2-1.2A10.4 10.4 0 0 0 8 .5 10.4 10.4 0 0 0 .6 3.5l1.2 1.2A8.7 8.7 0 0 1 8 2.2zm0 3.4c1.5 0 2.8.6 3.8 1.5L13 5.9a7 7 0 0 0-10 0l1.2 1.2c1-.9 2.3-1.5 3.8-1.5zM8 9l2-2a2.9 2.9 0 0 0-4 0z"/></svg><svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="17" height="8" rx="2" fill="currentColor"/><rect x="23.5" y="4" width="1.5" height="4" rx=".75" fill="currentColor" opacity=".4"/></svg></span></div>
+<div class="nav"><span class="bk"><i data-i="chevl" data-s="20"></i>代码</span><span class="f14 w7 mono ell">GroupPicker.tsx</span><span class="tag tg-n">184 行</span></div>
+<div class="pad" style="padding-top:4px">
+  <div class="cc-m-seg">
+    <span class="on">完整代码文件</span><span>证据大图对照 (4)</span>
+  </div>
+  <div class="row g6" style="margin-top:8px;overflow:hidden">
+    <span class="chip glass" style="height:26px;font-size:11.5px">顶部 Imports</span>
+    <span class="chip" style="height:26px;font-size:11.5px;background:var(--btn-pri-bg);color:#fff">GroupPicker :38–54</span>
+    <span class="chip glass" style="height:26px;font-size:11.5px">MemberList</span>
+  </div>
+  <div class="cd" style="margin-top:8px"><div class="hk">顶部 Imports（第 1–37 行）</div><div class="l "><span class="n">01</span><span class="s"></span><span class="c">import { useEffect, useState } from &#x27;react&#x27;;</span></div><div class="l "><span class="n">03</span><span class="s"></span><span class="c">import { createAbortGate } from &#x27;../utils/abortable&#x27;;</span></div><div class="hk">export function GroupPicker（第 38–54 行）</div><div class="l "><span class="n">38</span><span class="s"></span><span class="c">export function GroupPicker({ groupId }: Props) {</span></div><div class="l del"><span class="n">41</span><span class="s">−</span><span class="c">  useEffect(() =&gt; {</span></div><div class="l del"><span class="n">42</span><span class="s">−</span><span class="c">    fetchGroupMembers(groupId).then(setMembers);</span></div><div class="l del"><span class="n">43</span><span class="s">−</span><span class="c">  }, [groupId]);</span></div><div class="l add"><span class="n">44</span><span class="s">+</span><span class="c">  useEffect(() =&gt; {</span></div><div class="l add"><span class="n">45</span><span class="s">+</span><span class="c">    const gate = createAbortGate();</span></div><div class="l add"><span class="n">47</span><span class="s">+</span><span class="c">    fetchGroupMembers(groupId, gate).then(res =&gt; {</span></div><div class="l add sel"><span class="n">48</span><span class="s">+</span><span class="c">      if (gate.stale()) return; // 丢弃过期请求</span></div><div class="l add"><span class="n">49</span><span class="s">+</span><span class="c">      setMembers(res.items); setLoading(false);</span></div><div class="l add"><span class="n">51</span><span class="s">+</span><span class="c">    return () =&gt; gate.abort();</span></div><div class="l add"><span class="n">52</span><span class="s">+</span><span class="c">  }, [groupId]);</span></div><div class="l "><span class="n">53</span><span class="s"></span><span class="c">  return &lt;MemberList members={members} /&gt;;</span></div><div class="hk">function MemberList（第 116–184 行）</div><div class="l "><span class="n">116</span><span class="s"></span><span class="c">function MemberList({ members }: ListProps) {</span></div></div>
+  <div class="ains" style="margin-top:8px"><b style="color:var(--ink-purple)">第 48 行 · 本单 AI</b>　已用 AbortGate 拦掉旧响应；确认第 48 行 return 前是否已关闭加载态。</div>
+</div>
+<div class="dock2 glass">
+  <div class="row g8">
+    <button class="abtn a-sec" style="flex:1"><i data-i="copy" data-s="14"></i>复制 :48 引用</button>
+    <button class="abtn a-red" style="flex:1.1"><i data-i="undo" data-s="14"></i>附到打回</button>
+  </div>
+</div><div class="home"></div></div></div><div class="lbl">完整代码文件<em>符号跳转 + 第 48 行 AI 批注</em></div></div>
+<div class="col3"><div class="phone"><div class="scr"><div class="sbar"><span>9:41</span><span class="sbi"><svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M8 2.2c2.4 0 4.6.9 6.2 2.5l1.2-1.2A10.4 10.4 0 0 0 8 .5 10.4 10.4 0 0 0 .6 3.5l1.2 1.2A8.7 8.7 0 0 1 8 2.2zm0 3.4c1.5 0 2.8.6 3.8 1.5L13 5.9a7 7 0 0 0-10 0l1.2 1.2c1-.9 2.3-1.5 3.8-1.5zM8 9l2-2a2.9 2.9 0 0 0-4 0z"/></svg><svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="17" height="8" rx="2" fill="currentColor"/><rect x="23.5" y="4" width="1.5" height="4" rx=".75" fill="currentColor" opacity=".4"/></svg></span></div>
+<div class="nav"><span class="bk"><i data-i="chevl" data-s="20"></i>证据</span><span class="f15 w7">证据大图对照</span><span class="tag tg-b">2 / 4</span></div>
+<div class="pad" style="padding-top:4px">
+  <div class="cc-m-seg">
+    <span>完整代码文件</span><span class="on">证据大图对照 (4)</span>
+  </div>
+  <div style="margin-top:10px">
+    <div class="row g6" style="margin-bottom:5px"><span class="tag tg-o">修前复现</span><span class="f12 w6 grow">0:18 切销售部卡死转圈</span><span class="f11 t3">第 1 轮</span></div>
+    <div class="shot" data-s="before" data-cap="修前复现 · 0:18" style="height:178px;border-radius:14px"></div>
+  </div>
+  <div style="margin-top:11px">
+    <div class="row g6" style="margin-bottom:5px"><span class="tag tg-g">修后复测</span><span class="f12 w6 grow" style="color:var(--ink-green)">0:41 切换 3 组流畅选中何嘉明</span><span class="f11 lnk">未查阅</span></div>
+    <div class="shot" data-s="after" data-cap="修后复测 · 0:41" style="height:178px;border-radius:14px;box-shadow:0 0 0 2px var(--green)"></div>
+  </div>
+  <div class="flat2 row g8" style="margin-top:10px;padding:8px 11px">
+    <span class="ic-box" style="width:24px;height:24px;border-radius:50%;background:var(--btn-pri-bg);flex:none"><i data-i="play" data-s="11"></i></span>
+    <span class="mono f11 w6">0:18</span>
+    <div style="flex:1;height:5px;border-radius:3px;background:var(--well);position:relative"><i style="display:block;width:46%;height:100%;border-radius:3px;background:linear-gradient(90deg,var(--blue),var(--green))"></i></div>
+    <span class="mono f11 t3">0:41</span>
+    <span class="f11 lnk" style="flex:none">看代码 :48</span>
+  </div>
+</div>
+<div class="dock2 glass">
+  <div class="row g8">
+    <button class="abtn a-pri" style="flex:1.15"><i data-i="check" data-s="15" data-w="2.6"></i>标为已查阅</button>
+    <button class="abtn a-red" style="flex:1"><i data-i="undo" data-s="14"></i>附到打回</button>
+  </div>
+</div><div class="home"></div></div></div><div class="lbl">证据大图对照 (4)<em>修前 vs 修后上下对比 + 进度条</em></div></div>
+<div class="col3"><div class="phone"><div class="scr"><div class="sbar"><span>9:41</span><span class="sbi"><svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M8 2.2c2.4 0 4.6.9 6.2 2.5l1.2-1.2A10.4 10.4 0 0 0 8 .5 10.4 10.4 0 0 0 .6 3.5l1.2 1.2A8.7 8.7 0 0 1 8 2.2zm0 3.4c1.5 0 2.8.6 3.8 1.5L13 5.9a7 7 0 0 0-10 0l1.2 1.2c1-.9 2.3-1.5 3.8-1.5zM8 9l2-2a2.9 2.9 0 0 0-4 0z"/></svg><svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="17" height="8" rx="2" fill="currentColor"/><rect x="23.5" y="4" width="1.5" height="4" rx=".75" fill="currentColor" opacity=".4"/></svg></span></div>
+<div style="position:absolute;inset:0;background:#0C0E16;color:#EEF1F8;padding-top:50px">
+  <div class="nav" style="color:#EEF1F8"><span class="bk" style="color:#6CA6FF"><i data-i="chevl" data-s="20"></i>关闭</span><span class="mono f14 w6">fail-2.png</span><span class="tag" style="background:rgba(48,209,88,.18);color:#5BE884">已脱敏</span></div>
+  <div class="pad" style="padding-top:10px">
+    <div style="border-radius:16px;overflow:hidden;border:1.5px solid rgba(255,69,58,.55);background:#151824;padding:12px">
+      <div class="row g6 f11" style="color:#9BA3B8;margin-bottom:8px"><span style="width:8px;height:8px;border-radius:50%;background:#FF5F56"></span><span class="mono ell">test.tita.work/okr/progress?period=2026Q4</span></div>
+      <div style="border-radius:12px;background:#1C2030;padding:22px 14px;text-align:center;border:1px solid rgba(255,255,255,.07)">
+        <span style="width:44px;height:44px;border-radius:14px;background:rgba(255,69,58,.18);color:#FF6B63;display:inline-flex;align-items:center;justify-content:center"><i data-i="lock" data-s="22"></i></span>
+        <div class="f14 w7" style="margin-top:10px;color:#fff">403 · 当前账号无 OKR 进度权限</div>
+        <div class="f12" style="margin-top:5px;color:#9BA3B8">router guard blocked at <span class="mono">guard.ts:88</span></div>
+      </div>
+      <div class="row g8" style="margin-top:10px;padding:8px 10px;border-radius:10px;background:rgba(255,159,10,.12);color:#FFB340;font-size:11.5px">
+        <i data-i="shield" data-s="13"></i><span>Cookie tita_sid=•••• 已自动打码 · 可双指缩放</span>
+      </div>
+    </div>
+    <div style="border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);padding:11px 13px;margin-top:12px">
+      <div class="row f12" style="color:#C8D0E4"><span class="grow">截图来源：OKR-2231 第 2 次尝试</span><span>14:32:48</span></div>
+      <div class="f12" style="color:#8F98B0;margin-top:5px;line-height:1.5">普通员工账号缺 <span class="mono">okr.progress.view</span>；同样适用于「大包/回滚」回读原图放大预览。</div>
+    </div>
+  </div>
+  <div class="dock2" style="background:rgba(24,27,38,.88);border:1px solid rgba(255,255,255,.1)">
+    <div class="row g8">
+      <button class="abtn" style="flex:1;background:rgba(255,255,255,.1);color:#EEF1F8"><i data-i="download" data-s="14"></i>保存原图</button>
+      <button class="abtn a-pri" style="flex:1.25"><i data-i="refresh" data-s="14"></i>补账号并重试</button>
+    </div>
+  </div>
+</div><div class="home"></div></div></div><div class="lbl">失败截图 / 原图灯箱<em>双指缩放 + 脱敏标 + 一键重试</em></div></div>
+</div><script src="../v3/shots.js"></script><script src="icons.js"></script></body></html>

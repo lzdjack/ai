@@ -1,0 +1,54 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>确认加入工作空间 · PC</title>
+<link rel="stylesheet" href="../v3/base.css"><link rel="stylesheet" href="../v4/apple.css"><link rel="stylesheet" href="pc.css">
+<script>(function(){var q=new URLSearchParams(location.search);if(q.get('mode')==='dark')document.documentElement.classList.add('dark')})()</script>
+<style>
+.root{display:block;background:var(--wall)}
+.aura{position:absolute;border-radius:50%;background:conic-gradient(from 210deg,#4F8BFF,#9B5CFF,#FF5FA8,#FFB14A,#4FD1FF,#4F8BFF);filter:blur(70px);opacity:.36}
+html.dark .aura{opacity:.46}
+.ring{position:absolute;border-radius:50%;border:1px solid color-mix(in srgb,var(--text) 7%,transparent)}
+.card{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:var(--r-panel);display:flex;flex-direction:column;z-index:2}
+.ft{position:absolute;left:0;right:0;bottom:28px;display:flex;justify-content:center}
+.ver{position:absolute;right:30px;top:26px;font-size:12px;color:var(--text-3)}
+</style></head><body>
+<div class="root">
+  <div class="ring" style="width:620px;height:620px;left:410px;top:140px"></div>
+  <div class="ring" style="width:900px;height:900px;left:270px;top:0"></div>
+  <div class="aura" style="width:420px;height:420px;left:510px;top:240px"></div>
+  <span class="ver">v1.0 · 反孤岛拦截</span>
+  <div class="card glass" style="width:490px;padding:28px 34px 26px;gap:14px" data-pin="join-card">
+  <div class="row g8">
+    <span class="tag tg-g" style="height:22px"><i data-i="check" data-s="12" data-w="2.6"></i>邮箱验证已通过 · alex@company.com</span>
+    <span class="grow"></span>
+    <span class="tag tg-b" style="height:22px">防孤岛邀请拦截</span>
+  </div>
+  <div class="col" style="align-items:center;text-align:center;margin-top:2px">
+    <img src="logo.svg" width="68" height="68" alt="" style="margin:-4px 0 2px">
+    <div class="f20 w7">检测到团队邀请，直接加入而非另起孤岛</div>
+    <div class="f12 t2" style="margin-top:5px;line-height:1.55">同事 <b>林某</b> 已为 <span class="mono">alex@company.com</span> 预留团队席位并配齐项目默认环境，点下方确认即可免配置直接修单。</div>
+  </div>
+  <div style="border-radius:16px;padding:14px 16px;background:color-mix(in srgb,var(--blue) 7%,var(--glass-2));border:1px solid color-mix(in srgb,var(--blue) 26%,transparent)">
+    <div class="row g10">
+      <span class="ic-box" style="width:36px;height:36px;border-radius:10px;background:linear-gradient(155deg,#5AA0FF,#1F6FFF)"><i data-i="users" data-s="18" data-w="2.2"></i></span>
+      <div class="col grow">
+        <div class="row g6"><span class="f15 w7">星辰研发中心</span><span class="tag tg-b" style="height:18px;font-size:10.5px">企业空间</span></div>
+        <div class="f11 t3" style="margin-top:2px">Slug：<span class="mono">starcraft-dev</span> · 邀请有效期剩余 21 小时</div>
+      </div>
+    </div>
+    <div class="col g6" style="margin-top:11px;padding-top:10px;border-top:1px solid var(--hair)">
+      <div class="row f12"><span class="t3" style="width:92px;flex:none">预设主部门</span><span class="w6">OKR 产研</span></div>
+      <div class="row f12"><span class="t3" style="width:92px;flex:none">预设角色</span><span class="w6">研发成员（可审核分配给我的工单）</span></div>
+      <div class="row f12"><span class="t3" style="width:92px;flex:none">自动继承配置</span><span class="w6" style="color:var(--ink-green)">OKR(可改) · 审批(只读) · 共享连接器 · 3 项 Skills</span></div>
+    </div>
+  </div>
+  <div class="row g8 f11 t2" style="padding:8px 11px;border-radius:11px;background:var(--well);border:1px solid var(--hair);line-height:1.5">
+    <i data-i="layers" data-s="14" style="color:var(--ink-blue);flex:none"></i>
+    <span>加入后你将同时拥有「星辰研发中心」与个人空间（可用空间 ≥ 2），登录后顶栏自动开启工作空间切换胶囊，单空间用户 0 打扰。</span>
+  </div>
+  <div class="col g8" style="margin-top:2px">
+    <button class="cc-btn cc-btn-lg cc-btn-pri" data-pin="confirm-join-btn" style="width:100%"><i data-i="check" data-s="15" data-w="2.6"></i>确认加入「星辰研发中心 · OKR 产研」</button>
+    <button class="cc-btn cc-btn-md cc-btn-glass" data-pin="keep-personal-btn" style="width:100%">暂不加入，仅进入我的个人空间（可稍后在空间切换中接受）</button>
+  </div>
+</div>
+  <div class="ft"><span class="pill glass" style="padding:0 14px;height:28px;font-size:12px"><i data-i="shield" data-s="13"></i>未通过验证码前绝不泄露任何企业名或成员信息</span></div>
+</div>
+<script src="icons.js"></script></body></html>

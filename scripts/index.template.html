@@ -269,6 +269,140 @@ figure img,.gal img{display:block;width:100%;max-width:100%;height:auto;backgrou
 .chk li::before{content:"";display:inline-block;width:14px;height:14px;border-radius:4px;border:1.5px solid var(--text-3);margin-right:9px;vertical-align:-2px}
 .chk li.done::before{background:var(--green);border-color:var(--green)}
 .chk li.wip::before{background:var(--orange);border-color:var(--orange)}
+
+/* UI 点击流转拓扑图（对齐大包明细节点+曲线语法） */
+.uf-lg{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.uf-lg i{width:14px;height:4px;border-radius:3px;display:inline-block}
+.uf-tabs{display:flex;flex-wrap:wrap;height:auto;padding:4px;margin-bottom:0;flex:1;min-width:0}
+.uf-bar-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+.uf-zoombar{display:inline-flex;align-items:center;gap:4px;height:36px;padding:3px 6px;border-radius:10px;background:var(--well);border:1px solid var(--hair);flex:none}
+.uf-zbtn{all:unset;cursor:pointer;min-width:26px;height:28px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--text-2);transition:background .14s,color .14s;user-select:none}
+.uf-zbtn.txt{padding:0 9px;font-size:12px;font-weight:600}
+.uf-zbtn:hover{background:var(--glass-2);color:var(--text)}
+.uf-zbtn.on{background:var(--seg-thumb);color:var(--text);box-shadow:var(--shadow-seg)}
+.uf-zrange{width:74px;accent-color:var(--blue);cursor:pointer;margin:0 2px}
+.uf-zval{min-width:40px;text-align:center;font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--text)}
+.uf-zsep{width:1px;height:16px;background:var(--hair);margin:0 2px}
+.uf-pane{display:none}.uf-pane.on{display:block;animation:fade .2s ease}
+.uf-scroll{position:relative;overflow:hidden;height:clamp(540px,70vh,760px);border-radius:18px;background:radial-gradient(circle at 20px 20px,color-mix(in srgb,var(--text) 9%,transparent) 1px,transparent 1px) 0 0 / 24px 24px,color-mix(in srgb,var(--well) 74%,transparent);border:1px solid var(--hair);cursor:grab;touch-action:none;user-select:none;outline:none}
+.uf-scroll.is-panning{cursor:grabbing}
+.uf-stage{position:absolute;left:0;top:0;display:grid;gap:54px 76px;align-items:start;width:1380px;padding:24px;transform-origin:0 0;will-change:transform}
+.uf-stage.is-anim{transition:transform .22s cubic-bezier(.22,1,.36,1)}
+.uf-canvas-hud{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);z-index:8;padding:4px 12px;border-radius:999px;font-size:11.5px;font-weight:500;color:var(--text-2);background:var(--glass-2);border:1px solid var(--hair);backdrop-filter:blur(14px);white-space:nowrap;pointer-events:none;box-shadow:0 6px 18px -6px rgba(0,0,0,.35)}
+.uf-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;overflow:visible}
+.uf-svg path{fill:none;stroke-width:2.1;stroke-linecap:round;transition:opacity .16s,stroke-width .16s}
+.uf-svg path.is-hi{stroke-width:3;opacity:1!important}
+.uf-svg path.is-dim{opacity:.14}
+.uf-edgelbls{position:absolute;inset:0;pointer-events:none;z-index:3}
+.uf-elbl{
+  position:absolute;transform:translate(-50%,-50%);padding:2px 8px;border-radius:999px;font-size:11px;font-weight:600;
+  background:var(--glass-2);border:1px solid var(--border-ctl);color:var(--text);white-space:nowrap;
+  box-shadow:0 4px 12px -4px rgba(0,0,0,.28);backdrop-filter:blur(14px);transition:opacity .16s,transform .16s;pointer-events:auto;cursor:pointer
+}
+.uf-elbl.tone-ok{color:var(--ink-green);border-color:color-mix(in srgb,var(--green) 42%,transparent)}
+.uf-elbl.tone-info{color:var(--ink-blue);border-color:color-mix(in srgb,var(--blue) 42%,transparent)}
+.uf-elbl.tone-warn{color:var(--ink-orange);border-color:color-mix(in srgb,var(--orange) 45%,transparent)}
+.uf-elbl.tone-gap{color:var(--ink-red);border-color:color-mix(in srgb,var(--red) 48%,transparent);border-style:dashed}
+.uf-elbl.is-dim{opacity:.16}
+.uf-elbl.is-hi{transform:translate(-50%,-50%) scale(1.06);z-index:5}
+.uf-node{
+  position:relative;z-index:2;width:100%;min-width:0;border-radius:15px;padding:10px;
+  background:var(--glass-2);border:1px solid var(--stroke);box-shadow:0 12px 26px -16px rgba(15,25,60,.45);
+  display:flex;flex-direction:column;gap:8px;cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s,opacity .16s;
+}
+html.dark .uf-node{box-shadow:0 14px 30px -14px rgba(0,0,0,.65)}
+.uf-node:hover,.uf-node.is-hi{transform:translateY(-2px);border-color:var(--blue);box-shadow:0 0 0 2px color-mix(in srgb,var(--blue) 35%,transparent),0 16px 30px -14px rgba(0,102,214,.35)}
+.uf-node.is-gap{border:1.5px dashed var(--red);background:color-mix(in srgb,var(--red) 6%,var(--glass-2))}
+.uf-node.is-dim{opacity:.24}
+.uf-nhd{display:flex;align-items:flex-start;gap:8px}
+.uf-meta span{font-size:10.5px;font-weight:600;color:var(--text-3);letter-spacing:.2px}
+.uf-ntitle{display:block;font-size:13.5px;font-weight:700;line-height:1.3;margin-top:1px}
+.uf-nsub{display:block;font-size:11.5px;color:var(--text-3);line-height:1.35;margin-top:2px}
+.uf-thumb{position:relative;border-radius:10px;overflow:hidden;border:1px solid var(--hair);background:var(--fill);aspect-ratio:16/10}
+.uf-thumb img{display:block;width:100%;height:100%;object-fit:cover;object-position:center top}
+.uf-thumb.is-gap{display:flex;align-items:center;justify-content:center;padding:12px;text-align:center;border:1px dashed color-mix(in srgb,var(--red) 45%,transparent);background:color-mix(in srgb,var(--red) 5%,transparent)}
+.uf-gap-ph span{display:block;font-size:12.5px;font-weight:700;color:var(--ink-red)}
+.uf-gap-ph em{display:block;font-style:normal;font-size:11px;color:var(--text-3);margin-top:4px}
+.uf-zoom-hint{
+  position:absolute;right:6px;bottom:6px;padding:2px 7px;border-radius:999px;font-size:10.5px;font-weight:600;
+  background:rgba(15,17,26,.72);color:#fff;opacity:0;transition:opacity .15s;backdrop-filter:blur(6px)
+}
+.uf-node:hover .uf-zoom-hint{opacity:1}
+.uf-hslist{display:flex;flex-direction:column;gap:4px}
+.uf-hs{display:flex;align-items:flex-start;gap:6px;font-size:11.5px;line-height:1.4;color:var(--text-2)}
+.uf-hs i{
+  font-style:normal;width:15px;height:15px;border-radius:50%;flex:none;display:inline-flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:800;margin-top:1px;color:#fff;background:var(--btn-ok-bg)
+}
+.uf-hs.is-warn i{background:#B45309}.uf-hs.is-gap i{background:var(--btn-danger-bg)}.uf-hs.is-reuse i{background:var(--btn-pri-bg)}
+.uf-hs.is-gap span{color:var(--ink-red);font-weight:600}
+.uf-hs.is-clickable{padding:2px 4px;margin:0 -4px;border-radius:6px;transition:background .14s}
+.uf-hs.is-clickable:hover{background:color-mix(in srgb,var(--blue) 14%,transparent)}
+.uf-hs-go{margin-left:auto;color:var(--ink-blue);font-size:11px;font-weight:700;padding-left:4px;flex:none}
+.uf-nfoot{margin-top:auto;padding-top:6px;border-top:1px solid var(--hair);display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:11px;color:var(--text-3);white-space:nowrap}
+.uf-nfoot b{color:var(--ink-blue);font-weight:600;flex:none;white-space:nowrap}
+.uf-nfoot.is-gap b{color:var(--ink-red)}
+
+/* 流转详情检查弹窗 */
+.uf-modal{position:fixed;inset:0;z-index:100;background:rgba(8,10,18,.72);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:24px}
+.uf-modal.on{display:flex;animation:fade .18s ease}
+.uf-modal-card{width:min(1180px,96vw);max-height:92vh;border-radius:22px;padding:18px 22px;display:flex;flex-direction:column;gap:14px;overflow:hidden}
+.uf-modal-hd{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.uf-m-back,.uf-m-pinbtn{all:unset;cursor:pointer;height:26px;padding:0 10px;border-radius:999px;font-size:12px;font-weight:600;background:var(--fill);color:var(--text-2);display:inline-flex;align-items:center;gap:4px}
+.uf-m-back:hover{background:var(--glass-2);color:var(--text)}
+.uf-m-pinbtn.on{background:color-mix(in srgb,var(--blue) 16%,transparent);color:var(--ink-blue);border:1px solid color-mix(in srgb,var(--blue) 42%,transparent)}
+.uf-m-close{all:unset;cursor:pointer;width:32px;height:32px;border-radius:50%;background:var(--fill);color:var(--text);display:flex;align-items:center;justify-content:center;font-weight:700;flex:none}
+.uf-modal-close:hover,.uf-m-close:hover{background:var(--glass-2)}
+.uf-modal-body{display:grid;grid-template-columns:1.65fr 1fr;gap:16px;min-height:0;overflow:auto}
+@media (max-width:900px){.uf-modal-body{grid-template-columns:1fr}}
+.uf-modal-img{border-radius:14px;overflow:hidden;border:1px solid var(--stroke);background:var(--well);display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;align-self:start;position:sticky;top:0;min-height:240px}
+.uf-m-vtabs{display:none;flex-wrap:wrap;gap:6px;padding:10px 12px;border-bottom:1px solid var(--hair);background:var(--glass-2)}
+.uf-m-vtabs.on{display:flex}
+.uf-m-vtab{all:unset;cursor:pointer;height:24px;padding:0 10px;border-radius:999px;font-size:11.5px;font-weight:600;color:var(--text-2);background:var(--fill);border:1px solid transparent}
+.uf-m-vtab:hover{color:var(--text)}
+.uf-m-vtab.on{background:var(--btn-pri-bg);color:#fff}
+.uf-img-stage{position:relative;width:100%;line-height:0}
+.uf-img-stage img{width:100%;height:auto;display:block}
+.uf-pins{position:absolute;inset:0;pointer-events:none;transition:opacity .15s}
+.uf-pins.is-hidden{opacity:0;pointer-events:none}
+.uf-pin{
+  all:unset;box-sizing:border-box;position:absolute;pointer-events:auto;cursor:pointer;border-radius:8px;
+  border:1.5px dashed rgba(56,189,248,.68);background:rgba(56,189,248,.04);
+  transition:transform .14s,background .14s,box-shadow .14s,border-color .14s;
+}
+.uf-pin.tone-ok{border-color:rgba(52,211,153,.72);background:rgba(52,211,153,.04)}
+.uf-pin.tone-warn{border-color:rgba(251,191,36,.75);background:rgba(251,191,36,.04)}
+.uf-pin.tone-gap{border-color:rgba(248,113,113,.85);background:rgba(248,113,113,.07)}
+.uf-pin:hover,.uf-pin.is-hi{background:rgba(56,189,248,.18);border-style:solid;z-index:5;box-shadow:0 0 0 2px rgba(255,255,255,.72),0 0 20px rgba(56,189,248,.75)}
+.uf-pin.tone-ok:hover,.uf-pin.tone-ok.is-hi{background:rgba(52,211,153,.18);box-shadow:0 0 0 2px rgba(255,255,255,.72),0 0 20px rgba(52,211,153,.75)}
+.uf-pin.tone-warn:hover,.uf-pin.tone-warn.is-hi{background:rgba(251,191,36,.18);box-shadow:0 0 0 2px rgba(255,255,255,.72),0 0 20px rgba(251,191,36,.75)}
+.uf-pin.tone-gap:hover,.uf-pin.tone-gap.is-hi{background:rgba(248,113,113,.22);box-shadow:0 0 0 2px rgba(255,255,255,.72),0 0 20px rgba(248,113,113,.8)}
+.uf-pin-dot{
+  position:absolute;right:-7px;top:-7px;width:18px;height:18px;border-radius:50%;
+  font-size:10.5px;font-weight:800;line-height:1;color:#fff;
+  background:#0284C7;border:1.5px solid rgba(255,255,255,.92);box-shadow:0 2px 6px rgba(0,0,0,.45);
+  display:inline-flex;align-items:center;justify-content:center;
+}
+.uf-pin.tone-ok .uf-pin-dot{background:#16A34A}
+.uf-pin.tone-warn .uf-pin-dot{background:#D97706}
+.uf-pin.tone-gap .uf-pin-dot{background:#DC2626}
+.uf-pin-tip{
+  position:absolute;left:50%;top:0;transform:translate(-50%,-118%);padding:3px 9px;border-radius:999px;
+  font-size:11px;font-weight:600;line-height:1.25;white-space:nowrap;color:#fff;opacity:0;pointer-events:none;
+  background:rgba(15,18,30,.9);border:1px solid rgba(255,255,255,.25);box-shadow:0 6px 16px rgba(0,0,0,.45);
+  transition:opacity .12s;
+}
+.uf-pin:hover .uf-pin-tip,.uf-pin.is-hi .uf-pin-tip{opacity:1}
+.uf-pin-tip.below{top:auto;bottom:0;transform:translate(-50%,118%)}
+.uf-pin-tip.edge-l{left:0;transform:translate(0,-118%)}
+.uf-pin-tip.edge-l.below{left:0;transform:translate(0,118%)}
+.uf-pin-tip.edge-r{left:auto;right:0;transform:translate(0,-118%)}
+.uf-pin-tip.edge-r.below{left:auto;right:0;transform:translate(0,118%)}
+.uf-modal-side{display:flex;flex-direction:column;gap:12px;min-width:0}
+.uf-side-blk{border-radius:14px;padding:12px 14px;background:var(--glass-2);border:1px solid var(--hair);display:flex;flex-direction:column;gap:8px}
+.uf-side-blk b{font-size:12.5px;color:var(--text)}
+.uf-jump{all:unset;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 9px;border-radius:9px;background:var(--fill);font-size:12px;color:var(--text);transition:background .15s}
+.uf-jump:hover{background:color-mix(in srgb,var(--blue) 14%,transparent);color:var(--ink-blue)}
 </style>
 <script>
 (function(){var q=new URLSearchParams(location.search).get('mode'),d=q;if(!d){try{d=localStorage.getItem('theme')}catch(e){}}
@@ -340,6 +474,7 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
   <div class="subbar">
     <div class="subtabs" data-subtabs="plan">
       <button class="on" data-sub="overview">概览与总图</button>
+      <button data-sub="clickflow">UI 点击流转图（含关联与缺口）</button>
       <button data-sub="flow">链路流转全文（05）</button>
       <button data-sub="run">修复流转方案（04）</button>
     </div>
@@ -441,6 +576,9 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
       <article class="md glass">{{RUN_BODY}}</article>
     </div>
   </div>
+
+  <!-- 2.4 UI 点击流转拓扑图与缺口体检 -->
+  {{UIFLOW_BODY}}
 
   <div class="next"><button class="nb sec" data-go-tab="req">← 上一步：需求</button><button class="nb pri" data-go-tab="theme">下一步：设计主题 →</button></div>
 </section>
@@ -552,7 +690,7 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
 <!-- ========== 4 PC ========== -->
 <section class="pane" id="p-pc" data-pane="pc">
   <h2 class="ttl">第 4 步 · PC 界面</h2>
-  <p class="sub">全部页面严格按「首次进入 → 选执行环境 → 初始化 → 开工准备 → 修单 → 审核 → 发测试 → 复测 → 合回主分支 → 发正式 → 完结」的真实流转顺序编排，画布 1440 × 900，自动跟随右上角亮色 / 暗色切换。</p>
+  <p class="sub">全部页面严格按「首次进入 → 选执行环境 → 初始化 → 开工准备 → 修单 → 审核 → 发测试 → 复测 → 合回主分支 → 发正式 → 完结」的真实流转顺序编排，画布 1440 × 900，自动跟随右上角亮色 / 暗色切换。 <a href="#plan:clickflow" data-go-flow="onboarding" class="pill p-blue" style="text-decoration:none;vertical-align:middle;margin-left:6px">查看 PC 点击流转图 ›</a></p>
   <p class="toggle-note">把鼠标移到红色编号上，下面对应的说明会高亮。</p>
   <div class="shot" id="pcshot">
     <img class="img-l" src="reference/images/PC-主界面-亮色.png" alt="PC 主界面 亮色">
@@ -560,11 +698,14 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
   </div>
   <div class="legend" id="pclegend"></div>
   <div class="card glass mt">
-    <h3>阶段一 · 启动、登录注册、执行环境（3 路径）与精简 4 步开工向导（18 张 · 按真实顺序 ① → ⑭）</h3>
+    <h3>阶段一 · 启动、登录注册、执行环境（3 路径）与精简 4 步开工向导（23 张 · 按真实顺序 ① → ⑭）</h3>
     <div class="gal">
       <figure><img class="img-l" src="reference/images/splash/PC-闪屏-亮色.png" alt="PC 闪屏"><img class="img-d" src="reference/images/splash/PC-闪屏-暗色.png" alt="PC 闪屏"><figcaption><b>① 启动 · PC 闪屏</b> · 图标 + 名称 + 真实加载步骤</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/PC-登录-亮色.png" alt="PC 登录 亮色"><img class="img-d" src="reference/images/pages/PC-登录-暗色.png" alt="PC 登录 暗色"><figcaption><b>② 登录</b> · 独立邮箱 + 密码登录，顶部分段切换登录 / 注册；GitLab / Jira / Tita 通过连接器接入</figcaption></figure>
-      <figure><img class="img-l" src="reference/images/pages/PC-注册-亮色.png" alt="PC 注册 亮色"><img class="img-d" src="reference/images/pages/PC-注册-暗色.png" alt="PC 注册 暗色"><figcaption><b>③ 注册</b> · 邮箱 + 6 位验证码 + 昵称 + 密码创建云匠账号；私有部署可切换仅邀请注册</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/PC-重置密码-亮色.png" alt="PC 重置密码 亮色"><img class="img-d" src="reference/images/pages/PC-重置密码-暗色.png" alt="PC 重置密码 暗色"><figcaption><b>②a 重置登录密码</b> · 注册邮箱 + 6 位验证码重设新密码，完成后安全下线其余已登录设备</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/PC-邀请加入-亮色.png" alt="PC 邀请加入 亮色"><img class="img-d" src="reference/images/pages/PC-邀请加入-暗色.png" alt="PC 邀请加入 暗色"><figcaption><b>②b 免 SMTP 一次性邀请加入</b> · 点击设置→成员生成的一次性链接直接设密加入，自动继承管理员预关联的部门、角色与外部身份</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/PC-注册-亮色.png" alt="PC 注册 亮色"><img class="img-d" src="reference/images/pages/PC-注册-暗色.png" alt="PC 注册 暗色"><figcaption><b>③ 注册</b> · 邮箱 + 6 位验证码 + 选填工作空间/团队名称（不前置泄露企业列表）；验证后自动查待加入邀请防孤岛</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/PC-已注册成员确认加入-亮色.png" alt="PC 已注册成员确认加入 亮色"><img class="img-d" src="reference/images/pages/PC-已注册成员确认加入-暗色.png" alt="PC 已注册成员确认加入 暗色"><figcaption><b>③a 反孤岛 · 确认加入已有空间</b> · 验证 OTP 后检测到有效邀请或认证企业域名（M2/M3），直接入驻并继承部门默认配置</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/PC-选择执行环境-亮色.png" alt="选择执行环境 亮色"><img class="img-d" src="reference/images/pages/PC-选择执行环境-暗色.png" alt="选择执行环境 暗色"><figcaption><b>④ 首次 · 选择执行环境</b> · 尚无在线执行器时三选一（本机电脑 / 自有与团队服务器 / 云端托管 Pro）；跳过后可随时在「设置 → 执行器」补配</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/PC-执行器初始化-亮色.png" alt="执行器初始化 亮色"><img class="img-d" src="reference/images/pages/PC-执行器初始化-暗色.png" alt="执行器初始化 暗色"><figcaption><b>⑤a 路径 A · 本机执行器初始化</b> · 水波纹星光 + 灵动岛单胶囊，优先零下载复用本机 Chrome，支持后台继续准备</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/PC-连接团队服务器-亮色.png" alt="连接团队服务器 亮色"><img class="img-d" src="reference/images/pages/PC-连接团队服务器-暗色.png" alt="连接团队服务器 暗色"><figcaption><b>⑤b 路径 B · 连接自有 / 团队服务器</b> · 节点命名 + 一键脚本 / Docker Compose + 15 分钟一次性令牌 + 纯出站 WSS 实时握手监听</figcaption></figure>
@@ -579,19 +720,21 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
       <figure><img class="img-l" src="reference/images/pages/PC-步骤器-2-微调配置-亮色.png" alt="微调仓库配置 亮色"><img class="img-d" src="reference/images/pages/PC-步骤器-2-微调配置-暗色.png" alt="微调仓库配置 暗色"><figcaption><b>⑪ 开工 2 · 微调仓库配置抽屉</b> · 归属项目合并、主干/测试分支、试构建命令与 MR 审核人覆盖；人工覆盖不被重探测冲掉，支持一键还原与保存即试构建</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/PC-首次使用步骤器-亮色.png" alt="步骤器 测试环境 亮色"><img class="img-d" src="reference/images/pages/PC-首次使用步骤器-暗色.png" alt="步骤器 测试环境 暗色"><figcaption><b>⑫ 开工 3 · 环境与账号（测试环境）</b> · 多环境、账号不限数量、密码或 Cookie、Bot 当场试登录；纯代码单可跳过</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/PC-首次使用步骤器-正式环境-亮色.png" alt="步骤器 正式环境 亮色"><img class="img-d" src="reference/images/pages/PC-首次使用步骤器-正式环境-暗色.png" alt="步骤器 正式环境 暗色"><figcaption><b>⑬ 开工 3 · 环境与账号（正式环境）</b> · 每个账号的数据权限（只能查看 / 可以修改）、Cookie 过期、Bot 识别账号</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/PC-步骤器-3-添加账号-亮色.png" alt="添加复现账号抽屉 亮色"><img class="img-d" src="reference/images/pages/PC-步骤器-3-添加账号-暗色.png" alt="添加复现账号抽屉 暗色"><figcaption><b>⑬a 开工 3 · 添加账号 / 环境入口抽屉</b> · 切换密码 / Cookie（免填账号名由 Bot 试登录识别），正式环境默认锁死「只能查看」护栏</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/PC-步骤器-4-体检并开工-亮色.png" alt="AI 体检并开工 亮色"><img class="img-d" src="reference/images/pages/PC-步骤器-4-体检并开工-暗色.png" alt="AI 体检并开工 暗色"><figcaption><b>⑭ 开工 4 · AI 体检并开工</b> · 实测连接器、可修改仓推测构建、只读仓隔离与环境试登录；内置规范直接生效，扩展插件按需去插件市场装</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/PC-步骤器-4-体检完整日志-亮色.png" alt="AI 体检完整日志抽屉 亮色"><img class="img-d" src="reference/images/pages/PC-步骤器-4-体检完整日志-暗色.png" alt="AI 体检完整日志抽屉 暗色"><figcaption><b>⑭a 开工 4 · AI 体检完整日志抽屉</b> · 5 阶段通过摘要、可过滤仅警告、凭据 <code>***REDACTED***</code> 脱敏终端日志，与 设置→项目「看完整日志 ›」共用</figcaption></figure>
     </div>
   </div>
   <div class="card glass mt">
-    <h3>阶段二 · 日常修单、审核、发布上线、插件市场与支线页面（37 张 · 严格按链路第 3 → 13 步排序）</h3>
+    <h3>阶段二 · 日常修单、审核、发布上线、插件市场与支线页面（45 张 · 严格按链路第 3 → 13 步排序）</h3>
     <p class="sub" style="margin:0 0 12px">外壳（顶栏、Dock、工单列表含手动建单 <code>+</code>）与主界面完全一致（全部已同步「插件市场」Dock 图标，设置页已同步「执行器」「连接器」与免 SMTP 邀请链接），只换中间内容。每张图已标出对应 <code>05-链路流转</code> 步号，按从左到右、从上到下连贯阅读即可，也可按模块筛选、点图放大。</p>
     <div class="chips" id="pc-filter">
-      <button class="chip-btn on" data-cat="all">全部 <em>37</em></button>
-      <button class="chip-btn" data-cat="ticket">工单与审核（第 3～4、13 步） <em>10</em></button>
+      <button class="chip-btn on" data-cat="all">全部 <em>45</em></button>
+      <button class="chip-btn" data-cat="ticket">工单与审核（第 3～4、13 步） <em>12</em></button>
       <button class="chip-btn" data-cat="release">发布、复测与回滚（第 5～12 步） <em>11</em></button>
       <button class="chip-btn" data-cat="skills">Skills <em>3</em></button>
       <button class="chip-btn" data-cat="market">插件市场 <em>1</em></button>
-      <button class="chip-btn" data-cat="settings">设置 <em>8</em></button>
+      <button class="chip-btn" data-cat="settings">设置 <em>14</em></button>
       <button class="chip-btn" data-cat="state">排队与边界状态 <em>4</em></button>
     </div>
     <div class="gal" id="pc-gal">
@@ -601,6 +744,8 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
       <figure data-cat="ticket"><img class="img-l" src="reference/images/pages/PC-Bot提问回复-亮色.png" alt="Bot 在问你 亮色"><img class="img-d" src="reference/images/pages/PC-Bot提问回复-暗色.png" alt="Bot 在问你 暗色"><figcaption><b>[链路第 3a 步] Bot 在问你</b> · 一键回答、可选存为项目规则、回复后从原步骤继续</figcaption></figure>
       <figure data-cat="ticket"><img class="img-l" src="reference/images/pages/PC-执行日志报错-亮色.png" alt="执行日志 · 报错 亮色"><img class="img-d" src="reference/images/pages/PC-执行日志报错-暗色.png" alt="执行日志 · 报错 暗色"><figcaption><b>[链路第 3 步 · 异常] 执行日志 · 报错</b> · 失败步骤、报错原文可复制、AI 解读单独展示、保留上次尝试</figcaption></figure>
       <figure data-cat="ticket"><img class="img-l" src="reference/images/pages/PC-代码改动-亮色.png" alt="代码改动 亮色"><img class="img-d" src="reference/images/pages/PC-代码改动-暗色.png" alt="代码改动 暗色"><figcaption><b>[链路第 4 步 · 审代码] 代码改动</b> · 逐行差异、选中一行问 AI、缺失仓库明确提示</figcaption></figure>
+      <figure data-cat="ticket"><img class="img-l" src="reference/images/pages/PC-完整文件与证据预览-亮色.png" alt="完整文件与证据预览 亮色"><img class="img-d" src="reference/images/pages/PC-完整文件与证据预览-暗色.png" alt="完整文件与证据预览 暗色"><figcaption><b>[链路第 4 步 · 预览弹层 1] 完整代码文件</b> · 全文件源码上下文、第 48 行 AI 意见高亮、一键「附到打回」与证据切换</figcaption></figure>
+      <figure data-cat="ticket"><img class="img-l" src="reference/images/pages/PC-证据大图对照-亮色.png" alt="证据大图对照 亮色"><img class="img-d" src="reference/images/pages/PC-证据大图对照-暗色.png" alt="证据大图对照 暗色"><figcaption><b>[链路第 4 步 · 预览弹层 2] 证据大图对照 (4)</b> · 4 项证据列表、修前卡死 vs 修后流畅并排对比、时间轴与跳代码 :48</figcaption></figure>
       <figure data-cat="ticket"><img class="img-l" src="reference/images/pages/PC-证据-亮色.png" alt="证据 亮色"><img class="img-d" src="reference/images/pages/PC-证据-暗色.png" alt="证据 暗色"><figcaption><b>[链路第 4 步 · 看证据] 证据</b> · 原单 / 修前 / 修后用途标签、查阅状态、计划与实际执行对照</figcaption></figure>
       <figure data-cat="ticket"><img class="img-l" src="reference/images/pages/PC-打回原因-亮色.png" alt="打回原因 亮色"><img class="img-d" src="reference/images/pages/PC-打回原因-暗色.png" alt="打回原因 暗色"><figcaption><b>[链路第 4 步 · 打回重修] 打回原因</b> · 意见 + 代码位置 + 截图，要求下一轮复测的角色，回到第 3 步开新一轮</figcaption></figure>
       <figure data-cat="ticket"><img class="img-l" src="reference/images/pages/PC-审核通过-有未测项-亮色.png" alt="审核通过 · 有未测项 亮色"><img class="img-d" src="reference/images/pages/PC-审核通过-有未测项-暗色.png" alt="审核通过 · 有未测项 暗色"><figcaption><b>[链路第 4 步 · 审核通过] 审核通过 · 有未测项</b> · 已验证 / 没测项和原因、勾选确认后转给测试人重点测，进入第 5 步发测试</figcaption></figure>
@@ -630,14 +775,20 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
       <figure data-cat="settings"><img class="img-l" src="reference/images/pages/PC-设置-全局AI-亮色.png" alt="设置 · 全局 AI 亮色"><img class="img-d" src="reference/images/pages/PC-设置-全局AI-暗色.png" alt="设置 · 全局 AI 暗色"><figcaption><b>设置 · 全局 AI</b> · 管理员接一次 AI（Pi 默认内置 · 多模型网关），按 <code>runtimes</code> 动态扩引擎；外部工具鉴权已收口至「设置 → 连接器」</figcaption></figure>
       <figure data-cat="settings"><img class="img-l" src="reference/images/pages/PC-设置-执行器-亮色.png" alt="设置 · 执行器 亮色"><img class="img-d" src="reference/images/pages/PC-设置-执行器-暗色.png" alt="设置 · 执行器 暗色"><figcaption><b>设置 · 执行器（跳过补配 &amp; 随时切换）</b> · 统一管理团队服务器 / 本机 / 云端 Pro，切换调度策略、看 4C8G 实时资源槽，「+ 添加执行器」随时重开三选一向导</figcaption></figure>
       <figure data-cat="settings"><img class="img-l" src="reference/images/pages/PC-设置-来源采集-亮色.png" alt="设置 · 来源采集 亮色"><img class="img-d" src="reference/images/pages/PC-设置-来源采集-暗色.png" alt="设置 · 来源采集 暗色"><figcaption><b>设置 · 来源采集</b> · Jira / Tita 采集状态、失败原文和重试；最近收单的四种结果，没收成的去处理</figcaption></figure>
-      <figure data-cat="settings"><img class="img-l" src="reference/images/pages/PC-设置-成员与身份-亮色.png" alt="设置 · 成员与身份 亮色"><img class="img-d" src="reference/images/pages/PC-设置-成员与身份-暗色.png" alt="设置 · 成员与身份 暗色"><figcaption><b>设置 · 成员与身份</b> · 独立邮箱账号、免 SMTP 一次性邀请链接、空间管理员与项目负责人分层、外部 ID 身份映射</figcaption></figure>
-      <figure data-cat="settings"><img class="img-l" src="reference/images/pages/PC-设置-我的账号-亮色.png" alt="设置 · 我的账号 亮色"><img class="img-d" src="reference/images/pages/PC-设置-我的账号-暗色.png" alt="设置 · 我的账号 暗色"><figcaption><b>设置 · 我的账号</b> · 每人自己的 GitLab、Apollo 账号：合入、发布、回滚用本人的，记的是本人</figcaption></figure>
+      <figure data-cat="settings"><img class="img-l" src="reference/images/pages/PC-设置-成员与身份-亮色.png" alt="设置 · 成员与身份 亮色"><img class="img-d" src="reference/images/pages/PC-设置-成员与身份-暗色.png" alt="设置 · 成员与身份 暗色"><figcaption><b>设置 · 组织与成员（成员与身份）</b> · 顶部切「成员与部门 ｜ 角色与权限」· 手工部门树 + 继承卡 + Guest 隔离 + 免 SMTP 邀请 + <code>/admin</code> 入口</figcaption></figure>
+      <figure data-cat="settings"><img class="img-l" src="reference/images/pages/PC-设置-角色与权限-亮色.png" alt="设置 · 角色与权限 亮色"><img class="img-d" src="reference/images/pages/PC-设置-角色与权限-暗色.png" alt="设置 · 角色与权限 暗色"><figcaption><b>设置 · 角色与权限（Core 8 域 + 动态插件权限）</b> · 区分 Core 不可卸载基础权限与 <code>manifest.permissions</code> 动态贡献（未装不显示、停用置灰留快照），支持模板克隆与新装 Fail-Closed</figcaption></figure>
+      <figure data-cat="settings"><img class="img-l" src="reference/images/pages/PC-组织-部门默认设置-亮色.png" alt="部门默认配置抽屉 亮色"><img class="img-d" src="reference/images/pages/PC-组织-部门默认设置-暗色.png" alt="部门默认配置抽屉 暗色"><figcaption><b>组织 · 部门默认配置抽屉</b> · 并集继承项目权限、共享只读连接器、部门 Skills；<code>credential_class='personal_exec'</code> 写凭据与安全门禁 DB 强锁 <code>scope='user'</code></figcaption></figure>
+      <figure data-cat="settings"><img class="img-l" src="reference/images/pages/PC-组织-添加编辑成员-亮色.png" alt="添加编辑成员抽屉 亮色"><img class="img-d" src="reference/images/pages/PC-组织-添加编辑成员-暗色.png" alt="添加编辑成员抽屉 暗色"><figcaption><b>组织 · 添加 / 编辑成员抽屉</b> · 主部门 + 虚线借调到期日、外包 Guest（Fail-Closed）隔离、Allow/Deny 绑定与动态外部工具身份；SaaS 禁代改密</figcaption></figure>
+      <figure data-cat="settings"><img class="img-l" src="reference/images/pages/PC-组织-停用交接-亮色.png" alt="停用与待办交接抽屉 亮色"><img class="img-d" src="reference/images/pages/PC-组织-停用交接-暗色.png" alt="停用与待办交接抽屉 暗色"><figcaption><b>组织 · 停用成员与待办交接抽屉</b> · 审计待审单/原平台待办/个人 Runner，选定接替人同事务移交并吊销全部活跃会话</figcaption></figure>
+      <figure data-cat="settings"><img class="img-l" src="reference/images/pages/PC-企业管理后台-蓝图-亮色.png" alt="Web 企业管理后台蓝图 亮色"><img class="img-d" src="reference/images/pages/PC-企业管理后台-蓝图-暗色.png" alt="Web 企业管理后台蓝图 暗色"><figcaption><b>[M2/M3 蓝图 · Web /admin] 企业管理后台</b> · 独立同源 SPA（不混入 M1 桌面左栏）：多级组织树、飞书 SCIM、域名校验 SSO、级联锁定与审计导出</figcaption></figure>
+      <figure data-cat="settings"><img class="img-l" src="reference/images/pages/PC-企业管理后台-角色策略-亮色.png" alt="Web 企业管理后台角色策略 亮色"><img class="img-d" src="reference/images/pages/PC-企业管理后台-角色策略-暗色.png" alt="Web 企业管理后台角色策略 暗色"><figcaption><b>[M2/M3 蓝图 · Web /admin] 角色策略中心</b> · 五重 AND 门禁（含 Tier 0 插件生命周期门禁、消除假绿灯）、命名空间隔离显式 DENY 与 <code>ActionGate</code> 试算</figcaption></figure>
+      <figure data-cat="settings"><img class="img-l" src="reference/images/pages/PC-设置-我的账号-亮色.png" alt="设置 · 我的账号 亮色"><img class="img-d" src="reference/images/pages/PC-设置-我的账号-暗色.png" alt="设置 · 我的账号 暗色"><figcaption><b>设置 · 我的账号</b> · 独立邮箱账号 + 合并「外观与语言（themes + i18n）」+ 按已启用插件动态加载本人写凭据（DB 锁 <code>scope='user'</code>）</figcaption></figure>
       <figure data-cat="settings"><img class="img-l" src="reference/images/pages/PC-设置-通知-亮色.png" alt="设置 · 通知 亮色"><img class="img-d" src="reference/images/pages/PC-设置-通知-暗色.png" alt="设置 · 通知 暗色"><figcaption><b>设置 · 通知</b> · 每人自己的：事件 × PC / 手机开关、设备、免打扰；发布失败关不掉</figcaption></figure>
       <!-- 排队、空状态与边界状态 -->
       <figure data-cat="state"><img class="img-l" src="reference/images/pages/PC-排队-亮色.png" alt="排队 亮色"><img class="img-d" src="reference/images/pages/PC-排队-暗色.png" alt="排队 暗色"><figcaption><b>排队</b> · Bot 都在忙时：列表多一组「排队中」、排队的单写清前面是谁和预计开始、谁在修谁在排</figcaption></figure>
-      <figure data-cat="state"><img class="img-l" src="reference/images/pages/PC-空状态-亮色.png" alt="空状态 亮色"><img class="img-d" src="reference/images/pages/PC-空状态-暗色.png" alt="空状态 暗色"><figcaption><b>空状态 · 一</b> · 还没收到单（Bot 在等单）、搜索没结果、还没有发布、还没有自己的 Skill</figcaption></figure>
+      <figure data-cat="state"><img class="img-l" src="reference/images/pages/PC-空状态-亮色.png" alt="空状态 亮色"><img class="img-d" src="reference/images/pages/PC-空状态-暗色.png" alt="空状态 暗色"><figcaption><b>空状态 · 一</b> · 还没收到单（Bot 在等单）、搜索没结果、还没有发布（仅发布插件启用时）、还没有自己的 Skill</figcaption></figure>
       <figure data-cat="state"><img class="img-l" src="reference/images/pages/PC-空状态-2-亮色.png" alt="空状态 · 二 亮色"><img class="img-d" src="reference/images/pages/PC-空状态-2-暗色.png" alt="空状态 · 二 暗色"><figcaption><b>空状态 · 二</b> · AI 助手第一次打开、回滚没有上一次、代码改动还没提交、工单发布还没开始</figcaption></figure>
-      <figure data-cat="state"><img class="img-l" src="reference/images/pages/PC-边界状态-亮色.png" alt="边界状态 亮色"><img class="img-d" src="reference/images/pages/PC-边界状态-暗色.png" alt="边界状态 暗色"><figcaption><b>边界状态</b> · 无权查看、登录过期回原处、状态已经变了不改写结果、审核中有新提交要看完最新才能通过</figcaption></figure>
+      <figure data-cat="state"><img class="img-l" src="reference/images/pages/PC-边界状态-亮色.png" alt="边界状态 亮色"><img class="img-d" src="reference/images/pages/PC-边界状态-暗色.png" alt="边界状态 暗色"><figcaption><b>边界状态</b> · 无权查看、独立邮箱登录过期回原处、状态已经变了不改写结果、审核中有新提交要看完最新才能通过</figcaption></figure>
     </div>
   </div>
   <div class="card glass mt" style="border-color:color-mix(in srgb,var(--orange) 42%,transparent)">
@@ -659,7 +810,7 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
 <!-- ========== 5 移动端 ========== -->
 <section class="pane" id="p-mobile" data-pane="mobile">
   <h2 class="ttl">第 5 步 · 移动端</h2>
-  <p class="sub">首页三屏：工单列表、工单对话（审核）、AI 助手；下面是闪屏、登录、步骤器以及其余 10 张（30 屏，含插件市场与无在线执行器轻引导）。每台手机 390 × 844，和 PC 用同一套主题。</p>
+  <p class="sub">首页三屏：工单列表、工单对话（审核）、AI 助手；下面是闪屏、登录、步骤器以及其余 10 张（30 屏，含插件市场与无在线执行器轻引导）。每台手机 390 × 844，和 PC 用同一套主题。 <a href="#plan:clickflow" data-go-flow="mobile" class="pill p-blue" style="text-decoration:none;vertical-align:middle;margin-left:6px">查看移动端 14 屏点击流转图 ›</a></p>
   <p class="toggle-note">把鼠标移到红色编号上，下面对应的说明会高亮。</p>
   <div class="shot" id="mshot">
     <img class="img-l" src="reference/images/移动端-亮色.png" alt="移动端 亮色">
@@ -667,23 +818,26 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
   </div>
   <div class="legend" id="mlegend"></div>
   <div class="card glass mt">
-    <h3>组件库规范、启动、登录与步骤器（4 张）</h3>
+    <h3>组件库规范、启动、登录与步骤器（5 张）</h3>
     <div class="gal" style="grid-template-columns:1fr">
       <figure><img class="img-l" src="reference/images/pages/移动端-组件库规范-亮色.png" alt="移动端组件库规范 亮色"><img class="img-d" src="reference/images/pages/移动端-组件库规范-暗色.png" alt="移动端组件库规范 暗色"><figcaption><b>移动端组件库规范（3 屏 · 3 路多 Agent 审定）</b> · 基础控件与 44–48pt 标尺 / 10 秒审核卡与 L2 高危锁 / Toast (z:70) 与 Bottom Sheet (z:40)</figcaption></figure>
       <figure><img class="img-l" src="reference/images/splash/移动端-闪屏-亮色.png" alt="移动端闪屏"><img class="img-d" src="reference/images/splash/移动端-闪屏-暗色.png" alt="移动端闪屏"><figcaption><b>移动端闪屏</b> · 启动 / 首次加载 / 从通知打开</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/移动端-登录-亮色.png" alt="移动端登录与注册 亮色"><img class="img-d" src="reference/images/pages/移动端-登录-暗色.png" alt="移动端登录与注册 暗色"><figcaption><b>移动端登录与注册（4 屏）</b> · 邮箱登录 / 邮箱注册（带验证码） / 密码错误 / 登录过期回到原工单</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/移动端-重设密码与邀请-亮色.png" alt="移动端重设密码与邀请 亮色"><img class="img-d" src="reference/images/pages/移动端-重设密码与邀请-暗色.png" alt="移动端重设密码与邀请 暗色"><figcaption><b>移动端重设密码与邀请（3 屏）</b> · 重置登录密码（邮箱验证码）/ 免 SMTP 一次性邀请设密加入 / 链接已使用或超 24h 失效兜底</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/移动端-首次使用步骤器-亮色.png" alt="移动端步骤器 亮色"><img class="img-d" src="reference/images/pages/移动端-首次使用步骤器-暗色.png" alt="移动端步骤器 暗色"><figcaption><b>移动端步骤器（4 屏 · 精简 4 步）</b> · 步骤概览（连接器鉴权 → 授权项目代码 → 环境账号 → AI 体检）/ 环境与账号 / 添加账号（Cookie）/ AI 体检并开工</figcaption></figure>
     </div>
   </div>
   <div class="card glass mt">
-    <h3>其余功能页面（10 张 · 30 屏）</h3>
+    <h3>其余功能页面（12 张 · 36 屏）</h3>
     <div class="gal">
       <figure><img class="img-l" src="reference/images/pages/移动端-代码与审核-亮色.png" alt="代码与审核 亮色"><img class="img-d" src="reference/images/pages/移动端-代码与审核-暗色.png" alt="代码与审核 暗色"><figcaption><b>代码与审核</b> · 代码改动 · 打回 · Bot 在问你</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/移动端-完整文件与证据预览-亮色.png" alt="移动端完整文件与证据预览 亮色"><img class="img-d" src="reference/images/pages/移动端-完整文件与证据预览-暗色.png" alt="移动端完整文件与证据预览 暗色"><figcaption><b>完整文件与证据预览（3 屏）</b> · 完整代码文件（第 48 行 AI 批注）· 证据大图对照 (4) · 失败截图 / 原图灯箱</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/移动端-证据报错发布-亮色.png" alt="证据、报错与发布 亮色"><img class="img-d" src="reference/images/pages/移动端-证据报错发布-暗色.png" alt="证据、报错与发布 暗色"><figcaption><b>证据、报错与发布</b> · 证据 · 报错 · 发布到测试</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/移动端-发布-亮色.png" alt="移动端 · 发布 亮色"><img class="img-d" src="reference/images/pages/移动端-发布-暗色.png" alt="移动端 · 发布 暗色"><figcaption><b>移动端 · 发布</b> · 同一套发布详情的三种状态：工单里的「发布」标签、等复测（测试人点通过 / 打回）、发布到正式（前置齐了才能点）</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/移动端-大包与紧急回滚-亮色.png" alt="大包与紧急回滚 亮色"><img class="img-d" src="reference/images/pages/移动端-大包与紧急回滚-暗色.png" alt="大包与紧急回滚 暗色"><figcaption><b>大包与紧急回滚</b> · 大包明细 · 回滚确认 · 回滚结果</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/移动端-Skills与设置-亮色.png" alt="Skills 与设置 亮色"><img class="img-d" src="reference/images/pages/移动端-Skills与设置-暗色.png" alt="Skills 与设置 暗色"><figcaption><b>Skills 与设置</b> · Skills · 编辑草稿 · 设置（含插件市场、连接器与执行器状态）</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/移动端-插件市场与执行器-亮色.png" alt="插件市场与执行器 亮色"><img class="img-d" src="reference/images/pages/移动端-插件市场与执行器-暗色.png" alt="插件市场与执行器 暗色"><figcaption><b>插件市场与执行器</b> · 设置 → 插件市场列表 · 紧急回滚（Apollo）5 贡献点详情 · 暂无在线执行器轻引导</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/移动端-组织与成员-亮色.png" alt="移动端组织与成员 亮色"><img class="img-d" src="reference/images/pages/移动端-组织与成员-暗色.png" alt="移动端组织与成员 暗色"><figcaption><b>组织与成员（3 屏 · 禁用编树）</b> · 只读部门筛选与外包 Guest 隔离 · 同名张伟选人绑定 · 停用成员待办一键交接 Sheet</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/移动端-通知-亮色.png" alt="移动端 · 通知 亮色"><img class="img-d" src="reference/images/pages/移动端-通知-暗色.png" alt="移动端 · 通知 暗色"><figcaption><b>移动端 · 通知</b> · 锁屏推送（点开直达）· 通知设置（两项关不掉）· 免打扰与设备</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/移动端-审核与排队-亮色.png" alt="移动端 · 审核与排队 亮色"><img class="img-d" src="reference/images/pages/移动端-审核与排队-暗色.png" alt="移动端 · 审核与排队 暗色"><figcaption><b>移动端 · 审核与排队</b> · 审核通过有未测项（勾选才能通过）· 工单排队中 · 发测试前换测试人</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/移动端-空状态-亮色.png" alt="移动端 · 空状态 亮色"><img class="img-d" src="reference/images/pages/移动端-空状态-暗色.png" alt="移动端 · 空状态 暗色"><figcaption><b>移动端 · 空状态</b> · 工单还没收到单（Bot 在等单）· 还没有发布 · AI 助手第一次打开</figcaption></figure>
@@ -699,8 +853,8 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
   <p class="sub">来源于 <code>docs/06-技术设计方案.md</code>，改完文档重新运行 <code>python3 scripts/build-index.py</code> 即可自动同步到这里。架构图、ER 图、状态机图已离线内置渲染，支持亮/暗切换。</p>
 
   <div class="grid g4">
-    <div class="kpi glass"><b style="font-size:19px">Fastify + Drizzle + PG</b><span>纯 ESM · 单源 Schema 出 OpenAPI 3.1</span></div>
-    <div class="kpi glass"><b style="font-size:19px">Electron + Flutter</b><span>双端由 OpenAPI 同源生成客户端</span></div>
+    <div class="kpi glass"><b style="font-size:19px">Fastify + Drizzle + PG</b><span>纯 ESM · 单源 Schema 出 OpenAPI 3.0.3</span></div>
+    <div class="kpi glass"><b style="font-size:19px">Electron + Flutter + /admin</b><span>3 纯浏览器 UI 包 · 双端同源生成</span></div>
     <div class="kpi glass"><b style="font-size:19px">Pi 内核 · 多模型</b><span>轻量可控执行引擎 + UI Block 协议</span></div>
     <div class="kpi glass"><b style="font-size:19px">第 0～14 节已锁版</b><span>M1 六项二期零重构预留 + M4 跨项目需求变更集全定案 · 可开工</span></div>
   </div>
@@ -982,7 +1136,393 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
   var z=document.getElementById('zoom');
   document.querySelectorAll('.gal img').forEach(function(im){im.onclick=function(){z.querySelector('img').src=im.src;z.classList.add('on')}});
   z.onclick=function(){z.classList.remove('on')};
-  document.addEventListener('keydown',function(e){if(e.key==='Escape')z.classList.remove('on')});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'){z.classList.remove('on');closeUfModal()}});
+
+  /* UI 点击流转拓扑图：DOM 实测连线 + 悬停高亮 + 节点详情弹窗 */
+  var ufDataEl=document.getElementById('uf-data');
+  var ufData=ufDataEl?JSON.parse(ufDataEl.textContent):{journeys:[]};
+  var ufModal=document.getElementById('uf-modal');
+  var ufHistory=[];
+  var ufPinsVisible=true;
+  var ufPinToggle=document.getElementById('uf-m-pintoggle');
+  var ufBackBtn=document.getElementById('uf-m-back');
+  function syncPinToggle(){
+    var layer=document.getElementById('uf-m-pins');
+    if(layer)layer.classList.toggle('is-hidden',!ufPinsVisible);
+    if(ufPinToggle){
+      ufPinToggle.classList.toggle('on',ufPinsVisible);
+      ufPinToggle.textContent='可点热区标识：'+(ufPinsVisible?'开':'关');
+    }
+  }
+  if(ufPinToggle){ufPinToggle.onclick=function(){ufPinsVisible=!ufPinsVisible;syncPinToggle()}}
+  if(ufBackBtn){ufBackBtn.onclick=function(){
+    if(ufHistory.length>1){ufHistory.pop();var prev=ufHistory[ufHistory.length-1];openUfModal(prev[0],prev[1]+':'+(prev[2]||0),true)}
+  }}
+
+  function closeUfModal(){if(ufModal){ufModal.classList.remove('on');ufModal.setAttribute('aria-hidden','true');ufHistory=[]}}
+  if(ufModal){
+    ufModal.onclick=function(e){if(e.target===ufModal)closeUfModal()};
+    var mc=document.getElementById('uf-m-close');
+    if(mc)mc.onclick=closeUfModal;
+  }
+
+  var ufCam={z:1,tx:0,ty:0};
+  var ufScaleMode='fit';
+  var ufWheelZoom=true;
+  function getActiveCanvas(){
+    var pane=document.querySelector('.uf-pane.on');
+    if(!pane)return null;
+    var sc=pane.querySelector('.uf-scroll'),st=pane.querySelector('.uf-stage');
+    return (sc&&st&&st.offsetWidth)?{pane:pane,sc:sc,st:st}:null;
+  }
+  function updateZoomUI(){
+    var pct=Math.round(ufCam.z*100);
+    var zv=document.getElementById('uf-z-val');if(zv)zv.textContent=pct+'%';
+    var zr=document.getElementById('uf-z-range');if(zr)zr.value=String(pct);
+    var bf=document.getElementById('uf-z-fit'),b1=document.getElementById('uf-z-100'),bw=document.getElementById('uf-z-wheel');
+    if(bf)bf.classList.toggle('on',ufScaleMode==='fit');
+    if(b1)b1.classList.toggle('on',ufScaleMode==='100');
+    if(bw){bw.classList.toggle('on',ufWheelZoom);bw.textContent='滚轮缩放'+(ufWheelZoom?'':'(关)')}
+  }
+  function applyTransform(st,z,tx,ty,anim){
+    ufCam.z=Math.max(0.25,Math.min(2.4,z));
+    ufCam.tx=tx;ufCam.ty=ty;
+    st.classList.toggle('is-anim',!!anim);
+    st.style.transform='translate3d('+ufCam.tx.toFixed(1)+'px,'+ufCam.ty.toFixed(1)+'px,0) scale('+ufCam.z.toFixed(4)+')';
+    updateZoomUI();
+  }
+  function zoomAt(sc,st,newZ,cx,cy,anim){
+    newZ=Math.max(0.25,Math.min(2.4,newZ));
+    var r=newZ/ufCam.z;
+    var ntx=cx-(cx-ufCam.tx)*r;
+    var nty=cy-(cy-ufCam.ty)*r;
+    ufScaleMode=(Math.abs(newZ-1)<0.005)?'100':'custom';
+    applyTransform(st,newZ,ntx,nty,anim);
+  }
+  function fitVisibleFlow(anim){
+    var c=getActiveCanvas();if(!c)return;
+    var sc=c.sc,st=c.st;
+    var vw=Math.max(300,sc.clientWidth-40);
+    var vh=Math.max(300,sc.clientHeight-74);
+    var z=Math.max(0.25,Math.min(1,vw/st.offsetWidth,vh/st.offsetHeight));
+    var tx=(sc.clientWidth-st.offsetWidth*z)/2;
+    var ty=Math.max(10,(sc.clientHeight-44-st.offsetHeight*z)/2);
+    ufScaleMode='fit';
+    applyTransform(st,z,tx,ty,anim);
+    drawJourneyEdges(st.dataset.ufStage);
+  }
+  function resetTo100(){
+    var c=getActiveCanvas();if(!c)return;
+    var sc=c.sc,st=c.st;
+    var tx=Math.max(16,(sc.clientWidth-st.offsetWidth)/2);
+    ufScaleMode='100';
+    applyTransform(st,1,tx,16,true);
+    drawJourneyEdges(st.dataset.ufStage);
+  }
+  var bOut=document.getElementById('uf-z-out'),bIn=document.getElementById('uf-z-in'),bFit=document.getElementById('uf-z-fit'),b100=document.getElementById('uf-z-100'),bRange=document.getElementById('uf-z-range'),bWheel=document.getElementById('uf-z-wheel');
+  if(bOut)bOut.onclick=function(){var c=getActiveCanvas();if(c)zoomAt(c.sc,c.st,ufCam.z*0.78,c.sc.clientWidth/2,c.sc.clientHeight/2,true)};
+  if(bIn)bIn.onclick=function(){var c=getActiveCanvas();if(c)zoomAt(c.sc,c.st,ufCam.z*1.28,c.sc.clientWidth/2,c.sc.clientHeight/2,true)};
+  if(bRange)bRange.oninput=function(){var c=getActiveCanvas();if(c)zoomAt(c.sc,c.st,parseInt(bRange.value,10)/100,c.sc.clientWidth/2,c.sc.clientHeight/2,false)};
+  if(bFit)bFit.onclick=function(){fitVisibleFlow(true)};
+  if(b100)b100.onclick=resetTo100;
+  if(bWheel)bWheel.onclick=function(){ufWheelZoom=!ufWheelZoom;updateZoomUI()};
+
+  var ufDidDrag=false;
+  document.querySelectorAll('.uf-scroll').forEach(function(sc){
+    var st=sc.querySelector('.uf-stage');
+    sc.addEventListener('wheel',function(e){
+      if(!st)return;
+      if(e.ctrlKey||e.metaKey||ufWheelZoom){
+        e.preventDefault();
+        var rect=sc.getBoundingClientRect();
+        var rawDy=e.deltaY;
+        if(e.deltaMode===1)rawDy*=28;
+        else if(e.deltaMode===2)rawDy*=240;
+        var sens=(e.ctrlKey||e.metaKey)?0.014:0.0065;
+        var step=Math.max(-0.45,Math.min(0.45,-rawDy*sens));
+        var factor=Math.exp(step);
+        zoomAt(sc,st,ufCam.z*factor,e.clientX-rect.left,e.clientY-rect.top,false);
+      }else{
+        e.preventDefault();
+        ufScaleMode='custom';
+        applyTransform(st,ufCam.z,ufCam.tx-e.deltaX,ufCam.ty-e.deltaY,false);
+      }
+    },{passive:false});
+    sc.addEventListener('dblclick',function(e){
+      if(e.target.closest('.uf-node,.uf-elbl'))return;
+      if(ufScaleMode==='fit')resetTo100();else fitVisibleFlow(true);
+    });
+    var drag=null;
+    sc.addEventListener('pointerdown',function(e){
+      if(e.button!==0||!st)return;
+      drag={id:e.pointerId,x:e.clientX,y:e.clientY,tx:ufCam.tx,ty:ufCam.ty,moved:false};
+      ufDidDrag=false;
+    });
+    window.addEventListener('pointermove',function(e){
+      if(!drag||e.pointerId!==drag.id)return;
+      var dx=e.clientX-drag.x,dy=e.clientY-drag.y;
+      if(!drag.moved&&Math.hypot(dx,dy)>5){
+        drag.moved=true;ufDidDrag=true;sc.classList.add('is-panning');
+      }
+      if(drag.moved){
+        if(ufScaleMode==='fit')ufScaleMode='custom';
+        applyTransform(st,ufCam.z,drag.tx+dx,drag.ty+dy,false);
+      }
+    });
+    window.addEventListener('pointerup',function(e){
+      if(!drag||e.pointerId!==drag.id)return;
+      sc.classList.remove('is-panning');
+      if(drag.moved)setTimeout(function(){ufDidDrag=false},30);
+      drag=null;
+    });
+  });
+
+  function portXY(el,side){
+    var x=el.offsetLeft,y=el.offsetTop,w=el.offsetWidth,h=el.offsetHeight;
+    if(side==='right')return [x+w,y+h*0.42];
+    if(side==='left')return [x,y+h*0.42];
+    if(side==='top')return [x+w*0.5,y];
+    return [x+w*0.5,y+h];
+  }
+  var TONE_COLOR={ok:'var(--green)',info:'var(--blue)',warn:'var(--orange)',gap:'var(--red)'};
+  function bezierPt(p0,c1,c2,p1,t){
+    var u=1-t;
+    return [
+      u*u*u*p0[0]+3*u*u*t*c1[0]+3*u*t*t*c2[0]+t*t*t*p1[0],
+      u*u*u*p0[1]+3*u*u*t*c1[1]+3*u*t*t*c2[1]+t*t*t*p1[1]
+    ];
+  }
+  function drawJourneyEdges(jid){
+    var j=ufData.journeys.find(function(x){return x.id===jid});
+    var stage=document.querySelector('.uf-stage[data-uf-stage="'+jid+'"]');
+    if(!j||!stage||!stage.offsetParent)return;
+    var svg=stage.querySelector('.uf-svg');
+    var lblWrap=stage.querySelector('.uf-edgelbls');
+    var sr=stage.getBoundingClientRect();
+    var defs='<defs>';
+    ['ok','info','warn','gap'].forEach(function(tn){
+      defs+='<marker id="uf-arr-'+jid+'-'+tn+'" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0 1L10 5L0 9z" fill="'+TONE_COLOR[tn]+'"/></marker>';
+    });
+    defs+='</defs>';
+    var paths='',lbls='';
+    j.edges.forEach(function(ed,idx){
+      var sEl=stage.querySelector('.uf-node[data-node="'+ed.from+'"]');
+      var dEl=stage.querySelector('.uf-node[data-node="'+ed.to+'"]');
+      if(!sEl||!dEl)return;
+      var p0=portXY(sEl,ed.fromSide||'right');
+      var p1=portXY(dEl,ed.toSide||'left');
+      var dx=p1[0]-p0[0],dy=p1[1]-p0[1],dist=Math.max(40,Math.hypot(dx,dy)*0.42);
+      var c1=[p0[0],p0[1]],c2=[p1[0],p1[1]];
+      if(ed.fromSide==='right')c1[0]+=dist;else if(ed.fromSide==='left')c1[0]-=dist;else if(ed.fromSide==='top')c1[1]-=dist;else c1[1]+=dist;
+      if(ed.toSide==='left')c2[0]-=dist;else if(ed.toSide==='right')c2[0]+=dist;else if(ed.toSide==='top')c2[1]-=dist;else c2[1]+=dist;
+      if(ed.curve){c1[1]+=ed.curve;c2[1]+=ed.curve}
+      var col=TONE_COLOR[ed.tone||'ok'];
+      var dash=ed.dashed?' stroke-dasharray="6 5"':'';
+      paths+='<path data-from="'+ed.from+'" data-to="'+ed.to+'" data-eidx="'+idx+'" stroke="'+col+'"'+dash+' marker-end="url(#uf-arr-'+jid+'-'+(ed.tone||'ok')+')" d="M'+p0[0].toFixed(1)+' '+p0[1].toFixed(1)+' C '+c1[0].toFixed(1)+' '+c1[1].toFixed(1)+', '+c2[0].toFixed(1)+' '+c2[1].toFixed(1)+', '+p1[0].toFixed(1)+' '+p1[1].toFixed(1)+'"/>';
+      var mid=bezierPt(p0,c1,c2,p1,0.5);
+      lbls+='<div class="uf-elbl tone-'+(ed.tone||'ok')+'" data-from="'+ed.from+'" data-to="'+ed.to+'" data-eidx="'+idx+'" style="left:'+mid[0].toFixed(1)+'px;top:'+mid[1].toFixed(1)+'px">'+ed.label+'</div>';
+    });
+    svg.innerHTML=defs+paths;
+    lblWrap.innerHTML=lbls;
+
+    function highlightNode(nid){
+      var nodes=stage.querySelectorAll('.uf-node');
+      var pEls=svg.querySelectorAll('path[data-from]');
+      var lEls=lblWrap.querySelectorAll('.uf-elbl');
+      if(!nid){
+        nodes.forEach(function(n){n.classList.remove('is-dim','is-hi')});
+        pEls.forEach(function(p){p.classList.remove('is-dim','is-hi')});
+        lEls.forEach(function(l){l.classList.remove('is-dim','is-hi')});
+        return;
+      }
+      var rel=new Set([nid]);
+      j.edges.forEach(function(e){if(e.from===nid)rel.add(e.to);if(e.to===nid)rel.add(e.from)});
+      nodes.forEach(function(n){
+        var id=n.dataset.node;
+        n.classList.toggle('is-hi',id===nid);
+        n.classList.toggle('is-dim',!rel.has(id));
+      });
+      pEls.forEach(function(p){
+        var hit=(p.dataset.from===nid||p.dataset.to===nid);
+        p.classList.toggle('is-hi',hit);
+        p.classList.toggle('is-dim',!hit);
+      });
+      lEls.forEach(function(l){
+        var hit=(l.dataset.from===nid||l.dataset.to===nid);
+        l.classList.toggle('is-hi',hit);
+        l.classList.toggle('is-dim',!hit);
+      });
+    }
+
+    stage.querySelectorAll('.uf-node').forEach(function(n){
+      n.onmouseenter=function(){highlightNode(n.dataset.node)};
+      n.onmouseleave=function(){highlightNode(null)};
+      n.onclick=function(e){
+        if(ufDidDrag)return;
+        var hs=e.target.closest('.uf-hs[data-jump-target]');
+        if(hs&&hs.dataset.jumpTarget){e.stopPropagation();openUfModal(jid,hs.dataset.jumpTarget);return}
+        openUfModal(jid,n.dataset.node);
+      };
+    });
+    lblWrap.querySelectorAll('.uf-elbl').forEach(function(l){
+      l.onmouseenter=function(){highlightNode(l.dataset.from)};
+      l.onmouseleave=function(){highlightNode(null)};
+      l.onclick=function(){if(!ufDidDrag)openUfModal(jid,l.dataset.to)};
+    });
+  }
+
+  function findUfNode(ref,preferJid){
+    var raw=String(ref||'');
+    var vIdx=0,nid=raw;
+    var cPos=raw.indexOf(':');
+    if(cPos>=0){nid=raw.slice(0,cPos);vIdx=parseInt(raw.slice(cPos+1),10)||0}
+    var list=ufData.journeys||[];
+    if(preferJid){
+      var pj=list.find(function(x){return x.id===preferJid});
+      if(pj){var pn=pj.nodes.find(function(x){return x.id===nid});if(pn)return {j:pj,n:pn,vIdx:vIdx}}
+    }
+    for(var i=0;i<list.length;i++){
+      var fn=list[i].nodes.find(function(x){return x.id===nid});
+      if(fn)return {j:list[i],n:fn,vIdx:vIdx};
+    }
+    return null;
+  }
+
+  function openUfModal(jid,ref,fromBack){
+    var found=findUfNode(ref,jid);
+    if(!found||!ufModal)return;
+    var j=found.j,n=found.n,vIdx=found.vIdx||0;
+    jid=j.id;
+    var nid=n.id;
+    var histKey=nid+':'+vIdx;
+    if(!fromBack){
+      var last=ufHistory[ufHistory.length-1];
+      if(!last||(last[1]+':'+last[2])!==histKey)ufHistory.push([jid,nid,vIdx]);
+    }
+    if(ufBackBtn)ufBackBtn.style.display=ufHistory.length>1?'inline-flex':'none';
+
+    var mapNode={};
+    ufData.journeys.forEach(function(jr){jr.nodes.forEach(function(x){mapNode[x.id]={n:x,j:jr}})});
+
+    var vars=(n.variants&&n.variants.length)?n.variants:[{label:n.title,imgL:n.imgL,imgD:n.imgD,pins:n.pins||[],note:n.note||''}];
+    if(vIdx<0||vIdx>=vars.length)vIdx=0;
+    var curV=vars[vIdx];
+
+    document.getElementById('uf-m-title').textContent=n.title+(vars.length>1?' · '+curV.label:'');
+    document.getElementById('uf-m-sub').textContent=j.title+' · '+n.kind+' · '+n.subtitle;
+    var stEl=document.getElementById('uf-m-status');
+    var stMeta={done:['p-green','已出图 ✓'],reuse:['p-blue','共用页 ↻'],gap:['p-red','缺独立图 !'],ext:['p-gray','外部系统']}[n.status];
+    stEl.className='pill '+stMeta[0];stEl.textContent=stMeta[1];
+
+    var vTabsEl=document.getElementById('uf-m-vtabs');
+    if(vTabsEl){
+      if(vars.length>1){
+        vTabsEl.classList.add('on');
+        vTabsEl.innerHTML=vars.map(function(vr,i){
+          return '<button type="button" class="uf-m-vtab'+(i===vIdx?' on':'')+'" data-vidx="'+i+'">'+vr.label+'</button>';
+        }).join('');
+        vTabsEl.querySelectorAll('[data-vidx]').forEach(function(b){
+          b.onclick=function(){openUfModal(jid,nid+':'+b.dataset.vidx)};
+        });
+      }else{
+        vTabsEl.classList.remove('on');vTabsEl.innerHTML='';
+      }
+    }
+
+    var stageEl=document.getElementById('uf-m-stage');
+    var imgL=document.getElementById('uf-m-imgl'),imgD=document.getElementById('uf-m-imgd'),gapB=document.getElementById('uf-m-gapbox');
+    var pinsLayer=document.getElementById('uf-m-pins');
+    var curImgL=curV.imgL||n.imgL,curImgD=curV.imgD||n.imgD;
+    if(curImgL){
+      imgL.src=curImgL;imgD.src=curImgD;if(stageEl)stageEl.style.display='';gapB.style.display='none';
+    }else{
+      imgL.removeAttribute('src');imgD.removeAttribute('src');if(stageEl)stageEl.style.display='none';
+      gapB.style.display='block';
+      gapB.innerHTML='<span>缺少独立设计图</span><em>'+n.title+'</em>';
+    }
+
+    var pins=(curV.pins&&curV.pins.length)?curV.pins:(n.pins||[]);
+    if(pinsLayer){
+      pinsLayer.innerHTML=pins.map(function(p,idx){
+        var cls=((p.y<14||p.below)?' below':'')+(p.x<12?' edge-l':((p.x+p.w)>88?' edge-r':''));
+        return '<button type="button" class="uf-pin tone-'+(p.tone||'ok')+'" data-pin-idx="'+idx+'" data-jump-node="'+p.to+'" style="left:'+p.x+'%;top:'+p.y+'%;width:'+p.w+'%;height:'+p.h+'%"><span class="uf-pin-dot">'+(idx+1)+'</span><span class="uf-pin-tip'+cls+'">'+p.label+' ↗</span></button>';
+      }).join('');
+      syncPinToggle();
+    }
+    var pinsListHtml=pins.length?pins.map(function(p,idx){
+      var baseId=String(p.to||'').split(':')[0];
+      var d=mapNode[baseId];
+      return '<button type="button" class="uf-jump" data-pin-idx="'+idx+'" data-jump-node="'+p.to+'"><span><b>['+(idx+1)+'] '+p.label+'</b> → '+(d?d.n.title:p.to)+'</span><span>直达 ↗</span></button>';
+    }).join(''):'<span class="ls">无额外页面外跳热区（见下方说明）</span>';
+    var pinsListEl=document.getElementById('uf-m-pinslist');
+    if(pinsListEl)pinsListEl.innerHTML=pinsListHtml;
+
+    var ins=[];
+    ufData.journeys.forEach(function(jr){
+      jr.edges.forEach(function(e){if(e.to===nid)ins.push({e:e,j:jr})});
+    });
+    var inHtml=ins.length?ins.map(function(it){
+      var s=mapNode[it.e.from];
+      var crossTag=(it.j.id!==jid)?'['+it.j.id+'] ':'';
+      return '<button type="button" class="uf-jump" data-jump-node="'+it.e.from+'"><span>← <b>'+crossTag+(s?s.n.title:it.e.from)+'</b> · '+it.e.label+'</span><span>查看 ›</span></button>';
+    }).join(''):'<span class="ls">旅程起点或全局入口直接到达</span>';
+    document.getElementById('uf-m-in').innerHTML=inHtml;
+    document.getElementById('uf-m-note').textContent=curV.note||n.note||(n.hotspots||[]).map(function(h){return h[1]}).join('；');
+
+    ufModal.querySelectorAll('[data-jump-node]').forEach(function(btn){
+      btn.onclick=function(){openUfModal(jid,btn.dataset.jumpNode)};
+      btn.onmouseenter=function(){
+        var idx=btn.dataset.pinIdx;
+        if(idx!==undefined&&pinsLayer){
+          var el=pinsLayer.querySelector('[data-pin-idx="'+idx+'"]');
+          if(el)el.classList.add('is-hi');
+        }
+      };
+      btn.onmouseleave=function(){
+        if(pinsLayer)pinsLayer.querySelectorAll('.uf-pin').forEach(function(el){el.classList.remove('is-hi')});
+      };
+    });
+    ufModal.classList.add('on');
+    ufModal.setAttribute('aria-hidden','false');
+  }
+
+  function redrawVisibleFlows(){
+    var c=getActiveCanvas();if(!c)return;
+    if(ufScaleMode==='fit'){fitVisibleFlow(false);return}
+    applyTransform(c.st,ufCam.z,ufCam.tx,ufCam.ty,false);
+    drawJourneyEdges(c.st.dataset.ufStage);
+  }
+  function switchUfJourney(jid){
+    document.querySelectorAll('[data-uf-tabs] button').forEach(function(b){b.classList.toggle('on',b.dataset.ufTab===jid)});
+    document.querySelectorAll('[data-uf-pane]').forEach(function(p){p.classList.toggle('on',p.dataset.ufPane===jid)});
+    ufScaleMode='fit';
+    requestAnimationFrame(redrawVisibleFlows);
+  }
+  document.querySelectorAll('[data-uf-tabs] button').forEach(function(btn){
+    btn.onclick=function(){switchUfJourney(btn.dataset.ufTab)};
+  });
+  document.querySelectorAll('[data-go-flow]').forEach(function(a){
+    a.onclick=function(e){
+      e.preventDefault();
+      go('plan');
+      goSub('plan','clickflow');
+      if(a.dataset.goFlow)switchUfJourney(a.dataset.goFlow);
+      var r=document.getElementById('ui-clickflow-root');
+      if(r)setTimeout(function(){r.scrollIntoView({behavior:'smooth',block:'start'});redrawVisibleFlows()},40);
+    };
+  });
+  var origGoSub=goSub;
+  goSub=function(g,s){origGoSub(g,s);if(g==='plan'&&s==='clickflow')requestAnimationFrame(redrawVisibleFlows)};
+  var origGo=go;
+  go=function(id,noScroll){origGo(id,noScroll);if(id==='plan')requestAnimationFrame(redrawVisibleFlows)};
+  if(initHash==='plan:clickflow'||initHash==='clickflow'){
+    go('plan',true);goSub('plan','clickflow');setTimeout(redrawVisibleFlows,60);
+  }
+  window.addEventListener('resize',redrawVisibleFlows);
+  if(location.search.indexOf('demo_node=')>=0){
+    var dn=new URLSearchParams(location.search).get('demo_node');
+    if(dn)setTimeout(function(){openUfModal('onboarding',dn)},120);
+  }
 })();
 </script>
 </body>

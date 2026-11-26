@@ -14,6 +14,7 @@ import pathlib
 import re
 import struct
 from tech_diagrams import render_mermaid
+from ui_flow_map import render_ui_flow_section
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 TPL = ROOT / "scripts" / "index.template.html"
@@ -291,6 +292,7 @@ def main():
         body, toc = md_to_html(path.read_text(encoding="utf-8"), prefix)
         toc_html = build_toc_html(toc)
         page = page.replace(f"{{{{{key}_BODY}}}}", body).replace(f"{{{{{key}_TOC}}}}", toc_html)
+    page = page.replace("{{UIFLOW_BODY}}", render_ui_flow_section())
     page, img_cnt = optimize_images(page)
     OUT.write_text(page, encoding="utf-8")
     print(f"→ {OUT}（已优化 {img_cnt} 张图片：lazy + 尺寸占位）")

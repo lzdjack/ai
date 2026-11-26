@@ -968,12 +968,12 @@ def p_aiset():
     <div class="kv2"><span class="t2">访问令牌</span><span class="row g8"><span class="mono f12 t2">•••••••••••• 3f9a</span><span class="f12 t3">加密存在内网服务器上，只给 Bot 用</span></span></div></div>
   <div class="card" style="padding:12px 16px 6px"><div class="row g8" style="margin-bottom:2px"><span class="sec grow">引擎插件与外部连接</span><span class="f12 t3">按 5 贡献点分工 · 0% 重复配置</span><span class="f12 lnk">去插件市场 ›</span></div>
     <div class="kv2"><span class="t2">引擎扩展</span><span class="row g8"><span class="f13">按 <span class="mono">runtimes</span> 契约动态装载</span><span class="f12 t3">安装 ACP / Claude Code / Codex 后此处自动出现</span></span></div>
-    <div class="kv2"><span class="t2">外部鉴权</span><span class="row g8"><span class="f13">GitLab · GitHub · 本机目录 · Jira · Tita</span><span class="f12 lnk">统一在「设置 → 连接器」管理 ›</span></span></div></div>
+    <div class="kv2"><span class="t2">外部鉴权</span><span class="row g8"><span class="f13">按已安装连接器动态加载（0～N 实例）</span><span class="f12 lnk">统一在「设置 → 连接器」管理 ›</span></span></div></div>
   <div class="card" style="padding:12px 16px 4px"><div class="row g8" style="margin-bottom:2px"><span class="sec grow">Bot 可以自己做的事</span><span class="f12 t3">没勾的要等人点</span></div>
     {act(CK, "复现问题", "在目标环境用登记过的账号操作页面")}
     {act(CK, "改代码、提交到修复分支", "只在 fix/ 分支上提交，不碰主分支和测试分支")}
     {act(CK, "提 MR 到测试分支", "合入仍要审核人通过")}
-    {act(NO, "发到测试环境", "默认由修复人在工单里点「发布到测试」")}
+    {act(NO, "发到测试环境（启用发布插件时）", "默认由有权限的成员在工单里点「发布到测试」")}
     {act(LK, "发到正式环境", "始终要真人发，不能打开")}</div>
   <div class="card" style="padding:12px 16px"><div class="row g8"><span class="sec grow">什么时候停下来找人</span><span class="f12 lnk">+ 加一条</span></div>
     <div class="row g8" style="margin-top:10px;flex-wrap:wrap">{chip("缺账号或角色")}{chip("同一步连续受阻 2 次")}{chip("一次要改 10 个以上文件")}{chip("要改接口约定或数据库")}</div></div>
@@ -1054,43 +1054,105 @@ def p_source():
 # =====================================================================
 def p_members():
     def av(n, g):
-        return f'<span class="av" style="width:26px;height:26px;font-size:10px;background:linear-gradient(150deg,{g})">{n}</span>'
-    def pick(n, dept, acct, g):
-        return f'''<div class="row g10" style="flex:1;padding:10px 12px;border-radius:12px;background:var(--fill)">{av(n,g)}<div class="col grow" style="min-width:0"><span class="f13 w6">{n} · {dept}</span><span class="f12 t3"><span class="mono">{acct}</span> · 手上 2 张单</span></div><button class="btn2 sm a-pri">就是他</button></div>'''
-    pend = f'''<div class="card" style="padding:14px 16px;box-shadow:0 0 0 2px color-mix(in srgb,var(--orange) 55%,transparent)">
-  <div class="row g8"><span class="ck" style="background:#B45309;font-size:12px;font-weight:800">!</span><span class="f14 w7 grow">OKR-3320 不知道该通知谁</span><span class="f12 t3">14:58 收单 · 管理员或 OKR 负责人可选 · 单子先留着</span></div>
-  <div class="f13 t2" style="margin:6px 0 10px 30px">Jira 经办人显示「张伟」，账号 <span class="mono">zw01</span> 还没关联成员。工作台里有 2 个叫张伟的，选一个——以后 <span class="mono">zw01</span> 的单自动给他。</div>
-  <div class="row g10" style="margin-left:30px">{pick("张伟","人事产研","zhangwei","#9FD7FF,#3A8EE6")}{pick("张伟","销售产研","zhangwei2","#C9B6FF,#7B5BE0")}</div></div>'''
-    M = [("林某", "#FFC9A8,#F08F7A", "lin@company.com", "林某 · lin", "林某", "审批 考勤 OKR", "空间管理员", "g", "正常"),
-         ("王某", "#7FB2FF,#4C7DF0", "wang@company.com", "王某 · wang", "—", "审批 考勤", "负责人 · 审批", "g", "正常"),
-         ("陈晨", "#FFD27F,#F0A23C", "chen@company.com", "陈晨 · chenchen", "陈晨", "审批", "成员", "g", "正常"),
-         ("张某", "#8FD8C9,#3FAE9A", "zhang@company.com", "张某 · zhang", "张某", "审批 OKR", "成员", "g", "正常"),
-         ("李娜", "#F7A8D0,#E0609E", "lina@company.com", "李娜 · lina", "李娜", "考勤", "成员", "g", "正常"),
-         ("周某", "#B5E3A0,#5FB84A", "zhou@company.com", "周某 · zhou", '<span style="color:var(--ink-orange)">未关联</span>', "考勤", "成员", "g", "正常"),
-         ("赵磊", "#C8CCD4,#8A909B", "zhao@company.com", "赵磊 · zhaolei", "赵磊", "考勤", "成员", "n", "已停用")]
-    tb = "".join(f'''<tr{" style=\"opacity:.6\"" if s=="已停用" else ""}><td><div class="row g8">{av(n,g)}<span class="w6">{n}</span></div></td><td class="mono f11 t2">{a}</td><td class="f12 t2">{j}</td><td class="f12 t2">{t}</td><td class="f12 t2">{p}</td><td>{"<span class=\"tag tg-b\">空间管理员</span>" if r=="空间管理员" else (f"<span class=\"tag tg-p\">{r}</span>" if r.startswith("负责人") else "<span class=\"f12 t3\">成员</span>")}</td><td><span class="tag tg-{c}">{s}</span></td></tr>''' for n, g, a, j, t, p, r, c, s in M)
-    main = f'''<main class="glass pn grow" style="min-width:0">
-<header class="thead"><div class="row g10"><div class="col grow"><h1>成员与身份</h1><div class="f12 t3" style="margin-top:2px">独立邮箱登录 · 工作空间管理员管全部，项目负责人管本项目 · 支持免 SMTP 一次性邀请链接</div></div>
-  <button class="btn2 a-sec" style="background:var(--fill)">{I("ext",13)}生成邀请链接</button>
-  <button class="btn2 a-pri">{I("plus",14,2.4)}添加成员</button></div></header>
-<div class="col g14 grow" style="padding:14px 22px;min-height:0;overflow:hidden">
-  {pend}
-  <div class="card" style="padding:12px 16px 4px"><div class="row g8" style="margin-bottom:6px"><span class="sec grow">成员</span><span class="cc-seg cc-seg-xs"><span class="on">全部 12</span><span>未关联 1</span><span>已停用 1</span></span></div>
-    <style>.tbl.mb td{{padding:7px 8px;white-space:nowrap}}</style><table class="tbl mb"><thead><tr><th style="width:13%">成员</th><th style="width:20%">登录邮箱</th><th style="width:15%">Jira 身份</th><th style="width:9%">Tita</th><th>能看的项目</th><th style="width:14%">角色</th><th style="width:8%">状态</th></tr></thead><tbody>{tb}</tbody></table>
-    <div class="row g8 f12" style="padding:8px 0;border-top:1px solid var(--hair)"><span class="ck" style="background:#B45309;width:16px;height:16px;font-size:10px;font-weight:800">!</span><span class="t2 grow">赵磊已停用，还有 1 张单等他审核，指定新负责人后才会转出去</span><span class="lnk w6">指定新负责人 ›</span></div></div>
+        return f'<span class="av" style="width:24px;height:24px;font-size:10px;background:linear-gradient(150deg,{g})">{n}</span>'
+    M = [("林某", "#FFC9A8,#F08F7A", "lin@company.com", '<span class="tag tg-n" style="height:19px;font-size:10.5px">继承全空间</span>', "lin / 林某", '<span class="tag tg-b" style="height:19px;font-size:10.5px">管理员</span>', "g", "正常", False),
+         ("张某", "#8FD8C9,#3FAE9A", "zhang@company.com", '<span class="tag tg-n" style="height:19px;font-size:10.5px">继承部门</span>', "zhang / 张某", '<span class="tag tg-p" style="height:19px;font-size:10.5px">负责人 · OKR</span>', "g", "正常", False),
+         ("周某", "#B5E3A0,#5FB84A", "zhou@company.com", '<span class="tag tg-n" style="height:19px;font-size:10.5px">继承 + 个人PAT</span>', 'zhou / <span style="color:var(--ink-orange)">未关联</span>', '<span class="f11 t3">成员</span>', "g", "正常", False),
+         ("陈晨", "#FFD27F,#F0A23C", "chen@company.com", '<span class="tag tg-g" style="height:19px;font-size:10.5px">免配置审单</span>', "chen / 陈晨", '<span class="f11 t3">成员</span>', "g", "正常", False),
+         ("宋工", "#A5B4FC,#6366F1", "song@vendor.io", '<span class="tag tg-o" style="height:19px;font-size:10.5px">外包 Guest</span>', "song / —", '<span class="tag tg-o" style="height:19px;font-size:10.5px">仅授权单</span>', "g", "正常", False),
+         ("赵磊", "#C8CCD4,#8A909B", "zhao@company.com", '<span class="tag tg-n" style="height:19px;font-size:10.5px">继承部门</span>', "zhao / 赵磊", '<span class="f11 t3">成员</span>', "n", "已停用", True)]
+    tb = "".join(f'''<tr{" style=\"opacity:.6\"" if dis else ""}><td><div class="row g6">{av(n,g)}<span class="w6">{n}</span></div></td><td class="mono f11 t2">{em}</td><td>{mode}</td><td class="f11 t2">{jt}</td><td>{role}</td><td><span class="tag tg-{c}" style="height:19px;font-size:10.5px">{s}</span></td></tr>''' for n, g, em, mode, jt, role, c, s, dis in M)
+    css = '''<style>
+.org-wrap{display:flex;flex:1;min-height:0}
+.org-tree{width:192px;flex:none;border-right:1px solid var(--hair);padding:12px 9px;display:flex;flex-direction:column;gap:3px;background:color-mix(in srgb,var(--text) 1.8%,transparent)}
+.ot-h{display:flex;align-items:center;padding:2px 6px 8px;font-size:12px;font-weight:700;color:var(--text-3)}
+.ot-item{display:flex;align-items:center;gap:6px;height:31px;padding:0 8px;border-radius:9px;font-size:12.5px;color:var(--text-2);white-space:nowrap}
+.ot-item.sub{padding-left:20px}
+.ot-item.on{background:color-mix(in srgb,var(--blue) 14%,transparent);color:var(--ink-blue);font-weight:700}
+.ot-cnt{margin-left:auto;font-size:11px;color:var(--text-3);font-weight:600}
+.ot-item.on .ot-cnt{color:var(--ink-blue)}
+.org-main{flex:1;min-width:0;padding:12px 16px;display:flex;flex-direction:column;gap:10px;overflow:hidden}
+.inherit-box{border-radius:16px;padding:11px 14px;background:color-mix(in srgb,var(--blue) 7%,var(--glass-2));border:1px solid color-mix(in srgb,var(--blue) 22%,transparent);display:flex;flex-direction:column;gap:8px}
+.inh-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.inh-cell{border-radius:10px;padding:8px 10px;background:var(--glass-2);border:1px solid var(--hair);min-width:0}
+.tbl.mb2{width:100%;border-collapse:collapse}
+.tbl.mb2 td{padding:6px 5px;white-space:nowrap;font-size:12px}
+.tbl.mb2 th{padding:5px 5px;white-space:nowrap;font-size:11.5px}
+.admin-portal{padding:9px 10px;border-radius:12px;background:var(--well);border:1px solid var(--hair);display:flex;flex-direction:column;gap:3px}
+</style>'''
+    main = f'''{css}<main class="glass pn grow" style="min-width:0">
+<header class="thead"><div class="row g10"><div class="col grow"><div class="row g10"><h1>成员与身份</h1><span class="cc-seg cc-seg-xs" data-pin="mem-role-seg"><span class="on">成员与部门</span><span>角色与权限 7</span></span></div><div class="f12 t3" style="margin-top:3px">独立账号 + 手工多级部门默认配置 · 角色权限管理 · 外包 Guest 默认 Fail-Closed</div></div>
+  <button class="cc-btn cc-btn-sm cc-btn-glass">{I("link",13)}生成本部门邀请链接</button>
+  <button class="cc-btn cc-btn-sm cc-btn-pri">{I("plus",14,2.4)}添加成员</button></div></header>
+<div class="org-wrap">
+  <div class="org-tree">
+    <div class="ot-h"><span class="grow">部门与团队</span><span class="lnk" style="font-size:11.5px">+ 新建</span></div>
+    <div class="ot-item">{I("users",13)}<span>全部成员</span><span class="ot-cnt">24</span></div>
+    <div class="ot-item" style="font-weight:600;color:var(--text)">{I("chevd",12)}<span>云匠研发中心</span><span class="ot-cnt">24</span></div>
+    <div class="ot-item sub">{I("layers",12)}<span>审批产研</span><span class="ot-cnt">8</span></div>
+    <div class="ot-item sub on">{I("layers",12)}<span>OKR 产研</span><span class="ot-cnt">6</span></div>
+    <div class="ot-item sub">{I("layers",12)}<span>人事产研</span><span class="ot-cnt">5</span></div>
+    <div class="ot-item sub">{I("layers",12)}<span>销售产研</span><span class="ot-cnt">3</span></div>
+    <div class="ot-item sub">{I("layers",12)}<span>QA 测试组</span><span class="ot-cnt">2</span></div>
+    <span class="grow"></span>
+    <div class="admin-portal" data-pin="admin-portal">
+      <div class="row g6"><span class="f12 w7" style="color:var(--ink-blue)">企业管理后台</span><span class="grow"></span>{I("ext",12,style="color:var(--ink-blue)")}</div>
+      <div class="t3" style="font-size:10.5px;line-height:1.45;white-space:nowrap">Web <span class="mono">/admin</span> · 仅管理者可见</div>
+      <div class="t3" style="font-size:10.5px;line-height:1.35">多级树 / SCIM / 域名与 SSO</div>
+    </div>
+  </div>
+  <div class="org-main">
+    <div class="row g10" data-pin="pend-issue" style="padding:8px 12px;border-radius:12px;background:color-mix(in srgb,var(--orange) 10%,var(--glass-2));border:1px solid color-mix(in srgb,var(--orange) 38%,transparent)">
+      <span class="ck" style="background:#B45309;width:18px;height:18px;font-size:11px;font-weight:800">!</span>
+      <span class="f12 grow ell"><b style="color:var(--text)">OKR-3320 待确认归属：</b>Jira 经办人「张伟 (<span class="mono">zw01</span>)」匹配到人事产研 / 销售产研两位同名成员</span>
+      <span class="f12 lnk w6" style="flex:none">选人确认 ›</span>
+    </div>
+    <div class="inherit-box" data-pin="dept-defaults">
+      <div class="row g8">
+        <span class="ic-box" style="width:24px;height:24px;border-radius:7px;background:linear-gradient(155deg,#5AA0FF,#1F6FFF)">{I("layers",12)}</span>
+        <span class="f13 w7">OKR 产研 · 部门默认配置</span>
+        <span class="tag tg-b" style="height:19px;font-size:10.5px">个人写凭据不继承</span>
+        <span class="grow"></span>
+        <span class="f12 lnk w6" data-pin="edit-dept-btn">编辑默认配置 ›</span>
+      </div>
+      <div class="inh-grid">
+        <div class="inh-cell">
+          <div class="f11 t3">默认授权项目</div>
+          <div class="row g4" style="margin-top:4px;flex-wrap:wrap"><span class="tag tg-g" style="height:19px;font-size:10.5px">OKR · 可修改</span><span class="tag tg-b" style="height:19px;font-size:10.5px">审批 · 仅查看</span></div>
+        </div>
+        <div class="inh-cell">
+          <div class="f11 t3">已连共享连接器与测试</div>
+          <div class="f12 w6 ell" style="margin-top:4px">代码源 · 工单采集 · 测试 2 账号</div>
+        </div>
+        <div class="inh-cell">
+          <div class="f11 t3">部门默认 Skills</div>
+          <div class="f12 w6 ell" style="margin-top:4px">页面交互回归 v1 + 2 项</div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="padding:10px 14px 4px;flex:1;min-height:0;display:flex;flex-direction:column">
+      <div class="row g8" style="margin-bottom:5px"><span class="sec grow">OKR 产研 · 成员（6）</span><span class="cc-seg cc-seg-xs"><span class="on">全部 6</span><span>免配置 4</span><span>外包 1</span><span>已停用 1</span></span></div>
+      <table class="tbl mb2"><thead><tr><th>成员</th><th>登录邮箱</th><th>配置 / 类型</th><th>外部工单身份</th><th>角色</th><th>状态</th></tr></thead><tbody>{tb}</tbody></table>
+      <span class="grow"></span>
+      <div class="row g8 f12" data-pin="handoff-row" style="padding:7px 0;border-top:1px solid var(--hair)"><span class="ck" style="background:#B45309;width:16px;height:16px;font-size:10px;font-weight:800">!</span><span class="t2 grow">赵磊已停用，还有 1 张单等他审核，指定新负责人后同事务移交并吊销会话</span><span class="lnk w6">停用与待办交接 ›</span></div>
+    </div>
+  </div>
 </div>
 </main>'''
     right = aside(
-        f'''<div class="card" style="padding:12px 14px"><div class="row"><div class="mini grow" style="margin:0">免 SMTP 邀请链接</div><span class="tag tg-g">私有部署</span></div>
-  <div class="f12 t2" style="margin-top:6px;line-height:1.6">内网无邮件服务器时，生成 24 小时一次性链接直接发企微/飞书，同事点开即可设密码加入。</div>
-  <div class="row g6" style="margin-top:8px;padding:6px 8px;border-radius:var(--r-sm);background:var(--well);border:1px solid var(--hair)"><span class="mono f11 t2 ell grow">https://cc.intra/join/9f2a…k8</span><span class="lnk f11 w6" style="white-space:nowrap">复制</span></div></div>''',
-        f'''<div class="card" style="padding:12px 14px"><div class="mini">单子怎么找到人</div>
-  <div class="f12 t2" style="margin-top:6px;line-height:1.65">1. 按原单外部用户 ID（非显示名）匹配<br>2. 对不上、同名或缺失进入顶部待处理，不发错人</div></div>''',
-        f'''<div class="card" style="padding:12px 14px"><div class="mini">谁能做什么</div>
-  <div class="kv2"><span class="t2">通过 / 打回</span><span class="f12">仅本单修复人</span></div>
-  <div class="kv2"><span class="t2">成员 / 角色 / 邀请</span><span class="f12">空间管理员</span></div>
-  <div class="kv2"><span class="t2">本项目身份映射</span><span class="f12">管理员 · 负责人</span></div>
-  <div class="f12 t3" style="margin-top:6px">管理员不能替别人审核；停用保留历史署名。</div></div>''')
+        f'''<div class="card" style="padding:12px 14px"><div class="row"><div class="mini grow" style="margin:0">免 SMTP 部门邀请</div><span class="tag tg-g">OKR 产研</span></div>
+  <div class="f12 t2" style="margin-top:6px;line-height:1.6">内网无邮件服务器时生成 24h 链接，预设部门、角色与项目，同事设密码即免孤岛入驻。</div>
+  <div class="row g6" style="margin-top:8px;padding:6px 8px;border-radius:var(--r-sm);background:var(--well);border:1px solid var(--hair)"><span class="mono f11 t2 ell grow">https://cc.intra/join/okr-9f2a</span><span class="lnk f11 w6" style="white-space:nowrap">复制</span></div></div>''',
+        f'''<div class="card" style="padding:12px 14px"><div class="mini">三层继承与红线</div>
+  <div class="f12 t2" style="margin-top:6px;line-height:1.62">
+    <b style="color:var(--text)">1. 工作空间</b>：AI 引擎、域名发现<br>
+    <b style="color:var(--text)">2. 部门默认</b>：项目权限、只读连接、Skills<br>
+    <b style="color:var(--ink-red)">3. 不可继承</b>：所有 <span class="mono">personal_exec</span> 写凭据锁死 <span class="mono">scope='user'</span></div></div>''',
+        f'''<div class="card" style="padding:12px 14px"><div class="mini">权责与隔离</div>
+  <div class="kv2"><span class="t2">部门 / 成员 / 角色</span><span class="f12">管理员</span></div>
+  <div class="kv2"><span class="t2">通过 / 打回代码</span><span class="f12">仅本单修复人</span></div>
+  <div class="kv2"><span class="t2">外包 Guest</span><span class="f12">仅见授权单与项目</span></div>
+  <div class="f12 t3" style="margin-top:6px">停用成员保留历史署名，高阶树同步移步 Web <span class="mono">/admin</span>。</div></div>''', w=246)
     return set_left("成员与身份") + main + right
 
 
@@ -1182,7 +1244,7 @@ html:not(.dark) .el .no{color:#fff}
   <div class="col grow g12" style="min-width:0">
     <div class="card" style="padding:12px 14px">
       <div class="row g10"><span class="av" style="width:34px;height:34px;font-size:12px;background:linear-gradient(160deg,#FFC9A8,#F08F7A);color:#5A2414">林</span>
-        <div class="col grow"><span class="f12 t3">当前登录</span><span class="row g6" style="margin-top:2px"><span class="bdj">J</span><span class="f14 w6">linmo</span></span></div><span class="f13 lnk">换个账号</span></div>
+        <div class="col grow"><span class="f12 t3">当前登录 · 独立云匠账号</span><span class="row g6" style="margin-top:2px"><span class="ic-box" style="width:18px;height:18px;border-radius:5px;background:linear-gradient(155deg,#3478F6,#5B21B6);font-size:9px;font-weight:800">云</span><span class="mono f13 w6">lin@company.com</span></span></div><span class="f13 lnk">换个账号</span></div>
       <div style="height:1px;background:var(--hair);margin:11px 0"></div>
       <div class="row g8 f12 t2">{I("msgq",14,style="color:var(--text-3)")}需要权限请联系项目管理员</div>
     </div>
@@ -1202,7 +1264,7 @@ html:not(.dark) .el .no{color:#fff}
       <div class="f11 t3" style="margin-top:7px">登录前不显示工单内容</div></div>
   </div>
   <div class="col grow g10" style="min-width:0">
-    <div class="ein"><span class="bdj">J</span><span class="grow">linmo</span><span class="f13 lnk">换账号</span></div>
+    <div class="ein"><span class="ic-box" style="width:18px;height:18px;border-radius:5px;background:linear-gradient(155deg,#3478F6,#5B21B6);font-size:9px;font-weight:800">云</span><span class="grow mono f13">lin@company.com</span><span class="f13 lnk">换账号</span></div>
     <div class="ein fo">{I("lock",15,style="color:var(--text-3)")}<span class="dots grow">●●●●●●●●</span>{I("eye",15,style="color:var(--text-3)")}</div>
     <button class="abtn a-pri" style="height:40px;justify-content:center;margin-top:4px">登录并回到 TK-20871</button>
     <div class="f12 t3" style="text-align:center">换成别的账号登录时，不会打开这张单</div>
@@ -1709,8 +1771,8 @@ html:not(.dark) .el .no{color:#fff}
   <div class="f13 t2" style="margin-top:6px">单审核通过后，发布记录会出现在这里</div>
   <div class="row g6" style="margin-top:14px"><span class="chip">审核通过</span><span class="arr">→</span><span class="chip">发测试</span><span class="arr">→</span><span class="chip">复测通过</span><span class="arr">→</span><span class="chip">发正式</span></div>
   <div class="row g10" style="margin-top:16px;padding:10px 12px;border-radius:12px;background:color-mix(in srgb,var(--orange) 13%,transparent)">{I("alert",15,style="color:var(--ink-orange)")}
-    <div class="col grow" style="min-width:0"><span class="f13 w6">发布配置还没填</span><span class="f12 t2">开工时跳过了 · 不影响修单，发测试前要填好</span></div>
-    <span class="cc-btn cc-btn-xs cc-btn-glass">去填</span></div>
+    <div class="col grow" style="min-width:0"><span class="f13 w6">本项目发布参数还没填</span><span class="f12 t2">启用发布插件时显示 · 不影响 Bot 修代码，发测试前配好即可</span></div>
+    <span class="cc-btn cc-btn-xs cc-btn-glass">去配置</span></div>
 </div>'''
 
     # 4 Skills：「我的」还没有
@@ -1731,7 +1793,7 @@ html:not(.dark) .el .no{color:#fff}
   <div class="f13 t2" style="margin-top:6px">Bot 现在只用平台内置的 4 条规则</div>
   <div class="row g10" style="margin-top:16px;align-items:stretch">
     {opt("plus","linear-gradient(160deg,#5AA0FF,#1F6FFF)","在线新建","从空白写<br>AI 读仓库帮你起草",True)}
-    {opt("download","linear-gradient(160deg,#B7BDC8,#8A92A0)","导入",".md 文件 · 粘贴<br>GitLab 文件链接")}
+    {opt("download","linear-gradient(160deg,#B7BDC8,#8A92A0)","导入",".md 文件 · 粘贴<br>代码仓文件链接")}
     {opt("copy","linear-gradient(160deg,#5EDB7A,#28B04F)","复制内置的改","在内置规则上<br>改成自己的版本")}
   </div>
   <div class="f12 t3" style="margin-top:12px">写好先是草稿，启用到项目后从下一轮生效</div>
@@ -1960,56 +2022,73 @@ def p_myacct():
     def no(t="不能"):
         return f'<span class="f12 t3" style="text-align:center;display:block">{t}</span>'
     def mrow(p, a, b, c, d, note=""):
-        cell = lambda x: f'<div style="width:96px;flex:none">{x}</div>'
-        return f'<div class="row g8" style="padding:8px 0;border-top:1px solid var(--hair)"><span class="f13 w6" style="width:70px;flex:none">{p}</span>{cell(a)}{cell(b)}{cell(c)}{cell(d)}<span class="f12 t3 grow ell" style="padding-left:6px">{note}</span></div>'
+        cell = lambda x: f'<div style="width:94px;flex:none">{x}</div>'
+        return f'<div class="row g8" style="padding:6px 0;border-top:1px solid var(--hair)"><span class="f13 w6" style="width:62px;flex:none">{p}</span>{cell(a)}{cell(b)}{cell(c)}{cell(d)}<span class="f11 t3 grow ell" style="padding-left:6px">{note}</span></div>'
     def hcell(t, sub):
-        return f'<div class="col" style="width:96px;flex:none;align-items:center;gap:1px"><span class="f12 t2 w6">{t}</span><span class="f11 t3">{sub}</span></div>'
+        return f'<div class="col" style="width:94px;flex:none;align-items:center;gap:1px"><span class="f12 t2 w6">{t}</span><span class="f10 t3">{sub}</span></div>'
     def use(ic, bg, t, d):
-        return f'<div class="row g10" style="padding:8px 0;border-top:1px solid var(--hair)"><span class="ic-box" style="width:28px;height:28px;border-radius:8px;background:{bg}">{I(ic,14)}</span><div class="col grow" style="gap:1px"><span class="f13 w6">{t}</span><span class="f12 t3">{d}</span></div></div>'
-    def acct(logo, title, ok, fields, btn, foot):
-        return f'''<div class="card grow" style="padding:12px 16px 14px;min-width:0">
-    <div class="row g8">{logo}<span class="sec grow">{title}</span><span class="row g6 f12" style="color:var(--ink-green)">{I("check",13,3)}{ok}</span></div>
+        return f'<div class="row g10" style="padding:7px 0;border-top:1px solid var(--hair)"><span class="ic-box" style="width:26px;height:26px;border-radius:8px;background:{bg}">{I(ic,13)}</span><div class="col grow" style="gap:1px"><span class="f12 w6">{t}</span><span class="f11 t3">{d}</span></div></div>'
+    def acct(logo, title, src_tag, ok, fields, btn, foot):
+        return f'''<div class="card grow" style="padding:10px 14px 11px;min-width:0">
+    <div class="row g6">{logo}<span class="sec" style="font-size:13.5px">{title}</span><span class="tag tg-n" style="height:17px;font-size:9.5px">{src_tag}</span><span class="grow"></span><span class="row g4 f11 w6" style="color:var(--ink-green)">{I("check",12,3)}{ok}</span></div>
     {fields}
-    <div class="row g10" style="margin-top:12px"><span class="cc-btn cc-btn-sm cc-btn-glass">{I("zap",13)}{btn}</span><span class="f12 t3 grow ell">{foot}</span></div></div>'''
-    GL = '<span style="width:20px;height:20px;border-radius:6px;background:#FC6D26;color:#fff;font-size:11px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;flex:none">G</span>'
-    AP = '<span style="width:20px;height:20px;border-radius:6px;background:linear-gradient(160deg,#4FA3FF,#1D6FE0);color:#fff;font-size:11px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;flex:none">A</span>'
-    gl_f = '''<div class="flabel" style="margin-top:12px">个人访问令牌</div><div class="field mono" style="font-size:13px;letter-spacing:1px">•••••••••••••••• 7c2e</div>
-    <div class="f12 t3" style="margin-top:6px">识别为 <span class="mono t2">lin.x</span> · 有效期到 2027-05-20 · 权限 api</div>'''
-    ap_f = '''<div class="row g10" style="margin-top:12px"><div class="grow"><div class="flabel">用户名</div><div class="field mono" style="font-size:13px">lin.x</div></div>
-    <div class="grow"><div class="flabel">密码</div><div class="field mono" style="font-size:13px;letter-spacing:2px">••••••••••</div></div></div>'''
+    <div class="row g8" style="margin-top:9px"><span class="cc-btn cc-btn-xs cc-btn-glass">{I("zap",12)}{btn}</span><span class="f11 t3 grow ell">{foot}</span></div></div>'''
+    def swatch(nm, bg, on=False):
+        bd = "box-shadow:0 0 0 2px var(--blue);border-color:transparent" if on else ""
+        return f'''<div class="row g8" style="flex:1;padding:6px 9px;border-radius:10px;background:var(--well);border:1px solid var(--hair);{bd}">
+  <span style="width:20px;height:20px;border-radius:6px;background:{bg};flex:none;border:1px solid var(--stroke)"></span>
+  <span class="f12 {"w7" if on else "t2"} grow ell">{nm}</span>
+  {"<span style=\"color:var(--ink-blue);font-size:11px;font-weight:700\">✓</span>" if on else ""}
+</div>'''
+    GL = '<span style="width:19px;height:19px;border-radius:5px;background:#FC6D26;color:#fff;font-size:10.5px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;flex:none">G</span>'
+    AP = '<span style="width:19px;height:19px;border-radius:5px;background:linear-gradient(160deg,#4FA3FF,#1D6FE0);color:#fff;font-size:10.5px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;flex:none">A</span>'
+    gl_f = '''<div class="flabel" style="margin-top:8px">个人访问令牌（scope='user' · 禁继承）</div><div class="field mono" style="font-size:12px;letter-spacing:1px;height:32px">•••••••••••••••• 7c2e</div>
+    <div class="f11 t3" style="margin-top:5px">识别为 <span class="mono t2">lin.x</span> · 到期 2027-05-20 · api</div>'''
+    ap_f = '''<div class="row g8" style="margin-top:8px"><div class="grow"><div class="flabel">用户名</div><div class="field mono" style="font-size:12px;height:32px">lin.x</div></div>
+    <div class="grow"><div class="flabel">密码</div><div class="field mono" style="font-size:12px;letter-spacing:2px;height:32px">••••••••</div></div></div>
+    <div class="f11 t3" style="margin-top:5px">随「发布 / 回滚插件」动态呈现 · 未装不显示</div>'''
     main = f'''<main class="glass pn grow" style="min-width:0">
-<header class="thead"><div class="row g10"><div class="col grow"><h1>我的账号</h1><div class="f12 t3" style="margin-top:2px">只给你用 · 合入 MR、发布、回滚都用你本人的账号</div></div>
+<header class="thead"><div class="row g10"><div class="col grow"><h1>我的账号</h1><div class="f12 t3" style="margin-top:2px">独立账号 + 按已启用插件动态呈现本人凭据（<span class="mono">scope='user'</span>）+ 外观与语言（8 项左栏不膨胀）</div></div>
   <span class="chip2">{I("spark",13,style="color:var(--ink-purple)")}也可以问 AI「我能合哪些分支？」</span></div></header>
-<div class="col g14 grow" style="padding:14px 22px;min-height:0;overflow:hidden">
-  <div class="card" style="padding:10px 16px">
-    <div class="row g12"><span class="av" style="width:34px;height:34px;font-size:13px;background:linear-gradient(150deg,#FFB38A,#F0703C)">林</span>
-      <div class="col grow" style="gap:1px"><span class="f14 w6">林某 <span class="f12 t3" style="font-weight:400">· 独立邮箱 <span class="mono">lin@company.com</span> 登录</span></span><span class="f12 t3">空间管理员 · 能看审批、OKR、考勤</span></div>
-      <span class="f12 t3">独立云匠账号 · 外部工具走个人连接器</span></div>
+<div class="col g10 grow" style="padding:12px 20px;min-height:0;overflow:hidden">
+  <div class="card" style="padding:9px 14px">
+    <div class="row g10"><span class="av" style="width:32px;height:32px;font-size:12px;background:linear-gradient(150deg,#FFB38A,#F0703C)">林</span>
+      <div class="col grow" style="gap:1px"><span class="f13 w6">林某 <span class="f12 t3" style="font-weight:400">· 独立邮箱 <span class="mono">lin@company.com</span></span></span><span class="f11 t3">空间管理员 · 本人跨空间与个人连接器中心</span></div>
+      <span class="tag tg-b" style="height:20px;font-size:10.5px">个人连接器由已启用插件动态生成</span></div>
   </div>
-  <div class="row g14" style="align-items:stretch">
-    {acct(GL, "GitLab 账号", "已连通", gl_f, "试连接", "在 GitLab 偏好设置 → 访问令牌里生成")}
-    {acct(AP, "Apollo 账号", "已连通 · 10:20", ap_f, "试登录", "加密存在内网服务器上")}
+  <div class="row g12" style="align-items:stretch">
+    {acct(GL, "GitLab 个人令牌", "代码源 · 已启用", "已连通", gl_f, "试连接", "在代码仓偏好设置生成")}
+    {acct(AP, "Apollo 个人账号", "扩展插件 · 已启用", "已连通", ap_f, "试登录", "停用发布插件时自动隐藏")}
   </div>
-  <div class="card" style="padding:12px 16px 6px">
-    <div class="row g8"><span class="sec grow">你能做什么</span><span class="f12 t3">试连接时实测 · 工作台的权限另算，两边都要过</span></div>
-    <div class="row g8" style="margin-top:8px;padding-bottom:6px"><span style="width:70px;flex:none"></span>{hcell("合入测试分支","GitLab")}{hcell("合回主分支","GitLab")}{hcell("发测试","Apollo")}{hcell("发正式 · 回滚","Apollo")}<span class="grow"></span></div>
+  <div class="card" style="padding:10px 14px;gap:8px">
+    <div class="row g8"><span class="sec">外观与语言</span><span class="tag tg-p" style="height:18px;font-size:10px">contributes.themes + i18n（合并自原外观菜单）</span><span class="grow"></span><span class="f11 t3">全局界面语言：</span>
+      <span class="cc-select cc-select-xs" style="width:142px;flex:none"><span class="cc-sel-val">简体中文 (zh-CN)</span><span class="cc-sel-sp"></span><span class="cc-sel-caret">{I("chevd",12)}</span></span>
+    </div>
+    <div class="row g8">
+      {swatch("默认苹果毛玻璃", "linear-gradient(135deg,#BFD5FF,#FFD3E6)", True)}
+      {swatch("亮眼高对比 (官方)", "linear-gradient(135deg,#E2E8F0,#64748B)")}
+      {swatch("深空暗夜霓虹 (市场插件)", "linear-gradient(135deg,#1E1B4B,#6D28D9)")}
+    </div>
+  </div>
+  <div class="card" style="padding:10px 14px 4px;flex:1;min-height:0">
+    <div class="row g8"><span class="sec grow">你能做什么（随已启用插件动态列）</span><span class="f11 t3">工作台权限 × 个人连接器实测双过</span></div>
+    <div class="row g8" style="margin-top:5px;padding-bottom:4px"><span style="width:62px;flex:none"></span>{hcell("合入测试分支","代码源")}{hcell("合回主分支","代码源")}{hcell("发测试","发布插件")}{hcell("发正式·回滚","扩展插件")}<span class="grow"></span></div>
     {mrow("OKR", yes(), yes(), yes(), yes())}
-    {mrow("审批", yes(), no(), yes(), no("只能看"), "找管理员加权限")}
+    {mrow("审批", yes(), no(), yes(), no("只能看"), "未配主干/PROD 写权限")}
     {mrow("考勤", yes(), yes(), yes(), yes())}
   </div>
 </div>
 </main>'''
     right = aside(
         f'''<div class="card" style="padding:12px 14px"><div class="mini">什么时候用你的账号</div>
-  {use("branch","linear-gradient(160deg,#FF9A5A,#FC6D26)","你点「通过并合入」","两次 MR 都用你的 GitLab 账号合入")}
-  {use("rocket","linear-gradient(160deg,#5AA0FF,#1F6FFF)","你点发测试、发正式","用你的 Apollo 账号写回并发布")}
-  {use("history","linear-gradient(160deg,#FF8A7A,#E0281E)","你确认紧急回滚","看历史、预览、执行都用你的")}
-  <div class="f12 t3" style="padding:8px 0 2px;border-top:1px solid var(--hair);line-height:1.55">拉代码、推 fix/ 分支、提 MR 由 Bot 用 <span class="mono">bot-fix</span> 做，不用你的。</div></div>''',
-        f'''<div class="card" style="padding:12px 14px"><div class="mini">GitLab、Apollo 里会记成谁</div>
-  <div class="row g8" style="margin-top:8px"><span class="ck" style="background:var(--btn-ok-bg);width:16px;height:16px">{I("check",10,3.2)}</span><span class="f13 grow" style="white-space:nowrap">合入人、发布人 <span class="mono">lin.x</span></span></div>
-  <div class="row g8" style="margin-top:6px;opacity:.55"><span class="ck" style="background:var(--text-3);width:16px;height:16px">{I("x",10,3.2)}</span><span class="f13 grow" style="white-space:nowrap"><span class="mono">bot-fix</span> / <span class="mono">deployuser</span></span></div></div>''',
-        f'''<div class="card" style="padding:12px 14px"><div class="mini">过期了怎么办</div>
-  <div class="f12 t2" style="margin-top:6px;line-height:1.6">令牌快到期前 7 天提醒你。Apollo 改了密码回来这里也改。忘了也没事：用到时失败会通知你，改完在那一步点「重试」。</div></div>''')
+  {use("branch","linear-gradient(160deg,#FF9A5A,#FC6D26)","代码源 · 通过并合入","由已启用代码连接器调用你的 PAT")}
+  {use("rocket","linear-gradient(160deg,#5AA0FF,#1F6FFF)","扩展插件 · 发布与回滚","仅装发布/回滚插件后出现，用本人签发")}
+  <div class="f11 t3" style="padding:6px 0 2px;border-top:1px solid var(--hair);line-height:1.5">拉代码与提 MR 由项目只读连接器执行，不碰本人凭据。</div></div>''',
+        f'''<div class="card" style="padding:12px 14px"><div class="mini">第三方系统里记成谁</div>
+  <div class="row g8" style="margin-top:6px"><span class="ck" style="background:var(--btn-ok-bg);width:16px;height:16px">{I("check",10,3.2)}</span><span class="f12 grow">操作人 <span class="mono">lin.x</span>（本人实名）</span></div>
+  <div class="row g8" style="margin-top:5px;opacity:.55"><span class="ck" style="background:var(--text-3);width:16px;height:16px">{I("x",10,3.2)}</span><span class="f12 grow"><span class="mono">bot-fix</span> / 管理员代签</span></div></div>''',
+        f'''<div class="card" style="padding:12px 14px"><div class="mini">外观与凭据过期规则</div>
+  <div class="f11 t2" style="margin-top:6px;line-height:1.6">• 主题皮肤与语言实时双端同步 <span class="mono">users.locale</span>。<br>• 个人令牌到期前 7 天提醒；缺凭据时 <span class="mono">ActionGate</span> 在操作处就地弹窗补配。</div></div>''')
     return set_left("我的账号") + main + right
 
 
@@ -2020,7 +2099,7 @@ def p_acctneed():
     base = p_pubbefore()
     dlg = f'''<div class="scrim"></div>
 <div class="dlg" style="left:50%;top:50%;width:560px;transform:translate(-50%,-50%);padding:22px 24px">
-  <div class="row g10"><span class="ic-box" style="background:linear-gradient(160deg,#FFC15A,#F08A00)">{I("key",16)}</span><div class="col grow"><span class="f18 w7">发布前，先配你的 Apollo 账号</span><span class="f12 t3">第一次在工作台发布 · 用你本人的账号，Apollo 里记的是你</span></div></div>
+  <div class="row g10"><span class="ic-box" style="background:linear-gradient(160deg,#FFC15A,#F08A00)">{I("key",16)}</span><div class="col grow"><div class="row g8"><span class="f18 w7">发布前，先配你的 Apollo 账号</span><span class="tag tg-b">由插件 authSchema 动态渲染</span></div><span class="f12 t3">检测到 <span class="mono">USER_CREDENTIAL_MISSING</span> · 仅你本人可用、存至个人连接器</span></div></div>
   <div class="row g12" style="margin-top:18px">
     <div class="grow"><div class="flabel">Apollo 用户名</div><div class="field mono" style="font-size:13px">lin.x</div></div>
     <div class="grow"><div class="flabel">密码</div><div class="field focus mono" style="font-size:13px;letter-spacing:2px">••••••••<span style="display:inline-block;width:1.5px;height:15px;background:var(--focus-ring);vertical-align:-2px;margin-left:2px"></span></div></div>

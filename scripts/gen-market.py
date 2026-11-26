@@ -75,7 +75,7 @@ left = f'''<section class="glass pn" style="width:296px;flex:none;padding:16px 1
 
   <div class="g10h">可安装 · 扩展生态<span>4</span></div>
   {mrow("Token 费用检测", "topbar.widgets + 插件设置 · 预算熔断", SVG_WAVE, "linear-gradient(155deg,#34D399,#059669)", "", "", action_txt="安装")}
-  {mrow("高对比暗夜主题", "themes · 自动归「外观与语言」单选", SVG_TERM, "linear-gradient(155deg,#A855F7,#6366F1)", "", "", action_txt="安装")}
+  {mrow("高对比暗夜主题", "themes · 自动归「我的账号 → 外观与语言」", SVG_TERM, "linear-gradient(155deg,#A855F7,#6366F1)", "", "", action_txt="安装")}
   {mrow("外部 CLI 引擎（ACP）", "runtimes · 复用 Claude Code / Codex", SVG_PLUG, "linear-gradient(155deg,#64748B,#334155)", "", "", action_txt="安装")}
   {mrow("飞书 / 钉钉审批联动", "connectors + mcp · 群审批卡", SVG_MSG, "linear-gradient(155deg,#60A5FA,#4F46E5)", "", "", action_txt="安装")}
 </section>'''
@@ -161,7 +161,7 @@ right = f'''<aside class="glass pn" style="width:288px;flex:none;padding:16px 14
 
   <div class="card" style="padding:13px 14px">
     <div class="mini">企业自研与新物种插件</div>
-    <div class="f12 t2" style="line-height:1.6">外部鉴权自动进「设置 → 连接器」，主题进「外观与语言」；Token 费用检测等任意新物种零代码自动落入「插件设置」通用 Schema 抽屉。</div>
+    <div class="f12 t2" style="line-height:1.6">外部鉴权自动进「设置 → 连接器」，主题进「我的账号 → 外观与语言」；权限声明通过 <span class="mono">manifest.permissions</span> 进「角色与权限」。</div>
     <div class="row g8" style="margin-top:11px">
       <span class="btn2 sm grow" style="background:var(--btn-pri-bg);color:#fff">导入私有插件</span>
       <span class="btn2 sm" style="background:var(--fill);color:var(--text)">SDK 文档</span>
