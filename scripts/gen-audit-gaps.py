@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""全链路终审补齐 6 张高清设计板（T-08b / T-13 / T-14 / T-15）：
+"""全链路终审补齐 7 张高清设计板（T-08b / T-13 / T-14 / T-15 / 操作记录回滚）：
 1. reference/src/v5/pc-ws-switch.html        (1440×900)  → PC-顶栏空间切换与邀请抽屉
 2. reference/src/v5/pc-invite-expired.html   (1440×900)  → PC-邀请失效与切号
 3. reference/src/v5/pc-project-workflow.html (1440×900)  → PC-设置-项目-流程模板
-4. reference/src/v5/pc-edge-extra.html       (1440×900)  → PC-工作台-边界补全
-5. reference/src/v5/pc-plugin-runtime.html   (1440×900)  → PC-插件运行态规范
-6. reference/src/v5/m-runtime-extra.html     (1440×1000) → 移动端-运行态与异常补齐
+4. reference/src/v5/pc-operation-log.html    (1440×900)  → PC-设置-操作记录与数据回滚
+5. reference/src/v5/pc-edge-extra.html       (1440×900)  → PC-工作台-边界补全
+6. reference/src/v5/pc-plugin-runtime.html   (1440×900)  → PC-插件运行态规范
+7. reference/src/v5/m-runtime-extra.html     (1440×1000) → 移动端-运行态与异常补齐
 
 用法：python3 scripts/gen-audit-gaps.py
 """
@@ -299,6 +300,109 @@ def build_project_workflow():
 
 
 # =====================================================================
+# 3b. PC-设置-操作记录与数据回滚（三轨分治 · 真只追加 + 安全还原）
+# =====================================================================
+def build_operation_log():
+    bg_main = f'''<main class="glass pn grow" style="min-width:0;opacity:.72">
+<header class="thead">
+  <div class="row g10">
+    <div class="col grow">
+      <div class="row g10"><h1>连接器</h1><span class="tag tg-g">已连通 5</span></div>
+      <div class="f12 t3" style="margin-top:2px">设置左栏保持 8 项不变 · 任意核心配置页右上角与工单菜单均可打开「操作记录」追溯与恢复误删</div>
+    </div>
+    <button class="cc-btn cc-btn-sm cc-btn-glass is-focus" style="border-color:var(--focus-ring);color:var(--ink-blue)">{I("history",13,2.2)}操作记录 · 可恢复 3</button>
+  </div>
+</header>
+<div class="col g12 grow" style="padding:16px 22px">
+  <div class="card flat" style="padding:14px 16px"><div class="f13 w7">已启用代码源 / 工单源连接器（4）</div><div class="f12 t3" style="margin-top:4px">GitLab 主仓（正常） · Jira 产研（正常） · Tita 工单（令牌待续）</div></div>
+  <div class="row g10" style="margin-top:auto;padding:9px 14px;border-radius:12px;background:var(--glass-elev);border:1px solid var(--stroke)">
+    <span class="dt" style="width:7px;height:7px;border-radius:50%;background:var(--orange)"></span>
+    <span class="f12 t2 grow">刚才已将连接器 <span class="w6">GitLab 审批仓</span> 移入回收站（未销毁密文，保留 30 天）</span>
+    <span class="lnk f12 w7">5 秒撤销 ›</span>
+  </div>
+</div></main>'''
+
+    def op_row(seq, kind_tag, kind_cls, title, sub, hint, hint_cls="t3", on=False):
+        st = "background:color-mix(in srgb,var(--blue) 12%,var(--glass-2));border-color:var(--focus-ring);box-shadow:0 0 0 2px var(--focus-halo)" if on else "background:var(--well);border-color:var(--hair)"
+        return f'''<div class="col g4" style="padding:10px 12px;border-radius:12px;border:1px solid;{st}">
+  <div class="row g6"><span class="mono f10 t3 w7">#{seq}</span><span class="tag {kind_cls}" style="height:17px;font-size:9.5px;padding:0 5px">{kind_tag}</span><span class="f12 w7 grow ell">{title}</span></div>
+  <div class="f11 t2 ell">{sub}</div>
+  <div class="f10 {hint_cls} ell">{hint}</div>
+</div>'''
+
+    def diff_kv(k, before_v, cur_v, warn=False):
+        cur_style = "color:var(--ink-red)" if warn else "color:var(--text-2)"
+        return f'''<div style="display:grid;grid-template-columns:100px 1fr 1fr;gap:8px;padding:7px 10px;border-top:1px solid var(--hair);font-size:11.5px;align-items:center">
+  <span class="t3">{k}</span>
+  <span class="mono" style="color:var(--ink-green);background:color-mix(in srgb,var(--green) 8%,transparent);padding:2px 6px;border-radius:6px">{before_v}</span>
+  <span class="mono" style="{cur_style};background:var(--well);padding:2px 6px;border-radius:6px">{cur_v}</span>
+</div>'''
+
+    drawer = f'''<div class="scrim"></div>
+<aside class="cc-drawer" style="top:64px;height:calc(100% - 76px);width:780px;z-index:var(--z-drawer)">
+  <div class="cc-drawer-hd">
+    <span class="ic-box" style="width:36px;height:36px;border-radius:10px;background:linear-gradient(155deg,#6CC4FF,#1673FF)">{I("history",18,2.2)}</span>
+    <div class="col grow">
+      <div class="row g8"><span class="f17 w7">操作记录与数据恢复</span><span class="tag tg-b">真只追加 events + operation_reverts</span></div>
+      <div class="f12 t3" style="margin-top:2px">9 类配置资源支持软删回收（周期可配）· 模板/Skill 走版本切换 · 令牌轮换与外部合并如实不可逆</div>
+    </div>
+    <span class="cc-close">{I("x",15,2.2)}</span>
+  </div>
+  <div class="cc-drawer-bd" style="gap:10px;padding:12px 18px">
+    <div class="row g8">
+      <span class="cc-seg cc-seg-xs"><span class="on">全部变更记录</span><span>已删除 · 可恢复 (3)</span></span>
+      <span class="cc-select cc-select-xs" style="width:auto;flex:none"><span class="cc-sel-val">授权范围</span><span class="cc-sel-caret">{I("chevd",11)}</span></span>
+      <span class="cc-select cc-select-xs" style="width:auto;flex:none"><span class="cc-sel-val">全部来源</span><span class="cc-sel-caret">{I("chevd",11)}</span></span>
+      <span class="grow"></span>
+      <span class="f11 t3">可配周期：30 天软删 · 180 天底账</span>
+    </div>
+    <div class="row g12 grow" style="min-height:0;align-items:stretch">
+      <div class="col g8" style="width:302px;flex:none">
+        {op_row("1842", "软删", "tg-r", "连接器 · GitLab 审批仓", "陈某 · PC 界面 · 12 分钟前", "移入回收站（密文未销毁）· 可无损恢复", "t2", on=True)}
+        {op_row("1840", "切版本", "tg-p", "流程模板 · 标准前端 v3 → v4", "林某 · AI 助手 confirm_card · 38 分钟前", "原生不可变版本 · 切回 v3 下一轮生效")}
+        {op_row("1837", "可还原", "tg-b", "环境 · staging 超时阈值", "林某 · PC 界面 · 2 小时前", "白名单扁平还原 · state_digest 锁并发")}
+        {op_row("1831", "不可逆", "tg-n", "GitLab 令牌轮换 · MR !318 合入", "林某 · PC 界面 · 昨天 19:10", "旧密文即时销毁 / 远端合入 · 仅审计留痕")}
+        <div class="f11 t3" style="margin-top:auto;padding:4px 2px">按当前态 RBAC 裁剪 · 默认 0px 悬浮滚动加载…</div>
+      </div>
+      <div class="col g10 grow" style="min-width:0">
+        <div class="card" style="padding:12px 14px;gap:6px">
+          <div class="row g8">
+            <span class="tag tg-r">soft_delete</span>
+            <span class="f14 w7 grow">连接器 · GitLab 审批仓</span>
+            <span class="tag tg-g">无主键冲突 · 可恢复</span>
+          </div>
+          <div class="f11 t3">操作人 陈某 · 设备 Mac-Work · 请求 <span class="mono">req_91a8</span> · 策略：移入回收站（未销毁密文）</div>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden">
+          <div style="display:grid;grid-template-columns:100px 1fr 1fr;gap:8px;padding:8px 10px;background:var(--well);font-size:11px;font-weight:700;color:var(--text-3)">
+            <span>字段</span><span>恢复目标态（Before）</span><span>当前线上态（Current）</span>
+          </div>
+          {diff_kv("配置状态", "正常启用", "已进回收站（剩余 29 天）", warn=True)}
+          {diff_kv("连接器地址", "gitlab.tita.work/approve", "—")}
+          {diff_kv("凭据类别", "code_source · workspace_secret", "—")}
+          {diff_kv("密文 secret_91d0", "clean（未受 Runner 吊销波及）", "回收站冻结 · 校验 clean 自动重连")}
+          {diff_kv("关联触发器", "2 条同批删除（同步恢复）", "暂停调度")}
+        </div>
+        <div class="card" style="padding:10px 12px;gap:6px;background:color-mix(in srgb,var(--blue) 7%,var(--glass-2));border-color:color-mix(in srgb,var(--blue) 24%,transparent)">
+          <div class="row g6">{I("shield",14,2.2,"color:var(--ink-blue)")}<span class="f12 w7" style="color:var(--ink-blue)">三轨安全护栏（防越权 · 防 TOCTOU · 密文追踪）</span></div>
+          <div class="f11 t2" style="line-height:1.58">
+            • 提交强制校当前双权（<span class="mono">ops_log:restore</span> + 目标写权）与全态 <span class="mono">state_digest</span> 钉扎；<br>
+            • 删除若勾选「因泄露立即销毁密文」则恢复后标记 <span class="mono">needs_reauth</span>；<span class="mono">L2</span> 高危项禁 AI 直接确认还原。
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="cc-drawer-ft">
+    <span class="f11 t3 grow">执行后真只追加 events + operation_reverts（重名冲突走 409 重命名恢复，高危 L2 禁 AI 直接确认）</span>
+    <button class="cc-btn cc-btn-md cc-btn-glass">取消</button>
+    <button class="cc-btn cc-btn-md cc-btn-pri">{I("history",14,2.4)}恢复此条记录</button>
+  </div>
+</aside>'''
+    return pc_shell("操作记录与数据回滚 · 云匠", "set", set_left("连接器") + bg_main, overlay=drawer)
+
+
+# =====================================================================
 # 4. PC-工作台-边界补全（T-14：Hard Gate 2x失败 / 我来接手 / no_code_fix / 提问消歧）
 # =====================================================================
 def build_edge_extra():
@@ -495,6 +599,7 @@ FILES = {
     "pc-ws-switch.html": build_ws_switch(),
     "pc-invite-expired.html": build_invite_expired(),
     "pc-project-workflow.html": build_project_workflow(),
+    "pc-operation-log.html": build_operation_log(),
     "pc-edge-extra.html": build_edge_extra(),
     "pc-plugin-runtime.html": build_plugin_runtime(),
     "m-runtime-extra.html": build_mobile_runtime(),
