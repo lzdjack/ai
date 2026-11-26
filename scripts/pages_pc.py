@@ -349,18 +349,46 @@ def chat_main_dim():
 
 
 def p_reject():
+    nodes = [
+        ("1", "读单与复现定位", "AI 执行", False),
+        ("2", "代码改动与离线构建", "推荐默认", True),
+        ("3", "修后浏览器验证", "AI 执行", False),
+        ("4", "结构化交付与硬门禁", "机审门禁", False),
+        ("5", "代码审查与风险分级", "审后交付", False),
+        ("6", "环境分支 MR 与发 TEST", "审后交付", False),
+        ("7", "合回主分支 → 正式发布", "审后交付", False),
+    ]
+    menu_rows = "".join(
+        f'<div class="cc-menu-item{" is-selected" if sel else ""}" style="padding:3px 8px;min-height:24px;border-radius:7px">'
+        f'<span class="cc-mi-ck" style="width:14px">{I("check",11,2.6) if sel else ""}</span>'
+        f'<span class="f11 {"w7" if sel else "t2"} grow ell">{idx} · {nm}</span>'
+        f'<span class="tag {"tg-b" if sel else "tg-n"}" style="height:16px;font-size:9.5px;padding:0 5px">{tg_txt}</span></div>'
+        for idx, nm, tg_txt, sel in nodes
+    )
     dlg = f'''<div class="scrim"></div>
-<div class="dlg" style="left:50%;top:50%;width:640px;transform:translate(-50%,-50%);padding:22px 24px">
+<div class="dlg" style="left:50%;top:50%;width:700px;transform:translate(-50%,-50%);padding:20px 22px">
   <div class="row g10"><span class="ic-box" style="background:linear-gradient(160deg,#FF8A7A,#E0281E)">{I("undo",16,2.2)}</span><div class="col grow"><span class="f18 w7">打回第 2 轮</span><span class="f12 t3">TK-20871 · 审核对象 <span class="mono">a3f9c21</span> · 意见会原样交给 Bot-01</span></div><span class="cc-close">{I("x",15,2.2)}</span></div>
-  <div class="flabel" style="margin-top:18px">打回原因</div>
-  <div class="field focus" style="min-height:92px">分组 2、3 好了，但<b>管理员</b>账号切到「销售部」还是会卡一下，大概 2 秒。另外第 49 行直接 return，加载态没有收起来，界面会一直转圈。<span style="display:inline-block;width:1.5px;height:16px;background:var(--focus-ring);vertical-align:-3px"></span></div>
-  <div class="row g6 wrap" style="margin-top:8px"><span class="f12 t3">常用：</span><span class="chip2">问题仍存在</span><span class="chip2">改出了新问题</span><span class="chip2">验证不充分</span><span class="chip2">改法不认可</span></div>
-  <div class="flabel" style="margin-top:16px">附上的代码位置</div>
-  <div class="row g10" style="padding:10px 12px;border-radius:12px;background:var(--fill)"><span class="st st-m" style="width:16px;height:16px;border-radius:4px;font-size:10px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center">M</span><span class="mono f12 w6">GroupPicker.tsx:49</span><span class="mono f12 t2 grow ell">if (req.aborted) return;</span><span class="f12 lnk">换一行</span><span class="t3">{I("x",14)}</span></div>
-  <div class="flabel" style="margin-top:16px">截图 / 录屏</div>
-  <div class="row g10"><div class="shw" style="width:120px;height:78px"><div class="shot" data-s="before" data-cap="none" style="transform:scale(.522)"></div></div><div class="col" style="width:120px;height:74px;border-radius:12px;border:1.5px dashed var(--hair);align-items:center;justify-content:center;gap:4px;color:var(--text-3)">{I("plus",18)}<span class="f11">截图或录屏</span></div>
-    <div class="col g6 grow" style="padding-left:6px"><div class="row g8"><span class="cbx on">{I("check",12,3)}</span><span class="f13">要求下一轮用「管理员」复测</span></div><div class="row g8"><span class="cbx on">{I("check",12,3)}</span><span class="f13">重新提交时展示相对本轮的改动</span></div></div></div>
-  <div class="row g10" style="margin-top:20px;padding-top:16px;border-top:1px solid var(--hair)"><span class="f12 t3 grow">打回后 Bot-01 会读取：本条意见 · 代码位置 1 · 截图 1</span><span class="cc-btn cc-btn-sec">取消</span><span class="cc-btn cc-btn-danger-solid" style="padding:0 18px">{I("undo",14)}打回并通知 Bot</span></div>
+  <div class="flabel" style="margin-top:14px">打回原因</div>
+  <div class="field focus" style="min-height:74px">分组 2、3 好了，但<b>管理员</b>账号切到「销售部」还是会卡一下，大概 2 秒。另外第 49 行直接 return，加载态没有收起来，界面会一直转圈。<span style="display:inline-block;width:1.5px;height:16px;background:var(--focus-ring);vertical-align:-3px"></span></div>
+  <div class="row g6 wrap" style="margin-top:7px"><span class="f12 t3">常用：</span><span class="chip2">问题仍存在</span><span class="chip2">改出了新问题</span><span class="chip2">验证不充分</span><span class="chip2">改法不认可</span></div>
+  <div class="flabel" style="margin-top:12px">附上的代码位置</div>
+  <div class="row g10" style="padding:8px 12px;border-radius:11px;background:var(--fill)"><span class="st st-m" style="width:16px;height:16px;border-radius:4px;font-size:10px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center">M</span><span class="mono f12 w6">GroupPicker.tsx:49</span><span class="mono f12 t2 grow ell">if (req.aborted) return;</span><span class="f12 lnk">换一行</span><span class="t3">{I("x",14)}</span></div>
+  <div style="display:grid;grid-template-columns:280px 1fr;gap:14px;margin-top:12px;align-items:start">
+    <div class="col g8">
+      <div class="flabel" style="margin:0">截图 / 录屏</div>
+      <div class="row g10"><div class="shw" style="width:120px;height:74px"><div class="shot" data-s="before" data-cap="none" style="transform:scale(.522)"></div></div><div class="col" style="width:120px;height:70px;border-radius:12px;border:1.5px dashed var(--hair);align-items:center;justify-content:center;gap:4px;color:var(--text-3)">{I("plus",17)}<span class="f11">截图或录屏</span></div></div>
+      <div class="col g6" style="margin-top:4px"><div class="row g8"><span class="cbx on">{I("check",12,3)}</span><span class="f12">要求下一轮用「管理员」复测</span></div><div class="row g8"><span class="cbx on">{I("check",12,3)}</span><span class="f12">重新提交时展示相对本轮改动</span></div></div>
+      <div class="f11 t3" style="line-height:1.45;margin-top:2px">上游第 1 步将标记 <span class="mono">skipped_inherited</span> 沿用本轮证据；产出新提交后后置门禁自动重跑。</div>
+    </div>
+    <div class="col g4">
+      <div class="row g6"><div class="flabel" style="margin:0">打回后回到哪个节点</div><span class="grow"></span><span class="f11 t3">列出模板全部节点</span></div>
+      <div class="cc-select cc-select-sm is-open">
+        <span class="cc-sel-val">2 · 代码改动与离线构建</span><span class="cc-tag cc-tag-b">默认</span><span class="cc-sel-sp"></span><span class="cc-sel-caret">{I("chevd",12)}</span>
+      </div>
+      <div class="cc-menu" style="padding:4px;gap:1px;border-radius:11px">{menu_rows}</div>
+    </div>
+  </div>
+  <div class="row g10" style="margin-top:14px;padding-top:12px;border-top:1px solid var(--hair)"><span class="f12 t3 grow">将从「2 · 代码改动与离线构建」开第 3 轮 · 附带意见、代码位置 1、截图 1</span><span class="cc-btn cc-btn-sec">取消</span><span class="cc-btn cc-btn-danger-solid" style="padding:0 18px">{I("undo",14)}打回并通知 Bot</span></div>
 </div>'''
     right = aside(f'''<div class="card" style="padding:12px 14px"><div class="mini">经过</div>
   <div class="tlx"><div class="rail"><span class="bul" style="background:var(--green)"></span><i></i></div><div style="padding-bottom:8px"><div class="f13 w6">接单 · 已通知你</div><div class="f12 t3">昨天 21:52</div></div></div>

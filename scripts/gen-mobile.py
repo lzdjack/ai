@@ -23,7 +23,7 @@ def row(nm,gr,st,title,src,sub,right='',subc='',prog=None,on=False):
 # ---------- Phone 1 列表 ----------
 p1=f'''<div class="phone"><div class="scr">{status}
 <div class="pad">
-  <div class="row" style="margin-top:6px"><div class="grow"><div class="cap">11月20日 周四</div><div class="lgt">工单</div></div><span class="me">林</span></div>
+  <div class="row" style="margin-top:6px"><div class="grow"><div class="cap">11月20日 周四</div><div class="lgt">工单</div></div><span class="nb2 glass" style="margin-right:8px"><i data-i="bell" data-s="17"></i><span style="position:absolute;top:7px;right:7px;width:7px;height:7px;border-radius:50%;background:var(--red);box-shadow:0 0 0 1.5px var(--glass-2)"></span></span><span class="me">林</span></div>
   <div class="row g8" style="margin-top:12px">
     <span class="chip glass"><span class="dt" style="background:var(--green)"></span>3 个 Bot 在线</span>
     <span class="chip glass" style="color:var(--ink-orange)"><span class="dt" style="background:var(--orange)"></span>Tita 采集重试中</span>

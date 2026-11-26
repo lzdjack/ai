@@ -46,7 +46,14 @@ def build_ws_switch():
   <span class="cc-tag cc-tag-b" style="height:17px;font-size:9.5px">2 空间</span>
   <span class="cc-sel-caret">{I("chevd",12)}</span>
 </span>'''
-    tb = make_topbar(ws_pill=ws_pill)
+    bell_btn = '''<span class="pill glass tpill" style="width:34px;height:34px;padding:0;justify-content:center;position:relative" title="站内通知中心">{I("bell",15,2.0)}<span style="position:absolute;top:5px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--red);box-shadow:0 0 0 1.5px var(--glass)"></span></span>'''
+    right_tb = (
+        f'<span class="pill glass tpill">{I("bot",13)}3 个 Bot 在线</span>'
+        '<span class="pill glass tpill"><span class="dot" style="width:7px;height:7px;background:var(--green)"></span>Jira · 2 分钟前</span>'
+        '<span class="pill glass tpill" style="color:var(--ink-orange)"><span class="dot" style="width:7px;height:7px;background:var(--orange)"></span>Tita 采集失败 · 重试中</span>'
+        + bell_btn.replace('{I("bell",15,2.0)}', I("bell", 15, 2.0))
+    )
+    tb = make_topbar(ws_pill=ws_pill, right_extra=right_tb)
     _, chat_css = p_empty()
     base_body = ticket_list("20871") + '''<main class="glass pn grow" style="min-width:0;opacity:.75">''' + ticket_head() + '''
 <div class="col g12 grow" style="padding:20px 26px"><div class="card flat" style="padding:14px 16px"><div class="f13 w7">已切换至工作空间：星辰研发中心（organization）</div><div class="f12 t2" style="margin-top:4px">当前工单、连接器、Skills 与个人凭据已通过 withWorkspaceTx 行级安全隔离。</div></div></div></main>'''
@@ -70,7 +77,7 @@ def build_ws_switch():
 </div>'''
 
     drawer = f'''{ws_menu}<div class="scrim"></div>
-<aside class="cc-drawer" style="width:580px;z-index:var(--z-drawer)">
+<aside class="cc-drawer" style="top:64px;height:calc(100% - 76px);width:560px;z-index:var(--z-drawer)">
   <div class="cc-drawer-hd">
     <span class="ic-box" style="width:36px;height:36px;border-radius:10px;background:linear-gradient(155deg,#5AA0FF,#1F6FFF)">{I("users",18,2.2)}</span>
     <div class="col grow">
@@ -159,21 +166,62 @@ def build_invite_expired():
 
 
 # =====================================================================
-# 3. PC-设置-项目-流程模板（T-08b：可定制节点流程 + 每节点绑定专属 Skills）
+# 3. PC-设置-项目-流程模板（T-08b + D1：React Flow 画布 + 节点级 Skills）
 # =====================================================================
 def build_project_workflow():
-    def node_card(idx, phase, name, desc, skills, isolated=False, on=False, chk=True):
-        ptag = '<span class="tag tg-t" style="height:17px;font-size:10px;white-space:nowrap">AI 执行</span>' if phase == "exec" else '<span class="tag tg-b" style="height:17px;font-size:10px;white-space:nowrap">审后交付</span>'
-        sk_h = "".join(f'<span class="tag tg-p" style="height:18px;font-size:10px">{I("layers",10)} {s}</span>' for s in skills)
-        iso_h = '<span class="tag tg-o" style="height:18px;font-size:10px;white-space:nowrap">隔离检查点</span>' if isolated else '<span class="tag tg-n" style="height:18px;font-size:10px;white-space:nowrap">共享 KV</span>'
-        sw = '<span class="cc-switch on" style="transform:scale(.82)"></span>' if chk else '<span class="cc-switch" style="transform:scale(.82)"></span>'
-        bd = "border-color:var(--focus-ring);box-shadow:0 0 0 3px var(--focus-halo);background:var(--glass-2)" if on else ""
-        return f'''<div class="card row g10" style="padding:10px 12px;align-items:flex-start;{bd}">
-  <span class="qn" style="width:22px;height:22px;border-radius:7px;background:{"var(--btn-pri-bg)" if on else "var(--fill)"};color:{"#fff" if on else "var(--text-2)"};font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none">{idx}</span>
-  <div class="col grow" style="min-width:0;gap:5px">
-    <div class="row g6" style="min-width:0">{ptag}<span class="f13 w7 ell">{name}</span><span class="grow"></span>{iso_h}{sw}</div>
-    <div class="f12 t2 ell">{desc}</div>
-    <div class="row g6" style="flex-wrap:wrap">{sk_h}</div>
+    def rf_node(idx, x_pct, y_px, phase, name, badge_txt, skills, on=False, chk=True):
+        ptag = '<span class="tag tg-t" style="height:16px;font-size:9.5px;padding:0 5px">AI</span>' if phase == "exec" else '<span class="tag tg-b" style="height:16px;font-size:9.5px;padding:0 5px">交付</span>'
+        bd = "border-color:var(--focus-ring);box-shadow:0 0 0 3px var(--focus-halo);background:var(--glass-2)" if on else ("opacity:.68;background:var(--well)" if not chk else "background:var(--glass-2)")
+        sk_h = "".join(f'<span class="tag tg-p" style="height:16px;font-size:9.5px;padding:0 5px">{s}</span>' for s in skills[:2])
+        b_tag = f'<span class="tag tg-n" style="height:16px;font-size:9px;padding:0 5px">{badge_txt}</span>' if badge_txt else ""
+        h_dot = "position:absolute;top:50%;width:8px;height:8px;border-radius:50%;transform:translateY(-50%);background:var(--blue);border:1.5px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.22)"
+        return f'''<div class="card" style="position:absolute;left:{x_pct}%;top:{y_px}px;width:21.6%;height:76px;padding:7px 10px;gap:3px;border-radius:13px;justify-content:space-between;{bd}">
+  <span style="{h_dot};left:-4px"></span><span style="{h_dot};right:-4px"></span>
+  <div class="row g5" style="min-width:0">{ptag}<span class="f10 w7 t2">{idx}</span><span class="grow"></span>{b_tag}</div>
+  <div class="f12 w7 ell">{name}</div>
+  <div class="row g4" style="flex-wrap:nowrap;overflow:hidden">{sk_h}</div>
+</div>'''
+
+    canvas = f'''<div style="position:relative;height:430px;flex:none;border-radius:16px;border:1px solid var(--hair);background:radial-gradient(color-mix(in srgb,var(--text) 16%,transparent) 1px, transparent 1px) 0 0 / 16px 16px, var(--well);overflow:hidden">
+  <svg viewBox="0 0 1000 430" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none">
+    <defs>
+      <marker id="rf-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 1L9 5L0 9z" fill="var(--teal)"/></marker>
+      <marker id="rf-del" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 1L9 5L0 9z" fill="var(--blue)"/></marker>
+      <marker id="rf-org" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 1L9 5L0 9z" fill="var(--orange)"/></marker>
+      <marker id="rf-gry" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 1L9 5L0 9z" fill="var(--text-3)"/></marker>
+    </defs>
+    <!-- Row 1 execution edges (nodes top=64 height=76 => center y=102) -->
+    <path d="M238 102 L264 102" stroke="var(--teal)" stroke-width="2" fill="none" marker-end="url(#rf-arr)"/>
+    <path d="M484 102 L510 102" stroke="var(--teal)" stroke-width="2" fill="none" marker-end="url(#rf-arr)"/>
+    <path d="M730 102 L756 102" stroke="var(--teal)" stroke-width="2" fill="none" marker-end="url(#rf-arr)"/>
+    <!-- run_when bypass above node 3 (Node 2 top 376,64 -> Node 4 top 868,60) -->
+    <path d="M376 64 C 376 14, 868 14, 868 60" stroke="var(--text-3)" stroke-width="1.6" stroke-dasharray="5 4" fill="none" marker-end="url(#rf-gry)"/>
+    <!-- Cross-phase Z connector 4 -> 5 in clean y=214 aisle -->
+    <path d="M976 102 C 994 102, 994 214, 956 214 L 44 214 C 6 214, 6 312, 18 312" stroke="var(--blue)" stroke-width="2" fill="none" marker-end="url(#rf-del)"/>
+    <!-- Row 2 delivery edges (nodes top=274 height=76 => center y=312) -->
+    <path d="M238 312 L264 312" stroke="var(--blue)" stroke-width="2" fill="none" marker-end="url(#rf-del)"/>
+    <path d="M484 312 L510 312" stroke="var(--blue)" stroke-width="2" fill="none" marker-end="url(#rf-del)"/>
+    <path d="M730 312 L756 312" stroke="var(--text-3)" stroke-width="1.6" stroke-dasharray="4 3" fill="none" marker-end="url(#rf-gry)"/>
+    <!-- Rollback default dashed curve (Node 6 top 376,274 -> Node 2 bottom 376,144) -->
+    <path d="M376 274 L376 144" stroke="var(--orange)" stroke-width="2.2" stroke-dasharray="6 4" fill="none" marker-end="url(#rf-org)"/>
+  </svg>
+  <span class="tag tg-n" style="position:absolute;left:62.2%;top:12px;transform:translateX(-50%);height:19px;font-size:10px;background:var(--glass-elev)">run_when: 非前端/SDK 自动跳过 3</span>
+  <span class="tag tg-o" style="position:absolute;left:37.6%;top:168px;transform:translateX(-50%);height:20px;font-size:10px;background:var(--glass-elev)">打回默认 → 2（全节点下拉可选）</span>
+  <span class="f10 w7 t3" style="position:absolute;left:22px;top:16px">阶段一 · execution</span>
+  {rf_node(1,2.2,64,"exec","读单与复现","ai_phase",["最小改动 v2","权限上下文"])}
+  {rf_node(2,26.8,64,"exec","改码与构建","ai_phase",["禁弱化断言","Token 规范"])}
+  {rf_node(3,51.4,64,"exec","修后浏览器验证","run_when",["交互回归 v1","金额核验"],on=True)}
+  {rf_node(4,76.0,64,"exec","交付与硬门禁","per_repo",["交付摘要 v1"])}
+  <span class="f10 w7 t3" style="position:absolute;left:22px;top:248px">阶段二 · delivery</span>
+  {rf_node(5,2.2,274,"del","代码审查","L0-L2",["高危路径清单"])}
+  {rf_node(6,26.8,274,"del","MR 合入与复测","per_repo",["TEST 发版核验"])}
+  {rf_node(7,51.4,274,"del","主干合入与发布","PROD",["不倒退校验"])}
+  {rf_node(8,76.0,274,"del","合规会签(可选)","未启用",["会签说明"],chk=False)}
+  <div class="row g8" style="position:absolute;left:12px;bottom:10px;padding:4px 10px;border-radius:10px;background:var(--glass-elev);border:1px solid var(--stroke);font-size:10.5px;color:var(--text-2)">
+    <span class="w7 mono" style="color:var(--ink-blue)">@xyflow/react</span><span>+  −  ⊡</span>
+  </div>
+  <div class="row g8" style="position:absolute;right:12px;bottom:10px;padding:4px 10px;border-radius:10px;background:var(--glass-elev);border:1px solid var(--stroke);font-size:10px;color:var(--text-3)">
+    <span>实线 主链 · 灰虚 run_when · 橙虚 回退预设</span>
   </div>
 </div>'''
 
@@ -181,8 +229,8 @@ def build_project_workflow():
 <header class="thead">
   <div class="row g10">
     <div class="col grow">
-      <div class="row g10"><h1>项目 · OKR</h1><span class="cc-seg cc-seg-xs"><span>开工条件</span><span class="on">流程模板与节点 Skills</span></span></div>
-      <div class="f12 t3" style="margin-top:3px">配置优先于写死 · 支持增删改序流程节点，并为单个 AI 节点挂载专属 <span class="mono">skill_ids[]</span> 与工具边界（下一轮生效）</div>
+      <div class="row g10"><h1>项目 · OKR</h1><span class="cc-seg cc-seg-xs"><span>开工条件</span><span class="on">流程画布与节点 Skills</span></span></div>
+      <div class="f12 t3" style="margin-top:3px">配置优先于写死 · 前端 <span class="mono">@xyflow/react</span> 可视化编排 + 后端 PG/<span class="mono">pg-boss</span> 同事务步进（下一轮生效）</div>
     </div>
     <button class="cc-btn cc-btn-sm cc-btn-glass">{I("plus",13,2.4)}新增节点</button>
     <button class="cc-btn cc-btn-sm cc-btn-pri">{I("check",13,2.6)}发布新版本 v4</button>
@@ -198,42 +246,41 @@ def build_project_workflow():
     <span class="grow"></span>
     <span class="f11 t3">v3 在用 · 修改将生成 v4</span>
   </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;flex:1;min-height:0">
-    <div class="col g8" style="min-height:0">
-      <div class="f12 w7 t3">阶段一 · AI 执行环节（<span class="mono">execution</span>）</div>
-      {node_card(1,"exec","读单与复现定位","按来源快照与 Playwright/单测定位根因",["最小改动红线 v2","OKR 权限上下文"])}
-      {node_card(2,"exec","代码改动与离线构建","在 --network=none 容器内改代码并跑试构建",["禁止弱化断言 v1","Tailwind/Token 规范"])}
-      {node_card(3,"exec","修后浏览器验证","局部产物替换验证业务断言与 Console 0 报错",["页面交互回归 v1","金额精度核验"], isolated=False, on=True)}
-      {node_card(4,"exec","结构化交付与硬门禁","汇总 round_repo_slices 与验证证据卡入审",["交付摘要格式 v1"])}
+  {canvas}
+  <div class="card" style="padding:10px 14px;gap:8px">
+    <div class="row g8">
+      <span class="f12 w7">默认回退起跑规则与证据继承</span>
+      <span class="f11 t3 grow">每项下拉均展示全部 8 个流程节点（仅作默认预选 · 打回或提交时仍可手动改选任意节点）</span>
     </div>
-    <div class="col g8" style="min-height:0">
-      <div class="f12 w7 t3">阶段二 · 审后交付环节（<span class="mono">delivery</span>）</div>
-      {node_card(5,"del","代码审查与 L0-L2 分级","人工逐行查看 Diff 并确认影响面风险等级",["L2 高危路径清单"])}
-      {node_card(6,"del","环境分支 MR 与复测","冲突自动开 port/ 分支 · 发 TEST 并通知复测",["测试环境发版检查"])}
-      {node_card(7,"del","合回主分支 → 正式发布","重打主分支包 + 输入 env_code 确认后发 PROD",["PROD 发布前不倒退核对"])}
-      {node_card(8,"del","高危合规会签（可选）","涉及金额/RBAC 变更时可选加设额外审批节点",["合规会签说明"], chk=False)}
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+      <div class="col g4"><span class="f11 t3">审核 / 复测打回默认</span><div class="cc-select cc-select-xs"><span class="cc-sel-val">2 · 代码改动与构建</span><span class="cc-sel-caret">{I("chevd",11)}</span></div></div>
+      <div class="col g4"><span class="f11 t3">机审 Gate 失败默认</span><div class="cc-select cc-select-xs"><span class="cc-sel-val">2 · 同轮回改码节点</span><span class="cc-sel-caret">{I("chevd",11)}</span></div></div>
+      <div class="col g4"><span class="f11 t3">人工接手回交默认</span><div class="cc-select cc-select-xs"><span class="cc-sel-val">4 · 确定性硬门禁</span><span class="cc-sel-caret">{I("chevd",11)}</span></div></div>
+      <div class="col g4"><span class="f11 t3">跳过上游证据继承</span><div class="cc-select cc-select-xs is-blue"><span class="cc-sel-val">代码不变则沿用</span><span class="cc-sel-caret">{I("chevd",11)}</span></div></div>
     </div>
   </div>
 </div></main>'''
 
-    right = f'''<aside class="glass pn" style="width:316px;flex:none;padding:16px 16px;display:flex;flex-direction:column;gap:11px">
+    right = f'''<aside class="glass pn" style="width:316px;flex:none;padding:15px 16px;display:flex;flex-direction:column;gap:9px">
   <div class="row g8"><span class="tag tg-t">节点配置</span><span class="f15 w7 grow">3 · 修后浏览器验证</span></div>
   <div class="cc-field">
-    <div class="cc-field-hd"><span>上下文传递模式（T-08b）</span></div>
-    <div class="cc-seg cc-seg-xs" style="width:100%;display:flex"><span class="on" style="flex:1">共享 KV + Handoff 摘要</span><span style="flex:1">独立上下文检查点</span></div>
+    <div class="cc-field-hd"><span>上下文传递模式 &amp; 跳过条件（<span class="mono">run_when</span>）</span></div>
+    <div class="cc-seg cc-seg-xs" style="width:100%;display:flex"><span class="on" style="flex:1">共享 KV + Handoff</span><span style="flex:1">独立检查点</span></div>
+    <div class="mono f10 t2" style="margin-top:5px;padding:6px 8px;border-radius:8px;background:var(--well);border:1px solid var(--hair)">run_when: repo.verify_strategy == "browser_dist_replace"</div>
   </div>
   <div class="cc-field">
-    <div class="cc-field-hd"><span>本节点挂载专属 Skills（仅跑此步激活）</span><span class="lnk f11">+ 选 Skill</span></div>
+    <div class="cc-field-hd"><span>本节点挂载专属 Skills（P3 节点优先）</span><span class="lnk f11">+ 选 Skill</span></div>
     <div class="col g6" style="padding:8px 10px;border-radius:11px;background:var(--well);border:1px solid var(--hair)">
-      <div class="row g8 f12"><span class="cbx on">{I("check",11,3)}</span><span class="w6 grow">页面交互回归 v1</span><span class="f11 t3 mono">320t</span></div>
-      <div class="row g8 f12"><span class="cbx on">{I("check",11,3)}</span><span class="w6 grow">金额精度核验红线</span><span class="f11 t3 mono">210t</span></div>
-      <div class="row g8 f12 t3"><span class="cbx"></span><span class="grow">后端 SQL 索引审查</span><span class="f11 mono">未绑</span></div>
+      <div class="row g6 f12"><span class="cbx on">{I("check",11,3)}</span><span class="w6 grow ell">页面交互回归 v1</span><span class="tag tg-p" style="height:16px;font-size:9.5px;padding:0 5px">override 替换</span><span class="f11 t3 mono">320t</span></div>
+      <div class="row g6 f12"><span class="cbx on">{I("check",11,3)}</span><span class="w6 grow ell">金额精度核验红线</span><span class="tag tg-n" style="height:16px;font-size:9.5px;padding:0 5px">merge 叠加</span><span class="f11 t3 mono">210t</span></div>
+      <div class="row g6 f12 t3"><span class="cbx"></span><span class="grow ell">后端 SQL 索引审查</span><span class="f11 mono">未绑</span></div>
     </div>
+    <div class="f10 t3" style="line-height:1.45;margin-top:2px">优先级：<b>P5 底座红线 &gt; P4 本轮人工 &gt; P3 本节点 &gt; P2 项目 &gt; P1 部门</b>；切出即卸载正文。</div>
   </div>
   <div class="cc-field">
     <div class="cc-field-hd"><span>节点指令补充（<span class="mono">node_instructions</span>）</span></div>
-    <div style="padding:9px 10px;border-radius:10px;background:var(--well);border:1px solid var(--hair);font-size:12px;line-height:1.55;color:var(--text-2)">
-      必须验证切换分组后 Console 0 新增报错、以及导出文件名无非法字符；若验证策略为 test_suite 则跳过浏览器工具。
+    <div style="padding:8px 10px;border-radius:10px;background:var(--well);border:1px solid var(--hair);font-size:11.5px;line-height:1.5;color:var(--text-2)">
+      必须验证切换分组后 Console 0 新增报错及导出文件名合法；无浏览器仓自动跳过。
     </div>
   </div>
   <div class="cc-field">
@@ -248,7 +295,7 @@ def build_project_workflow():
     <span><b>生效时机：</b>发布后从<b>下一轮（next_round）</b>开始生效；当前运行中轮次仍锁定启动时的模板快照 v3。</span>
   </div>
 </aside>'''
-    return pc_shell("项目流程模板与节点 Skills · 云匠", "set", set_left("项目") + main + right)
+    return pc_shell("项目流程画布与节点 Skills · 云匠", "set", set_left("项目") + main + right)
 
 
 # =====================================================================
@@ -278,13 +325,14 @@ def build_edge_extra():
   </div>
   <div class="row g8" style="margin-top:auto"><button class="cc-btn cc-btn-sm cc-btn-sec">查看 Diff 与 3 次报错</button><span class="grow"></span><button class="cc-btn cc-btn-sm cc-btn-glass">填写理由审计豁免</button><button class="cc-btn cc-btn-sm cc-btn-pri">补充提示让 Bot 继续修</button></div>''')
 
-    t2 = tile(2, "我来接手 (human_takeover) · 受门禁交付", "fence_token 防并发覆写 · 提交走 gate_check", f'''
+    t2 = tile(2, "我来接手 (human_takeover) · 受门禁交付", "fence_token 防并发覆写 · 提交全节点可选（默认 gate_check）", f'''
   <div class="row g8"><span class="tag tg-b">human_takeover 已接管</span><span class="mono f12 t3 grow">fix/TK-20840 · fence_token #4</span><span class="tag tg-g">Bot 已释放</span></div>
-  <div class="card" style="padding:10px 12px;gap:5px">
+  <div class="card" style="padding:9px 12px;gap:4px">
     <div class="f13 w7">本地继续修改并提交受门禁交付（self_delivery）</div>
-    <div class="f12 t2" style="line-height:1.55">① <span class="mono">git fetch && git checkout fix/TK-20840</span>（已保留 Bot 半成品 commit <span class="mono">7c2e1a9</span>）<br>② 本地推送最新提交后，点击下方提交人工交付——宿主机照常跑 <span class="mono">gate_check</span> 与 <span class="mono">L0~L2</span> 评定。</div>
+    <div class="f12 t2" style="line-height:1.5">① <span class="mono">git fetch && git checkout fix/TK-20840</span>（保留 Bot 半成品 <span class="mono">7c2e1a9</span>）<br>② 本地推送最新提交后选定接入节点——默认预选 <span class="mono">gate_check</span> 与 <span class="mono">L0~L2</span> 评定，下拉含全部流程节点。</div>
   </div>
-  <div class="row g8" style="margin-top:auto"><button class="cc-btn cc-btn-sm cc-btn-sec">放弃接手，退回 AI 重跑</button><span class="grow"></span><button class="cc-btn cc-btn-sm cc-btn-glass">本地 Dist 预览</button><button class="cc-btn cc-btn-sm cc-btn-pri">{I("check",13,2.5)}提交人工交付（self_delivery）</button></div>''')
+  <div class="row g8"><span class="f11 w6 t2">提交后接入节点：</span><div class="cc-select cc-select-xs grow"><span class="cc-sel-val">4 · 结构化交付与硬门禁</span><span class="cc-sel-sub">默认 · 下拉含全部节点</span><span class="cc-sel-caret">{I("chevd",12)}</span></div></div>
+  <div class="row g8" style="margin-top:auto"><button class="cc-btn cc-btn-sm cc-btn-sec">放弃接手，退回 AI 重跑</button><span class="grow"></span><button class="cc-btn cc-btn-sm cc-btn-glass">本地 Dist 预览</button><button class="cc-btn cc-btn-sm cc-btn-pri">{I("check",13,2.5)}提交人工交付</button></div>''')
 
     t3 = tile(3, "无代码改动结单 (no_code_fix)", "阻断空分支进入代码审查与发布流", f'''
   <div class="row g8"><span class="tag tg-p">AI 诊断结论 · 无需改代码</span><span class="mono f12 t3 grow">TK-20901 · Zero Diff</span><span class="tag tg-n">发布已阻断</span></div>
@@ -350,14 +398,14 @@ def build_plugin_runtime():
     </div>
   </div>''')
 
-    t4 = tile(4, "无感建个人空间 → 团队发现与合并边界", "防孤岛完整收敛闭环（个人空间不丢失任何配置）", f'''
-  <div class="card" style="padding:11px 13px;gap:7px">
-    <div class="row g8"><span class="tag tg-g">状态健康</span><span class="f13 w7">单空间零打扰 → 多空间自动露出切换器</span></div>
-    <div class="f12 t2" style="line-height:1.6">
-      • 用户独立注册未中邀请时：无感建 <span class="mono">personal</span> 空间，顶栏隐藏切换器；<br>
-      • 后续受邀或识别剪贴板口令：保留原 <span class="mono">personal</span> 空间不动，自动激活顶栏 <span class="mono">>=2</span> 空间切换胶囊；<br>
-      • 也可以一键原地把现有个人空间升级成多人 <span class="mono">organization</span> 空间。
-    </div>
+    t4 = tile(4, "插件 AI A2UI 原语卡 + 站内铃铛通知收件箱", "MCP 自动发现 · 真实参数防 TOCTOU · 通知 5m 防轰炸合并", f'''
+  <div class="card" style="padding:9px 12px;gap:6px">
+    <div class="row g8"><span class="tag tg-p">kv_card · 扩展插件</span><span class="f12 w7 grow">灰度放量插件 · 审批中心</span><span class="tag tg-b">当前 30%</span><button class="cc-btn cc-btn-xs cc-btn-glass">打开 72% L3 抽屉 ›</button></div>
+    <div class="f11 t2">由标准 MCP + <span class="mono">assistant_actions(state_digest)</span> 自动生成确认卡，未触发流内嵌 iframe。</div>
+  </div>
+  <div class="card" style="padding:9px 12px;gap:5px;background:var(--well)">
+    <div class="row g8"><span class="pill glass tpill" style="height:24px;padding:0 8px;font-size:11px">{I("bell",12)} 通知收件箱 (2)</span><span class="tag tg-r">PROD 失败 · 穿透免打扰</span><span class="tag tg-n">他人已抢审 · 只读消退</span></div>
+    <div class="f11 t3">顶栏头像旁 34px 铃铛展开 400px 收件箱（不占 Dock/8 项设置），5m 窗口合并防轰炸。</div>
   </div>''')
 
     return board_page("动态插件运行态与防膨胀边界规范 · 云匠", f'<div class="eb">{t1}{t2}{t3}{t4}</div>', css)
