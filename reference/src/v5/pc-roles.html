@@ -7,9 +7,7 @@
   <div class="br"><span class="lg"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7.2L3.6 12 8 16.8"/><path d="M16 7.2l4.4 4.8-4.4 4.8" opacity=".6"/><path d="M9.6 12.3l1.8 1.8 3.2-4"/></svg><svg class="spk" width="11" height="11" viewBox="0 0 24 24" fill="#fff"><path d="M12 1l2.6 8.4L23 12l-8.4 2.6L12 23l-2.6-8.4L1 12l8.4-2.6z"/></svg></span><span class="tt"><b>云匠</b><em>CloudCraft</em></span></div>
   <div class="grow row" style="justify-content:center"><div class="glass tsearch"><i data-i="search" data-s="15"></i><span class="f13 grow">搜索工单、MR、发布记录</span><span class="kbd" style="border-color:var(--hair)">⌘F</span></div></div>
   <div class="tright">
-    <span class="pill glass tpill"><i data-i="bot" data-s="13"></i>3 个 Bot 在线</span>
-    <span class="pill glass tpill"><span class="dot" style="width:7px;height:7px;background:var(--green)"></span>Jira · 2 分钟前</span>
-    <span class="pill glass tpill" style="color:var(--ink-orange)"><span class="dot" style="width:7px;height:7px;background:var(--orange)"></span>Tita 采集失败 · 重试中</span>
+    <span class="pill glass tpill"><i data-i="bot" data-s="13"></i>3 个 Bot 在线</span><span class="pill glass tpill"><span class="dot" style="width:7px;height:7px;background:var(--green)"></span>Jira · 2 分钟前</span><span class="pill glass tpill" style="color:var(--ink-orange)"><span class="dot" style="width:7px;height:7px;background:var(--orange)"></span>Tita 采集失败 · 重试中</span>
     <span class="av" style="width:34px;height:34px;font-size:13px;background:linear-gradient(160deg,#FFC9A8,#F08F7A);color:#5A2414">林</span>
   </div>
 </div>
@@ -49,7 +47,7 @@
   <div class="ot-item" style="height:30px"><i data-i="shield" data-s="12"></i><span class="ell">研发成员</span><span class="ot-cnt">12</span></div>
 </div>
     <div class="col" style="gap:1px">
-  <div class="ot-item" style="height:30px"><i data-i="shield" data-s="12"></i><span class="ell">外包访客 Guest</span><span class="tag tg-o" style="height:17px;font-size:9.5px;margin-left:auto">隔离</span></div>
+  <div class="ot-item" style="height:30px"><i data-i="shield" data-s="12"></i><span class="ell">外部低权协作者</span><span class="tag tg-o" style="height:17px;font-size:9.5px;margin-left:auto">作用域</span></div>
 </div>
     <div class="ot-h" style="margin-top:6px"><span class="grow">轻量自定义（2 · 模板克隆）</span></div>
     <div class="col" style="gap:1px">
@@ -60,8 +58,8 @@
 </div>
     <span class="grow"></span>
     <div class="admin-portal" data-pin="admin-roles-portal">
-      <div class="row g6"><span class="f12 w7" style="color:var(--ink-blue)">高级策略 (Allow/Deny)</span><span class="grow"></span><i data-i="ext" data-s="12" style="color:var(--ink-blue)"></i></div>
-      <div class="t3" style="font-size:10.5px;line-height:1.4">M2 Web <span class="mono">/admin/role-policies</span></div>
+      <div class="row g6"><span class="f12 w7" style="color:var(--ink-blue)">Deny-Overrides 生效中</span><span class="grow"></span><i data-i="shield" data-s="12" style="color:var(--ink-blue)"></i></div>
+      <div class="t3" style="font-size:10.5px;line-height:1.4">新装插件默认 Fail-Closed 不自动放权</div>
     </div>
   </div>
   <div class="role-main">
@@ -69,22 +67,22 @@
       <span class="ic-box" style="width:28px;height:28px;border-radius:8px;background:linear-gradient(155deg,#5AA0FF,#1F6FFF)"><i data-i="layers" data-s="14"></i></span>
       <div class="col grow" style="min-width:0">
         <div class="row g8" style="flex-wrap:wrap;row-gap:4px"><span class="f13 w7" style="white-space:nowrap">代码合入协同专员</span><span class="tag tg-p" style="height:18px;font-size:10px">模板克隆 · base: member</span><span class="tag tg-g" style="height:18px;font-size:10px">新装插件默认 Fail-Closed</span></div>
-        <div class="f11 t3" style="margin-top:2px">仅存显式白名单；安全红线（禁代审、个人写凭据隔离、Guest 门禁）永不可解锁</div>
+        <div class="f11 t3" style="margin-top:2px">仅存显式白名单与 Deny-Overrides；安全红线（禁代审、个人写凭据隔离）永不可解锁</div>
       </div>
       <button class="cc-btn cc-btn-xs cc-btn-glass">重命名</button>
       <button class="cc-btn cc-btn-xs cc-btn-pri"><i data-i="check" data-s="12" data-w="2.5"></i>保存权限</button>
     </div>
 
-    <div class="grp-lbl"><span>一、Core 不可卸载基础权限（8 核心域 · 永远存在）</span></div>
+    <div class="grp-lbl"><span>一、Core 不可卸载基础权限（9 核心域 · 含工单、MR 与内置发布流）</span></div>
     <div class="pgrid">
       <div class="pcard">
-        <div class="ph0"><i data-i="code" data-s="13" style="color:var(--ink-blue)"></i><span>工单、代码与审核红线</span></div>
+        <div class="ph0"><i data-i="code" data-s="13" style="color:var(--ink-blue)"></i><span>工单、MR 与内置发布红线</span></div>
         <div class="row g8" style="padding:6px 0;border-top:1px solid var(--hair);min-width:0">
   <div class="col grow" style="min-width:0"><span class="f12 w6 ell">查看项目与 Bug 单 (ticket:read)</span><span class="f11 t3 ell">按所属部门与项目可见范围隔离</span></div>
   <span class="cc-switch on"></span>
 </div>
         <div class="row g8" style="padding:6px 0;border-top:1px solid var(--hair);min-width:0">
-  <div class="col grow" style="min-width:0"><span class="f12 w6 ell">响应 Bot 提问 / 提交补充</span><span class="f11 t3 ell">在授权项目中触发修改与重跑</span></div>
+  <div class="col grow" style="min-width:0"><span class="f12 w6 ell">响应 Bot / 发起内置发布任务</span><span class="f11 t3 ell">授权项目内提修、发测试与正式流水线</span></div>
   <span class="cc-switch on"></span>
 </div>
         <div class="row g8" style="padding:6px 0;border-top:1px solid var(--hair);min-width:0">
@@ -95,11 +93,11 @@
       <div class="pcard">
         <div class="ph0"><i data-i="shield" data-s="13" style="color:var(--ink-red)"></i><span>组织、全局 AI 与凭据安全锁</span></div>
         <div class="row g8" style="padding:6px 0;border-top:1px solid var(--hair);min-width:0">
-  <div class="col grow" style="min-width:0"><span class="f12 w6 ell">查看部门树与同事目录</span><span class="f11 t3 ell">Fail-Closed：Guest 克隆模板永锁关闭</span></div>
+  <div class="col grow" style="min-width:0"><span class="f12 w6 ell">查看部门树与同事目录</span><span class="f11 t3 ell">Fail-Closed：低权模板默认关闭</span></div>
   <span class="cc-switch on"></span>
 </div>
         <div class="row g8" style="padding:6px 0;border-top:1px solid var(--hair);min-width:0">
-  <div class="col grow" style="min-width:0"><span class="f12 w6 ell">管理全局 AI / 部门架构 / 成员</span><span class="f11 t3 ell">仅限空间管理员管理</span></div>
+  <div class="col grow" style="min-width:0"><span class="f12 w6 ell">管理全局 AI / 部门架构 / 成员</span><span class="f11 t3 ell">仅限具备管理权限的角色</span></div>
   <span class="cc-switch"></span>
 </div>
         <div class="row g8" style="padding:6px 0;border-top:1px solid var(--hair);min-width:0">
@@ -155,12 +153,12 @@
   </div>
 </div>
 </main><aside class="glass pn" style="width:246px;flex:none;padding:16px 14px;gap:12px"><div class="card" style="padding:12px 14px"><div class="row"><div class="mini grow" style="margin:0">动态插件权限契约</div><span class="tag tg-b">防硬编码</span></div>
-  <div class="f12 t2" style="margin-top:6px;line-height:1.6">插件通过 <span class="mono">manifest.permissions</span> 声明 <span class="mono">ext:&lt;id&gt;:*</span> 键（禁止 <span class="mono">core:*</span>）。<b>未安装不渲染</b>；已停用置灰冻结不丢快照；新装插件对现有克隆角色默认 Fail-Closed。</div></div><div class="card" style="padding:12px 14px"><div class="mini">五重 AND 消除假绿灯</div>
+  <div class="f12 t2" style="margin-top:6px;line-height:1.6">插件通过 <span class="mono">manifest.permissions</span> 声明 <span class="mono">ext:&lt;id&gt;:*</span> 键（禁止 <span class="mono">core:*</span>）。<b>未安装不渲染</b>；已停用置灰冻结不丢快照；新装插件对现有克隆角色默认 Fail-Closed。</div></div><div class="card" style="padding:12px 14px"><div class="mini">四重 AND 消除假绿灯</div>
   <div class="f12 t2" style="margin-top:6px;line-height:1.6">
     <b style="color:var(--text)">0. 插件状态</b>：已装且当前项目启用<br>
     <b style="color:var(--ink-red)">1. Core 安全锁</b>：代审 / scope='user'<br>
-    <b style="color:var(--text)">2. Guest 拦截</b>：仅白名单项目/单<br>
-    <b style="color:var(--text)">3. RBAC 绑定</b> + <b style="color:var(--text)">4. 本人个人凭据</b></div></div><div class="card" style="padding:12px 14px"><div class="mini">为什么用「模板克隆」</div>
+    <b style="color:var(--text)">2. RBAC 矩阵</b>：Deny-Overrides + 作用域<br>
+    <b style="color:var(--text)">3. 本人凭据</b>：personal_exec 实时有效性</div></div><div class="card" style="padding:12px 14px"><div class="mini">为什么用「模板克隆」</div>
   <div class="f12 t2" style="margin-top:6px;line-height:1.6">M1 按内置模板深拷贝白名单，既能按需放开业务协作权，又确保核心安全锁与新装高危插件不静默放权。</div></div></aside></div>
 <nav class="dockv glass" aria-label="主菜单"><span class="dki"><span class="ap ap-ai"><svg width="24" height="24" viewBox="0 0 24 24" fill="#fff"><path d="M10 3l1.9 5.6 5.6 1.9-5.6 1.9L10 18l-1.9-5.6L2.5 10.5l5.6-1.9z"/><path d="M18 13.5l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9z" opacity=".8"/></svg></span></span><span class="dsep"></span><span class="dki"><span class="ap ap-chat"><svg width="30" height="30" viewBox="0 0 24 24"><defs><linearGradient id="cb1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6CC4FF"/><stop offset="1" stop-color="#1673FF"/></linearGradient></defs><path d="M15 9.6c3.4 0 6.1 2.2 6.1 4.9 0 1.4-.7 2.6-1.8 3.5l.5 2.5-2.9-1.4c-.6.2-1.2.3-1.9.3-3.4 0-6.1-2.2-6.1-4.9s2.7-4.9 6.1-4.9z" fill="#B9DBFF"/><path d="M9.6 3.2c-4 0-7.2 2.6-7.2 5.8 0 1.7.9 3.2 2.3 4.2l-.6 3 3.5-1.7c.6.2 1.3.2 2 .2 4 0 7.2-2.6 7.2-5.8S13.6 3.2 9.6 3.2z" fill="url(#cb1)"/><circle cx="6.8" cy="9" r="1" fill="#fff"/><circle cx="9.6" cy="9" r="1" fill="#fff"/><circle cx="12.4" cy="9" r="1" fill="#fff"/></svg></span><b>4</b></span><span class="dki"><span class="ap ap-pub"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 2.6l8.4 4.7L12 12 3.6 7.3z" fill="#FFE2A8"/><path d="M3.6 7.3L12 12v9.4l-8.4-4.7z" fill="#fff" opacity=".95"/><path d="M20.4 7.3L12 12v9.4l8.4-4.7z" fill="#fff" opacity=".7"/><path d="M7.8 4.9l8.4 4.7v3.2" stroke="#FF8A00" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".7"/></svg></span><b>1</b></span><span class="dki"><span class="ap ap-rb"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3.8 4.8v4.4h4.4"/><path d="M4.2 9.2A8.3 8.3 0 1 1 3.9 13.6"/><path d="M12 8v4.2l2.7 1.7"/></svg></span></span><span class="dki"><span class="ap ap-sk"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 13.2l8.6-4.4L12 4.4 3.4 8.8z" fill="#fff"/><path d="M3.4 12.6L12 17l8.6-4.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".75"/><path d="M3.4 16.2L12 20.6l8.6-4.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".5"/></svg></span></span><span class="grow"></span><span class="dki"><span class="ap ap-mkt"><svg width="24" height="24" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7.2" height="7.2" rx="2.2" fill="#fff"/><rect x="13.3" y="3.5" width="7.2" height="7.2" rx="2.2" fill="#fff" opacity=".82"/><rect x="3.5" y="13.3" width="7.2" height="7.2" rx="2.2" fill="#fff" opacity=".82"/><path d="M16.9 13.2l1.1 2.7 2.7 1.1-2.7 1.1-1.1 2.7-1.1-2.7-2.7-1.1 2.7-1.1z" fill="#fff"/></svg></span></span><span class="dki on"><span class="ap ap-set"><svg width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="gr1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#D9DCE3"/></linearGradient></defs><path d="M12 1.8l1.6 2.4 2.8-.7.5 2.9 2.8.9-.9 2.8 2.2 1.9-2.2 1.9.9 2.8-2.8.9-.5 2.9-2.8-.7L12 22.2l-1.6-2.4-2.8.7-.5-2.9-2.8-.9.9-2.8-2.2-1.9 2.2-1.9-.9-2.8 2.8-.9.5-2.9 2.8.7z" fill="url(#gr1)"/><circle cx="12" cy="12" r="5.2" fill="#8D919B"/><circle cx="12" cy="12" r="2.6" fill="#E9EBF0"/></svg></span></span></nav>
 

@@ -326,7 +326,7 @@ def p_ask():
   <div class="kv2"><span class="t2">工单材料</span><span class="f12 t3">原单 + 附件 2</span></div>
   <div class="kv2"><span class="t2">你的补充</span><span class="f12 t3">暂无</span></div>
   <div class="kv2"><span class="t2">编码 Skill</span><span class="f12">复用表单组件 v3</span></div>
-  <div class="kv2"><span class="t2">验证 Skill</span><span class="f12">页面交互回归 v1</span></div></div>''',
+  <div class="kv2"><span class="t2">节点绑定 Skills</span><span class="f12">页面交互回归 v1</span></div></div>''',
         f'''<div class="card" style="padding:12px 14px"><div class="mini">回复之后</div>
   <div class="f12 t2" style="line-height:1.7">Bot-03 从「复现」继续，不重新开单。<br>回复会标记为「已采纳 / 未采纳」，你能看到本轮是否用上。</div></div>''')
     return ticket_list("20862") + main + right
@@ -900,9 +900,9 @@ def p_settings():
         item("no", "环境账号", "项目管理员", '测试环境 5 个账号能登录　<b style="color:var(--ink-red)">OKR 管理员：没有账号</b>，复现大部分 OKR Bug 要用它', todo("填写账号")),
     ])
     g3 = "".join([
-        item("ok", "工单来源", "管理员", 'Jira OKR「AI修复」→ 测试环境；Tita「AI干活」→ 正式环境', done("2 分钟前收单")),
-        item("ok", "Skills", "项目管理员", '编码：最小改动修复、组件包升级　验证：页面交互回归', done("3 个已启用")),
-        item("wn", "发布配置", "项目管理员", '还没填 tita build / tita release。不影响 Bot 修代码，但修完不能一键发测试', todo("去配置", False), req=False),
+        item("ok", "工单来源", "管理员", 'Jira OKR「AI修复」→ 测试环境；Tita「AI干活」→ 正式环境（连接器可配）', done("2 分钟前收单")),
+        item("ok", "工作流与 Skills", "项目管理员", '标准前端 6 节点（可定制 · 节级挂载 Skills 3 个）', done("3 个已启用")),
+        item("wn", "发布配置", "项目管理员", '还没填 craft build / release 发布命令。不影响 Bot 修代码，但修完不能一键发测试', todo("去配置", False), req=False),
     ])
     def grp(t, sub, body):
         return f'<div class="card" style="padding:2px 16px 0"><div class="row g8" style="padding:6px 0 2px"><span class="sec" style="font-size:14px">{t}</span><span class="f12 t3">{sub}</span></div>{body}</div>'
@@ -963,8 +963,8 @@ def p_aiset():
 <div class="col g12 grow" style="padding:14px 22px;min-height:0;overflow:hidden">
   <div class="card" style="padding:12px 16px 6px"><div class="row g8" style="margin-bottom:4px"><span class="sec grow">连接</span><span class="row g6 f12" style="color:var(--ink-green)">{I("check",13,3)}已连通 · 今天 10:12 试过，1.2 秒</span><span class="btn2 sm a-sec" style="background:var(--fill);margin-left:8px">{I("refresh",13)}再试一下</span></div>
     <div class="kv2"><span class="t2">AI 引擎</span><span class="f13 w6">Pi（默认内置 · 多模型）</span></div>
-    <div class="kv2"><span class="t2">主力模型</span><span class="f13 w6">gpt-6.2-sol</span></div>
-    <div class="kv2"><span class="t2">连接方式</span><span class="row g8"><span class="f13">公司网关</span><span class="mono f12 t2">https://ai-gateway.tita.cloud</span></span></div>
+    <div class="kv2"><span class="t2">主力模型</span><span class="f13 w6">自定义网关推理模型（支持费率覆写与单轮 400k 熔断）</span></div>
+    <div class="kv2"><span class="t2">连接方式</span><span class="row g8"><span class="f13">OpenAI 兼容网关</span><span class="mono f12 t2">https://ai-gateway.example.com</span></span></div>
     <div class="kv2"><span class="t2">访问令牌</span><span class="row g8"><span class="mono f12 t2">•••••••••••• 3f9a</span><span class="f12 t3">加密存在内网服务器上，只给 Bot 用</span></span></div></div>
   <div class="card" style="padding:12px 16px 6px"><div class="row g8" style="margin-bottom:2px"><span class="sec grow">引擎插件与外部连接</span><span class="f12 t3">按 5 贡献点分工 · 0% 重复配置</span><span class="f12 lnk">去插件市场 ›</span></div>
     <div class="kv2"><span class="t2">引擎扩展</span><span class="row g8"><span class="f13">按 <span class="mono">runtimes</span> 契约动态装载</span><span class="f12 t3">安装 ACP / Claude Code / Codex 后此处自动出现</span></span></div>
@@ -973,7 +973,7 @@ def p_aiset():
     {act(CK, "复现问题", "在目标环境用登记过的账号操作页面")}
     {act(CK, "改代码、提交到修复分支", "只在 fix/ 分支上提交，不碰主分支和测试分支")}
     {act(CK, "提 MR 到测试分支", "合入仍要审核人通过")}
-    {act(NO, "发到测试环境（启用发布插件时）", "默认由有权限的成员在工单里点「发布到测试」")}
+    {act(NO, "发到测试环境", "默认由有权限的成员在工单里点「发布到测试」")}
     {act(LK, "发到正式环境", "始终要真人发，不能打开")}</div>
   <div class="card" style="padding:12px 16px"><div class="row g8"><span class="sec grow">什么时候停下来找人</span><span class="f12 lnk">+ 加一条</span></div>
     <div class="row g8" style="margin-top:10px;flex-wrap:wrap">{chip("缺账号或角色")}{chip("同一步连续受阻 2 次")}{chip("一次要改 10 个以上文件")}{chip("要改接口约定或数据库")}</div></div>
@@ -988,7 +988,7 @@ def p_aiset():
   <div class="kv2"><span class="t2">失败</span><span class="f13" style="color:var(--ink-green)">0 次</span></div>
   <div class="kv2"><span class="t2">平均响应</span><span class="f13">1.4 秒</span></div></div>''',
         f'''<div class="card" style="padding:12px 14px"><div class="mini">最近改动</div>
-  <div class="f13" style="line-height:1.6">林某 把模型换成 gpt-6.2-sol</div><div class="f12 t3">11-18 16:20 · 进行中的 2 张单沿用旧模型</div>
+  <div class="f13" style="line-height:1.6">林某 切换了默认网关推理模型与费率覆写</div><div class="f12 t3">11-18 16:20 · 进行中的 2 张单沿用旧模型</div>
   <div class="hr" style="margin:10px 0"></div>
   <div class="f13" style="line-height:1.6">林某 加了「要改接口约定或数据库」</div><div class="f12 t3">11-12 10:05</div></div>''')
     return left + main + right
@@ -1059,7 +1059,7 @@ def p_members():
          ("张某", "#8FD8C9,#3FAE9A", "zhang@company.com", '<span class="tag tg-n" style="height:19px;font-size:10.5px">继承部门</span>', "zhang / 张某", '<span class="tag tg-p" style="height:19px;font-size:10.5px">负责人 · OKR</span>', "g", "正常", False),
          ("周某", "#B5E3A0,#5FB84A", "zhou@company.com", '<span class="tag tg-n" style="height:19px;font-size:10.5px">继承 + 个人PAT</span>', 'zhou / <span style="color:var(--ink-orange)">未关联</span>', '<span class="f11 t3">成员</span>', "g", "正常", False),
          ("陈晨", "#FFD27F,#F0A23C", "chen@company.com", '<span class="tag tg-g" style="height:19px;font-size:10.5px">免配置审单</span>', "chen / 陈晨", '<span class="f11 t3">成员</span>', "g", "正常", False),
-         ("宋工", "#A5B4FC,#6366F1", "song@vendor.io", '<span class="tag tg-o" style="height:19px;font-size:10.5px">外包 Guest</span>', "song / —", '<span class="tag tg-o" style="height:19px;font-size:10.5px">仅授权单</span>', "g", "正常", False),
+         ("宋工", "#A5B4FC,#6366F1", "song@vendor.io", '<span class="tag tg-o" style="height:19px;font-size:10.5px">外部协作者</span>', "song / —", '<span class="tag tg-o" style="height:19px;font-size:10.5px">仅授权单</span>', "g", "正常", False),
          ("赵磊", "#C8CCD4,#8A909B", "zhao@company.com", '<span class="tag tg-n" style="height:19px;font-size:10.5px">继承部门</span>', "zhao / 赵磊", '<span class="f11 t3">成员</span>', "n", "已停用", True)]
     tb = "".join(f'''<tr{" style=\"opacity:.6\"" if dis else ""}><td><div class="row g6">{av(n,g)}<span class="w6">{n}</span></div></td><td class="mono f11 t2">{em}</td><td>{mode}</td><td class="f11 t2">{jt}</td><td>{role}</td><td><span class="tag tg-{c}" style="height:19px;font-size:10.5px">{s}</span></td></tr>''' for n, g, em, mode, jt, role, c, s, dis in M)
     css = '''<style>
@@ -1081,7 +1081,7 @@ def p_members():
 .admin-portal{padding:9px 10px;border-radius:12px;background:var(--well);border:1px solid var(--hair);display:flex;flex-direction:column;gap:3px}
 </style>'''
     main = f'''{css}<main class="glass pn grow" style="min-width:0">
-<header class="thead"><div class="row g10"><div class="col grow"><div class="row g10"><h1>成员与身份</h1><span class="cc-seg cc-seg-xs" data-pin="mem-role-seg"><span class="on">成员与部门</span><span>角色与权限 7</span></span></div><div class="f12 t3" style="margin-top:3px">独立账号 + 手工多级部门默认配置 · 角色权限管理 · 外包 Guest 默认 Fail-Closed</div></div>
+<header class="thead"><div class="row g10"><div class="col grow"><div class="row g10"><h1>成员与身份</h1><span class="cc-seg cc-seg-xs" data-pin="mem-role-seg"><span class="on">成员与部门</span><span>角色与权限 7</span></span></div><div class="f12 t3" style="margin-top:3px">独立账号 + 手工多级部门默认配置 · 纯 RBAC 权限与作用域隔离</div></div>
   <button class="cc-btn cc-btn-sm cc-btn-glass">{I("link",13)}生成本部门邀请链接</button>
   <button class="cc-btn cc-btn-sm cc-btn-pri">{I("plus",14,2.4)}添加成员</button></div></header>
 <div class="org-wrap">
@@ -1096,9 +1096,8 @@ def p_members():
     <div class="ot-item sub">{I("layers",12)}<span>QA 测试组</span><span class="ot-cnt">2</span></div>
     <span class="grow"></span>
     <div class="admin-portal" data-pin="admin-portal">
-      <div class="row g6"><span class="f12 w7" style="color:var(--ink-blue)">企业管理后台</span><span class="grow"></span>{I("ext",12,style="color:var(--ink-blue)")}</div>
-      <div class="t3" style="font-size:10.5px;line-height:1.45;white-space:nowrap">Web <span class="mono">/admin</span> · 仅管理者可见</div>
-      <div class="t3" style="font-size:10.5px;line-height:1.35">多级树 / SCIM / 域名与 SSO</div>
+      <div class="row g6"><span class="f12 w7" style="color:var(--ink-blue)">角色与权限 (7)</span><span class="grow"></span>{I("chevr",12,style="color:var(--ink-blue)")}</div>
+      <div class="t3" style="font-size:10.5px;line-height:1.45">预设角色 · 模板克隆与禁用交接</div>
     </div>
   </div>
   <div class="org-main">
@@ -1131,7 +1130,7 @@ def p_members():
       </div>
     </div>
     <div class="card" style="padding:10px 14px 4px;flex:1;min-height:0;display:flex;flex-direction:column">
-      <div class="row g8" style="margin-bottom:5px"><span class="sec grow">OKR 产研 · 成员（6）</span><span class="cc-seg cc-seg-xs"><span class="on">全部 6</span><span>免配置 4</span><span>外包 1</span><span>已停用 1</span></span></div>
+      <div class="row g8" style="margin-bottom:5px"><span class="sec grow">OKR 产研 · 成员（6）</span><span class="cc-seg cc-seg-xs"><span class="on">全部 6</span><span>免配置 4</span><span>受限协作 1</span><span>已停用 1</span></span></div>
       <table class="tbl mb2"><thead><tr><th>成员</th><th>登录邮箱</th><th>配置 / 类型</th><th>外部工单身份</th><th>角色</th><th>状态</th></tr></thead><tbody>{tb}</tbody></table>
       <span class="grow"></span>
       <div class="row g8 f12" data-pin="handoff-row" style="padding:7px 0;border-top:1px solid var(--hair)"><span class="ck" style="background:#B45309;width:16px;height:16px;font-size:10px;font-weight:800">!</span><span class="t2 grow">赵磊已停用，还有 1 张单等他审核，指定新负责人后同事务移交并吊销会话</span><span class="lnk w6">停用与待办交接 ›</span></div>
@@ -1142,7 +1141,7 @@ def p_members():
     right = aside(
         f'''<div class="card" style="padding:12px 14px"><div class="row"><div class="mini grow" style="margin:0">免 SMTP 部门邀请</div><span class="tag tg-g">OKR 产研</span></div>
   <div class="f12 t2" style="margin-top:6px;line-height:1.6">生成 24h 链接与口令，同事点链接或整段复制进客户端即可自动识别免孤岛入驻。</div>
-  <div class="row g6" style="margin-top:8px;padding:6px 8px;border-radius:var(--r-sm);background:var(--well);border:1px solid var(--hair)"><span class="mono f11 t2 ell grow">cc.intra/join/okr-9f2a · #CC-7M9P#</span><span class="lnk f11 w6" style="white-space:nowrap">复制口令</span></div></div>''',
+  <div class="row g6" style="margin-top:8px;padding:6px 8px;border-radius:var(--r-sm);background:var(--well);border:1px solid var(--hair)"><span class="mono f11 t2 ell grow">cc.intra/join/okr-9f2a · #CC-8K4P-9M2X-Q7R5#</span><span class="lnk f11 w6" style="white-space:nowrap">复制口令</span></div></div>''',
         f'''<div class="card" style="padding:12px 14px"><div class="mini">三层继承与红线</div>
   <div class="f12 t2" style="margin-top:6px;line-height:1.62">
     <b style="color:var(--text)">1. 工作空间</b>：AI 引擎、域名发现<br>
@@ -1151,8 +1150,8 @@ def p_members():
         f'''<div class="card" style="padding:12px 14px"><div class="mini">权责与隔离</div>
   <div class="kv2"><span class="t2">部门 / 成员 / 角色</span><span class="f12">管理员</span></div>
   <div class="kv2"><span class="t2">通过 / 打回代码</span><span class="f12">仅本单修复人</span></div>
-  <div class="kv2"><span class="t2">外包 Guest</span><span class="f12">仅见授权单与项目</span></div>
-  <div class="f12 t3" style="margin-top:6px">停用成员保留历史署名，高阶树同步移步 Web <span class="mono">/admin</span>。</div></div>''', w=246)
+  <div class="kv2"><span class="t2">受限协作角色</span><span class="f12">由 RBAC 作用域限定项目/单</span></div>
+  <div class="f12 t3" style="margin-top:6px">停用成员永久保留历史署名，部门架构与绑定策略一并审计留痕。</div></div>''', w=246)
     return set_left("成员与身份") + main + right
 
 
@@ -1160,12 +1159,12 @@ def p_members():
 # 15. 设置 · 通知（每个人自己的）
 # =====================================================================
 def p_notify():
-    T = lambda on: f'<span class="cc-switch{" is-on" if on else ""}"></span>'
-    L = '<span class="cc-switch is-on is-disabled"></span>'
+    T = lambda on: f'<span class="cc-switch{" on" if on else ""}"></span>'
+    L = '<span class="cc-switch on is-disabled"></span>'
     ev = [("接到新单", "我是修复人", T(True), T(True)), ("Bot 在问我 / 需要协助", "说清缺哪项", T(True), T(True)),
           ("待我审核", "每轮修好后", T(True), T(True)), ("可以复测", "我是测试人，提交号对上后", T(True), T(True)),
-          ("测试结果", "我的单被测试通过或打回", T(True), T(False)), ("发布失败", "哪个环境、哪个项目、哪一步", L, L),
-          ("紧急回滚结果", "我发起或我负责的项目", L, L), ("待原平台确认", "每天 18:00 汇总一次", T(False), T(True))]
+          ("测试结果", "我的单被测试通过或打回", T(True), T(False)), ("发布失败", "系统核心必保告警（默认锁定）", L, L),
+          ("紧急回滚结果", "已装插件 · 回滚结果同步锁定", L, L), ("待原平台确认", "按个人时区可配时刻（默认 18:00）汇总", T(False), T(True))]
     rows = "".join(f'<div class="row g10" style="padding:7px 0;border-top:1px solid var(--hair)"><div class="row g10 grow" style="min-width:0"><span class="f13 w6" style="width:170px;flex:none">{a}</span><span class="f12 t3 ell">{b}</span></div><div style="width:110px;display:flex;justify-content:center">{c}</div><div style="width:110px;display:flex;justify-content:center">{d}</div></div>' for a, b, c, d in ev)
     def dev(ic, n, d, st, c, act):
         return f'<div class="row g10" style="padding:10px 0;border-top:1px solid var(--hair)"><span class="ic-box" style="width:30px;height:30px;border-radius:9px;background:linear-gradient(160deg,#A9AEB8,#6E737D)">{I(ic,15)}</span><div class="col grow"><span class="f13 w6">{n}</span><span class="f12 t3">{d}</span></div><span class="f12" style="color:var(--ink-{c})">{st}</span><span class="f12 lnk w6" style="width:96px;text-align:right">{act}</span></div>'
@@ -1174,7 +1173,7 @@ def p_notify():
   <span class="chip2">{I("spark",13,style="color:var(--ink-purple)")}也可以对 AI 说「晚上别推测试结果」</span></div></header>
 <div class="col g14 grow" style="padding:14px 22px;min-height:0;overflow:hidden">
   <div class="card" style="padding:12px 16px 6px"><div class="row g10"><span class="sec grow">什么事通知我</span><span class="f12 t3" style="width:110px;text-align:center">PC 桌面提醒</span><span class="f12 t3" style="width:110px;text-align:center">手机推送</span></div>{rows}
-    <div class="row g6 f12 t3" style="padding:8px 0 4px;border-top:1px solid var(--hair)">{I("lock",12)}发布失败和回滚结果关不掉，出了问题一定要有人知道</div></div>
+    <div class="row g6 f12 t3" style="padding:8px 0 4px;border-top:1px solid var(--hair)">{I("lock",12)}发布失败为 Core 必保告警，其余已启用插件（如回滚）按策略联动锁定</div></div>
   <div class="row g14" style="align-items:stretch">
     <div class="card grow" style="padding:12px 16px 4px"><div class="sec">已登录的设备</div>
       {dev("phone","iPhone 15","今天 15:01 · 家里 Wi-Fi","推送已开启","green","发条测试通知")}
@@ -1380,7 +1379,7 @@ def p_working():
                        meta='TK-20840 · <span style="color:var(--ink-orange)">P2</span> · 考勤 / 月报导出 · 修复人 林某 · 执行 Bot-02',
                        pill=("p-teal", "AI 修复中 · 第 1 轮"))
     head = head.replace('class="pill p-teal" style="flex:none"', 'class="pill" style="flex:none;color:var(--ink-teal);background:color-mix(in srgb,var(--teal) 15%,transparent)"')
-    steps = [("ok", "读工单"), ("ok", "复现"), ("ok", "定位"), ("ok", "改代码"), ("ok", "试构建"), ("run", "修后验证")]
+    steps = [("ok", "读单"), ("ok", "复现"), ("ok", "定位"), ("ok", "改代码"), ("ok", "试构建"), ("run", "修后验证")]
     sb = "".join(f'<span style="white-space:nowrap" class="stp{" w6" if s=="run" else ""}"{" style=\"color:var(--ink-teal)\"" if s=="run" else ""}>{CK() if s=="ok" else I("loader",14,2.6)}{n}</span>' for s, n in steps)
     acts = [("15:31", "用 hr-admin-02 登录测试环境", "ok"), ("15:33", "导出「研发中心」考勤月报", "ok"), ("15:34", "打开 Excel，核对「部门」列", "ok"), ("15:35", "导出「全公司」· 你刚才的补充", "run")]
     al = "".join(f'<div class="row g8 f12" style="padding:4px 0"><span class="mono t3" style="width:38px">{t}</span>{CK() if s=="ok" else I("loader",13,2.6,style="color:var(--ink-teal)")}<span class="{"t2" if s=="ok" else "w6"}"{" style=\"color:var(--ink-teal)\"" if s=="run" else ""}>{a}</span></div>' for t, a, s in acts)
@@ -1391,10 +1390,10 @@ def p_working():
     <div class="row g8"><span class="sc10 sc-t">Tita</span><span class="f13 w7 grow">原单 · 客户反馈</span><span class="f12 t3">反馈人 赵磊 · 今天 13:50 · 附件 1</span></div>
     <div class="f13 t2" style="margin-top:6px;line-height:1.6">考勤月报导出 Excel，打开后「部门」一列全是乱码，姓名和出勤天数正常。正式环境 2.17.4。</div>
   </div>
-  <div class="divd">第 1 轮 · 今天 14:05 开始 · Bot-02</div>
+  <div class="divd">第 1 轮 · 今天 14:05 开始 · Bot-02 · 模板「标准前端」</div>
   <div class="row g10" style="align-items:flex-start"><span class="botav">{I("bot",16)}</span>
     <div class="col g10 grow" style="min-width:0">
-      <div class="row g12" style="padding:8px 12px;border-radius:12px;background:var(--fill);white-space:nowrap">{sb}<span class="grow"></span><span class="f12 t3">已用 1 小时 30 分</span></div>
+      <div class="row g10" style="padding:8px 12px;border-radius:12px;background:var(--fill);white-space:nowrap"><span class="tag tg-t" style="height:19px;font-size:10px">流程 6 节点</span>{sb}<span class="grow"></span><span class="f12 t3">已用 1 小时 30 分</span></div>
       <div class="card" style="padding:14px 16px;border-radius:20px;box-shadow:0 0 0 2px color-mix(in srgb,var(--teal) 50%,transparent),0 14px 30px -18px rgba(48,176,199,.6)">
         <div class="row g8"><span class="ic-box" style="width:26px;height:26px;border-radius:8px;background:#0A6678">{I("eye",15,2.2)}</span><span class="f15 w7 grow">正在做：修后浏览器验证</span><span class="f12 t3">验证 3 / 4 · 测试环境</span></div>
         <div class="row g16" style="margin-top:10px;align-items:flex-start">
@@ -1425,7 +1424,7 @@ def p_working():
   <div class="kv2"><span class="t2">工单材料</span><span class="f12 t3">原单 + 附件 1</span></div>
   <div class="kv2"><span class="t2">你的补充</span><span class="f12" style="color:var(--ink-green)">1 条 · 已采纳</span></div>
   <div class="kv2"><span class="t2">验证账号</span><span class="f12 mono">hr-admin-02</span></div>
-  <div class="kv2"><span class="t2">验证 Skill</span><span class="f12">页面交互回归 v1</span></div></div>''',
+  <div class="kv2"><span class="t2">节点绑定 Skills</span><span class="f12">页面交互回归 v1</span></div></div>''',
         f'''<div class="card" style="padding:12px 14px"><div class="mini">接下来</div>
   <div class="f12 t2" style="line-height:1.7">验证完交付第 1 轮，通知你审核。<br>受阻会停下来问你，不会自己猜。</div>
   <div class="row g8" style="margin-top:10px"><span class="btn2 sm a-sec" style="background:var(--fill);flex:1">我来接手</span><span class="btn2 sm a-sec" style="background:var(--fill);flex:1">停止本轮</span></div></div>''')
@@ -1771,7 +1770,7 @@ html:not(.dark) .el .no{color:#fff}
   <div class="f13 t2" style="margin-top:6px">单审核通过后，发布记录会出现在这里</div>
   <div class="row g6" style="margin-top:14px"><span class="chip">审核通过</span><span class="arr">→</span><span class="chip">发测试</span><span class="arr">→</span><span class="chip">复测通过</span><span class="arr">→</span><span class="chip">发正式</span></div>
   <div class="row g10" style="margin-top:16px;padding:10px 12px;border-radius:12px;background:color-mix(in srgb,var(--orange) 13%,transparent)">{I("alert",15,style="color:var(--ink-orange)")}
-    <div class="col grow" style="min-width:0"><span class="f13 w6">本项目发布参数还没填</span><span class="f12 t2">启用发布插件时显示 · 不影响 Bot 修代码，发测试前配好即可</span></div>
+    <div class="col grow" style="min-width:0"><span class="f13 w6">本项目发布参数还没填</span><span class="f12 t2">不影响 Bot 修代码 · 发起发测试前在项目设置里配好即可</span></div>
     <span class="cc-btn cc-btn-xs cc-btn-glass">去配置</span></div>
 </div>'''
 
@@ -1924,12 +1923,12 @@ def p_queue():
   <span class="pill glass" style="align-self:flex-start;height:30px;padding:0 12px">{I("bot",13)}3 个 Bot 都在忙 · 3 张排队</span>
   <div class="f12 t3" style="margin-top:6px">顶栏胶囊，点开是右边第 4 块</div>
   <div class="card" style="padding:12px 14px;margin-top:14px">
-    <div class="f13 w7">排队顺序（固定）</div>
+    <div class="f13 w7">排队顺序（默认可配置）</div>
     <div class="qx"><span class="qn">1</span><span class="f13 grow">P1 最先</span>{tg("r","P1")}</div>
     <div class="qx"><span class="qn">2</span><span class="f13 grow">同级里打回重修的在前</span>{tg("o","打回重修")}</div>
     <div class="qx"><span class="qn">3</span><span class="f13 grow">再按进来的先后</span>{tg("n","先来先到")}</div>
   </div>
-  <div class="f12 t3" style="margin-top:10px;line-height:1.6">优先级取自原单；顺序不能手动拖。</div>
+  <div class="f12 t3" style="margin-top:10px;line-height:1.6">支持项目设定默认序及授权人员紧急置顶。</div>
 </div>'''
 
     # 2 工单 · 排队中
@@ -1955,11 +1954,11 @@ def p_queue():
   <div class="row g8"><span class="f12 t3">设置 · 全局 AI</span><span class="tag tg-n">只有管理员能改</span></div>
   <div class="card" style="padding:4px 14px;margin-top:10px">
     <div class="qx" style="padding:10px 0"><div class="col grow"><span class="f14 w6">同时修几张</span><span class="f12 t3">多出来的单排队；现在 3 个 Bot 在线</span></div><div class="stp"><span>−</span><b>3</b><span>+</span></div></div>
-    <div class="qx" style="padding:10px 0"><div class="col grow"><span class="f14 w6">排队顺序</span><span class="f12 t3">P1 最先 → 打回重修 → 先来先到</span></div><span class="row g6 f12 t3">{I("lock",12)}固定</span></div>
-    <div class="qx" style="padding:10px 0"><div class="col grow"><span class="f14 w6">收单</span><span class="f12 t3">每 2 分钟采一次，新单 5 分钟内开始修并通知</span></div></div>
-    <div class="qx" style="padding:10px 0"><div class="col grow"><span class="f14 w6">采集异常</span><span class="f12 t3">超过 15 分钟没采到：顶栏变橙，来源采集页标红</span></div></div>
+    <div class="qx" style="padding:10px 0"><div class="col grow"><span class="f14 w6">排队顺序</span><span class="f12 t3">P1 最先 → 打回重修 → 先来先到</span></div><span class="row g6 f12 lnk">自定义 ›</span></div>
+    <div class="qx" style="padding:10px 0"><div class="col grow"><span class="f14 w6">收单</span><span class="f12 t3">默认每 2 分钟采一次（可按连接器调整）</span></div></div>
+    <div class="qx" style="padding:10px 0"><div class="col grow"><span class="f14 w6">采集异常</span><span class="f12 t3">超过可配阈值（默认 15 分钟）顶栏告警</span></div></div>
   </div>
-  <div class="f12 t3" style="margin-top:10px">改了从下一张单开始生效，正在修的不受影响</div>
+  <div class="f12 t3" style="margin-top:10px">改了从下一轮 / 下一张单开始生效，正在修的不受影响</div>
 </div>'''
 
     # 4 现在谁在修、谁在排
@@ -1999,16 +1998,16 @@ def p_approve():
   <div class="row g10"><span class="ic-box" style="background:linear-gradient(160deg,#5AA0FF,#1F6FFF)">{I("check",16,2.6)}</span><div class="col grow"><span class="f18 w7">审核通过第 2 轮</span><span class="f12 t3">TK-20871 · 审核对象 <span class="mono">a3f9c21</span> · 改了 2 个文件</span></div></div>
   <div class="flabel" style="margin-top:18px">Bot 已验证 3 项</div>
   <div class="col g6" style="padding:10px 12px;border-radius:12px;background:var(--fill)">{ok("普通员工切换分组不再卡住")}{ok("分组 2、3 切换后列表正确")}{ok("刷新后停在原来的分组")}</div>
-  <div class="flabel" style="margin-top:16px;color:var(--ink-orange)">还有 1 项没测 · 待人工复测</div>
+  <div class="flabel" style="margin-top:16px;color:var(--ink-orange)">还有 1 项未测 · 1 条 Soft Gate 告警需确认</div>
   <div class="col g8" style="padding:12px 14px;border-radius:12px;background:color-mix(in srgb,var(--orange) 11%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--orange) 35%,transparent)">
-    <div class="row g8"><span class="ck" style="background:#B45309;width:16px;height:16px;font-size:10px">!</span><span class="f14 w6 grow">「管理员」切到「销售部」不卡</span><span class="f12 lnk">先登记账号，让 Bot 补测 ›</span></div>
-    <div class="f12 t2" style="padding-left:24px">没测的原因：项目里没有登记管理员账号，Bot 没能登录</div>
+    <div class="row g8"><span class="ck" style="background:#B45309;width:16px;height:16px;font-size:10px">!</span><span class="f14 w6 grow">「管理员」切到「销售部」不卡（待人工复测）</span><span class="f12 lnk">先登记账号，让 Bot 补测 ›</span></div>
+    <div class="f12 t2" style="padding-left:24px">原因：项目未登记管理员账号 · 另附 Soft Gate：1 条风格类 lint 告警</div>
   </div>
   <div class="flabel" style="margin-top:16px">通过后，这一项交给测试人</div>
   <div class="row g10" style="padding:10px 12px;border-radius:12px;border:1px solid var(--hair)">{I("bell",15,style="color:var(--text-3)")}
     <div class="col grow" style="min-width:0"><span class="f12 t3">复测通知里会写</span><span class="f13"><span class="tag tg-o" style="margin-right:6px">重点测</span>「管理员」切到「销售部」不卡（Bot 没测过）</span></div></div>
-  <div class="row g8" style="margin-top:16px"><span class="cbx on">{I("check",12,3)}</span><span class="f14 w6">我知道有 1 项没测，交给测试人重点测</span><span class="grow"></span><span class="f12 t3">不勾不能通过</span></div>
-  <div class="row g10" style="margin-top:18px;padding-top:16px;border-top:1px solid var(--hair)"><span class="f12 t3 grow">通过后可以发测试，同时生成「待原平台确认」</span><span class="btn2 a-sec" style="background:var(--fill);height:36px">取消</span><span class="btn2 a-pri" style="height:36px">{I("check",14,2.6)}审核通过 a3f9c21</span></div>
+  <div class="row g8" style="margin-top:16px"><span class="cbx on">{I("check",12,3)}</span><span class="f14 w6">我已知晓未测项与 Soft Gate 告警并交给测试重点验</span><span class="grow"></span><span class="f12 t3">不勾不能通过</span></div>
+  <div class="row g10" style="margin-top:18px;padding-top:16px;border-top:1px solid var(--hair)"><span class="f12 t3 grow">通过后进入项目交付流程（外部单同步生成待确认，手动单自动跳过）</span><span class="cc-btn cc-btn-md cc-btn-sec">取消</span><span class="cc-btn cc-btn-md cc-btn-pri">{I("check",14,2.6)}审核通过 a3f9c21</span></div>
 </div>'''
     return base + '<!--OVERLAY-->' + dlg
 
@@ -2046,19 +2045,19 @@ def p_myacct():
     <div class="f11 t3" style="margin-top:5px">识别为 <span class="mono t2">lin.x</span> · 到期 2027-05-20 · api</div>'''
     ap_f = '''<div class="row g8" style="margin-top:8px"><div class="grow"><div class="flabel">用户名</div><div class="field mono" style="font-size:12px;height:32px">lin.x</div></div>
     <div class="grow"><div class="flabel">密码</div><div class="field mono" style="font-size:12px;letter-spacing:2px;height:32px">••••••••</div></div></div>
-    <div class="f11 t3" style="margin-top:5px">随「发布 / 回滚插件」动态呈现 · 未装不显示</div>'''
+    <div class="f11 t3" style="margin-top:5px">随项目接入的发布连接器 / 回滚插件动态呈现</div>'''
     main = f'''<main class="glass pn grow" style="min-width:0">
-<header class="thead"><div class="row g10"><div class="col grow"><h1>我的账号</h1><div class="f12 t3" style="margin-top:2px">独立账号 + 按已启用插件动态呈现本人凭据（<span class="mono">scope='user'</span>）+ 外观与语言（8 项左栏不膨胀）</div></div>
+<header class="thead"><div class="row g10"><div class="col grow"><h1>我的账号</h1><div class="f12 t3" style="margin-top:2px">独立账号 + 按已启用连接器与扩展插件动态呈现本人凭据（<span class="mono">scope='user'</span>）+ 外观与语言（8 项左栏不膨胀）</div></div>
   <span class="chip2">{I("spark",13,style="color:var(--ink-purple)")}也可以问 AI「我能合哪些分支？」</span></div></header>
 <div class="col g10 grow" style="padding:12px 20px;min-height:0;overflow:hidden">
   <div class="card" style="padding:9px 14px">
     <div class="row g10"><span class="av" style="width:32px;height:32px;font-size:12px;background:linear-gradient(150deg,#FFB38A,#F0703C)">林</span>
       <div class="col grow" style="gap:1px"><span class="f13 w6">林某 <span class="f12 t3" style="font-weight:400">· 独立邮箱 <span class="mono">lin@company.com</span></span></span><span class="f11 t3">空间管理员 · 本人跨空间与个人连接器中心</span></div>
-      <span class="tag tg-b" style="height:20px;font-size:10.5px">个人连接器由已启用插件动态生成</span></div>
+      <span class="tag tg-b" style="height:20px;font-size:10.5px">个人连接器由已接入工具动态生成</span></div>
   </div>
   <div class="row g12" style="align-items:stretch">
     {acct(GL, "GitLab 个人令牌", "代码源 · 已启用", "已连通", gl_f, "试连接", "在代码仓偏好设置生成")}
-    {acct(AP, "Apollo 个人账号", "扩展插件 · 已启用", "已连通", ap_f, "试登录", "停用发布插件时自动隐藏")}
+    {acct(AP, "Apollo 个人账号", "连接器 · 已启用", "已连通", ap_f, "试登录", "停用回滚插件仅隐藏回滚项")}
   </div>
   <div class="card" style="padding:10px 14px;gap:8px">
     <div class="row g8"><span class="sec">外观与语言</span><span class="tag tg-p" style="height:18px;font-size:10px">contributes.themes + i18n（合并自原外观菜单）</span><span class="grow"></span><span class="f11 t3">全局界面语言：</span>
@@ -2071,8 +2070,8 @@ def p_myacct():
     </div>
   </div>
   <div class="card" style="padding:10px 14px 4px;flex:1;min-height:0">
-    <div class="row g8"><span class="sec grow">你能做什么（随已启用插件动态列）</span><span class="f11 t3">工作台权限 × 个人连接器实测双过</span></div>
-    <div class="row g8" style="margin-top:5px;padding-bottom:4px"><span style="width:62px;flex:none"></span>{hcell("合入测试分支","代码源")}{hcell("合回主分支","代码源")}{hcell("发测试","发布插件")}{hcell("发正式·回滚","扩展插件")}<span class="grow"></span></div>
+    <div class="row g8"><span class="sec grow">你能做什么（内置发布流 + 动态插件动作）</span><span class="f11 t3">工作台权限 × 个人连接器实测双过</span></div>
+    <div class="row g8" style="margin-top:5px;padding-bottom:4px"><span style="width:62px;flex:none"></span>{hcell("合入测试分支","代码源")}{hcell("合回主分支","代码源")}{hcell("发测试·正式","内置 + 连接器")}{hcell("紧急回滚","扩展插件")}<span class="grow"></span></div>
     {mrow("OKR", yes(), yes(), yes(), yes())}
     {mrow("审批", yes(), no(), yes(), no("只能看"), "未配主干/PROD 写权限")}
     {mrow("考勤", yes(), yes(), yes(), yes())}
@@ -2082,7 +2081,7 @@ def p_myacct():
     right = aside(
         f'''<div class="card" style="padding:12px 14px"><div class="mini">什么时候用你的账号</div>
   {use("branch","linear-gradient(160deg,#FF9A5A,#FC6D26)","代码源 · 通过并合入","由已启用代码连接器调用你的 PAT")}
-  {use("rocket","linear-gradient(160deg,#5AA0FF,#1F6FFF)","扩展插件 · 发布与回滚","仅装发布/回滚插件后出现，用本人签发")}
+  {use("rocket","linear-gradient(160deg,#5AA0FF,#1F6FFF)","内置发布 · 扩展回滚","发布按项目连接器鉴权；回滚仅装插件后出现")}
   <div class="f11 t3" style="padding:6px 0 2px;border-top:1px solid var(--hair);line-height:1.5">拉代码与提 MR 由项目只读连接器执行，不碰本人凭据。</div></div>''',
         f'''<div class="card" style="padding:12px 14px"><div class="mini">第三方系统里记成谁</div>
   <div class="row g8" style="margin-top:6px"><span class="ck" style="background:var(--btn-ok-bg);width:16px;height:16px">{I("check",10,3.2)}</span><span class="f12 grow">操作人 <span class="mono">lin.x</span>（本人实名）</span></div>
@@ -2106,7 +2105,7 @@ def p_acctneed():
   </div>
   <div class="row g8 f13" style="margin-top:12px;padding:9px 12px;border-radius:12px;background:color-mix(in srgb,var(--green) 10%,transparent)"><span class="ck" style="background:var(--btn-ok-bg);width:16px;height:16px">{I("check",10,3.2)}</span><span class="grow">登录成功 · 审批测试环境能发布</span><span class="f12 t3">刚刚试过</span></div>
   <div class="row g8 f12 t3" style="margin-top:12px;line-height:1.55">{I("lock",13)}<span>加密存在内网服务器上，存到「设置 → 我的账号」，下次不用再填。第一次合入 MR 时同样会让你配 GitLab 令牌。</span></div>
-  <div class="row g10" style="margin-top:18px;padding-top:16px;border-top:1px solid var(--hair)"><span class="f12 t3 grow">测试人：王某 · 测试环境 · 审批</span><span class="btn2 a-sec" style="background:var(--fill);height:36px">取消</span><span class="btn2 a-pri" style="height:36px">{I("pkg",14)}保存并发布到测试环境</span></div>
+  <div class="row g10" style="margin-top:18px;padding-top:16px;border-top:1px solid var(--hair)"><span class="f12 t3 grow">测试人：王某 · 测试环境 · 审批</span><span class="cc-btn cc-btn-md cc-btn-sec">取消</span><span class="cc-btn cc-btn-md cc-btn-pri">{I("pkg",14)}保存并发布到测试环境</span></div>
 </div>'''
     return base + '<!--OVERLAY-->' + dlg
 
@@ -2207,7 +2206,7 @@ def p_newticket():
       <span class="ic-box" style="width:36px;height:36px;border-radius:10px;background:linear-gradient(155deg,#5AA0FF,#1F6FFF)">{I("plus",18,2.6)}</span>
       <div class="col grow">
         <div class="f18 w7">手动新建工单</div>
-        <div class="f12 t3" style="margin-top:2px">不依赖 Jira / Tita，直接派给 Bot 修复 · 自动编号 <span class="mono t2">M-105</span> · 不生成「待原平台确认」待办</div>
+        <div class="f12 t3" style="margin-top:2px">不依赖外部工单系统，直接派给 Bot 修复 · 自动编号 <span class="mono t2">M-105</span> · 不生成「待原平台确认」待办</div>
       </div>
       <span class="cc-close">{I("x",15,2.2)}</span>
     </div>
@@ -2219,8 +2218,8 @@ def p_newticket():
           <span class="f12 w6 t2">所属项目</span>
           <div class="row g6">
             <span class="pill p-blue" style="height:30px;padding:0 12px;border:1px solid color-mix(in srgb,var(--blue) 45%,transparent)">审批 · 已开工</span>
-            <span class="pill p-gray" style="height:30px;padding:0 12px">OKR</span>
-            <span class="pill p-gray" style="height:30px;padding:0 12px">考勤</span>
+            <span class="pill p-gray" style="height:30px;padding:0 12px">OKR · 未开工(可暂存)</span>
+            <span class="pill p-gray" style="height:30px;padding:0 12px;opacity:.45">网关 · 无可改仓禁选</span>
           </div>
         </div>
         <div class="col g6">
@@ -2281,9 +2280,9 @@ def p_newticket():
     </div>
 
     <div class="row g10" style="margin-top:18px;padding-top:14px;border-top:1px solid var(--hair)">
-      <span class="f12 t3 grow">创建后立即按优先级入队交给 Bot，开启机审门禁与浏览器复测</span>
-      <button class="btn2 a-sec" style="background:var(--fill)">取消</button>
-      <button class="btn2 a-pri" style="padding:0 20px">{I("bot",14)}创建并派给 Bot</button>
+      <span class="f12 t3 grow">创建后按项目流程模板与优先级入队交给 Bot，开启机审门禁与对应验证策略</span>
+      <button class="cc-btn cc-btn-md cc-btn-sec">取消</button>
+      <button class="cc-btn cc-btn-md cc-btn-pri" style="padding:0 20px">{I("bot",14)}创建并派给 Bot</button>
     </div>
   </div>'''
     return ticket_list("20871") + chat_main_dim() + aside(

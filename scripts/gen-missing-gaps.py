@@ -394,7 +394,7 @@ CHKLOG_DRW = f'''{CHKLOG_CSS}
     </div>
 
     <div class="term2">
-      <div class="ln"><span class="no">01</span><span class="ts">10:38:12</span><span class="ok">[PASS]</span><span>ai-engine pi(gpt-6.2-sol) · gateway 200 OK (1.2s)</span></div>
+      <div class="ln"><span class="no">01</span><span class="ts">10:38:12</span><span class="ok">[PASS]</span><span>ai-engine pi(custom-gateway) · gateway 200 OK (1.2s)</span></div>
       <div class="ln"><span class="no">08</span><span class="ts">10:38:16</span><span class="ok">[PASS]</span><span>connectors OK: gitlab, github, local(/work/tita), jira</span></div>
       <div class="ln"><span class="no">15</span><span class="ts">10:38:21</span><span class="dm">[EXEC]</span><span>git clone --depth=1 gitlab.tita.work/fe/tita-okr-web</span></div>
       <div class="ln"><span class="no">22</span><span class="ts">10:41:39</span><span class="ok">[PASS]</span><span>pnpm build-prod --no-sourcemap · dist 14.8MB (3m18s)</span></div>

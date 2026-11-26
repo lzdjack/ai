@@ -7,9 +7,7 @@
   <div class="br"><span class="lg"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7.2L3.6 12 8 16.8"/><path d="M16 7.2l4.4 4.8-4.4 4.8" opacity=".6"/><path d="M9.6 12.3l1.8 1.8 3.2-4"/></svg><svg class="spk" width="11" height="11" viewBox="0 0 24 24" fill="#fff"><path d="M12 1l2.6 8.4L23 12l-8.4 2.6L12 23l-2.6-8.4L1 12l8.4-2.6z"/></svg></span><span class="tt"><b>云匠</b><em>CloudCraft</em></span></div>
   <div class="grow row" style="justify-content:center"><div class="glass tsearch"><i data-i="search" data-s="15"></i><span class="f13 grow">搜索工单、MR、发布记录</span><span class="kbd" style="border-color:var(--hair)">⌘F</span></div></div>
   <div class="tright">
-    <span class="pill glass tpill"><i data-i="bot" data-s="13"></i>3 个 Bot 在线</span>
-    <span class="pill glass tpill"><span class="dot" style="width:7px;height:7px;background:var(--green)"></span>Jira · 2 分钟前</span>
-    <span class="pill glass tpill" style="color:var(--ink-orange)"><span class="dot" style="width:7px;height:7px;background:var(--orange)"></span>Tita 采集失败 · 重试中</span>
+    <span class="pill glass tpill"><i data-i="bot" data-s="13"></i>3 个 Bot 在线</span><span class="pill glass tpill"><span class="dot" style="width:7px;height:7px;background:var(--green)"></span>Jira · 2 分钟前</span><span class="pill glass tpill" style="color:var(--ink-orange)"><span class="dot" style="width:7px;height:7px;background:var(--orange)"></span>Tita 采集失败 · 重试中</span>
     <span class="av" style="width:34px;height:34px;font-size:13px;background:linear-gradient(160deg,#FFC9A8,#F08F7A);color:#5A2414">林</span>
   </div>
 </div>
@@ -37,7 +35,7 @@
       <span class="ic-box" style="width:36px;height:36px;border-radius:10px;background:linear-gradient(155deg,#5AA0FF,#1F6FFF)"><i data-i="plus" data-s="18" data-w="2.6"></i></span>
       <div class="col grow">
         <div class="f18 w7">手动新建工单</div>
-        <div class="f12 t3" style="margin-top:2px">不依赖 Jira / Tita，直接派给 Bot 修复 · 自动编号 <span class="mono t2">M-105</span> · 不生成「待原平台确认」待办</div>
+        <div class="f12 t3" style="margin-top:2px">不依赖外部工单系统，直接派给 Bot 修复 · 自动编号 <span class="mono t2">M-105</span> · 不生成「待原平台确认」待办</div>
       </div>
       <span class="cc-close"><i data-i="x" data-s="15" data-w="2.2"></i></span>
     </div>
@@ -49,8 +47,8 @@
           <span class="f12 w6 t2">所属项目</span>
           <div class="row g6">
             <span class="pill p-blue" style="height:30px;padding:0 12px;border:1px solid color-mix(in srgb,var(--blue) 45%,transparent)">审批 · 已开工</span>
-            <span class="pill p-gray" style="height:30px;padding:0 12px">OKR</span>
-            <span class="pill p-gray" style="height:30px;padding:0 12px">考勤</span>
+            <span class="pill p-gray" style="height:30px;padding:0 12px">OKR · 未开工(可暂存)</span>
+            <span class="pill p-gray" style="height:30px;padding:0 12px;opacity:.45">网关 · 无可改仓禁选</span>
           </div>
         </div>
         <div class="col g6">
@@ -111,9 +109,9 @@
     </div>
 
     <div class="row g10" style="margin-top:18px;padding-top:14px;border-top:1px solid var(--hair)">
-      <span class="f12 t3 grow">创建后立即按优先级入队交给 Bot，开启机审门禁与浏览器复测</span>
-      <button class="btn2 a-sec" style="background:var(--fill)">取消</button>
-      <button class="btn2 a-pri" style="padding:0 20px"><i data-i="bot" data-s="14"></i>创建并派给 Bot</button>
+      <span class="f12 t3 grow">创建后按项目流程模板与优先级入队交给 Bot，开启机审门禁与对应验证策略</span>
+      <button class="cc-btn cc-btn-md cc-btn-sec">取消</button>
+      <button class="cc-btn cc-btn-md cc-btn-pri" style="padding:0 20px"><i data-i="bot" data-s="14"></i>创建并派给 Bot</button>
     </div>
   </div>
 </div>

@@ -77,7 +77,7 @@ PC_MODAL_HTML = f'''{PC_MODAL_CSS}
       <span class="t3">确认或忽略后不再重复提示</span>
     </div>
     <div class="f12 mono t2" style="line-height:1.5;word-break:break-all">
-      林某邀请你加入云匠「星辰研发中心·OKR 产研」：<span style="color:var(--ink-blue);font-weight:600">https://cc.intra/join/9f2a4c8d</span> · 口令 <span style="color:var(--text);font-weight:700">#CC-7M9P#</span>
+      林某邀请你加入云匠「星辰研发中心·OKR 产研」：<span style="color:var(--ink-blue);font-weight:600">https://cc.intra/join/9f2a4c8d</span> · 口令 <span style="color:var(--text);font-weight:700">#CC-8K4P-9M2X-Q7R5#</span>
     </div>
   </div>
 
@@ -194,7 +194,7 @@ mp1_overlay = f'''<div class="scrim"></div>
   <div class="f12 t2" style="margin-top:3px;line-height:1.45">同事 <b>林某</b> 邀请你加入，确认即同步项目环境、权限与 Skills。</div>
 
   <div class="flat2" style="margin-top:10px;padding:9px 11px">
-    <div class="row f11 t3" style="margin-bottom:3px"><span>识别来源：微信/飞书复制</span><span class="grow"></span><span class="mono">#CC-7M9P#</span></div>
+    <div class="row f11 t3" style="margin-bottom:3px"><span>识别来源：微信/飞书复制</span><span class="grow"></span><span class="mono">#CC-8K4P-9M2X-Q7R5#</span></div>
     <div class="f12 mono ell" style="color:var(--ink-blue);font-weight:600">https://cc.intra/join/9f2a4c8d</div>
   </div>
 
@@ -294,7 +294,7 @@ mp3_inner = f'''<div class="pad" style="padding-top:4px">
   <div class="card2" style="margin-top:12px;padding:10px 12px;background:color-mix(in srgb,var(--green) 8%,var(--glass-2));border-color:color-mix(in srgb,var(--green) 26%,transparent)">
     <div class="row g8">
       <span style="color:var(--ink-green)">{I("check",14,2.8)}</span>
-      <span class="f12 w6 grow" style="color:var(--ink-green)">已消费并清除口令 #CC-7M9P#</span>
+      <span class="f12 w6 grow" style="color:var(--ink-green)">已消费并清除口令 #CC-8K4P-9M2X-Q7R5#</span>
     </div>
     <div class="f11 t2" style="margin-top:3px;line-height:1.45">本地已记录消费状态，后续切换前后台不再重复弹出邀请识别卡。</div>
   </div>

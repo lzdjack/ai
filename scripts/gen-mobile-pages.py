@@ -462,8 +462,8 @@ def m_notify():
     T = lambda on: f'<span class="tgl{" on" if on else ""}"></span>'
     ev = [("接到新单", "我是修复人", T(True)), ("Bot 在问我 / 需要协助", "说清缺哪项", T(True)), ("待我审核", "每轮修好后", T(True)),
           ("可以复测", "我是测试人，提交号对上后", T(True)), ("测试结果", "我的单被通过或打回", T(False)),
-          ("发布失败", "关不掉", L), ("紧急回滚结果", "关不掉", L), ("待原平台确认", "每天 18:00 汇总一次", T(True))]
-    rows = "".join(f'<div class="ir" style="min-height:50px"><div class="col grow" style="min-width:0;gap:1px"><span class="f14 w6 row g6">{a}{I("lock",12,st="color:var(--text-3)") if b=="关不掉" else ""}</span><span class="f12 t3 ell">{b}</span></div>{c}</div>' for a, b, c in ev)
+          ("发布失败", "核心告警 · 关不掉", L), ("紧急回滚结果", "已启回滚插件 · 锁定", L), ("待原平台确认", "按个人时区可配时刻汇总", T(True))]
+    rows = "".join(f'<div class="ir" style="min-height:50px"><div class="col grow" style="min-width:0;gap:1px"><span class="f14 w6 row g6">{a}{I("lock",12,st="color:var(--text-3)") if ("关不掉" in b or "锁定" in b) else ""}</span><span class="f12 t3 ell">{b}</span></div>{c}</div>' for a, b, c in ev)
     inner = f'''{nav("设置", "通知", "")}
 <div class="pad">
   <div class="grp glass" style="padding:12px;display:flex;align-items:center;gap:12px;margin-top:4px"><span class="ii" style="width:36px;height:36px;border-radius:10px;background:linear-gradient(160deg,#5EDB7A,#28B04F);display:flex;align-items:center;justify-content:center;color:#fff">{I("bell",18,2)}</span>
@@ -551,7 +551,7 @@ def m_empty_pub():
   <div class="row g6" style="justify-content:center;margin-top:16px">{chips}</div>
   <div class="card2" style="margin-top:22px;display:flex;align-items:center;gap:12px;background:color-mix(in srgb,var(--orange) 12%,transparent);border-color:transparent">
     {I("alert",18,st="color:var(--ink-orange);flex:none")}
-    <div class="col grow" style="min-width:0;gap:2px"><span class="f14 w7">本项目发布参数还没填</span><span class="f12 t2" style="line-height:1.5">已装发布插件时可见 · 不影响修单<br>发测试前在项目设置里补好</span></div>
+    <div class="col grow" style="min-width:0;gap:2px"><span class="f14 w7">本项目发布参数还没填</span><span class="f12 t2" style="line-height:1.5">不影响修单 · 发起发测试前配好即可</span></div>
     <span class="chip glass" style="color:var(--text);border:1px solid var(--border-ctl)">去配置</span></div>
 </div>{_tb0("pub", 32)}'''
     return phone(inner)
@@ -719,11 +719,12 @@ def m_market_list():
     <span class="chip glass">已安装 4</span>
     <span class="chip glass">官方 5</span>
   </div>
-  <div class="gh" style="padding:10px 6px 4px">已安装<span>4</span><em>可随时启停</em></div>
+  <div class="gh" style="padding:10px 6px 4px">已安装<span>5</span><em>可随时启停</em></div>
   <div class="grp glass">
-    {mrow("linear-gradient(160deg,#FF8A7A,#E0281E)","history","紧急回滚（Apollo）","回滚入口 · 差异预览与回退","默认安装",'<span class="tgl on"></span>',True)}
-    {mrow("linear-gradient(160deg,#FFC54D,#FF7A00)","pkg","发布流水线（Tita）","构建发布 · 测试/正式双环境","默认安装",'<span class="tgl on"></span>')}
-    {mrow("linear-gradient(160deg,#5AA0FF,#1F6FFF)","link","GitLab / Jira 连接器","鉴权实例归「设置 → 连接器」","官方预装",'<span class="tgl on" style="opacity:.45;pointer-events:none"></span>')}
+    {mrow("linear-gradient(160deg,#FF8A7A,#E0281E)","history","紧急回滚（Apollo）","可选扩展 · 停用仅藏回滚入口","默认安装",'<span class="tgl on"></span>',True)}
+    {mrow("linear-gradient(160deg,#FFC54D,#FF7A00)","pkg","Tita / Apollo 部署连接器","release_provider + craft · 发布适配","官方预装",'<span class="tgl on" style="opacity:.45;pointer-events:none"></span>')}
+    {mrow("linear-gradient(160deg,#5AA0FF,#1F6FFF)","branch","GitLab 代码源连接器","code_source · PR/MR 与 diff 同步","官方预装",'<span class="tgl on" style="opacity:.45;pointer-events:none"></span>')}
+    {mrow("linear-gradient(160deg,#60A5FA,#4F46E5)","link","Jira 工单源连接器","ticket_source · 鉴权归「设置 → 连接器」","官方预装",'<span class="tgl on" style="opacity:.45;pointer-events:none"></span>')}
     {mrow("linear-gradient(155deg,#5E8BFF,#8B5CF6)","spark","Pi 修复引擎","runtimes 核心默认 · 多模型","核心默认",'<span class="tgl on" style="opacity:.45;pointer-events:none"></span>')}
   </div>
   <div class="gh" style="padding:10px 6px 4px">可安装<span>3</span><em>PC 端安装</em></div>
@@ -812,7 +813,7 @@ BOARDS = {
     "evidence": ("移动端 · 证据与发布", [(m_evidence, "证据", "用途、查阅状态、验证记录"), (m_error, "报错", "失败步骤 + 原文 + AI 解读"), (m_release, "发布到测试", "关掉 App 也能接着看进度")]),
     "release": ("移动端 · 发布", [(m_tkrelease, "工单 · 发布", "工单里的第 5 个标签，同一份发布详情"), (m_waittest, "等复测", "测试人本人看到通过 / 打回"), (m_prod, "发布到正式", "三项前置齐了才能点")]),
     "rollback": ("移动端 · 大包与紧急回滚", [(m_bundle, "大包明细", "部分完成，从失败处重试"), (m_rb_preview, "紧急回滚", "看差异，本人确认"), (m_rb_result, "回滚结果", "请求、回读、业务验证分开")]),
-    "notify": ("移动端 · 通知", [(m_lock, "锁屏推送", "说清哪张单、什么事，点开直达"), (m_notify, "通知设置", "每人自己的，两项关不掉"), (m_dnd, "免打扰与设备", "免打扰、设备、点开去哪")]),
+    "notify": ("移动端 · 通知", [(m_lock, "锁屏推送", "说清哪张单、什么事，点开直达"), (m_notify, "通知设置", "核心发布失败锁定，插件告警随装随锁"), (m_dnd, "免打扰与设备", "免打扰、设备、点开去哪")]),
     "empty": ("移动端 · 空状态", [(m_empty_tk, "工单 · 还没收到单", "Bot 在等单，收单条件和采集状态"), (m_empty_pub, "发布 · 还没有发布", "审核通过后才有；配置没填先提醒"), (m_empty_ai, "AI 助手 · 第一次打开", "点一句就能问")]),
     "empty2": ("移动端 · 空状态二", [(m_empty_search, "搜索没有结果", "说清在哪没找到，去全部里找"), (m_empty_sk, "Skills · 我的还没有", "新建、导入、复制内置"), (m_empty_rb, "紧急回滚 · 没有上一次", "只发布过一次，没得回")]),
     "rules": ("移动端 · 审核与排队", [(m_approve, "审核通过 · 有未测项", "勾「我知道有未测项」才能通过"), (m_queue, "工单 · 排队中", "前面是谁、预计几点开始"), (m_tester, "发测试 · 换测试人", "提单人找不到时必须选一个")]),
