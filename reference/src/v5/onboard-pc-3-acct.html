@@ -1,0 +1,193 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>第一次使用 · 添加复现账号</title>
+<link rel="stylesheet" href="../v3/base.css"><link rel="stylesheet" href="../v4/apple.css"><link rel="stylesheet" href="pc.css">
+<script>(function(){var q=new URLSearchParams(location.search);if(q.get('mode')==='dark')document.documentElement.classList.add('dark')})()</script>
+<style>
+.root{display:block;background:var(--wall)}
+.top{position:absolute;left:32px;right:32px;top:22px;display:flex;align-items:center;gap:12px}
+.wz{position:absolute;left:120px;right:120px;top:80px;bottom:36px;border-radius:var(--r-panel);display:flex;overflow:hidden}
+.sl{width:300px;flex:none;padding:26px 24px 22px;border-right:1px solid var(--hair);background:color-mix(in srgb,var(--text) 2.5%,transparent);display:flex;flex-direction:column}
+.st2{display:flex;gap:13px;position:relative;padding-bottom:20px}
+.st2:not(:last-child)::after{content:"";position:absolute;left:12.5px;top:28px;bottom:3px;width:1.5px;background:var(--hair)}
+.st2.done::after{background:color-mix(in srgb,var(--green) 55%,transparent)}
+.sc2{width:26px;height:26px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:800}
+.done .sc2{background:var(--green);color:#fff}
+.cur .sc2{background:var(--btn-pri-bg);color:#fff;box-shadow:0 0 0 5px color-mix(in srgb,var(--blue) 20%,transparent)}
+.todo .sc2{border:1.5px solid color-mix(in srgb,var(--text) 22%,transparent);color:var(--text-3)}
+.st2 b{display:block;font-size:14.5px;font-weight:600;line-height:26px}
+.todo b{color:var(--text-2);font-weight:500}
+.cur b{color:var(--ink-blue);font-weight:700}
+.st2 em{display:block;font-style:normal;font-size:12px;color:var(--text-3);margin-top:1px;line-height:1.45}
+.done em{color:var(--text-2)}
+.skip .sc2{background:var(--fill);color:var(--text-3)}
+.skip b{color:var(--text-2);font-weight:500}
+.st2.skip::after{background:color-mix(in srgb,var(--green) 55%,transparent)}
+.why{border-radius:14px;padding:12px 13px;background:color-mix(in srgb,var(--purple) 7%,var(--fill));border:1px solid color-mix(in srgb,var(--purple) 18%,transparent);font-size:12px;line-height:1.55;color:var(--text-2);margin-bottom:18px}
+.why .wh{display:flex;align-items:center;gap:6px;font-weight:700;color:var(--text);margin-bottom:5px;font-size:12.5px}
+.fm{flex:1;min-width:0;display:flex;flex-direction:column}
+.fb{flex:1;padding:26px 36px 0;min-height:0;overflow:hidden;display:flex;flex-direction:column}
+.ff{display:flex;align-items:center;gap:12px;padding:16px 36px;border-top:1px solid var(--hair)}
+.lab{font-size:13.5px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.lab span{font-weight:400;font-size:12px;color:var(--text-3)}
+.inp{height:var(--ctl-lg);border-radius:var(--r-lg);background:var(--well);border:1px solid var(--hair);display:flex;align-items:center;gap:10px;padding:0 13px;font-size:14px;color:var(--text);min-width:0}
+.inp>i{color:var(--text-3)}
+.inp.focus{background:var(--glass-2);border-color:var(--focus-ring);box-shadow:0 0 0 3px var(--focus-halo)}
+.dots{letter-spacing:3px;font-size:15px}
+.okt{display:inline-flex;align-items:center;gap:5px;color:var(--ink-green);font-size:12.5px;font-weight:600;white-space:nowrap}
+.ing{display:inline-flex;align-items:center;gap:7px;color:var(--ink-blue);font-size:12.5px;font-weight:600;white-space:nowrap}
+.spin{width:13px;height:13px;border-radius:50%;border:2px solid color-mix(in srgb,var(--blue) 25%,transparent);border-top-color:var(--ink-blue);flex:none}
+.rt{display:grid;grid-template-columns:140px 1fr 160px 128px 116px;gap:8px 10px;align-items:center}
+.au{background:transparent;border:1px dashed color-mix(in srgb,var(--text) 16%,transparent);color:var(--text-2)}
+.aut{flex:none;font-size:11px;font-weight:600;color:var(--ink-purple);background:color-mix(in srgb,var(--purple) 12%,transparent);height:20px;padding:0 6px;border-radius:6px;display:inline-flex;align-items:center}
+.cr{gap:8px;padding:0 10px;font-size:13px}
+.crt{flex:none;height:20px;padding:0 6px;border-radius:6px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;background:color-mix(in srgb,var(--text) 8%,transparent);color:var(--text-2)}
+.cr-x{border-color:color-mix(in srgb,var(--orange) 70%,transparent);color:var(--ink-orange)}
+.wnt{color:var(--ink-orange);font-size:12.5px;font-weight:600;white-space:nowrap}
+.pm{font-size:13px;gap:7px;padding:0 10px;background:var(--glass-2);border:1px solid var(--border-ctl);box-shadow:var(--shadow-ctl)}
+.pm-e{color:var(--ink-green);font-weight:600}.pm-e>i:first-child{color:var(--ink-green)}
+.pm-v{color:var(--ink-blue);font-weight:600}.pm-v>i:first-child{color:var(--ink-blue)}
+.pm-l{color:var(--text-3);background:transparent;border:1px solid var(--hair);box-shadow:none}
+.rt .inp{height:var(--ctl-md);border-radius:var(--r-md)}
+.rsel{font-weight:600;font-size:13.5px;padding:0 10px 0 12px;background:var(--glass-2);border:1px solid var(--border-ctl);box-shadow:var(--shadow-ctl)}
+.rh{font-size:12px;color:var(--text-3);padding:0 2px 6px}
+.envs{display:grid;grid-template-columns:1fr 1fr 1fr 120px;gap:10px}
+.env{border-radius:14px;padding:11px 13px;background:var(--fill);border:1.5px solid transparent;min-width:0}
+.env b{font-size:14px}
+.env.on{background:var(--glass-2);border-color:var(--blue);box-shadow:0 6px 16px -10px color-mix(in srgb,var(--blue) 70%,transparent)}
+.env.add{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-size:13px;color:var(--text-3);background:transparent;border:1.5px dashed color-mix(in srgb,var(--text) 18%,transparent)}
+.bigb{height:var(--ctl-lg);border-radius:var(--r-lg);border:0;font-size:14px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 20px;white-space:nowrap}
+.pri{background:var(--btn-pri-bg);color:#fff;box-shadow:0 10px 22px -10px color-mix(in srgb,var(--btn-pri-bg) 85%,transparent)}
+.secb{background:var(--fill);color:var(--text)}
+.note{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;color:var(--text-2);line-height:1.5;padding:9px 13px;border-radius:13px;background:color-mix(in srgb,var(--blue) 7%,transparent)}
+.pbar{height:4px;border-radius:2px;background:var(--well);overflow:hidden}
+.pbar i{display:block;height:100%;border-radius:2px;background:linear-gradient(90deg,var(--blue),var(--purple))}
+</style></head><body><div class="root">
+<div class="top">
+  <img src="logo.svg" width="40" height="40" alt="" style="margin:-4px">
+  <span class="tt"><b>云匠</b><em>CloudCraft</em></span>
+  <span class="grow"></span>
+  <span class="f13 t2">稍后再填，先进入工作台 ›</span>
+</div>
+<div class="wz glass">
+  <aside class="sl">
+    <div class="f12 t3">第一次使用</div>
+    <div style="font-size:21px;font-weight:800;margin-top:4px">接入工具与权限</div>
+    <div class="f12 t2" style="margin-top:6px;line-height:1.55">只填 AI 猜不出的鉴权与权限边界，<br>其余由 Bot 自动探测与匹配</div>
+    <div style="margin-top:22px"><div class="st2 done"><span class="sc2"><i data-i="check" data-s="14" data-w="3"></i></span><div><b>连接器与鉴权</b><em>GitLab · GitHub · 本机 · Jira</em></div></div><div class="st2 done"><span class="sc2"><i data-i="check" data-s="14" data-w="3"></i></span><div><b>授权项目与代码</b><em>2 可修改 · 2 仅查看</em></div></div><div class="st2 cur"><span class="sc2">3</span><div><b>环境与账号</b><em>复现入口与数据权限 · 可跳过</em></div></div><div class="st2 todo"><span class="sc2">4</span><div><b>AI 体检并开工</b><em>试拉取与构建，通过即开干</em></div></div></div>
+    <div class="grow"></div>
+    <div class="why"><div class="wh"><i data-i="shield" data-s="13" style="color:var(--ink-purple)"></i>为什么还要配环境账号？</div>分支与构建命令 AI 能自动推测，但业务系统的登录凭证和「正式环境能否改数据」涉及安全红线，必须由你明示授权。</div>
+    <div class="row f12 t3" style="margin-bottom:8px"><span class="grow">第 3 步，共 4 步</span><span>已完成 2 步</span></div>
+    <div class="pbar"><i style="width:75%"></i></div>
+  </aside>
+  <section class="fm">
+    <div class="fb">
+      <div class="row g10">
+        <div class="grow"><div class="f12" style="color:var(--ink-blue);font-weight:700">第 3 步 · 环境与账号</div>
+          <div style="font-size:24px;font-weight:800;margin-top:5px">Bot 在哪儿复现、用谁的身份登录</div>
+          <div class="f13 t2" style="margin-top:5px">工单在哪个环境发现的，Bot 就去哪个环境按数据权限复现；纯代码修复可先跳过</div></div>
+        <span class="chip2" style="align-self:flex-start"><i data-i="spark" data-s="13" style="color:var(--ink-purple)"></i>不知道填什么？问 AI</span>
+      </div>
+
+      <div style="margin-top:18px">
+        <div class="lab">环境<span>按需添加测试、联调或正式入口；纯代码逻辑修复可先跳过这一步</span></div>
+        <div class="envs"><div class="env"><div class="row g6"><b>测试环境</b><span class="tag tg-b">测试</span><span class="grow"></span><span class="okt"><i data-i="check" data-s="14" data-w="3"></i>能打开</span></div>
+            <div class="mono f12 t2 ell" style="margin-top:6px">test.tita.work/okr</div><div class="f12 t3" style="margin-top:3px">版本 2.31.0 · 4 个账号</div></div><div class="env"><div class="row g6"><b>联调环境</b><span class="tag tg-b">测试</span><span class="grow"></span><span class="okt"><i data-i="check" data-s="14" data-w="3"></i>能打开</span></div>
+            <div class="mono f12 t2 ell" style="margin-top:6px">dev.tita.work/okr</div><div class="f12 t3" style="margin-top:3px">版本 2.32.0-beta · 2 个账号</div></div><div class="env on"><div class="row g6"><b>正式环境</b><span class="tag tg-o">线上</span><span class="grow"></span><span class="okt"><i data-i="check" data-s="14" data-w="3"></i>能打开</span></div>
+            <div class="mono f12 t2 ell" style="margin-top:6px">www.tita.com/okr</div><div class="f12 t3" style="margin-top:3px">版本 2.30.4 · 3 个账号</div></div><div class="env add"><i data-i="plus" data-s="18"></i>添加环境</div></div>
+        <div class="note" style="margin-top:10px;padding:8px 12px"><i data-i="git" data-s="15" style="color:var(--ink-blue);margin-top:1px"></i><span><b>复现与复测规则：</b>测试 Bug 去测试环境复现；线上单去正式环境按账号数据权限复现；改完统一在测试环境做浏览器复测。</span></div>
+      </div>
+
+      <div style="margin-top:16px">
+        <div class="lab">正式环境的账号<span>Bot 严格按每个账号的数据权限操作 · Cookie 过期会自动提醒更新</span></div>
+        <div class="rt"><div class="rh">角色</div><div class="rh">账号</div><div class="rh">密码 / Cookie</div><div class="rh">数据权限</div><div class="rh">Bot 实测</div><div class="inp rsel"><span class="grow ell">普通员工</span><i data-i="chevd" data-s="13"></i></div>
+<div class="inp"><i data-i="user" data-s="15"></i><span class="grow ell">qa_prod01</span></div>
+<div class="inp cr"><span class="crt">密码</span><span class="dots grow">••••••</span></div>
+<div><div class="inp pm pm-e"><i data-i="edit" data-s="15"></i><span class="grow">可以修改</span><i data-i="chevd" data-s="13"></i></div></div>
+<div><span class="okt"><i data-i="check" data-s="14" data-w="3"></i>登录成功</span></div><div class="inp rsel"><span class="grow ell">OKR 管理员</span><i data-i="chevd" data-s="13"></i></div>
+<div class="inp au"><i data-i="user" data-s="15"></i><span class="grow ell t3">更新 Cookie 后识别</span></div>
+<div class="inp cr cr-x"><span class="crt">Cookie</span><span class="grow">已过期</span></div>
+<div><div class="inp pm pm-v"><i data-i="eye" data-s="15"></i><span class="grow">只能查看</span><i data-i="chevd" data-s="13"></i></div></div>
+<div><span class="wnt">已过期 · 去更新</span></div><div class="inp rsel"><span class="grow ell">普通员工</span><i data-i="chevd" data-s="13"></i></div>
+<div class="inp au"><i data-i="user" data-s="15"></i><span class="grow ell">王敏 · 示范科技</span><span class="aut">Bot 识别</span></div>
+<div class="inp cr"><span class="crt">Cookie</span><span class="grow ell">至 11-23</span></div>
+<div><div class="inp pm pm-v"><i data-i="eye" data-s="15"></i><span class="grow">只能查看</span><i data-i="chevd" data-s="13"></i></div></div>
+<div><span class="okt"><i data-i="check" data-s="14" data-w="3"></i>登录成功</span></div></div>
+        <div class="row g16" style="margin-top:10px"><span class="f13 lnk grow">+ 添加账号</span>
+          <span class="row g6 f12 t3"><i data-i="eye" data-s="14" style="color:var(--ink-blue)"></i><b class="t2">只能查看</b>只看页面，不点保存、提交、删除</span>
+          <span class="row g6 f12 t3"><i data-i="edit" data-s="14" style="color:var(--ink-green)"></i><b class="t2">可以修改</b>能新增、编辑这个账号的数据</span></div>
+      </div>
+
+      <div class="note" style="margin-top:auto;margin-bottom:14px;background:var(--fill)"><i data-i="msgq" data-s="15" style="color:var(--text-3);margin-top:1px"></i><span><b>测试数据不用这里填：</b>由每张工单自己提供。工单里写的账号必须在这里登记过 Bot 才会登录；没登记的会停下来提醒你补录。</span></div>
+    </div>
+    <div class="ff"><button class="bigb secb"><i data-i="chevl" data-s="16" data-w="2.4"></i>上一步</button><span class="grow"></span><span class="f13 t3" style="margin-right:6px">这一步先跳过</span><button class="bigb pri">下一步：AI 体检并开工<i data-i="chevr" data-s="16" data-w="2.4"></i></button></div>
+  </section>
+</div>
+<style>
+.flab{font-size:12px;font-weight:600;color:var(--text-2);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.dsel{height:var(--ctl-md);border-radius:var(--r-md);background:var(--glass-2);border:1px solid var(--border-ctl);box-shadow:var(--shadow-ctl);display:flex;align-items:center;gap:8px;padding:0 12px;font-size:13px;font-weight:600;color:var(--text);min-width:0}
+.dinp{height:var(--ctl-md);border-radius:var(--r-md);background:var(--well);border:1px solid var(--hair);display:flex;align-items:center;gap:8px;padding:0 12px;font-size:13px;color:var(--text);min-width:0}
+.tsec{border-radius:15px;padding:13px 15px;background:var(--fill);display:flex;flex-direction:column;gap:10px}
+.permcard{flex:1;border-radius:13px;padding:11px 13px;border:1.5px solid var(--hair);background:var(--glass-2);display:flex;flex-direction:column;gap:5px;min-width:0}
+.permcard.on-b{border-color:var(--blue);background:color-mix(in srgb,var(--blue) 9%,var(--glass-2));box-shadow:0 6px 16px -10px color-mix(in srgb,var(--blue) 55%,transparent)}
+.ckbox{border-radius:12px;padding:10px 12px;background:var(--glass-2);border:1px solid var(--focus-ring);box-shadow:0 0 0 3px var(--focus-halo);font-size:12px;line-height:1.6;color:var(--text);overflow-wrap:anywhere}
+</style>
+<div class="cc-scrim"></div>
+<div class="cc-drawer" style="width:580px">
+  <div class="cc-drawer-hd">
+    <span class="ic-box" style="width:38px;height:38px;border-radius:11px;background:linear-gradient(155deg,#5AA0FF,#1F6FFF)"><i data-i="user" data-s="18"></i></span>
+    <div class="grow" style="min-width:0">
+      <div class="row g8"><span style="font-size:17px;font-weight:800">添加复现账号 / 环境入口</span><span class="cc-tag cc-tag-b">Bot 试登录</span></div>
+      <div class="f12 t3 ell" style="margin-top:2px">凭据加密存储，展示与 AI 上下文引用前自动脱敏</div>
+    </div>
+    <span class="cc-close"><i data-i="x" data-s="16" data-w="2.2"></i></span>
+  </div>
+  <div class="cc-drawer-bd" style="gap:13px">
+    <div class="tsec">
+      <div class="row g10">
+        <div class="grow">
+          <div class="flab">所属环境<span class="lnk f11" style="margin-left:auto">+ 新增环境入口</span></div>
+          <div class="dsel"><span class="tag tg-o" style="height:19px;font-size:10.5px">正式</span><span class="grow ell">正式环境 · www.tita.com/okr</span><i data-i="chevd" data-s="13" style="color:var(--text-3)"></i></div>
+        </div>
+        <div style="width:176px;flex:none">
+          <div class="flab">对应角色</div>
+          <div class="dsel"><span class="grow">普通员工</span><i data-i="chevd" data-s="13" style="color:var(--text-3)"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tsec">
+      <div class="row">
+        <div class="flab" style="margin:0">登录方式与凭据</div>
+        <div class="grow"></div>
+        <div class="cc-seg cc-seg-sm"><span>账号密码</span><span class="on">Cookie（免填账号名）</span></div>
+      </div>
+      <div>
+        <div class="flab">粘贴浏览器 Cookie<span class="f11 t3" style="font-weight:400">支持 Header 原始串或 JSON</span></div>
+        <div class="ckbox mono">SESSION=6f2c9a…e81b; tita_uid=882041; tita_tenant=shifan; Path=/; Expires=Sun, 23 Nov 2026</div>
+      </div>
+      <div class="row g8 f12 t2" style="padding:8px 10px;border-radius:10px;background:var(--glass-2)">
+        <i data-i="spark" data-s="14" style="color:var(--ink-purple)"></i>
+        <span class="grow">填 Cookie 不用手动填写姓名，点「试登录」后 Bot 自动识别当前身份并在过期前 3 天提醒续期</span>
+      </div>
+    </div>
+
+    <div class="tsec">
+      <div class="flab" style="margin:0">数据权限<span class="f11 t3" style="font-weight:400">正式环境默认选中「只能查看」，避免误动线上真实数据</span></div>
+      <div class="row g10">
+        <div class="permcard on-b">
+          <div class="row g6"><span style="color:var(--ink-blue)"><i data-i="eye" data-s="15"></i></span><b class="f13" style="color:var(--ink-blue)">只能查看（推荐）</b><span class="grow"></span><span class="cc-radio is-checked"></span></div>
+          <div class="f12 t2" style="line-height:1.5">只看页面与截图复现；交互守卫拦截点击保存、提交、删除，不误阻查询接口。</div>
+        </div>
+        <div class="permcard">
+          <div class="row g6"><span style="color:var(--ink-green)"><i data-i="edit" data-s="15"></i></span><b class="f13">可以修改</b><span class="grow"></span><span class="cc-radio"></span></div>
+          <div class="f12 t3" style="line-height:1.5">允许新增与编辑数据；正式环境仅建议用于已隔离的测试/沙箱账号。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="cc-drawer-ft">
+    <button class="cc-btn cc-btn-lg cc-btn-sec">取消</button>
+    <span class="grow"></span>
+    <button class="cc-btn cc-btn-lg cc-btn-glass"><i data-i="zap" data-s="14"></i>保存前试登录</button>
+    <button class="cc-btn cc-btn-lg cc-btn-pri"><i data-i="check" data-s="14" data-w="2.6"></i>保存并识别账号</button>
+  </div>
+</div></div><script src="icons.js"></script></body></html>

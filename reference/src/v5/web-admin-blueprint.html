@@ -1,0 +1,119 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>企业管理后台（Web /admin 蓝图）</title>
+<link rel="stylesheet" href="../v3/base.css"><link rel="stylesheet" href="../v4/apple.css"><link rel="stylesheet" href="pc.css">
+<script>(function(){var q=new URLSearchParams(location.search);if(q.get('mode')==='dark')document.documentElement.classList.add('dark')})()</script>
+<style>
+.root{background:var(--wall);padding:18px;display:flex;flex-direction:column;gap:12px}
+.bwin{flex:1;min-height:0;border-radius:22px;display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--stroke)}
+.bbar{height:48px;padding:0 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--hair);background:color-mix(in srgb,var(--glass-2) 78%,transparent)}
+.dots{display:flex;gap:7px}.dots i{width:11px;height:11px;border-radius:50%;display:block}
+.urlbox{height:30px;padding:0 12px;border-radius:9px;background:var(--well);border:1px solid var(--hair);display:flex;align-items:center;gap:8px;min-width:340px;font-size:12px;color:var(--text-2)}
+.wbody{flex:1;min-height:0;display:flex}
+.wside{width:254px;flex:none;border-right:1px solid var(--hair);padding:16px 12px;display:flex;flex-direction:column;gap:4px;background:color-mix(in srgb,var(--text) 2%,transparent)}
+.wnav{height:38px;padding:0 10px;border-radius:10px;display:flex;align-items:center;gap:9px;font-size:13px;color:var(--text-2);font-weight:500}
+.wnav.on{background:color-mix(in srgb,var(--blue) 14%,transparent);color:var(--ink-blue);font-weight:700}
+.wmain{flex:1;min-width:0;padding:18px 22px;display:flex;flex-direction:column;gap:14px;overflow:hidden}
+.wgrid{flex:1;min-height:0;display:grid;grid-template-columns:1.02fr 1.18fr;gap:14px}
+.wcard{border-radius:16px;padding:14px 16px;background:var(--glass-2);border:1px solid var(--stroke);display:flex;flex-direction:column;gap:10px;min-height:0}
+.tnode{display:flex;align-items:center;gap:7px;height:30px;padding:0 9px;border-radius:8px;font-size:12.5px}
+.tnode.on{background:color-mix(in srgb,var(--blue) 13%,transparent);color:var(--ink-blue);font-weight:700}
+</style></head><body><div class="root">
+  <div class="bwin glass">
+    <div class="bbar">
+      <div class="dots"><i style="background:#FF5F57"></i><i style="background:#FEBC2E"></i><i style="background:#28C840"></i></div>
+      <div class="urlbox"><span class="dot" style="width:7px;height:7px;background:var(--green)"></span><span class="mono">https://craft.company.com/admin/org-tree</span><span class="tag tg-g" style="height:18px;font-size:10px;margin-left:auto">同源 Cookie + CSRF</span></div>
+      <span class="pill" style="height:26px;padding:0 12px;border-radius:13px;background:color-mix(in srgb,var(--purple) 14%,transparent);color:var(--ink-purple);font-size:11.5px;font-weight:700"><i data-i="layers" data-s="12"></i>M2/M3 企业管理后台（Web /admin · 二期架构蓝图，不混入 M1 桌面设置主栏）</span>
+      <span class="grow"></span>
+      <span class="f12 lnk w6" style="white-space:nowrap">返回桌面工作台 ↗</span>
+    </div>
+    <div class="wbody">
+      <aside class="wside">
+        <div class="row g10" style="padding:4px 6px 12px;border-bottom:1px solid var(--hair);margin-bottom:6px">
+          <span class="ic-box" style="width:32px;height:32px;border-radius:9px;background:linear-gradient(155deg,#3478F6,#5B21B6)"><i data-i="shield" data-s="16" data-w="2"></i></span>
+          <div class="col"><span class="f13 w7">星辰研发中心</span><span class="f11 t3">enterprise-web · /admin</span></div>
+        </div>
+        <div class="wnav on"><i data-i="users" data-s="15"></i><span class="grow ell">多级组织架构树与同步</span><span class="f11 t3 mono">48</span></div><div class="wnav"><i data-i="shield" data-s="15"></i><span class="grow ell">企业域名验证与 SSO</span><span class="f11 t3 mono">2</span></div><div class="wnav"><i data-i="lock" data-s="15"></i><span class="grow ell">角色策略（Allow / Deny）</span><span class="f11 t3 mono">7</span></div><div class="wnav"><i data-i="layers" data-s="15"></i><span class="grow ell">级联配置与安全锁定</span><span class="f11 t3 mono">scoped</span></div><div class="wnav"><i data-i="zap" data-s="15"></i><span class="grow ell">配额账单与安全审计</span><span class="f11 t3 mono">export</span></div>
+        <span class="grow"></span>
+        <div class="card" style="padding:10px 11px;gap:4px">
+          <div class="f11 w7">工程分层红线</div>
+          <div class="f11 t2" style="line-height:1.5">独立 Vite SPA（<span class="mono">apps/web</span>），复用 <span class="mono">packages/ui-kit + admin-ui</span>；经 URL Fragment <span class="mono">#token=...</span> + <span class="mono">POST /exchange</span> 交接。</div>
+        </div>
+      </aside>
+      <main class="wmain"><div class="row g10">
+      <div class="col grow">
+        <div class="row g8"><span class="f20 w7">组织治理与多级安全中心</span><span class="tag tg-p">企业蓝图 M2 / M3</span></div>
+        <div class="f12 t3" style="margin-top:2px">集团多事业部（<span class="mono">organizations</span>）· 飞书 SCIM 组织同步 · 企业域名可信发现 · 非密钥级联配置与安全审计导出</div>
+      </div>
+      <button class="cc-btn cc-btn-sm cc-btn-glass"><i data-i="refresh" data-s="13"></i>立即同步飞书通讯录</button>
+      <button class="cc-btn cc-btn-sm cc-btn-pri"><i data-i="plus" data-s="13" data-w="2.4"></i>新建子节点</button>
+    </div>
+    <div class="wgrid">
+      <div class="wcard">
+        <div class="row g8">
+          <span class="f14 w7 grow">多级组织架构树（<span class="mono">org_units.path</span>）</span>
+          <span class="tag tg-g">飞书 SCIM 已接入 · 12 分钟前</span>
+        </div>
+        <div class="col g4" style="padding:8px;border-radius:12px;background:var(--well);border:1px solid var(--hair);flex:1">
+          <div class="tnode w7"><i data-i="chevd" data-s="12"></i><span>云匠集团（Organization）</span><span class="mono f11 t3" style="margin-left:auto">48 人</span></div>
+          <div class="tnode" style="padding-left:22px;font-weight:600"><i data-i="chevd" data-s="12"></i><span>星辰研发中心</span><span class="tag tg-n" style="height:17px;font-size:10px;margin-left:auto">scim_feishu</span></div>
+          <div class="tnode" style="padding-left:40px"><i data-i="layers" data-s="12"></i><span>基础架构与安全部</span><span class="f11 t3" style="margin-left:auto">10 人</span></div>
+          <div class="tnode on" style="padding-left:40px"><i data-i="layers" data-s="12"></i><span>业务产研 · OKR 与审批</span><span class="f11" style="margin-left:auto;color:var(--ink-blue)">22 人</span></div>
+          <div class="tnode" style="padding-left:60px"><i data-i="users" data-s="12"></i><span>OKR 前端一组（主部门）</span><span class="f11 t3" style="margin-left:auto">6 人</span></div>
+          <div class="tnode" style="padding-left:60px"><i data-i="users" data-s="12"></i><span>审批重构虚线借调组</span><span class="tag tg-b" style="height:17px;font-size:10px;margin-left:auto">expires 12/31</span></div>
+          <div class="tnode" style="padding-left:40px"><i data-i="layers" data-s="12"></i><span>外包协作专项池（Guest）</span><span class="tag tg-o" style="height:17px;font-size:10px;margin-left:auto">Fail-Closed</span></div>
+          <div class="tnode" style="padding-left:22px"><i data-i="chevd" data-s="12"></i><span>商业化事业部（独立工作空间）</span><span class="f11 t3" style="margin-left:auto">16 人</span></div>
+        </div>
+        <div class="f11 t3" style="line-height:1.5">树节点写操作加 <span class="mono">pg_advisory_xact_lock('org_tree:'||ws_id)</span> 防并发成环；SCIM 与手工节点均标注来源与外部 ID。</div>
+      </div>
+
+      <div class="col g12" style="min-height:0">
+        <div class="wcard" style="padding:12px 14px;gap:8px">
+          <div class="row g8">
+            <span class="f14 w7 grow">企业域名验证与 SAML / 飞书自动入驻（防孤岛二层）</span>
+            <span class="tag tg-g">DNS TXT 已验证</span>
+          </div>
+          <div class="row g10" style="padding:8px 10px;border-radius:10px;background:var(--well)">
+            <span class="mono f12 w7">company.com</span>
+            <span class="tag tg-b">SAML 2.0 + 飞书 OIDC</span>
+            <span class="f11 t2 grow ell">新注册同事验证后直接提示加入星辰研发中心，告别孤岛</span>
+            <span class="cc-switch on"></span>
+          </div>
+        </div>
+
+        <div class="wcard" style="padding:12px 14px;gap:8px">
+          <div class="row g8">
+            <span class="f14 w7 grow">非密钥级联配置（<span class="mono">scoped_configs</span>）与锁定键</span>
+            <span class="tag tg-r">4 项硬锁定 locked_keys</span>
+          </div>
+          <div class="row g10" style="padding:7px 10px;border-radius:10px;background:var(--fill)">
+            <span class="f12 w6 grow">1. <span class="mono">safety_policies</span>（L2 禁移动端速过 / 管理员禁代审）</span>
+            <span class="tag tg-r" style="height:18px;font-size:10px">MONOTONIC_TIGHTEN</span>
+          </div>
+          <div class="row g10" style="padding:7px 10px;border-radius:10px;background:var(--fill)">
+            <span class="f12 w6 grow">2. <span class="mono">ai_settings</span> 网关令牌与个人 PAT / Apollo PROD</span>
+            <span class="tag tg-n" style="height:18px;font-size:10px">物理隔离 · 禁级联覆盖</span>
+          </div>
+        </div>
+
+        <div class="wcard" style="padding:12px 14px;gap:8px;flex:1">
+          <div class="row g8">
+            <span class="f14 w7 grow">按部门成本归集 &amp; 防篡改安全审计流（<span class="mono">events</span>）</span>
+            <span class="lnk f11 w6">导出合规 CSV ›</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+            <div class="card" style="padding:8px 10px"><div class="f11 t3">OKR 产研（快照部门）</div><div class="f14 w7" style="margin-top:2px">$142.8 · 38 单</div></div>
+            <div class="card" style="padding:8px 10px"><div class="f11 t3">基础架构部</div><div class="f14 w7" style="margin-top:2px">$68.4 · 19 单</div></div>
+            <div class="card" style="padding:8px 10px"><div class="f11 t3">安全审计事件</div><div class="f14 w7" style="color:var(--ink-green);margin-top:2px">防篡改触发器开启</div></div>
+          </div>
+          <div class="row g8 f11 t2" style="padding:6px 8px;border-radius:8px;background:var(--well)">
+            <span class="tag tg-r" style="height:17px;font-size:10px">security_audit</span>
+            <span class="mono">15:02</span>
+            <span class="grow ell">林某 将 宋工 设为外包 Guest（Fail-Closed）并完成赵磊待审单移交</span>
+            <span class="tag tg-n" style="height:17px;font-size:10px">仅管理员</span>
+          </div>
+        </div>
+      </div>
+    </div></main>
+    </div>
+  </div>
+</div>
+<script src="icons.js"></script></body></html>

@@ -92,21 +92,22 @@ pc_login_card = f'''<div class="card glass" style="width:430px;padding:34px 38px
   <div class="f12 t3" style="margin-top:12px;text-align:center">私有部署可在设置中切换「开放注册 / 仅邀请注册」</div>
 </div>'''
 
-pc_register_card = f'''<div class="card glass" style="width:430px;padding:34px 38px 28px;align-items:stretch">
+pc_register_card = f'''<div class="card glass" style="width:440px;padding:28px 36px 24px;align-items:stretch">
   <div style="display:flex;flex-direction:column;align-items:center">
-    <img src="logo.svg" width="96" height="96" alt="" style="margin:-8px 0 -4px">
-    <div class="nm" style="font-size:26px">云匠</div>
-    <div class="sub" style="font-size:12px;margin-top:6px">CloudCraft</div>
+    <img src="logo.svg" width="84" height="84" alt="" style="margin:-6px 0 -4px">
+    <div class="nm" style="font-size:24px">云匠</div>
+    <div class="sub" style="font-size:11.5px;margin-top:4px">CloudCraft</div>
   </div>
-  <div style="margin-top:24px">{seg('up')}</div>
-  <div style="margin-top:16px"><div class="lab">邮箱</div><div class="inp">{MAIL}<span class="grow">alex@studio.dev</span></div></div>
-  <div style="margin-top:12px"><div class="lab">邮箱验证码</div><div class="inp focus">{SHIELD}<span class="grow mono" style="letter-spacing:2px;font-weight:600">482 910</span><span class="cbtn sent">58s 后重发</span></div></div>
-  <div style="display:grid;grid-template-columns:1fr 1.25fr;gap:10px;margin-top:12px">
+  <div style="margin-top:18px">{seg('up')}</div>
+  <div style="margin-top:14px"><div class="lab">工作邮箱</div><div class="inp">{MAIL}<span class="grow">alex@company.com</span></div></div>
+  <div style="margin-top:10px"><div class="lab">邮箱验证码 <span class="f11 t3" style="margin-left:auto;font-weight:400">验证后自动查待加入邀请，防孤岛</span></div><div class="inp focus">{SHIELD}<span class="grow mono" style="letter-spacing:2px;font-weight:600">482 910</span><span class="cbtn sent">58s 后重发</span></div></div>
+  <div style="display:grid;grid-template-columns:1fr 1.25fr;gap:10px;margin-top:10px">
     <div><div class="lab">昵称</div><div class="inp">{USER}<span class="grow">Alex</span></div></div>
     <div><div class="lab">设置密码</div><div class="inp">{LOCK}<span class="grow t3" style="font-size:13px">8 位以上字母数字</span></div></div>
   </div>
-  <button class="btnL pri" style="margin-top:18px">创建云匠账号</button>
-  <div class="f12 t3" style="margin-top:12px;text-align:center">注册即同意服务条款与隐私政策</div>
+  <div style="margin-top:10px"><div class="lab">工作空间 / 团队名称 <span class="f11 t3" style="margin-left:auto;font-weight:400">个人使用可留空</span></div><div class="inp"><i data-i="layers" data-s="15" style="color:var(--text-3)"></i><span class="grow t3" style="font-size:13px">如：星辰前端团队（个人留空自动建个人空间）</span></div></div>
+  <button class="btnL pri" style="margin-top:16px">下一步 · 验证并入驻</button>
+  <div class="f12 t3" style="margin-top:10px;text-align:center">注册即同意服务条款与隐私政策 · 绝不前置公开企业列表</div>
 </div>'''
 
 

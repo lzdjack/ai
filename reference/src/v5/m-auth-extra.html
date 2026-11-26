@@ -1,0 +1,132 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>移动端 · 重设密码与邀请</title>
+<link rel="stylesheet" href="../v3/base.css"><link rel="stylesheet" href="../v4/apple.css"><link rel="stylesheet" href="m.css">
+<script>(function(){var q=new URLSearchParams(location.search);var h=document.documentElement;if(q.get('mode')==='dark')h.classList.add('dark');h.classList.add('s-'+(q.get('s')||'def'))})()</script>
+<style>
+.aura{position:absolute;border-radius:50%;background:conic-gradient(from 210deg,#4F8BFF,#9B5CFF,#FF5FA8,#FFB14A,#4FD1FF,#4F8BFF);filter:blur(70px);opacity:.36}
+html.dark .aura{opacity:.46}
+.ring{position:absolute;border-radius:50%;border:1px solid color-mix(in srgb,var(--text) 7%,transparent)}
+.nm{font-family:"Hiragino Sans GB","PingFang SC",sans-serif;font-weight:600;letter-spacing:2.4px;color:var(--text)}
+.sub{font-family:"Optima","Avenir Next",sans-serif;letter-spacing:3.2px;text-transform:uppercase;font-weight:700;background:linear-gradient(90deg,#3B6FE8,#7C4DDB);-webkit-background-clip:text;-webkit-text-fill-color:transparent;opacity:.88}
+html.dark .sub{background:var(--brand-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;opacity:.92}
+.pri{background:var(--btn-pri-bg);color:#fff;box-shadow:0 12px 26px -10px color-mix(in srgb,var(--btn-pri-bg) 85%,transparent)}
+.sec{background:var(--fill);color:var(--text)}
+.lnk{color:var(--ink-blue);font-weight:600}
+.pill{display:inline-flex;align-items:center;gap:7px;height:28px;padding:0 13px;border-radius:var(--r-full);font-size:12px;font-weight:600;color:var(--text-2);box-shadow:none!important}
+.lab{font-size:12px;font-weight:600;color:var(--text-2);margin:0 0 6px 2px;display:flex;align-items:center;gap:6px}
+.inp{height:var(--ctl-lg);border-radius:var(--r-lg);background:var(--well);border:1px solid var(--hair);display:flex;align-items:center;gap:10px;padding:0 14px;font-size:14px;color:var(--text)}
+.inp>i,.inp>svg{color:var(--text-3);flex:none}
+.inp.focus{background:var(--glass-2);border-color:var(--focus-ring);box-shadow:0 0 0 3px var(--focus-halo)}
+.inp.ro{background:color-mix(in srgb,var(--text) 3.5%,transparent);border-color:var(--hair)}
+.dots{letter-spacing:3px;font-size:15px}
+.cbtn{height:28px;padding:0 10px;border-radius:var(--r-sm);background:var(--glass-2);border:1px solid var(--border-ctl);font-size:12px;font-weight:600;color:var(--ink-blue);display:inline-flex;align-items:center;white-space:nowrap;position:relative}
+.cbtn.sent{color:var(--text-3)}
+.ctxbox{border-radius:16px;padding:12px 14px;background:color-mix(in srgb,var(--blue) 7%,var(--glass-2));border:1px solid color-mix(in srgb,var(--blue) 22%,transparent)}
+
+.mid{position:absolute;left:0;right:0;display:flex;flex-direction:column;align-items:center}
+.pad2{position:absolute;left:20px;right:20px}
+.inp{height:var(--m-input-h);font-size:14.5px}
+.bigbtn{width:100%;height:var(--m-btn-h);border-radius:15px;border:0;font-size:15.5px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px}
+.cbtn::before{content:"";position:absolute;inset:-8px -4px;min-height:var(--m-touch)}
+.bk{display:inline-flex;align-items:center;gap:2px;color:var(--ink-blue);font-size:15px;font-weight:500;min-height:var(--m-touch);white-space:nowrap}
+</style></head><body><div class="board">
+<div class="col3"><div class="phone"><div class="scr"><div class="sbar"><span>9:41</span><span class="sbi"><svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M8 2.2c2.4 0 4.6.9 6.2 2.5l1.2-1.2A10.4 10.4 0 0 0 8 .5 10.4 10.4 0 0 0 .6 3.5l1.2 1.2A8.7 8.7 0 0 1 8 2.2zm0 3.4c1.5 0 2.8.6 3.8 1.5L13 5.9a7 7 0 0 0-10 0l1.2 1.2c1-.9 2.3-1.5 3.8-1.5zM8 9l2-2a2.9 2.9 0 0 0-4 0z"/></svg><svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="17" height="8" rx="2" fill="currentColor"/><rect x="23.5" y="4" width="1.5" height="4" rx=".75" fill="currentColor" opacity=".4"/></svg></span></div>
+<div class="pad2" style="top:54px">
+  <div class="row" style="min-height:var(--m-nav-h)">
+    <span class="bk"><i data-i="chevl" data-s="20"></i>登录</span>
+    <span class="grow"></span>
+    <span class="f12 t3">邮箱重置</span>
+  </div>
+  <div style="margin-top:10px;display:flex;flex-direction:column;align-items:center">
+    <img src="logo.svg" width="68" height="68" alt="">
+    <div style="font-size:21px;font-weight:800;margin-top:2px">重置登录密码</div>
+    <div class="f13 t2" style="margin-top:4px">验证注册邮箱后重设，自动下线旧会话</div>
+  </div>
+  <div style="margin-top:20px">
+    <div class="lab">注册邮箱</div>
+    <div class="inp"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><span class="grow">lin.x@company.com</span></div>
+  </div>
+  <div style="margin-top:12px">
+    <div class="lab">6 位邮箱验证码</div>
+    <div class="inp focus"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 5-3.5 8-7 9-3.5-1-7-4-7-9V6l7-3z"/><path d="M9.5 12l1.8 1.8 3.2-3.6"/></svg><span class="grow mono" style="letter-spacing:2px;font-weight:700">482 910</span><span class="cbtn sent">58s</span></div>
+  </div>
+  <div style="margin-top:12px">
+    <div class="lab">新密码</div>
+    <div class="inp"><i data-i="lock" data-s="17"></i><span class="dots grow">••••••••••</span><i data-i="eye" data-s="17" style="color:var(--text-3)"></i></div>
+  </div>
+  <div style="margin-top:12px">
+    <div class="lab">确认新密码</div>
+    <div class="inp"><i data-i="lock" data-s="17"></i><span class="dots grow">••••••••••</span><i data-i="eye" data-s="17" style="color:var(--text-3)"></i></div>
+  </div>
+  <div class="row g6 f12" style="margin-top:10px;color:var(--ink-green);font-weight:600">
+    <i data-i="check" data-s="13" data-w="2.8"></i><span>8 位以上字母与数字，两次一致</span>
+  </div>
+</div>
+<div class="pad2" style="bottom:48px">
+  <button class="bigbtn pri">确认重设并登录</button>
+  <div class="f12 t3" style="text-align:center;margin-top:10px">无邮件服务？可由管理员生成一次性重设链接</div>
+</div><div class="home"></div></div></div><div class="lbl">重置密码<em>邮箱验证码 + 设新密</em></div></div>
+<div class="col3"><div class="phone"><div class="scr"><div class="sbar"><span>9:41</span><span class="sbi"><svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M8 2.2c2.4 0 4.6.9 6.2 2.5l1.2-1.2A10.4 10.4 0 0 0 8 .5 10.4 10.4 0 0 0 .6 3.5l1.2 1.2A8.7 8.7 0 0 1 8 2.2zm0 3.4c1.5 0 2.8.6 3.8 1.5L13 5.9a7 7 0 0 0-10 0l1.2 1.2c1-.9 2.3-1.5 3.8-1.5zM8 9l2-2a2.9 2.9 0 0 0-4 0z"/></svg><svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="17" height="8" rx="2" fill="currentColor"/><rect x="23.5" y="4" width="1.5" height="4" rx=".75" fill="currentColor" opacity=".4"/></svg></span></div>
+<div class="aura" style="width:120px;height:120px;left:134px;top:68px"></div>
+<div class="pad2" style="top:54px">
+  <div class="row" style="min-height:var(--m-nav-h)">
+    <span class="tg" style="height:22px;font-size:11px;color:var(--ink-blue);background:color-mix(in srgb,var(--blue) 12%,transparent)">免 SMTP 一次性邀请</span>
+    <span class="grow"></span>
+    <span class="f13 lnk" style="min-height:var(--m-touch);display:inline-flex;align-items:center">去登录</span>
+  </div>
+  <div style="margin-top:6px;display:flex;flex-direction:column;align-items:center">
+    <img src="logo.svg" width="68" height="68" alt="" style="position:relative">
+    <div style="font-size:21px;font-weight:800;margin-top:2px">设密并加入工作空间</div>
+    <div class="f12 t3 mono" style="margin-top:3px">cc.intra/join/9f2a4c8d</div>
+  </div>
+  <div class="ctxbox" style="margin-top:16px">
+    <div class="row g10">
+      <span class="av2" style="width:36px;height:36px;font-size:14px;background:linear-gradient(160deg,#FFC9A8,#F08F7A);color:#5A2414">林</span>
+      <div class="grow" style="min-width:0">
+        <div class="f13 w6 ell">林某 邀请你加入「云匠」</div>
+        <div class="f12 t2" style="margin-top:2px">成员 · 已关联 Tita / Jira 身份</div>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:14px">
+    <div class="lab">分配邮箱</div>
+    <div class="inp ro"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><span class="grow">lin.x@company.com</span></div>
+  </div>
+  <div style="margin-top:12px">
+    <div class="lab">设置登录密码</div>
+    <div class="inp focus"><i data-i="lock" data-s="17"></i><span class="dots grow">••••••••••</span><i data-i="eye" data-s="17" style="color:var(--text-3)"></i></div>
+  </div>
+  <div style="margin-top:12px">
+    <div class="lab">确认密码</div>
+    <div class="inp"><i data-i="lock" data-s="17"></i><span class="dots grow">••••••••••</span><i data-i="eye" data-s="17" style="color:var(--text-3)"></i></div>
+  </div>
+</div>
+<div class="pad2" style="bottom:48px">
+  <button class="bigbtn pri">设密并加入工作空间</button>
+  <div class="f12 t3" style="text-align:center;margin-top:10px">加入后自动同步管理员已配好的项目权限</div>
+</div><div class="home"></div></div></div><div class="lbl">免 SMTP 邀请加入<em>一次性链接设密进工作空间</em></div></div>
+<div class="col3"><div class="phone"><div class="scr"><div class="sbar"><span>9:41</span><span class="sbi"><svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M8 2.2c2.4 0 4.6.9 6.2 2.5l1.2-1.2A10.4 10.4 0 0 0 8 .5 10.4 10.4 0 0 0 .6 3.5l1.2 1.2A8.7 8.7 0 0 1 8 2.2zm0 3.4c1.5 0 2.8.6 3.8 1.5L13 5.9a7 7 0 0 0-10 0l1.2 1.2c1-.9 2.3-1.5 3.8-1.5zM8 9l2-2a2.9 2.9 0 0 0-4 0z"/></svg><svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="17" height="8" rx="2" fill="currentColor"/><rect x="23.5" y="4" width="1.5" height="4" rx=".75" fill="currentColor" opacity=".4"/></svg></span></div>
+<div class="pad2" style="top:54px">
+  <div class="row" style="min-height:var(--m-nav-h)">
+    <span class="bk"><i data-i="chevl" data-s="20"></i>登录</span>
+    <span class="grow"></span>
+    <span class="f12 t3">链接失效兜底</span>
+  </div>
+  <div style="margin-top:46px;display:flex;flex-direction:column;align-items:center;text-align:center">
+    <span style="width:68px;height:68px;border-radius:22px;background:color-mix(in srgb,var(--orange) 14%,var(--glass-2));border:1px solid color-mix(in srgb,var(--orange) 35%,transparent);display:flex;align-items:center;justify-content:center;color:var(--ink-orange)"><i data-i="alert" data-s="32" data-w="2"></i></span>
+    <div style="font-size:21px;font-weight:800;margin-top:16px">链接已使用或已过期</div>
+    <div class="f13 t2" style="margin-top:8px;line-height:1.55;max-width:296px">一次性邀请与重设密码链接仅首次设置有效，超过 24 小时或已绑定邮箱后将自动作废</div>
+  </div>
+  <div class="glass" style="border-radius:18px;padding:14px 16px;margin-top:26px">
+    <div class="row g8 f13 w6"><i data-i="link" data-s="15" style="color:var(--ink-blue)"></i><span class="mono f12 t2 ell">cc.intra/join/9f2a4c8d</span></div>
+    <div class="f12 t2" style="margin-top:10px;line-height:1.6">
+      <b style="color:var(--text)">接下来怎么办：</b><br>
+      1. 如果你已设置过密码，请直接用邮箱与密码登录；<br>
+      2. 若尚未激活，请管理员在 PC 端「设置 → 成员与身份」点击「重新复制一次性链接」。
+    </div>
+  </div>
+</div>
+<div class="pad2" style="bottom:48px">
+  <button class="bigbtn pri">返回邮箱登录</button>
+  <button class="bigbtn sec" style="margin-top:10px">联系工作空间管理员</button>
+</div><div class="home"></div></div></div><div class="lbl">链接失效兜底<em>已使用或超 24h 指引重发</em></div></div>
+</div><script src="icons.js"></script></body></html>

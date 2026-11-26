@@ -315,7 +315,7 @@ def m_settings():
     inner = f'''{nav("工单", "设置", "")}
 <div class="pad" style="height:714px;overflow:hidden;-webkit-mask-image:linear-gradient(180deg,#000 92%,transparent);mask-image:linear-gradient(180deg,#000 92%,transparent)">
   <div class="grp glass" style="margin-top:2px;padding:8px 12px;display:flex;align-items:center;gap:12px"><span class="me" style="width:40px;height:40px;font-size:15px">林</span><div class="col grow"><span class="f15 w7">林某</span><span class="f12 t3">云匠账号 · 审批项目管理员</span></div>{I("chevr",15,st="color:var(--text-3)")}</div>
-  <div class="gh" style="padding:10px 6px 4px">收单</div>
+  <div class="gh" style="padding:10px 6px 4px">收单（按已接入工单连接器）</div>
   <div class="grp glass">
     <div class="ir"><span class="sc sc-j">Jira</span><span class="grow">状态「AI修复」</span><em style="color:var(--ink-green);font-weight:600">2 分钟前</em></div>
     <div class="ir"><span class="sc sc-t">Tita</span><span class="grow">节点「AI干活」</span><em style="color:var(--ink-orange);font-weight:600">失败 · 重试中</em></div>
@@ -326,11 +326,11 @@ def m_settings():
     {ir("","linear-gradient(155deg,#34D399,#0284C7)","插件市场","已装 4",raw=MKT_SVG_SM)}
     {ir("link","linear-gradient(160deg,#38BDF8,#2563EB)","连接器","5 个 · 1 过期")}
     {ir("layers","linear-gradient(160deg,#5AA0FF,#1F6FFF)","项目","OKR 差 1 项")}
-    {ir("users","linear-gradient(160deg,#5EDB7A,#28B04F)","成员与身份","",'1')}
+    {ir("users","linear-gradient(160deg,#5EDB7A,#28B04F)","组织、角色与身份","",'1')}
   </div>
   <div class="gh" style="padding:10px 6px 4px">我自己</div>
   <div class="grp glass">
-    {ir("key","linear-gradient(160deg,#FFC15A,#F08A00)","我的账号与凭据","GitLab、Apollo")}
+    {ir("key","linear-gradient(160deg,#FFC15A,#F08A00)","我的账号与外观","动态凭据与语言")}
     {ir("bell","linear-gradient(160deg,#FF8A7A,#E0281E)","通知","免打扰 22:00")}
     <div class="ir"><span class="ii" style="background:linear-gradient(160deg,#A9AEB8,#6E737D)">{I("monitor",15,2)}</span><span class="grow">执行器状态</span><em style="color:var(--ink-green);font-weight:600">本机在线</em></div>
   </div>
@@ -551,8 +551,8 @@ def m_empty_pub():
   <div class="row g6" style="justify-content:center;margin-top:16px">{chips}</div>
   <div class="card2" style="margin-top:22px;display:flex;align-items:center;gap:12px;background:color-mix(in srgb,var(--orange) 12%,transparent);border-color:transparent">
     {I("alert",18,st="color:var(--ink-orange);flex:none")}
-    <div class="col grow" style="min-width:0;gap:2px"><span class="f14 w7">发布配置还没填</span><span class="f12 t2" style="line-height:1.5">开工时跳过了 · 不影响修单<br>发测试前要填好</span></div>
-    <span class="chip glass" style="color:var(--text);border:1px solid var(--border-ctl)">去填</span></div>
+    <div class="col grow" style="min-width:0;gap:2px"><span class="f14 w7">本项目发布参数还没填</span><span class="f12 t2" style="line-height:1.5">已装发布插件时可见 · 不影响修单<br>发测试前在项目设置里补好</span></div>
+    <span class="chip glass" style="color:var(--text);border:1px solid var(--border-ctl)">去配置</span></div>
 </div>{_tb0("pub", 32)}'''
     return phone(inner)
 
@@ -604,7 +604,7 @@ def m_empty_sk():
     <div class="f13 t2" style="margin-top:6px">Bot 现在只用平台内置的 4 条规则</div></div>
   <div class="row g8" style="margin-top:16px;align-items:stretch">
     {opt("plus","linear-gradient(160deg,#5AA0FF,#1F6FFF)","在线新建","从空白写<br>AI 帮你起草",True)}
-    {opt("download","linear-gradient(160deg,#B7BDC8,#8A92A0)","导入",".md · 粘贴<br>GitLab 链接")}
+    {opt("download","linear-gradient(160deg,#B7BDC8,#8A92A0)","导入",".md · 粘贴<br>代码仓链接")}
     {opt("copy","linear-gradient(160deg,#5EDB7A,#28B04F)","复制内置","改成自己<br>的版本")}
   </div>
   <div class="gh">平台内置<span>4</span></div>
@@ -719,16 +719,17 @@ def m_market_list():
     <span class="chip glass">已安装 4</span>
     <span class="chip glass">官方 5</span>
   </div>
-  <div class="gh" style="padding:12px 6px 6px">已安装<span>4</span><em>可随时启停</em></div>
+  <div class="gh" style="padding:10px 6px 4px">已安装<span>4</span><em>可随时启停</em></div>
   <div class="grp glass">
     {mrow("linear-gradient(160deg,#FF8A7A,#E0281E)","history","紧急回滚（Apollo）","回滚入口 · 差异预览与回退","默认安装",'<span class="tgl on"></span>',True)}
     {mrow("linear-gradient(160deg,#FFC54D,#FF7A00)","pkg","发布流水线（Tita）","构建发布 · 测试/正式双环境","默认安装",'<span class="tgl on"></span>')}
     {mrow("linear-gradient(160deg,#5AA0FF,#1F6FFF)","link","GitLab / Jira 连接器","鉴权实例归「设置 → 连接器」","官方预装",'<span class="tgl on" style="opacity:.45;pointer-events:none"></span>')}
+    {mrow("linear-gradient(155deg,#5E8BFF,#8B5CF6)","spark","Pi 修复引擎","runtimes 核心默认 · 多模型","核心默认",'<span class="tgl on" style="opacity:.45;pointer-events:none"></span>')}
   </div>
-  <div class="gh" style="padding:14px 6px 6px">可安装<span>3</span><em>PC 端安装</em></div>
+  <div class="gh" style="padding:10px 6px 4px">可安装<span>3</span><em>PC 端安装</em></div>
   <div class="grp glass">
     {mrow("linear-gradient(160deg,#34D399,#059669)","zap","Token 费用检测","顶栏预算微胶囊 · 插件设置阈值","","<em>PC 安装" + I("chevr",13) + "</em>")}
-    {mrow("linear-gradient(160deg,#C58BFF,#6A3DF0)","moon","高对比暗夜主题","themes 契约 · 归「外观与语言」","","<em>PC 安装" + I("chevr",13) + "</em>")}
+    {mrow("linear-gradient(160deg,#C58BFF,#6A3DF0)","moon","高对比暗夜主题","themes 契约 · 归「我的账号」","","<em>PC 安装" + I("chevr",13) + "</em>")}
     {mrow("linear-gradient(160deg,#64748B,#334155)","terminal","自定义 CLI / MCP 适配器","接入企业自研工具与连接器","","<em>PC 安装" + I("chevr",13) + "</em>")}
   </div>
   <div class="f12 t3" style="padding:10px 6px 0;line-height:1.55">手机端支持查看与启停，安装和详细配置请在 PC 端「插件市场」或「设置 → 连接器」完成。关闭「紧急回滚」后底部回滚入口自动隐藏。</div>
@@ -746,7 +747,7 @@ def m_market_detail():
       <span class="ii" style="width:50px;height:50px;border-radius:14px;background:linear-gradient(160deg,#FF8A7A,#FF453A 55%,#E0281E);display:flex;align-items:center;justify-content:center;color:#fff;flex:none;box-shadow:0 8px 18px -6px rgba(224,40,30,.55)">{I("history",24,2.2)}</span>
       <div class="col grow" style="min-width:0;gap:5px">
         <div class="f16 w7 ell">紧急回滚（Apollo）</div>
-        <div class="row g6"><span class="tag tg-b">官方</span><span class="tag tg-g">默认安装</span><span class="tag tg-n">v1.4.2</span></div>
+        <div class="row g6"><span class="tag tg-b">官方</span><span class="tag tg-g">默认安装</span><span class="tag tg-n">v1.2.0</span></div>
       </div>
     </div>
     <div class="f12 t2" style="margin-top:10px;line-height:1.55">对接 Apollo 配置中心，预览配置差异、执行一键回退并触发业务回读校验；鉴权实例归口「设置 → 连接器」。</div>
