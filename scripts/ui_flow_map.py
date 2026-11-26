@@ -301,10 +301,10 @@ JOURNEYS = [
                         note="复制微信/飞书中的邀请链接（cc.intra/join/...）或口令（#CC-8K4P-9M2X-Q7R5#）切回云匠即拦截弹出确认卡；支持 Deep Link（cloudcraft://join）直唤，消费或忽略后不重复打扰。",
                     ),
                     variant(
-                        "⑤ 顶栏空间切换 & 原地升级团队抽屉 (PC)",
+                        "⑤ 顶栏空间切换 · 通知铃铛 & 原地升级抽屉 (PC)",
                         "reference/images/pages/PC-顶栏空间切换与邀请抽屉",
                         pins=[pin(15.0, 2.0, 12.0, 3.0, "g_set_mem:0", "工作空间 ≥2 切换与原地升级", "ok")],
-                        note="仅当可用空间 ≥ 2 时在顶栏露出切换胶囊；支持原地把 personal 无损升级为团队 organization 空间。",
+                        note="仅当可用空间 ≥ 2 时在顶栏露出切换胶囊；头像旁 34px 铃铛承接跨端收件箱；支持原地把 personal 无损升级为团队 organization 空间。",
                     ),
                     variant(
                         "⑥ 邀请失效 / 邮箱不匹配 & 安全交接兜底 (PC)",
@@ -1055,10 +1055,10 @@ JOURNEYS = [
                         ] + _pc_dock_pins("mkt"),
                     ),
                     variant(
-                        "② 插件运行态与超限折叠规范",
+                        "② 插件运行态 · AI A2UI 与站内通知规范",
                         "reference/images/pages/PC-插件运行态规范",
                         pins=[],
-                        note="展示停用后历史快照只读、5s 超时隔离重试、Dock >4 / 顶栏 >2 折叠及个人空间无损保留。",
+                        note="展示停用后历史快照只读、5s 超时隔离重试、Dock >4 / 顶栏 >2 折叠、个人空间无损保留，以及插件 AI kv_card/L3 抽屉与 PROD 铃铛收件箱。",
                     ),
                 ],
             ),
@@ -1096,12 +1096,12 @@ JOURNEYS = [
                         ] + _pc_set_nav_pins("proj") + _pc_dock_pins("set"),
                     ),
                     variant(
-                        "② 流程模板与节点绑定 Skills（T-08b）",
+                        "② 流程模板与节点绑定 Skills（React Flow）",
                         "reference/images/pages/PC-设置-项目-流程模板",
                         pins=[
                             pin(34.0, 9.4, 5.5, 2.5, "g_set_proj:0", "切回「开工条件」", "info"),
                         ] + _pc_set_nav_pins("proj") + _pc_dock_pins("set"),
-                        note="4 套预设模板 + 增删改序 execution/delivery 节点 + 为单节点绑定专属 skill_ids[] 与工具范围，修改从下一轮生效。",
+                        note="4 套预设模板 + @xyflow/react 交互画布（增删连接线 / run_when 分支 / 退回弧）+ 为单节点绑定专属 skill_ids[] 与工具范围，修改从下一轮生效。",
                     ),
                 ],
             ),

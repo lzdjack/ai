@@ -21,13 +21,14 @@
     <div class="f12 w7" style="color:var(--ink-orange)">受控审计豁免说明（强制升 L2 · 禁手机速过）</div>
     <div class="f12 t2">如属已有历史类型债可填写理由豁免进入审核：<span class="mono">「仅修复兼容层，历史 DTO 类型另单追踪」</span></div>
   </div>
-  <div class="row g8" style="margin-top:auto"><button class="cc-btn cc-btn-sm cc-btn-sec">查看 Diff 与 3 次报错</button><span class="grow"></span><button class="cc-btn cc-btn-sm cc-btn-glass">填写理由审计豁免</button><button class="cc-btn cc-btn-sm cc-btn-pri">补充提示让 Bot 继续修</button></div></section></div><div class="et"><div class="el"><span class="no">2</span><b>我来接手 (human_takeover) · 受门禁交付</b><em>fence_token 防并发覆写 · 提交走 gate_check</em></div><section class="glass ep">
+  <div class="row g8" style="margin-top:auto"><button class="cc-btn cc-btn-sm cc-btn-sec">查看 Diff 与 3 次报错</button><span class="grow"></span><button class="cc-btn cc-btn-sm cc-btn-glass">填写理由审计豁免</button><button class="cc-btn cc-btn-sm cc-btn-pri">补充提示让 Bot 继续修</button></div></section></div><div class="et"><div class="el"><span class="no">2</span><b>我来接手 (human_takeover) · 受门禁交付</b><em>fence_token 防并发覆写 · 提交全节点可选（默认 gate_check）</em></div><section class="glass ep">
   <div class="row g8"><span class="tag tg-b">human_takeover 已接管</span><span class="mono f12 t3 grow">fix/TK-20840 · fence_token #4</span><span class="tag tg-g">Bot 已释放</span></div>
-  <div class="card" style="padding:10px 12px;gap:5px">
+  <div class="card" style="padding:9px 12px;gap:4px">
     <div class="f13 w7">本地继续修改并提交受门禁交付（self_delivery）</div>
-    <div class="f12 t2" style="line-height:1.55">① <span class="mono">git fetch && git checkout fix/TK-20840</span>（已保留 Bot 半成品 commit <span class="mono">7c2e1a9</span>）<br>② 本地推送最新提交后，点击下方提交人工交付——宿主机照常跑 <span class="mono">gate_check</span> 与 <span class="mono">L0~L2</span> 评定。</div>
+    <div class="f12 t2" style="line-height:1.5">① <span class="mono">git fetch && git checkout fix/TK-20840</span>（保留 Bot 半成品 <span class="mono">7c2e1a9</span>）<br>② 本地推送最新提交后选定接入节点——默认预选 <span class="mono">gate_check</span> 与 <span class="mono">L0~L2</span> 评定，下拉含全部流程节点。</div>
   </div>
-  <div class="row g8" style="margin-top:auto"><button class="cc-btn cc-btn-sm cc-btn-sec">放弃接手，退回 AI 重跑</button><span class="grow"></span><button class="cc-btn cc-btn-sm cc-btn-glass">本地 Dist 预览</button><button class="cc-btn cc-btn-sm cc-btn-pri"><i data-i="check" data-s="13" data-w="2.5"></i>提交人工交付（self_delivery）</button></div></section></div><div class="et"><div class="el"><span class="no">3</span><b>无代码改动结单 (no_code_fix)</b><em>阻断空分支进入代码审查与发布流</em></div><section class="glass ep">
+  <div class="row g8"><span class="f11 w6 t2">提交后接入节点：</span><div class="cc-select cc-select-xs grow"><span class="cc-sel-val">4 · 结构化交付与硬门禁</span><span class="cc-sel-sub">默认 · 下拉含全部节点</span><span class="cc-sel-caret"><i data-i="chevd" data-s="12"></i></span></div></div>
+  <div class="row g8" style="margin-top:auto"><button class="cc-btn cc-btn-sm cc-btn-sec">放弃接手，退回 AI 重跑</button><span class="grow"></span><button class="cc-btn cc-btn-sm cc-btn-glass">本地 Dist 预览</button><button class="cc-btn cc-btn-sm cc-btn-pri"><i data-i="check" data-s="13" data-w="2.5"></i>提交人工交付</button></div></section></div><div class="et"><div class="el"><span class="no">3</span><b>无代码改动结单 (no_code_fix)</b><em>阻断空分支进入代码审查与发布流</em></div><section class="glass ep">
   <div class="row g8"><span class="tag tg-p">AI 诊断结论 · 无需改代码</span><span class="mono f12 t3 grow">TK-20901 · Zero Diff</span><span class="tag tg-n">发布已阻断</span></div>
   <div class="card" style="padding:10px 12px;gap:6px">
     <div class="f13 w7">根因判定：测试环境第三方回调域名未加入配置白名单</div>

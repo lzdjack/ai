@@ -54,12 +54,12 @@ ARCH_SVG = """<figure class="diagram glass-sub">
 
   <rect x="228" y="294" width="144" height="62" rx="12" class="dg-box b-purple"/>
   <text x="300" y="321" text-anchor="middle" class="dg-t">对话助手</text>
-  <text x="300" y="340" text-anchor="middle" class="dg-s">全局 AI / 本单 AI</text>
+  <text x="300" y="340" text-anchor="middle" class="dg-s">MCP · HITL 确认卡</text>
 
   <!-- 中列：调度与采集 -->
   <rect x="394" y="60" width="128" height="58" rx="12" class="dg-box b-teal"/>
-  <text x="458" y="85" text-anchor="middle" class="dg-t">调度与排队</text>
-  <text x="458" y="103" text-anchor="middle" class="dg-s">P1 → 打回 → 先后</text>
+  <text x="458" y="85" text-anchor="middle" class="dg-t">调度与步进引擎</text>
+  <text x="458" y="103" text-anchor="middle" class="dg-s">PG 同事务 + pg-boss</text>
 
   <rect x="394" y="150" width="128" height="58" rx="12" class="dg-box b-orange"/>
   <text x="458" y="175" text-anchor="middle" class="dg-t">采集服务</text>
@@ -268,7 +268,7 @@ ER_SVG = """<figure class="diagram glass-sub">
 
   <rect x="670" y="56" width="124" height="58" rx="12" class="dg-box b-orange"/>
   <text x="732" y="77" text-anchor="middle" class="dg-t">release_tasks</text>
-  <text x="732" y="93" text-anchor="middle" class="dg-s">repo_id · env_code</text>
+  <text x="732" y="93" text-anchor="middle" class="dg-s">bundles · items DAG</text>
   <text x="732" y="106" text-anchor="middle" class="dg-s">ticket_node_runs[]</text>
 
   <rect x="816" y="54" width="118" height="44" rx="10" class="dg-box b-gray"/>
