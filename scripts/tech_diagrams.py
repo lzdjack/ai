@@ -137,7 +137,7 @@ ARCH_SVG = """<figure class="diagram glass-sub">
 
 
 ER_SVG = """<figure class="diagram glass-sub">
-<div class="diag-hd"><b>核心数据模型总图（ER 关系 · 含 M1 预留与统一软删回滚台账）</b><span>全库统一 workspace_id + deleted_at 软删；不可变 events 快照支撑数据回滚；核心状态机零污染</span></div>
+<div class="diag-hd"><b>核心数据模型总图（ER 关系 · 含 M1 预留与三轨软删操作底账）</b><span>全库统一 workspace_id + 9类配置 deleted_at；真只追加 events + operation_reverts</span></div>
 <div class="diag-body">
 <svg viewBox="0 0 960 412" width="100%" role="img" aria-label="数据模型总图">
   <defs>
@@ -250,8 +250,8 @@ ER_SVG = """<figure class="diagram glass-sub">
   <text x="551" y="334" text-anchor="middle" class="dg-s">role · 门禁 · Token</text>
 
   <rect x="488" y="352" width="126" height="36" rx="10" class="dg-box b-purple"/>
-  <text x="551" y="368" text-anchor="middle" class="dg-t">events（操作快照）</text>
-  <text x="551" y="381" text-anchor="middle" class="dg-s">deleted_at 软删 + 回滚</text>
+  <text x="551" y="368" text-anchor="middle" class="dg-t">events · op_reverts</text>
+  <text x="551" y="381" text-anchor="middle" class="dg-s">真只追加 · 三轨还原</text>
 
   <!-- triggers → tickets -->
   <path d="M274 275 L300 275 L300 178 L328 178" class="dg-ln l-blue" marker-end="url(#er-b)"/>

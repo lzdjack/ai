@@ -300,24 +300,24 @@ def build_project_workflow():
 
 
 # =====================================================================
-# 3b. PC-设置-操作记录与数据回滚（统一软删 + 快照差异 + 安全还原）
+# 3b. PC-设置-操作记录与数据回滚（三轨分治 · 真只追加 + 安全还原）
 # =====================================================================
 def build_operation_log():
     bg_main = f'''<main class="glass pn grow" style="min-width:0;opacity:.72">
 <header class="thead">
   <div class="row g10">
     <div class="col grow">
-      <div class="row g10"><h1>项目 · OKR</h1><span class="tag tg-g">已就绪</span></div>
-      <div class="f12 t3" style="margin-top:2px">设置左栏保持 8 项不变 · 任意核心配置页右上角与工单菜单均可通过「操作记录」追溯并恢复误删数据</div>
+      <div class="row g10"><h1>连接器</h1><span class="tag tg-g">已连通 5</span></div>
+      <div class="f12 t3" style="margin-top:2px">设置左栏保持 8 项不变 · 任意核心配置页右上角与工单菜单均可打开「操作记录」追溯与恢复误删</div>
     </div>
     <button class="cc-btn cc-btn-sm cc-btn-glass is-focus" style="border-color:var(--focus-ring);color:var(--ink-blue)">{I("history",13,2.2)}操作记录 · 可恢复 3</button>
   </div>
 </header>
 <div class="col g12 grow" style="padding:16px 22px">
-  <div class="card flat" style="padding:14px 16px"><div class="f13 w7">已接入仓库（2）</div><div class="f12 t3" style="margin-top:4px">fe/tita-okr-web（可修改） · service/okr-api（仅查看）</div></div>
+  <div class="card flat" style="padding:14px 16px"><div class="f13 w7">已启用代码源 / 工单源连接器（4）</div><div class="f12 t3" style="margin-top:4px">GitLab 主仓（正常） · Jira 产研（正常） · Tita 工单（令牌待续）</div></div>
   <div class="row g10" style="margin-top:auto;padding:9px 14px;border-radius:12px;background:var(--glass-elev);border:1px solid var(--stroke)">
     <span class="dt" style="width:7px;height:7px;border-radius:50%;background:var(--orange)"></span>
-    <span class="f12 t2 grow">刚才已将仓库 <span class="mono w6">okr-export-worker</span> 移入可恢复记录（默认保留 30 天）</span>
+    <span class="f12 t2 grow">刚才已将连接器 <span class="w6">GitLab 审批仓</span> 移入回收站（未销毁密文，保留 30 天）</span>
     <span class="lnk f12 w7">5 秒撤销 ›</span>
   </div>
 </div></main>'''
@@ -332,7 +332,7 @@ def build_operation_log():
 
     def diff_kv(k, before_v, cur_v, warn=False):
         cur_style = "color:var(--ink-red)" if warn else "color:var(--text-2)"
-        return f'''<div style="display:grid;grid-template-columns:92px 1fr 1fr;gap:8px;padding:7px 10px;border-top:1px solid var(--hair);font-size:11.5px;align-items:center">
+        return f'''<div style="display:grid;grid-template-columns:100px 1fr 1fr;gap:8px;padding:7px 10px;border-top:1px solid var(--hair);font-size:11.5px;align-items:center">
   <span class="t3">{k}</span>
   <span class="mono" style="color:var(--ink-green);background:color-mix(in srgb,var(--green) 8%,transparent);padding:2px 6px;border-radius:6px">{before_v}</span>
   <span class="mono" style="{cur_style};background:var(--well);padding:2px 6px;border-radius:6px">{cur_v}</span>
@@ -343,63 +343,63 @@ def build_operation_log():
   <div class="cc-drawer-hd">
     <span class="ic-box" style="width:36px;height:36px;border-radius:10px;background:linear-gradient(155deg,#6CC4FF,#1673FF)">{I("history",18,2.2)}</span>
     <div class="col grow">
-      <div class="row g8"><span class="f17 w7">操作记录与数据恢复</span><span class="tag tg-b">events 不可篡改底账</span></div>
-      <div class="f12 t3" style="margin-top:2px">业务删除默认走软删回收（保留周期可在空间设置配置）· 支持对比改前快照一键恢复，密文永不进快照</div>
+      <div class="row g8"><span class="f17 w7">操作记录与数据恢复</span><span class="tag tg-b">真只追加 events + operation_reverts</span></div>
+      <div class="f12 t3" style="margin-top:2px">9 类配置资源支持软删回收（周期可配）· 模板/Skill 走版本切换 · 令牌轮换与外部合并如实不可逆</div>
     </div>
     <span class="cc-close">{I("x",15,2.2)}</span>
   </div>
   <div class="cc-drawer-bd" style="gap:10px;padding:12px 18px">
     <div class="row g8">
-      <span class="cc-seg cc-seg-xs"><span>全部变更记录</span><span class="on">已删除 · 可恢复 (3)</span></span>
-      <span class="cc-select cc-select-xs" style="width:154px"><span class="cc-sel-val">全部对象类型</span><span class="cc-sel-caret">{I("chevd",11)}</span></span>
-      <span class="cc-select cc-select-xs" style="width:128px"><span class="cc-sel-val">来源: 界面 / AI</span><span class="cc-sel-caret">{I("chevd",11)}</span></span>
+      <span class="cc-seg cc-seg-xs"><span class="on">全部变更记录</span><span>已删除 · 可恢复 (3)</span></span>
+      <span class="cc-select cc-select-xs" style="width:auto;flex:none"><span class="cc-sel-val">授权范围</span><span class="cc-sel-caret">{I("chevd",11)}</span></span>
+      <span class="cc-select cc-select-xs" style="width:auto;flex:none"><span class="cc-sel-val">全部来源</span><span class="cc-sel-caret">{I("chevd",11)}</span></span>
       <span class="grow"></span>
-      <span class="f11 t3">保留策略：30 天软删 · 180 天记录</span>
+      <span class="f11 t3">可配周期：30 天软删 · 180 天底账</span>
     </div>
     <div class="row g12 grow" style="min-height:0;align-items:stretch">
-      <div class="col g8" style="width:296px;flex:none">
-        {op_row("1842", "软删", "tg-r", "仓库 fe/okr-export-worker", "陈某 · PC 界面 · 12 分钟前", "deleted_at 保护期剩余 29 天 · 可恢复", "t2", on=True)}
-        {op_row("1840", "修改", "tg-b", "流程模板 · 标准前端 v3 → v4", "林某 · AI 助手 confirm_card · 38 分钟前", "支持回退改前版（下一轮生效）")}
-        {op_row("1837", "修改", "tg-o", "连接器 · GitLab 令牌轮换", "林某 · PC 界面 · 2 小时前", "密文打码 ****7c2e · 未吊销可重连")}
-        {op_row("1831", "不可逆", "tg-n", "MR !318 已合入主干 main", "林某 · PC 界面 · 昨天 19:10", "已产生远端合并副作用 · 请发起 revert MR")}
-        <div class="f11 t3" style="margin-top:auto;padding:4px 2px">默认 0px 悬浮滚动加载更多历史（seq 倒序）…</div>
+      <div class="col g8" style="width:302px;flex:none">
+        {op_row("1842", "软删", "tg-r", "连接器 · GitLab 审批仓", "陈某 · PC 界面 · 12 分钟前", "移入回收站（密文未销毁）· 可无损恢复", "t2", on=True)}
+        {op_row("1840", "切版本", "tg-p", "流程模板 · 标准前端 v3 → v4", "林某 · AI 助手 confirm_card · 38 分钟前", "原生不可变版本 · 切回 v3 下一轮生效")}
+        {op_row("1837", "可还原", "tg-b", "环境 · staging 超时阈值", "林某 · PC 界面 · 2 小时前", "白名单扁平还原 · state_digest 锁并发")}
+        {op_row("1831", "不可逆", "tg-n", "GitLab 令牌轮换 · MR !318 合入", "林某 · PC 界面 · 昨天 19:10", "旧密文即时销毁 / 远端合入 · 仅审计留痕")}
+        <div class="f11 t3" style="margin-top:auto;padding:4px 2px">按当前态 RBAC 裁剪 · 默认 0px 悬浮滚动加载…</div>
       </div>
       <div class="col g10 grow" style="min-width:0">
         <div class="card" style="padding:12px 14px;gap:6px">
           <div class="row g8">
             <span class="tag tg-r">soft_delete</span>
-            <span class="f14 w7 grow">仓库 fe/okr-export-worker</span>
-            <span class="tag tg-g">可无损恢复 · 无键冲突</span>
+            <span class="f14 w7 grow">连接器 · GitLab 审批仓</span>
+            <span class="tag tg-g">无主键冲突 · 可恢复</span>
           </div>
-          <div class="f11 t3">操作人 陈某 · 设备 Mac-Work · 请求 <span class="mono">req_91a8</span> · 原因：误点移出项目仓库</div>
+          <div class="f11 t3">操作人 陈某 · 设备 Mac-Work · 请求 <span class="mono">req_91a8</span> · 策略：移入回收站（未销毁密文）</div>
         </div>
         <div class="card" style="padding:0;overflow:hidden">
-          <div style="display:grid;grid-template-columns:92px 1fr 1fr;gap:8px;padding:8px 10px;background:var(--well);font-size:11px;font-weight:700;color:var(--text-3)">
-            <span>字段</span><span>恢复目标态（改前 Before）</span><span>当前线上态（Current）</span>
+          <div style="display:grid;grid-template-columns:100px 1fr 1fr;gap:8px;padding:8px 10px;background:var(--well);font-size:11px;font-weight:700;color:var(--text-3)">
+            <span>字段</span><span>恢复目标态（Before）</span><span>当前线上态（Current）</span>
           </div>
-          {diff_kv("deleted_at", "NULL（正常启用）", "2026-11-26 13:08", warn=True)}
-          {diff_kv("仓库路径", "fe/okr-export-worker", "—")}
-          {diff_kv("读写权限", "read_write（可修改）", "—")}
-          {diff_kv("默认分支", "main · fix/okr/*", "—")}
-          {diff_kv("关联密文", "secret_91d0（打码 ****91d0）", "未物理擦除 · 自动重连")}
+          {diff_kv("配置状态", "正常启用", "已进回收站（剩余 29 天）", warn=True)}
+          {diff_kv("连接器地址", "gitlab.tita.work/approve", "—")}
+          {diff_kv("凭据类别", "code_source · workspace_secret", "—")}
+          {diff_kv("密文 secret_91d0", "clean（未受 Runner 吊销波及）", "回收站冻结 · 校验 clean 自动重连")}
+          {diff_kv("关联触发器", "2 条同批删除（同步恢复）", "暂停调度")}
         </div>
         <div class="card" style="padding:10px 12px;gap:6px;background:color-mix(in srgb,var(--blue) 7%,var(--glass-2));border-color:color-mix(in srgb,var(--blue) 24%,transparent)">
-          <div class="row g6">{I("shield",14,2.2,"color:var(--ink-blue)")}<span class="f12 w7" style="color:var(--ink-blue)">恢复护栏与防冲突契约</span></div>
-          <div class="f11 t2" style="line-height:1.6">
-            • 恢复时同事务校验 <span class="mono">ops_log:restore</span> + 目标实体写权（<span class="mono">personal_exec</span> 限本人）；<br>
-            • 若已新建同名活跃配置，将返回 <span class="mono">409 RESTORE_KEY_CONFLICT</span> 引导重命名或覆盖，绝不静默丢数。
+          <div class="row g6">{I("shield",14,2.2,"color:var(--ink-blue)")}<span class="f12 w7" style="color:var(--ink-blue)">三轨安全护栏（防越权 · 防 TOCTOU · 密文追踪）</span></div>
+          <div class="f11 t2" style="line-height:1.58">
+            • 提交强制校当前双权（<span class="mono">ops_log:restore</span> + 目标写权）与全态 <span class="mono">state_digest</span> 钉扎；<br>
+            • 删除若勾选「因泄露立即销毁密文」则恢复后标记 <span class="mono">needs_reauth</span>；<span class="mono">L2</span> 高危项禁 AI 直接确认还原。
           </div>
         </div>
       </div>
     </div>
   </div>
   <div class="cc-drawer-ft">
-    <span class="f11 t3 grow">执行后将写入反向新记录 #1843（支持再次撤销，工作流变更从下一轮生效）</span>
+    <span class="f11 t3 grow">执行后真只追加 events + operation_reverts（重名冲突走 409 重命名恢复，高危 L2 禁 AI 直接确认）</span>
     <button class="cc-btn cc-btn-md cc-btn-glass">取消</button>
     <button class="cc-btn cc-btn-md cc-btn-pri">{I("history",14,2.4)}恢复此条记录</button>
   </div>
 </aside>'''
-    return pc_shell("操作记录与数据回滚 · 云匠", "set", set_left("项目") + bg_main, overlay=drawer)
+    return pc_shell("操作记录与数据回滚 · 云匠", "set", set_left("连接器") + bg_main, overlay=drawer)
 
 
 # =====================================================================
