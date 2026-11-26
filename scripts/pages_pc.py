@@ -1141,8 +1141,8 @@ def p_members():
 </main>'''
     right = aside(
         f'''<div class="card" style="padding:12px 14px"><div class="row"><div class="mini grow" style="margin:0">免 SMTP 部门邀请</div><span class="tag tg-g">OKR 产研</span></div>
-  <div class="f12 t2" style="margin-top:6px;line-height:1.6">内网无邮件服务器时生成 24h 链接，预设部门、角色与项目，同事设密码即免孤岛入驻。</div>
-  <div class="row g6" style="margin-top:8px;padding:6px 8px;border-radius:var(--r-sm);background:var(--well);border:1px solid var(--hair)"><span class="mono f11 t2 ell grow">https://cc.intra/join/okr-9f2a</span><span class="lnk f11 w6" style="white-space:nowrap">复制</span></div></div>''',
+  <div class="f12 t2" style="margin-top:6px;line-height:1.6">生成 24h 链接与口令，同事点链接或整段复制进客户端即可自动识别免孤岛入驻。</div>
+  <div class="row g6" style="margin-top:8px;padding:6px 8px;border-radius:var(--r-sm);background:var(--well);border:1px solid var(--hair)"><span class="mono f11 t2 ell grow">cc.intra/join/okr-9f2a · #CC-7M9P#</span><span class="lnk f11 w6" style="white-space:nowrap">复制口令</span></div></div>''',
         f'''<div class="card" style="padding:12px 14px"><div class="mini">三层继承与红线</div>
   <div class="f12 t2" style="margin-top:6px;line-height:1.62">
     <b style="color:var(--text)">1. 工作空间</b>：AI 引擎、域名发现<br>

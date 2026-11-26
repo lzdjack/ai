@@ -698,7 +698,7 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
   </div>
   <div class="legend" id="pclegend"></div>
   <div class="card glass mt">
-    <h3>阶段一 · 启动、登录注册、执行环境（3 路径）与精简 4 步开工向导（23 张 · 按真实顺序 ① → ⑭）</h3>
+    <h3>阶段一 · 启动、登录注册、执行环境（3 路径）与精简 4 步开工向导（24 张 · 按真实顺序 ① → ⑭）</h3>
     <div class="gal">
       <figure><img class="img-l" src="reference/images/splash/PC-闪屏-亮色.png" alt="PC 闪屏"><img class="img-d" src="reference/images/splash/PC-闪屏-暗色.png" alt="PC 闪屏"><figcaption><b>① 启动 · PC 闪屏</b> · 图标 + 名称 + 真实加载步骤</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/PC-登录-亮色.png" alt="PC 登录 亮色"><img class="img-d" src="reference/images/pages/PC-登录-暗色.png" alt="PC 登录 暗色"><figcaption><b>② 登录</b> · 独立邮箱 + 密码登录，顶部分段切换登录 / 注册；GitLab / Jira / Tita 通过连接器接入</figcaption></figure>
@@ -706,6 +706,7 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
       <figure><img class="img-l" src="reference/images/pages/PC-邀请加入-亮色.png" alt="PC 邀请加入 亮色"><img class="img-d" src="reference/images/pages/PC-邀请加入-暗色.png" alt="PC 邀请加入 暗色"><figcaption><b>②b 免 SMTP 一次性邀请加入</b> · 点击设置→成员生成的一次性链接直接设密加入，自动继承管理员预关联的部门、角色与外部身份</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/PC-注册-亮色.png" alt="PC 注册 亮色"><img class="img-d" src="reference/images/pages/PC-注册-暗色.png" alt="PC 注册 暗色"><figcaption><b>③ 注册</b> · 邮箱 + 6 位验证码 + 选填工作空间/团队名称（不前置泄露企业列表）；验证后自动查待加入邀请防孤岛</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/PC-已注册成员确认加入-亮色.png" alt="PC 已注册成员确认加入 亮色"><img class="img-d" src="reference/images/pages/PC-已注册成员确认加入-暗色.png" alt="PC 已注册成员确认加入 暗色"><figcaption><b>③a 反孤岛 · 确认加入已有空间</b> · 验证 OTP 后检测到有效邀请或认证企业域名（M2/M3），直接入驻并继承部门默认配置</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/PC-剪贴板识别邀请-亮色.png" alt="PC 剪贴板识别邀请 亮色"><img class="img-d" src="reference/images/pages/PC-剪贴板识别邀请-暗色.png" alt="PC 剪贴板识别邀请 暗色"><figcaption><b>③b 剪贴板口令 / 链接智能识别</b> · 从微信/飞书复制邀请链接或 <code>#CC-7M9P#</code> 口令切回云匠自动拦截；兼容 Deep Link (<code>cloudcraft://join</code>) 直唤，消费或忽略后不重弹</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/PC-选择执行环境-亮色.png" alt="选择执行环境 亮色"><img class="img-d" src="reference/images/pages/PC-选择执行环境-暗色.png" alt="选择执行环境 暗色"><figcaption><b>④ 首次 · 选择执行环境</b> · 尚无在线执行器时三选一（本机电脑 / 自有与团队服务器 / 云端托管 Pro）；跳过后可随时在「设置 → 执行器」补配</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/PC-执行器初始化-亮色.png" alt="执行器初始化 亮色"><img class="img-d" src="reference/images/pages/PC-执行器初始化-暗色.png" alt="执行器初始化 暗色"><figcaption><b>⑤a 路径 A · 本机执行器初始化</b> · 水波纹星光 + 灵动岛单胶囊，优先零下载复用本机 Chrome，支持后台继续准备</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/PC-连接团队服务器-亮色.png" alt="连接团队服务器 亮色"><img class="img-d" src="reference/images/pages/PC-连接团队服务器-暗色.png" alt="连接团队服务器 暗色"><figcaption><b>⑤b 路径 B · 连接自有 / 团队服务器</b> · 节点命名 + 一键脚本 / Docker Compose + 15 分钟一次性令牌 + 纯出站 WSS 实时握手监听</figcaption></figure>
@@ -818,12 +819,13 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
   </div>
   <div class="legend" id="mlegend"></div>
   <div class="card glass mt">
-    <h3>组件库规范、启动、登录与步骤器（5 张）</h3>
+    <h3>组件库规范、启动、登录、剪贴板邀请与步骤器（6 张）</h3>
     <div class="gal" style="grid-template-columns:1fr">
       <figure><img class="img-l" src="reference/images/pages/移动端-组件库规范-亮色.png" alt="移动端组件库规范 亮色"><img class="img-d" src="reference/images/pages/移动端-组件库规范-暗色.png" alt="移动端组件库规范 暗色"><figcaption><b>移动端组件库规范（3 屏 · 3 路多 Agent 审定）</b> · 基础控件与 44–48pt 标尺 / 10 秒审核卡与 L2 高危锁 / Toast (z:70) 与 Bottom Sheet (z:40)</figcaption></figure>
       <figure><img class="img-l" src="reference/images/splash/移动端-闪屏-亮色.png" alt="移动端闪屏"><img class="img-d" src="reference/images/splash/移动端-闪屏-暗色.png" alt="移动端闪屏"><figcaption><b>移动端闪屏</b> · 启动 / 首次加载 / 从通知打开</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/移动端-登录-亮色.png" alt="移动端登录与注册 亮色"><img class="img-d" src="reference/images/pages/移动端-登录-暗色.png" alt="移动端登录与注册 暗色"><figcaption><b>移动端登录与注册（4 屏）</b> · 邮箱登录 / 邮箱注册（带验证码） / 密码错误 / 登录过期回到原工单</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/移动端-重设密码与邀请-亮色.png" alt="移动端重设密码与邀请 亮色"><img class="img-d" src="reference/images/pages/移动端-重设密码与邀请-暗色.png" alt="移动端重设密码与邀请 暗色"><figcaption><b>移动端重设密码与邀请（3 屏）</b> · 重置登录密码（邮箱验证码）/ 免 SMTP 一次性邀请设密加入 / 链接已使用或超 24h 失效兜底</figcaption></figure>
+      <figure><img class="img-l" src="reference/images/pages/移动端-剪贴板识别邀请-亮色.png" alt="移动端剪贴板识别邀请 亮色"><img class="img-d" src="reference/images/pages/移动端-剪贴板识别邀请-暗色.png" alt="移动端剪贴板识别邀请 暗色"><figcaption><b>移动端 · 剪贴板口令识别与多空间切换（3 屏）</b> · iOS Pattern 无感探测命中即弹确认 Sheet / 未登录直达设密加入 / 入驻后顶栏显露多空间切换并消费清空口令</figcaption></figure>
       <figure><img class="img-l" src="reference/images/pages/移动端-首次使用步骤器-亮色.png" alt="移动端步骤器 亮色"><img class="img-d" src="reference/images/pages/移动端-首次使用步骤器-暗色.png" alt="移动端步骤器 暗色"><figcaption><b>移动端步骤器（4 屏 · 精简 4 步）</b> · 步骤概览（连接器鉴权 → 授权项目代码 → 环境账号 → AI 体检）/ 环境与账号 / 添加账号（Cookie）/ AI 体检并开工</figcaption></figure>
     </div>
   </div>

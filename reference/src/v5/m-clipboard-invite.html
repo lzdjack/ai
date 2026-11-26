@@ -1,0 +1,158 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>移动端 · 剪贴板识别邀请</title>
+<link rel="stylesheet" href="../v3/base.css"><link rel="stylesheet" href="../v4/apple.css"><link rel="stylesheet" href="m.css">
+<script>(function(){var q=new URLSearchParams(location.search);if(q.get('mode')==='dark')document.documentElement.classList.add('dark')})()</script>
+<style>
+.aura{position:absolute;border-radius:50%;background:conic-gradient(from 210deg,#4F8BFF,#9B5CFF,#FF5FA8,#FFB14A,#4FD1FF,#4F8BFF);filter:blur(65px);opacity:.34}
+html.dark .aura{opacity:.44}
+.pad2{position:absolute;left:18px;right:18px}
+.inp{height:var(--m-input-h);border-radius:var(--r-lg);background:var(--well);border:1px solid var(--hair);display:flex;align-items:center;gap:10px;padding:0 14px;font-size:14.5px;color:var(--text)}
+.inp.focus{background:var(--glass-2);border-color:var(--focus-ring);box-shadow:0 0 0 3px var(--focus-halo)}
+.inp.ro{background:color-mix(in srgb,var(--text) 3.5%,transparent);border-color:var(--hair)}
+.lab{font-size:12px;font-weight:600;color:var(--text-2);margin:0 0 6px 2px;display:flex;align-items:center;gap:6px}
+.dots{letter-spacing:3px;font-size:15px}
+.bigbtn{width:100%;height:var(--m-btn-h);border-radius:15px;border:0;font-size:15.5px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px}
+.pri{background:var(--btn-pri-bg);color:#fff;box-shadow:0 12px 26px -10px color-mix(in srgb,var(--btn-pri-bg) 85%,transparent)}
+.sec{background:var(--fill);color:var(--text)}
+.ios-hint{
+  position:absolute;left:16px;right:16px;top:62px;z-index:calc(var(--z-drawer) + 1);
+  border-radius:16px;padding:9px 12px;background:var(--glass-overlay);
+  border:1px solid var(--stroke);backdrop-filter:var(--blur-panel);-webkit-backdrop-filter:var(--blur-panel);
+  box-shadow:var(--shadow-float);display:flex;align-items:center;gap:9px
+}
+.ws-pill{
+  display:inline-flex;align-items:center;gap:5px;height:30px;padding:0 10px;
+  border-radius:15px;background:var(--glass-2);border:1px solid var(--border-ctl);
+  font-size:12.5px;font-weight:700;color:var(--text);white-space:nowrap
+}
+.ws-pop{
+  position:relative;border-radius:18px;padding:8px;margin-top:8px;
+  background:var(--glass-overlay);border:1px solid var(--stroke);
+  box-shadow:var(--shadow-float)
+}
+</style></head><body><div class="board">
+<div class="col3"><div class="phone"><div class="scr"><div class="sbar"><span>9:41</span><span class="sbi"><svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M8 2.2c2.4 0 4.6.9 6.2 2.5l1.2-1.2A10.4 10.4 0 0 0 8 .5 10.4 10.4 0 0 0 .6 3.5l1.2 1.2A8.7 8.7 0 0 1 8 2.2zm0 3.4c1.5 0 2.8.6 3.8 1.5L13 5.9a7 7 0 0 0-10 0l1.2 1.2c1-.9 2.3-1.5 3.8-1.5zM8 9l2-2a2.9 2.9 0 0 0-4 0z"/></svg><svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="17" height="8" rx="2" fill="currentColor"/><rect x="23.5" y="4" width="1.5" height="4" rx=".75" fill="currentColor" opacity=".4"/></svg></span></div><div class="pad" style="padding-top:4px;opacity:.55">
+  <div class="row"><div class="grow"><div class="cap">个人工作空间</div><div class="lgt">工单</div></div><span class="me">A</span></div>
+  <div class="search glass"><i data-i="search" data-s="17"></i><span>搜索工单或改动...</span></div>
+  <div class="stats"><div class="stat glass on"><b>0</b><span>待我审核</span></div><div class="stat glass"><b>1</b><span>进行中</span></div><div class="stat glass"><b>0</b><span>已完成</span></div></div>
+  <div class="gh">我的个人单<span>1</span></div>
+  <div class="grp glass"><div class="lr on"><span class="av2" style="width:40px;height:40px;background:linear-gradient(150deg,#7FB2FF,#4C7DF0)">A<i style="background:var(--blue)"></i></span><div class="grow mn"><div class="row g6"><span class="lt ell grow">演示项目：表单校验遗漏</span></div><div class="row g6" style="margin-top:3px"><span class="sc sc-t">Tita</span><span class="ls ell" >Bot 修复中 · 54%</span></div><span class="pg"><i style="width:54%;background:var(--teal)"></i></span></div></div></div>
+</div><div class="scrim"></div>
+<div class="ios-hint">
+  <span style="width:28px;height:28px;border-radius:9px;background:color-mix(in srgb,var(--green) 16%,transparent);color:var(--ink-green);display:flex;align-items:center;justify-content:center;flex:none"><i data-i="shield" data-s="15" data-w="2.2"></i></span>
+  <div class="col grow" style="min-width:0">
+    <span class="f12 w7">无感 Pattern 探测命中邀请特征</span>
+    <span class="f11 t3 ell">iOS 16+ 仅命中规则才读，不骚扰系统「粘贴」弹窗</span>
+  </div>
+</div>
+<div class="sheet" style="padding:10px 18px 28px">
+  <div class="grab"></div>
+  <div class="row g8">
+    <span class="tag tg-b" style="height:22px"><i data-i="link" data-s="12" data-w="2.2"></i>剪贴板识别邀请</span>
+    <span class="tag tg-g" style="height:22px">23h 有效</span>
+    <span class="grow"></span>
+    <span class="f13 t3 w6" style="padding:4px 2px">忽略</span>
+  </div>
+  <div style="font-size:18px;font-weight:800;margin-top:8px">检测到「星辰研发中心」团队邀请</div>
+  <div class="f12 t2" style="margin-top:3px;line-height:1.45">同事 <b>林某</b> 邀请你加入，确认即同步项目环境、权限与 Skills。</div>
+
+  <div class="flat2" style="margin-top:10px;padding:9px 11px">
+    <div class="row f11 t3" style="margin-bottom:3px"><span>识别来源：微信/飞书复制</span><span class="grow"></span><span class="mono">#CC-7M9P#</span></div>
+    <div class="f12 mono ell" style="color:var(--ink-blue);font-weight:600">https://cc.intra/join/9f2a4c8d</div>
+  </div>
+
+  <div class="card2" style="margin-top:10px;padding:11px 13px;background:color-mix(in srgb,var(--blue) 7%,var(--glass-2));border-color:color-mix(in srgb,var(--blue) 26%,transparent)">
+    <div class="row g8">
+      <span style="width:32px;height:32px;border-radius:9px;background:linear-gradient(155deg,#5AA0FF,#1F6FFF);color:#fff;display:flex;align-items:center;justify-content:center;flex:none"><i data-i="users" data-s="16" data-w="2.2"></i></span>
+      <div class="col grow" style="min-width:0">
+        <div class="row g6"><span class="f14 w7">星辰研发中心</span><span class="tag tg-b" style="height:17px;font-size:10px">企业空间</span></div>
+        <span class="f11 t3">主部门：OKR 产研 · 角色：研发成员</span>
+      </div>
+    </div>
+    <div class="f11 w6" style="margin-top:8px;padding-top:7px;border-top:1px solid var(--hair);color:var(--ink-green)">继承：OKR(可改) · 审批(只读) · 共享连接器 · 3 Skills</div>
+  </div>
+
+  <button class="bigbtn pri" style="margin-top:12px"><i data-i="check" data-s="16" data-w="2.6"></i>确认加入团队空间</button>
+  <button class="bigbtn sec" style="margin-top:8px;height:42px;font-size:14px">忽略本次，不再重复识别此口令</button>
+  <div class="f11 t3" style="text-align:center;margin-top:8px">保留原有个人空间（可用空间 ≥ 2 自动解锁顶栏切换）</div>
+</div><div class="home"></div></div></div><div class="lbl">复制切回无感识别<em>Pattern 探测命中即弹确认卡</em></div></div>
+<div class="col3"><div class="phone"><div class="scr"><div class="sbar"><span>9:41</span><span class="sbi"><svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M8 2.2c2.4 0 4.6.9 6.2 2.5l1.2-1.2A10.4 10.4 0 0 0 8 .5 10.4 10.4 0 0 0 .6 3.5l1.2 1.2A8.7 8.7 0 0 1 8 2.2zm0 3.4c1.5 0 2.8.6 3.8 1.5L13 5.9a7 7 0 0 0-10 0l1.2 1.2c1-.9 2.3-1.5 3.8-1.5zM8 9l2-2a2.9 2.9 0 0 0-4 0z"/></svg><svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="17" height="8" rx="2" fill="currentColor"/><rect x="23.5" y="4" width="1.5" height="4" rx=".75" fill="currentColor" opacity=".4"/></svg></span></div><div class="aura" style="width:140px;height:140px;left:125px;top:60px"></div>
+<div class="pad2" style="top:54px">
+  <div class="row" style="min-height:var(--m-nav-h)">
+    <span class="tag tg-b" style="height:22px"><i data-i="link" data-s="12" data-w="2.2"></i>剪贴板自动识别邀请</span>
+    <span class="grow"></span>
+    <span class="f13 lnk w6" style="min-height:var(--m-touch);display:inline-flex;align-items:center">去登录</span>
+  </div>
+  <div style="margin-top:8px;display:flex;flex-direction:column;align-items:center;text-align:center">
+    <img src="logo.svg" width="64" height="64" alt="" style="position:relative">
+    <div style="font-size:20px;font-weight:800;margin-top:4px">设密并直接加入团队</div>
+    <div class="f12 t2" style="margin-top:3px">已从剪贴板识别邀请，免找入口直接入驻</div>
+  </div>
+
+  <div class="card2" style="margin-top:14px;padding:11px 13px;background:color-mix(in srgb,var(--blue) 7%,var(--glass-2));border-color:color-mix(in srgb,var(--blue) 26%,transparent)">
+    <div class="row g10">
+      <span class="av2" style="width:34px;height:34px;font-size:12px;background:linear-gradient(160deg,#FFC9A8,#F08F7A);color:#5A2414">林某</span>
+      <div class="col grow" style="min-width:0">
+        <span class="f13 w7 ell">林某 邀请你加入「星辰研发中心」</span>
+        <span class="f11 t2">OKR 产研 · 研发成员 · 继承默认环境</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:14px">
+    <div class="lab">分配邮箱<span class="tag tg-g" style="height:17px;font-size:10px;margin-left:auto">已锁定</span></div>
+    <div class="inp ro"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><span class="grow">alex@company.com</span></div>
+  </div>
+  <div style="margin-top:12px">
+    <div class="lab">设置登录密码</div>
+    <div class="inp focus"><i data-i="lock" data-s="17"></i><span class="dots grow">••••••••••</span><i data-i="eye" data-s="17" style="color:var(--text-3)"></i></div>
+  </div>
+  <div style="margin-top:12px">
+    <div class="lab">确认密码</div>
+    <div class="inp"><i data-i="lock" data-s="17"></i><span class="dots grow">••••••••••</span><i data-i="eye" data-s="17" style="color:var(--text-3)"></i></div>
+  </div>
+</div>
+<div class="pad2" style="bottom:40px">
+  <button class="bigbtn pri"><i data-i="check" data-s="16" data-w="2.6"></i>设密并加入「OKR 产研」</button>
+  <div class="f12 t3" style="text-align:center;margin-top:10px">已有账号？<span class="lnk w6">登录后直接确认加入 ›</span></div>
+</div><div class="home"></div></div></div><div class="lbl">未登录直达设密<em>免找入口 · 自动带入预填信息</em></div></div>
+<div class="col3"><div class="phone"><div class="scr"><div class="sbar"><span>9:41</span><span class="sbi"><svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M8 2.2c2.4 0 4.6.9 6.2 2.5l1.2-1.2A10.4 10.4 0 0 0 8 .5 10.4 10.4 0 0 0 .6 3.5l1.2 1.2A8.7 8.7 0 0 1 8 2.2zm0 3.4c1.5 0 2.8.6 3.8 1.5L13 5.9a7 7 0 0 0-10 0l1.2 1.2c1-.9 2.3-1.5 3.8-1.5zM8 9l2-2a2.9 2.9 0 0 0-4 0z"/></svg><svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="17" height="8" rx="2" fill="currentColor"/><rect x="23.5" y="4" width="1.5" height="4" rx=".75" fill="currentColor" opacity=".4"/></svg></span></div><div class="pad" style="padding-top:4px">
+  <div class="row g8">
+    <div class="ws-pill">
+      <span style="width:18px;height:18px;border-radius:5px;background:linear-gradient(155deg,#5AA0FF,#1F6FFF);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:800">星</span>
+      <span>星辰研发中心</span>
+      <i data-i="chevd" data-s="13" style="color:var(--text-3)"></i>
+    </div>
+    <span class="tag tg-b" style="height:22px">2 空间</span>
+    <span class="grow"></span>
+    <span class="me">A</span>
+  </div>
+
+  <div class="ws-pop">
+    <div class="row f11 t3" style="padding:2px 8px 6px"><span>切换工作空间（≥ 2 个空间自动显露）</span></div>
+    <div class="row g8" style="padding:8px 10px;border-radius:12px;background:color-mix(in srgb,var(--blue) 12%,transparent)">
+      <span style="width:26px;height:26px;border-radius:8px;background:linear-gradient(155deg,#5AA0FF,#1F6FFF);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">星</span>
+      <div class="col grow"><span class="f13 w7">星辰研发中心</span><span class="f11 t3">OKR 产研 · 企业空间</span></div>
+      <span style="color:var(--ink-blue)"><i data-i="check" data-s="15" data-w="2.6"></i></span>
+    </div>
+    <div class="row g8" style="padding:8px 10px;border-radius:12px;margin-top:2px">
+      <span style="width:26px;height:26px;border-radius:8px;background:var(--fill);color:var(--text-2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">个</span>
+      <div class="col grow"><span class="f13 w6">alex 的个人空间</span><span class="f11 t3">Personal · 原私有单保留</span></div>
+    </div>
+  </div>
+
+  <div class="gh" style="padding-top:12px">OKR 产研 · 待处理<span>2</span><em>免配置开修</em></div>
+  <div class="grp glass">
+    <div class="lr on"><span class="av2" style="width:40px;height:40px;background:linear-gradient(150deg,#7FB2FF,#4C7DF0)">王芳<i style="background:var(--blue)"></i></span><div class="grow mn"><div class="row g6"><span class="lt ell grow">审批中心：点击分组卡住</span></div><div class="row g6" style="margin-top:3px"><span class="sc sc-t">Tita</span><span class="ls ell" >审核通过 · 等发测试</span></div></div></div>
+    <div class="lr"><span class="av2" style="width:40px;height:40px;background:linear-gradient(150deg,#FFD27F,#F0A23C)">陈晨<i style="background:var(--orange)"></i></span><div class="grow mn"><div class="row g6"><span class="lt ell grow">进度条切换周期不刷新</span></div><div class="row g6" style="margin-top:3px"><span class="sc sc-j">Jira</span><span class="ls ell" >验证中 · 78%</span></div><span class="pg"><i style="width:78%;background:var(--teal)"></i></span></div></div>
+  </div>
+
+  <div class="card2" style="margin-top:12px;padding:10px 12px;background:color-mix(in srgb,var(--green) 8%,var(--glass-2));border-color:color-mix(in srgb,var(--green) 26%,transparent)">
+    <div class="row g8">
+      <span style="color:var(--ink-green)"><i data-i="check" data-s="14" data-w="2.8"></i></span>
+      <span class="f12 w6 grow" style="color:var(--ink-green)">已消费并清除口令 #CC-7M9P#</span>
+    </div>
+    <div class="f11 t2" style="margin-top:3px;line-height:1.45">本地已记录消费状态，后续切换前后台不再重复弹出邀请识别卡。</div>
+  </div>
+</div>
+<div class="tabbar glass"><span class="tb"><span class="ap ap-ai"><svg width="24" height="24" viewBox="0 0 24 24" fill="#fff"><path d="M10 3l1.9 5.6 5.6 1.9-5.6 1.9L10 18l-1.9-5.6L2.5 10.5l5.6-1.9z"/><path d="M18 13.5l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9z" opacity=".8"/></svg></span></span><span class="tb on"><span class="ap ap-chat"><svg width="28" height="28" viewBox="0 0 24 24"><defs><linearGradient id="cb1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6CC4FF"/><stop offset="1" stop-color="#1673FF"/></linearGradient></defs><path d="M15 9.6c3.4 0 6.1 2.2 6.1 4.9 0 1.4-.7 2.6-1.8 3.5l.5 2.5-2.9-1.4c-.6.2-1.2.3-1.9.3-3.4 0-6.1-2.2-6.1-4.9s2.7-4.9 6.1-4.9z" fill="#B9DBFF"/><path d="M9.6 3.2c-4 0-7.2 2.6-7.2 5.8 0 1.7.9 3.2 2.3 4.2l-.6 3 3.5-1.7c.6.2 1.3.2 2 .2 4 0 7.2-2.6 7.2-5.8S13.6 3.2 9.6 3.2z" fill="url(#cb1)"/><circle cx="6.8" cy="9" r="1" fill="#fff"/><circle cx="9.6" cy="9" r="1" fill="#fff"/><circle cx="12.4" cy="9" r="1" fill="#fff"/></svg></span><b>4</b></span><span class="tb"><span class="ap ap-pub"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 2.6l8.4 4.7L12 12 3.6 7.3z" fill="#FFE2A8"/><path d="M3.6 7.3L12 12v9.4l-8.4-4.7z" fill="#fff" opacity=".95"/><path d="M20.4 7.3L12 12v9.4l8.4-4.7z" fill="#fff" opacity=".7"/><path d="M7.8 4.9l8.4 4.7v3.2" stroke="#FF8A00" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".7"/></svg></span><b>1</b></span><span class="tb"><span class="ap ap-rb"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3.8 4.8v4.4h4.4"/><path d="M4.2 9.2A8.3 8.3 0 1 1 3.9 13.6"/><path d="M12 8v4.2l2.7 1.7"/></svg></span></span><span class="tb"><span class="ap ap-sk"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 13.2l8.6-4.4L12 4.4 3.4 8.8z" fill="#fff"/><path d="M3.4 12.6L12 17l8.6-4.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".75"/><path d="M3.4 16.2L12 20.6l8.6-4.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".5"/></svg></span></span></div><div class="home"></div></div></div><div class="lbl">入驻激活多空间切换<em>≥2 空间露胶囊 · 已消费防重弹</em></div></div>
+</div><script src="../v3/shots.js"></script><script src="icons.js"></script></body></html>
