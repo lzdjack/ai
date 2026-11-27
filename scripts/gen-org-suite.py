@@ -218,7 +218,7 @@ def build_member_handoff():
   <div class="col grow"><span class="f12 w6">{title}</span><span class="f11 t3">{sub}</span></div>
 </div>'''
 
-    drawer = f'''<aside class="cc-drawer" style="width:580px" data-pin="drawer-handoff">
+    drawer = f'''<div class="cc-dialog cc-dialog-lg" data-pin="drawer-handoff" style="position:absolute;border:1px solid var(--stroke);box-shadow:var(--shadow-dialog)">
   <div class="cc-drawer-hd">
     <span class="av" style="width:36px;height:36px;font-size:13px;background:linear-gradient(150deg,#C8CCD4,#8A909B)">赵磊</span>
     <div class="col grow">
@@ -262,8 +262,9 @@ def build_member_handoff():
     <button class="cc-btn cc-btn-sm cc-btn-glass">取消</button>
     <button class="cc-btn cc-btn-sm cc-btn-red">{I("shield",13,2.2)}确认停用并移交给 张某</button>
   </div>
-</aside>'''
-    return overlay_pc("停用交接 · 组织与成员", drawer)
+</div>'''
+    base = page("停用交接 · 组织与成员", "set", p_members())
+    return base.replace('<script src="icons.js">', f'<div class="scrim"></div>{drawer}<script src="icons.js">', 1)
 
 
 # =====================================================================
