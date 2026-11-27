@@ -6,5 +6,11 @@
   "description": "无头 Chromium、产物替换、截图录屏（06 §5.2）",
   "exports": {
     ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@cloudcraft/core-protocol": "workspace:*",
+    "parse5": "8.1.0",
+    "playwright-core": "1.65.0",
+    "typebox": "1.4.7"
   }
 }
