@@ -1,0 +1,158 @@
+{
+  "_note": "U1 的示例数据：和定稿图 PC-主界面 一致，只用于外壳对照；P4 起换成接口数据",
+  "user": { "name": "林某", "initial": "林" },
+  "bots_online": 3,
+  "sources": [
+    { "text": "Jira · 2 分钟前", "dot": "var(--green)" },
+    { "text": "Tita 采集失败 · 重试中", "dot": "var(--orange)", "warn": true }
+  ],
+  "badges": { "chat": 4, "release": 1 },
+  "total": 8,
+  "groups": [
+    {
+      "key": "waiting_you",
+      "items": [
+        {
+          "id": "TK-20871",
+          "title": "点击分组后界面卡住",
+          "reporter": { "name": "王芳", "label": "王芳", "tone": 0 },
+          "status": "blue",
+          "source": "Tita",
+          "note": "第 2 轮交付 · 验证 3/4",
+          "time": "8 分钟"
+        },
+        {
+          "id": "TK-20866",
+          "title": "进度条切换周期不刷新",
+          "reporter": { "name": "陈晨", "label": "陈晨", "tone": 1 },
+          "status": "orange",
+          "source": "Jira",
+          "sourceOutline": true,
+          "note": "验证受阻：账号进不去页面",
+          "unread": "blue"
+        }
+      ]
+    },
+    {
+      "key": "bot_asking",
+      "items": [
+        {
+          "id": "TK-20859",
+          "title": "考勤部门筛选失效",
+          "reporter": { "name": "李娜", "label": "李娜", "tone": 2 },
+          "status": "orange",
+          "source": "Tita",
+          "note": "复现用哪个角色？",
+          "noteTone": "orange",
+          "unread": "orange"
+        }
+      ]
+    },
+    {
+      "key": "bot_fixing",
+      "items": [
+        {
+          "id": "TK-20851",
+          "title": "考勤导出部门名乱码",
+          "reporter": { "name": "赵磊", "label": "赵磊", "tone": 3 },
+          "status": "teal",
+          "source": "Tita",
+          "note": "浏览器验证中 · 84%",
+          "progress": 84
+        },
+        {
+          "id": "TK-20848",
+          "title": "看板拖拽后回弹",
+          "reporter": { "name": "周婷", "label": "周婷", "tone": 4 },
+          "status": "teal",
+          "source": "Jira",
+          "sourceOutline": true,
+          "note": "复现中 · 还有 1 张",
+          "progress": 30
+        }
+      ]
+    },
+    {
+      "key": "platform_confirm",
+      "items": [
+        {
+          "id": "TK-20830",
+          "title": "审批单撤回后状态错乱",
+          "reporter": { "name": "孙浩", "label": "孙浩", "tone": 5 },
+          "status": "green",
+          "source": "Tita",
+          "note": "已通过 · 去 Tita 点「已完成」"
+        }
+      ]
+    },
+    {
+      "key": "need_action",
+      "items": [
+        {
+          "id": "OKR-3320",
+          "title": "OKR-3320 已收单",
+          "reporter": { "name": "OKR", "label": "OKR", "system": true },
+          "status": "red",
+          "source": "Jira",
+          "sourceOutline": true,
+          "note": "无法确定真人修复人",
+          "noteTone": "red"
+        }
+      ]
+    }
+  ],
+  "ticket": {
+    "id": "TK-20871",
+    "source": { "code": "TITA", "name": "Tita" },
+    "title": "审批中心：发起审批时点击分组，界面卡住",
+    "priority": "P1",
+    "metaAfter": "审批 / 发起审批 · 修复人 林某 · 执行 Bot-01",
+    "state": { "tone": "blue", "text": "待我审核 · 第 2 轮" },
+    "counts": { "code": 3, "evidence": 4 },
+    "extraTabs": [{ "key": "release", "label": "发布" }],
+    "flow": [
+      { "kind": "divider", "text": "第 1 轮 · 昨天 22:40 交付 · 你打回了" },
+      {
+        "kind": "user",
+        "text": "第二个分组还是会卡，再看看。",
+        "note": "打回意见 · 附截图 1 · 昨天 23:05"
+      },
+      { "kind": "divider", "text": "第 2 轮 · 今天 14:10 开始" },
+      {
+        "kind": "bot",
+        "steps": ["复现", "定位", "改代码", "浏览器验证"],
+        "minutes": 42,
+        "delivery": {
+          "round": 2,
+          "by": "Bot-01",
+          "at": "14:52",
+          "rootCause": "切换分组时旧请求晚返回，覆盖新数据导致卡死。",
+          "response": "加了请求取消，复测分组 2、3",
+          "responseHandled": true,
+          "before": { "image": "evidence-before.png", "duration": "0:18", "seen": true },
+          "after": { "image": "evidence-after.png", "duration": "0:41", "seen": false },
+          "verifiedOn": "测试环境 · 2.18.0-fix.2 · 普通员工",
+          "checks": [
+            { "label": "进入发起审批" },
+            { "label": "点击分组 1、2、3" },
+            { "label": "仍可选择审批人" },
+            { "label": "管理员未测·缺账号", "untested": true }
+          ],
+          "files": { "count": 3, "add": 38, "del": 12 },
+          "mr": "MR !482",
+          "skills": ["编码 · 复用表单组件 v3", "验证 · 页面交互回归 v1"]
+        },
+        "review": { "sha": "a3f9c21" }
+      }
+    ],
+    "rail": {
+      "timeline": [
+        { "tone": "green", "title": "接单 · 已通知你", "sub": "昨天 21:52 · 节点「AI干活」" },
+        { "tone": "red", "title": "第 1 轮 · 你打回了", "sub": "“第二个分组还是会卡”" },
+        { "tone": "blue", "title": "第 2 轮 · 等你审核", "sub": "8 分钟前", "current": true }
+      ],
+      "env": { "test": "2.17.4", "testNote": "未含本修复", "prod": "2.17.4", "tester": "王某" },
+      "progress": { "codeReviewWaiting": true, "release": "通过后可发测试", "platform": "未确认" }
+    }
+  }
+}
