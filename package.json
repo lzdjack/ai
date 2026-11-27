@@ -23,9 +23,9 @@
     "fixtures:check": "tsx tools/fixtures/check.ts",
     "sandbox:try": "tsx tools/sandbox/try.ts",
     "llm:check": "tsx tools/llm/check.ts",
-    "pi:try": "tsx tools/pi/try.ts",
     "runner": "node --import tsx apps/bot-executor/src/main.ts",
     "runner:try": "tsx tools/runner/try.ts",
+    "llm-proxy": "node --import tsx apps/llm-proxy/src/main.ts",
     "dev": "turbo run dev"
   },
   "devDependencies": {

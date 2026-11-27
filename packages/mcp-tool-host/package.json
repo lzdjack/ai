@@ -6,5 +6,9 @@
   "description": "宿主侧工具与事实覆写（06 §11.4）",
   "exports": {
     ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@cloudcraft/core-protocol": "workspace:*",
+    "typebox": "1.4.7"
   }
 }
