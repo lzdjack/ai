@@ -1,6 +1,6 @@
 // Container runner for the code/build sandbox (docs/06 §5.3).
 // Every container: non-root, all capabilities dropped, read-only rootfs, resource limits.
-import { spawn, spawnSync } from 'node:child_process';
+import { spawn, spawnSync, type ChildProcessWithoutNullStreams } from 'node:child_process';
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -30,8 +30,11 @@ export interface Mount {
 
 export interface RunOptions {
   image: string;
-  /** 'none' for the execute phase; 'bridge' only for the prepare phase */
-  network: 'none' | 'bridge';
+  /**
+   * 'none' for the execute phase; 'bridge' only for the prepare phase; otherwise the name of this
+   * round's --internal network (Docker Desktop / OrbStack, see relay.ts).
+   */
+  network: 'none' | 'bridge' | (string & {});
   mounts: Mount[];
   script: string;
   workdir?: string;
@@ -49,17 +52,17 @@ export interface RunResult {
 
 const MAX_OUTPUT = 1024 * 1024;
 
-export function runContainer(opts: RunOptions): Promise<RunResult> {
+function containerArgs(opts: RunOptions, name: string, interactive: boolean): string[] {
   const limits = { ...DEFAULT_LIMITS, ...opts.limits };
-  const name = `cc-sbx-${crypto.randomBytes(6).toString('hex')}`;
   const env: Record<string, string> = {
     CI: 'true',
     NODE_OPTIONS: `--max-old-space-size=${limits.nodeMaxOldSpaceMb}`,
     ...opts.env,
   };
-  const args = [
+  return [
     'run',
     '--rm',
+    ...(interactive ? ['-i'] : []),
     '--name',
     name,
     `--network=${opts.network}`,
@@ -81,10 +84,56 @@ export function runContainer(opts: RunOptions): Promise<RunResult> {
     '-c',
     opts.script,
   ];
+}
 
+export interface StartedContainer {
+  name: string;
+  /** stdin/stdout belong to the caller (e.g. a JSONL RPC client); stderr is collected into `done` */
+  child: ChildProcessWithoutNullStreams;
+  done: Promise<RunResult>;
+  kill(): void;
+}
+
+/** Long-running container with stdin attached; used to drive an AI engine over stdio. */
+export function startContainer(opts: RunOptions): StartedContainer {
+  const limits = { ...DEFAULT_LIMITS, ...opts.limits };
+  const name = `cc-sbx-${crypto.randomBytes(6).toString('hex')}`;
+  const started = Date.now();
+  const child = spawn('docker', containerArgs(opts, name, true), { stdio: 'pipe' });
+  let output = '';
+  child.stderr.on('data', (chunk: Buffer) => {
+    output += chunk.toString();
+    if (output.length > MAX_OUTPUT) output = output.slice(-MAX_OUTPUT);
+  });
+  const kill = () => spawnSync('docker', ['kill', name], { stdio: 'ignore' });
+  let timedOut = false;
+  const timer = setTimeout(() => {
+    timedOut = true;
+    kill();
+  }, limits.timeoutMs);
+  const done = new Promise<RunResult>((resolve) => {
+    child.on('close', (code) => {
+      clearTimeout(timer);
+      resolve({
+        ok: code === 0 && !timedOut,
+        exitCode: code,
+        timedOut,
+        output,
+        ms: Date.now() - started,
+      });
+    });
+  });
+  return { name, child, done, kill };
+}
+
+export function runContainer(opts: RunOptions): Promise<RunResult> {
+  const limits = { ...DEFAULT_LIMITS, ...opts.limits };
+  const name = `cc-sbx-${crypto.randomBytes(6).toString('hex')}`;
   const started = Date.now();
   return new Promise((resolve) => {
-    const child = spawn('docker', args, { stdio: ['ignore', 'pipe', 'pipe'] });
+    const child = spawn('docker', containerArgs(opts, name, false), {
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
     let output = '';
     const collect = (chunk: Buffer) => {
       output += chunk.toString();

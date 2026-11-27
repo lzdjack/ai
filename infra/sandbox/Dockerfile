@@ -4,6 +4,8 @@ FROM node:24.15.0-bookworm-slim
 
 ARG PNPM_VERSION=12.23.0
 ARG AST_GREP_VERSION=0.51.2
+# AI 引擎（06 §5.4）：锁定版本，选发布满两周的版本
+ARG PI_VERSION=1.5.2
 
 # 定位工具：git（查 log / blame）、ripgrep、ast-grep（06 §5.3「容器里预装定位工具」）
 RUN apt-get update \
@@ -12,10 +14,17 @@ RUN apt-get update \
  && npm install -g --no-fund --no-audit "pnpm@${PNPM_VERSION}" "@ast-grep/cli@${AST_GREP_VERSION}" \
  && npm cache clean --force
 
+# Pi 单独一层，升级 Pi 不用重装上面的工具
+RUN npm install -g --no-fund --no-audit --ignore-scripts "@earendil-works/pi-coding-agent@${PI_VERSION}" \
+ && npm cache clean --force
+
 # 非 root 运行；node 镜像自带 uid 1000 的 node 用户
 USER node
 ENV HOME=/home/node \
     CI=true \
     NPM_CONFIG_UPDATE_NOTIFIER=false \
-    PNPM_CONFIG_MANAGE_PACKAGE_MANAGER_VERSIONS=false
+    PNPM_CONFIG_MANAGE_PACKAGE_MANAGER_VERSIONS=false \
+    PI_OFFLINE=1 \
+    PI_SKIP_VERSION_CHECK=1 \
+    PI_TELEMETRY=0
 WORKDIR /work

@@ -7,19 +7,15 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import {
-  cloneDepsForRound,
   depsKey,
   ensureSandboxImage,
-  offlineInstallScript,
-  prepareDeps,
+  installRoundDeps,
   runContainer,
-  type Mount,
-  type PreparedDeps,
   type RunResult,
 } from '@cloudcraft/bot-executor';
 import { loadConfig } from '@cloudcraft/config';
-import { seedDemoRepos } from '../fixtures/seed.ts';
-import { DEMO_NAMESPACE, DEMO_REPOS, ROOT, git, withSim } from '../fixtures/lib.ts';
+import { cloneDemoAsBot } from '../fixtures/seed.ts';
+import { DEMO_REPOS, ROOT } from '../fixtures/lib.ts';
 
 const cold = process.argv.includes('--cold');
 const keep = process.argv.includes('--keep');
@@ -29,6 +25,10 @@ const roundDir = path.join(c.CC_DATA_DIR, 'sandboxes', `try-${Date.now()}`);
 const workDir = path.join(roundDir, 'work');
 const timings: Array<[string, number]> = [];
 const sec = (ms: number) => `${(ms / 1000).toFixed(1)}s`;
+const STEP_LABEL: Record<string, string> = {
+  'clone caches for this round': '本轮克隆依赖缓存（写时复制）',
+  'offline install': '阶段 2 离线安装（断网）',
+};
 
 function must(label: string, r: RunResult): void {
   if (r.ok) return;
@@ -42,64 +42,37 @@ if (image.built) timings.push(['构建沙箱镜像（只在 Dockerfile 变了时
 console.log(`· 沙箱镜像 ${image.tag}${image.built ? '（新构建）' : ''}`);
 
 // 1. 克隆：和真实执行器一样在宿主机做，令牌走请求头，不写进 .git/config
-let botToken = '';
 const cloneStart = Date.now();
-await seedDemoRepos(c);
-await withSim(c, async (base) => {
-  const users = (await (await fetch(`${base}/__sim/gitlab/users`)).json()) as Array<{
-    username: string;
-    token: string;
-  }>;
-  botToken = users.find((u) => u.username === 'cc-bot')?.token ?? '';
-  fs.mkdirSync(workDir, { recursive: true });
-  for (const repo of DEMO_REPOS)
-    await git(workDir, ['clone', '-q', `${base}/${DEMO_NAMESPACE}/${repo}.git`, repo], {
-      token: botToken,
-    });
-});
+const botToken = await cloneDemoAsBot(c, workDir);
 timings.push(['宿主机克隆两仓', Date.now() - cloneStart]);
-for (const repo of DEMO_REPOS) {
-  if (fs.readFileSync(path.join(workDir, repo, '.git', 'config'), 'utf8').includes(botToken)) {
-    console.error(`✗ ${repo}/.git/config 里有令牌`);
-    process.exit(1);
-  }
-}
 
-// 2. 阶段 1：联网准备依赖缓存
+// 2～3. 两阶段依赖：联网准备缓存（--cold 先删掉重来）→ 本轮克隆缓存 → 断网离线安装
 if (cold)
   for (const repo of DEMO_REPOS)
     fs.rmSync(path.join(cacheRoot, depsKey(path.join(workDir, repo), image.tag)), {
       recursive: true,
       force: true,
     });
-const prepared: Array<[string, PreparedDeps]> = [];
-for (const repo of DEMO_REPOS) {
-  const p = await prepareDeps({ image: image.tag, repoDir: path.join(workDir, repo), cacheRoot });
-  if (p.result) must(`${repo} 准备依赖`, p.result);
+const deps = await installRoundDeps({
+  image: image.tag,
+  workDir,
+  repos: DEMO_REPOS,
+  cacheRoot,
+  roundDir,
+});
+for (const s of deps.steps) {
+  const m = /^prepare (\S+)( \(cached\))?$/.exec(s.label);
   timings.push([
-    `阶段 1 准备依赖 ${repo}${p.cached ? '（命中缓存，跳过）' : '（联网）'}`,
-    p.result?.ms ?? 0,
+    m
+      ? `阶段 1 准备依赖 ${m[1]}${m[2] ? '（命中缓存，跳过）' : '（联网）'}`
+      : (STEP_LABEL[s.label] ?? s.label),
+    s.ms,
   ]);
-  prepared.push([repo, p]);
 }
-
-// 3. 阶段 2：断网容器。依赖缓存每轮克隆一份，共享缓存本身不进容器
-const cloneDepsStart = Date.now();
-const mounts: Mount[] = [
-  { host: workDir, container: '/work' },
-  ...prepared.map(([, p]) => cloneDepsForRound(p, roundDir)),
-];
-timings.push(['本轮克隆依赖缓存（写时复制）', Date.now() - cloneDepsStart]);
+if (!deps.ok) must(deps.label, deps.result);
+const mounts = deps.ok ? deps.mounts : [];
 const offline = (script: string) =>
   runContainer({ image: image.tag, network: 'none', mounts, script });
-
-const install = await offline(
-  ['set -e', ...prepared.map(([repo, p]) => offlineInstallScript(`/work/${repo}`, p.key))].join(
-    '\n',
-  ),
-);
-must('阶段 2 离线安装', install);
-timings.push(['阶段 2 离线安装（断网）', install.ms]);
 
 const build = await offline('cd /work/demo-web && pnpm build');
 must('阶段 2 构建 demo-web', build);

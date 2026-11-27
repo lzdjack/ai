@@ -8,3 +8,6 @@ packages:
 allowBuilds:
   esbuild: true
   lefthook: true
+  # Pi 的依赖链带进来的安装脚本，不需要执行
+  '@google/genai': false
+  protobufjs: false

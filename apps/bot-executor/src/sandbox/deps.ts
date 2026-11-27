@@ -7,7 +7,7 @@
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
-import { runContainer, type RunResult, type SandboxLimits } from './docker.ts';
+import { runContainer, type Mount, type RunResult, type SandboxLimits } from './docker.ts';
 
 export const LOCKFILE = 'pnpm-lock.yaml';
 
@@ -91,4 +91,62 @@ export function cloneDepsForRound(prepared: PreparedDeps, roundDir: string) {
 /** Shell lines that install one repo offline (phase 2) from its cloned cache. */
 export function offlineInstallScript(repoPathInContainer: string, key: string): string {
   return `cd ${repoPathInContainer} && pnpm install --offline --frozen-lockfile --ignore-scripts --ignore-workspace --reporter=append-only ${pnpmDirs(key)}`;
+}
+
+export interface RoundDepsStep {
+  label: string;
+  ms: number;
+}
+
+/**
+ * Both phases for one round, for repos already cloned under `workDir` (mounted at /work):
+ * prepare each repo's cache (skipped when cached), clone the caches for this round, then install
+ * offline in a --network=none container. Returns the mounts the round's later containers need.
+ */
+export async function installRoundDeps(opts: {
+  image: string;
+  workDir: string;
+  repos: readonly string[];
+  cacheRoot: string;
+  roundDir: string;
+  limits?: Partial<SandboxLimits>;
+}): Promise<
+  | { ok: true; mounts: Mount[]; steps: RoundDepsStep[] }
+  | { ok: false; label: string; result: RunResult; steps: RoundDepsStep[] }
+> {
+  const steps: RoundDepsStep[] = [];
+  const prepared: Array<[string, PreparedDeps]> = [];
+  for (const repo of opts.repos) {
+    const p = await prepareDeps({
+      image: opts.image,
+      repoDir: path.join(opts.workDir, repo),
+      cacheRoot: opts.cacheRoot,
+      limits: opts.limits,
+    });
+    const label = `prepare ${repo}${p.cached ? ' (cached)' : ''}`;
+    steps.push({ label, ms: p.result?.ms ?? 0 });
+    if (p.result && !p.result.ok) return { ok: false, label, result: p.result, steps };
+    prepared.push([repo, p]);
+  }
+
+  const cloneStart = Date.now();
+  const mounts: Mount[] = [
+    { host: opts.workDir, container: '/work' },
+    ...prepared.map(([, p]) => cloneDepsForRound(p, opts.roundDir)),
+  ];
+  steps.push({ label: 'clone caches for this round', ms: Date.now() - cloneStart });
+
+  const install = await runContainer({
+    image: opts.image,
+    network: 'none',
+    mounts,
+    script: [
+      'set -e',
+      ...prepared.map(([repo, p]) => offlineInstallScript(`/work/${repo}`, p.key)),
+    ].join('\n'),
+    limits: opts.limits,
+  });
+  steps.push({ label: 'offline install', ms: install.ms });
+  if (!install.ok) return { ok: false, label: 'offline install', result: install, steps };
+  return { ok: true, mounts, steps };
 }

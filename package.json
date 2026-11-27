@@ -23,6 +23,7 @@
     "fixtures:check": "tsx tools/fixtures/check.ts",
     "sandbox:try": "tsx tools/sandbox/try.ts",
     "llm:check": "tsx tools/llm/check.ts",
+    "pi:try": "tsx tools/pi/try.ts",
     "dev": "turbo run dev"
   },
   "devDependencies": {
