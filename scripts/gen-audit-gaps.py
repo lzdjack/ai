@@ -690,74 +690,108 @@ html:not(.dark) .fold-n{color:#fff}
 # 6. 移动端-运行态与异常补齐（T-15：3 屏，1440×1000）
 # =====================================================================
 def build_mobile_runtime():
+    """移动端运行态三屏：与其他移动端板同一套导航、工单头和底部操作区。"""
     def phone_wrap(inner, sheet=""):
         return f'<div class="phone"><div class="scr">{status}{inner}{sheet}<div class="home"></div></div></div>'
 
-    def mnav(back, title, right=""):
-        return f'<div class="mnav"><span class="bk" style="gap:3px;min-width:64px">{I("chevl",16,2.5)} {back}</span><b>{title}</b><span class="rt" style="min-width:64px">{right}</span></div>'
+    def nav(back, title, right=""):
+        r = right or '<span aria-hidden="true"></span>'
+        return (f'<div class="nav"><span class="bk">{I("chevr",20,style="transform:rotate(180deg)")}{back}</span>'
+                f'<span style="text-align:center;font-weight:600;font-size:15px">{title}</span>{r}</div>')
 
-    # 屏 1：移动端首次操作触发 <PersonalCredentialPrompt>（USER_CREDENTIAL_MISSING）
-    bg1 = f'''{mnav("发布","TK-20871 · 第 2 轮")}
-<div class="pad" style="opacity:.45">
-  <div class="lgt" style="font-size:24px;margin-top:4px">发布到测试环境</div>
-  <div class="card2" style="margin-top:10px;padding:12px"><div class="f13 w6">MR !318 已准备</div><div class="f12 t3">点击发测试时校验个人执行凭据…</div></div>
+    def seg(items, on):
+        return '<div class="cc-m-seg" style="margin-top:12px">' + "".join(
+            f'<span{" class=\"on\"" if i == on else ""} style="padding:0 4px">{t}</span>' for i, t in enumerate(items)) + "</div>"
+
+    def thead(title, tags, tabs, tab):
+        return f'''<div class="pad" style="padding-top:2px">
+  <div class="row g12" style="align-items:flex-start"><span class="appic ic-tita" style="width:40px;height:40px;border-radius:11px;font-size:11px;font-weight:800">TITA</span>
+  <div class="grow" style="min-width:0"><div style="font-size:17px;font-weight:700;line-height:1.3" class="ell">{title}</div><div class="row g6" style="margin-top:5px">{tags}</div></div></div>
+  {seg(tabs, tab)}
+</div>'''
+
+    def tg(text, c):
+        return f'<span class="tg" style="color:var(--ink-{c});background:color-mix(in srgb,var(--{c}) 12%,transparent)">{text}</span>'
+
+    more = f'<span class="nb2 glass">{I("more",18)}</span>'
+    TABS = ["对话", "改动 7", "证据 4", "日志", "发布"]
+
+    # 屏 1：第一次发测试时，就地补填个人发布账号
+    def step(state, name, right):
+        ic = (f'<span class="ck" style="background:var(--btn-ok-bg)">{I("check",11,3)}</span>' if state == "ok"
+              else '<span class="ck" style="background:var(--fill);color:var(--text-3)"></span>')
+        return f'<div class="row g10" style="padding:9px 0;border-top:1px solid var(--hair)">{ic}<span class="f13 w6 grow">{name}</span><span class="f11 t3">{right}</span></div>'
+    bg1 = f'''{nav("工单", "TK-20871", more)}{thead("发起审批时点击分组，界面卡住", tg("审核通过 · 第 2 轮", "green"), TABS, 4)}
+<div class="pad">
+  <div class="card2" style="margin-top:12px;padding:12px 14px">
+    <div class="row g8"><span class="f13 w7 grow">第 2 轮 → 测试环境</span><span class="tag tg-n">还没发布</span></div>
+    <div class="row g8 f12 t2" style="margin-top:8px"><span class="mono">2.17.4</span><span class="t3">→</span><span class="mono w7" style="color:var(--ink-blue)">2.18.0-fix.2</span></div>
+  </div>
+  <div class="card2" style="margin-top:10px;padding:4px 14px">
+    {step("ok", "合入测试分支", "MR !318 已合入")}{step("", "打包上传", "等待")}{step("", "发布到测试", "等待")}{step("", "核对生效", "等待")}{step("", "通知测试人", "等待")}
+  </div>
 </div>'''
     sh1 = f'''<div class="scrim"></div>
 <div class="sheet">
   <div class="grab"></div>
   <div class="row g10">
-    <span class="ii" style="width:36px;height:36px;border-radius:10px;background:linear-gradient(160deg,#FFC15A,#F08A00);color:#fff;display:flex;align-items:center;justify-content:center">{I("key",18,2.2)}</span>
-    <div class="col grow"><div class="f16 w7">先配你的个人发布账号</div><div class="f11 t3">发布要用你自己的账号，只需填一次，只有你能用</div></div>
+    <span class="ii" style="width:36px;height:36px;border-radius:10px;background:linear-gradient(160deg,#FFC15A,#F08A00);color:#fff;display:flex;align-items:center;justify-content:center;flex:none">{I("key",18,2.2)}</span>
+    <div class="col grow" style="min-width:0"><div class="f16 w7">先填你的发布账号</div><div class="f12 t3">发布要用你本人的账号，只填一次</div></div>
+    <span class="f13 t3">取消</span>
   </div>
-  <div class="flb" style="margin-top:12px">账号 / 令牌</div>
+  <div class="flb" style="margin-top:14px">账号</div>
   <div class="cc-m-input"><span class="mono grow">lin.x</span></div>
-  <div class="flb" style="margin-top:8px">密码 / PAT</div>
-  <div class="cc-m-input is-focus"><span class="mono grow">••••••••••••</span></div>
-  <div class="f11 t3" style="margin-top:8px;line-height:1.5">加密存进本人「设置 → 我的账号」，仅由本人操作鉴权，管理者不可代填或继承。</div>
-  <button class="bigbtn" style="background:var(--btn-pri-bg);color:#fff;margin-top:12px;font-size:15px">{I("check",16,2.6)}保存凭据并继续发布到测试</button>
+  <div class="flb" style="margin-top:10px">密码或令牌</div>
+  <div class="cc-m-input is-focus"><span class="mono grow">••••••••••••</span>{I("eye",16,style="color:var(--text-3)")}</div>
+  <div class="row g6 f12 t3" style="margin-top:10px;align-items:flex-start;line-height:1.5">{I("lock",13,2.2,"flex:none;margin-top:2px")}<span>加密保存，只有你能用，管理员也看不到</span></div>
+  <button class="bigbtn" style="background:var(--btn-pri-bg);color:#fff;margin-top:14px">{I("check",16,2.6)}保存并发布到测试</button>
 </div>'''
     p1 = phone_wrap(bg1, sh1)
 
-    # 屏 2：移动端独立「无权查看」页（换号或掉权点推送进入）
-    p2 = phone_wrap(f'''{mnav("返回","工单详情")}
-<div class="pad" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;height:690px">
-  <span class="ii" style="width:60px;height:60px;border-radius:18px;background:linear-gradient(160deg,#FF8A7A,#E0281E);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 12px 24px -10px rgba(224,40,30,.5)">{I("lock",26,2.2)}</span>
-  <div class="f20 w7" style="margin-top:14px">当前账号无权查看这张工单</div>
-  <div class="f13 t2" style="margin-top:6px;line-height:1.6">可能已切换账号或项目成员权限被移除。<br>出于安全隔离，不显示工单标题与正文内容。</div>
-  <div class="grp glass" style="width:100%;margin-top:16px;padding:10px 14px;text-align:left">
-    <div class="f11 t3">当前已登录账号</div>
-    <div class="row g10" style="margin-top:4px">{av("林","#FFC9A8,#F08F7A","green",26)}<span class="mono f13 w6 grow">lin@personal.com</span><span class="lnk f12">切换账号</span></div>
+    # 屏 2：无权查看
+    p2 = phone_wrap(f'''{nav("工单", "工单详情")}
+<div class="pad" style="display:flex;flex-direction:column;align-items:center;text-align:center;padding-top:150px">
+  <span class="ii" style="width:64px;height:64px;border-radius:19px;background:linear-gradient(160deg,#FF8A7A,#E0281E);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 12px 24px -10px rgba(224,40,30,.5)">{I("lock",28,2.2)}</span>
+  <div style="font-size:20px;font-weight:700;margin-top:18px">当前账号无权查看这张工单</div>
+  <div class="f13 t2" style="margin-top:8px;line-height:1.6">可能换了账号登录，或项目权限已被撤销。<br>工单内容不会显示。</div>
+  <div class="grp glass" style="width:100%;margin-top:22px;padding:12px 14px;text-align:left">
+    <div class="f12 t3">当前登录</div>
+    <div class="row g10" style="margin-top:6px">{av("林","#FFC9A8,#F08F7A","green",30)}<span class="mono f13 w6 grow">lin@personal.com</span><span class="lnk f13 w6">切换账号</span></div>
   </div>
-  <button class="bigbtn" style="background:var(--btn-pri-bg);color:#fff;width:100%;margin-top:18px;font-size:15px">回到我的工单</button>
+  <div class="f12 t3" style="margin-top:12px;line-height:1.5">工单列表、搜索和 AI 助手里也查不到这张单。<br>需要权限请联系管理员或项目负责人。</div>
+  <button class="bigbtn" style="background:var(--btn-pri-bg);color:#fff;width:100%;margin-top:22px">回到我的工单</button>
 </div>''')
 
-    # 屏 3：移动端 L2 高危锁默认锁定 vs 项目授权后完整浏览滑块模式
-    p3 = phone_wrap(f'''{mnav("工单","TK-20871 · 审核")}
+    # 屏 3：L2 高危改动 · 手机上默认不能快速通过
+    def fl(name, add, dele, seen):
+        mark = (f'<span class="ck" style="background:var(--btn-ok-bg);width:16px;height:16px">{I("check",10,3)}</span>' if seen
+                else '<span class="ck" style="background:var(--fill);width:16px;height:16px"></span>')
+        return (f'<div class="row g8" style="padding:7px 0;border-top:1px solid var(--hair)">{mark}<span class="mono f12 grow ell">{name}</span>'
+                f'<span class="mono f11" style="color:var(--ink-green)">+{add}</span><span class="mono f11" style="color:var(--ink-red)">−{dele}</span></div>')
+    p3 = phone_wrap(f'''{nav("工单", "TK-20871", more)}{thead("发起审批时点击分组，界面卡住", tg("P1", "red") + tg("待我审核 · 第 2 轮", "blue"), TABS, 0)}
 <div class="pad">
-  <div class="cc-m-l2-lock" style="margin-top:4px;flex-direction:column;align-items:stretch;gap:6px">
-    <div class="row g8">{I("shield",16,2.2)}<span class="f14 w7">L2 高危改动 · 默认禁用 10 秒速过</span></div>
-    <div class="f12 t2" style="line-height:1.5">命中高危路径规则（<span class="mono">rbac/auth</span> 权限逻辑与 7 个文件）。默认锁定手机快速通过，建议发到 PC 逐行审 Diff。</div>
+  <div class="cc-m-l2-lock" style="margin-top:12px;flex-direction:column;align-items:stretch;gap:6px">
+    <div class="row g8">{I("shield",16,2.2)}<span class="f14 w7">改到了权限相关代码</span></div>
+    <div class="f12 t2" style="line-height:1.5">这一轮改了 <span class="mono">auth/</span> 下 7 个文件，手机上不能一键通过。看完全部改动后才能通过，或者发到电脑上逐行审。</div>
   </div>
-  <div class="card2" style="margin-top:12px;padding:12px 14px">
-    <div class="row g8"><span class="f13 w7 grow">项目高级策略 · 移动全量展开模式</span><span class="tag tg-b">可配</span></div>
-    <div class="f12 t2" style="margin-top:6px;line-height:1.5">当管理员在项目配置允许时，手动<b>逐文件展开查看全部 7 个文件 Diff</b> 后，滑块确认将解锁。</div>
-    <div class="row g6" style="margin-top:8px"><span class="tag tg-g">已展开 7/7 完整 Diff</span><span class="f11 t3 grow">或点下方发到 PC 处理</span></div>
+  <div class="card2" style="margin-top:10px;padding:10px 14px 4px">
+    <div class="row g8" style="padding-bottom:6px"><span class="f13 w7 grow">改动文件</span><span class="f12 t3">已看 3 / 7</span></div>
+    {fl("auth/guard.ts", 18, 6, True)}{fl("auth/roles.ts", 9, 2, True)}{fl("auth/session.ts", 4, 1, True)}{fl("approval/GroupPicker.tsx", 38, 12, False)}
+    <div class="row g6 f12 lnk w6" style="padding:8px 0;border-top:1px solid var(--hair);justify-content:center">还有 3 个文件 {I("chevd",12,2.4)}</div>
   </div>
-  <div class="card2" style="margin-top:10px;padding:10px 14px;background:var(--well)">
-    <div class="row g8"><span class="f13 w6">发送当前预览到我的桌面端</span><span class="grow"></span><span class="lnk f13 w6">在 PC 逐行审 ›</span></div>
-  </div>
+  <div class="row g8" style="margin-top:10px;padding:11px 14px;border-radius:14px;background:var(--well);border:1px solid var(--hair)">{I("monitor",15,2.2,"color:var(--ink-blue)")}<span class="f13 w6 grow">发到电脑上逐行审</span><span class="lnk f13 w6">发送 ›</span></div>
 </div>
 <div class="dock2 glass">
   <div class="row g12">
-    <button class="bigbtn" style="flex:1;height:var(--m-btn-sm-h);background:color-mix(in srgb,var(--red) 12%,transparent);color:var(--ink-red);font-size:14.5px">打回</button>
-    <button class="cc-m-btn-locked bigbtn" style="flex:1.6;height:var(--m-btn-sm-h);font-size:13.5px;white-space:nowrap">{I("lock",14)}已锁 · 展全 Diff 解锁</button>
+    <button class="abtn a-red" style="flex:1;height:44px;justify-content:center;border-radius:14px">{I("undo",15)}打回</button>
+    <button class="cc-m-btn-locked bigbtn" style="flex:1.6;height:44px;font-size:13.5px;white-space:nowrap">{I("lock",14)}看完 7 个文件后可通过</button>
   </div>
 </div>''')
 
     cols = (
-        f'<div class="col3">{p1}<div class="lbl">就地补填个人账号<em>用到个人账号但还没填时弹出</em></div></div>'
-        f'<div class="col3">{p2}<div class="lbl">独立「无权查看」拦截页<em>不泄露任何标题与附件，支持切换账号</em></div></div>'
-        f'<div class="col3">{p3}<div class="lbl">L2 高危锁 × 可配全量展Diff<em>默认锁定速过；按项目规则展开全Diff可解锁</em></div></div>'
+        f'<div class="col3">{p1}<div class="lbl">第一次发布时补填账号<em>只填一次，只有本人能用</em></div></div>'
+        f'<div class="col3">{p2}<div class="lbl">无权查看<em>不显示工单内容，可切换账号</em></div></div>'
+        f'<div class="col3">{p3}<div class="lbl">改到权限代码时<em>看完全部改动才能通过</em></div></div>'
     )
     return f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>移动端 · 运行态与异常补齐</title>
 <link rel="stylesheet" href="../v3/base.css"><link rel="stylesheet" href="../v4/apple.css"><link rel="stylesheet" href="m.css">
