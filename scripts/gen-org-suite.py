@@ -23,9 +23,10 @@ from pages_pc import p_members, set_left, aside  # noqa: E402
 
 
 # ---------- 共用包装 ----------
-def overlay_pc(title, drawer_html):
+def dialog_pc(title, dialog_html):
+    """组织与成员页上的居中弹窗（.cc-dialog-lg 650px，高度随内容，.scrim 轻遮罩）。"""
     base = page(title, "set", p_members())
-    return base.replace('<script src="icons.js">', f'<div class="cc-scrim"></div>{drawer_html}<script src="icons.js">', 1)
+    return base.replace('<script src="icons.js">', f'<div class="scrim"></div>{dialog_html}<script src="icons.js">', 1)
 
 
 def ck_box(on=True, bg="var(--btn-pri-bg)"):
@@ -36,7 +37,7 @@ def ck_box(on=True, bg="var(--btn-pri-bg)"):
 
 
 # =====================================================================
-# 1. PC-组织-部门默认设置（.cc-drawer 660px）
+# 1. PC-组织-部门默认设置（居中弹窗 .cc-dialog-lg）
 # =====================================================================
 def build_org_defaults():
     def proj_row(name, perm, tone, note):
@@ -49,7 +50,7 @@ def build_org_defaults():
   </span>
 </div>'''
 
-    drawer = f'''<aside class="cc-drawer" data-pin="drawer-defaults">
+    drawer = f'''<div class="cc-dialog cc-dialog-lg" data-pin="drawer-defaults" style="position:absolute;border:1px solid var(--stroke);box-shadow:var(--shadow-dialog)">
   <div class="cc-drawer-hd">
     <span class="ic-box" style="width:36px;height:36px;border-radius:10px;background:linear-gradient(155deg,#5AA0FF,#1F6FFF)">{I("layers",18,2.2)}</span>
     <div class="col grow">
@@ -106,20 +107,20 @@ def build_org_defaults():
     <button class="cc-btn cc-btn-sm cc-btn-glass">取消</button>
     <button class="cc-btn cc-btn-sm cc-btn-pri">{I("check",13,2.6)}保存部门默认配置</button>
   </div>
-</aside>'''
-    return overlay_pc("部门默认配置 · 组织与成员", drawer)
+</div>'''
+    return dialog_pc("部门默认配置 · 组织与成员", drawer)
 
 
 # =====================================================================
-# 2. PC-组织-添加编辑成员（.cc-drawer 660px）
+# 2. PC-组织-添加编辑成员（居中弹窗 .cc-dialog-lg）
 # =====================================================================
 def build_member_edit():
-    drawer = f'''<aside class="cc-drawer" data-pin="drawer-member-edit">
+    drawer = f'''<div class="cc-dialog cc-dialog-lg" data-pin="drawer-member-edit" style="position:absolute;border:1px solid var(--stroke);box-shadow:var(--shadow-dialog)">
   <div class="cc-drawer-hd">
     <span class="av" style="width:36px;height:36px;font-size:13px;background:linear-gradient(150deg,#A5B4FC,#6366F1)">宋工</span>
     <div class="col grow">
       <div class="f17 w7">编辑成员 · 宋工</div>
-      <div class="f12 t3" style="margin-top:2px">独立邮箱账号 <span class="mono">song@vendor.io</span> · 可以借调到其他部门，能做什么只由角色和授权范围决定</div>
+      <div class="f12 t3" style="margin-top:2px"><span class="mono">song@vendor.io</span> · 外部协作者 · 能做什么只看角色和授权范围</div>
     </div>
     <span class="cc-close">{I("x",15,2.2)}</span>
   </div>
@@ -204,12 +205,12 @@ def build_member_edit():
     <button class="cc-btn cc-btn-sm cc-btn-glass">取消</button>
     <button class="cc-btn cc-btn-sm cc-btn-pri">{I("check",13,2.6)}保存成员配置</button>
   </div>
-</aside>'''
-    return overlay_pc("添加/编辑成员 · 组织与成员", drawer)
+</div>'''
+    return dialog_pc("添加/编辑成员 · 组织与成员", drawer)
 
 
 # =====================================================================
-# 3. PC-组织-停用交接（.cc-drawer 600px）
+# 3. PC-组织-停用交接（居中弹窗 .cc-dialog-lg）
 # =====================================================================
 def build_member_handoff():
     def chk_row(title, sub):
@@ -218,7 +219,7 @@ def build_member_handoff():
   <div class="col grow"><span class="f12 w6">{title}</span><span class="f11 t3">{sub}</span></div>
 </div>'''
 
-    drawer = f'''<aside class="cc-drawer" style="width:580px" data-pin="drawer-handoff">
+    drawer = f'''<div class="cc-dialog cc-dialog-lg" data-pin="drawer-handoff" style="position:absolute;border:1px solid var(--stroke);box-shadow:var(--shadow-dialog)">
   <div class="cc-drawer-hd">
     <span class="av" style="width:36px;height:36px;font-size:13px;background:linear-gradient(150deg,#C8CCD4,#8A909B)">赵磊</span>
     <div class="col grow">
@@ -262,8 +263,8 @@ def build_member_handoff():
     <button class="cc-btn cc-btn-sm cc-btn-glass">取消</button>
     <button class="cc-btn cc-btn-sm cc-btn-red">{I("shield",13,2.2)}确认停用并移交给 张某</button>
   </div>
-</aside>'''
-    return overlay_pc("停用交接 · 组织与成员", drawer)
+</div>'''
+    return dialog_pc("停用交接 · 组织与成员", drawer)
 
 
 # =====================================================================
@@ -669,11 +670,11 @@ html.dark .aura{opacity:.46}
   </div>
   <div class="row g8 f11 t2" style="padding:8px 11px;border-radius:11px;background:var(--well);border:1px solid var(--hair);line-height:1.5">
     {I("layers",14,style="color:var(--ink-blue);flex:none")}
-    <span>加入后你将同时拥有「星辰研发中心」与个人空间（可用空间 ≥ 2），登录后顶栏自动开启工作空间切换胶囊，单空间用户 0 打扰。</span>
+    <span>加入后你会同时有「星辰研发中心」和个人空间，点右上角头像就能切换；只有一个空间时不显示切换。</span>
   </div>
   <div class="col g8" style="margin-top:2px">
     <button class="cc-btn cc-btn-lg cc-btn-pri" data-pin="confirm-join-btn" style="width:100%">{I("check",15,2.6)}确认加入「星辰研发中心 · OKR 产研」</button>
-    <button class="cc-btn cc-btn-md cc-btn-glass" data-pin="keep-personal-btn" style="width:100%">暂不加入，仅进入我的个人空间（可稍后在空间切换中接受）</button>
+    <button class="cc-btn cc-btn-md cc-btn-glass" data-pin="keep-personal-btn" style="width:100%">暂不加入，先进入我的个人空间（之后可在头像菜单里接受）</button>
   </div>
 </div>'''
     return f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>确认加入工作空间 · PC</title>

@@ -98,7 +98,7 @@ PC_MODAL_HTML = f'''{PC_MODAL_CSS}
 
   <div class="row g8 f11 t2" style="padding:8px 11px;border-radius:11px;background:var(--well);border:1px solid var(--hair);line-height:1.5">
     {I("layers",14,st="color:var(--ink-blue);flex:none")}
-    <span>当前已登录 <b style="color:var(--text)">alex@company.com</b>，确认即入驻并自动激活顶栏空间切换胶囊；若未登录则直达「设密并加入」页。</span>
+    <span>当前已登录 <b style="color:var(--text)">alex@company.com</b>，确认即入驻，之后点头像切换空间；若未登录则直达「设密并加入」页。</span>
   </div>
 
   <div class="col g8" style="margin-top:2px">
@@ -142,16 +142,6 @@ html.dark .aura{opacity:.44}
   border-radius:16px;padding:9px 12px;background:var(--glass-overlay);
   border:1px solid var(--stroke);backdrop-filter:var(--blur-panel);-webkit-backdrop-filter:var(--blur-panel);
   box-shadow:var(--shadow-float);display:flex;align-items:center;gap:9px
-}
-.ws-pill{
-  display:inline-flex;align-items:center;gap:5px;height:30px;padding:0 10px;
-  border-radius:15px;background:var(--glass-2);border:1px solid var(--border-ctl);
-  font-size:12.5px;font-weight:700;color:var(--text);white-space:nowrap
-}
-.ws-pop{
-  position:relative;border-radius:18px;padding:8px;margin-top:8px;
-  background:var(--glass-overlay);border:1px solid var(--stroke);
-  box-shadow:var(--shadow-float)
 }
 '''
 
@@ -211,7 +201,7 @@ mp1_overlay = f'''<div class="scrim"></div>
 
   <button class="bigbtn pri" style="margin-top:12px">{I("check",16,2.6)}确认加入团队空间</button>
   <button class="bigbtn sec" style="margin-top:8px;height:42px;font-size:14px">忽略本次，不再重复识别此口令</button>
-  <div class="f11 t3" style="text-align:center;margin-top:8px">保留原有个人空间（可用空间 ≥ 2 自动解锁顶栏切换）</div>
+  <div class="f11 t3" style="text-align:center;margin-top:8px">原来的个人空间会保留，之后点头像切换空间</div>
 </div>'''
 mp1 = phone_m(mp1_bg, mp1_overlay)
 
@@ -259,47 +249,44 @@ mp2 = phone_m(f'''<div class="aura" style="width:140px;height:140px;left:125px;t
 </div>''')
 
 
-# P3：确认加入后直入工作台，≥2 空间自动出现切换胶囊 + 剪贴板口令已消费不重弹
-mp3_inner = f'''<div class="pad" style="padding-top:4px">
-  <div class="row g8">
-    <div class="ws-pill">
-      <span style="width:18px;height:18px;border-radius:5px;background:linear-gradient(155deg,#5AA0FF,#1F6FFF);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:800">星</span>
-      <span>星辰研发中心</span>
-      {I("chevd",13,st="color:var(--text-3)")}
-    </div>
-    <span class="tag tg-b" style="height:22px">2 空间</span>
-    <span class="grow"></span>
-    <span class="me">A</span>
-  </div>
+# P3：加入后在首页点头像，推入「账号与空间」页切换空间（不在首页弹浮层）
+def ws_ir(ic, grad, name, sub, right=""):
+    return (f'<div class="ir" style="min-height:58px">'
+            f'<span class="ii" style="width:32px;height:32px;border-radius:9px;background:linear-gradient(155deg,{grad});font-size:13px;font-weight:700">{ic}</span>'
+            f'<div class="col grow" style="min-width:0;gap:2px"><span class="f14 w6 ell">{name}</span><span class="f12 t3 ell">{sub}</span></div>{right}</div>')
 
-  <div class="ws-pop">
-    <div class="row f11 t3" style="padding:2px 8px 6px"><span>切换工作空间（≥ 2 个空间自动显露）</span></div>
-    <div class="row g8" style="padding:8px 10px;border-radius:12px;background:color-mix(in srgb,var(--blue) 12%,transparent)">
-      <span style="width:26px;height:26px;border-radius:8px;background:linear-gradient(155deg,#5AA0FF,#1F6FFF);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">星</span>
-      <div class="col grow"><span class="f13 w7">星辰研发中心</span><span class="f11 t3">OKR 产研 · 企业空间</span></div>
-      <span style="color:var(--ink-blue)">{I("check",15,2.6)}</span>
-    </div>
-    <div class="row g8" style="padding:8px 10px;border-radius:12px;margin-top:2px">
-      <span style="width:26px;height:26px;border-radius:8px;background:var(--fill);color:var(--text-2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">个</span>
-      <div class="col grow"><span class="f13 w6">alex 的个人空间</span><span class="f11 t3">Personal · 原私有单保留</span></div>
+
+mp3_inner = f'''<div class="nav"><span class="bk">{I("chevr",20,st="transform:rotate(180deg)")}工单</span><span style="text-align:center;font-weight:600;font-size:15px">账号与空间</span><span aria-hidden="true"></span></div>
+<div class="pad" style="padding-top:6px">
+  <div class="grp glass" style="padding:12px 14px">
+    <div class="row g12">
+      <span class="me" style="width:52px;height:52px;font-size:19px;flex:none">A</span>
+      <div class="col grow" style="min-width:0;gap:2px"><span class="f17 w7">alex</span><span class="f12 t3 mono ell">alex@company.com</span></div>
+      <span class="f13 t3 row g4">我的账号{I("chevr",14)}</span>
     </div>
   </div>
 
-  <div class="gh" style="padding-top:12px">OKR 产研 · 待处理<span>2</span><em>免配置开修</em></div>
+  <div class="gh">工作空间<span>2</span><em style="color:var(--text-3);font-weight:500">点一下就切换</em></div>
   <div class="grp glass">
-    {row("王芳","#7FB2FF,#4C7DF0","blue","审批中心：点击分组卡住","t","审核通过 · 等发测试",on=True)}
-    {row("陈晨","#FFD27F,#F0A23C","orange","进度条切换周期不刷新","j","验证中 · 78%",prog=78)}
+    {ws_ir("星", "#5AA0FF,#1F6FFF", "星辰研发中心", "团队 · 刚刚加入 · 待处理 2", f'<span style="color:var(--ink-blue)">{I("check",17,2.6)}</span>')}
+    {ws_ir(I("user",15,2.4), "#A5B4FC,#6366F1", "alex 的个人空间", "个人 · 原来的单都还在", f'<em>{I("chevr",14)}</em>')}
   </div>
 
   <div class="card2" style="margin-top:12px;padding:10px 12px;background:color-mix(in srgb,var(--green) 8%,var(--glass-2));border-color:color-mix(in srgb,var(--green) 26%,transparent)">
     <div class="row g8">
       <span style="color:var(--ink-green)">{I("check",14,2.8)}</span>
-      <span class="f12 w6 grow" style="color:var(--ink-green)">已消费并清除口令 #CC-8K4P-9M2X-Q7R5#</span>
+      <span class="f12 w6 grow" style="color:var(--ink-green)">已加入星辰研发中心</span>
     </div>
-    <div class="f11 t2" style="margin-top:3px;line-height:1.45">本地已记录消费状态，后续切换前后台不再重复弹出邀请识别卡。</div>
+    <div class="f11 t2" style="margin-top:3px;line-height:1.45">这条邀请已经用过，之后切回云匠不会再弹出。</div>
   </div>
-</div>
-{tabbar("chat", 1)}'''
+
+  <div class="grp glass" style="margin-top:14px">
+    <div class="ir"><span class="ii" style="background:linear-gradient(155deg,#5AA0FF,#1F6FFF)">{I("link",15,2.2)}</span><span class="grow">输入邀请口令加入别的团队</span><em>{I("chevr",14)}</em></div>
+  </div>
+  <div class="grp glass" style="margin-top:14px">
+    <div class="ir" style="justify-content:center;color:var(--ink-red);font-weight:600">退出登录</div>
+  </div>
+</div>'''
 mp3 = phone_m(mp3_inner)
 
 m_clipboard = f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>移动端 · 剪贴板识别邀请</title>
@@ -308,7 +295,7 @@ m_clipboard = f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
 <style>{M_CLIP_CSS}</style></head><body><div class="board">
 <div class="col3">{mp1}<div class="lbl">复制切回无感识别<em>Pattern 探测命中即弹确认卡</em></div></div>
 <div class="col3">{mp2}<div class="lbl">未登录直达设密<em>免找入口 · 自动带入预填信息</em></div></div>
-<div class="col3">{mp3}<div class="lbl">入驻激活多空间切换<em>≥2 空间露胶囊 · 已消费防重弹</em></div></div>
+<div class="col3">{mp3}<div class="lbl">点头像推入账号与空间<em>在这里切换空间 · 邀请用过不再弹</em></div></div>
 </div><script src="../v3/shots.js"></script><script src="icons.js"></script></body></html>'''
 
 
