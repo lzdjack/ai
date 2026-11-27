@@ -15,6 +15,13 @@
       "when": 1795798383861,
       "tag": "0001_events",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1795799665738,
+      "tag": "0002_node_run_fanout",
+      "breakpoints": true
     }
   ]
 }

@@ -88,9 +88,12 @@ export const nodeRuns = projectTable(
     nodeKey: text().notNull(),
     nodeKind: text().notNull(),
     attemptNo: integer().notNull().default(1),
+    /** per_repo fan-out (06 §5.1a); the repos table and its FK come with P3 */
+    repoId: uuid(),
     runMode: text().notNull().default('full'),
     status: text().notNull().default('pending'),
     skipReason: text(),
+    errorRaw: text(),
     startedAt: ts(),
     finishedAt: ts(),
   },
@@ -101,7 +104,9 @@ export const nodeRuns = projectTable(
       columns: [t.workspaceId, t.flowInstanceId],
       foreignColumns: [flowInstances.workspaceId, flowInstances.id],
     }),
-    uniqueIndex('node_runs_attempt_key').on(t.flowInstanceId, t.nodeKey, t.attemptNo),
+    unique('node_runs_attempt_key')
+      .on(t.flowInstanceId, t.nodeKey, t.attemptNo, t.repoId)
+      .nullsNotDistinct(),
     enumCheck('node_runs_run_mode_check', 'run_mode', ['full', 'verify_only']),
     enumCheck('node_runs_status_check', 'status', NODE_STATUSES),
   ],
