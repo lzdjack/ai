@@ -45,8 +45,9 @@
 
 ## 生成与出图
 
-- 页面 HTML 由 `scripts/gen-*.py` 生成，**不要手改 `reference/src/v5/` 下的生成产物**。出图：`scripts/render.sh <html> "<查询参数>" <输出前缀> [宽] [高]`（`docs/03-出图流程.md`）。
-- 有依赖顺序：`gen-clipboard-invite.py` 读 `pc-ai.html`，`gen-missing-gaps.py` 读 `onboard-pc-4.html`、`onboard-pc-prod.html`、`pc-code.html`、`pc-evidence.html`。改了上游，要先跑 `gen-pages.py` / `gen-onboard.py`，再跑这两个脚本。
+- 页面 HTML 由 `scripts/gen-*.py` 生成，**不要手改 `reference/src/v5/` 下的生成产物**。
+- **统一用 `python3 scripts/build-all.py` 生成和出图**：按依赖顺序跑生成脚本 → 出亮暗 PNG → 生成 `index.html`。改完一般用 `--changed` 只重出有改动的页面；`--only <关键字>` 出指定页面；`--check` 核对对照表（`docs/03-出图流程.md`）。
+- 新增页面：在 `build-all.py` 的 `GENERATORS` 登记生成脚本、在 `RENDERS` 登记「HTML → 图名 → 尺寸」，然后跑 `--check`，不要只手动跑 `render.sh` 而不登记。
 
 ## 目录
 
@@ -54,7 +55,7 @@
 docs/        00 需求 · 01 设计主题 · 02 决策与禁区 · 03 出图流程 · 04 修复流转 · 05 链路流转 · 06 技术设计
 tokens/      theme.css（全部 token）、components.css（组件库唯一样式源）
 reference/   src/v4 主界面、src/v5 其余页面（生成产物）；images/、images/pages/ 定稿图
-scripts/     render.sh 出图；gen-pages.py + shell_pc.py + pages_pc.py（PC 页面）；gen-mobile-pages.py + shell_m.py（移动端）；
+scripts/     build-all.py 统一生成与出图（含对照表）；render.sh 单页出图；gen-pages.py + shell_pc.py + pages_pc.py（PC 页面）；gen-mobile-pages.py + shell_m.py（移动端）；
              gen-components*.py / gen-mobile-components.py（组件库规范板）；gen-onboard*.py + onboard_steps.py（开工步骤器）；
              gen-login / gen-splash / gen-market / gen-runner-* / gen-org-suite / gen-audit-gaps / gen-missing-gaps / gen-clipboard-invite / gen-phase2（各专题页）；
              gen-flow.py（链路总图）；build-index.py + tech_diagrams.py + ui_flow_map.py + index.template.html（生成 index.html）
