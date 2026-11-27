@@ -2,7 +2,9 @@
 // 编排推进函数、任务租约、Outbox 与外部副作用登记、HTTP 骨架。
 export { buildApp, type ApiError } from './app.ts';
 export { startSysLoop, type SysLoop } from './sys.ts';
-export { accountSettings } from './service/settings.ts';
+export { accountSettings, sourceSettings } from './service/settings.ts';
+export { signAccessToken } from './service/auth-crypto.ts';
+export type { SourceSettings } from './service/source-service.ts';
 export type { AccountSettings } from './service/account-service.ts';
 export type { Mailer } from './service/mailer.ts';
 export {

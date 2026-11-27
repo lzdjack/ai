@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@cloudcraft/config": "workspace:*",
+    "@cloudcraft/connector-gitlab": "workspace:*",
     "@cloudcraft/core-protocol": "workspace:*",
     "@fastify/websocket": "11.3.7",
     "drizzle-orm": "0.45.4",

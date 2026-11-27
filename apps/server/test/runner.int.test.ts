@@ -17,7 +17,7 @@ import { pgOrchestrator } from '../src/orchestrator/flow.ts';
 import { issueEnrollToken } from '../src/service/runner-service.ts';
 import { startSysLoop } from '../src/sys.ts';
 import { createTestDb, type TestDb } from './db.ts';
-import { seedSpace, testAccounts, type Space } from './fixtures.ts';
+import { seedSpace, testAccounts, testSources, type Space } from './fixtures.ts';
 
 let t: TestDb;
 let db: Db;
@@ -25,7 +25,12 @@ let A: Space;
 let B: Space;
 // short leases so expiry can be watched
 const app = () =>
-  buildApp({ db, runner: { leaseSeconds: 2, pollMs: 100 }, accounts: testAccounts().settings });
+  buildApp({
+    db,
+    runner: { leaseSeconds: 2, pollMs: 100 },
+    accounts: testAccounts().settings,
+    sources: testSources(),
+  });
 let server: ReturnType<typeof app>;
 
 const PLAN: Plan = {

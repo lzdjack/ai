@@ -7,7 +7,7 @@ import { createDb, type Db } from '../src/db/client.ts';
 import { findUnmatchedProbes } from '../src/db/write.ts';
 import { startSysLoop, type SysLoop } from '../src/sys.ts';
 import { createTestDb, type TestDb } from './db.ts';
-import { testAccounts } from './fixtures.ts';
+import { testAccounts, testSources } from './fixtures.ts';
 
 let t: TestDb;
 let db: Db;
@@ -19,7 +19,12 @@ const { settings, mails } = testAccounts();
 beforeAll(async () => {
   t = await createTestDb();
   db = createDb(t.appUrl, { max: 8 });
-  const app = buildApp({ db, runner: { leaseSeconds: 60, pollMs: 5000 }, accounts: settings });
+  const app = buildApp({
+    db,
+    runner: { leaseSeconds: 60, pollMs: 5000 },
+    accounts: settings,
+    sources: testSources(),
+  });
   await app.listen({ host: '127.0.0.1', port: 0 });
   base = `http://127.0.0.1:${(app.server.address() as AddressInfo).port}`;
   sys = startSysLoop(db, { reapIntervalMs: 60_000, streamIntervalMs: 30 });
@@ -308,6 +313,7 @@ describe('账号与空间（P2）', () => {
       db,
       runner: { leaseSeconds: 60, pollMs: 5000 },
       accounts: tight.settings,
+      sources: testSources(),
     });
     const send = () =>
       app.inject({

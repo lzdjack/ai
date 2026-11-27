@@ -3,6 +3,8 @@
 import {
   CompleteStepRequest,
   CompleteStepResponse,
+  CredentialEnvelope,
+  FetchCredentialRequest,
   HeartbeatRequest,
   HeartbeatResponse,
   RUNNER_FRAME_LIMIT,
@@ -17,7 +19,9 @@ import {
   heartbeatAndPoll,
   registerRunner,
   type RunnerSettings,
+  fetchCredential,
 } from '../service/runner-service.ts';
+import type { SourceSettings } from '../service/source-service.ts';
 
 const AUTH = /^Runner ([0-9a-f-]{36}):(\S+)$/;
 
@@ -27,7 +31,12 @@ function runnerAuth(req: FastifyRequest) {
   return { runnerId: m[1]!, secret: m[2]! };
 }
 
-export function runnerRoutes(app: FastifyInstance, db: Db, s: RunnerSettings) {
+export function runnerRoutes(
+  app: FastifyInstance,
+  db: Db,
+  s: RunnerSettings,
+  sources: SourceSettings,
+) {
   const opts = { bodyLimit: RUNNER_FRAME_LIMIT };
   app.post<{ Body: RegisterRunnerRequest }>(
     RUNNER_PATHS.registerRunner,
@@ -46,5 +55,10 @@ export function runnerRoutes(app: FastifyInstance, db: Db, s: RunnerSettings) {
       const next = await completeRoundStep(db, s, runnerAuth(req), req.body);
       return { accepted: true, ...(next ? { next } : {}) };
     },
+  );
+  app.post<{ Body: FetchCredentialRequest }>(
+    RUNNER_PATHS.fetchCredential,
+    { ...opts, schema: { body: FetchCredentialRequest, response: { 200: CredentialEnvelope } } },
+    (req) => fetchCredential(db, sources, runnerAuth(req), req.body),
   );
 }

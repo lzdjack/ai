@@ -282,6 +282,9 @@ importers:
       '@cloudcraft/config':
         specifier: workspace:*
         version: link:../../packages/config
+      '@cloudcraft/connector-gitlab':
+        specifier: workspace:*
+        version: link:../../plugins/connector-gitlab
       '@cloudcraft/core-protocol':
         specifier: workspace:*
         version: link:../../packages/core-protocol
@@ -392,7 +395,14 @@ importers:
         specifier: 19.3.0
         version: 19.3.0
 
-  plugins/connector-gitlab: {}
+  plugins/connector-gitlab:
+    dependencies:
+      '@cloudcraft/core-protocol':
+        specifier: workspace:*
+        version: link:../../packages/core-protocol
+      typebox:
+        specifier: 1.4.7
+        version: 1.4.7
 
   plugins/connector-jira: {}
 
