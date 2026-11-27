@@ -1,0 +1,34 @@
+# 本地基础设施（docs/07 §4.1）：由 pnpm dev:up 带上配置里的环境变量启动，不要直接 docker compose up
+name: cloudcraft
+
+services:
+  postgres:
+    build: ./postgres
+    image: cloudcraft/postgres:16.16-bigm
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${CC_PG_SUPERUSER_PASSWORD:?}
+      POSTGRES_DB: ${CC_PG_DATABASE:?}
+      CC_MIGRATOR_PASSWORD: ${CC_PG_MIGRATOR_PASSWORD:?}
+      CC_APP_PASSWORD: ${CC_PG_APP_PASSWORD:?}
+    ports:
+      - '127.0.0.1:${CC_PG_PORT:?}:5432'
+    volumes:
+      - ${CC_DATA_DIR:?}/pg:/var/lib/postgresql/data
+      - ./postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d "$$POSTGRES_DB"']
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  mailpit:
+    image: axllent/mailpit:v1.33.1
+    ports:
+      - '127.0.0.1:${CC_SMTP_PORT:?}:1025'
+      - '127.0.0.1:${CC_MAILPIT_UI_PORT:?}:8025'
+    healthcheck:
+      test: ['CMD', '/mailpit', 'readyz']
+      interval: 2s
+      timeout: 3s
+      retries: 30

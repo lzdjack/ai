@@ -1,0 +1,13 @@
+{
+  "name": "@cloudcraft/config",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "统一配置：读取 ~/.cloudcraft-dev/.env 与环境变量，TypeBox 校验（docs/07 §4.5，仅 Node 端）",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "typebox": "1.4.7"
+  }
+}
