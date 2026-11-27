@@ -1,0 +1,10 @@
+{
+  "name": "@cloudcraft/sim",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "内网系统模拟服务（07 §5，不进生产构建）",
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}

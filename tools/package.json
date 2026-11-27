@@ -1,0 +1,7 @@
+{
+  "name": "@cloudcraft/tools",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "开发工具：verify、代码生成、ESLint 自定义规则、Claude Code 钩子"
+}

@@ -1,0 +1,10 @@
+{
+  "name": "@cloudcraft/runtime-pi",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Pi 引擎插件（AgentRuntimePlugin）",
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}

@@ -1,0 +1,9 @@
+# 设计与文档目录不由 Prettier 管（Python 出图脚本有自己的格式）
+docs/
+reference/
+scripts/
+tokens/
+index.html
+*.md
+fixtures/
+pnpm-lock.yaml

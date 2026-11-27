@@ -1,0 +1,22 @@
+# 提交前：格式化、检查改动的文件、扫描密钥；推送前：全量 verify（docs/07 §3.1、§7.4）
+# 只在失败时输出，省 token
+output:
+  - failure
+
+pre-commit:
+  parallel: true
+  jobs:
+    - name: 格式化
+      glob: '*.{ts,tsx,mts,js,mjs,json,yaml,yml,css}'
+      run: pnpm exec prettier --write --ignore-unknown --log-level warn {staged_files}
+      stage_fixed: true
+    - name: 代码检查
+      glob: '*.{ts,tsx,mts,js,mjs}'
+      run: pnpm exec eslint --max-warnings 0 --no-warn-ignored {staged_files}
+    - name: 密钥扫描
+      glob: '*.{ts,tsx,mts,js,mjs,json,yaml,yml,env,sh,py,toml,txt}'
+      run: pnpm exec secretlint {staged_files}
+pre-push:
+  jobs:
+    - name: verify
+      run: pnpm verify

@@ -1,0 +1,10 @@
+{
+  "name": "@cloudcraft/workbench-ui",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "纯浏览器视图：工单、Diff、证据、AI",
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}

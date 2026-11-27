@@ -1,0 +1,10 @@
+{
+  "name": "@cloudcraft/mcp-tool-host",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "宿主侧工具与事实覆写（06 §11.4）",
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}

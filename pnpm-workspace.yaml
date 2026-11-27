@@ -1,0 +1,10 @@
+# 只包含代码目录；docs/ reference/ scripts/ 等设计目录和 fixtures/ 的 demo 仓不是工作区成员（docs/07 §2.2）
+packages:
+  - apps/*
+  - packages/*
+  - plugins/*
+  - sim
+  - tools
+allowBuilds:
+  esbuild: true
+  lefthook: true

@@ -1,0 +1,10 @@
+{
+  "name": "@cloudcraft/connector-tita-apollo",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "试点发布适配：tita build / release 与 Apollo 写回",
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}

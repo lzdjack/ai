@@ -1,0 +1,10 @@
+{
+  "name": "@cloudcraft/connector-jira",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Jira 收单连接器（只读）",
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "name": "@cloudcraft/admin-ui",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "纯浏览器视图：组织与权限",
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}
