@@ -20,8 +20,8 @@
   <div class="bwin glass">
     <div class="bbar">
       <div class="dots"><i style="background:#FF5F57"></i><i style="background:#FEBC2E"></i><i style="background:#28C840"></i></div>
-      <div class="urlbox"><span class="dot" style="width:7px;height:7px;background:var(--green)"></span><span class="mono">https://craft.company.com/admin/role-policies</span><span class="tag tg-g" style="height:18px;font-size:10px;margin-left:auto">同源 Cookie + CSRF</span></div>
-      <span class="pill" style="height:26px;padding:0 12px;border-radius:13px;background:color-mix(in srgb,var(--purple) 14%,transparent);color:var(--ink-purple);font-size:11.5px;font-weight:700"><i data-i="layers" data-s="12"></i>M2/M3 企业管理后台（Web /admin · 二期架构蓝图，不混入 M1 桌面设置主栏）</span>
+      <div class="urlbox"><span class="dot" style="width:7px;height:7px;background:var(--green)"></span><span class="mono">https://craft.company.com/admin/role-policies</span><span class="tag tg-g" style="height:18px;font-size:10px;margin-left:auto">已登录</span></div>
+      <span class="pill" style="height:26px;padding:0 12px;border-radius:13px;background:color-mix(in srgb,var(--purple) 14%,transparent);color:var(--ink-purple);font-size:11.5px;font-weight:700"><i data-i="layers" data-s="12"></i>企业管理后台 · 网页版（二期蓝图，不在桌面端设置里）</span>
       <span class="grow"></span>
       <span class="f12 lnk w6" style="white-space:nowrap">返回桌面工作台 ↗</span>
     </div>
@@ -29,109 +29,109 @@
       <aside class="wside">
         <div class="row g10" style="padding:4px 6px 12px;border-bottom:1px solid var(--hair);margin-bottom:6px">
           <span class="ic-box" style="width:32px;height:32px;border-radius:9px;background:linear-gradient(155deg,#3478F6,#5B21B6)"><i data-i="shield" data-s="16" data-w="2"></i></span>
-          <div class="col"><span class="f13 w7">星辰研发中心</span><span class="f11 t3">enterprise-web · /admin</span></div>
+          <div class="col"><span class="f13 w7">星辰研发中心</span><span class="f11 t3">网页管理后台</span></div>
         </div>
-        <div class="wnav"><i data-i="users" data-s="15"></i><span class="grow ell">多级组织架构树与同步</span><span class="f11 t3 mono">48</span></div><div class="wnav"><i data-i="shield" data-s="15"></i><span class="grow ell">企业域名验证与 SSO</span><span class="f11 t3 mono">2</span></div><div class="wnav on"><i data-i="lock" data-s="15"></i><span class="grow ell">角色策略（Allow / Deny）</span><span class="f11 t3 mono">7</span></div><div class="wnav"><i data-i="layers" data-s="15"></i><span class="grow ell">级联配置与安全锁定</span><span class="f11 t3 mono">scoped</span></div><div class="wnav"><i data-i="zap" data-s="15"></i><span class="grow ell">配额账单与安全审计</span><span class="f11 t3 mono">export</span></div>
+        <div class="wnav"><i data-i="users" data-s="15"></i><span class="grow ell">多级组织架构树与同步</span><span class="f11 t3 mono">48</span></div><div class="wnav"><i data-i="shield" data-s="15"></i><span class="grow ell">企业域名验证与 SSO</span><span class="f11 t3 mono">2</span></div><div class="wnav on"><i data-i="lock" data-s="15"></i><span class="grow ell">角色策略</span><span class="f11 t3 mono">7</span></div><div class="wnav"><i data-i="layers" data-s="15"></i><span class="grow ell">配置下发与安全锁定</span><span class="f11 t3 mono">4</span></div><div class="wnav"><i data-i="zap" data-s="15"></i><span class="grow ell">配额账单与安全审计</span><span class="f11 t3 mono"></span></div>
         <span class="grow"></span>
         <div class="card" style="padding:10px 11px;gap:4px">
-          <div class="f11 w7">工程分层红线</div>
-          <div class="f11 t2" style="line-height:1.5">独立 Vite SPA（<span class="mono">apps/web</span>），复用 <span class="mono">packages/ui-kit + admin-ui</span>；经 URL Fragment <span class="mono">#token=...</span> + <span class="mono">POST /exchange</span> 交接。</div>
+          <div class="f11 w7">从工作台进入</div>
+          <div class="f11 t2" style="line-height:1.5">管理员在桌面端「设置」底部点「管理后台」，不用重新登录。</div>
         </div>
       </aside>
       <main class="wmain"><div class="row g10">
       <div class="col grow">
-        <div class="row g8"><span class="f20 w7">角色策略中心（Allow / Deny 规则引擎）</span><span class="tag tg-p">企业蓝图 M2 / M3</span></div>
-        <div class="f12 t3" style="margin-top:2px">在 M1 权限基础上叠加四重 AND 门禁、显式拒绝（<span class="mono">effect='deny'</span>）与动态插件跨作用域试算</div>
+        <div class="row g8"><span class="f20 w7">角色策略中心（允许 / 拒绝规则）</span><span class="tag tg-p">企业蓝图 M2 / M3</span></div>
+        <div class="f12 t3" style="margin-top:2px">在一期权限基础上增加拒绝规则，并可以模拟某个人在某个项目里能不能做某件事</div>
       </div>
-      <button class="cc-btn cc-btn-sm cc-btn-glass"><i data-i="shield" data-s="13"></i>策略合规试算</button>
+      <button class="cc-btn cc-btn-sm cc-btn-glass"><i data-i="shield" data-s="13"></i>模拟权限</button>
       <button class="cc-btn cc-btn-sm cc-btn-pri"><i data-i="plus" data-s="13" data-w="2.4"></i>新建自定义角色 / 策略</button>
     </div>
     <div class="wgrid">
       <div class="wcard">
         <div class="row g8">
-          <span class="f14 w7 grow">四重 AND × Deny-Overrides 优先级栈</span>
-          <span class="tag tg-r">消假绿灯</span>
+          <span class="f14 w7 grow">一个操作要依次通过这 4 层检查</span>
+          <span class="tag tg-r">任何一层不过都不放行</span>
         </div>
         <div class="col g6">
           <div class="row g10" style="padding:9px 11px;border-radius:11px;background:var(--well);border:1px solid var(--hair)">
   <span class="ck" style="background:var(--ink-purple);width:20px;height:20px;font-size:11px;font-weight:800">0</span>
-  <div class="col grow" style="min-width:0"><span class="f12 w7">插件生命周期门禁（enabled & 项目生效范围）</span><span class="f11 t3">未安装/已停用插件的 ext:* 动作第 0 层 403 阻断</span></div>
+  <div class="col grow" style="min-width:0"><span class="f12 w7">插件是否可用</span><span class="f11 t3">插件没装或已停用时，它的操作一律不可用</span></div>
 </div>
           <div class="row g10" style="padding:9px 11px;border-radius:11px;background:var(--well);border:1px solid var(--hair)">
   <span class="ck" style="background:var(--btn-danger-bg);width:20px;height:20px;font-size:11px;font-weight:800">1</span>
-  <div class="col grow" style="min-width:0"><span class="f12 w7">Core 安全不变量（不可配置）</span><span class="f11 t3">代审仅 ticket_assignees、personal_exec 凭据强制 scope='user'</span></div>
+  <div class="col grow" style="min-width:0"><span class="f12 w7">安全红线（不能修改）</span><span class="f11 t3">只有本单修复人能审代码；个人账号只能本人使用</span></div>
 </div>
           <div class="row g10" style="padding:9px 11px;border-radius:11px;background:var(--well);border:1px solid var(--hair)">
   <span class="ck" style="background:var(--orange);width:20px;height:20px;font-size:11px;font-weight:800">2</span>
-  <div class="col grow" style="min-width:0"><span class="f12 w7">RBAC 角色与显式拒绝（Deny-Overrides + 作用域）</span><span class="f11 t3">任一作用域命中 DENY 立即一票否决，无任何内置角色名特判</span></div>
+  <div class="col grow" style="min-width:0"><span class="f12 w7">角色权限（拒绝优先）</span><span class="f11 t3">命中任何一条拒绝规则就不放行，不看角色名</span></div>
 </div>
           <div class="row g10" style="padding:9px 11px;border-radius:11px;background:var(--well);border:1px solid var(--hair)">
   <span class="ck" style="background:var(--btn-pri-bg);width:20px;height:20px;font-size:11px;font-weight:800">3</span>
-  <div class="col grow" style="min-width:0"><span class="f12 w7">操作人个人凭据实时校验</span><span class="f11 t3">RBAC 放行后仍需本人「我的账号」有效 scope='user' 凭据</span></div>
+  <div class="col grow" style="min-width:0"><span class="f12 w7">本人账号是否有效</span><span class="f11 t3">权限通过后，还要你在「我的账号」里的个人账号有效</span></div>
 </div>
         </div>
         <div class="card" style="padding:9px 11px;gap:3px;margin-top:auto">
-          <div class="f11 w7">跨阶段零重构契约</div>
-          <div class="f11 t2" style="line-height:1.45">所有可选插件权限定名走 <span class="mono">ext:&lt;plugin_id&gt;:&lt;action&gt;</span>；停用不丢 <span class="mono">DENY</span> 策略，重装按签名自动恢复防御。</div>
+          <div class="f11 w7">插件权限的命名</div>
+          <div class="f11 t2" style="line-height:1.45">插件权限统一写成 <span class="mono">ext:插件名:操作</span>；插件停用后拒绝规则照样保留，重新启用时自动恢复。</div>
         </div>
       </div>
 
       <div class="col g12" style="min-height:0">
         <div class="wcard" style="padding:12px 14px;gap:7px">
           <div class="row g8">
-            <span class="f14 w7 grow">活跃策略绑定清单（<span class="mono">role_bindings</span>）</span>
-            <span class="cc-seg cc-seg-xs"><span class="on">全部 4</span><span>仅 DENY 2</span><span>停用冻结 1</span></span>
+            <span class="f14 w7 grow">生效中的规则</span>
+            <span class="cc-seg cc-seg-xs"><span class="on">全部 4</span><span>仅拒绝 2</span><span>停用冻结 1</span></span>
           </div>
           <div class="row g8" style="padding:7px 10px;border-radius:10px;background:var(--fill)">
   <span class="mono f11 t3" style="width:52px;flex:none">POL-01</span>
-  <span class="tag tg-r" style="height:18px;font-size:10px">DENY</span>
-  <div class="col grow" style="min-width:0"><span class="f12 w6 ell">外部协作者（低权） · 全空间</span><span class="f11 t3 ell">禁止读取共享参考仓库、全部成员目录及 ext:* 空间级插件</span></div>
+  <span class="tag tg-r" style="height:18px;font-size:10px">拒绝</span>
+  <div class="col grow" style="min-width:0"><span class="f12 w6 ell">外部协作者（低权） · 全空间</span><span class="f11 t3 ell">不能查看共享参考仓库、全体成员目录和空间级插件</span></div>
   <span class="lnk f11">编辑</span>
 </div>
           <div class="row g8" style="padding:7px 10px;border-radius:10px;background:var(--fill)">
   <span class="mono f11 t3" style="width:52px;flex:none">POL-02</span>
-  <span class="tag tg-r" style="height:18px;font-size:10px">DENY</span>
-  <div class="col grow" style="min-width:0"><span class="f12 w6 ell">借调组（审批重构） · 项目·审批</span><span class="f11 t3 ell">禁止向 PROD 正式环境发起发布或变更（ext:release-*:prod） · 12/31 止</span></div>
+  <span class="tag tg-r" style="height:18px;font-size:10px">拒绝</span>
+  <div class="col grow" style="min-width:0"><span class="f12 w6 ell">借调组（审批重构） · 项目·审批</span><span class="f11 t3 ell">不能向正式环境发布或变更 · 12/31 到期</span></div>
   <span class="lnk f11">编辑</span>
 </div>
           <div class="row g8" style="padding:7px 10px;border-radius:10px;background:var(--fill);opacity:.68">
   <span class="mono f11 t3" style="width:52px;flex:none">POL-03</span>
-  <span class="tag tg-g" style="height:18px;font-size:10px">ALLOW</span>
-  <div class="col grow" style="min-width:0"><span class="f12 w6 ell">紧急回滚插件（Apollo） · 全空间</span><span class="f11 t3 ell">ext:rollback-apollo:execute · 插件当前在工作空间停用</span></div>
+  <span class="tag tg-g" style="height:18px;font-size:10px">允许</span>
+  <div class="col grow" style="min-width:0"><span class="f12 w6 ell">紧急回滚插件（Apollo） · 全空间</span><span class="f11 t3 ell">可以执行紧急回滚 · 插件已停用，规则暂不生效</span></div>
   <span class="tag tg-n" style="height:18px;font-size:9.5px">插件停用·冻结</span>
 </div>
         </div>
 
         <div class="wcard" style="padding:12px 14px;gap:6px;flex:1">
           <div class="row g8">
-            <span class="f14 w7 grow">有效权限合规试算器（ActionGate 实态模拟）</span>
+            <span class="f14 w7 grow">权限模拟（选一个人，看他能不能做某件事）</span>
             <span class="cc-select cc-select-sm" style="width:186px"><span class="cc-sel-val">宋工（外部协作者）</span><span class="cc-sel-sp"></span><span class="cc-sel-caret"><i data-i="chevd" data-s="12"></i></span></span>
           </div>
           <div class="col" style="margin-top:2px">
             <div class="row g8" style="padding:6px 0;border-top:1px solid var(--hair)">
   <span class="mono f11 w6" style="width:184px;flex:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">core:ticket:read</span>
-  <span class="tag tg-g" style="height:18px;font-size:10px">ALLOW</span>
-  <span class="f11 t2 grow ell">命中 OKR 项目显式授权白名单</span>
+  <span class="tag tg-g" style="height:18px;font-size:10px">允许</span>
+  <span class="f11 t2 grow ell">OKR 项目已授权</span>
 </div>
             <div class="row g8" style="padding:6px 0;border-top:1px solid var(--hair)">
   <span class="mono f11 w6" style="width:184px;flex:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">ext:connector-gitlab:merge</span>
-  <span class="tag tg-o" style="height:18px;font-size:10px">待补凭据</span>
-  <span class="f11 t2 grow ell">RBAC 允许但缺本人 scope='user' PAT（ActionGate 引导补配）</span>
+  <span class="tag tg-o" style="height:18px;font-size:10px">待补账号</span>
+  <span class="f11 t2 grow ell">权限允许，但本人还没填 GitLab 个人令牌，会引导补填</span>
 </div>
             <div class="row g8" style="padding:6px 0;border-top:1px solid var(--hair)">
   <span class="mono f11 w6" style="width:184px;flex:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">ext:rollback-apollo:exec</span>
   <span class="tag tg-n" style="height:18px;font-size:10px">插件停用</span>
-  <span class="f11 t2 grow ell">第 0 层 PLUGIN_DISABLED 拦截（POL-03 快照保留但不放行）</span>
+  <span class="f11 t2 grow ell">插件已停用，不放行（POL-03 规则保留）</span>
 </div>
             <div class="row g8" style="padding:6px 0;border-top:1px solid var(--hair)">
   <span class="mono f11 w6" style="width:184px;flex:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">core:repo:shared_ref</span>
-  <span class="tag tg-r" style="height:18px;font-size:10px">DENIED</span>
-  <span class="f11 t2 grow ell">POL-01 Explicit DENY 拦截（非授权项目范围）</span>
+  <span class="tag tg-r" style="height:18px;font-size:10px">拒绝</span>
+  <span class="f11 t2 grow ell">被 POL-01 拒绝（不在授权项目内）</span>
 </div>
             <div class="row g8" style="padding:6px 0;border-top:1px solid var(--hair)">
   <span class="mono f11 w6" style="width:184px;flex:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">core:ticket:review_code</span>
-  <span class="tag tg-r" style="height:18px;font-size:10px">LOCKED</span>
-  <span class="f11 t2 grow ell">Plane B 安全红线：仅当本人为 ticket_assignees 时允许</span>
+  <span class="tag tg-r" style="height:18px;font-size:10px">锁定</span>
+  <span class="f11 t2 grow ell">安全红线：只有本单修复人可以审代码</span>
 </div>
           </div>
         </div>

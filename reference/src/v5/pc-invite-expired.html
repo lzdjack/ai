@@ -15,18 +15,18 @@
   <span class="ic-box" style="width:52px;height:52px;border-radius:16px;background:linear-gradient(160deg,#FF8A7A,#E0281E)"><i data-i="alert" data-s="24" data-w="2.2"></i></span>
   <div class="f18 w7" style="margin-top:12px">这个邀请已经失效</div>
   <div class="f13 t2" style="margin-top:6px;line-height:1.6">口令 <span class="mono">#CC-8K4P-9M2X-Q7R5#</span> 已于 14:20 过期或被其他账号使用。<br>为保安全，系统不泄露原空间成员信息。</div>
-  <div class="row g10" style="margin-top:16px"><button class="cc-btn cc-btn-md cc-btn-sec">返回我的工作台</button><button class="cc-btn cc-btn-md cc-btn-pri">联系邀请人重发 24h 新口令</button></div></section></div><div class="et"><div class="el"><span class="no">2</span><b>当前账号邮箱与受邀邮箱不一致</b><em>防错入与越权顶替（invite.email 强核对）</em></div><section class="glass ep">
+  <div class="row g10" style="margin-top:16px"><button class="cc-btn cc-btn-md cc-btn-sec">返回我的工作台</button><button class="cc-btn cc-btn-md cc-btn-pri">联系邀请人重发 24h 新口令</button></div></section></div><div class="et"><div class="el"><span class="no">2</span><b>当前账号邮箱与受邀邮箱不一致</b><em>邀请指定了邮箱，就必须用这个邮箱加入</em></div><section class="glass ep">
   <span class="ic-box" style="width:52px;height:52px;border-radius:16px;background:linear-gradient(160deg,#FFC54D,#FF7A00)"><i data-i="users" data-s="24" data-w="2.2"></i></span>
   <div class="f18 w7" style="margin-top:12px">请切换为受邀邮箱后再加入</div>
   <div class="card col g6" style="margin-top:12px;padding:10px 14px;width:430px;text-align:left">
     <div class="row f12"><span class="t3" style="width:92px">当前已登录</span><span class="mono w6">zhang@personal.com</span><span class="tag tg-r" style="margin-left:auto">不匹配</span></div>
     <div class="row f12"><span class="t3" style="width:92px">本邀请指定邮箱</span><span class="mono w6" style="color:var(--ink-green)">zhang@company.com</span></div>
   </div>
-  <div class="row g10" style="margin-top:14px"><button class="cc-btn cc-btn-md cc-btn-sec">取消并留在此账号</button><button class="cc-btn cc-btn-md cc-btn-pri">退出并用 zhang@company.com 登录</button></div></section></div><div class="et"><div class="el"><span class="no">3</span><b>Web 管理后台安全交接中间确认页</b><em>从桌面跳 /admin（#token= Fragment · 防反向代理日志泄露）</em></div><section class="glass ep">
+  <div class="row g10" style="margin-top:14px"><button class="cc-btn cc-btn-md cc-btn-sec">取消并留在此账号</button><button class="cc-btn cc-btn-md cc-btn-pri">退出并用 zhang@company.com 登录</button></div></section></div><div class="et"><div class="el"><span class="no">3</span><b>Web 管理后台安全交接中间确认页</b><em>从桌面端跳到网页管理后台，免登录且令牌只用一次</em></div><section class="glass ep">
   <span class="ic-box" style="width:52px;height:52px;border-radius:16px;background:linear-gradient(155deg,#3478F6,#5B21B6)"><i data-i="shield" data-s="24" data-w="2.2"></i></span>
   <div class="f18 w7" style="margin-top:12px">确认进入「星辰研发中心」企业管理后台？</div>
-  <div class="f13 t2" style="margin-top:6px;line-height:1.6">正在由桌面端安全交接一次性令牌（URL Fragment <span class="mono">#token=...</span>），<br>确认后立即兑换 <span class="mono">HttpOnly; Path=/admin</span> 同源 Cookie 并作废原交接码。</div>
-  <div class="row g10" style="margin-top:16px"><button class="cc-btn cc-btn-md cc-btn-sec">取消返回</button><button class="cc-btn cc-btn-md cc-btn-pri"><i data-i="check" data-s="14" data-w="2.6"></i>确认进入 /admin 控制台</button></div></section></div><div class="et"><div class="el"><span class="no">4</span><b>私有部署冷启动 · 首位超管强制改密拦截态</b><em>INIT_ADMIN 登录后持有 pwd_change_only 短期令牌</em></div><section class="glass ep">
+  <div class="f13 t2" style="margin-top:6px;line-height:1.6">你正从桌面端进入管理后台，不需要重新登录。<br>确认后即可进入，这次的跳转链接随即失效。</div>
+  <div class="row g10" style="margin-top:16px"><button class="cc-btn cc-btn-md cc-btn-sec">取消返回</button><button class="cc-btn cc-btn-md cc-btn-pri"><i data-i="check" data-s="14" data-w="2.6"></i>确认进入管理后台</button></div></section></div><div class="et"><div class="el"><span class="no">4</span><b>私有部署冷启动 · 首位超管强制改密拦截态</b><em>首位管理员登录后只能先改密码，改完才能做别的</em></div><section class="glass ep">
   <span class="ic-box" style="width:52px;height:52px;border-radius:16px;background:linear-gradient(155deg,#A855F7,#6366F1)"><i data-i="key" data-s="24" data-w="2.2"></i></span>
   <div class="f18 w7" style="margin-top:12px">首次启动请先重置管理员初始密码</div>
   <div class="f13 t2" style="margin-top:4px">当前为私有部署冷启动强制保护状态，改密完成前拦截所有业务与邀请操作。</div>

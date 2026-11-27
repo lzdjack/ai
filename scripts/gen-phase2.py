@@ -246,9 +246,9 @@ def build_1_spec():
   </div>
 
   <div class="card" style="padding:11px 13px">
-    <div class="mini" style="margin-bottom:4px">两层 RBAC 与隔离护栏</div>
+    <div class="mini" style="margin-bottom:4px">两层权限与隔离</div>
     <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">活原型与契约</span><span class="f11.5 w6" style="font-size:11.5px;color:var(--ink-green)">4 方只读共享</span></div>
-    <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">源码 / 录屏 / 测试号</span><span class="mono f11" style="color:var(--ink-blue)">project_only</span></div>
+    <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">源码 / 录屏 / 测试号</span><span class="mono f11" style="color:var(--ink-blue)">仅本项目</span></div>
     <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">并行联调策略</span><span class="f11.5 w6" style="font-size:11.5px">契约 Mock 先行</span></div>
   </div>
 </aside>'''
@@ -305,7 +305,7 @@ def build_2_drawer():
     <div class="srow"><span class="c-pill cp-p">组织人事</span><span class="mono f12 w7">TK-902</span><span class="f13 w6 ell grow">员工调岗异动事件补充 effectiveDate</span></div>
     <div class="srow hi"><span class="c-pill cp-o">CRM</span><span class="mono f12 w7" style="color:var(--ink-blue)">TK-903</span><span class="f13 w6 ell grow">订单回款推送销售提成明细</span></div>
     <div class="srow"><span class="c-pill cp-b">薪酬 API</span><span class="mono f12 w7">TK-904a</span><span class="f13 w6 ell grow">月度算薪引擎接入绩效与提成（契约 Mock 4/4）</span></div>
-    <div class="srow"><span class="c-pill cp-b">薪酬 Web</span><span class="mono f12 w7">TK-904b</span><span class="f13 w6 ell grow">算薪明细表新增绩效与提成列（CDP Mock 过审）</span></div>
+    <div class="srow"><span class="c-pill cp-b">薪酬 Web</span><span class="mono f12 w7">TK-904b</span><span class="f13 w6 ell grow">算薪明细表新增绩效与提成列（模拟数据验证通过）</span></div>
   </div>
 </main>'''
 
@@ -359,7 +359,7 @@ def build_2_drawer():
       </div>
 
       <div class="row g8" style="padding:8px 11px;border-radius:10px;background:var(--fill);font-size:11.5px;color:var(--text-2)">
-        <span class="c-pill cp-i">RBAC 兜底</span>
+        <span class="c-pill cp-i">权限兜底</span>
         <span class="grow">非 CRM 成员点开此抽屉时，自动折叠源码与原始录屏区，仅显契约合规态与状态摘要，绝不撞红锁。</span>
       </div>
 
@@ -399,7 +399,7 @@ def build_2_drawer():
         <div class="kv2"><span class="f11.5 t2" style="font-size:11.5px">契约消费方</span><span class="f11.5 w6" style="font-size:11.5px">薪酬 TK-904a</span></div>
         <div class="kv2"><span class="f11.5 t2" style="font-size:11.5px">薪酬并行状态</span><span class="c-pill cp-g">Mock 4/4 通过</span></div>
         <div class="kv2"><span class="f11.5 t2" style="font-size:11.5px">发版波次</span><span class="f11.5 w6" style="font-size:11.5px">波次 1 · 兼容先上</span></div>
-        <div class="kv2"><span class="f11.5 t2" style="font-size:11.5px">源码可见域</span><span class="c-pill cp-n">project_only</span></div>
+        <div class="kv2"><span class="f11.5 t2" style="font-size:11.5px">源码可见域</span><span class="c-pill cp-n">仅本项目</span></div>
       </div>
     </aside>
   </div>
@@ -625,7 +625,7 @@ def build_4_qa():
       <div class="har-box" style="margin-top:8px">
         <div><span class="t3">冻结契约 #8e1b@v1：</span><span class="mono har-ok">when isRefund == true =&gt; amount &lt; 0</span></div>
         <div><span class="t3">脱敏抓包（CRM 发出）：</span><span class="mono har-bad">{{ "orderId": "ORD-***91", "isRefund": true, "amount": +1280.00 }}  ← 响应违约！</span></div>
-        <div class="f11.5 t2" style="margin-top:3px;font-size:11.5px"><b>归因结论：</b>100% 归责提供方 <b>CRM</b>（未按契约发负数），非薪酬算错；原始录屏已按 <span class="mono">project_only</span> 脱敏隔离。</div>
+        <div class="f11.5 t2" style="margin-top:3px;font-size:11.5px"><b>归因结论：</b>100% 归责提供方 <b>CRM</b>（未按契约发负数），非薪酬算错；原始录屏已按 仅本项目可见并脱敏。</div>
       </div>
       <div class="row g8" style="margin-top:9px">
         <span class="btn2 sm a-pri">{I("check",13,2.6)}确认派给 CRM 生成工单</span>
@@ -654,18 +654,18 @@ def build_4_qa():
   </div>
 
   <div class="card" style="padding:11px 13px">
-    <div class="mini" style="margin-bottom:5px">跨项目 RBAC 隐私护栏</div>
+    <div class="mini" style="margin-bottom:5px">跨项目隐私保护</div>
     <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">联调公共区</span><span class="f11.5 w6" style="font-size:11.5px;color:var(--ink-green)">仅脱敏契约 Diff</span></div>
-    <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">录屏与堆栈</span><span class="mono f11" style="color:var(--ink-blue)">project_only</span></div>
+    <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">录屏与堆栈</span><span class="mono f11" style="color:var(--ink-blue)">仅本项目</span></div>
     <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">全局 AI 聚合</span><span class="f11.5 w6" style="font-size:11.5px">按成员强裁剪</span></div>
   </div>
 
   <div class="card" style="padding:11px 13px">
-    <div class="mini" style="margin-bottom:5px">PROD 波次编排（release_bundles）</div>
+    <div class="mini" style="margin-bottom:5px">正式环境分批发布</div>
     <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">波次 1（提供方）</span><span class="f11.5 w6" style="font-size:11.5px">绩效 / 人事 / CRM</span></div>
     <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">波次 2（消费方）</span><span class="f11.5 w6" style="font-size:11.5px">薪酬 API + Web</span></div>
     <div class="kv2" style="padding:3px 0"><span class="f11.5 t2" style="font-size:11.5px">灰度开关</span><span class="c-pill cp-o">Flag OFF</span></div>
-    <div class="f11 t3" style="margin-top:6px;line-height:1.5">每个节点复用一期 <span class="mono">release_tasks</span> 串行锁、个人 Apollo 账号与真人输 <span class="mono">PROD</span> 确认。</div>
+    <div class="f11 t3" style="margin-top:6px;line-height:1.5">每一批沿用一期发布规则：同一时间只发一个、用个人发布账号、真人输入 <span class="mono">PROD</span> 确认。</div>
   </div>
 </aside>'''
 

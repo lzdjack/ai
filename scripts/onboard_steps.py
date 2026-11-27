@@ -86,7 +86,7 @@ def STEP_PAGES(page, CHECK):
       <div class="sech">
         <b>代码来源</b>
         <span class="tag tg-b" style="height:19px;font-size:10.5px">至少 1 个</span>
-        <span class="sub">自动筛出插件市场中 <span class="mono">code_source</span> 类连接器 · 鉴权后拉取仓库与推测分支</span>
+        <span class="sub">列出能接代码仓库的连接器 · 连上后自动拉取仓库并推测分支</span>
       </div>
       <div class="cgrid">
         <div class="ccard">
@@ -127,7 +127,7 @@ def STEP_PAGES(page, CHECK):
       <div class="sech" style="margin-top:18px">
         <b>工单平台</b>
         <span class="tag tg-n" style="height:19px;font-size:10.5px">可选 · 可跳过</span>
-        <span class="sub">自动筛出 <span class="mono">ticket_source</span> 类连接器 · 不接也能直接进工作台点「+」手动建单</span>
+        <span class="sub">列出能接工单平台的连接器 · 不接也能进工作台点「+」手动建单</span>
       </div>
       <div class="cgrid">
         <div class="ccard opt">
@@ -155,7 +155,7 @@ def STEP_PAGES(page, CHECK):
 
       <div class="note" style="margin-top:auto;margin-bottom:14px">
         {I("lock",15,st="color:var(--ink-blue);margin-top:1px")}
-        <span><b>凭证安全隔离：</b>所有连接器令牌采用「公钥加密入库、私钥仅在执行器解出」，接口层拿不到明文；管理员配好「公司共用」连接器后，团队成员直接复用，之后随时可在「设置 → 连接器」增改。</span>
+        <span><b>凭证安全隔离：</b>所有连接器令牌都加密保存，只有执行器在用的时候才能解开，页面和接口都拿不到明文；管理员配好「公司共用」连接器后，团队成员直接复用，之后随时可在「设置 → 连接器」增改。</span>
       </div>'''
     foot1 = (f'<span class="stat-pill sp-g">{I("check",13,2.8)}代码源 2 个已鉴权</span>'
              f'<span class="stat-pill sp-b">{I("inbox",13)}工单源 1 个（可选）</span>'
@@ -186,7 +186,7 @@ def STEP_PAGES(page, CHECK):
     <span class="ic3" style="background:linear-gradient(155deg,#FF8A4C,#E24329)">G</span>
     <div class="grow">
       <div style="font-size:18px;font-weight:800">新建代码连接器</div>
-      <div class="f12 t3" style="margin-top:2px">表单按插件 <span class="mono">authSchema</span> 自动渲染 · 鉴权通过后下一步即可拉取该平台仓库</div>
+      <div class="f12 t3" style="margin-top:2px">按所选平台显示需要填写的内容 · 连接成功后下一步就能拉取仓库</div>
     </div>
     <span class="cc-close">{I("x",16,2.2)}</span>
   </div>
@@ -259,7 +259,7 @@ html.dark .tsec2{{background:rgba(255,255,255,.038)}}
     <span class="ic3" style="background:linear-gradient(155deg,#4FA3FF,#1D6FE0)">J</span>
     <div class="grow" style="min-width:0">
       <div class="row g8"><span style="font-size:17px;font-weight:800">编辑工单连接器 · 公司 Jira</span><span class="cc-tag cc-tag-n">公司共用</span><span class="cc-tag cc-tag-g">鉴权通过</span></div>
-      <div class="f11 t3" style="margin-top:2px">共用 <span class="mono">ConnectorDrawer</span>（工单源额外渲染 <span class="mono">triggerSchema</span> + 试采预览）· 令牌留空不覆盖</div>
+      <div class="f11 t3" style="margin-top:2px">工单源还可以设置收单条件并试采预览 · 令牌留空表示不修改</div>
     </div>
     <span class="cc-close">{I("x",16,2.2)}</span>
   </div>
@@ -425,7 +425,7 @@ html.dark .tsec2{{background:rgba(255,255,255,.038)}}
     </div>
 
     <div class="cc-banner cc-banner-warn" style="margin-top:auto">
-      <span><b style="color:var(--text)">冷启动兜底：</b>在管理员第 0 步尚未连通 AI 模型时点「问 AI」，自动降级为<b>内置离线交互式引导卡</b>（公司网关 / OpenAI / Ollama 填法），绝不报 500 死循环。</span>
+      <span><b style="color:var(--text)">还没接 AI 也能用：</b>第 0 步还没连上 AI 模型时点「问 AI」，会显示<b>内置的填写引导</b>（公司网关 / OpenAI / Ollama 怎么填）。</span>
     </div>
   </div>
 
@@ -485,7 +485,7 @@ html.dark .tsec2{{background:rgba(255,255,255,.038)}}
               </div>
               <div class="pmeta">
                 <span class="ro-bdg">{I("lock",11)}只读隔离</span>
-                <span class="ell">辅助核对接口字段、错误码与权限逻辑，宿主机硬拦截写入与推送</span>
+                <span class="ell">辅助核对接口字段、错误码与权限逻辑 · 只读，Bot 不能改动或推送</span>
               </div>
             </div>
             <div class="pseg"><span class="s-ro">{I("eye",12)}仅查看</span><span>{I("edit",12)}可修改</span></div>
@@ -540,7 +540,7 @@ html.dark .tsec2{{background:rgba(255,255,255,.038)}}
               </div>
               <div class="pmeta">
                 <span class="ro-bdg">{I("lock",11)}只读隔离</span>
-                <span class="ell">供 Bot 跨仓查组件 API 与主题变量，宿主机硬拦截任何代码写入与提 PR</span>
+                <span class="ell">供 Bot 查组件用法与主题变量 · 只读，Bot 不能改代码或提 PR</span>
               </div>
             </div>
             <div class="pseg"><span class="s-ro">{I("eye",12)}仅查看</span><span>{I("edit",12)}可修改</span></div>
@@ -677,7 +677,7 @@ html.dark .tsec2{{background:rgba(255,255,255,.038)}}
       </div>
       <div class="row g10">
         <div style="width:170px;flex:none">
-          <div class="flab">工具链适配<span class="aid2">lock / mod</span></div>
+          <div class="flab">工具链适配<span class="aid2">自动识别</span></div>
           <div class="dsel"><span class="mono grow">pnpm (多语言支持)</span>{I("chevd",13,st="color:var(--text-3)")}</div>
         </div>
         <div class="grow">
@@ -692,7 +692,7 @@ html.dark .tsec2{{background:rgba(255,255,255,.038)}}
       <div class="tsec-h"><span>验证策略、规范与默认审核人</span></div>
       <div class="row g8 f12 t2" style="padding:7px 10px;border-radius:10px;background:var(--glass-2)">
         {I("file",14,st="color:var(--ink-purple)")}
-        <span class="grow ell">自动识别 <span class="mono">AGENTS.md</span> · 验证策略 <span class="mono">browser_dist_replace</span>（后端支持 <span class="mono">test_suite</span>）</span>
+        <span class="grow ell">自动识别 <span class="mono">AGENTS.md</span> · 验证方式：浏览器里替换产物验证（后端仓库可选跑测试）</span>
         <span class="tag tg-g" style="height:19px;font-size:10.5px">已生效</span>
       </div>
       <div class="row g10">
@@ -723,7 +723,7 @@ html.dark .tsec2{{background:rgba(255,255,255,.038)}}
 
     # ---------------- 4 AI 体检并开工 ----------------
     def c(st, t, r):
-        bg = {"ok": "var(--btn-ok-bg)", "wn": "#B45309", "sk": "color-mix(in srgb,var(--text) 25%,transparent)"}[st]
+        bg = {"ok": "var(--btn-ok-bg)", "wn": "var(--btn-warn-bg)", "sk": "color-mix(in srgb,var(--text) 25%,transparent)"}[st]
         g = {"ok": CHECK, "wn": "!", "sk": "–"}[st]
         rc = {"ok": "var(--text-3)", "wn": "var(--ink-orange)", "sk": "var(--text-3)"}[st]
         return f'<div class="chk3"><span class="ck3" style="background:{bg};font-size:12px;font-weight:800">{g}</span><span class="grow">{t}</span><span class="f12" style="color:{rc}">{r}</span></div>'

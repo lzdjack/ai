@@ -107,13 +107,13 @@ reset_card = f'''<div class="card glass" style="width:450px;padding:28px 36px 26
   <button class="btnL pri" style="margin-top:16px">确认重设密码并登录</button>
   <div class="f12 t3" style="margin-top:11px;text-align:center">重设成功后，其他已登录设备将下线并要求重新验证</div>
 </div>'''
-reset_pc = pc_wrap("重置密码 · PC", reset_card, "私有部署未配置 SMTP 时，可由管理员在「设置 → 成员与身份」生成一次性重设链接")
+reset_pc = pc_wrap("重置密码 · PC", reset_card, "私有部署没有配置邮件服务时，可由管理员在「设置 → 成员与身份」生成一次性重设链接")
 
 
 # ============ 2. PC 邀请加入（免 SMTP 一次性邀请链接落地页） ============
 invite_card = f'''<div class="card glass" style="width:460px;padding:28px 36px 26px;align-items:stretch">
   <div class="row" style="margin-bottom:4px">
-    <span class="tag tg-b" style="height:22px;font-size:11px">{I("link",12)}免 SMTP 一次性邀请链接 · 24h 有效</span>
+    <span class="tag tg-b" style="height:22px;font-size:11px">{I("link",12)}一次性邀请链接 · 24 小时有效</span>
     <span class="grow"></span>
     <span class="f12 lnk">已有账号，去登录 ›</span>
   </div>
@@ -205,7 +205,7 @@ mp2 = phone(f'''
 <div class="aura" style="width:120px;height:120px;left:134px;top:68px"></div>
 <div class="pad2" style="top:54px">
   <div class="row" style="min-height:var(--m-nav-h)">
-    <span class="tg" style="height:22px;font-size:11px;color:var(--ink-blue);background:color-mix(in srgb,var(--blue) 12%,transparent)">免 SMTP 一次性邀请</span>
+    <span class="tg" style="height:22px;font-size:11px;color:var(--ink-blue);background:color-mix(in srgb,var(--blue) 12%,transparent)">一次性邀请（不用发邮件）</span>
     <span class="grow"></span>
     <span class="f13 lnk" style="min-height:var(--m-touch);display:inline-flex;align-items:center">去登录</span>
   </div>
@@ -269,7 +269,7 @@ mp3 = phone(f'''
 
 m_auth_extra = HEAD.format(t="移动端 · 重设密码与邀请", css="m.css", style=M_STYLE) + f'''<div class="board">
 <div class="col3">{mp1}<div class="lbl">重置密码<em>邮箱验证码 + 设新密</em></div></div>
-<div class="col3">{mp2}<div class="lbl">免 SMTP 邀请加入<em>一次性链接设密进工作空间</em></div></div>
+<div class="col3">{mp2}<div class="lbl">链接邀请加入<em>一次性链接设密进工作空间</em></div></div>
 <div class="col3">{mp3}<div class="lbl">链接失效兜底<em>已使用或超 24h 指引重发</em></div></div>
 </div>''' + TAIL
 

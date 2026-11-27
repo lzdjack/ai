@@ -11,34 +11,34 @@
 .ep{flex:1;min-height:0;border-radius:22px;padding:18px 20px;display:flex;flex-direction:column;gap:10px}
 </style>
 </head><body><div class="root">
-<div class="eb"><div class="et"><div class="el"><span class="no">1</span><b>Hard Gate 连续 2 次失败 · 阻断入审</b><em>转需要协助并保留受控豁免出口</em></div><section class="glass ep">
-  <div class="row g8"><span class="tag tg-r">Hard Gate 未通过（3 次尝试均失败）</span><span class="mono f12 t3 grow">TK-20855 · 第 2 轮</span><span class="tag tg-o">禁止入审</span></div>
+<div class="eb"><div class="et"><div class="el"><span class="no">1</span><b>机审门禁连续 2 次失败 · 不能进入审核</b><em>转为需要协助，也可以填写理由后放行</em></div><section class="glass ep">
+  <div class="row g8"><span class="tag tg-r">机审门禁未通过（3 次尝试均失败）</span><span class="mono f12 t3 grow">TK-20855 · 第 2 轮</span><span class="tag tg-o">禁止入审</span></div>
   <div class="log" style="padding:10px 12px;border-radius:10px;background:var(--terminal-bg);color:#E5E7EB;font-size:11.5px;line-height:1.55">
     <div class="ln"><span class="ts" style="color:#9CA3AF">尝试#3</span><span style="color:#FCA5A5">[FAIL]</span> typecheck src/utils/export.ts:42 · string | undefined mismatch</div>
     <div class="ln"><span class="ts" style="color:#9CA3AF">策略</span><span style="color:#7DD3FC">[GATE]</span> verify_strategy=browser_dist_replace · entry_js_replaced=true</div>
   </div>
   <div class="card" style="padding:9px 12px;gap:6px;background:color-mix(in srgb,var(--orange) 8%,var(--glass-2));border-color:color-mix(in srgb,var(--orange) 30%,transparent)">
-    <div class="f12 w7" style="color:var(--ink-orange)">受控审计豁免说明（强制升 L2 · 禁手机速过）</div>
+    <div class="f12 w7" style="color:var(--ink-orange)">填写理由后放行（会升为高风险，必须在电脑上逐行审）</div>
     <div class="f12 t2">如属已有历史类型债可填写理由豁免进入审核：<span class="mono">「仅修复兼容层，历史 DTO 类型另单追踪」</span></div>
   </div>
-  <div class="row g8" style="margin-top:auto"><button class="cc-btn cc-btn-sm cc-btn-sec">查看 Diff 与 3 次报错</button><span class="grow"></span><button class="cc-btn cc-btn-sm cc-btn-glass">填写理由审计豁免</button><button class="cc-btn cc-btn-sm cc-btn-pri">补充提示让 Bot 继续修</button></div></section></div><div class="et"><div class="el"><span class="no">2</span><b>我来接手 (human_takeover) · 受门禁交付</b><em>fence_token 防并发覆写 · 提交全节点可选（默认 gate_check）</em></div><section class="glass ep">
-  <div class="row g8"><span class="tag tg-b">human_takeover 已接管</span><span class="mono f12 t3 grow">fix/TK-20840 · fence_token #4</span><span class="tag tg-g">Bot 已释放</span></div>
+  <div class="row g8" style="margin-top:auto"><button class="cc-btn cc-btn-sm cc-btn-sec">查看 Diff 与 3 次报错</button><span class="grow"></span><button class="cc-btn cc-btn-sm cc-btn-glass">填写理由审计豁免</button><button class="cc-btn cc-btn-sm cc-btn-pri">补充提示让 Bot 继续修</button></div></section></div><div class="et"><div class="el"><span class="no">2</span><b>我来接手 · 本地改完照样过门禁</b><em>接手后 Bot 不会再改这条分支 · 提交后可选从哪一步继续（默认机审门禁）</em></div><section class="glass ep">
+  <div class="row g8"><span class="tag tg-b">你已接手</span><span class="mono f12 t3 grow">fix/TK-20840</span><span class="tag tg-g">Bot 已释放</span></div>
   <div class="card" style="padding:9px 12px;gap:4px">
-    <div class="f13 w7">本地继续修改并提交受门禁交付（self_delivery）</div>
-    <div class="f12 t2" style="line-height:1.5">① <span class="mono">git fetch && git checkout fix/TK-20840</span>（保留 Bot 半成品 <span class="mono">7c2e1a9</span>）<br>② 本地推送最新提交后选定接入节点——默认预选 <span class="mono">gate_check</span> 与 <span class="mono">L0~L2</span> 评定，下拉含全部流程节点。</div>
+    <div class="f13 w7">在本地继续修改，提交后照样走门禁检查</div>
+    <div class="f12 t2" style="line-height:1.5">① <span class="mono">git fetch && git checkout fix/TK-20840</span>（保留 Bot 半成品 <span class="mono">7c2e1a9</span>）<br>② 推送后选择从哪一步继续——默认从机审门禁和风险分级开始，也可以选其他步骤。</div>
   </div>
   <div class="row g8"><span class="f11 w6 t2">提交后接入节点：</span><div class="cc-select cc-select-xs grow"><span class="cc-sel-val">4 · 结构化交付与硬门禁</span><span class="cc-sel-sub">默认 · 下拉含全部节点</span><span class="cc-sel-caret"><i data-i="chevd" data-s="12"></i></span></div></div>
-  <div class="row g8" style="margin-top:auto"><button class="cc-btn cc-btn-sm cc-btn-sec">放弃接手，退回 AI 重跑</button><span class="grow"></span><button class="cc-btn cc-btn-sm cc-btn-glass">本地 Dist 预览</button><button class="cc-btn cc-btn-sm cc-btn-pri"><i data-i="check" data-s="13" data-w="2.5"></i>提交人工交付</button></div></section></div><div class="et"><div class="el"><span class="no">3</span><b>无代码改动结单 (no_code_fix)</b><em>阻断空分支进入代码审查与发布流</em></div><section class="glass ep">
-  <div class="row g8"><span class="tag tg-p">AI 诊断结论 · 无需改代码</span><span class="mono f12 t3 grow">TK-20901 · Zero Diff</span><span class="tag tg-n">发布已阻断</span></div>
+  <div class="row g8" style="margin-top:auto"><button class="cc-btn cc-btn-sm cc-btn-sec">放弃接手，退回 AI 重跑</button><span class="grow"></span><button class="cc-btn cc-btn-sm cc-btn-glass">本地预览</button><button class="cc-btn cc-btn-sm cc-btn-pri"><i data-i="check" data-s="13" data-w="2.5"></i>提交人工交付</button></div></section></div><div class="et"><div class="el"><span class="no">3</span><b>不需要改代码时直接结单</b><em>没有改动的分支不会进入审核和发布</em></div><section class="glass ep">
+  <div class="row g8"><span class="tag tg-p">AI 诊断结论 · 无需改代码</span><span class="mono f12 t3 grow">TK-20901 · 没有代码改动</span><span class="tag tg-n">发布已阻断</span></div>
   <div class="card" style="padding:10px 12px;gap:6px">
     <div class="f13 w7">根因判定：测试环境第三方回调域名未加入配置白名单</div>
     <div class="f12 t2" style="line-height:1.55">Bot 已复现并保存 2 份请求抓包证据，确认源码逻辑正确。按安全策略：<b>已自动禁用「合入测试/主分支」与「发版」后续节点</b>，避免空包上生产。</div>
   </div>
-  <div class="row g8" style="margin-top:auto"><button class="cc-btn cc-btn-sm cc-btn-sec">提供新线索重查</button><span class="grow"></span><button class="cc-btn cc-btn-sm cc-btn-pri"><i data-i="check" data-s="13" data-w="2.5"></i>确认无改动关闭（close_reason: no_code_fix）</button></div></section></div><div class="et"><div class="el"><span class="no">4</span><b>ask_user 底栏消歧 + 独立凭据框</b><em>AUTH_REQUIRED 明文绝不进 messages</em></div><section class="glass ep">
+  <div class="row g8" style="margin-top:auto"><button class="cc-btn cc-btn-sm cc-btn-sec">提供新线索重查</button><span class="grow"></span><button class="cc-btn cc-btn-sm cc-btn-pri"><i data-i="check" data-s="13" data-w="2.5"></i>确认不用改代码，关闭工单</button></div></section></div><div class="et"><div class="el"><span class="no">4</span><b>Bot 提问时的选项 + 单独的账号输入框</b><em>填的密码和 Cookie 不会出现在对话里</em></div><section class="glass ep">
   <div class="card" style="padding:10px 12px;gap:6px;background:color-mix(in srgb,var(--orange) 9%,var(--glass-2));border-color:color-mix(in srgb,var(--orange) 34%,transparent)">
-    <div class="row g8"><span class="tag tg-o">AUTH_REQUIRED · 独立安全录入口</span><span class="f12 w6 grow">管理员测试账号登录态过期</span></div>
-    <div class="f11 t2">输入的 Cookie / 口令直通宿主机 <span class="mono">credential_envelopes</span> 公钥加密，<b>绝不写入对话 messages 与大模型上下文</b>。</div>
-    <div class="row g8"><div class="cc-input cc-input-sm grow"><span class="mono f11 t3">Cookie：session_id=••••••••••••（独立密文框）</span></div><button class="cc-btn cc-btn-xs cc-btn-pri">更新并恢复</button></div>
+    <div class="row g8"><span class="tag tg-o">需要重新登录 · 单独输入</span><span class="f12 w6 grow">管理员测试账号登录态过期</span></div>
+    <div class="f11 t2">这里填的 Cookie 或密码会加密保存，<b>不会出现在对话记录里，也不会发给 AI</b>。</div>
+    <div class="row g8"><div class="cc-input cc-input-sm grow"><span class="mono f11 t3">Cookie：session_id=••••••••••••</span></div><button class="cc-btn cc-btn-xs cc-btn-pri">更新并恢复</button></div>
   </div>
   <div style="margin-top:auto;padding:8px 10px;border-radius:14px;background:var(--glass-2);border:1px solid var(--focus-ring)">
     <div class="row g6 f11" style="margin-bottom:6px;color:var(--ink-orange);font-weight:600"><span>正在等待你回答提问 #Q-204</span><span class="grow"></span><span class="lnk">切为「顺便问本单 AI（不恢复 Bot）」</span></div>

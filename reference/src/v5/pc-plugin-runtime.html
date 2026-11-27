@@ -11,35 +11,35 @@
 .ep{flex:1;min-height:0;border-radius:22px;padding:18px 20px;display:flex;flex-direction:column;gap:10px}
 </style>
 </head><body><div class="root">
-<div class="eb"><div class="et"><div class="el"><span class="no">1</span><b>已停用插件 · 历史审计记录只读追溯</b><em>停用只拦截写动作，不误杀 reviews/rollbacks 历史快照</em></div><section class="glass ep">
+<div class="eb"><div class="et"><div class="el"><span class="no">1</span><b>已停用插件 · 历史审计记录只读追溯</b><em>停用后不能再执行，历史记录照常可查</em></div><section class="glass ep">
   <div class="card" style="padding:11px 13px;gap:6px;opacity:.85;background:var(--well)">
     <div class="row g8"><i data-i="history" data-s="15" style="color:var(--text-3)"></i><span class="f13 w7 grow">历史紧急回滚记录 · RB-091（已停用插件）</span><span class="tag tg-o">历史只读</span></div>
     <div class="f12 t2">11-18 19:42 由林某执行回滚至 3.8.1 · 回读检验通过。当前工作空间已停用回滚插件，隐藏写入口但<b>永久保留可查审计快照</b>。</div>
   </div>
-  <div class="row g8" style="margin-top:auto"><button class="cc-btn cc-btn-sm cc-btn-sec is-disabled"><i data-i="lock" data-s="12"></i>再次执行回滚（已停用）</button><span class="grow"></span><span class="lnk f12">管理员去插件市场启用 ›</span></div></section></div><div class="et"><div class="el"><span class="no">2</span><b>插件视图 / MCP 5 秒超时 · 零拖垮核心</b><em>独立插座故障隔离，核心修单与内置发布 100% 正常</em></div><section class="glass ep">
+  <div class="row g8" style="margin-top:auto"><button class="cc-btn cc-btn-sm cc-btn-sec is-disabled"><i data-i="lock" data-s="12"></i>再次执行回滚（已停用）</button><span class="grow"></span><span class="lnk f12">管理员去插件市场启用 ›</span></div></section></div><div class="et"><div class="el"><span class="no">2</span><b>插件 5 秒没响应 · 不影响核心功能</b><em>插件出错只影响它自己的位置，修单和发布照常可用</em></div><section class="glass ep">
   <div class="card" style="padding:18px 16px;align-items:center;text-align:center;gap:8px;flex:1;justify-content:center">
     <span class="ic-box" style="width:42px;height:42px;border-radius:12px;background:color-mix(in srgb,var(--orange) 16%,transparent);color:var(--ink-orange)"><i data-i="alert" data-s="20" data-w="2.2"></i></span>
     <div class="f14 w7">扩展视图「灰度放量看板」响应超时（&gt; 5s）</div>
-    <div class="f12 t3">仅影响当前 <span class="mono">ticket.tabs</span> 插座加载，核心对话、Diff 审核与发布主流程不受任何影响。</div>
-    <button class="cc-btn cc-btn-sm cc-btn-glass" style="margin-top:4px"><i data-i="refresh" data-s="13"></i>重试加载插座</button>
-  </div></section></div><div class="et"><div class="el"><span class="no">3</span><b>防菜单膨胀 · Dock > 4 与顶栏 > 2 超限自动折叠</b><em>manifest.contributes.views 硬上限防栏位撑爆</em></div><section class="glass ep">
+    <div class="f12 t3">只影响这个标签页，对话、代码审核和发布都不受影响。</div>
+    <button class="cc-btn cc-btn-sm cc-btn-glass" style="margin-top:4px"><i data-i="refresh" data-s="13"></i>重新加载</button>
+  </div></section></div><div class="et"><div class="el"><span class="no">3</span><b>防菜单膨胀 · Dock > 4 与顶栏 > 2 超限自动折叠</b><em>插件放进来的入口有数量上限，超出自动收起</em></div><section class="glass ep">
   <div class="col g10" style="flex:1;justify-content:center">
     <div class="card" style="padding:9px 12px;gap:6px">
-      <div class="f11 t3 w7">顶栏右区扩展槽（<span class="mono">topbar.widgets ≤ 2</span>）</div>
+      <div class="f11 t3 w7">顶栏右侧插件位（最多 2 个）</div>
       <div class="row g6"><span class="pill glass tpill" style="height:26px;font-size:11px">今日费用 $4.2</span><span class="pill glass tpill" style="height:26px;font-size:11px">灰度 30%</span><span class="pill p-blue" style="height:26px;font-size:11px">更多微件 +2 ▾</span></div>
     </div>
     <div class="card" style="padding:9px 12px;gap:6px">
-      <div class="f11 t3 w7">左侧 Dock 扩展槽（<span class="mono">dock.items ≤ 4</span>）</div>
+      <div class="f11 t3 w7">左侧 Dock 插件位（最多 4 个）</div>
       <div class="row g8"><span class="tag tg-b">AI</span><span class="tag tg-b">工单</span><span class="tag tg-b">发布</span><span class="tag tg-r">回滚</span><span class="tag tg-p">Skills</span><span class="tag tg-o">+2 扩展抽屉 ▾</span><span class="f11 t3">（Token 费用 / 绩效大盘）</span></div>
     </div>
-  </div></section></div><div class="et"><div class="el"><span class="no">4</span><b>插件 AI A2UI 原语卡 + 站内铃铛通知收件箱</b><em>MCP 自动发现 · 真实参数防 TOCTOU · 通知 5m 防轰炸合并</em></div><section class="glass ep">
+  </div></section></div><div class="et"><div class="el"><span class="no">4</span><b>插件确认卡 + 站内通知收件箱</b><em>确认时按最新数据再校验 · 同类通知 5 分钟合并</em></div><section class="glass ep">
   <div class="card" style="padding:9px 12px;gap:6px">
-    <div class="row g8"><span class="tag tg-p">kv_card · 扩展插件</span><span class="f12 w7 grow">灰度放量插件 · 审批中心</span><span class="tag tg-b">当前 30%</span><button class="cc-btn cc-btn-xs cc-btn-glass">打开 72% L3 抽屉 ›</button></div>
-    <div class="f11 t2">由标准 MCP + <span class="mono">assistant_actions(state_digest)</span> 自动生成确认卡，未触发流内嵌 iframe。</div>
+    <div class="row g8"><span class="tag tg-p">扩展插件</span><span class="f12 w7 grow">灰度放量插件 · 审批中心</span><span class="tag tg-b">当前 30%</span><button class="cc-btn cc-btn-xs cc-btn-glass">打开详情 ›</button></div>
+    <div class="f11 t2">插件提供的操作会自动生成确认卡；点确认时按最新数据再校验一次，数据变了会提示。</div>
   </div>
   <div class="card" style="padding:9px 12px;gap:5px;background:var(--well)">
-    <div class="row g8"><span class="pill glass tpill" style="height:24px;padding:0 8px;font-size:11px"><i data-i="bell" data-s="12"></i> 通知收件箱 (2)</span><span class="tag tg-r">PROD 失败 · 穿透免打扰</span><span class="tag tg-n">他人已抢审 · 只读消退</span></div>
-    <div class="f11 t3">顶栏头像旁 34px 铃铛展开 400px 收件箱（不占 Dock/8 项设置），5m 窗口合并防轰炸。</div>
+    <div class="row g8"><span class="pill glass tpill" style="height:24px;padding:0 8px;font-size:11px"><i data-i="bell" data-s="12"></i> 通知收件箱 (2)</span><span class="tag tg-r">正式发布失败 · 免打扰也提醒</span><span class="tag tg-n">已由他人审核 · 自动消失</span></div>
+    <div class="f11 t3">点顶栏头像旁的铃铛打开收件箱，不占 Dock 和设置菜单；5 分钟内的同类通知合并成一条。</div>
   </div></section></div></div>
 </div>
 <script src="../v3/shots.js"></script><script src="icons.js"></script>

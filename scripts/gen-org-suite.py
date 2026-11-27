@@ -54,26 +54,26 @@ def build_org_defaults():
     <span class="ic-box" style="width:36px;height:36px;border-radius:10px;background:linear-gradient(155deg,#5AA0FF,#1F6FFF)">{I("layers",18,2.2)}</span>
     <div class="col grow">
       <div class="f17 w7">OKR 产研 · 部门默认配置</div>
-      <div class="f12 t3" style="margin-top:2px">新入驻成员自动继承 · 部门只增补或收紧，绝不继承个人高危凭据</div>
+      <div class="f12 t3" style="margin-top:2px">新成员加入后自动套用 · 个人账号不会被继承</div>
     </div>
     <span class="cc-close">{I("x",15,2.2)}</span>
   </div>
   <div class="cc-drawer-bd">
     <div class="col g6">
-      <div class="row"><span class="f12 w7 t2">1. 默认授权项目与操作权限</span><span class="tag tg-b" style="height:18px;font-size:10.5px;margin-left:auto">并集继承 ADDITIVE_UNION</span></div>
+      <div class="row"><span class="f12 w7 t2">1. 默认授权项目与操作权限</span><span class="tag tg-b" style="height:18px;font-size:10.5px;margin-left:auto">属于多个部门时取合集</span></div>
       <div class="col g6">
-        {proj_row("OKR", "可修改代码", "is-green", "本部门主责项目 · 默认写入 Ticket & 代码")}
+        {proj_row("OKR", "可修改代码", "is-green", "本部门负责的项目 · 默认可改工单和代码")}
         {proj_row("审批", "仅查看", "is-blue", "跨组联调对照 · 禁止修改审批仓代码")}
         {proj_row("考勤", "禁止访问", "", "非关联部门默认不可见工单与仓库")}
       </div>
     </div>
 
     <div class="col g6">
-      <div class="row"><span class="f12 w7 t2">2. 已接入的共享连接器与测试账号</span><span class="f11 t3" style="margin-left:auto">按 <span class="mono">scope='workspace'</span> 实例动态列表</span></div>
+      <div class="row"><span class="f12 w7 t2">2. 已接入的共享连接器与测试账号</span><span class="f11 t3" style="margin-left:auto">列出空间里共用的连接器</span></div>
       <div class="card" style="padding:8px 12px;gap:6px">
         <div class="row g8">{ck_box()}<span class="f12 w6 grow">代码源连接器（只读拉取与隔离试构建）</span><span class="tag tg-g" style="height:18px;font-size:10px">已继承</span></div>
         <div class="row g8" style="padding-top:6px;border-top:1px solid var(--hair)">{ck_box()}<span class="f12 w6 grow">外部工单采集（按所选项目动态收单）</span><span class="tag tg-g" style="height:18px;font-size:10px">已继承</span></div>
-        <div class="row g8" style="padding-top:6px;border-top:1px solid var(--hair)">{ck_box()}<span class="f12 w6 grow">OKR 测试环境（<span class="mono">普通员工 / 观察员</span> 2 个共享账号）</span><span class="tag tg-b" style="height:18px;font-size:10px">密文托管</span></div>
+        <div class="row g8" style="padding-top:6px;border-top:1px solid var(--hair)">{ck_box()}<span class="f12 w6 grow">OKR 测试环境（<span class="mono">普通员工 / 观察员</span> 2 个共享账号）</span><span class="tag tg-b" style="height:18px;font-size:10px">加密保存</span></div>
       </div>
     </div>
 
@@ -90,19 +90,19 @@ def build_org_defaults():
     <div class="col g6" style="padding:10px 12px;border-radius:14px;background:color-mix(in srgb,var(--red) 6%,var(--glass-2));border:1px solid color-mix(in srgb,var(--red) 28%,transparent)">
       <div class="row g6">
         {I("shield",14,2.2,"color:var(--ink-red)")}
-        <span class="f12 w7" style="color:var(--ink-red)">双平面与安全锁定红线（Monotonic Tighten · 数据库硬约束）</span>
+        <span class="f12 w7" style="color:var(--ink-red)">安全红线（下级只能收紧，不能放宽）</span>
       </div>
       <div class="f11 t2" style="line-height:1.5">
-        <b style="color:var(--text)">Plane B 个人执行凭据禁止继承</b>：凡声明 <span class="mono">credential_class='personal_exec'</span>（如个人代码写令牌、发布回滚凭据），均由 DB CHECK 锁定 <span class="mono">scope='user'</span>，部门与管理员严禁代填或代审。
+        <b style="color:var(--text)">个人账号不会继承</b>：个人代码令牌、发布和回滚账号只能本人填写和使用，部门默认设置和管理员都不能代填。
       </div>
       <div class="row g10" style="padding-top:4px;border-top:1px solid var(--hair)">
-        <span class="f12 grow">低权协作成员按 RBAC 作用域严格隔离（禁越部门借用共享测试账号）</span>
+        <span class="f12 grow">低权限协作成员只能用本部门的共享测试账号</span>
         <span class="cc-switch on is-disabled"></span>
       </div>
     </div>
   </div>
   <div class="cc-drawer-ft">
-    <span class="f11 t3 grow">保存后自动记录 <span class="mono">security_audit</span> 事件，下一轮修单实时重算生效</span>
+    <span class="f11 t3 grow">保存后记入安全审计，从下一轮修复开始生效</span>
     <button class="cc-btn cc-btn-sm cc-btn-glass">取消</button>
     <button class="cc-btn cc-btn-sm cc-btn-pri">{I("check",13,2.6)}保存部门默认配置</button>
   </div>
@@ -119,7 +119,7 @@ def build_member_edit():
     <span class="av" style="width:36px;height:36px;font-size:13px;background:linear-gradient(150deg,#A5B4FC,#6366F1)">宋工</span>
     <div class="col grow">
       <div class="f17 w7">编辑成员 · 宋工</div>
-      <div class="f12 t3" style="margin-top:2px">独立邮箱账号 <span class="mono">song@vendor.io</span> · 支持虚线借调、纯 RBAC 角色与作用域隔离</div>
+      <div class="f12 t3" style="margin-top:2px">独立邮箱账号 <span class="mono">song@vendor.io</span> · 可以借调到其他部门，能做什么只由角色和授权范围决定</div>
     </div>
     <span class="cc-close">{I("x",15,2.2)}</span>
   </div>
@@ -133,7 +133,7 @@ def build_member_edit():
         </div>
       </div>
       <div class="cc-field">
-        <div class="cc-field-hd">主部门（费用/Token 快照归属）</div>
+        <div class="cc-field-hd">主部门（AI 费用记在这个部门）</div>
         <div class="cc-select cc-select-sm">
           <span class="cc-sel-val">OKR 产研</span>
           <span class="cc-sel-sub">云匠研发中心</span>
@@ -145,7 +145,7 @@ def build_member_edit():
     <div class="row g8" style="padding:8px 11px;border-radius:11px;background:color-mix(in srgb,var(--orange) 9%,var(--glass-2));border:1px solid color-mix(in srgb,var(--orange) 35%,transparent)">
       {I("shield",15,2.1,"color:var(--ink-orange);flex:none")}
       <div class="f11 t2" style="line-height:1.5">
-        <b style="color:var(--ink-orange)">纯 RBAC 作用域收敛生效：</b>该模板默认关闭全空间成员树、共享参考仓与跨项目 AI 检索，<b>纯靠 `role_bindings` 白名单与项目作用域控制</b>（无身份特判）。
+        <b style="color:var(--ink-orange)">这个角色默认只能看授权的项目：</b>看不到全体成员目录、共享参考仓库，AI 也不会跨项目检索。需要更多权限时<b>在角色或授权范围里打开</b>。
       </div>
     </div>
 
@@ -168,23 +168,23 @@ def build_member_edit():
     </div>
 
     <div class="cc-field">
-      <div class="cc-field-hd">角色与 Deny-Overrides 权限绑定（<span class="mono">role_bindings</span>）</div>
+      <div class="cc-field-hd">角色与授权（拒绝优先于允许）</div>
       <div class="card" style="padding:8px 10px;gap:6px">
         <div class="row g8">
-          <span class="tag tg-g" style="height:20px;font-size:10.5px">Allow</span>
+          <span class="tag tg-g" style="height:20px;font-size:10.5px">允许</span>
           <span class="f12 w6 grow">项目级角色：OKR · 研发成员（仅修本单 & 提交审查）</span>
           <span class="f11 t3">作用域：OKR</span>
         </div>
         <div class="row g8" style="padding-top:6px;border-top:1px solid var(--hair)">
-          <span class="tag tg-r" style="height:20px;font-size:10.5px">Deny</span>
-          <span class="f12 w6 grow">明确拒绝：考勤跨部门仓库 · 管理全局 AI · 扩展插件写操作（<span class="mono">ext:*</span>）</span>
+          <span class="tag tg-r" style="height:20px;font-size:10.5px">拒绝</span>
+          <span class="f12 w6 grow">明确拒绝：考勤跨部门仓库 · 管理全局 AI · 扩展插件的写操作</span>
           <span class="lnk f11">改策略</span>
         </div>
       </div>
     </div>
 
     <div class="cc-field">
-      <div class="cc-field-hd"><span>外部工具身份（<span class="mono">identities</span> · 按已启用工单连接器动态生成）</span><span class="cc-field-hint">0 连接器时不展示</span></div>
+      <div class="cc-field-hd"><span>外部平台账号（按已接入的工单平台显示）</span><span class="cc-field-hint">没接工单平台时不显示</span></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
         <div class="cc-input cc-input-sm"><span class="sc10 sc-j">工单源 1</span><span class="mono f12 grow">song_ext</span><span class="f11" style="color:var(--ink-green)">已关联</span></div>
         <div class="cc-input cc-input-sm"><span class="sc10 sc-t">工单源 2</span><span class="f12 grow" style="color:var(--ink-orange)">未关联</span><span class="lnk f11">去匹配</span></div>
@@ -193,10 +193,10 @@ def build_member_edit():
 
     <div class="row g10" style="padding:8px 11px;border-radius:11px;background:var(--well);border:1px solid var(--hair)">
       <div class="col grow">
-        <span class="f12 w6">私有部署免 SMTP · 一次性重置密码链接</span>
-        <span class="f11 t3">仅 <span class="mono">self_hosted</span> 无邮件服务时可见；SaaS 模式严禁管理员代改密</span>
+        <span class="f12 w6">私有部署 · 一次性重置密码链接</span>
+        <span class="f11 t3">仅私有部署且没有邮件服务时显示；云端版管理员不能代改密码</span>
       </div>
-      <button class="cc-btn cc-btn-xs cc-btn-glass">{I("key",12)}生成 30m 重置链</button>
+      <button class="cc-btn cc-btn-xs cc-btn-glass">{I("key",12)}生成链接（30 分钟有效）</button>
     </div>
   </div>
   <div class="cc-drawer-ft">
@@ -223,14 +223,14 @@ def build_member_handoff():
     <span class="av" style="width:36px;height:36px;font-size:13px;background:linear-gradient(150deg,#C8CCD4,#8A909B)">赵磊</span>
     <div class="col grow">
       <div class="f17 w7">停用成员与待办交接 · 赵磊</div>
-      <div class="f12 t3" style="margin-top:2px"><span class="mono">zhao@company.com</span> · OKR 产研 · 停用同事务清退全部活跃会话</div>
+      <div class="f12 t3" style="margin-top:2px"><span class="mono">zhao@company.com</span> · OKR 产研 · 停用后立即退出他的所有登录</div>
     </div>
     <span class="cc-close">{I("x",15,2.2)}</span>
   </div>
   <div class="cc-drawer-bd">
     <div class="col g8" style="padding:12px 14px;border-radius:14px;background:color-mix(in srgb,var(--orange) 10%,var(--glass-2));border:1px solid color-mix(in srgb,var(--orange) 36%,transparent)">
       <div class="row g8">
-        <span class="ck" style="background:#B45309;width:18px;height:18px;font-size:11px;font-weight:800">!</span>
+        <span class="ck" style="background:var(--btn-warn-bg);width:18px;height:18px;font-size:11px;font-weight:800">!</span>
         <span class="f13 w7">检测到 3 项未完结在途资产，必须先指定接替人</span>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:2px">
@@ -251,10 +251,10 @@ def build_member_handoff():
     </div>
 
     <div class="col g8">
-      <div class="f12 w7 t2">同一数据库事务自动执行以下动作（失败整体回滚）</div>
-      {chk_row("将 1 张待审单与 1 条原平台待办移交至 张某", "ticket_assignees 写入 source='manual'，后续 Webhook 同步绝不覆写")}
-      {chk_row("立即吊销赵磊全部 Refresh Token、个人 Runner 与 WebSocket 实时长连", "断开 macbook-zhao 连接并清理 personal 执行槽")}
-      {chk_row("永久保留赵磊的历史审核意见、发布签署及不可篡改审计署名", "仅停用 workspace_members 与权限绑定，绝不删改历史 events / reviews")}
+      <div class="f12 w7 t2">确认后一次完成以下动作（任何一步失败都会全部撤销）</div>
+      {chk_row("将 1 张待审单与 1 条原平台待办移交至 张某", "按手动指定记录，之后原平台同步过来也不会改回去")}
+      {chk_row("立即让赵磊在所有设备上退出登录，并停用他的个人执行器", "断开 macbook-zhao，清理他电脑上的执行任务")}
+      {chk_row("永久保留赵磊的历史审核意见、发布签署及不可篡改审计署名", "只停用他的成员身份和权限，历史记录一条都不删改")}
     </div>
   </div>
   <div class="cc-drawer-ft">
@@ -319,7 +319,7 @@ def build_pc_roles():
 </style>'''
 
     main = f'''{css}<main class="glass pn grow" style="min-width:0">
-<header class="thead"><div class="row g10"><div class="col grow"><div class="row g10"><h1>成员与身份</h1><span class="cc-seg cc-seg-xs" data-pin="mem-role-seg"><span>成员与部门</span><span class="on">角色与权限 7</span></span></div><div class="f12 t3" style="margin-top:3px">Core 内置权限永远存在 · 连接器与市场插件通过 <span class="mono">manifest.permissions</span> 动态注册（未安装不显示）</div></div>
+<header class="thead"><div class="row g10"><div class="col grow"><div class="row g10"><h1>成员与身份</h1><span class="cc-seg cc-seg-xs" data-pin="mem-role-seg"><span>成员与部门</span><span class="on">角色与权限 7</span></span></div><div class="f12 t3" style="margin-top:3px">内置权限始终显示 · 装了连接器或插件后，它们的权限会自动出现在下面（没装不显示）</div></div>
   <button class="cc-btn cc-btn-sm cc-btn-pri" data-pin="clone-role-btn">{I("plus",14,2.4)}从模板克隆角色</button></div></header>
 <div class="role-wrap">
   <div class="role-side">
@@ -334,47 +334,47 @@ def build_pc_roles():
     {ritem("QA 验收员", "2", sub="克隆自 研发成员 · 仅复测与退回")}
     <span class="grow"></span>
     <div class="admin-portal" data-pin="admin-roles-portal">
-      <div class="row g6"><span class="f12 w7" style="color:var(--ink-blue)">Deny-Overrides 生效中</span><span class="grow"></span>{I("shield",12,style="color:var(--ink-blue)")}</div>
-      <div class="t3" style="font-size:10.5px;line-height:1.4">新装插件默认 Fail-Closed 不自动放权</div>
+      <div class="row g6"><span class="f12 w7" style="color:var(--ink-blue)">拒绝优先于允许</span><span class="grow"></span>{I("shield",12,style="color:var(--ink-blue)")}</div>
+      <div class="t3" style="font-size:10.5px;line-height:1.4">新装的插件默认不给任何角色授权</div>
     </div>
   </div>
   <div class="role-main">
     <div class="row g10" style="padding:9px 13px;border-radius:14px;background:color-mix(in srgb,var(--blue) 7%,var(--glass-2));border:1px solid color-mix(in srgb,var(--blue) 22%,transparent)">
       <span class="ic-box" style="width:28px;height:28px;border-radius:8px;background:linear-gradient(155deg,#5AA0FF,#1F6FFF)">{I("layers",14)}</span>
       <div class="col grow" style="min-width:0">
-        <div class="row g8" style="flex-wrap:wrap;row-gap:4px"><span class="f13 w7" style="white-space:nowrap">代码合入协同专员</span><span class="tag tg-p" style="height:18px;font-size:10px">模板克隆 · base: member</span><span class="tag tg-g" style="height:18px;font-size:10px">新装插件默认 Fail-Closed</span></div>
-        <div class="f11 t3" style="margin-top:2px">仅存显式白名单与 Deny-Overrides；安全红线（禁代审、个人写凭据隔离）永不可解锁</div>
+        <div class="row g8" style="flex-wrap:wrap;row-gap:4px"><span class="f13 w7" style="white-space:nowrap">代码合入协同专员</span><span class="tag tg-p" style="height:18px;font-size:10px">基于「成员」复制</span><span class="tag tg-g" style="height:18px;font-size:10px">新插件默认不授权</span></div>
+        <div class="f11 t3" style="margin-top:2px">只记录你改动过的权限；安全红线（不能代审、个人账号不能共用）任何角色都不能打开</div>
       </div>
       <button class="cc-btn cc-btn-xs cc-btn-glass">重命名</button>
       <button class="cc-btn cc-btn-xs cc-btn-pri">{I("check",12,2.5)}保存权限</button>
     </div>
 
-    <div class="grp-lbl"><span>一、Core 不可卸载基础权限（9 核心域 · 含工单、MR 与内置发布流）</span></div>
+    <div class="grp-lbl"><span>一、内置权限（工单、MR 与发布，始终存在）</span></div>
     <div class="pgrid">
       <div class="pcard">
         <div class="ph0">{I("code",13,style="color:var(--ink-blue)")}<span>工单、MR 与内置发布红线</span></div>
-        {perm_row("查看项目与 Bug 单 (ticket:read)", "按所属部门与项目可见范围隔离", "on")}
+        {perm_row("查看项目与 Bug 单", "只能看所属部门和授权项目里的", "on")}
         {perm_row("响应 Bot / 发起内置发布任务", "授权项目内提修、发测试与正式流水线", "on")}
-        {perm_row("代审他人代码 (review_code)", "始终锁死仅 ticket_assignees", "locked_off")}
+        {perm_row("审核别人负责的代码", "只有本单修复人可以，不能修改", "locked_off")}
       </div>
       <div class="pcard">
         <div class="ph0">{I("shield",13,style="color:var(--ink-red)")}<span>组织、全局 AI 与凭据安全锁</span></div>
-        {perm_row("查看部门树与同事目录", "Fail-Closed：低权模板默认关闭", "on")}
+        {perm_row("查看部门树与同事目录", "低权限角色默认关闭", "on")}
         {perm_row("管理全局 AI / 部门架构 / 成员", "仅限具备管理权限的角色", "off")}
-        {perm_row("共享/代用他人个人写凭据", "personal_exec · DB 强锁 scope='user'", "locked_off")}
+        {perm_row("共用或代用别人的个人账号", "任何角色都不行，不能修改", "locked_off")}
       </div>
     </div>
 
-    <div class="grp-lbl"><span>二、已安装连接器 / 市场插件动态贡献（<span class="mono">manifest.permissions</span> · 未装不显示，停用冻结）</span></div>
+    <div class="grp-lbl"><span>二、已安装的连接器和插件带来的权限（没装不显示，停用后置灰保留）</span></div>
     <div class="pgrid">
       <div class="pcard">
         <div class="ph0">{I("branch",13,style="color:var(--ink-green)")}<span class="grow ell">代码源连接器 · GitLab</span><span class="tag tg-g" style="height:17px;font-size:9.5px">已启用</span></div>
-        {perm_row("合入测试 / 主分支 MR (merge_mr)", "需操作人本人 scope='user' 写凭据双过", "on")}
+        {perm_row("合入测试 / 主分支 MR", "还需要操作人自己的代码平台账号有效", "on")}
         {perm_row("读取 MR 流水线状态", "只读同步检查结果", "on")}
       </div>
       <div class="pcard dim">
         <div class="ph0">{I("history",13,style="color:var(--text-3)")}<span class="grow ell">市场插件 · 紧急回滚</span><span class="tag tg-o" style="height:17px;font-size:9.5px">已停用 · 保留快照</span></div>
-        {perm_row("执行高危回滚 (rollback:exec)", "插件已停用 · 第 0 层 403 拦截", "disabled_off")}
+        {perm_row("执行紧急回滚", "插件已停用，暂不可用", "disabled_off")}
         <div class="row f11" style="padding:4px 0 6px;border-top:1px solid var(--hair)"><span class="t3 grow">去插件市场启用后恢复可配</span><span class="lnk w6">去启用 ›</span></div>
       </div>
     </div>
@@ -394,16 +394,16 @@ def build_pc_roles():
 </main>'''
 
     right = aside(
-        '''<div class="card" style="padding:12px 14px"><div class="row"><div class="mini grow" style="margin:0">动态插件权限契约</div><span class="tag tg-b">防硬编码</span></div>
-  <div class="f12 t2" style="margin-top:6px;line-height:1.6">插件通过 <span class="mono">manifest.permissions</span> 声明 <span class="mono">ext:&lt;id&gt;:*</span> 键（禁止 <span class="mono">core:*</span>）。<b>未安装不渲染</b>；已停用置灰冻结不丢快照；新装插件对现有克隆角色默认 Fail-Closed。</div></div>''',
-        '''<div class="card" style="padding:12px 14px"><div class="mini">四重 AND 消除假绿灯</div>
+        '''<div class="card" style="padding:12px 14px"><div class="row"><div class="mini grow" style="margin:0">插件带来的权限</div><span class="tag tg-b">说明</span></div>
+  <div class="f12 t2" style="margin-top:6px;line-height:1.6">装了插件后，它的权限出现在第二组。<b>没装的插件不显示</b>；停用后置灰，设置保留；新装的插件默认不给现有角色授权，需要你手动打开。</div></div>''',
+        '''<div class="card" style="padding:12px 14px"><div class="mini">一个操作要同时满足 4 条</div>
   <div class="f12 t2" style="margin-top:6px;line-height:1.6">
-    <b style="color:var(--text)">0. 插件状态</b>：已装且当前项目启用<br>
-    <b style="color:var(--ink-red)">1. Core 安全锁</b>：代审 / scope='user'<br>
-    <b style="color:var(--text)">2. RBAC 矩阵</b>：Deny-Overrides + 作用域<br>
-    <b style="color:var(--text)">3. 本人凭据</b>：personal_exec 实时有效性</div></div>''',
+    <b style="color:var(--text)">1. 插件可用</b>：已安装且本项目已启用<br>
+    <b style="color:var(--ink-red)">2. 安全红线</b>：不能代审、个人账号不共用<br>
+    <b style="color:var(--text)">3. 角色权限</b>：有拒绝规则时以拒绝为准<br>
+    <b style="color:var(--text)">4. 本人账号</b>：要用到的个人账号当前有效</div></div>''',
         '''<div class="card" style="padding:12px 14px"><div class="mini">为什么用「模板克隆」</div>
-  <div class="f12 t2" style="margin-top:6px;line-height:1.6">M1 按内置模板深拷贝白名单，既能按需放开业务协作权，又确保核心安全锁与新装高危插件不静默放权。</div></div>''',
+  <div class="f12 t2" style="margin-top:6px;line-height:1.6">从内置角色复制一份再改，既能按需放开协作权限，又不会碰到安全红线；以后新装的插件也不会自动给它授权。</div></div>''',
         w=246,
     )
     return page("角色与权限 · 成员与身份", "set", set_left("成员与身份") + main + right)
@@ -432,9 +432,9 @@ def web_admin_wrap(title, url_path, active_nav, body_html):
     nav_items = [
         ("users", "多级组织架构树与同步", "48", "org"),
         ("shield", "企业域名验证与 SSO", "2", "sso"),
-        ("lock", "角色策略（Allow / Deny）", "7", "roles"),
-        ("layers", "级联配置与安全锁定", "scoped", "scoped"),
-        ("zap", "配额账单与安全审计", "export", "audit"),
+        ("lock", "角色策略", "7", "roles"),
+        ("layers", "配置下发与安全锁定", "4", "scoped"),
+        ("zap", "配额账单与安全审计", "", "audit"),
     ]
     side_html = "".join(
         f'<div class="wnav{" on" if key == active_nav else ""}">{I(ic,15)}<span class="grow ell">{t}</span>'
@@ -447,8 +447,8 @@ def web_admin_wrap(title, url_path, active_nav, body_html):
   <div class="bwin glass">
     <div class="bbar">
       <div class="dots"><i style="background:#FF5F57"></i><i style="background:#FEBC2E"></i><i style="background:#28C840"></i></div>
-      <div class="urlbox"><span class="dot" style="width:7px;height:7px;background:var(--green)"></span><span class="mono">https://craft.company.com{url_path}</span><span class="tag tg-g" style="height:18px;font-size:10px;margin-left:auto">同源 Cookie + CSRF</span></div>
-      <span class="pill" style="height:26px;padding:0 12px;border-radius:13px;background:color-mix(in srgb,var(--purple) 14%,transparent);color:var(--ink-purple);font-size:11.5px;font-weight:700">{I("layers",12)}M2/M3 企业管理后台（Web /admin · 二期架构蓝图，不混入 M1 桌面设置主栏）</span>
+      <div class="urlbox"><span class="dot" style="width:7px;height:7px;background:var(--green)"></span><span class="mono">https://craft.company.com{url_path}</span><span class="tag tg-g" style="height:18px;font-size:10px;margin-left:auto">已登录</span></div>
+      <span class="pill" style="height:26px;padding:0 12px;border-radius:13px;background:color-mix(in srgb,var(--purple) 14%,transparent);color:var(--ink-purple);font-size:11.5px;font-weight:700">{I("layers",12)}企业管理后台 · 网页版（二期蓝图，不在桌面端设置里）</span>
       <span class="grow"></span>
       <span class="f12 lnk w6" style="white-space:nowrap">返回桌面工作台 ↗</span>
     </div>
@@ -456,13 +456,13 @@ def web_admin_wrap(title, url_path, active_nav, body_html):
       <aside class="wside">
         <div class="row g10" style="padding:4px 6px 12px;border-bottom:1px solid var(--hair);margin-bottom:6px">
           <span class="ic-box" style="width:32px;height:32px;border-radius:9px;background:linear-gradient(155deg,#3478F6,#5B21B6)">{I("shield",16,2)}</span>
-          <div class="col"><span class="f13 w7">星辰研发中心</span><span class="f11 t3">enterprise-web · /admin</span></div>
+          <div class="col"><span class="f13 w7">星辰研发中心</span><span class="f11 t3">网页管理后台</span></div>
         </div>
         {side_html}
         <span class="grow"></span>
         <div class="card" style="padding:10px 11px;gap:4px">
-          <div class="f11 w7">工程分层红线</div>
-          <div class="f11 t2" style="line-height:1.5">独立 Vite SPA（<span class="mono">apps/web</span>），复用 <span class="mono">packages/ui-kit + admin-ui</span>；经 URL Fragment <span class="mono">#token=...</span> + <span class="mono">POST /exchange</span> 交接。</div>
+          <div class="f11 w7">从工作台进入</div>
+          <div class="f11 t2" style="line-height:1.5">管理员在桌面端「设置」底部点「管理后台」，不用重新登录。</div>
         </div>
       </aside>
       <main class="wmain">{body_html}</main>
@@ -476,7 +476,7 @@ def build_web_admin():
     body = f'''<div class="row g10">
       <div class="col grow">
         <div class="row g8"><span class="f20 w7">组织治理与多级安全中心</span><span class="tag tg-p">企业蓝图 M2 / M3</span></div>
-        <div class="f12 t3" style="margin-top:2px">集团多事业部（<span class="mono">organizations</span>）· 飞书 SCIM 组织同步 · 企业域名可信发现 · 非密钥级联配置与安全审计导出</div>
+        <div class="f12 t3" style="margin-top:2px">集团多事业部 · 飞书组织架构同步 · 企业域名验证 · 配置下发 · 安全审计导出</div>
       </div>
       <button class="cc-btn cc-btn-sm cc-btn-glass">{I("refresh",13)}立即同步飞书通讯录</button>
       <button class="cc-btn cc-btn-sm cc-btn-pri">{I("plus",13,2.4)}新建子节点</button>
@@ -484,26 +484,26 @@ def build_web_admin():
     <div class="wgrid">
       <div class="wcard">
         <div class="row g8">
-          <span class="f14 w7 grow">多级组织架构树（<span class="mono">org_units.path</span>）</span>
-          <span class="tag tg-g">飞书 SCIM 已接入 · 12 分钟前</span>
+          <span class="f14 w7 grow">多级组织架构</span>
+          <span class="tag tg-g">飞书已同步 · 12 分钟前</span>
         </div>
         <div class="col g4" style="padding:8px;border-radius:12px;background:var(--well);border:1px solid var(--hair);flex:1">
-          <div class="tnode w7">{I("chevd",12)}<span>云匠集团（Organization）</span><span class="mono f11 t3" style="margin-left:auto">48 人</span></div>
-          <div class="tnode" style="padding-left:22px;font-weight:600">{I("chevd",12)}<span>星辰研发中心</span><span class="tag tg-n" style="height:17px;font-size:10px;margin-left:auto">scim_feishu</span></div>
+          <div class="tnode w7">{I("chevd",12)}<span>云匠集团</span><span class="mono f11 t3" style="margin-left:auto">48 人</span></div>
+          <div class="tnode" style="padding-left:22px;font-weight:600">{I("chevd",12)}<span>星辰研发中心</span><span class="tag tg-n" style="height:17px;font-size:10px;margin-left:auto">飞书同步</span></div>
           <div class="tnode" style="padding-left:40px">{I("layers",12)}<span>基础架构与安全部</span><span class="f11 t3" style="margin-left:auto">10 人</span></div>
           <div class="tnode on" style="padding-left:40px">{I("layers",12)}<span>业务产研 · OKR 与审批</span><span class="f11" style="margin-left:auto;color:var(--ink-blue)">22 人</span></div>
           <div class="tnode" style="padding-left:60px">{I("users",12)}<span>OKR 前端一组（主部门）</span><span class="f11 t3" style="margin-left:auto">6 人</span></div>
-          <div class="tnode" style="padding-left:60px">{I("users",12)}<span>审批重构虚线借调组</span><span class="tag tg-b" style="height:17px;font-size:10px;margin-left:auto">expires 12/31</span></div>
-          <div class="tnode" style="padding-left:40px">{I("layers",12)}<span>外部协作专项池</span><span class="tag tg-o" style="height:17px;font-size:10px;margin-left:auto">受限作用域</span></div>
+          <div class="tnode" style="padding-left:60px">{I("users",12)}<span>审批重构虚线借调组</span><span class="tag tg-b" style="height:17px;font-size:10px;margin-left:auto">12/31 到期</span></div>
+          <div class="tnode" style="padding-left:40px">{I("layers",12)}<span>外部协作专项池</span><span class="tag tg-o" style="height:17px;font-size:10px;margin-left:auto">受限范围</span></div>
           <div class="tnode" style="padding-left:22px">{I("chevd",12)}<span>商业化事业部（独立工作空间）</span><span class="f11 t3" style="margin-left:auto">16 人</span></div>
         </div>
-        <div class="f11 t3" style="line-height:1.5">树节点写操作加 <span class="mono">pg_advisory_xact_lock('org_tree:'||ws_id)</span> 防并发成环；SCIM 与手工节点均标注来源与外部 ID。</div>
+        <div class="f11 t3" style="line-height:1.5">多人同时调整组织架构时会自动防冲突；飞书同步来的部门和手工建的部门都标明来源。</div>
       </div>
 
       <div class="col g12" style="min-height:0">
         <div class="wcard" style="padding:12px 14px;gap:8px">
           <div class="row g8">
-            <span class="f14 w7 grow">企业域名验证与 SAML / 飞书自动入驻（防孤岛二层）</span>
+            <span class="f14 w7 grow">企业域名验证与单点登录（同事注册后自动加入）</span>
             <span class="tag tg-g">DNS TXT 已验证</span>
           </div>
           <div class="row g10" style="padding:8px 10px;border-radius:10px;background:var(--well)">
@@ -516,33 +516,33 @@ def build_web_admin():
 
         <div class="wcard" style="padding:12px 14px;gap:8px">
           <div class="row g8">
-            <span class="f14 w7 grow">非密钥级联配置（<span class="mono">scoped_configs</span>）与锁定键</span>
-            <span class="tag tg-r">4 项硬锁定 locked_keys</span>
+            <span class="f14 w7 grow">下发到部门和项目的配置</span>
+            <span class="tag tg-r">4 项已锁定</span>
           </div>
           <div class="row g10" style="padding:7px 10px;border-radius:10px;background:var(--fill)">
-            <span class="f12 w6 grow">1. <span class="mono">safety_policies</span>（L2 禁移动端速过 / 管理员禁代审）</span>
-            <span class="tag tg-r" style="height:18px;font-size:10px">MONOTONIC_TIGHTEN</span>
+            <span class="f12 w6 grow">1. 安全策略（高风险单不能在手机上快速通过 / 管理员不能代审）</span>
+            <span class="tag tg-r" style="height:18px;font-size:10px">下级只能收紧</span>
           </div>
           <div class="row g10" style="padding:7px 10px;border-radius:10px;background:var(--fill)">
-            <span class="f12 w6 grow">2. <span class="mono">ai_settings</span> 网关令牌与个人 PAT / Apollo PROD</span>
-            <span class="tag tg-n" style="height:18px;font-size:10px">物理隔离 · 禁级联覆盖</span>
+            <span class="f12 w6 grow">2. AI 网关令牌、个人代码令牌和发布账号</span>
+            <span class="tag tg-n" style="height:18px;font-size:10px">单独保存 · 不向下继承</span>
           </div>
         </div>
 
         <div class="wcard" style="padding:12px 14px;gap:8px;flex:1">
           <div class="row g8">
-            <span class="f14 w7 grow">按部门成本归集 &amp; 防篡改安全审计流（<span class="mono">events</span>）</span>
+            <span class="f14 w7 grow">按部门统计费用 &amp; 安全审计</span>
             <span class="lnk f11 w6">导出合规 CSV ›</span>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
-            <div class="card" style="padding:8px 10px"><div class="f11 t3">OKR 产研（快照部门）</div><div class="f14 w7" style="margin-top:2px">$142.8 · 38 单</div></div>
+            <div class="card" style="padding:8px 10px"><div class="f11 t3">OKR 产研</div><div class="f14 w7" style="margin-top:2px">$142.8 · 38 单</div></div>
             <div class="card" style="padding:8px 10px"><div class="f11 t3">基础架构部</div><div class="f14 w7" style="margin-top:2px">$68.4 · 19 单</div></div>
-            <div class="card" style="padding:8px 10px"><div class="f11 t3">安全审计事件</div><div class="f14 w7" style="color:var(--ink-green);margin-top:2px">防篡改触发器开启</div></div>
+            <div class="card" style="padding:8px 10px"><div class="f11 t3">安全审计事件</div><div class="f14 w7" style="color:var(--ink-green);margin-top:2px">防篡改保护已开启</div></div>
           </div>
           <div class="row g8 f11 t2" style="padding:6px 8px;border-radius:8px;background:var(--well)">
-            <span class="tag tg-r" style="height:17px;font-size:10px">security_audit</span>
+            <span class="tag tg-r" style="height:17px;font-size:10px">安全审计</span>
             <span class="mono">15:02</span>
-            <span class="grow ell">林某 将 宋工 绑定为「外部低权协作者」并完成赵磊待审单移交 · 经 #token= 安全交接入 /admin</span>
+            <span class="grow ell">林某 将 宋工 设为「外部低权协作者」，并把赵磊的待审单移交出去 · 从工作台进入管理后台</span>
             <span class="tag tg-n" style="height:17px;font-size:10px">仅管理员</span>
           </div>
         </div>
@@ -562,7 +562,7 @@ def build_web_admin_roles():
         st_pill = '<span class="tag tg-n" style="height:18px;font-size:9.5px">插件停用·冻结</span>' if frozen else '<span class="lnk f11">编辑</span>'
         return f'''<div class="row g8" style="padding:7px 10px;border-radius:10px;background:var(--fill){";opacity:.68" if frozen else ""}">
   <span class="mono f11 t3" style="width:52px;flex:none">{rid}</span>
-  <span class="tag tg-{"r" if eff=="DENY" else "g"}" style="height:18px;font-size:10px">{eff}</span>
+  <span class="tag tg-{"r" if eff=="DENY" else "g"}" style="height:18px;font-size:10px">{"拒绝" if eff=="DENY" else "允许"}</span>
   <div class="col grow" style="min-width:0"><span class="f12 w6 ell">{subject} · {scope}</span><span class="f11 t3 ell">{detail}</span></div>
   {st_pill}
 </div>'''
@@ -576,52 +576,52 @@ def build_web_admin_roles():
 
     body = f'''<div class="row g10">
       <div class="col grow">
-        <div class="row g8"><span class="f20 w7">角色策略中心（Allow / Deny 规则引擎）</span><span class="tag tg-p">企业蓝图 M2 / M3</span></div>
-        <div class="f12 t3" style="margin-top:2px">在 M1 权限基础上叠加四重 AND 门禁、显式拒绝（<span class="mono">effect='deny'</span>）与动态插件跨作用域试算</div>
+        <div class="row g8"><span class="f20 w7">角色策略中心（允许 / 拒绝规则）</span><span class="tag tg-p">企业蓝图 M2 / M3</span></div>
+        <div class="f12 t3" style="margin-top:2px">在一期权限基础上增加拒绝规则，并可以模拟某个人在某个项目里能不能做某件事</div>
       </div>
-      <button class="cc-btn cc-btn-sm cc-btn-glass">{I("shield",13)}策略合规试算</button>
+      <button class="cc-btn cc-btn-sm cc-btn-glass">{I("shield",13)}模拟权限</button>
       <button class="cc-btn cc-btn-sm cc-btn-pri">{I("plus",13,2.4)}新建自定义角色 / 策略</button>
     </div>
     <div class="wgrid">
       <div class="wcard">
         <div class="row g8">
-          <span class="f14 w7 grow">四重 AND × Deny-Overrides 优先级栈</span>
-          <span class="tag tg-r">消假绿灯</span>
+          <span class="f14 w7 grow">一个操作要依次通过这 4 层检查</span>
+          <span class="tag tg-r">任何一层不过都不放行</span>
         </div>
         <div class="col g6">
-          {stack_item(0, "插件生命周期门禁（enabled & 项目生效范围）", "未安装/已停用插件的 ext:* 动作第 0 层 403 阻断", "ink-purple")}
-          {stack_item(1, "Core 安全不变量（不可配置）", "代审仅 ticket_assignees、personal_exec 凭据强制 scope='user'", "btn-danger-bg")}
-          {stack_item(2, "RBAC 角色与显式拒绝（Deny-Overrides + 作用域）", "任一作用域命中 DENY 立即一票否决，无任何内置角色名特判", "orange")}
-          {stack_item(3, "操作人个人凭据实时校验", "RBAC 放行后仍需本人「我的账号」有效 scope='user' 凭据", "btn-pri-bg")}
+          {stack_item(0, "插件是否可用", "插件没装或已停用时，它的操作一律不可用", "ink-purple")}
+          {stack_item(1, "安全红线（不能修改）", "只有本单修复人能审代码；个人账号只能本人使用", "btn-danger-bg")}
+          {stack_item(2, "角色权限（拒绝优先）", "命中任何一条拒绝规则就不放行，不看角色名", "orange")}
+          {stack_item(3, "本人账号是否有效", "权限通过后，还要你在「我的账号」里的个人账号有效", "btn-pri-bg")}
         </div>
         <div class="card" style="padding:9px 11px;gap:3px;margin-top:auto">
-          <div class="f11 w7">跨阶段零重构契约</div>
-          <div class="f11 t2" style="line-height:1.45">所有可选插件权限定名走 <span class="mono">ext:&lt;plugin_id&gt;:&lt;action&gt;</span>；停用不丢 <span class="mono">DENY</span> 策略，重装按签名自动恢复防御。</div>
+          <div class="f11 w7">插件权限的命名</div>
+          <div class="f11 t2" style="line-height:1.45">插件权限统一写成 <span class="mono">ext:插件名:操作</span>；插件停用后拒绝规则照样保留，重新启用时自动恢复。</div>
         </div>
       </div>
 
       <div class="col g12" style="min-height:0">
         <div class="wcard" style="padding:12px 14px;gap:7px">
           <div class="row g8">
-            <span class="f14 w7 grow">活跃策略绑定清单（<span class="mono">role_bindings</span>）</span>
-            <span class="cc-seg cc-seg-xs"><span class="on">全部 4</span><span>仅 DENY 2</span><span>停用冻结 1</span></span>
+            <span class="f14 w7 grow">生效中的规则</span>
+            <span class="cc-seg cc-seg-xs"><span class="on">全部 4</span><span>仅拒绝 2</span><span>停用冻结 1</span></span>
           </div>
-          {rule_row("POL-01", "外部协作者（低权）", "DENY", "全空间", "禁止读取共享参考仓库、全部成员目录及 ext:* 空间级插件")}
-          {rule_row("POL-02", "借调组（审批重构）", "DENY", "项目·审批", "禁止向 PROD 正式环境发起发布或变更（ext:release-*:prod） · 12/31 止")}
-          {rule_row("POL-03", "紧急回滚插件（Apollo）", "ALLOW", "全空间", "ext:rollback-apollo:execute · 插件当前在工作空间停用", frozen=True)}
+          {rule_row("POL-01", "外部协作者（低权）", "DENY", "全空间", "不能查看共享参考仓库、全体成员目录和空间级插件")}
+          {rule_row("POL-02", "借调组（审批重构）", "DENY", "项目·审批", "不能向正式环境发布或变更 · 12/31 到期")}
+          {rule_row("POL-03", "紧急回滚插件（Apollo）", "ALLOW", "全空间", "可以执行紧急回滚 · 插件已停用，规则暂不生效", frozen=True)}
         </div>
 
         <div class="wcard" style="padding:12px 14px;gap:6px;flex:1">
           <div class="row g8">
-            <span class="f14 w7 grow">有效权限合规试算器（ActionGate 实态模拟）</span>
+            <span class="f14 w7 grow">权限模拟（选一个人，看他能不能做某件事）</span>
             <span class="cc-select cc-select-sm" style="width:186px"><span class="cc-sel-val">宋工（外部协作者）</span><span class="cc-sel-sp"></span><span class="cc-sel-caret">{I("chevd",12)}</span></span>
           </div>
           <div class="col" style="margin-top:2px">
-            {sim_row("core:ticket:read", "ALLOW", "g", "命中 OKR 项目显式授权白名单")}
-            {sim_row("ext:connector-gitlab:merge", "待补凭据", "o", "RBAC 允许但缺本人 scope='user' PAT（ActionGate 引导补配）")}
-            {sim_row("ext:rollback-apollo:exec", "插件停用", "n", "第 0 层 PLUGIN_DISABLED 拦截（POL-03 快照保留但不放行）")}
-            {sim_row("core:repo:shared_ref", "DENIED", "r", "POL-01 Explicit DENY 拦截（非授权项目范围）")}
-            {sim_row("core:ticket:review_code", "LOCKED", "r", "Plane B 安全红线：仅当本人为 ticket_assignees 时允许")}
+            {sim_row("core:ticket:read", "允许", "g", "OKR 项目已授权")}
+            {sim_row("ext:connector-gitlab:merge", "待补账号", "o", "权限允许，但本人还没填 GitLab 个人令牌，会引导补填")}
+            {sim_row("ext:rollback-apollo:exec", "插件停用", "n", "插件已停用，不放行（POL-03 规则保留）")}
+            {sim_row("core:repo:shared_ref", "拒绝", "r", "被 POL-01 拒绝（不在授权项目内）")}
+            {sim_row("core:ticket:review_code", "锁定", "r", "安全红线：只有本单修复人可以审代码")}
           </div>
         </div>
       </div>
@@ -723,7 +723,7 @@ def m_p1_dir():
   </div>
   <div class="card2" style="margin-top:10px;padding:11px 13px;background:color-mix(in srgb,var(--blue) 7%,var(--glass-2));border-color:color-mix(in srgb,var(--blue) 24%,transparent)">
     <div class="row g6"><span class="f13 w7 grow">OKR 产研 · 部门默认继承</span><span class="tag tg-b">只读概览</span></div>
-    <div class="f12 t2" style="margin-top:4px;line-height:1.45">默认项目 OKR(可改) · 审批(只读) · 共享连接器 + 3 Skills（个人 write 凭据不继承）</div>
+    <div class="f12 t2" style="margin-top:4px;line-height:1.45">默认项目 OKR(可改) · 审批(只读) · 共享连接器 + 3 Skills（个人账号不继承）</div>
   </div>
   <div class="gh" style="padding:12px 4px 6px">部门成员<span>6</span><em>点成员可交接</em></div>
   <div class="grp glass">
@@ -734,7 +734,7 @@ def m_p1_dir():
     {mrow("赵磊","#C8CCD4,#8A909B",'<span class="tag tg-n">已停用</span>',"1 张待审单待交接",f'<span style="color:var(--ink-orange);font-weight:600">交接</span>{I("chevr",14)}')}
   </div>
   <div class="card2" style="margin-top:12px;padding:10px 12px">
-    <div class="row g8"><span class="f12 t3" style="line-height:1.5">手机端禁用编辑组织树，完整树与 SCIM / SSO 同步请至 PC「成员与身份」或 Web <span class="mono">/admin</span>。</span></div>
+    <div class="row g8"><span class="f12 t3" style="line-height:1.5">手机上不能改组织架构；完整组织架构和飞书 / 企微同步请到电脑端「成员与身份」或网页管理后台。</span></div>
   </div>
 </div>'''
     return phone_m(inner)
@@ -756,7 +756,7 @@ def m_p2_resolve():
     inner = f'''{nav_m("组织", "待确认归属")}
 <div class="pad">
   <div class="card2" style="margin-top:6px;padding:13px 14px;border-color:color-mix(in srgb,var(--orange) 42%,transparent);background:color-mix(in srgb,var(--orange) 9%,var(--glass-2))">
-    <div class="row g8"><span class="ck2" style="background:#B45309">!</span><span class="f14 w7">OKR-3320 无法自动认人</span><span class="tag tg-o" style="margin-left:auto">工单已保留</span></div>
+    <div class="row g8"><span class="ck2" style="background:var(--btn-warn-bg)">!</span><span class="f14 w7">OKR-3320 无法自动认人</span><span class="tag tg-o" style="margin-left:auto">工单已保留</span></div>
     <div class="f12 t2" style="margin-top:6px;line-height:1.55">Jira 经办人显示「张伟（账号 <span class="mono">zw01</span>）」，工作台匹配到两位同名研发。</div>
   </div>
   <div class="gh" style="padding:14px 4px 6px">选择一位成员接收并绑定</div>
@@ -765,7 +765,7 @@ def m_p2_resolve():
     {cand("张伟", "销售产研", "zhangwei2", 1, False)}
   </div>
   <div class="card2" style="margin-top:12px;padding:11px 13px">
-    <div class="f12 t2" style="line-height:1.55"><b style="color:var(--text)">防错规则：</b>确认后按 <span class="mono">(connector_id, zw01)</span> 写入 <span class="mono">identities</span> 唯一索引，以后 <span class="mono">zw01</span> 来单直接通知他，绝不按同名展示名覆盖。</div>
+    <div class="f12 t2" style="line-height:1.55"><b style="color:var(--text)">防错规则：</b>确认后记住这个对应关系，以后 <span class="mono">zw01</span> 提的单直接通知他，不会因为重名认错人。</div>
   </div>
 </div>
 <div class="dock2 glass">
@@ -793,7 +793,7 @@ def m_p3_handoff():
 <div class="sheet">
   <div class="grab"></div>
   <div class="row g10" style="margin-bottom:8px">
-    <div class="col grow"><span class="f17 w7">停用并交接 · 赵磊</span><span class="f12 t3">OKR 产研 · 同事务清退会话与本机 Runner</span></div>
+    <div class="col grow"><span class="f17 w7">停用并交接 · 赵磊</span><span class="f12 t3">OKR 产研 · 退出他的登录并停用本机执行器</span></div>
     <span class="tag tg-o">2 项待交接</span>
   </div>
   <div class="flat2" style="padding:9px 12px;margin-bottom:10px">
@@ -811,9 +811,9 @@ def m_p3_handoff():
 
 def build_m_org():
     phones = [
-        (m_p1_dir, "只读部门与成员目录", "按部门筛选 · RBAC 作用域隔离 · 禁用手机端编树"),
-        (m_p2_resolve, "同名待确认选人", "OKR-3320 对不上号，按 external_id 精准绑定"),
-        (m_p3_handoff, "停用待办一键交接", "先选接替人并同事务吊销登录态与个人 Runner"),
+        (m_p1_dir, "只读部门与成员目录", "按部门筛选 · 只看有权限的人 · 手机上不能改组织架构"),
+        (m_p2_resolve, "同名待确认选人", "OKR-3320 对不上人，手动选一次，以后自动认"),
+        (m_p3_handoff, "停用待办一键交接", "先选接替人，再退出他的登录、停用个人执行器"),
     ]
     cols = "".join(f'<div class="col3">{fn()}<div class="lbl">{t}<em>{d}</em></div></div>' for fn, t, d in phones)
     return f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>移动端 · 组织与成员</title>

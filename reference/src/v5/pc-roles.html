@@ -29,7 +29,7 @@
 .pcard .ph0{font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;display:flex;align-items:center;gap:6px}
 .admin-portal{padding:9px 10px;border-radius:12px;background:var(--well);border:1px solid var(--hair);display:flex;flex-direction:column;gap:3px}
 </style><main class="glass pn grow" style="min-width:0">
-<header class="thead"><div class="row g10"><div class="col grow"><div class="row g10"><h1>成员与身份</h1><span class="cc-seg cc-seg-xs" data-pin="mem-role-seg"><span>成员与部门</span><span class="on">角色与权限 7</span></span></div><div class="f12 t3" style="margin-top:3px">Core 内置权限永远存在 · 连接器与市场插件通过 <span class="mono">manifest.permissions</span> 动态注册（未安装不显示）</div></div>
+<header class="thead"><div class="row g10"><div class="col grow"><div class="row g10"><h1>成员与身份</h1><span class="cc-seg cc-seg-xs" data-pin="mem-role-seg"><span>成员与部门</span><span class="on">角色与权限 7</span></span></div><div class="f12 t3" style="margin-top:3px">内置权限始终显示 · 装了连接器或插件后，它们的权限会自动出现在下面（没装不显示）</div></div>
   <button class="cc-btn cc-btn-sm cc-btn-pri" data-pin="clone-role-btn"><i data-i="plus" data-s="14" data-w="2.4"></i>从模板克隆角色</button></div></header>
 <div class="role-wrap">
   <div class="role-side">
@@ -58,27 +58,27 @@
 </div>
     <span class="grow"></span>
     <div class="admin-portal" data-pin="admin-roles-portal">
-      <div class="row g6"><span class="f12 w7" style="color:var(--ink-blue)">Deny-Overrides 生效中</span><span class="grow"></span><i data-i="shield" data-s="12" style="color:var(--ink-blue)"></i></div>
-      <div class="t3" style="font-size:10.5px;line-height:1.4">新装插件默认 Fail-Closed 不自动放权</div>
+      <div class="row g6"><span class="f12 w7" style="color:var(--ink-blue)">拒绝优先于允许</span><span class="grow"></span><i data-i="shield" data-s="12" style="color:var(--ink-blue)"></i></div>
+      <div class="t3" style="font-size:10.5px;line-height:1.4">新装的插件默认不给任何角色授权</div>
     </div>
   </div>
   <div class="role-main">
     <div class="row g10" style="padding:9px 13px;border-radius:14px;background:color-mix(in srgb,var(--blue) 7%,var(--glass-2));border:1px solid color-mix(in srgb,var(--blue) 22%,transparent)">
       <span class="ic-box" style="width:28px;height:28px;border-radius:8px;background:linear-gradient(155deg,#5AA0FF,#1F6FFF)"><i data-i="layers" data-s="14"></i></span>
       <div class="col grow" style="min-width:0">
-        <div class="row g8" style="flex-wrap:wrap;row-gap:4px"><span class="f13 w7" style="white-space:nowrap">代码合入协同专员</span><span class="tag tg-p" style="height:18px;font-size:10px">模板克隆 · base: member</span><span class="tag tg-g" style="height:18px;font-size:10px">新装插件默认 Fail-Closed</span></div>
-        <div class="f11 t3" style="margin-top:2px">仅存显式白名单与 Deny-Overrides；安全红线（禁代审、个人写凭据隔离）永不可解锁</div>
+        <div class="row g8" style="flex-wrap:wrap;row-gap:4px"><span class="f13 w7" style="white-space:nowrap">代码合入协同专员</span><span class="tag tg-p" style="height:18px;font-size:10px">基于「成员」复制</span><span class="tag tg-g" style="height:18px;font-size:10px">新插件默认不授权</span></div>
+        <div class="f11 t3" style="margin-top:2px">只记录你改动过的权限；安全红线（不能代审、个人账号不能共用）任何角色都不能打开</div>
       </div>
       <button class="cc-btn cc-btn-xs cc-btn-glass">重命名</button>
       <button class="cc-btn cc-btn-xs cc-btn-pri"><i data-i="check" data-s="12" data-w="2.5"></i>保存权限</button>
     </div>
 
-    <div class="grp-lbl"><span>一、Core 不可卸载基础权限（9 核心域 · 含工单、MR 与内置发布流）</span></div>
+    <div class="grp-lbl"><span>一、内置权限（工单、MR 与发布，始终存在）</span></div>
     <div class="pgrid">
       <div class="pcard">
         <div class="ph0"><i data-i="code" data-s="13" style="color:var(--ink-blue)"></i><span>工单、MR 与内置发布红线</span></div>
         <div class="row g8" style="padding:6px 0;border-top:1px solid var(--hair);min-width:0">
-  <div class="col grow" style="min-width:0"><span class="f12 w6 ell">查看项目与 Bug 单 (ticket:read)</span><span class="f11 t3 ell">按所属部门与项目可见范围隔离</span></div>
+  <div class="col grow" style="min-width:0"><span class="f12 w6 ell">查看项目与 Bug 单</span><span class="f11 t3 ell">只能看所属部门和授权项目里的</span></div>
   <span class="cc-switch on"></span>
 </div>
         <div class="row g8" style="padding:6px 0;border-top:1px solid var(--hair);min-width:0">
@@ -86,14 +86,14 @@
   <span class="cc-switch on"></span>
 </div>
         <div class="row g8" style="padding:6px 0;border-top:1px solid var(--hair);min-width:0">
-  <div class="col grow" style="min-width:0"><span class="f12 w6 ell">代审他人代码 (review_code)</span><span class="f11 t3 ell">始终锁死仅 ticket_assignees</span></div>
+  <div class="col grow" style="min-width:0"><span class="f12 w6 ell">审核别人负责的代码</span><span class="f11 t3 ell">只有本单修复人可以，不能修改</span></div>
   <span class="tag tg-r" style="height:20px;font-size:10px;white-space:nowrap"><i data-i="lock" data-s="10"></i> 安全锁</span>
 </div>
       </div>
       <div class="pcard">
         <div class="ph0"><i data-i="shield" data-s="13" style="color:var(--ink-red)"></i><span>组织、全局 AI 与凭据安全锁</span></div>
         <div class="row g8" style="padding:6px 0;border-top:1px solid var(--hair);min-width:0">
-  <div class="col grow" style="min-width:0"><span class="f12 w6 ell">查看部门树与同事目录</span><span class="f11 t3 ell">Fail-Closed：低权模板默认关闭</span></div>
+  <div class="col grow" style="min-width:0"><span class="f12 w6 ell">查看部门树与同事目录</span><span class="f11 t3 ell">低权限角色默认关闭</span></div>
   <span class="cc-switch on"></span>
 </div>
         <div class="row g8" style="padding:6px 0;border-top:1px solid var(--hair);min-width:0">
@@ -101,18 +101,18 @@
   <span class="cc-switch"></span>
 </div>
         <div class="row g8" style="padding:6px 0;border-top:1px solid var(--hair);min-width:0">
-  <div class="col grow" style="min-width:0"><span class="f12 w6 ell">共享/代用他人个人写凭据</span><span class="f11 t3 ell">personal_exec · DB 强锁 scope='user'</span></div>
+  <div class="col grow" style="min-width:0"><span class="f12 w6 ell">共用或代用别人的个人账号</span><span class="f11 t3 ell">任何角色都不行，不能修改</span></div>
   <span class="tag tg-r" style="height:20px;font-size:10px;white-space:nowrap"><i data-i="lock" data-s="10"></i> 安全锁</span>
 </div>
       </div>
     </div>
 
-    <div class="grp-lbl"><span>二、已安装连接器 / 市场插件动态贡献（<span class="mono">manifest.permissions</span> · 未装不显示，停用冻结）</span></div>
+    <div class="grp-lbl"><span>二、已安装的连接器和插件带来的权限（没装不显示，停用后置灰保留）</span></div>
     <div class="pgrid">
       <div class="pcard">
         <div class="ph0"><i data-i="branch" data-s="13" style="color:var(--ink-green)"></i><span class="grow ell">代码源连接器 · GitLab</span><span class="tag tg-g" style="height:17px;font-size:9.5px">已启用</span></div>
         <div class="row g8" style="padding:6px 0;border-top:1px solid var(--hair);min-width:0">
-  <div class="col grow" style="min-width:0"><span class="f12 w6 ell">合入测试 / 主分支 MR (merge_mr)</span><span class="f11 t3 ell">需操作人本人 scope='user' 写凭据双过</span></div>
+  <div class="col grow" style="min-width:0"><span class="f12 w6 ell">合入测试 / 主分支 MR</span><span class="f11 t3 ell">还需要操作人自己的代码平台账号有效</span></div>
   <span class="cc-switch on"></span>
 </div>
         <div class="row g8" style="padding:6px 0;border-top:1px solid var(--hair);min-width:0">
@@ -123,7 +123,7 @@
       <div class="pcard dim">
         <div class="ph0"><i data-i="history" data-s="13" style="color:var(--text-3)"></i><span class="grow ell">市场插件 · 紧急回滚</span><span class="tag tg-o" style="height:17px;font-size:9.5px">已停用 · 保留快照</span></div>
         <div class="row g8" style="padding:6px 0;border-top:1px solid var(--hair);min-width:0">
-  <div class="col grow" style="min-width:0"><span class="f12 w6 ell">执行高危回滚 (rollback:exec)</span><span class="f11 t3 ell">插件已停用 · 第 0 层 403 拦截</span></div>
+  <div class="col grow" style="min-width:0"><span class="f12 w6 ell">执行紧急回滚</span><span class="f11 t3 ell">插件已停用，暂不可用</span></div>
   <span class="cc-switch is-disabled"></span>
 </div>
         <div class="row f11" style="padding:4px 0 6px;border-top:1px solid var(--hair)"><span class="t3 grow">去插件市场启用后恢复可配</span><span class="lnk w6">去启用 ›</span></div>
@@ -152,14 +152,14 @@
     </div>
   </div>
 </div>
-</main><aside class="glass pn" style="width:246px;flex:none;padding:16px 14px;gap:12px"><div class="card" style="padding:12px 14px"><div class="row"><div class="mini grow" style="margin:0">动态插件权限契约</div><span class="tag tg-b">防硬编码</span></div>
-  <div class="f12 t2" style="margin-top:6px;line-height:1.6">插件通过 <span class="mono">manifest.permissions</span> 声明 <span class="mono">ext:&lt;id&gt;:*</span> 键（禁止 <span class="mono">core:*</span>）。<b>未安装不渲染</b>；已停用置灰冻结不丢快照；新装插件对现有克隆角色默认 Fail-Closed。</div></div><div class="card" style="padding:12px 14px"><div class="mini">四重 AND 消除假绿灯</div>
+</main><aside class="glass pn" style="width:246px;flex:none;padding:16px 14px;gap:12px"><div class="card" style="padding:12px 14px"><div class="row"><div class="mini grow" style="margin:0">插件带来的权限</div><span class="tag tg-b">说明</span></div>
+  <div class="f12 t2" style="margin-top:6px;line-height:1.6">装了插件后，它的权限出现在第二组。<b>没装的插件不显示</b>；停用后置灰，设置保留；新装的插件默认不给现有角色授权，需要你手动打开。</div></div><div class="card" style="padding:12px 14px"><div class="mini">一个操作要同时满足 4 条</div>
   <div class="f12 t2" style="margin-top:6px;line-height:1.6">
-    <b style="color:var(--text)">0. 插件状态</b>：已装且当前项目启用<br>
-    <b style="color:var(--ink-red)">1. Core 安全锁</b>：代审 / scope='user'<br>
-    <b style="color:var(--text)">2. RBAC 矩阵</b>：Deny-Overrides + 作用域<br>
-    <b style="color:var(--text)">3. 本人凭据</b>：personal_exec 实时有效性</div></div><div class="card" style="padding:12px 14px"><div class="mini">为什么用「模板克隆」</div>
-  <div class="f12 t2" style="margin-top:6px;line-height:1.6">M1 按内置模板深拷贝白名单，既能按需放开业务协作权，又确保核心安全锁与新装高危插件不静默放权。</div></div></aside></div>
+    <b style="color:var(--text)">1. 插件可用</b>：已安装且本项目已启用<br>
+    <b style="color:var(--ink-red)">2. 安全红线</b>：不能代审、个人账号不共用<br>
+    <b style="color:var(--text)">3. 角色权限</b>：有拒绝规则时以拒绝为准<br>
+    <b style="color:var(--text)">4. 本人账号</b>：要用到的个人账号当前有效</div></div><div class="card" style="padding:12px 14px"><div class="mini">为什么用「模板克隆」</div>
+  <div class="f12 t2" style="margin-top:6px;line-height:1.6">从内置角色复制一份再改，既能按需放开协作权限，又不会碰到安全红线；以后新装的插件也不会自动给它授权。</div></div></aside></div>
 <nav class="dockv glass" aria-label="主菜单"><span class="dki"><span class="ap ap-ai"><svg width="24" height="24" viewBox="0 0 24 24" fill="#fff"><path d="M10 3l1.9 5.6 5.6 1.9-5.6 1.9L10 18l-1.9-5.6L2.5 10.5l5.6-1.9z"/><path d="M18 13.5l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9z" opacity=".8"/></svg></span></span><span class="dsep"></span><span class="dki"><span class="ap ap-chat"><svg width="30" height="30" viewBox="0 0 24 24"><defs><linearGradient id="cb1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6CC4FF"/><stop offset="1" stop-color="#1673FF"/></linearGradient></defs><path d="M15 9.6c3.4 0 6.1 2.2 6.1 4.9 0 1.4-.7 2.6-1.8 3.5l.5 2.5-2.9-1.4c-.6.2-1.2.3-1.9.3-3.4 0-6.1-2.2-6.1-4.9s2.7-4.9 6.1-4.9z" fill="#B9DBFF"/><path d="M9.6 3.2c-4 0-7.2 2.6-7.2 5.8 0 1.7.9 3.2 2.3 4.2l-.6 3 3.5-1.7c.6.2 1.3.2 2 .2 4 0 7.2-2.6 7.2-5.8S13.6 3.2 9.6 3.2z" fill="url(#cb1)"/><circle cx="6.8" cy="9" r="1" fill="#fff"/><circle cx="9.6" cy="9" r="1" fill="#fff"/><circle cx="12.4" cy="9" r="1" fill="#fff"/></svg></span><b>4</b></span><span class="dki"><span class="ap ap-pub"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 2.6l8.4 4.7L12 12 3.6 7.3z" fill="#FFE2A8"/><path d="M3.6 7.3L12 12v9.4l-8.4-4.7z" fill="#fff" opacity=".95"/><path d="M20.4 7.3L12 12v9.4l8.4-4.7z" fill="#fff" opacity=".7"/><path d="M7.8 4.9l8.4 4.7v3.2" stroke="#FF8A00" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".7"/></svg></span><b>1</b></span><span class="dki"><span class="ap ap-rb"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3.8 4.8v4.4h4.4"/><path d="M4.2 9.2A8.3 8.3 0 1 1 3.9 13.6"/><path d="M12 8v4.2l2.7 1.7"/></svg></span></span><span class="dki"><span class="ap ap-sk"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 13.2l8.6-4.4L12 4.4 3.4 8.8z" fill="#fff"/><path d="M3.4 12.6L12 17l8.6-4.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".75"/><path d="M3.4 16.2L12 20.6l8.6-4.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".5"/></svg></span></span><span class="grow"></span><span class="dki"><span class="ap ap-mkt"><svg width="24" height="24" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7.2" height="7.2" rx="2.2" fill="#fff"/><rect x="13.3" y="3.5" width="7.2" height="7.2" rx="2.2" fill="#fff" opacity=".82"/><rect x="3.5" y="13.3" width="7.2" height="7.2" rx="2.2" fill="#fff" opacity=".82"/><path d="M16.9 13.2l1.1 2.7 2.7 1.1-2.7 1.1-1.1 2.7-1.1-2.7-2.7-1.1 2.7-1.1z" fill="#fff"/></svg></span></span><span class="dki on"><span class="ap ap-set"><svg width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="gr1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#D9DCE3"/></linearGradient></defs><path d="M12 1.8l1.6 2.4 2.8-.7.5 2.9 2.8.9-.9 2.8 2.2 1.9-2.2 1.9.9 2.8-2.8.9-.5 2.9-2.8-.7L12 22.2l-1.6-2.4-2.8.7-.5-2.9-2.8-.9.9-2.8-2.2-1.9 2.2-1.9-.9-2.8 2.8-.9.5-2.9 2.8.7z" fill="url(#gr1)"/><circle cx="12" cy="12" r="5.2" fill="#8D919B"/><circle cx="12" cy="12" r="2.6" fill="#E9EBF0"/></svg></span></span></nav>
 
 </div>

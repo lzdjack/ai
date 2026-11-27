@@ -204,7 +204,7 @@
               </div>
               <div class="pmeta">
                 <span class="ro-bdg"><i data-i="lock" data-s="11"></i>只读隔离</span>
-                <span class="ell">辅助核对接口字段、错误码与权限逻辑，宿主机硬拦截写入与推送</span>
+                <span class="ell">辅助核对接口字段、错误码与权限逻辑 · 只读，Bot 不能改动或推送</span>
               </div>
             </div>
             <div class="pseg"><span class="s-ro"><i data-i="eye" data-s="12"></i>仅查看</span><span><i data-i="edit" data-s="12"></i>可修改</span></div>
@@ -259,7 +259,7 @@
               </div>
               <div class="pmeta">
                 <span class="ro-bdg"><i data-i="lock" data-s="11"></i>只读隔离</span>
-                <span class="ell">供 Bot 跨仓查组件 API 与主题变量，宿主机硬拦截任何代码写入与提 PR</span>
+                <span class="ell">供 Bot 查组件用法与主题变量 · 只读，Bot 不能改代码或提 PR</span>
               </div>
             </div>
             <div class="pseg"><span class="s-ro"><i data-i="eye" data-s="12"></i>仅查看</span><span><i data-i="edit" data-s="12"></i>可修改</span></div>
@@ -328,7 +328,7 @@
       </div>
       <div class="row g10">
         <div style="width:170px;flex:none">
-          <div class="flab">工具链适配<span class="aid2">lock / mod</span></div>
+          <div class="flab">工具链适配<span class="aid2">自动识别</span></div>
           <div class="dsel"><span class="mono grow">pnpm (多语言支持)</span><i data-i="chevd" data-s="13" style="color:var(--text-3)"></i></div>
         </div>
         <div class="grow">
@@ -343,7 +343,7 @@
       <div class="tsec-h"><span>验证策略、规范与默认审核人</span></div>
       <div class="row g8 f12 t2" style="padding:7px 10px;border-radius:10px;background:var(--glass-2)">
         <i data-i="file" data-s="14" style="color:var(--ink-purple)"></i>
-        <span class="grow ell">自动识别 <span class="mono">AGENTS.md</span> · 验证策略 <span class="mono">browser_dist_replace</span>（后端支持 <span class="mono">test_suite</span>）</span>
+        <span class="grow ell">自动识别 <span class="mono">AGENTS.md</span> · 验证方式：浏览器里替换产物验证（后端仓库可选跑测试）</span>
         <span class="tag tg-g" style="height:19px;font-size:10.5px">已生效</span>
       </div>
       <div class="row g10">
