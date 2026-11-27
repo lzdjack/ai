@@ -6,5 +6,21 @@
   "description": "接口服务 cc-app 与后台任务 cc-sys（06 §1.2）",
   "exports": {
     ".": "./src/index.ts"
+  },
+  "scripts": {
+    "dev": "tsx watch src/main.ts",
+    "start": "tsx src/main.ts"
+  },
+  "dependencies": {
+    "@cloudcraft/config": "workspace:*",
+    "drizzle-orm": "0.45.4",
+    "fastify": "5.12.8",
+    "pg": "8.23.1",
+    "typebox": "1.4.7"
+  },
+  "devDependencies": {
+    "@types/pg": "8.23.1",
+    "drizzle-kit": "0.31.11",
+    "fast-check": "4.10.2"
   }
 }

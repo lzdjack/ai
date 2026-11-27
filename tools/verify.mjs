@@ -1,6 +1,7 @@
 // pnpm verify：唯一检查入口，本地即 CI（docs/07 §3.3）。
 // 全绿时每步只打一行；失败时打印该步输出的末尾并退出 1，省 token。
 import { spawnSync } from 'node:child_process';
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { GENERATORS } from './gen.mjs';
@@ -69,14 +70,32 @@ step('代码检查与依赖边界', () =>
   ]),
 );
 
+/** 生成物当前内容的指纹：路径 → 内容哈希（目录递归展开） */
+function fingerprint(outputs) {
+  const out = new Map();
+  const walk = (rel) => {
+    const abs = path.join(ROOT, rel);
+    if (!fs.existsSync(abs)) return;
+    if (fs.statSync(abs).isDirectory())
+      for (const f of fs.readdirSync(abs)) walk(path.join(rel, f));
+    else out.set(rel, crypto.createHash('sha256').update(fs.readFileSync(abs)).digest('hex'));
+  };
+  outputs.forEach(walk);
+  return out;
+}
+
 step('生成物是否最新', () => {
   if (GENERATORS.length === 0) return { skip: '暂无生成器' };
+  const outputs = GENERATORS.flatMap((g) => g.outputs);
+  const before = fingerprint(outputs);
   const r = run('node', ['tools/gen.mjs']);
   if (!r.ok) return r;
-  const outputs = GENERATORS.flatMap((g) => g.outputs);
-  const diff = git(['status', '--porcelain', '--', ...outputs]);
-  return diff.out
-    ? { ok: false, out: `生成物和源不一致，运行 pnpm gen 后提交：\n${diff.out}` }
+  const after = fingerprint(outputs);
+  const changed = [...new Set([...before.keys(), ...after.keys()])].filter(
+    (f) => before.get(f) !== after.get(f),
+  );
+  return changed.length
+    ? { ok: false, out: `生成物和源不一致，已重新生成，检查后提交：\n${changed.join('\n')}` }
     : { ok: true };
 });
 
