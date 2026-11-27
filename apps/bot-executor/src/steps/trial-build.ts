@@ -7,6 +7,7 @@ import type { StepAssignment } from '@cloudcraft/core-protocol';
 import type { StepHandler, StepResult } from '../runner/loop.ts';
 import { installRoundDeps } from '../sandbox/deps.ts';
 import { runContainer } from '../sandbox/docker.ts';
+import type { GitAuth } from '../runner/credentials.ts';
 import { clone } from './git.ts';
 
 const TAIL = 2000;
@@ -18,8 +19,8 @@ export interface TrialBuildOptions {
   cacheRoot: string;
   /** per-step work directories go below this */
   workRoot: string;
-  /** credential for cloning; E1 takes it from the executor's own config (P3: credential envelopes) */
-  gitToken?: string;
+  /** credential per repo: an envelope from the server, or the executor's own token (drills) */
+  gitAuth: GitAuth;
   /** labels for every container of this executor (crash cleanup) */
   labels?: Record<string, string>;
 }
@@ -33,7 +34,10 @@ export function trialBuild(o: TrialBuildOptions): StepHandler {
       const t0 = Date.now();
       fs.mkdirSync(workDir, { recursive: true });
       for (const r of step.repos)
-        await clone(r.clone_url, r.ref, path.join(workDir, r.name), { token: o.gitToken, signal });
+        await clone(r.clone_url, r.ref, path.join(workDir, r.name), {
+          ...(await o.gitAuth(step, r)),
+          signal,
+        });
       timings.push({ label: 'clone', ms: Date.now() - t0 });
 
       const deps = await installRoundDeps({
