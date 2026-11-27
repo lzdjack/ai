@@ -1,0 +1,17 @@
+id: B003
+title: 发起审批时金额填 0 也能提交，英文界面的金额报错是中文
+repo: demo-web
+level: L1
+report: |
+  发起审批的时候金额填 0 居然能提交成功。
+  另外切到英文界面，金额填负数时出来的报错提示还是中文。
+repro:
+  - 打开 /#/approvals/new
+  - 标题、事由随便填，金额填 0，点提交
+  - 切换到 English，金额填 -1，点 Submit
+inject: B003.inject.patch
+inject_message: 调整发起审批的金额校验与文案
+fix: B003.fix.patch
+verify:
+  unit: B003.test.ts
+expect_files: [src/pages/approvals/validate.ts, src/i18n/en-US.ts]

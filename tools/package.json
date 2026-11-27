@@ -5,6 +5,9 @@
   "type": "module",
   "description": "开发工具：verify、代码生成、ESLint 自定义规则、Claude Code 钩子",
   "dependencies": {
-    "@cloudcraft/config": "workspace:*"
+    "@cloudcraft/config": "workspace:*",
+    "@cloudcraft/sim": "workspace:*",
+    "typebox": "1.4.7",
+    "yaml": "2.9.1"
   }
 }

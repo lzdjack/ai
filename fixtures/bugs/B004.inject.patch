@@ -1,0 +1,14 @@
+diff --git a/src/auth/permissions.ts b/src/auth/permissions.ts
+index d34bb37..848f52b 100644
+--- a/src/auth/permissions.ts
++++ b/src/auth/permissions.ts
+@@ -1,6 +1,6 @@
+ import type { Approval, User } from '../types';
+ 
+-/** 只有申请人本人能撤回，而且只能撤回审批中的单 */
+-export function canWithdraw(user: User, approval: Approval): boolean {
+-  return approval.status === 'pending' && approval.applicant_id === user.id;
++/** 审批中的单可以撤回 */
++export function canWithdraw(_user: User, approval: Approval): boolean {
++  return approval.status === 'pending';
+ }

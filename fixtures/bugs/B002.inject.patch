@@ -1,0 +1,12 @@
+diff --git a/src/format/amount.ts b/src/format/amount.ts
+index 1fcad33..c9dab24 100644
+--- a/src/format/amount.ts
++++ b/src/format/amount.ts
+@@ -6,6 +6,6 @@ const SYMBOL: Record<Locale, string> = { 'zh-CN': '¥', 'en-US': 'CNY ' };
+ export function formatAmount(value: number, locale: Locale = 'zh-CN'): string {
+   const sign = value < 0 ? '-' : '';
+   const [int = '0', dec = '00'] = (Math.round(Math.abs(value) * 100) / 100).toFixed(2).split('.');
+-  const grouped = int.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
++  const grouped = int.replace(/\B(?=(\d{3})+(?!\d))/, ',');
+   return `${sign}${SYMBOL[locale]}${grouped}.${dec}`;
+ }

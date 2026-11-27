@@ -1,0 +1,22 @@
+body { font: 14px/1.6 -apple-system, system-ui, sans-serif; margin: 0; color: #1f2329; }
+.app { max-width: 960px; margin: 0 auto; padding: 16px; }
+header { display: flex; align-items: center; justify-content: space-between; }
+nav { display: flex; gap: 12px; align-items: center; }
+.toolbar { display: flex; gap: 8px; margin: 12px 0; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 8px; border-bottom: 1px solid #eee; text-align: left; }
+th.sortable { cursor: pointer; user-select: none; }
+td.num { font-variant-numeric: tabular-nums; }
+.pager { display: flex; gap: 12px; align-items: center; justify-content: flex-end; margin-top: 12px; }
+.muted { color: #8f959e; }
+.form { display: grid; gap: 12px; max-width: 420px; }
+.form label { display: grid; gap: 4px; }
+.error { color: #d83931; font-size: 12px; }
+.flow { padding-left: 20px; }
+.flow-node--approved { color: #2ea121; }
+.flow-node--rejected { color: #d83931; }
+.demo-tag { display: inline-block; padding: 0 8px; border-radius: 4px; font-size: 12px; }
+.demo-tag--info { background: #e1eaff; color: #245bdb; }
+.demo-tag--success { background: #d9f5d6; color: #237b19; }
+.demo-tag--danger { background: #fde2e2; color: #d83931; }
+.demo-tag--neutral { background: #eff0f1; color: #646a73; }

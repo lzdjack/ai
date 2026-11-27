@@ -1,5 +1,6 @@
 // pnpm dev:up：起本地基础设施并自检（docs/07 §4.4）。可重复执行。
 import { databaseUrls } from '@cloudcraft/config';
+import { seedDemoRepos } from '../fixtures/seed.ts';
 import {
   compose,
   dataDir,
@@ -50,11 +51,20 @@ const mail = await fetch(`http://127.0.0.1:${c.CC_MAILPIT_UI_PORT}/api/v1/info`)
 must('mailpit 自检', { ok: !!mail?.ok, out: `http://127.0.0.1:${c.CC_MAILPIT_UI_PORT} 无响应` });
 console.log('✓ mailpit 可用');
 
+const seeded = await seedDemoRepos(c).catch((e: Error) => {
+  must('demo 仓推进模拟 GitLab', { ok: false, out: e.message });
+  return [];
+});
+const pushed = seeded.filter((r) => r.result === 'pushed').length;
+console.log(
+  `✓ 模拟 GitLab：${seeded.map((r) => r.repo).join('、')}${pushed ? `（本次推送 ${pushed} 个）` : '（已存在）'}`,
+);
+
 const { app } = databaseUrls(c);
 console.log(`
 数据库    ${app.replace(/:[^:@]+@/, ':***@')}
 收件箱    http://127.0.0.1:${c.CC_MAILPIT_UI_PORT}
 SMTP      127.0.0.1:${c.CC_SMTP_PORT}
+模拟服务  pnpm dev 后 http://127.0.0.1:${c.CC_SIM_PORT}/
 数据目录  ${dir}
-- 数据库迁移与种子数据：P1 起
-- demo 仓推进模拟 GitLab：E0-4 起`);
+- 数据库迁移与种子数据：P1 起`);

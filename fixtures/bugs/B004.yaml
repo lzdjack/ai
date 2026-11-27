@@ -1,0 +1,16 @@
+id: B004
+title: 能撤回别人发起的审批
+repo: demo-web
+level: L2
+report: |
+  我（张三）打开李四发起的一条审批中的单子，详情页也有「撤回」按钮，点了以后真的被撤回了。
+  撤回应该只有申请人自己能操作。
+repro:
+  - 打开 /#/approvals/A002（申请人李四，审批中）
+  - 看到「撤回」按钮并点击
+inject: B004.inject.patch
+inject_message: 撤回按钮显示条件整理
+fix: B004.fix.patch
+verify:
+  unit: B004.test.ts
+expect_files: [src/auth/permissions.ts]

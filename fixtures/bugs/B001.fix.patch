@@ -1,0 +1,13 @@
+diff --git b/src/pages/approvals/sort.ts a/src/pages/approvals/sort.ts
+index 96ed063..6bba182 100644
+--- b/src/pages/approvals/sort.ts
++++ a/src/pages/approvals/sort.ts
+@@ -6,7 +6,7 @@ export type SortOrder = 'asc' | 'desc';
+ export function sortApprovals(list: Approval[], key: SortKey, order: SortOrder): Approval[] {
+   const dir = order === 'asc' ? 1 : -1;
+   return [...list].sort((a, b) => {
+-    const compare = key === 'amount' ? a.amount - b.amount : b.submitted_at.localeCompare(a.submitted_at);
++    const compare = key === 'amount' ? a.amount - b.amount : a.submitted_at.localeCompare(b.submitted_at);
+     return compare * dir;
+   });
+ }

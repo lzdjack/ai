@@ -19,6 +19,8 @@
     "dev:up": "tsx tools/dev/up.ts",
     "dev:down": "tsx tools/dev/down.ts",
     "dev:reset": "tsx tools/dev/reset.ts",
+    "fixtures:seed": "tsx tools/fixtures/seed.ts",
+    "fixtures:check": "tsx tools/fixtures/check.ts",
     "dev": "turbo run dev"
   },
   "devDependencies": {
