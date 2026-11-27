@@ -49,16 +49,20 @@ export async function renewLeases(
   return renewed;
 }
 
-/** Leases due items of one kind to this runner; committed when the request's transaction ends. */
+/**
+ * Leases due items of one kind to this runner; committed when the request's transaction ends.
+ * With flowId, only that flow's items (the next step of a segment the runner is working on).
+ */
 export async function claimForRunner(
   tx: Tx,
-  o: { runnerId: string; kind: string; limit: number; seconds: number },
+  o: { runnerId: string; kind: string; limit: number; seconds: number; flowId?: string },
 ) {
   if (o.limit <= 0) return [];
   const r = await tx.execute<{ id: string }>(sql`
     with due as (
       select id from work_items
       where status = 'queued' and run_after <= now() and kind = ${o.kind}
+        ${o.flowId ? sql`and payload->>'flow_instance_id' = ${o.flowId}` : sql``}
       order by run_after
       limit ${o.limit}
       for update skip locked
