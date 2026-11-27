@@ -5,7 +5,8 @@
 import { loadConfig } from '@cloudcraft/config';
 
 type Api = 'openai-completions' | 'openai-responses' | 'anthropic-messages';
-const APIS: Api[] = ['openai-completions', 'openai-responses', 'anthropic-messages'];
+// 按推荐顺序探测，第一个通的作为建议：Responses 接口能跨轮保留推理状态，同时支持时优先用它
+const APIS: Api[] = ['openai-responses', 'openai-completions', 'anthropic-messages'];
 
 const c = loadConfig();
 const missing = (['CC_LLM_BASE_URL', 'CC_LLM_API_KEY'] as const).filter((k) => !c[k]);
