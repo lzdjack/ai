@@ -6,6 +6,7 @@
 - docs/05-链路流转.md      → 方案与链路标签页（链路流转全文）
 - docs/04-修复流转方案.md  → 方案与链路标签页（修复流转方案全文）
 - docs/06-技术设计方案.md  → 技术设计标签页（含架构/ER/状态机 SVG 图）
+- docs/07-工程化与实施计划.md → 开发实施标签页（工程化方案与任务台账）
 
 用法：python3 scripts/build-index.py
 """
@@ -25,6 +26,7 @@ DOCS = {
     "FLOW": (ROOT / "docs" / "05-链路流转.md", "flow"),
     "RUN": (ROOT / "docs" / "04-修复流转方案.md", "run"),
     "TECH": (ROOT / "docs" / "06-技术设计方案.md", "tech"),
+    "IMPL": (ROOT / "docs" / "07-工程化与实施计划.md", "impl"),
 }
 
 
