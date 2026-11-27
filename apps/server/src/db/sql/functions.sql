@@ -102,6 +102,31 @@ begin
   return found;
 end $$;
 
+-- lease_reaper (06 §2.12): takes over items whose lease expired, with a fresh committed lease, so the
+-- reaper can decide inside the item's workspace whether to resume from a checkpoint or mark it
+-- interrupted (06 §5.8). Same shape and rules as sys_claim_work.
+create or replace function sys_claim_expired(p_limit int, p_owner text, p_lease_seconds int)
+returns table (workspace_id uuid, work_item_id uuid, lease_token uuid, fence int)
+language plpgsql security definer set search_path = public, pg_temp as $$
+#variable_conflict use_column
+begin
+  return query
+  with expired as (
+    select w.id from work_items w
+    where w.status = 'leased' and w.lease_expires_at <= now()
+    order by w.lease_expires_at
+    limit p_limit
+    for update skip locked
+  )
+  update work_items w
+  set lease_token = gen_random_uuid(), lease_owner = p_owner,
+      lease_expires_at = now() + make_interval(secs => p_lease_seconds),
+      fence = w.fence + 1, updated_at = now()
+  from expired
+  where w.id = expired.id
+  returning w.workspace_id, w.id, w.lease_token, w.fence;
+end $$;
+
 -- Start of a system transaction for a claimed item: the lease decides the workspace.
 create or replace function app_enter_lease(p_item uuid, p_token uuid) returns uuid
 language plpgsql security definer set search_path = public, pg_temp as $$
@@ -145,11 +170,13 @@ revoke all on function app_enter(uuid, uuid) from public;
 revoke all on function app_create_workspace(uuid, text, text, text) from public;
 revoke all on function sys_claim_work(text[], int, text, int) from public;
 revoke all on function sys_renew_lease(uuid, uuid, int) from public;
+revoke all on function sys_claim_expired(int, text, int) from public;
 revoke all on function app_enter_lease(uuid, uuid) from public;
 revoke all on function cc_events_ensure_partitions(int) from public;
 grant execute on function app_enter(uuid, uuid) to cc_app;
 grant execute on function app_create_workspace(uuid, text, text, text) to cc_app;
 grant execute on function sys_claim_work(text[], int, text, int) to cc_app;
 grant execute on function sys_renew_lease(uuid, uuid, int) to cc_app;
+grant execute on function sys_claim_expired(int, text, int) to cc_app;
 grant execute on function app_enter_lease(uuid, uuid) to cc_app;
 grant execute on function cc_events_ensure_partitions(int) to cc_app;

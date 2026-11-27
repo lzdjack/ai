@@ -16,7 +16,7 @@ import { enqueueWork } from './queue.ts';
 
 export const RUN_NODE = 'run_node';
 
-/** The swappable seam in front of the orchestration engine (06 §3.6 item 8, §15 item 9). */
+/** The swappable seam in front of the orchestration engine (06 §3.6 item 8). */
 export interface OrchestratorPort {
   startFlow(
     tx: Tx,
@@ -45,11 +45,17 @@ async function signal(
     .where(eq(nodeRuns.flowInstanceId, flowInstanceId))
     .orderBy(asc(nodeRuns.createdAt));
   const commands = advance(
-    { status: flow.status as FlowStatus, plan: flow.plan as Plan, nodeRuns: runs },
+    {
+      status: flow.status as FlowStatus,
+      plan: flow.plan as Plan,
+      nodeRuns: runs.map((r) => ({ ...r, error: r.errorRaw })),
+    },
     s,
   );
 
   const opened = new Map<string, string>();
+  const runKey = (c: { nodeKey: string; attemptNo: number; repoId: string | null }) =>
+    `${c.nodeKey}#${c.attemptNo}#${c.repoId ?? ''}`;
   for (const c of commands) {
     switch (c.type) {
       case 'open_node': {
@@ -59,14 +65,15 @@ async function signal(
           nodeKey: c.nodeKey,
           nodeKind: c.nodeKind,
           attemptNo: c.attemptNo,
+          repoId: c.repoId,
           status: c.status,
           startedAt: sql`now()`,
         });
-        opened.set(`${c.nodeKey}#${c.attemptNo}`, run.id);
+        opened.set(runKey(c), run.id);
         break;
       }
       case 'enqueue_work': {
-        const nodeRunId = opened.get(`${c.nodeKey}#${c.attemptNo}`)!;
+        const nodeRunId = opened.get(runKey(c))!;
         await enqueueWork(tx, ctx, {
           kind: RUN_NODE,
           singletonKey: `node_run:${nodeRunId}`,
@@ -77,6 +84,7 @@ async function signal(
       case 'close_node':
         await updateRow(tx, ctx, nodeRuns, c.nodeRunId, {
           status: c.status,
+          errorRaw: c.error ?? null,
           finishedAt: sql`now()`,
         });
         break;

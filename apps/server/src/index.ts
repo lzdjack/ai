@@ -32,6 +32,12 @@ export {
   type Plan,
   type Signal,
 } from './orchestrator/advance.ts';
+export {
+  reapExpiredLeases,
+  runEffect,
+  type EffectIo,
+  type EffectSpec,
+} from './orchestrator/effects.ts';
 export { RUN_NODE, pgOrchestrator, type OrchestratorPort } from './orchestrator/flow.ts';
 export {
   claimWork,
