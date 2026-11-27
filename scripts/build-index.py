@@ -93,7 +93,9 @@ def strip_heading_status(text: str) -> str:
 
 
 def split_table_row(row: str) -> list[str]:
-    return [c.strip() for c in row.strip().strip("|").split("|")]
+    # 按未转义的 | 切列；单元格里的 \| 还原为字面的 |（如枚举 `a \| b`）
+    cells = re.split(r"(?<!\\)\|", row.strip().strip("|"))
+    return [c.strip().replace("\\|", "|") for c in cells]
 
 
 def md_to_html(src: str, prefix: str):
