@@ -66,6 +66,52 @@ begin
   return ws;
 end $$;
 
+-- ---------- executors (06 §2.3 B-class handshake, §5.3a) ----------
+
+create or replace function cc_sha256_hex(p text) returns text
+language sql immutable as $$ select encode(sha256(convert_to(p, 'UTF8')), 'hex') $$;
+
+-- Enrollment: a valid one-time token (cc_run_live_*, 15 minutes) enters the runner's workspace and
+-- locks its row; the caller then records the long-term secret and the public key in the same
+-- transaction (with events) and clears the token, so a token works once.
+create or replace function app_enroll_runner(p_token text) returns uuid
+language plpgsql security definer set search_path = public, pg_temp as $$
+declare
+  r record;
+begin
+  select id, workspace_id into r from runners
+  where enroll_token_hash = cc_sha256_hex(p_token) and status = 'pending'
+    and enroll_expires_at > now() and deleted_at is null
+  for update;
+  if r.id is null then
+    raise exception 'invalid or expired enrollment token' using errcode = '28000';
+  end if;
+  perform set_config('app.current_workspace_id', r.workspace_id::text, true);
+  perform set_config('app.current_user_id', '', true);
+  perform set_config('app.visible_project_ids', '{}', true);
+  return r.id;
+end $$;
+
+-- Start of every runner request: the long-term secret decides the workspace. Runner writes go to
+-- the project of the node run they hold, so every project of the workspace is visible here.
+create or replace function app_enter_runner(p_runner uuid, p_secret text) returns uuid
+language plpgsql security definer set search_path = public, pg_temp as $$
+declare
+  ws uuid;
+begin
+  select workspace_id into ws from runners
+  where id = p_runner and auth_token_hash = cc_sha256_hex(p_secret) and status = 'online'
+    and deleted_at is null;
+  if ws is null then
+    raise exception 'runner not recognised' using errcode = '28000';
+  end if;
+  perform set_config('app.current_workspace_id', ws::text, true);
+  perform set_config('app.current_user_id', '', true);
+  perform set_config('app.visible_project_ids',
+    (select coalesce(array_agg(p.id), '{}') from projects p where p.workspace_id = ws)::text, true);
+  return ws;
+end $$;
+
 -- ---------- system tasks: claim with a committed lease, then work inside one workspace ----------
 
 -- Called as a single statement (autocommit), so the lease is committed before any work starts.
@@ -168,6 +214,8 @@ end $$;
 revoke all on function app_resolve_visibility(uuid, uuid) from public;
 revoke all on function app_enter(uuid, uuid) from public;
 revoke all on function app_create_workspace(uuid, text, text, text) from public;
+revoke all on function app_enroll_runner(text) from public;
+revoke all on function app_enter_runner(uuid, text) from public;
 revoke all on function sys_claim_work(text[], int, text, int) from public;
 revoke all on function sys_renew_lease(uuid, uuid, int) from public;
 revoke all on function sys_claim_expired(int, text, int) from public;
@@ -175,6 +223,8 @@ revoke all on function app_enter_lease(uuid, uuid) from public;
 revoke all on function cc_events_ensure_partitions(int) from public;
 grant execute on function app_enter(uuid, uuid) to cc_app;
 grant execute on function app_create_workspace(uuid, text, text, text) to cc_app;
+grant execute on function app_enroll_runner(text) to cc_app;
+grant execute on function app_enter_runner(uuid, text) to cc_app;
 grant execute on function sys_claim_work(text[], int, text, int) to cc_app;
 grant execute on function sys_renew_lease(uuid, uuid, int) to cc_app;
 grant execute on function sys_claim_expired(int, text, int) to cc_app;

@@ -2,3 +2,4 @@
 // (hand-written partitioned migration) and is deliberately not exported here.
 export * from './tenant.ts';
 export * from './core.ts';
+export * from './runner.ts';

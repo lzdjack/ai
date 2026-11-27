@@ -6,5 +6,8 @@
   "description": "唯一契约：TypeBox 定义、UI Block、RunnerTransport、AgentRuntimePlugin",
   "exports": {
     ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "typebox": "1.4.7"
   }
 }

@@ -93,6 +93,9 @@ export const nodeRuns = projectTable(
     runMode: text().notNull().default('full'),
     status: text().notNull().default('pending'),
     skipReason: text(),
+    /** the runner that holds / held this run (06 §2.5 executor_id) */
+    executorId: uuid(),
+    structuredOutput: jsonb(),
     errorRaw: text(),
     startedAt: ts(),
     finishedAt: ts(),

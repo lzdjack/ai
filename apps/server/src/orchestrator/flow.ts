@@ -10,11 +10,21 @@ import {
   type Command,
   type FlowStatus,
   type Plan,
+  type PlanNode,
   type Signal,
 } from './advance.ts';
 import { enqueueWork } from './queue.ts';
 
 export const RUN_NODE = 'run_node';
+/** work for the Bot executor, handed out over RunnerTransport (06 §2.12, §5.3a) */
+export const BOT_STEP = 'bot_step';
+
+/** Node kinds that run in the code sandbox of a Bot executor (06 §5.1). */
+const BOT_NODE_KINDS = new Set(['host_prepare', 'ai_agent', 'deterministic_verify']);
+
+/** Who runs an auto node: the Bot executor for sandbox nodes, cc-sys workers for the rest. */
+export const workKindFor = (node: PlanNode | undefined) =>
+  node?.node_kind && BOT_NODE_KINDS.has(node.node_kind) ? BOT_STEP : RUN_NODE;
 
 /** The swappable seam in front of the orchestration engine (06 §3.6 item 8). */
 export interface OrchestratorPort {
@@ -75,7 +85,7 @@ async function signal(
       case 'enqueue_work': {
         const nodeRunId = opened.get(runKey(c))!;
         await enqueueWork(tx, ctx, {
-          kind: RUN_NODE,
+          kind: workKindFor((flow.plan as Plan).nodes.find((n) => n.key === c.nodeKey)),
           singletonKey: `node_run:${nodeRunId}`,
           payload: { flow_instance_id: flowInstanceId, node_run_id: nodeRunId },
         });
