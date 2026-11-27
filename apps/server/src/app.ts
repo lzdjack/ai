@@ -1,9 +1,12 @@
-// HTTP entry of cc-app (docs/06 §1.2). P1: skeleton only — request ids, the ApiError shape and a
-// health check. Routes arrive with P2 (routes → service → repo, contracts in core-protocol).
+// HTTP entry of cc-app (docs/06 §1.2): request ids, the ApiError shape, a health check and the
+// RunnerTransport routes (E1). User-facing routes arrive with P2 (routes → service → repo, contracts
+// in core-protocol).
 import crypto from 'node:crypto';
 import Fastify, { type FastifyError } from 'fastify';
-import type { Db } from './db/client.ts';
+import { LeaseLostError, RunnerAuthError, type Db } from './db/client.ts';
 import { NotFoundError, RevConflictError } from './db/write.ts';
+import { runnerRoutes } from './routes/runner-routes.ts';
+import { OutputTooLargeError, type RunnerSettings } from './service/runner-service.ts';
 
 /** Error body for every failed request (07 §2 contract rules): code is `domain.reason`. */
 export interface ApiError {
@@ -12,7 +15,7 @@ export interface ApiError {
   data?: unknown;
 }
 
-export function buildApp(o: { db: Db; logger?: boolean }) {
+export function buildApp(o: { db: Db; runner: RunnerSettings; logger?: boolean }) {
   const app = Fastify({
     logger: o.logger ?? false,
     requestIdHeader: 'x-request-id',
@@ -29,10 +32,19 @@ export function buildApp(o: { db: Db; logger?: boolean }) {
     if (err instanceof NotFoundError) return send(404, { code: err.code, message: err.message });
     if (err instanceof RevConflictError)
       return send(409, { code: err.code, message: err.message, data: { rev: err.currentRev } });
+    if (err instanceof RunnerAuthError) return send(401, { code: err.code, message: err.message });
+    if (err instanceof LeaseLostError)
+      return send(409, { code: 'runner.lease_lost', message: err.message });
+    if (err instanceof OutputTooLargeError)
+      return send(413, { code: err.code, message: err.message });
     if (err.validation) return send(400, { code: 'common.invalid_request', message: err.message });
+    if (err.statusCode === 413)
+      return send(413, { code: 'common.payload_too_large', message: err.message });
     req.log.error(err);
     return send(500, { code: 'common.internal', message: 'internal error' });
   });
+
+  runnerRoutes(app, o.db, o.runner);
 
   app.get('/healthz', async () => {
     await o.db.pool.query('select 1');

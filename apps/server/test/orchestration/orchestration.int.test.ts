@@ -78,7 +78,17 @@ const startFlow = (nodes: PlanNode[], repoIds?: string[]) =>
       plan: {
         plan_schema_version: PLAN_SCHEMA_VERSION,
         nodes,
-        ...(repoIds ? { repo_ids: repoIds } : {}),
+        ...(repoIds
+          ? {
+              repos: repoIds.map((id) => ({
+                id,
+                name: id,
+                clone_url: `http://git.test/${id}.git`,
+                ref: 'main',
+                build_command: 'pnpm build',
+              })),
+            }
+          : {}),
       },
     }),
   );

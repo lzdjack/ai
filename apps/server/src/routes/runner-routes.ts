@@ -1,0 +1,50 @@
+// RunnerTransport over HTTP (docs/06 §5.3a): POST + JSON, frames capped at 64 KB. Authorization is
+// `Runner <runner_id>:<secret>` on every call except enrollment, which carries its one-time token.
+import {
+  CompleteStepRequest,
+  CompleteStepResponse,
+  HeartbeatRequest,
+  HeartbeatResponse,
+  RUNNER_FRAME_LIMIT,
+  RUNNER_PATHS,
+  RegisterRunnerRequest,
+  RegisterRunnerResponse,
+} from '@cloudcraft/core-protocol';
+import type { FastifyInstance, FastifyRequest } from 'fastify';
+import { RunnerAuthError, type Db } from '../db/client.ts';
+import {
+  completeRoundStep,
+  heartbeatAndPoll,
+  registerRunner,
+  type RunnerSettings,
+} from '../service/runner-service.ts';
+
+const AUTH = /^Runner ([0-9a-f-]{36}):(\S+)$/;
+
+function runnerAuth(req: FastifyRequest) {
+  const m = AUTH.exec(req.headers.authorization ?? '');
+  if (!m) throw new RunnerAuthError();
+  return { runnerId: m[1]!, secret: m[2]! };
+}
+
+export function runnerRoutes(app: FastifyInstance, db: Db, s: RunnerSettings) {
+  const opts = { bodyLimit: RUNNER_FRAME_LIMIT };
+  app.post<{ Body: RegisterRunnerRequest }>(
+    RUNNER_PATHS.registerRunner,
+    { ...opts, schema: { body: RegisterRunnerRequest, response: { 200: RegisterRunnerResponse } } },
+    (req) => registerRunner(db, s, req.body),
+  );
+  app.post<{ Body: HeartbeatRequest }>(
+    RUNNER_PATHS.heartbeatAndPoll,
+    { ...opts, schema: { body: HeartbeatRequest, response: { 200: HeartbeatResponse } } },
+    (req) => heartbeatAndPoll(db, s, runnerAuth(req), req.body),
+  );
+  app.post<{ Body: CompleteStepRequest }>(
+    RUNNER_PATHS.completeRoundStep,
+    { ...opts, schema: { body: CompleteStepRequest, response: { 200: CompleteStepResponse } } },
+    async (req) => {
+      await completeRoundStep(db, runnerAuth(req), req.body);
+      return { accepted: true };
+    },
+  );
+}

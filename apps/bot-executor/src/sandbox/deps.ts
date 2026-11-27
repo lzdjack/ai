@@ -45,6 +45,8 @@ export async function prepareDeps(opts: {
   repoDir: string;
   cacheRoot: string;
   limits?: Partial<SandboxLimits>;
+  signal?: AbortSignal;
+  labels?: Record<string, string>;
 }): Promise<PreparedDeps> {
   const key = depsKey(opts.repoDir, opts.image);
   const dir = path.join(opts.cacheRoot, key);
@@ -69,6 +71,8 @@ export async function prepareDeps(opts: {
       `pnpm install --frozen-lockfile --ignore-scripts --ignore-workspace --reporter=append-only ${pnpmDirs(key)}`,
     ].join('\n'),
     limits: opts.limits,
+    signal: opts.signal,
+    labels: opts.labels,
   });
   if (!result.ok) {
     fs.rmSync(tmp, { recursive: true, force: true });
@@ -110,6 +114,8 @@ export async function installRoundDeps(opts: {
   cacheRoot: string;
   roundDir: string;
   limits?: Partial<SandboxLimits>;
+  signal?: AbortSignal;
+  labels?: Record<string, string>;
 }): Promise<
   | { ok: true; mounts: Mount[]; steps: RoundDepsStep[] }
   | { ok: false; label: string; result: RunResult; steps: RoundDepsStep[] }
@@ -122,6 +128,8 @@ export async function installRoundDeps(opts: {
       repoDir: path.join(opts.workDir, repo),
       cacheRoot: opts.cacheRoot,
       limits: opts.limits,
+      signal: opts.signal,
+      labels: opts.labels,
     });
     const label = `prepare ${repo}${p.cached ? ' (cached)' : ''}`;
     steps.push({ label, ms: p.result?.ms ?? 0 });
@@ -145,6 +153,8 @@ export async function installRoundDeps(opts: {
       ...prepared.map(([repo, p]) => offlineInstallScript(`/work/${repo}`, p.key)),
     ].join('\n'),
     limits: opts.limits,
+    signal: opts.signal,
+    labels: opts.labels,
   });
   steps.push({ label: 'offline install', ms: install.ms });
   if (!install.ok) return { ok: false, label: 'offline install', result: install, steps };

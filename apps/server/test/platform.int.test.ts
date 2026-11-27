@@ -253,7 +253,7 @@ describe('平台骨架', () => {
   });
 
   it('HTTP 骨架：健康检查，请求 ID 原样带回', async () => {
-    const app = buildApp({ db });
+    const app = buildApp({ db, runner: { leaseSeconds: 60, pollMs: 5000 } });
     const res = await app.inject({ url: '/healthz', headers: { 'x-request-id': 'req-123' } });
     expect([res.statusCode, res.json(), res.headers['x-request-id']]).toEqual([
       200,

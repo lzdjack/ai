@@ -36,6 +36,10 @@ export const ConfigSchema = Type.Object({
   CC_LLM_MODEL: Type.Optional(Type.String({ minLength: 1 })),
   CC_LLM_API_KEY: Type.Optional(Type.String()),
   CC_LLM_DAILY_BUDGET_USD: Type.Number({ minimum: 0, default: 5 }),
+  // 执行器租约（06 §2.12、§5.8）：租约时长、执行器多久来领一次活、后台多久回收一次过期租约
+  CC_RUNNER_LEASE_SECONDS: Type.Integer({ minimum: 2, default: 60 }),
+  CC_RUNNER_POLL_MS: Type.Integer({ minimum: 200, default: 5000 }),
+  CC_SYS_REAP_INTERVAL_MS: Type.Integer({ minimum: 200, default: 15000 }),
 });
 
 export type Config = Static<typeof ConfigSchema>;

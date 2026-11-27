@@ -1,2 +1,2 @@
-// 占位：实现见 docs/07 §9 台账对应任务。
-export {};
+// Contracts shared by cc-app, executors and clients (docs/07 §2.2). Only TypeBox definitions here.
+export * from './runner-transport.ts';

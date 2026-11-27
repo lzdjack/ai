@@ -12,7 +12,7 @@
 //   appendOnly: runtime account loses UPDATE/DELETE/TRUNCATE and a trigger rejects them anyway.
 //   audit: trigger cc_audit_probe records (table, row, actor, txid) for the events cross-check.
 import { TENANT_TABLES, type TenantTableMeta } from './schema/tenant.ts';
-import './schema/core.ts';
+import './schema/index.ts';
 import './events.ts';
 
 export const APP_ROLE = 'cc_app';

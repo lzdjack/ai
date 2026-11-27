@@ -84,6 +84,27 @@ drop trigger if exists cc_append_only on projects;
 drop trigger if exists cc_audit_probe on projects;
 create trigger cc_audit_probe after insert or update or delete on projects for each row execute function cc_audit_probe('workspace_id');
 
+-- runner_keys (workspace, audit, definer)
+alter table runner_keys enable row level security;
+alter table runner_keys force row level security;
+drop policy if exists cc_tenant on runner_keys;
+create policy cc_tenant on runner_keys using (workspace_id = nullif(current_setting('app.current_workspace_id', true), '')::uuid) with check (workspace_id = nullif(current_setting('app.current_workspace_id', true), '')::uuid);
+drop policy if exists cc_definer on runner_keys;
+create policy cc_definer on runner_keys to cc_migrator using (true) with check (true);
+drop trigger if exists cc_append_only on runner_keys;
+drop trigger if exists cc_audit_probe on runner_keys;
+create trigger cc_audit_probe after insert or update or delete on runner_keys for each row execute function cc_audit_probe('workspace_id');
+
+-- runners (workspace, definer)
+alter table runners enable row level security;
+alter table runners force row level security;
+drop policy if exists cc_tenant on runners;
+create policy cc_tenant on runners using (workspace_id = nullif(current_setting('app.current_workspace_id', true), '')::uuid) with check (workspace_id = nullif(current_setting('app.current_workspace_id', true), '')::uuid);
+drop policy if exists cc_definer on runners;
+create policy cc_definer on runners to cc_migrator using (true) with check (true);
+drop trigger if exists cc_append_only on runners;
+drop trigger if exists cc_audit_probe on runners;
+
 -- work_items (workspace, definer)
 alter table work_items enable row level security;
 alter table work_items force row level security;
