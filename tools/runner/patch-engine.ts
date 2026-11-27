@@ -2,6 +2,7 @@
 // sandbox (internal network, relay, /work mounted) it applies the patches it is configured with and
 // calls submit_delivery through the relay, the way an agent would. Loaded by the executor through
 // CC_AGENT_RUNTIME like any engine (docs/06 §11.4); it only proves the host side, not an agent.
+import fs from 'node:fs';
 import type { AgentEvent, AgentRuntimePlugin } from '@cloudcraft/core-protocol';
 
 interface PatchEngineConfig {
@@ -43,7 +44,16 @@ const plugin: AgentRuntimePlugin = {
     },
   },
   async start(ctx) {
-    const cfg = ctx.config as unknown as PatchEngineConfig;
+    // node config first; plans compiled by the server (tickets) carry no engine settings, so a drill
+    // can hand them over in a file instead
+    const fromFile = process.env.CC_PATCH_ENGINE_FILE
+      ? (JSON.parse(fs.readFileSync(process.env.CC_PATCH_ENGINE_FILE, 'utf8')) as PatchEngineConfig)
+      : null;
+    const cfg = ((ctx.config as unknown as PatchEngineConfig).patches
+      ? ctx.config
+      : fromFile) as unknown as PatchEngineConfig;
+    if (!cfg?.patches)
+      throw new Error('patch engine: no patches (node config or CC_PATCH_ENGINE_FILE)');
     const listeners = new Set<(e: AgentEvent) => void>();
     const emit = (e: AgentEvent) => listeners.forEach((l) => l(e));
     let kill: (() => void) | null = null;
