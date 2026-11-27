@@ -465,55 +465,225 @@ def build_edge_extra():
 # 5. PC-插件运行态规范（T-15：停用只读 / 5s 超时 / Dock >4 & Topbar >2 折叠 / 升级）
 # =====================================================================
 def build_plugin_runtime():
-    css = '''
-.eb{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:18px;width:100%;height:100%}
-.et{display:flex;flex-direction:column;gap:8px;min-height:0}
-.el{display:flex;align-items:baseline;gap:10px;padding:0 4px}
-.el .no{width:22px;height:22px;border-radius:50%;background:var(--btn-pri-bg);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none}
-.el b{font-size:15px}.el em{font-style:normal;font-size:12.5px;color:var(--text-3)}
-.ep{flex:1;min-height:0;border-radius:22px;padding:18px 20px;display:flex;flex-direction:column;gap:10px}
+    """插件运行态四格：每格都是真实界面的一角，状态放回它实际出现的位置。"""
+    from shell_pc import DOCK_ICONS
+    css = p_empty()[1] + '''
+.eb>.et{min-width:0}
+.eb .ep{min-width:0}
+.eb .thead{padding:12px 18px 10px}
+.eb .thead h1{font-size:16px}
+.ep.v{flex-direction:column}
+.ep.rel{position:relative}
+/* 顶栏一角 */
+.mtb{height:50px;flex:none;display:flex;align-items:center;gap:8px;padding:0 14px;border-bottom:1px solid var(--hair)}
+.mtb .tsearch{height:30px;width:auto;flex:1;min-width:0;border-radius:9px;padding:0 10px;gap:7px;color:var(--text-3)}
+.mtb .tpill{height:28px;font-size:11.5px;padding:0 10px}
+.wd{display:inline-flex;align-items:center;gap:5px;height:28px;padding:0 10px;border-radius:var(--r-full);font-size:11.5px;font-weight:600;background:var(--glass-2);border:1px solid var(--stroke);color:var(--text-2);white-space:nowrap}
+.wd i{flex:none}
+.bel{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative;flex:none;background:var(--glass-2);border:1px solid var(--stroke);color:var(--text-2)}
+.bel>b{position:absolute;top:4px;right:5px;width:7px;height:7px;border-radius:50%;background:var(--red);box-shadow:0 0 0 1.5px var(--glass-2)}
+.bel.on{background:color-mix(in srgb,var(--blue) 14%,var(--glass-2));border-color:var(--focus-ring);color:var(--ink-blue);box-shadow:0 0 0 3px var(--focus-halo)}
+/* Dock 一角 */
+.mdk{width:76px;flex:none;border-right:1px solid var(--hair);display:flex;flex-direction:column;align-items:center;gap:9px;padding:12px 0;position:relative;overflow:hidden;
+  -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 34px);mask-image:linear-gradient(180deg,transparent 0,#000 34px)}
+.mdk .dki{width:40px;height:40px}
+.mdk .ap{width:38px;height:38px;border-radius:11px}
+.mdk .ap svg{width:21px;height:21px}
+.ap-pl{color:#fff}
+.ap-pl i{position:relative;filter:drop-shadow(0 1.5px 1.5px rgba(0,0,0,.18))}
+.ap-fold{background:color-mix(in srgb,var(--glass-2) 70%,transparent);border:1px solid var(--stroke);display:grid!important;grid-template-columns:1fr 1fr;gap:3px;padding:7px;backdrop-filter:blur(12px)}
+.ap-fold{grid-template-rows:1fr 1fr}
+.ap-fold span{display:block;width:100%;height:100%;border-radius:4px}
+.fold-n{position:absolute;bottom:-3px;right:-5px;height:16px;padding:0 5px;border-radius:8px;background:var(--text);color:var(--bg,#fff);font-size:10px;font-weight:700;display:flex;align-items:center;z-index:3}
+html.dark .fold-n{color:#111}
+html:not(.dark) .fold-n{color:#fff}
+/* 弹层 */
+.pop{position:absolute;z-index:5;border-radius:16px;background:var(--glass-elev);border:1px solid var(--stroke);box-shadow:var(--shadow-pop,0 18px 40px -12px rgba(15,30,70,.35));backdrop-filter:blur(24px) saturate(1.6);-webkit-backdrop-filter:blur(24px) saturate(1.6)}
+.fgrid{display:grid;grid-template-columns:repeat(3,72px);gap:10px 6px;padding:4px 2px 2px}
+.fgrid .it{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11.5px;color:var(--text-2);font-weight:600}
+.fgrid .it .ap{transform:none;width:44px;height:44px}
+.fgrid .slot{width:44px;height:44px;border-radius:12px;border:1.5px dashed var(--hair)}
+/* 淡化背景 */
+.fade{opacity:.5;pointer-events:none}
+.r10.mini{padding:8px 10px;gap:9px}
+.r10.mini .av10{width:28px;height:28px;font-size:9.5px}
+/* 通知 */
+.nt{display:flex;gap:10px;padding:9px 12px;border-radius:12px;flex:none}
+.nt+.nt{margin-top:2px}
+.nt>.ap{width:30px;height:30px;border-radius:9px;transform:none;flex:none}
+.nt>.ap svg{width:18px;height:18px}
+.nt>.ap.ap-pl i svg{width:16px;height:16px}
+.nt.gone{opacity:.45}
+.nt.gone .t{text-decoration:line-through}
+/* 表格 */
+.rt{display:grid;grid-template-columns:62px 1fr 96px 30px;gap:10px;align-items:center;padding:7px 12px;font-size:12px}
+.rt+.rt{border-top:1px solid var(--hair)}
+.rt.h{font-size:11px;font-weight:700;color:var(--text-3);background:var(--well);border-radius:10px 10px 0 0}
+.gray{filter:grayscale(1);opacity:.55}
 '''
-    def tile(no, name, when, body):
-        return f'<div class="et"><div class="el"><span class="no">{no}</span><b>{name}</b><em>{when}</em></div><section class="glass ep">{body}</section></div>'
 
-    t1 = tile(1, "已停用插件 · 历史审计记录只读追溯", "停用后不能再执行，历史记录照常可查", f'''
-  <div class="card" style="padding:11px 13px;gap:6px;opacity:.85;background:var(--well)">
-    <div class="row g8">{I("history",15,style="color:var(--text-3)")}<span class="f13 w7 grow">历史紧急回滚记录 · RB-091（已停用插件）</span><span class="tag tg-o">历史只读</span></div>
-    <div class="f12 t2">11-18 19:42 由林某执行回滚至 3.8.1 · 回读检验通过。当前工作空间已停用回滚插件，隐藏写入口但<b>永久保留可查审计快照</b>。</div>
+    def tile(no, name, when, inner, cls=""):
+        return (f'<div class="et"><div class="el"><span class="no">{no}</span><b>{name}</b><em>{when}</em></div>'
+                f'<section class="glass ep {cls}">{inner}</section></div>')
+
+    def ibox(bg, ic, size=52, color="#fff"):
+        return f'<span class="ic-box" style="width:{size}px;height:{size}px;border-radius:{size*0.3:.0f}px;background:{bg};color:{color}">{I(ic, int(size*0.46), 2)}</span>'
+
+    def plug(ic, grad):
+        return f'<span class="ap ap-pl" style="background:linear-gradient(160deg,{grad})">{I(ic, 20, 2.2)}</span>'
+
+    P_GRAY = ("filter", "#7DD3FC,#3B82F6 55%,#2563EB")   # 灰度放量
+    P_TOKEN = ("zap", "#F9A8D4,#EC4899 55%,#DB2777")     # Token 费用
+    P_QA = ("list", "#5EEAD4,#14B8A6 55%,#0F766E")       # 质量周报
+    P_DUTY = ("clock", "#A5B4FC,#6366F1 55%,#4F46E5")    # 值班表
+    P_PERF = ("monitor", "#FCD34D,#F59E0B 55%,#D97706")  # 绩效大盘
+
+    def mini_topbar(widgets, bell_on=False):
+        return f'''<div class="mtb">
+  <div class="glass tsearch" style="-webkit-mask-image:linear-gradient(90deg,transparent,#000 40px);mask-image:linear-gradient(90deg,transparent,#000 40px)">{I("search",13)}<span class="f12 grow ell">搜索工单、MR、发布记录</span></div>
+  <span class="pill glass tpill">{I("bot",12)}3 个 Bot 在线</span>
+  {widgets}
+  <span class="bel{" on" if bell_on else ""}">{I("bell",14,2.0)}<b></b></span>
+  <span class="av" style="width:30px;height:30px;font-size:12px;flex:none;background:linear-gradient(160deg,#FFC9A8,#F08F7A);color:#5A2414">林</span>
+</div>'''
+
+    WIDGETS = (f'<span class="wd">{I("zap",12,2.2,"color:#DB2777")}今日费用 ¥36.4</span>'
+               f'<span class="wd">{I("filter",12,2.2,"color:var(--ink-blue)")}灰度 30%</span>'
+               f'<span class="wd" style="padding:0 8px;color:var(--text-3)">+2{I("chevd",11)}</span>')
+
+    def mini_rows():
+        rows = [("王芳", "#7FB2FF,#4C7DF0", "blue", "点击分组后界面卡住", "第 2 轮交付 · 验证 3/4"),
+                ("陈晨", "#FFC38A,#F08A5D", "orange", "进度条切换周期不刷新", "验证受阻：账号进不去页面"),
+                ("李娜", "#F5A3C7,#D96BA0", "orange", "考勤部门筛选失效", "复现用哪个角色？"),
+                ("赵磊", "#8FD8C9,#3FAE9A", "teal", "考勤导出部门名乱码", "浏览器验证中 · 84%"),
+                ("周婷", "#C3A8FF,#8E6BEA", "teal", "看板拖拽后回弹", "复现中 · 还有 1 张")]
+        return "".join(
+            f'<div class="r10 mini"><span class="av10" style="background:linear-gradient(150deg,{g})">{n}<i style="background:var(--{s})"></i></span>'
+            f'<div class="grow" style="min-width:0"><div class="f12 w7 ell">{t}</div><div class="f11 t3 ell" style="margin-top:2px">{d}</div></div></div>'
+            for n, g, s, t, d in rows)
+
+    # ---------- 1 插件标签页超时 ----------
+    tabs = [("对话", ""), ("代码改动", "3"), ("证据", "4"), ("执行日志", ""), ("发布", ""), ("灰度看板", "")]
+    th = "".join(f'<span{" class=\"on\"" if n == "灰度看板" else ""}>{n}{(" <b>" + c + "</b>") if c else ""}</span>' for n, c in tabs)
+    t1 = f'''<header class="thead"><div class="row g10"><span class="appic ic-tita" style="width:32px;height:32px;font-size:9px;border-radius:9px">TITA</span>
+<div class="col grow" style="min-width:0"><h1 class="ell">审批中心：发起审批时点击分组，界面卡住</h1><div class="f12 t3 ell" style="margin-top:1px">TK-20871 · 修复人 林某 · 第 2 轮</div></div>
+<span class="pill p-blue" style="flex:none">待我审核 · 第 2 轮</span></div>
+<div class="row g10" style="margin-top:8px"><div class="tab2">{th}</div></div></header>
+<div class="col grow" style="align-items:center;justify-content:center;text-align:center;padding:0 36px">
+  {ibox("color-mix(in srgb,var(--orange) 16%,transparent)","alert",52,"var(--ink-orange)")}
+  <div class="eh">灰度看板暂时打不开</div>
+  <div class="f13 t2" style="margin-top:6px;line-height:1.6">5 秒没有响应，已自动重试 1 次。<br>只影响这个标签页，对话、审核和发布照常可用。</div>
+  <div class="row g8" style="margin-top:16px"><button class="cc-btn cc-btn-sm cc-btn-pri">{I("refresh",13,2.4)}重试</button><button class="cc-btn cc-btn-sm cc-btn-sec">回到对话</button></div>
+  <div class="row g6 f12 t3" style="margin-top:16px">{I("filter",12,2.2)}灰度放量 v1.2 · 插件提供</div>
+</div>'''
+
+    # ---------- 2 入口数量上限：Dock 文件夹 + 顶栏小胶囊 ----------
+    def dk(cls_or_html, badge="", on=False):
+        b = f"<b>{badge}</b>" if badge else ""
+        return f'<span class="dki{" on" if on else ""}">{cls_or_html}{b}</span>'
+    fold = ('<span class="ap ap-fold">'
+            f'<span style="background:linear-gradient(160deg,{P_DUTY[1]})"></span>'
+            f'<span style="background:linear-gradient(160deg,{P_PERF[1]})"></span>'
+            '<span style="background:var(--fill)"></span><span style="background:var(--fill)"></span></span>'
+            '<span class="fold-n">+2</span>')
+    dock_col = ('<div class="mdk">'
+                + dk(f'<span class="ap ap-rb">{DOCK_ICONS["rb"]}</span>')
+                + dk(f'<span class="ap ap-sk">{DOCK_ICONS["sk"]}</span>')
+                + dk(plug(*P_GRAY)) + dk(plug(*P_TOKEN)) + dk(plug(*P_QA))
+                + dk(fold, on=True) + '</div>')
+    t2 = mini_topbar(WIDGETS) + f'''<div class="row grow" style="min-height:0;align-items:stretch">
+  {dock_col}
+  <div class="col grow fade" style="padding:10px 8px;min-width:0">
+    <div class="row g8" style="padding:0 8px 4px"><span class="f15 w7">工单</span><span class="f12 t3">8</span></div>
+    {mini_rows()}
   </div>
-  <div class="row g8" style="margin-top:auto"><button class="cc-btn cc-btn-sm cc-btn-sec is-disabled">{I("lock",12)}再次执行回滚（已停用）</button><span class="grow"></span><span class="lnk f12">管理员去插件市场启用 ›</span></div>''')
-
-    t2 = tile(2, "插件 5 秒没响应 · 不影响核心功能", "插件出错只影响它自己的位置，修单和发布照常可用", f'''
-  <div class="card" style="padding:18px 16px;align-items:center;text-align:center;gap:8px;flex:1;justify-content:center">
-    <span class="ic-box" style="width:42px;height:42px;border-radius:12px;background:color-mix(in srgb,var(--orange) 16%,transparent);color:var(--ink-orange)">{I("alert",20,2.2)}</span>
-    <div class="f14 w7">扩展视图「灰度放量看板」响应超时（&gt; 5s）</div>
-    <div class="f12 t3">只影响这个标签页，对话、代码审核和发布都不受影响。</div>
-    <button class="cc-btn cc-btn-sm cc-btn-glass" style="margin-top:4px">{I("refresh",13)}重新加载</button>
-  </div>''')
-
-    t3 = tile(3, "防菜单膨胀 · Dock > 4 与顶栏 > 2 超限自动折叠", "插件放进来的入口有数量上限，超出自动收起", f'''
-  <div class="col g10" style="flex:1;justify-content:center">
-    <div class="card" style="padding:9px 12px;gap:6px">
-      <div class="f11 t3 w7">顶栏右侧插件位（最多 2 个）</div>
-      <div class="row g6"><span class="pill glass tpill" style="height:26px;font-size:11px">今日费用 $4.2</span><span class="pill glass tpill" style="height:26px;font-size:11px">灰度 30%</span><span class="pill p-blue" style="height:26px;font-size:11px">更多微件 +2 ▾</span></div>
-    </div>
-    <div class="card" style="padding:9px 12px;gap:6px">
-      <div class="f11 t3 w7">左侧 Dock 插件位（最多 4 个）</div>
-      <div class="row g8"><span class="tag tg-b">AI</span><span class="tag tg-b">工单</span><span class="tag tg-b">发布</span><span class="tag tg-r">回滚</span><span class="tag tg-p">Skills</span><span class="tag tg-o">+2 扩展抽屉 ▾</span><span class="f11 t3">（Token 费用 / 绩效大盘）</span></div>
-    </div>
-  </div>''')
-
-    t4 = tile(4, "插件确认卡 + 站内通知收件箱", "确认时按最新数据再校验 · 同类通知 5 分钟合并", f'''
-  <div class="card" style="padding:9px 12px;gap:6px">
-    <div class="row g8"><span class="tag tg-p">扩展插件</span><span class="f12 w7 grow">灰度放量插件 · 审批中心</span><span class="tag tg-b">当前 30%</span><button class="cc-btn cc-btn-xs cc-btn-glass">打开详情 ›</button></div>
-    <div class="f11 t2">插件提供的操作会自动生成确认卡；点确认时按最新数据再校验一次，数据变了会提示。</div>
+</div>
+<div class="pop" style="left:96px;top:176px;width:262px;padding:12px 12px 10px">
+  <div class="row g6" style="padding:0 4px 8px"><span class="f13 w7 grow">更多插件</span><span class="f11 t3">2</span></div>
+  <div class="fgrid">
+    <div class="it">{plug(*P_DUTY)}值班表</div>
+    <div class="it">{plug(*P_PERF)}绩效大盘</div>
+    <div class="it"><span class="slot"></span><span class="t3" style="font-weight:500">空位</span></div>
   </div>
-  <div class="card" style="padding:9px 12px;gap:5px;background:var(--well)">
-    <div class="row g8"><span class="pill glass tpill" style="height:24px;padding:0 8px;font-size:11px">{I("bell",12)} 通知收件箱 (2)</span><span class="tag tg-r">正式发布失败 · 免打扰也提醒</span><span class="tag tg-n">已由他人审核 · 自动消失</span></div>
-    <div class="f11 t3">点顶栏头像旁的铃铛打开收件箱，不占 Dock 和设置菜单；5 分钟内的同类通知合并成一条。</div>
-  </div>''')
+  <div class="f11 t3" style="margin-top:8px;padding:7px 4px 0;border-top:1px solid var(--hair)">拖到 Dock 上就能放到外面，外面最多 4 个</div>
+</div>'''
 
-    return board_page("动态插件运行态与防膨胀边界规范 · 云匠", f'<div class="eb">{t1}{t2}{t3}{t4}</div>', css)
+    # ---------- 3 插件操作要人确认 + 通知 ----------
+    t3 = mini_topbar(WIDGETS, bell_on=True) + f'''<div class="row grow" style="min-height:0;align-items:stretch">
+  <div class="col grow fade" style="padding:10px 8px;min-width:0">{mini_rows()}</div>
+</div>
+<div class="pop" style="right:12px;top:58px;width:400px;padding:12px 10px 8px;display:flex;flex-direction:column">
+  <div class="row g8" style="padding:0 4px 8px"><span class="f15 w7 grow">通知</span><span class="cc-seg cc-seg-xs"><span class="on">全部 6</span><span>待我处理 2</span></span></div>
+  <div class="nt" style="background:color-mix(in srgb,var(--red) 8%,transparent)">
+    <span class="ap ap-pub">{DOCK_ICONS["pub"]}</span>
+    <div class="col grow" style="min-width:0"><div class="row g6"><span class="f12 w7 grow ell">okr-web 正式发布失败</span><span class="f11 t3">2 分钟前</span></div>
+      <div class="row g6" style="margin-top:3px"><span class="f11 t2 grow ell">打包上传失败，正式环境还是 2.17.4</span><span class="tag tg-r">免打扰也提醒</span></div></div>
+  </div>
+  <div class="nt" style="background:var(--glass-2);border:1px solid color-mix(in srgb,var(--purple) 34%,transparent)">
+    {plug(*P_GRAY)}
+    <div class="col grow" style="min-width:0"><div class="row g6"><span class="f12 w7 grow ell">灰度放量想把 okr-web 从 30% 调到 50%</span></div>
+      <div class="row g6" style="margin-top:4px"><span class="f11 t3 grow">确认时按最新数据再核对一次</span><button class="cc-btn cc-btn-xs cc-btn-sec">不同意</button><button class="cc-btn cc-btn-xs cc-btn-pri">确认调整</button></div></div>
+  </div>
+  <div class="nt">
+    <span class="ap ap-chat">{DOCK_ICONS["chat"]}</span>
+    <div class="col grow" style="min-width:0"><div class="row g6"><span class="f12 w7 grow">Bot 在问你 · 3 条</span>{I("chevr",13,style="color:var(--text-3)")}</div>
+      <div class="f11 t3" style="margin-top:2px">5 分钟内的同类提醒合成了一条</div></div>
+  </div>
+  <div class="nt gone">
+    <span class="ap ap-chat">{DOCK_ICONS["chat"]}</span>
+    <div class="col grow" style="min-width:0"><div class="f12 w7 t">TK-20855 等你审核</div>
+      <div class="f11 t3" style="margin-top:2px">陈晨已经审核过，这条自动移除</div></div>
+  </div>
+</div>'''
+
+    # ---------- 4 插件停用后：历史只读 ----------
+    def mkrow(icon_html, name, sub, tag, on=False):
+        st = ("background:color-mix(in srgb,var(--blue) 12%,var(--glass-2));border:1px solid var(--focus-ring)" if on
+              else "border:1px solid transparent")
+        return (f'<div class="row g8" style="padding:7px 8px;border-radius:12px;{st}">{icon_html}'
+                f'<div class="col grow" style="min-width:0"><span class="f12 w7 ell">{name}</span><span class="f11 t3 ell">{sub}</span></div>{tag}</div>')
+
+    def sq(grad, ic, gray=False):
+        return f'<span class="ic-box{" gray" if gray else ""}" style="width:28px;height:28px;border-radius:8px;background:linear-gradient(160deg,{grad})">{I(ic,14,2.2)}</span>'
+
+    rb_grad = "#FF8A7A,#FF453A 55%,#E0281E"
+    left4 = f'''<div class="ml" style="width:200px"><div class="hd"><b class="grow">插件市场</b></div>
+<div class="cc-seg cc-seg-xs" style="margin:0 4px 8px;display:flex"><span style="flex:1">全部</span><span class="on" style="flex:1">已安装 5</span></div>
+<div class="col g2">
+{mkrow(sq(rb_grad,"history",True), "紧急回滚", "官方 · Apollo", '<span class="tag tg-n">已停用</span>', on=True)}
+{mkrow(sq(P_GRAY[1],"filter"), "灰度放量", "官方 · v1.2", '<span class="tag tg-g">启用</span>')}
+{mkrow(sq(P_TOKEN[1],"zap"), "Token 费用", "官方 · v0.9", '<span class="tag tg-g">启用</span>')}
+{mkrow(sq(P_QA[1],"list"), "质量周报", "企业自定义", '<span class="tag tg-g">启用</span>')}
+</div><span class="grow"></span></div>'''
+    def rrow(no, app, ver, who, when):
+        return (f'<div class="rt"><span class="mono w7">{no}</span><span class="col" style="min-width:0"><span class="w6 ell">{app} · 回读通过</span><span class="mono f11 t3">{ver}</span></span>'
+                f'<span class="col"><span class="t2">{who}</span><span class="f11 t3">{when}</span></span><span class="lnk w6" style="justify-self:end">查看</span></div>')
+    t4 = left4 + f'''<div class="col grow" style="min-width:0;padding:14px 18px 14px 16px;gap:10px">
+  <div class="row g10">
+    <span class="ic-box gray" style="width:40px;height:40px;border-radius:11px;background:linear-gradient(160deg,{rb_grad})">{I("history",20,2.2)}</span>
+    <div class="col grow" style="min-width:0"><div class="row g8"><span class="f15 w7">紧急回滚（Apollo）</span><span class="tag tg-n">已停用</span></div>
+      <div class="f11 t3" style="margin-top:2px">林某 11-21 停用 · 只有管理员能重新启用</div></div>
+    <span class="cc-switch"></span>
+  </div>
+  <div class="row g8" style="padding:9px 12px;border-radius:12px;background:var(--well);border:1px solid var(--hair)">
+    {I("lock",14,2.2,"color:var(--text-3)")}<span class="f12 t2 grow">Dock 里的回滚图标和工单里的回滚按钮已经收起，以前的回滚记录都还在，只能查看。</span>
+  </div>
+  <div class="card" style="padding:0;overflow:hidden;gap:0">
+    <div class="rt h"><span>编号</span><span>应用和版本</span><span>谁回滚的</span><span></span></div>
+    {rrow("RB-091", "okr-web", "3.8.2 → 3.8.1", "林某", "11-18 19:42")}
+    {rrow("RB-087", "approval-web", "2.4.1 → 2.4.0", "陈晨", "11-12 21:05")}
+    {rrow("RB-080", "okr-web", "3.7.0 → 3.6.4", "林某", "11-03 18:30")}
+  </div>
+  <div class="row g8" style="margin-top:auto"><button class="cc-btn cc-btn-sm cc-btn-locked">{I("lock",12,2.2)}再次回滚（插件已停用）</button><span class="grow"></span><span class="lnk f12 w6">导出记录</span></div>
+</div>'''
+
+    body = ('<div class="eb">'
+            + tile(1, "插件页面没响应", "只影响插件自己的标签页，修单和发布照常可用", t1, "v")
+            + tile(2, "插件入口超出上限自动收起", "Dock 外面最多 4 个插件，顶栏最多 2 个小胶囊", t2, "v rel")
+            + tile(3, "插件发起的操作要人确认", "同类通知 5 分钟内合并，已处理的自动移除", t3, "v rel")
+            + tile(4, "插件停用后，历史记录只能查看", "收起入口，不删记录", t4)
+            + '</div>')
+    return board_page("插件运行状态 · 云匠", body, css)
 
 
 # =====================================================================
