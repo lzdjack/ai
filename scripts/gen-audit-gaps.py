@@ -339,7 +339,7 @@ def build_operation_log():
   <span style="{cur_style};background:var(--well);padding:2px 6px;border-radius:6px">{cur_v}</span>
 </div>'''
 
-    drawer = f'''<div class="scrim"></div>
+    drawer = f'''<style>.stepn{{width:18px;height:18px;border-radius:50%;flex:none;background:color-mix(in srgb,var(--blue) 14%,transparent);color:var(--ink-blue);font-size:10.5px;font-weight:700;display:inline-flex;align-items:center;justify-content:center}}</style><div class="scrim"></div>
 <aside class="cc-drawer" style="top:64px;height:calc(100% - 76px);width:780px;z-index:var(--z-drawer)">
   <div class="cc-drawer-hd">
     <span class="ic-box" style="width:36px;height:36px;border-radius:10px;background:linear-gradient(155deg,#6CC4FF,#1673FF)">{I("history",18,2.2)}</span>
@@ -359,11 +359,14 @@ def build_operation_log():
     </div>
     <div class="row g12 grow" style="min-height:0;align-items:stretch">
       <div class="col g8" style="width:302px;flex:none">
+        <div class="f11 t3 w7" style="padding:0 4px">今天</div>
         {op_row("1842", "已删除", "tg-r", "连接器 · GitLab 审批仓", "陈某 · PC · 12 分钟前", "在回收站 · 可以完整恢复", "t2", on=True)}
         {op_row("1840", "改版本", "tg-p", "流程模板 · 标准前端 v3 → v4", "林某 · 通过 AI 助手 · 38 分钟前", "可以切回 v3 · 下一轮修复生效")}
         {op_row("1837", "已修改", "tg-b", "环境 · staging 超时 10 → 5 分钟", "林某 · PC · 2 小时前", "可以改回修改前的值")}
-        {op_row("1831", "仅记录", "tg-n", "GitLab 换令牌 · MR !318 合入", "林某 · PC · 昨天 19:10", "已在外部生效 · 只能查看，不能撤回")}
-        <div class="f11 t3" style="margin-top:auto;padding:4px 2px">只显示你有权限查看的记录</div>
+        <div class="f11 t3 w7" style="padding:6px 4px 0">昨天</div>
+        {op_row("1831", "仅记录", "tg-n", "GitLab 换令牌 · MR !318 合入", "林某 · PC · 19:10", "已在外部生效 · 只能查看，不能撤回")}
+        {op_row("1826", "改版本", "tg-p", "Skill · 页面交互回归 v1 → v2", "陈某 · PC · 16:42", "可以切回 v1")}
+        <div class="row g6 f11 lnk w6" style="justify-content:center;margin-top:auto;padding:6px 0 2px">查看更早的记录 {I("chevd",11,2.4)}</div>
       </div>
       <div class="col g10 grow" style="min-width:0">
         <div class="card" style="padding:12px 14px;gap:6px">
@@ -384,7 +387,14 @@ def build_operation_log():
           {diff_kv("访问令牌", "有效 · 恢复后自动重连", "已冻结")}
           {diff_kv("关联触发器", "2 条 · 一起恢复", "已暂停")}
         </div>
-        <div class="card" style="padding:10px 12px;gap:6px;background:color-mix(in srgb,var(--blue) 7%,var(--glass-2));border-color:color-mix(in srgb,var(--blue) 24%,transparent)">
+        <div class="card" style="padding:14px 16px;gap:12px;display:flex;flex-direction:column">
+          <div class="f12 w7">恢复时会一起做</div>
+          <div class="row g8 f12 t2"><span class="stepn">1</span><span class="grow">把连接器配置放回原处，名字和地址不变</span></div>
+          <div class="row g8 f12 t2"><span class="stepn">2</span><span class="grow">用原来的访问令牌重新连接 GitLab，并检查能否拉代码</span></div>
+          <div class="row g8 f12 t2"><span class="stepn">3</span><span class="grow">重新启用 2 条触发器，之后收到的单照常处理</span></div>
+          <div class="row g8 f12 t2"><span class="stepn">4</span><span class="grow">恢复完成后通知删除它的陈某</span></div>
+        </div>
+        <div class="card" style="padding:10px 12px;gap:6px;margin-top:auto;background:color-mix(in srgb,var(--blue) 7%,var(--glass-2));border-color:color-mix(in srgb,var(--blue) 24%,transparent)">
           <div class="row g6">{I("shield",14,2.2,"color:var(--ink-blue)")}<span class="f12 w7" style="color:var(--ink-blue)">恢复前请留意</span></div>
           <div class="f11 t2" style="line-height:1.58">
             • 需要同时有「恢复记录」和这个连接器的编辑权限；如果别人刚改过它，会提示你刷新后再确认。<br>
@@ -395,7 +405,7 @@ def build_operation_log():
     </div>
   </div>
   <div class="cc-drawer-ft">
-    <span class="f11 t3 grow">恢复本身也会记一条记录 · 已有同名连接器时会先让你改名</span>
+    <span class="f11 t3 grow">只显示你有权限查看的记录 · 恢复本身也会记一条记录</span>
     <button class="cc-btn cc-btn-md cc-btn-glass">取消</button>
     <button class="cc-btn cc-btn-md cc-btn-pri">{I("history",14,2.4)}恢复此条记录</button>
   </div>
