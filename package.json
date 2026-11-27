@@ -24,6 +24,7 @@
     "sandbox:try": "tsx tools/sandbox/try.ts",
     "llm:check": "tsx tools/llm/check.ts",
     "pi:try": "tsx tools/pi/try.ts",
+    "s2:dbos": "node --import tsx tools/s2-dbos/run.ts",
     "dev": "turbo run dev"
   },
   "devDependencies": {
