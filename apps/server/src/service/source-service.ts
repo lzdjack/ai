@@ -125,7 +125,7 @@ export function listConnectors(db: Db, userId: string, ws: string) {
 }
 
 /** The connector with its credential opened, for one call in this request. */
-async function opened(tx: Tx, s: SourceSettings, connectorId: string) {
+export async function opened(tx: Tx, s: SourceSettings, connectorId: string) {
   const [row] = await tx
     .select({ c: connectors, secret: secretItems })
     .from(connectors)
@@ -402,7 +402,7 @@ export function probe(db: Db, s: SourceSettings, userId: string, ws: string, id:
  * The project's repositories as an execution plan (dependency order: a repo another one links to
  * comes first), with each repo's credential referenced, not included.
  */
-async function projectRepoSpecs(tx: Tx, projectId: string): Promise<RepoSpec[]> {
+export async function projectRepoSpecs(tx: Tx, projectId: string): Promise<RepoSpec[]> {
   const rows = await tx
     .select({ r: repos, t: repoTargets, c: connectors })
     .from(repoTargets)
