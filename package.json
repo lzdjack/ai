@@ -21,6 +21,7 @@
     "dev:reset": "tsx tools/dev/reset.ts",
     "fixtures:seed": "tsx tools/fixtures/seed.ts",
     "fixtures:check": "tsx tools/fixtures/check.ts",
+    "sandbox:try": "tsx tools/sandbox/try.ts",
     "dev": "turbo run dev"
   },
   "devDependencies": {

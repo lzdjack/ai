@@ -272,6 +272,9 @@ importers:
 
   tools:
     dependencies:
+      '@cloudcraft/bot-executor':
+        specifier: workspace:*
+        version: link:../apps/bot-executor
       '@cloudcraft/config':
         specifier: workspace:*
         version: link:../packages/config
