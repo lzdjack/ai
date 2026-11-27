@@ -5,6 +5,16 @@
   "type": "module",
   "description": "纯浏览器组件库：包装 tokens/components.css 的 .cc-* 类、ScrollArea、SchemaForm",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./styles.css": "./src/styles/index.css"
+  },
+  "dependencies": {
+    "@radix-ui/react-scroll-area": "1.4.0",
+    "intl-messageformat": "12.1.5",
+    "react": "19.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0"
   }
 }

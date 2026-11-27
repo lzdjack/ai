@@ -1,0 +1,306 @@
+/* PC 外壳（01 §3，定稿图 PC-主界面）：顶栏 64、Dock 70、三栏面板；数值取自设计稿 reference/src/v4/apple-chat.html（v=10、sel=5、ic=3） */
+.cc-shell {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.cc-shell.root {
+  width: auto;
+  height: auto;
+}
+
+/* 顶栏 */
+.cc-topbar {
+  height: 64px;
+  padding: 0 26px 0 0;
+  gap: 16px;
+  position: relative;
+  z-index: 2;
+}
+.cc-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: 35px;
+}
+.cc-logo {
+  color: #fff;
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  overflow: hidden;
+  background:
+    radial-gradient(90% 70% at 25% 0%, rgba(140, 190, 255, 0.9), transparent 60%),
+    linear-gradient(155deg, #3478f6 0%, #4338ca 70%, #5b21b6 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.2),
+    0 6px 14px -6px rgba(67, 56, 202, 0.7);
+}
+.cc-logo::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 50%;
+  background: linear-gradient(rgba(255, 255, 255, 0.22), transparent);
+}
+.cc-logo svg {
+  position: relative;
+  filter: drop-shadow(0 1px 1.5px rgba(20, 10, 80, 0.4));
+}
+.cc-logo .spk {
+  position: absolute;
+  right: 6px;
+  top: 6px;
+  opacity: 0.95;
+}
+.cc-brand-name {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+.cc-brand-name b {
+  font-family: 'Hiragino Sans GB', 'PingFang SC', sans-serif;
+  font-size: 17.5px;
+  font-weight: 600;
+  letter-spacing: 1.4px;
+}
+.cc-brand-name em {
+  font-style: normal;
+  font-family: Optima, 'Avenir Next', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  margin-top: 2px;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  background: var(--brand-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.cc-topsearch {
+  width: 440px;
+  height: var(--ctl-md);
+  padding: 0 12px;
+  border-radius: var(--r-md);
+  background: var(--well);
+  border: 1px solid var(--hair);
+  color: var(--text-3);
+}
+.cc-topsearch .kbd {
+  border-color: var(--hair);
+}
+.cc-status-pill {
+  box-shadow: none;
+  color: var(--text-2);
+  gap: 6px;
+}
+.cc-status-pill.is-warn {
+  color: var(--ink-orange);
+}
+.cc-status-pill .dot {
+  width: 7px;
+  height: 7px;
+}
+
+/* Dock：只放图标；选中 = 放大 1.16 + 悬浮，其余 0.94 */
+.cc-dock {
+  position: absolute;
+  left: 22px;
+  top: 66px;
+  bottom: 22px;
+  width: 70px;
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+  z-index: 20;
+}
+.cc-dock-sep {
+  width: 28px;
+  height: 1px;
+  background: var(--hair);
+  margin: 2px 0;
+}
+.cc-dock-item {
+  position: relative;
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  border: 0;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+}
+.cc-dock-item:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 4px;
+  border-radius: 14px;
+}
+.cc-dock-ic {
+  color: #fff;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  transform: scale(0.94);
+  transition:
+    transform var(--dur-base) var(--ease-std),
+    box-shadow var(--dur-base) var(--ease-std);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.12),
+    0 1px 1px rgba(0, 0, 0, 0.08),
+    0 6px 14px -6px rgba(0, 0, 0, 0.4);
+}
+.cc-dock-ic::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 50%;
+  background: linear-gradient(rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0));
+  pointer-events: none;
+}
+.cc-dock-ic svg,
+.cc-dock-ic img {
+  position: relative;
+  filter: drop-shadow(0 1.5px 1.5px rgba(0, 0, 0, 0.18));
+}
+.cc-dock-item.is-on {
+  z-index: 2;
+}
+.cc-dock-item.is-on .cc-dock-ic {
+  transform: scale(1.16);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.1),
+    0 2px 4px rgba(0, 0, 0, 0.08),
+    0 14px 26px -8px rgba(20, 50, 120, 0.5);
+}
+html.dark .cc-dock-item.is-on .cc-dock-ic {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    0 16px 28px -8px rgba(0, 0, 0, 0.75);
+}
+.cc-dock-item > b {
+  position: absolute;
+  top: -5px;
+  right: -6px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 9px;
+  background: var(--btn-danger-bg);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 0 0 2px var(--glass-2),
+    0 1px 3px rgba(0, 0, 0, 0.25);
+  z-index: 2;
+}
+.cc-dock-item.is-on > b {
+  transform: translate(3px, -3px);
+}
+.cc-dock-ic.is-ai {
+  background: #141530;
+}
+.cc-dock-ic.is-ai::after {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  background: conic-gradient(from 210deg, #4f8bff, #9b5cff, #ff5fa8, #ffb14a, #4fd1ff, #4f8bff);
+  filter: blur(5px);
+  opacity: 0.95;
+}
+.cc-dock-ic.is-ai svg {
+  z-index: 1;
+}
+.cc-dock-ic.is-chat {
+  background: linear-gradient(#fff, #e8eef7);
+}
+.cc-dock-ic.is-chat img {
+  width: 30px;
+  height: 30px;
+}
+html.dark .cc-dock-ic.is-chat {
+  background: linear-gradient(#3a4157, #262b3c);
+}
+.cc-dock-ic.is-release {
+  background: linear-gradient(160deg, #ffc54d 0%, #ff9a1f 55%, #ff7a00 100%);
+}
+.cc-dock-ic.is-rollback {
+  background: linear-gradient(160deg, #ff8a7a 0%, #ff453a 55%, #e0281e 100%);
+}
+.cc-dock-ic.is-skills {
+  background: linear-gradient(160deg, #c58bff 0%, #8e5cff 55%, #6a3df0 100%);
+}
+.cc-dock-ic.is-market {
+  background: linear-gradient(155deg, #34d399 0%, #14b8a6 52%, #0284c7 100%);
+}
+.cc-dock-ic.is-settings {
+  background: linear-gradient(160deg, #a9aeb8 0%, #6e737d 100%);
+}
+
+/* 三栏面板 */
+.cc-panels {
+  position: absolute;
+  left: 106px;
+  right: 22px;
+  top: 66px;
+  bottom: 22px;
+  display: flex;
+  gap: 14px;
+  align-items: stretch;
+}
+
+/* 零占位悬浮滚动条（01 §2.6）：Radix ScrollArea，thumb 默认隐藏、移入或滚动时淡入 */
+.cc-scroll {
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+}
+.cc-scroll > .scroll-viewport {
+  width: 100%;
+  height: 100%;
+}
+.cc-scrollbar {
+  display: flex;
+  touch-action: none;
+  user-select: none;
+  padding: 2px;
+  width: calc(var(--sb-w) + 4px);
+  right: 0;
+}
+.cc-scrollbar[data-state='visible'] .scroll-thumb {
+  opacity: 1;
+}
+.cc-scrollbar .scroll-thumb {
+  flex: 1;
+  position: relative;
+}
