@@ -6,5 +6,13 @@
   "description": "内网系统模拟服务（07 §5，不进生产构建）",
   "exports": {
     ".": "./src/index.ts"
+  },
+  "scripts": {
+    "dev": "tsx watch src/main.ts",
+    "start": "tsx src/main.ts"
+  },
+  "dependencies": {
+    "fastify": "5.12.8",
+    "typebox": "1.4.7"
   }
 }

@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>模拟服务控制台</title>
+    <style>
+      body {
+        font:
+          14px/1.5 -apple-system,
+          system-ui,
+          sans-serif;
+        margin: 0 auto;
+        max-width: 1100px;
+        padding: 16px;
+        color: #222;
+        background: #fafafa;
+      }
+      h1 {
+        font-size: 18px;
+      }
+      h2 {
+        font-size: 15px;
+        margin: 24px 0 8px;
+      }
+      section {
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        padding: 12px 16px;
+        margin-bottom: 12px;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 4px 8px;
+        border-bottom: 1px solid #eee;
+        vertical-align: top;
+      }
+      th {
+        color: #666;
+        font-weight: normal;
+      }
+      code {
+        font-size: 12px;
+        background: #f2f2f2;
+        padding: 1px 4px;
+        border-radius: 3px;
+        word-break: break-all;
+      }
+      form {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        margin-top: 8px;
+      }
+      input,
+      select,
+      button {
+        font: inherit;
+        padding: 3px 6px;
+      }
+      .muted {
+        color: #888;
+      }
+      .err {
+        color: #c00;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>
+      模拟服务控制台 <span class="muted">（开发工具，数据在 ~/.cloudcraft-dev/sim 与 git/）</span>
+    </h1>
+    <p id="msg" class="err"></p>
+
+    <section>
+      <h2>故障注入</h2>
+      <div id="faults"></div>
+      <form id="fault-form">
+        <select name="module">
+          <option>gitlab</option>
+          <option>jira</option>
+          <option>tita</option>
+          <option>apollo</option>
+          <option>craft</option>
+        </select>
+        <select name="kind">
+          <option value="rate_limit">429 限流</option>
+          <option value="unauthorized">401 凭据失效</option>
+          <option value="server_error">500 服务出错</option>
+          <option value="timeout">超时（挂起后断开）</option>
+          <option value="merge_conflict">合并冲突（合并接口 406）</option>
+          <option value="publish_interrupt">发布中途中断</option>
+          <option value="readback_mismatch">Apollo 回读不一致</option>
+        </select>
+        <input name="method" placeholder="方法（可空）" size="8" />
+        <input name="path" placeholder="路径包含（可空）" size="22" />
+        <input name="times" placeholder="次数（空=一直）" size="10" />
+        <input name="retry_after_s" placeholder="Retry-After 秒" size="12" />
+        <button>添加</button>
+        <button type="button" id="clear-faults">全部清除</button>
+      </form>
+    </section>
+
+    <section>
+      <h2>GitLab · 账号与令牌</h2>
+      <div id="users"></div>
+      <p class="muted">
+        克隆：<code>git clone http://任意用户名:令牌@127.0.0.1:端口/组/项目.git</code>；接口：请求头
+        <code>PRIVATE-TOKEN: 令牌</code>
+      </p>
+    </section>
+
+    <section>
+      <h2>GitLab · 项目</h2>
+      <div id="projects"></div>
+      <form id="project-form">
+        <input
+          name="path_with_namespace"
+          placeholder="组/项目，如 demo/web-app"
+          size="28"
+          required
+        />
+        <input name="default_branch" placeholder="默认分支 main" size="14" />
+        <button>新建项目</button>
+      </form>
+    </section>
+
+    <section>
+      <h2>GitLab · 合并请求</h2>
+      <div id="mrs"></div>
+    </section>
+
+    <section>
+      <h2>GitLab · Webhook 投递（最近 50 条）</h2>
+      <div id="deliveries"></div>
+    </section>
+
+    <section>
+      <h2>Jira / Tita / Apollo / craft / 环境站点</h2>
+      <p class="muted">后续任务接入（见 docs/07 §9 台账）。</p>
+    </section>
+
+    <script>
+      const esc = (s) =>
+        String(s ?? '').replace(
+          /[&<>"]/g,
+          (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c],
+        );
+      const table = (heads, rows) =>
+        rows.length
+          ? `<table><tr>${heads.map((h) => `<th>${h}</th>`).join('')}</tr>${rows.map((r) => `<tr>${r.map((c) => `<td>${c}</td>`).join('')}</tr>`).join('')}</table>`
+          : '<p class="muted">暂无</p>';
+      const msg = (t) => {
+        document.getElementById('msg').textContent = t || '';
+      };
+
+      async function call(method, url, body) {
+        const res = await fetch(url, {
+          method,
+          headers: body ? { 'Content-Type': 'application/json' } : {},
+          body: body ? JSON.stringify(body) : undefined,
+        });
+        if (!res.ok) {
+          msg(`${method} ${url} → ${res.status} ${await res.text()}`);
+          return null;
+        }
+        msg('');
+        return res.status === 204 ? {} : res.json();
+      }
+
+      async function load() {
+        const s = await call('GET', '/__sim/state');
+        if (!s) return;
+        const g = s.gitlab;
+        const user = (id) => g.users.find((u) => u.id === id)?.username ?? '';
+        const proj = (id) => g.projects.find((p) => p.id === id)?.path_with_namespace ?? '';
+        document.getElementById('faults').innerHTML = table(
+          ['#', '模块', '类型', '方法', '路径', '已命中 / 次数', ''],
+          s.faults.map((f) => [
+            f.id,
+            f.module,
+            f.kind,
+            esc(f.method),
+            esc(f.path),
+            `${f.hits} / ${f.times ?? '∞'}`,
+            `<button data-del-fault="${f.id}">移除</button>`,
+          ]),
+        );
+        document.getElementById('users').innerHTML = table(
+          ['用户名', '角色', '只能推的分支', '令牌'],
+          g.users.map((u) => [
+            esc(u.username),
+            u.role === 'maintainer' ? '维护者' : '开发者',
+            esc(u.push_branch_patterns.join(' ')) || '不限',
+            `<code>${esc(u.token)}</code>`,
+          ]),
+        );
+        document.getElementById('projects').innerHTML = table(
+          ['ID', '路径', '默认分支', '受保护分支', '克隆地址'],
+          g.projects.map((p) => [
+            p.id,
+            esc(p.path_with_namespace),
+            esc(p.default_branch),
+            esc(p.protected_branches.join(', ')),
+            `<code>${location.origin}/${esc(p.path_with_namespace)}.git</code>`,
+          ]),
+        );
+        document.getElementById('mrs').innerHTML = table(
+          ['项目', '!iid', '标题', '分支', '状态', '作者', '合并人'],
+          g.merge_requests
+            .slice()
+            .reverse()
+            .map((m) => [
+              esc(proj(m.project_id)),
+              m.iid,
+              esc(m.title),
+              `${esc(m.source_branch)} → ${esc(m.target_branch)}`,
+              m.state,
+              esc(user(m.author_id)),
+              esc(user(m.merged_by_id)),
+            ]),
+        );
+        document.getElementById('deliveries').innerHTML = table(
+          ['时间', '事件', '地址', '结果'],
+          g.deliveries.map((d) => [
+            esc(d.at),
+            d.event,
+            esc(d.url),
+            d.status ?? `<span class="err">${esc(d.error)}</span>`,
+          ]),
+        );
+      }
+
+      document.getElementById('fault-form').onsubmit = async (e) => {
+        e.preventDefault();
+        const body = Object.fromEntries([...new FormData(e.target)].filter(([, v]) => v !== ''));
+        for (const k of ['times', 'retry_after_s']) if (body[k]) body[k] = Number(body[k]);
+        if (await call('POST', '/__sim/faults', body)) load();
+      };
+      document.getElementById('clear-faults').onclick = async () => {
+        await call('DELETE', '/__sim/faults');
+        load();
+      };
+      document.getElementById('project-form').onsubmit = async (e) => {
+        e.preventDefault();
+        const body = Object.fromEntries([...new FormData(e.target)].filter(([, v]) => v !== ''));
+        if (await call('POST', '/__sim/gitlab/projects', body)) {
+          e.target.reset();
+          load();
+        }
+      };
+      document.addEventListener('click', async (e) => {
+        const id = e.target.dataset?.delFault;
+        if (id) {
+          await call('DELETE', `/__sim/faults/${id}`);
+          load();
+        }
+      });
+      load();
+      setInterval(load, 5000);
+    </script>
+  </body>
+</html>
