@@ -46,7 +46,11 @@ async function catalog(): Promise<{ tenant: CatalogTable[]; others: string[] }> 
   const tenant: CatalogTable[] = [];
   const others: string[] = [];
   for (const r of rel.rows) {
-    if (!r.has_ws && r.name !== 'workspaces') {
+    // class A tables (06 §2.3) are global even when they name a workspace (ws_tickets)
+    if (
+      (!r.has_ws && r.name !== 'workspaces') ||
+      (GLOBAL_TABLES as readonly string[]).includes(r.name)
+    ) {
       others.push(r.name);
       continue;
     }
@@ -91,7 +95,8 @@ function valueFor(table: CatalogTable, col: Column, space: Space): string | null
   if (col.type === 'jsonb' || col.type === 'json') return '{}';
   if (col.type === 'boolean') return 'false';
   if (/int|numeric/.test(col.type)) return '1';
-  return 'x';
+  // unique per row: some text columns are globally unique (token hashes)
+  return `x-${crypto.randomUUID().slice(0, 8)}`;
 }
 
 /** Makes sure every tenant table has at least one row in `space`, inserting a synthetic one if needed. */

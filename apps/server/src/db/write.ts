@@ -7,7 +7,8 @@ import { toSnakeCase } from 'drizzle-orm/casing';
 import type { PgColumn, PgInsertValue, PgTable, PgUpdateSetSource } from 'drizzle-orm/pg-core';
 import type { ActorCtx, Tx } from './client.ts';
 import { events, type ActionKind, type RevertMode } from './events.ts';
-import { workspaceMembers, workspaces } from './schema/index.ts';
+import { BUILTIN_ROLES } from '@cloudcraft/core-protocol';
+import { roleBindings, roles, workspaceMembers, workspaces } from './schema/index.ts';
 
 export type TenantTable = PgTable & {
   id: PgColumn;
@@ -196,6 +197,20 @@ export function restore<T extends TenantTable>(
   });
 }
 
+/**
+ * Records rows a SECURITY DEFINER function wrote in this transaction (e.g. accepting an invitation),
+ * so their audit probes have matching events.
+ */
+export async function recordWritten(
+  tx: Tx,
+  ctx: ActorCtx,
+  table: PgTable,
+  row: Row,
+  action: ActionKind = 'create',
+): Promise<void> {
+  await recordEvent(tx, ctx, { action, ...eventFor(table, row), after: snapshot(table, row) });
+}
+
 /** Probes in this database without a matching event (same row, same transaction). */
 export async function findUnmatchedProbes(
   tx: Tx,
@@ -238,5 +253,17 @@ export async function createWorkspace(
     ...eventFor(workspaceMembers, member!),
     after: snapshot(workspaceMembers, member!),
   });
+  // the five built-in roles (06 §2.3); the creator holds the owner role workspace-wide
+  let owner = '';
+  for (const r of BUILTIN_ROLES) {
+    const row = await insertRow(tx, ctx, roles, {
+      key: r.key,
+      isBuiltin: true,
+      isOwner: r.is_owner,
+      permissions: r.permissions,
+    });
+    if (r.is_owner) owner = row.id;
+  }
+  await insertRow(tx, ctx, roleBindings, { userId, roleId: owner, scopeType: 'workspace' });
   return ctx;
 }

@@ -45,6 +45,12 @@ export const ConfigSchema = Type.Object({
   CC_RUNNER_LEASE_SECONDS: Type.Integer({ minimum: 2, default: 60 }),
   CC_RUNNER_POLL_MS: Type.Integer({ minimum: 200, default: 5000 }),
   CC_SYS_REAP_INTERVAL_MS: Type.Integer({ minimum: 200, default: 15000 }),
+  // 账号（06 §10.1、§2.9）：访问令牌签名密钥、验证码哈希的 pepper（dev:up 自动生成）；每个维度每小时
+  // 最多几次登录 / 发验证码 / 试邀请口令；邀请链接里用的对外地址
+  CC_AUTH_SECRET: Secret,
+  CC_OTP_PEPPER: Secret,
+  CC_AUTH_RATE_LIMIT_PER_HOUR: Type.Integer({ minimum: 1, default: 10 }),
+  CC_PUBLIC_URL: Type.Optional(Type.String({ pattern: '^https?://' })),
 });
 
 export type Config = Static<typeof ConfigSchema>;
@@ -54,6 +60,8 @@ export const GENERATED_SECRETS = [
   'CC_PG_SUPERUSER_PASSWORD',
   'CC_PG_MIGRATOR_PASSWORD',
   'CC_PG_APP_PASSWORD',
+  'CC_AUTH_SECRET',
+  'CC_OTP_PEPPER',
 ] as const;
 
 export interface ConfigIssue {
