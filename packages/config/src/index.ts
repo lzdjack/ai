@@ -24,7 +24,17 @@ export const ConfigSchema = Type.Object({
   CC_APP_PORT: Port(4100),
   CC_SIM_PORT: Port(4200),
   CC_WEB_PORT: Port(4300),
-  OPENAI_API_KEY: Type.Optional(Type.String()),
+  // 模型接入（06 §11.1）：协议 + Base URL + 模型 + 密钥。密钥只有模型代理进程读取
+  CC_LLM_API: Type.Optional(
+    Type.Union([
+      Type.Literal('openai-completions'),
+      Type.Literal('openai-responses'),
+      Type.Literal('anthropic-messages'),
+    ]),
+  ),
+  CC_LLM_BASE_URL: Type.Optional(Type.String({ pattern: '^https?://' })),
+  CC_LLM_MODEL: Type.Optional(Type.String({ minLength: 1 })),
+  CC_LLM_API_KEY: Type.Optional(Type.String()),
   CC_LLM_DAILY_BUDGET_USD: Type.Number({ minimum: 0, default: 5 }),
 });
 
