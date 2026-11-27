@@ -5,7 +5,12 @@
 // ask_user, submit_diagnosis, report_progress and ack_supplement come with P4 (their cards and pages).
 import fs from 'node:fs';
 import path from 'node:path';
-import type { HostToolDecl } from '@cloudcraft/core-protocol';
+import {
+  BrowserRepro,
+  browserReproErrors,
+  normalizeBrowserRepro,
+  type HostToolDecl,
+} from '@cloudcraft/core-protocol';
 import { Type, type Static } from 'typebox';
 
 export const SUBMIT_DELIVERY = 'submit_delivery';
@@ -21,13 +26,25 @@ export const SubmitDeliveryParams = Type.Object({
     maxLength: 3000,
     description: 'What you changed and why it fixes the bug.',
   }),
-  repro_tests: Type.Array(Type.String({ minLength: 1, maxLength: 300 }), {
-    minItems: 1,
-    maxItems: 10,
-    description:
-      'Test files you wrote that reproduce the bug: they fail before your fix and pass after it. ' +
-      'Paths relative to /work, starting with the repository directory, e.g. demo-web/src/x/y.test.ts.',
-  }),
+  repro_tests: Type.Optional(
+    Type.Array(Type.String({ minLength: 1, maxLength: 300 }), {
+      maxItems: 10,
+      description:
+        'Test files you wrote that reproduce the bug: they fail before your fix and pass after it. ' +
+        'Paths relative to /work, starting with the repository directory, e.g. demo-web/src/x/y.test.ts.',
+    }),
+  ),
+  browser_repro: Type.Optional(
+    Type.Object(BrowserRepro.properties, {
+      additionalProperties: false,
+      description:
+        'Only for a repository marked browser-verified. Steps the host runs in a real browser on the ' +
+        'deployed test environment with your build of that repository swapped in. It must stop on an ' +
+        'expect_text step before your fix and pass after it. Each locator uses exactly one of role ' +
+        '(with optional name), text, label or css, plus an optional 0-based nth. goto takes a path ' +
+        'on the environment, e.g. /#/approvals. Base texts and locators on the source code.',
+    }),
+  ),
   verification: Type.String({
     minLength: 1,
     maxLength: 3000,
@@ -42,6 +59,8 @@ export interface ToolRound {
   workDir: string;
   /** repository directories under /work */
   repos: string[];
+  /** repositories whose fix is also replayed in a browser (verify_strategy browser_dist_replace) */
+  browserRepos?: string[];
 }
 
 export type ToolResult = { ok: true; text: string; record?: unknown } | { ok: false; text: string };
@@ -77,12 +96,22 @@ const submitDelivery: HostTool = {
     label: 'Submit delivery',
     description:
       'Call exactly once when the fix is done and verified. The host commits your changes, ' +
-      'replays your repro tests before and after the fix, and reports the verdict.',
+      'replays your repro (tests and/or browser steps) before and after the fix, and reports the verdict.',
     parameters: SubmitDeliveryParams,
   },
   once: true,
   handle(params: SubmitDelivery, round) {
-    const files = params.repro_tests.map((p) => [p, workFile(round, p)] as const);
+    const b = params.browser_repro && normalizeBrowserRepro(params.browser_repro);
+    const tests = params.repro_tests ?? [];
+    if (!tests.length && !b) return { ok: false, text: 'give repro_tests, browser_repro, or both' };
+    if (b && !round.browserRepos?.includes(b.repo))
+      return {
+        ok: false,
+        text: `${b.repo} is not browser-verified; browser_repro works for: ${round.browserRepos?.join(', ') || 'none'}`,
+      };
+    const bad = b ? browserReproErrors(b) : [];
+    if (bad.length) return { ok: false, text: `browser_repro: ${bad.join('; ')}` };
+    const files = tests.map((p) => [p, workFile(round, p)] as const);
     const absent = files.filter(([, f]) => !f).map(([p]) => p);
     if (absent.length)
       return {
@@ -92,7 +121,11 @@ const submitDelivery: HostTool = {
     return {
       ok: true,
       text: 'Delivery received. The host will commit your changes and replay the repro tests. You are done; stop here.',
-      record: { ...params, repro_tests: files.map(([, f]) => f!) },
+      record: {
+        ...params,
+        repro_tests: files.map(([, f]) => f!),
+        ...(b ? { browser_repro: b } : {}),
+      },
     };
   },
 };

@@ -87,7 +87,10 @@ export async function driveAgent(o: {
       else {
         r.tool_errors += 1;
         failing = { key, count: failing.key === key ? failing.count + 1 : 1 };
-        if (failing.count >= limits.maxConsecutiveToolErrors) halt('tool_errors');
+        if (failing.count >= limits.maxConsecutiveToolErrors) {
+          r.error ??= `failed ${failing.count} times in a row: ${key.slice(0, 300)}`;
+          halt('tool_errors');
+        }
       }
     }
     if (e.type === 'usage') {
