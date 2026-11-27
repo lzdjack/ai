@@ -688,9 +688,17 @@ function hookDto(h: GitlabHook) {
   return Object.fromEntries(Object.entries(h).filter(([k]) => k !== 'token'));
 }
 
+/** 依据：官方文档「Protected branches / wildcard」——通配符 * 匹配任意字符（含 /），和推送钩子一致 */
 function branchAllowed(user: GitlabUser, branch: string): boolean {
   if (user.push_branch_patterns.length === 0) return true;
-  return user.push_branch_patterns.some((p) => path.matchesGlob(branch, p));
+  return user.push_branch_patterns.some((p) =>
+    new RegExp(
+      `^${p
+        .split('*')
+        .map((x) => x.replace(/[.+?^${}()|[\]\\]/g, '\\$&'))
+        .join('.*')}$`,
+    ).test(branch),
+  );
 }
 
 // 依据：官方文档「Pagination」——page / per_page，X-Total 等响应头
