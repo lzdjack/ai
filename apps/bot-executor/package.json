@@ -1,0 +1,10 @@
+{
+  "name": "@cloudcraft/bot-executor",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Bot 执行器：领租约、在断网沙箱里跑 AI 引擎（06 §5）",
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}

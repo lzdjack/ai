@@ -1,0 +1,10 @@
+{
+  "name": "@cloudcraft/ui-kit",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "纯浏览器组件库：包装 tokens/components.css 的 .cc-* 类、ScrollArea、SchemaForm",
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}

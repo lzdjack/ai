@@ -1,0 +1,10 @@
+{
+  "name": "@cloudcraft/server",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "接口服务 cc-app 与后台任务 cc-sys（06 §1.2）",
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}

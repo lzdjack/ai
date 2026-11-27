@@ -1,0 +1,10 @@
+{
+  "name": "@cloudcraft/connector-gitlab",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "GitLab 连接器",
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}

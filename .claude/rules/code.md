@@ -17,7 +17,7 @@ paths:
 
 ## 结构与边界
 
-- 依赖边界按 `07` §2.3，由 `eslint-plugin-boundaries` 强制：`apps/*`、`packages/*` 不静态 import `plugins/*`；`sim/` 不依赖任何产品代码；纯浏览器包不用 Node 内置模块。
+- 依赖边界按 `07` §2.3，由自定义 ESLint 规则 `cc/boundaries` 强制：`apps/*`、`packages/*` 不静态 import `plugins/*`；`sim/` 不依赖任何产品代码；纯浏览器包不用 Node 内置模块。
 - 不写按插件名分支的代码（如 `if (engine === 'pi')`），只读 `AdapterCapabilities` 能力位（`06` §11.4）。
 - 后端分 `routes / service / repo` 三层；接口定义只用 TypeBox，放 `packages/core-protocol`。
 - 租户表一律用建表助手创建（一次生成 `workspace_id`、`project_id`、复合外键、RLS 策略、`rev`、`deleted_at`）；直接写 SQL 只在 repo 层，不绕过 RLS。

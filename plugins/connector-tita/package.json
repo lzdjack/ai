@@ -1,0 +1,10 @@
+{
+  "name": "@cloudcraft/connector-tita",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Tita 工单收单连接器（只读）",
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}

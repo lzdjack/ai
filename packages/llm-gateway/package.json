@@ -1,0 +1,10 @@
+{
+  "name": "@cloudcraft/llm-gateway",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "轻任务多模型封装（对话助手用）",
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "name": "@cloudcraft/browser-sandbox",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "无头 Chromium、产物替换、截图录屏（06 §5.2）",
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}
