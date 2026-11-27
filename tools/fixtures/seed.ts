@@ -53,6 +53,33 @@ export async function seedDemoRepos(c: Config): Promise<Array<{ repo: string; re
   });
 }
 
+/** 模拟 GitLab 里的 Bot 令牌（只在宿主机用：克隆、推送 fix/ 分支） */
+export async function botToken(base: string): Promise<string> {
+  const users = (await (await fetch(`${base}/__sim/gitlab/users`)).json()) as SimUser[];
+  const token = users.find((u) => u.username === 'cc-bot')?.token;
+  if (!token) throw new Error('模拟 GitLab 里没有 cc-bot 账号');
+  return token;
+}
+
+/**
+ * 推好 demo 两仓后，以 Bot 身份克隆到 workDir（和真实执行器一样在宿主机做）。
+ * 令牌走请求头，不写进 .git/config；克隆后逐仓核对。返回 Bot 令牌。
+ */
+export async function cloneDemoAsBot(c: Config, workDir: string): Promise<string> {
+  await seedDemoRepos(c);
+  const token = await withSim(c, async (base) => {
+    const t = await botToken(base);
+    fs.mkdirSync(workDir, { recursive: true });
+    for (const repo of DEMO_REPOS)
+      await git(workDir, ['clone', '-q', `${base}/${DEMO_NAMESPACE}/${repo}.git`, repo], { token: t });
+    return t;
+  });
+  for (const repo of DEMO_REPOS)
+    if (fs.readFileSync(path.join(workDir, repo, '.git', 'config'), 'utf8').includes(token))
+      throw new Error(`${repo}/.git/config 里有令牌`);
+  return token;
+}
+
 if (import.meta.main) {
   const results = await seedDemoRepos(loadConfig());
   for (const r of results) console.log(`${r.result === 'pushed' ? '✓ 已推送' : '· 已存在'}  ${r.repo}`);

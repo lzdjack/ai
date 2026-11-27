@@ -7,6 +7,8 @@
   "dependencies": {
     "@cloudcraft/bot-executor": "workspace:*",
     "@cloudcraft/config": "workspace:*",
+    "@cloudcraft/llm-proxy": "workspace:*",
+    "@cloudcraft/runtime-pi": "workspace:*",
     "@cloudcraft/sim": "workspace:*",
     "typebox": "1.4.7",
     "yaml": "2.9.1"
