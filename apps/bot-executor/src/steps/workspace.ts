@@ -18,6 +18,9 @@ export interface RepoChange {
   head_sha: string;
   /** git name-status against base, e.g. "M src/a.ts" */
   files: string[];
+  /** lines added / deleted against base (risk level, 06 §5.7) */
+  added: number;
+  deleted: number;
 }
 
 export interface WorkspaceState {
@@ -86,7 +89,11 @@ export class Workspaces {
     fs.rmSync(dir, { recursive: true, force: true });
     const workDir = path.join(dir, 'work');
     fs.mkdirSync(workDir, { recursive: true });
-    const branch = branchFor(step.flow_instance_id);
+    // P4: the round's branch comes with the plan (fix/<project>/<ticket no>); drills fall back
+    const branch =
+      typeof step.config.branch === 'string'
+        ? step.config.branch
+        : branchFor(step.flow_instance_id);
     const timings: { label: string; ms: number }[] = [];
     const t0 = Date.now();
     for (const r of step.repos) {
@@ -149,7 +156,23 @@ export async function commitChanges(ws: Workspace, message: string): Promise<Rep
       .split('\n')
       .filter(Boolean)
       .map((l) => l.replace(/\t/, ' '));
-    out.push({ repo: r.name, base_sha: base, head_sha: head, files: files.slice(0, 200) });
+    let added = 0;
+    let deleted = 0;
+    for (const l of (await git(dir, ['diff', '--numstat', '--no-renames', base, head])).split(
+      '\n',
+    )) {
+      const [a, d] = l.split('\t');
+      if (a && a !== '-') added += Number(a);
+      if (d && d !== '-') deleted += Number(d);
+    }
+    out.push({
+      repo: r.name,
+      base_sha: base,
+      head_sha: head,
+      files: files.slice(0, 200),
+      added,
+      deleted,
+    });
   }
   return out;
 }
