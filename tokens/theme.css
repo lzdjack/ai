@@ -21,6 +21,10 @@
   --btn-pri-bg:#0066D6;--btn-pri-hover:#0055B8;--btn-pri-active:#004699;
   --btn-ok-bg:#157F3D;--btn-ok-hover:#126B33;--btn-ok-active:#0E5729;
   --btn-danger-bg:#C81E1E;--btn-danger-hover:#B01919;--btn-danger-active:#961414;
+  /* 状态实底（白字/白图标小圆点、步骤点、提问卡图标底；亮暗同值，白字 ≥ 5:1） */
+  --btn-warn-bg:#B45309;   /* 待处理 / 需人工 / 警示 */
+  --btn-run-bg:#0A6678;    /* 执行中 / 验证中 */
+  --btn-purple-bg:#7E22CE; /* 回原平台确认等外部待办 */
   --switch-on:#248A3D;
 
   /* —— 文字层级（--text-3 升至 .66 确保全表面 ≥ 4.73:1） —— */

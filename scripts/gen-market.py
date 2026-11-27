@@ -68,17 +68,17 @@ left = f'''<section class="glass pn" style="width:296px;flex:none;padding:16px 1
   </div>
 
   <div class="g10h">已安装 · 按连接器与能力分类<span>5</span></div>
-  {mrow("紧急回滚（Apollo）", "views + connectors · 可选扩展（停用仅藏入口）", SVG_RB, "linear-gradient(160deg,#FF8A7A,#E0281E)", "默认安装", "tg-g", on=True)}
-  {mrow("Tita / Apollo 部署连接器", "release_provider + craft · 发布适配", SVG_BOX, "linear-gradient(160deg,#FFC54D,#FF7A00)", "官方预装", "tg-b")}
-  {mrow("GitLab 代码源连接器", "code_source · PR/MR 与 diff 同步", SVG_PLUG, "linear-gradient(155deg,#38BDF8,#2563EB)", "官方预装", "tg-b")}
-  {mrow("Jira 工单源连接器", "ticket_source · 条件触发与状态同步", SVG_MSG, "linear-gradient(155deg,#60A5FA,#4F46E5)", "官方预装", "tg-b")}
-  {mrow("Pi 修复引擎（runtime-pi）", "runtimes · 多模型与流式交互", SVG_PI, "linear-gradient(155deg,#5E8BFF,#8B5CF6)", "核心默认", "tg-b")}
+  {mrow("紧急回滚（Apollo）", "可选扩展 · 停用后只隐藏入口", SVG_RB, "linear-gradient(160deg,#FF8A7A,#E0281E)", "默认安装", "tg-g", on=True)}
+  {mrow("Tita / Apollo 部署连接器", "发布到测试 / 正式环境", SVG_BOX, "linear-gradient(160deg,#FFC54D,#FF7A00)", "官方预装", "tg-b")}
+  {mrow("GitLab 代码源连接器", "同步代码、MR 和改动", SVG_PLUG, "linear-gradient(155deg,#38BDF8,#2563EB)", "官方预装", "tg-b")}
+  {mrow("Jira 工单源连接器", "按条件收单、同步状态", SVG_MSG, "linear-gradient(155deg,#60A5FA,#4F46E5)", "官方预装", "tg-b")}
+  {mrow("Pi 修复引擎", "AI 引擎 · 多模型、实时输出", SVG_PI, "linear-gradient(155deg,#5E8BFF,#8B5CF6)", "核心默认", "tg-b")}
 
   <div class="g10h">可安装 · 扩展生态<span>4</span></div>
-  {mrow("Token 费用检测", "topbar.widgets + 插件设置 · 预算熔断", SVG_WAVE, "linear-gradient(155deg,#34D399,#059669)", "", "", action_txt="安装")}
-  {mrow("高对比暗夜主题", "themes · 自动归「我的账号 → 外观与语言」", SVG_TERM, "linear-gradient(155deg,#A855F7,#6366F1)", "", "", action_txt="安装")}
-  {mrow("外部 CLI 引擎（ACP）", "runtimes · 复用 Claude Code / Codex", SVG_PLUG, "linear-gradient(155deg,#64748B,#334155)", "", "", action_txt="安装")}
-  {mrow("飞书 / 钉钉审批联动", "connectors + mcp · 群审批卡", SVG_MSG, "linear-gradient(155deg,#60A5FA,#4F46E5)", "", "", action_txt="安装")}
+  {mrow("Token 费用检测", "顶栏显示费用 · 超预算自动暂停", SVG_WAVE, "linear-gradient(155deg,#34D399,#059669)", "", "", action_txt="安装")}
+  {mrow("高对比暗夜主题", "主题 · 装好后在「我的账号 → 外观与语言」切换", SVG_TERM, "linear-gradient(155deg,#A855F7,#6366F1)", "", "", action_txt="安装")}
+  {mrow("外部 CLI 引擎（ACP）", "AI 引擎 · 复用 Claude Code / Codex", SVG_PLUG, "linear-gradient(155deg,#64748B,#334155)", "", "", action_txt="安装")}
+  {mrow("飞书 / 钉钉审批联动", "连接器 · 在群里发审批卡", SVG_MSG, "linear-gradient(155deg,#60A5FA,#4F46E5)", "", "", action_txt="安装")}
 </section>'''
 
 main = f'''<main class="glass pn grow" style="min-width:0;padding:18px 22px;gap:12px">
@@ -90,7 +90,7 @@ main = f'''<main class="glass pn grow" style="min-width:0;padding:18px 22px;gap:
         <span class="tag tg-g">已安装 · 默认安装</span>
         <span class="tag tg-n mono">v1.2.0</span>
       </div>
-      <div class="f12 t2" style="line-height:1.5">官方扩展插件 <span class="mono t3">plugins/module-rollback-apollo</span> · 遵循 5 贡献点协议（<span class="mono">views / connectors / capabilities</span>），不展示令牌明文，鉴权实例归口「设置 → 连接器」。</div>
+      <div class="f12 t2" style="line-height:1.5">官方扩展插件 · 不显示令牌明文，Apollo 账号在「设置 → 连接器」里配置。</div>
     </div>
     <div class="row g8" style="flex:none">
       <button class="btn2" style="background:color-mix(in srgb,var(--blue) 13%,transparent);color:var(--ink-blue)">插件设置</button>
@@ -99,22 +99,22 @@ main = f'''<main class="glass pn grow" style="min-width:0;padding:18px 22px;gap:
   </div>
 
   <div class="card" style="padding:13px 16px">
-    <div class="row"><span class="sec">声明的贡献点与扩展插座</span><span class="grow"></span><span class="f12 t3">按 manifest 自动归位 · 卸载零核心残留</span></div>
+    <div class="row"><span class="sec">插件会出现在这些位置</span><span class="grow"></span><span class="f12 t3">装好后自动出现在对应位置 · 卸载不留残留</span></div>
     <div class="slot-grid">
       <div class="slot-c">
-        <div class="row g6"><span class="tag tg-r mono">dock.items</span><span class="f13 w6 ell">左侧 Dock · 紧急回滚</span></div>
+        <div class="row g6"><span class="tag tg-r">Dock</span><span class="f13 w6 ell">左侧 Dock · 紧急回滚</span></div>
         <div class="f12 t3" style="margin-top:5px">挂载红色时钟图标，直达发布历史与 Namespace 差异预览</div>
       </div>
       <div class="slot-c">
-        <div class="row g6"><span class="tag tg-b mono">ticket.actions</span><span class="f13 w6 ell">工单操作 · 关联回滚查因</span></div>
+        <div class="row g6"><span class="tag tg-b">工单操作</span><span class="f13 w6 ell">工单操作 · 关联回滚查因</span></div>
         <div class="f12 t3" style="margin-top:5px">回滚完成后一键建单或关联原工单，让 Bot 自动定位根因</div>
       </div>
       <div class="slot-c">
-        <div class="row g6"><span class="tag tg-o mono">ticket.sidebar</span><span class="f13 w6 ell">工单右栏 · 回滚状态徽章</span></div>
+        <div class="row g6"><span class="tag tg-o">工单右栏</span><span class="f13 w6 ell">工单右栏 · 回滚状态徽章</span></div>
         <div class="f12 t3" style="margin-top:5px">区分「配置已回退 / 业务恢复待验证 / 已恢复」三段状态</div>
       </div>
       <div class="slot-c">
-        <div class="row g6"><span class="tag tg-p mono">connectors</span><span class="f13 w6 ell">鉴权归「设置 → 连接器」 ›</span></div>
+        <div class="row g6"><span class="tag tg-p">连接器</span><span class="f13 w6 ell">鉴权归「设置 → 连接器」 ›</span></div>
         <div class="f12 t3" style="margin-top:5px">复用本人 Apollo 账号执行与审计，需输入 PROD 二次确认</div>
       </div>
     </div>
@@ -141,15 +141,15 @@ main = f'''<main class="glass pn grow" style="min-width:0;padding:18px 22px;gap:
 right = f'''<aside class="glass pn" style="width:288px;flex:none;padding:16px 14px;gap:12px">
   <div class="card" style="padding:13px 14px">
     <div class="mini">权限授权（最小权限）</div>
-    <div class="kv2"><span class="t2">读工单与版本</span><span class="f12 w6" style="color:var(--ink-green)">✓ tickets:read</span></div>
-    <div class="kv2"><span class="t2">调用浏览器验证</span><span class="f12 w6" style="color:var(--ink-green)">✓ browser:verify</span></div>
-    <div class="kv2"><span class="t2">发送关不掉通知</span><span class="f12 w6" style="color:var(--ink-green)">✓ notify:alert</span></div>
-    <div class="kv2"><span class="t2">写回滚审计卡</span><span class="f12 w6" style="color:var(--ink-green)">✓ post_card</span></div>
-    <div class="f12 t3" style="margin-top:8px;line-height:1.55">严禁直连主库；回滚记录存隔离表 <span class="mono">module_records</span>。</div>
+    <div class="kv2"><span class="t2">读工单与版本</span><span class="f12 w6" style="color:var(--ink-green)">✓ 需要</span></div>
+    <div class="kv2"><span class="t2">调用浏览器验证</span><span class="f12 w6" style="color:var(--ink-green)">✓ 需要</span></div>
+    <div class="kv2"><span class="t2">发送关不掉通知</span><span class="f12 w6" style="color:var(--ink-green)">✓ 需要</span></div>
+    <div class="kv2"><span class="t2">写回滚审计卡</span><span class="f12 w6" style="color:var(--ink-green)">✓ 允许</span></div>
+    <div class="f12 t3" style="margin-top:8px;line-height:1.55">回滚记录单独存放，插件不能直接读写主数据。</div>
   </div>
 
   <div class="card" style="padding:13px 14px">
-    <div class="mini">订阅与发出的事件（Outbox）</div>
+    <div class="mini">插件监听和发出的事件</div>
     <div class="tlx">
       <div class="rail"><span class="bul" style="background:var(--green)"></span><i></i></div>
       <div style="padding-bottom:10px"><div class="f13 w6 mono">release.verified</div><div class="f12 t3">标记「验证通过」的安全回滚基线</div></div>
@@ -162,7 +162,7 @@ right = f'''<aside class="glass pn" style="width:288px;flex:none;padding:16px 14
 
   <div class="card" style="padding:13px 14px">
     <div class="mini">企业自研与新物种插件</div>
-    <div class="f12 t2" style="line-height:1.6">外部鉴权自动进「设置 → 连接器」，主题进「我的账号 → 外观与语言」；权限声明通过 <span class="mono">manifest.permissions</span> 进「角色与权限」。</div>
+    <div class="f12 t2" style="line-height:1.6">外部鉴权自动进「设置 → 连接器」，主题进「我的账号 → 外观与语言」；插件需要的权限出现在「角色与权限」里。</div>
     <div class="row g8" style="margin-top:11px">
       <span class="btn2 sm grow" style="background:var(--btn-pri-bg);color:#fff">导入私有插件</span>
       <span class="btn2 sm" style="background:var(--fill);color:var(--text)">SDK 文档</span>

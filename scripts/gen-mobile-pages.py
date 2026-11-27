@@ -112,7 +112,7 @@ def m_ask():
 <div class="pad">
   <div class="dv"><span>第 1 轮 · 13:20 · 已暂停等你回复</span></div>
   <div class="dcard glass" style="margin-top:0;box-shadow:0 0 0 2px color-mix(in srgb,var(--orange) 55%,transparent)">
-    <div class="row g8"><span class="ck2" style="width:24px;height:24px;border-radius:7px;background:#B45309">{I("msgq",14,2.2)}</span><span class="grow" style="font-size:15.5px;font-weight:700">复现要用哪个角色？</span><span class="f11 t3">Bot-03</span></div>
+    <div class="row g8"><span class="ck2" style="width:24px;height:24px;border-radius:7px;background:var(--btn-warn-bg)">{I("msgq",14,2.2)}</span><span class="grow" style="font-size:15.5px;font-weight:700">复现要用哪个角色？</span><span class="f11 t3">Bot-03</span></div>
     <div class="f13 t2" style="margin-top:8px;line-height:1.6">原单没写角色。我用<b style="color:var(--text)">管理员</b>筛选「研发中心」，列表正常变化，<b style="color:var(--text)">没有复现</b>。问题可能只在部门负责人或普通员工下出现。</div>
     <div class="row g8" style="margin-top:12px;flex-wrap:wrap"><span class="qr">用普通员工</span><span class="qr">用部门负责人</span><span class="qr">两个都测</span><span class="qr" style="color:var(--text-2);border-color:var(--border-ctl)">我来复现</span></div>
   </div>
@@ -722,15 +722,15 @@ def m_market_list():
   <div class="gh" style="padding:10px 6px 4px">已安装<span>5</span><em>可随时启停</em></div>
   <div class="grp glass">
     {mrow("linear-gradient(160deg,#FF8A7A,#E0281E)","history","紧急回滚（Apollo）","可选扩展 · 停用仅藏回滚入口","默认安装",'<span class="tgl on"></span>',True)}
-    {mrow("linear-gradient(160deg,#FFC54D,#FF7A00)","pkg","Tita / Apollo 部署连接器","release_provider + craft · 发布适配","官方预装",'<span class="tgl on" style="opacity:.45;pointer-events:none"></span>')}
-    {mrow("linear-gradient(160deg,#5AA0FF,#1F6FFF)","branch","GitLab 代码源连接器","code_source · PR/MR 与 diff 同步","官方预装",'<span class="tgl on" style="opacity:.45;pointer-events:none"></span>')}
-    {mrow("linear-gradient(160deg,#60A5FA,#4F46E5)","link","Jira 工单源连接器","ticket_source · 鉴权归「设置 → 连接器」","官方预装",'<span class="tgl on" style="opacity:.45;pointer-events:none"></span>')}
-    {mrow("linear-gradient(155deg,#5E8BFF,#8B5CF6)","spark","Pi 修复引擎","runtimes 核心默认 · 多模型","核心默认",'<span class="tgl on" style="opacity:.45;pointer-events:none"></span>')}
+    {mrow("linear-gradient(160deg,#FFC54D,#FF7A00)","pkg","Tita / Apollo 部署连接器","发布到测试 / 正式环境","官方预装",'<span class="tgl on" style="opacity:.45;pointer-events:none"></span>')}
+    {mrow("linear-gradient(160deg,#5AA0FF,#1F6FFF)","branch","GitLab 代码源连接器","同步代码、MR 和改动","官方预装",'<span class="tgl on" style="opacity:.45;pointer-events:none"></span>')}
+    {mrow("linear-gradient(160deg,#60A5FA,#4F46E5)","link","Jira 工单源连接器","按条件收单 · 账号在「设置 → 连接器」配置","官方预装",'<span class="tgl on" style="opacity:.45;pointer-events:none"></span>')}
+    {mrow("linear-gradient(155deg,#5E8BFF,#8B5CF6)","spark","Pi 修复引擎","AI 引擎 · 默认 · 多模型","核心默认",'<span class="tgl on" style="opacity:.45;pointer-events:none"></span>')}
   </div>
   <div class="gh" style="padding:10px 6px 4px">可安装<span>3</span><em>PC 端安装</em></div>
   <div class="grp glass">
     {mrow("linear-gradient(160deg,#34D399,#059669)","zap","Token 费用检测","顶栏预算微胶囊 · 插件设置阈值","","<em>PC 安装" + I("chevr",13) + "</em>")}
-    {mrow("linear-gradient(160deg,#C58BFF,#6A3DF0)","moon","高对比暗夜主题","themes 契约 · 归「我的账号」","","<em>PC 安装" + I("chevr",13) + "</em>")}
+    {mrow("linear-gradient(160deg,#C58BFF,#6A3DF0)","moon","高对比暗夜主题","主题 · 在「我的账号」切换","","<em>PC 安装" + I("chevr",13) + "</em>")}
     {mrow("linear-gradient(160deg,#64748B,#334155)","terminal","自定义 CLI / MCP 适配器","接入企业自研工具与连接器","","<em>PC 安装" + I("chevr",13) + "</em>")}
   </div>
   <div class="f12 t3" style="padding:10px 6px 0;line-height:1.55">手机端支持查看与启停，安装和详细配置请在 PC 端「插件市场」或「设置 → 连接器」完成。关闭「紧急回滚」后底部回滚入口自动隐藏。</div>
@@ -757,12 +757,12 @@ def m_market_detail():
     <div class="ir"><span class="grow w6">在当前团队启用</span><span class="tgl on"></span></div>
     <div class="ir"><span class="grow">生效项目</span><em>审批、考勤（2）{I("chevr",14)}</em></div>
   </div>
-  <div class="sec2">声明的贡献点与插座<em>5 贡献点协议</em></div>
+  <div class="sec2">插件会出现在这些位置</div>
   <div class="card2" style="padding:4px 14px 6px">
-    <div class="row g8" style="padding:7px 0"><span class="f12 t3" style="width:78px;flex:none">views</span><span class="f12 w6 grow">PC Dock + 手机底部「回滚」</span></div>
-    {kvrow("connectors", "复用个人 Apollo 鉴权实例")}
-    {kvrow("capabilities", "craft rollback / craft verify / MCP")}
-    {kvrow("插件设置", "通用 Schema 抽屉（无独立设置菜单）")}
+    <div class="row g8" style="padding:7px 0"><span class="f12 t3" style="width:78px;flex:none">入口</span><span class="f12 w6 grow">PC Dock + 手机底部「回滚」</span></div>
+    {kvrow("账号", "用你自己的 Apollo 账号")}
+    {kvrow("能力", "craft rollback / craft verify / MCP")}
+    {kvrow("插件设置", "在插件详情里设置，不单独占菜单")}
   </div>
   <div class="sec2">最小权限边界<em>不可越权</em></div>
   <div class="card2" style="padding:10px 14px">
@@ -798,7 +798,7 @@ def m_no_runner():
   <div class="gh" style="padding:12px 6px 6px">怎么让 Bot 开始修</div>
   <div class="card2" style="padding:10px 14px;display:flex;flex-direction:column;gap:8px">
     <div class="row g8" style="align-items:flex-start"><span class="ok2" style="background:var(--btn-pri-bg);margin-top:1px">1</span><span class="f12 t2" style="line-height:1.5">回到电脑打开云匠 PC 端，连上后自动接着修这张单</span></div>
-    <div class="row g8" style="align-items:flex-start"><span class="ok2" style="background:#0A6678;margin-top:1px">2</span><span class="f12 t2" style="line-height:1.5">或在 PC 端切到「团队 Runner / 云端托管」</span></div>
+    <div class="row g8" style="align-items:flex-start"><span class="ok2" style="background:var(--btn-run-bg);margin-top:1px">2</span><span class="f12 t2" style="line-height:1.5">或在 PC 端切到「团队 Runner / 云端托管」</span></div>
   </div>
 </div>
 <div class="dock2 glass">
@@ -818,7 +818,7 @@ BOARDS = {
     "empty2": ("移动端 · 空状态二", [(m_empty_search, "搜索没有结果", "说清在哪没找到，去全部里找"), (m_empty_sk, "Skills · 我的还没有", "新建、导入、复制内置"), (m_empty_rb, "紧急回滚 · 没有上一次", "只发布过一次，没得回")]),
     "rules": ("移动端 · 审核与排队", [(m_approve, "审核通过 · 有未测项", "勾「我知道有未测项」才能通过"), (m_queue, "工单 · 排队中", "前面是谁、预计几点开始"), (m_tester, "发测试 · 换测试人", "提单人找不到时必须选一个")]),
     "skills": ("移动端 · Skills 与设置", [(m_skills, "Skills", "我的 + 平台内置"), (m_skill_edit, "编辑 Skill", "接着 PC 的草稿写"), (m_settings, "设置", "从头像进入 · 含插件市场与连接器")]),
-    "market": ("移动端 · 插件市场与执行器", [(m_market_list, "插件市场", "查看与启停，安装与鉴权在 PC 端"), (m_market_detail, "紧急回滚 · 详情", "官方默认安装 · 5 贡献点与权限边界"), (m_no_runner, "暂无在线执行器", "个人电脑离线时的轻量引导")]),
+    "market": ("移动端 · 插件市场与执行器", [(m_market_list, "插件市场", "查看与启停，安装与鉴权在 PC 端"), (m_market_detail, "紧急回滚 · 详情", "官方默认安装 · 出现位置与权限"), (m_no_runner, "暂无在线执行器", "个人电脑离线时的轻量引导")]),
 }
 
 

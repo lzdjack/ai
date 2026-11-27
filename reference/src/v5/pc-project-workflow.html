@@ -17,7 +17,7 @@
   <div class="row g10">
     <div class="col grow">
       <div class="row g10"><h1>项目 · OKR</h1><span class="cc-seg cc-seg-xs"><span>开工条件</span><span class="on">流程画布与节点 Skills</span></span></div>
-      <div class="f12 t3" style="margin-top:3px">配置优先于写死 · 前端 <span class="mono">@xyflow/react</span> 可视化编排 + 后端 PG/<span class="mono">pg-boss</span> 同事务步进（下一轮生效）</div>
+      <div class="f12 t3" style="margin-top:3px">拖动节点调整顺序，每个节点可以单独挂 Skills、限定能用的工具 · 发布新版本后从下一轮修复开始生效</div>
     </div>
     <button class="cc-btn cc-btn-sm cc-btn-glass"><i data-i="plus" data-s="13" data-w="2.4"></i>新增节点</button>
     <button class="cc-btn cc-btn-sm cc-btn-pri"><i data-i="check" data-s="13" data-w="2.6"></i>发布新版本 v4</button>
@@ -56,34 +56,34 @@
     <!-- Rollback default dashed curve (Node 6 top 376,274 -> Node 2 bottom 376,144) -->
     <path d="M376 274 L376 144" stroke="var(--orange)" stroke-width="2.2" stroke-dasharray="6 4" fill="none" marker-end="url(#rf-org)"/>
   </svg>
-  <span class="tag tg-n" style="position:absolute;left:62.2%;top:12px;transform:translateX(-50%);height:19px;font-size:10px;background:var(--glass-elev)">run_when: 非前端/SDK 自动跳过 3</span>
+  <span class="tag tg-n" style="position:absolute;left:62.2%;top:12px;transform:translateX(-50%);height:19px;font-size:10px;background:var(--glass-elev)">非前端仓库自动跳过第 3 步</span>
   <span class="tag tg-o" style="position:absolute;left:37.6%;top:168px;transform:translateX(-50%);height:20px;font-size:10px;background:var(--glass-elev)">打回默认 → 2（全节点下拉可选）</span>
-  <span class="f10 w7 t3" style="position:absolute;left:22px;top:16px">阶段一 · execution</span>
+  <span class="f10 w7 t3" style="position:absolute;left:22px;top:16px">阶段一 · AI 修复</span>
   <div class="card" style="position:absolute;left:2.2%;top:64px;width:21.6%;height:76px;padding:7px 10px;gap:3px;border-radius:13px;justify-content:space-between;background:var(--glass-2)">
   <span style="position:absolute;top:50%;width:8px;height:8px;border-radius:50%;transform:translateY(-50%);background:var(--blue);border:1.5px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.22);left:-4px"></span><span style="position:absolute;top:50%;width:8px;height:8px;border-radius:50%;transform:translateY(-50%);background:var(--blue);border:1.5px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.22);right:-4px"></span>
-  <div class="row g5" style="min-width:0"><span class="tag tg-t" style="height:16px;font-size:9.5px;padding:0 5px">AI</span><span class="f10 w7 t2">1</span><span class="grow"></span><span class="tag tg-n" style="height:16px;font-size:9px;padding:0 5px">ai_phase</span></div>
+  <div class="row g5" style="min-width:0"><span class="tag tg-t" style="height:16px;font-size:9.5px;padding:0 5px">AI</span><span class="f10 w7 t2">1</span><span class="grow"></span></div>
   <div class="f12 w7 ell">读单与复现</div>
   <div class="row g4" style="flex-wrap:nowrap;overflow:hidden"><span class="tag tg-p" style="height:16px;font-size:9.5px;padding:0 5px">最小改动 v2</span><span class="tag tg-p" style="height:16px;font-size:9.5px;padding:0 5px">权限上下文</span></div>
 </div>
   <div class="card" style="position:absolute;left:26.8%;top:64px;width:21.6%;height:76px;padding:7px 10px;gap:3px;border-radius:13px;justify-content:space-between;background:var(--glass-2)">
   <span style="position:absolute;top:50%;width:8px;height:8px;border-radius:50%;transform:translateY(-50%);background:var(--blue);border:1.5px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.22);left:-4px"></span><span style="position:absolute;top:50%;width:8px;height:8px;border-radius:50%;transform:translateY(-50%);background:var(--blue);border:1.5px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.22);right:-4px"></span>
-  <div class="row g5" style="min-width:0"><span class="tag tg-t" style="height:16px;font-size:9.5px;padding:0 5px">AI</span><span class="f10 w7 t2">2</span><span class="grow"></span><span class="tag tg-n" style="height:16px;font-size:9px;padding:0 5px">ai_phase</span></div>
+  <div class="row g5" style="min-width:0"><span class="tag tg-t" style="height:16px;font-size:9.5px;padding:0 5px">AI</span><span class="f10 w7 t2">2</span><span class="grow"></span></div>
   <div class="f12 w7 ell">改码与构建</div>
   <div class="row g4" style="flex-wrap:nowrap;overflow:hidden"><span class="tag tg-p" style="height:16px;font-size:9.5px;padding:0 5px">禁弱化断言</span><span class="tag tg-p" style="height:16px;font-size:9.5px;padding:0 5px">Token 规范</span></div>
 </div>
   <div class="card" style="position:absolute;left:51.4%;top:64px;width:21.6%;height:76px;padding:7px 10px;gap:3px;border-radius:13px;justify-content:space-between;border-color:var(--focus-ring);box-shadow:0 0 0 3px var(--focus-halo);background:var(--glass-2)">
   <span style="position:absolute;top:50%;width:8px;height:8px;border-radius:50%;transform:translateY(-50%);background:var(--blue);border:1.5px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.22);left:-4px"></span><span style="position:absolute;top:50%;width:8px;height:8px;border-radius:50%;transform:translateY(-50%);background:var(--blue);border:1.5px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.22);right:-4px"></span>
-  <div class="row g5" style="min-width:0"><span class="tag tg-t" style="height:16px;font-size:9.5px;padding:0 5px">AI</span><span class="f10 w7 t2">3</span><span class="grow"></span><span class="tag tg-n" style="height:16px;font-size:9px;padding:0 5px">run_when</span></div>
+  <div class="row g5" style="min-width:0"><span class="tag tg-t" style="height:16px;font-size:9.5px;padding:0 5px">AI</span><span class="f10 w7 t2">3</span><span class="grow"></span><span class="tag tg-n" style="height:16px;font-size:9px;padding:0 5px">按条件</span></div>
   <div class="f12 w7 ell">修后浏览器验证</div>
   <div class="row g4" style="flex-wrap:nowrap;overflow:hidden"><span class="tag tg-p" style="height:16px;font-size:9.5px;padding:0 5px">交互回归 v1</span><span class="tag tg-p" style="height:16px;font-size:9.5px;padding:0 5px">金额核验</span></div>
 </div>
   <div class="card" style="position:absolute;left:76.0%;top:64px;width:21.6%;height:76px;padding:7px 10px;gap:3px;border-radius:13px;justify-content:space-between;background:var(--glass-2)">
   <span style="position:absolute;top:50%;width:8px;height:8px;border-radius:50%;transform:translateY(-50%);background:var(--blue);border:1.5px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.22);left:-4px"></span><span style="position:absolute;top:50%;width:8px;height:8px;border-radius:50%;transform:translateY(-50%);background:var(--blue);border:1.5px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.22);right:-4px"></span>
-  <div class="row g5" style="min-width:0"><span class="tag tg-t" style="height:16px;font-size:9.5px;padding:0 5px">AI</span><span class="f10 w7 t2">4</span><span class="grow"></span><span class="tag tg-n" style="height:16px;font-size:9px;padding:0 5px">per_repo</span></div>
+  <div class="row g5" style="min-width:0"><span class="tag tg-t" style="height:16px;font-size:9.5px;padding:0 5px">AI</span><span class="f10 w7 t2">4</span><span class="grow"></span><span class="tag tg-n" style="height:16px;font-size:9px;padding:0 5px">逐仓库</span></div>
   <div class="f12 w7 ell">交付与硬门禁</div>
   <div class="row g4" style="flex-wrap:nowrap;overflow:hidden"><span class="tag tg-p" style="height:16px;font-size:9.5px;padding:0 5px">交付摘要 v1</span></div>
 </div>
-  <span class="f10 w7 t3" style="position:absolute;left:22px;top:248px">阶段二 · delivery</span>
+  <span class="f10 w7 t3" style="position:absolute;left:22px;top:248px">阶段二 · 交付</span>
   <div class="card" style="position:absolute;left:2.2%;top:274px;width:21.6%;height:76px;padding:7px 10px;gap:3px;border-radius:13px;justify-content:space-between;background:var(--glass-2)">
   <span style="position:absolute;top:50%;width:8px;height:8px;border-radius:50%;transform:translateY(-50%);background:var(--blue);border:1.5px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.22);left:-4px"></span><span style="position:absolute;top:50%;width:8px;height:8px;border-radius:50%;transform:translateY(-50%);background:var(--blue);border:1.5px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.22);right:-4px"></span>
   <div class="row g5" style="min-width:0"><span class="tag tg-b" style="height:16px;font-size:9.5px;padding:0 5px">交付</span><span class="f10 w7 t2">5</span><span class="grow"></span><span class="tag tg-n" style="height:16px;font-size:9px;padding:0 5px">L0-L2</span></div>
@@ -92,7 +92,7 @@
 </div>
   <div class="card" style="position:absolute;left:26.8%;top:274px;width:21.6%;height:76px;padding:7px 10px;gap:3px;border-radius:13px;justify-content:space-between;background:var(--glass-2)">
   <span style="position:absolute;top:50%;width:8px;height:8px;border-radius:50%;transform:translateY(-50%);background:var(--blue);border:1.5px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.22);left:-4px"></span><span style="position:absolute;top:50%;width:8px;height:8px;border-radius:50%;transform:translateY(-50%);background:var(--blue);border:1.5px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.22);right:-4px"></span>
-  <div class="row g5" style="min-width:0"><span class="tag tg-b" style="height:16px;font-size:9.5px;padding:0 5px">交付</span><span class="f10 w7 t2">6</span><span class="grow"></span><span class="tag tg-n" style="height:16px;font-size:9px;padding:0 5px">per_repo</span></div>
+  <div class="row g5" style="min-width:0"><span class="tag tg-b" style="height:16px;font-size:9.5px;padding:0 5px">交付</span><span class="f10 w7 t2">6</span><span class="grow"></span><span class="tag tg-n" style="height:16px;font-size:9px;padding:0 5px">逐仓库</span></div>
   <div class="f12 w7 ell">MR 合入与复测</div>
   <div class="row g4" style="flex-wrap:nowrap;overflow:hidden"><span class="tag tg-p" style="height:16px;font-size:9.5px;padding:0 5px">TEST 发版核验</span></div>
 </div>
@@ -109,10 +109,10 @@
   <div class="row g4" style="flex-wrap:nowrap;overflow:hidden"><span class="tag tg-p" style="height:16px;font-size:9.5px;padding:0 5px">会签说明</span></div>
 </div>
   <div class="row g8" style="position:absolute;left:12px;bottom:10px;padding:4px 10px;border-radius:10px;background:var(--glass-elev);border:1px solid var(--stroke);font-size:10.5px;color:var(--text-2)">
-    <span class="w7 mono" style="color:var(--ink-blue)">@xyflow/react</span><span>+  −  ⊡</span>
+    <span class="w7" style="color:var(--ink-blue)">缩放</span><span>+  −  ⊡</span>
   </div>
   <div class="row g8" style="position:absolute;right:12px;bottom:10px;padding:4px 10px;border-radius:10px;background:var(--glass-elev);border:1px solid var(--stroke);font-size:10px;color:var(--text-3)">
-    <span>实线 主链 · 灰虚 run_when · 橙虚 回退预设</span>
+    <span>实线 主流程 · 灰虚线 按条件跳过 · 橙虚线 打回后回到</span>
   </div>
 </div>
   <div class="card" style="padding:10px 14px;gap:8px">
@@ -122,7 +122,7 @@
     </div>
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
       <div class="col g4"><span class="f11 t3">审核 / 复测打回默认</span><div class="cc-select cc-select-xs"><span class="cc-sel-val">2 · 代码改动与构建</span><span class="cc-sel-caret"><i data-i="chevd" data-s="11"></i></span></div></div>
-      <div class="col g4"><span class="f11 t3">机审 Gate 失败默认</span><div class="cc-select cc-select-xs"><span class="cc-sel-val">2 · 同轮回改码节点</span><span class="cc-sel-caret"><i data-i="chevd" data-s="11"></i></span></div></div>
+      <div class="col g4"><span class="f11 t3">机审门禁失败默认</span><div class="cc-select cc-select-xs"><span class="cc-sel-val">2 · 同轮回改码节点</span><span class="cc-sel-caret"><i data-i="chevd" data-s="11"></i></span></div></div>
       <div class="col g4"><span class="f11 t3">人工接手回交默认</span><div class="cc-select cc-select-xs"><span class="cc-sel-val">4 · 确定性硬门禁</span><span class="cc-sel-caret"><i data-i="chevd" data-s="11"></i></span></div></div>
       <div class="col g4"><span class="f11 t3">跳过上游证据继承</span><div class="cc-select cc-select-xs is-blue"><span class="cc-sel-val">代码不变则沿用</span><span class="cc-sel-caret"><i data-i="chevd" data-s="11"></i></span></div></div>
     </div>
@@ -130,35 +130,35 @@
 </div></main><aside class="glass pn" style="width:316px;flex:none;padding:15px 16px;display:flex;flex-direction:column;gap:9px">
   <div class="row g8"><span class="tag tg-t">节点配置</span><span class="f15 w7 grow">3 · 修后浏览器验证</span></div>
   <div class="cc-field">
-    <div class="cc-field-hd"><span>上下文传递模式 &amp; 跳过条件（<span class="mono">run_when</span>）</span></div>
-    <div class="cc-seg cc-seg-xs" style="width:100%;display:flex"><span class="on" style="flex:1">共享 KV + Handoff</span><span style="flex:1">独立检查点</span></div>
-    <div class="mono f10 t2" style="margin-top:5px;padding:6px 8px;border-radius:8px;background:var(--well);border:1px solid var(--hair)">run_when: repo.verify_strategy == "browser_dist_replace"</div>
+    <div class="cc-field-hd"><span>上下文怎么传 &amp; 什么时候跳过</span></div>
+    <div class="cc-seg cc-seg-xs" style="width:100%;display:flex"><span class="on" style="flex:1">接着上一步继续</span><span style="flex:1">每步重新开始</span></div>
+    <div class="f11 t2" style="margin-top:5px;padding:6px 8px;border-radius:8px;background:var(--well);border:1px solid var(--hair)">前端仓库执行，其他仓库自动跳过</div>
   </div>
   <div class="cc-field">
-    <div class="cc-field-hd"><span>本节点挂载专属 Skills（P3 节点优先）</span><span class="lnk f11">+ 选 Skill</span></div>
+    <div class="cc-field-hd"><span>本节点专用 Skills</span><span class="lnk f11">+ 选 Skill</span></div>
     <div class="col g6" style="padding:8px 10px;border-radius:11px;background:var(--well);border:1px solid var(--hair)">
-      <div class="row g6 f12"><span class="cbx on"><i data-i="check" data-s="11" data-w="3"></i></span><span class="w6 grow ell">页面交互回归 v1</span><span class="tag tg-p" style="height:16px;font-size:9.5px;padding:0 5px">override 替换</span><span class="f11 t3 mono">320t</span></div>
-      <div class="row g6 f12"><span class="cbx on"><i data-i="check" data-s="11" data-w="3"></i></span><span class="w6 grow ell">金额精度核验红线</span><span class="tag tg-n" style="height:16px;font-size:9.5px;padding:0 5px">merge 叠加</span><span class="f11 t3 mono">210t</span></div>
+      <div class="row g6 f12"><span class="cbx on"><i data-i="check" data-s="11" data-w="3"></i></span><span class="w6 grow ell">页面交互回归 v1</span><span class="tag tg-p" style="height:16px;font-size:9.5px;padding:0 5px">替换同名规则</span><span class="f11 t3 mono">320t</span></div>
+      <div class="row g6 f12"><span class="cbx on"><i data-i="check" data-s="11" data-w="3"></i></span><span class="w6 grow ell">金额精度核验红线</span><span class="tag tg-n" style="height:16px;font-size:9.5px;padding:0 5px">叠加</span><span class="f11 t3 mono">210t</span></div>
       <div class="row g6 f12 t3"><span class="cbx"></span><span class="grow ell">后端 SQL 索引审查</span><span class="f11 mono">未绑</span></div>
     </div>
-    <div class="f10 t3" style="line-height:1.45;margin-top:2px">优先级：<b>P5 底座红线 &gt; P4 本轮人工 &gt; P3 本节点 &gt; P2 项目 &gt; P1 部门</b>；切出即卸载正文。</div>
+    <div class="f10 t3" style="line-height:1.45;margin-top:2px">规则冲突时：<b>安全红线 &gt; 本轮人工要求 &gt; 本节点 &gt; 项目 &gt; 部门</b>；离开这个节点就不再加载。</div>
   </div>
   <div class="cc-field">
-    <div class="cc-field-hd"><span>节点指令补充（<span class="mono">node_instructions</span>）</span></div>
+    <div class="cc-field-hd"><span>给这个节点的补充要求</span></div>
     <div style="padding:8px 10px;border-radius:10px;background:var(--well);border:1px solid var(--hair);font-size:11.5px;line-height:1.5;color:var(--text-2)">
       必须验证切换分组后 Console 0 新增报错及导出文件名合法；无浏览器仓自动跳过。
     </div>
   </div>
   <div class="cc-field">
-    <div class="cc-field-hd"><span>允许工具白名单（<span class="mono">allowed_tools</span>）</span></div>
+    <div class="cc-field-hd"><span>这个节点能用的工具</span></div>
     <div class="row g6" style="flex-wrap:wrap">
-      <span class="tag tg-b">browser_login</span><span class="tag tg-b">browser_action</span><span class="tag tg-b">save_evidence</span><span class="tag tg-g">submit_delivery</span>
+      <span class="tag tg-b">登录被测系统</span><span class="tag tg-b">浏览器操作</span><span class="tag tg-b">保存证据</span><span class="tag tg-g">提交交付</span>
     </div>
   </div>
   <span class="grow"></span>
   <div class="row g8 f11 t2" style="padding:9px 10px;border-radius:10px;background:color-mix(in srgb,var(--orange) 9%,transparent);border:1px solid color-mix(in srgb,var(--orange) 28%,transparent);line-height:1.5">
     <i data-i="clock" data-s="13" style="color:var(--ink-orange);flex:none"></i>
-    <span><b>生效时机：</b>发布后从<b>下一轮（next_round）</b>开始生效；当前运行中轮次仍锁定启动时的模板快照 v3。</span>
+    <span><b>生效时机：</b>发布后从<b>下一轮修复</b>开始生效；当前运行中轮次仍锁定启动时的模板快照 v3。</span>
   </div>
 </aside></div>
 <nav class="dockv glass" aria-label="主菜单"><span class="dki"><span class="ap ap-ai"><svg width="24" height="24" viewBox="0 0 24 24" fill="#fff"><path d="M10 3l1.9 5.6 5.6 1.9-5.6 1.9L10 18l-1.9-5.6L2.5 10.5l5.6-1.9z"/><path d="M18 13.5l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9z" opacity=".8"/></svg></span></span><span class="dsep"></span><span class="dki"><span class="ap ap-chat"><svg width="30" height="30" viewBox="0 0 24 24"><defs><linearGradient id="cb1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6CC4FF"/><stop offset="1" stop-color="#1673FF"/></linearGradient></defs><path d="M15 9.6c3.4 0 6.1 2.2 6.1 4.9 0 1.4-.7 2.6-1.8 3.5l.5 2.5-2.9-1.4c-.6.2-1.2.3-1.9.3-3.4 0-6.1-2.2-6.1-4.9s2.7-4.9 6.1-4.9z" fill="#B9DBFF"/><path d="M9.6 3.2c-4 0-7.2 2.6-7.2 5.8 0 1.7.9 3.2 2.3 4.2l-.6 3 3.5-1.7c.6.2 1.3.2 2 .2 4 0 7.2-2.6 7.2-5.8S13.6 3.2 9.6 3.2z" fill="url(#cb1)"/><circle cx="6.8" cy="9" r="1" fill="#fff"/><circle cx="9.6" cy="9" r="1" fill="#fff"/><circle cx="12.4" cy="9" r="1" fill="#fff"/></svg></span><b>4</b></span><span class="dki"><span class="ap ap-pub"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 2.6l8.4 4.7L12 12 3.6 7.3z" fill="#FFE2A8"/><path d="M3.6 7.3L12 12v9.4l-8.4-4.7z" fill="#fff" opacity=".95"/><path d="M20.4 7.3L12 12v9.4l8.4-4.7z" fill="#fff" opacity=".7"/><path d="M7.8 4.9l8.4 4.7v3.2" stroke="#FF8A00" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".7"/></svg></span><b>1</b></span><span class="dki"><span class="ap ap-rb"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3.8 4.8v4.4h4.4"/><path d="M4.2 9.2A8.3 8.3 0 1 1 3.9 13.6"/><path d="M12 8v4.2l2.7 1.7"/></svg></span></span><span class="dki"><span class="ap ap-sk"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 13.2l8.6-4.4L12 4.4 3.4 8.8z" fill="#fff"/><path d="M3.4 12.6L12 17l8.6-4.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".75"/><path d="M3.4 16.2L12 20.6l8.6-4.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".5"/></svg></span></span><span class="grow"></span><span class="dki"><span class="ap ap-mkt"><svg width="24" height="24" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7.2" height="7.2" rx="2.2" fill="#fff"/><rect x="13.3" y="3.5" width="7.2" height="7.2" rx="2.2" fill="#fff" opacity=".82"/><rect x="3.5" y="13.3" width="7.2" height="7.2" rx="2.2" fill="#fff" opacity=".82"/><path d="M16.9 13.2l1.1 2.7 2.7 1.1-2.7 1.1-1.1 2.7-1.1-2.7-2.7-1.1 2.7-1.1z" fill="#fff"/></svg></span></span><span class="dki on"><span class="ap ap-set"><svg width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="gr1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#D9DCE3"/></linearGradient></defs><path d="M12 1.8l1.6 2.4 2.8-.7.5 2.9 2.8.9-.9 2.8 2.2 1.9-2.2 1.9.9 2.8-2.8.9-.5 2.9-2.8-.7L12 22.2l-1.6-2.4-2.8.7-.5-2.9-2.8-.9.9-2.8-2.2-1.9 2.2-1.9-.9-2.8 2.8-.9.5-2.9 2.8.7z" fill="url(#gr1)"/><circle cx="12" cy="12" r="5.2" fill="#8D919B"/><circle cx="12" cy="12" r="2.6" fill="#E9EBF0"/></svg></span></span></nav>

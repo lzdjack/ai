@@ -162,7 +162,7 @@
       <div class="sech">
         <b>代码来源</b>
         <span class="tag tg-b" style="height:19px;font-size:10.5px">至少 1 个</span>
-        <span class="sub">自动筛出插件市场中 <span class="mono">code_source</span> 类连接器 · 鉴权后拉取仓库与推测分支</span>
+        <span class="sub">列出能接代码仓库的连接器 · 连上后自动拉取仓库并推测分支</span>
       </div>
       <div class="cgrid">
         <div class="ccard">
@@ -203,7 +203,7 @@
       <div class="sech" style="margin-top:18px">
         <b>工单平台</b>
         <span class="tag tg-n" style="height:19px;font-size:10.5px">可选 · 可跳过</span>
-        <span class="sub">自动筛出 <span class="mono">ticket_source</span> 类连接器 · 不接也能直接进工作台点「+」手动建单</span>
+        <span class="sub">列出能接工单平台的连接器 · 不接也能进工作台点「+」手动建单</span>
       </div>
       <div class="cgrid">
         <div class="ccard opt">
@@ -231,7 +231,7 @@
 
       <div class="note" style="margin-top:auto;margin-bottom:14px">
         <i data-i="lock" data-s="15" style="color:var(--ink-blue);margin-top:1px"></i>
-        <span><b>凭证安全隔离：</b>所有连接器令牌采用「公钥加密入库、私钥仅在执行器解出」，接口层拿不到明文；管理员配好「公司共用」连接器后，团队成员直接复用，之后随时可在「设置 → 连接器」增改。</span>
+        <span><b>凭证安全隔离：</b>所有连接器令牌都加密保存，只有执行器在用的时候才能解开，页面和接口都拿不到明文；管理员配好「公司共用」连接器后，团队成员直接复用，之后随时可在「设置 → 连接器」增改。</span>
       </div>
     </div>
     <div class="ff"><span class="stat-pill sp-g"><i data-i="check" data-s="13" data-w="2.8"></i>代码源 2 个已鉴权</span><span class="stat-pill sp-b"><i data-i="inbox" data-s="13"></i>工单源 1 个（可选）</span><span class="f12 t3">下一步从已鉴权来源拉取项目列表</span><span class="grow"></span><button class="bigb pri">下一步：授权项目与代码<i data-i="chevr" data-s="16" data-w="2.4"></i></button></div>

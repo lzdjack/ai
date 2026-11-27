@@ -51,7 +51,7 @@
     <span class="cc-select cc-select-xs"><span class="cc-sel-val">共享范围：全部</span><span class="cc-sel-sp"></span><span class="cc-sel-caret"><i data-i="chevd" data-s="13"></i></span></span>
   </div>
 
-  <div class="cgrp"><b>代码存储</b><span class="mono f11 t3">code_source</span><span class="csub">· 自动出现在开工引导第 1 步</span></div>
+  <div class="cgrp"><b>代码存储</b><span class="csub">· 自动出现在开工引导第 1 步</span></div>
   <div class="c2g">
     <div class="cc">
       <div class="row g10">
@@ -79,7 +79,7 @@
     </div>
   </div>
 
-  <div class="cgrp"><b>工单平台</b><span class="mono f11 t3">ticket_source</span><span class="csub">· 自动出现在开工引导第 1 步（可选）</span></div>
+  <div class="cgrp"><b>工单平台</b><span class="csub">· 自动出现在开工引导第 1 步（可选）</span></div>
   <div class="c2g">
     <div class="cc">
       <div class="row g10">
@@ -107,7 +107,7 @@
     </div>
   </div>
 
-  <div class="cgrp"><b>发布与通知</b><span class="mono f11 t3">release_provider · notify_approval</span><span class="csub">· 不混入首次引导，按需启用</span></div>
+  <div class="cgrp"><b>发布与通知</b><span class="csub">· 不混入首次引导，按需启用</span></div>
   <div class="c2g">
     <div class="cc">
       <div class="row g10">
@@ -123,7 +123,7 @@
     </div>
     <div class="cc cc-dash">
       <div class="row g6"><span style="color:var(--ink-blue)"><i data-i="plus" data-s="15" data-w="2.4"></i></span><b class="f13">接入更多外部平台</b></div>
-      <div class="f12 t3" style="line-height:1.5">去插件市场装 GitHub / Gitee / 禅道 / 飞书审批，或直接配「通用 Git / Webhook / L2 MCP」连接器</div>
+      <div class="f12 t3" style="line-height:1.5">去插件市场装 GitHub / Gitee / 禅道 / 飞书审批，或直接配「通用 Git / Webhook / MCP」连接器</div>
       <div class="row g6" style="margin-top:2px"><span class="tag tg-n" style="height:19px;font-size:10.5px">通用 Git</span><span class="tag tg-n" style="height:19px;font-size:10.5px">Webhook 映射</span><span class="tag tg-p" style="height:19px;font-size:10.5px">自定义 MCP</span></div>
     </div>
   </div>
@@ -133,18 +133,18 @@
   <div class="f12 t2" style="margin-top:6px;line-height:1.6">在这里补建连接器完成鉴权，再去「设置 → 项目」划定<b>可修改 / 仅查看</b>即可开工；数据与首次向导完全同源。</div>
   <button class="cc-btn cc-btn-sm cc-btn-pri" style="width:100%;justify-content:center;margin-top:10px">继续未完成的开工向导 ›</button></div><div class="card" style="padding:12px 14px">
   <div class="mini">插件按能力标签自动归类</div>
-  <div class="f12 t3" style="margin-bottom:6px;line-height:1.5">无需官方写死白名单，插件 <span class="mono">manifest</span> 声明以下类别即自动出现在对应位置：</div>
+  <div class="f12 t3" style="margin-bottom:6px;line-height:1.5">连接器按能力自动归到对应位置：</div>
   <div>
-    <div class="catrow"><span class="tag tg-g" style="height:19px;font-size:10.5px">code_source</span><span class="t2 grow">代码存储 · 进向导第 1 步</span></div>
-    <div class="catrow"><span class="tag tg-b" style="height:19px;font-size:10.5px">ticket_source</span><span class="t2 grow">工单平台 · 进向导第 1 步</span></div>
-    <div class="catrow"><span class="tag tg-o" style="height:19px;font-size:10.5px">release</span><span class="t2 grow">发布回滚 · 不混入向导</span></div>
-    <div class="catrow"><span class="tag tg-p" style="height:19px;font-size:10.5px">notify</span><span class="t2 grow">审批通知 · 不混入向导</span></div>
+    <div class="catrow"><span class="tag tg-g" style="height:19px;font-size:10.5px">代码</span><span class="t2 grow">代码存储 · 进向导第 1 步</span></div>
+    <div class="catrow"><span class="tag tg-b" style="height:19px;font-size:10.5px">工单</span><span class="t2 grow">工单平台 · 进向导第 1 步</span></div>
+    <div class="catrow"><span class="tag tg-o" style="height:19px;font-size:10.5px">发布</span><span class="t2 grow">发布回滚 · 不混入向导</span></div>
+    <div class="catrow"><span class="tag tg-p" style="height:19px;font-size:10.5px">通知</span><span class="t2 grow">审批通知 · 不混入向导</span></div>
   </div></div><div class="card" style="padding:12px 14px">
   <div class="mini">非官方平台 3 档兼容</div>
   <div class="f12 t2" style="line-height:1.65">
     <b>1. 零代码通用兜底</b>：通用 Git（任意 URL + Token/SSH）与 Webhook 字段映射。<br>
     <b>2. 标准 MCP</b>：企业自研平台暴露 4～5 个标准 Tool 即接入。<br>
-    <b>3. 市场插件</b>：按 <span class="mono">authSchema</span> 自动渲染鉴权抽屉。
+    <b>3. 市场插件</b>：装好后按平台显示需要填写的账号信息。
   </div></div></aside></div>
 <nav class="dockv glass" aria-label="主菜单"><span class="dki"><span class="ap ap-ai"><svg width="24" height="24" viewBox="0 0 24 24" fill="#fff"><path d="M10 3l1.9 5.6 5.6 1.9-5.6 1.9L10 18l-1.9-5.6L2.5 10.5l5.6-1.9z"/><path d="M18 13.5l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9z" opacity=".8"/></svg></span></span><span class="dsep"></span><span class="dki"><span class="ap ap-chat"><svg width="30" height="30" viewBox="0 0 24 24"><defs><linearGradient id="cb1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6CC4FF"/><stop offset="1" stop-color="#1673FF"/></linearGradient></defs><path d="M15 9.6c3.4 0 6.1 2.2 6.1 4.9 0 1.4-.7 2.6-1.8 3.5l.5 2.5-2.9-1.4c-.6.2-1.2.3-1.9.3-3.4 0-6.1-2.2-6.1-4.9s2.7-4.9 6.1-4.9z" fill="#B9DBFF"/><path d="M9.6 3.2c-4 0-7.2 2.6-7.2 5.8 0 1.7.9 3.2 2.3 4.2l-.6 3 3.5-1.7c.6.2 1.3.2 2 .2 4 0 7.2-2.6 7.2-5.8S13.6 3.2 9.6 3.2z" fill="url(#cb1)"/><circle cx="6.8" cy="9" r="1" fill="#fff"/><circle cx="9.6" cy="9" r="1" fill="#fff"/><circle cx="12.4" cy="9" r="1" fill="#fff"/></svg></span><b>4</b></span><span class="dki"><span class="ap ap-pub"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 2.6l8.4 4.7L12 12 3.6 7.3z" fill="#FFE2A8"/><path d="M3.6 7.3L12 12v9.4l-8.4-4.7z" fill="#fff" opacity=".95"/><path d="M20.4 7.3L12 12v9.4l8.4-4.7z" fill="#fff" opacity=".7"/><path d="M7.8 4.9l8.4 4.7v3.2" stroke="#FF8A00" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".7"/></svg></span><b>1</b></span><span class="dki"><span class="ap ap-rb"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3.8 4.8v4.4h4.4"/><path d="M4.2 9.2A8.3 8.3 0 1 1 3.9 13.6"/><path d="M12 8v4.2l2.7 1.7"/></svg></span></span><span class="dki"><span class="ap ap-sk"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 13.2l8.6-4.4L12 4.4 3.4 8.8z" fill="#fff"/><path d="M3.4 12.6L12 17l8.6-4.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".75"/><path d="M3.4 16.2L12 20.6l8.6-4.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".5"/></svg></span></span><span class="grow"></span><span class="dki"><span class="ap ap-mkt"><svg width="24" height="24" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7.2" height="7.2" rx="2.2" fill="#fff"/><rect x="13.3" y="3.5" width="7.2" height="7.2" rx="2.2" fill="#fff" opacity=".82"/><rect x="3.5" y="13.3" width="7.2" height="7.2" rx="2.2" fill="#fff" opacity=".82"/><path d="M16.9 13.2l1.1 2.7 2.7 1.1-2.7 1.1-1.1 2.7-1.1-2.7-2.7-1.1 2.7-1.1z" fill="#fff"/></svg></span></span><span class="dki on"><span class="ap ap-set"><svg width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="gr1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#D9DCE3"/></linearGradient></defs><path d="M12 1.8l1.6 2.4 2.8-.7.5 2.9 2.8.9-.9 2.8 2.2 1.9-2.2 1.9.9 2.8-2.8.9-.5 2.9-2.8-.7L12 22.2l-1.6-2.4-2.8.7-.5-2.9-2.8-.9.9-2.8-2.2-1.9 2.2-1.9-.9-2.8 2.8-.9.5-2.9 2.8.7z" fill="url(#gr1)"/><circle cx="12" cy="12" r="5.2" fill="#8D919B"/><circle cx="12" cy="12" r="2.6" fill="#E9EBF0"/></svg></span></span></nav>
 

@@ -146,7 +146,7 @@ html.dark .tb.on .ap{box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 16px 26px 
 .vs .rl i{flex:1;width:2px;background:var(--hair);margin:3px 0;min-height:10px}
 .vs .rl i.ok{background:var(--green)}
 .vd{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:800;flex:none}
-.vd.ok{background:var(--btn-ok-bg)}.vd.run{background:#0A6678;box-shadow:0 0 0 4px color-mix(in srgb,var(--teal) 22%,transparent)}.vd.err{background:var(--btn-danger-bg);box-shadow:0 0 0 4px color-mix(in srgb,var(--red) 20%,transparent)}.vd.wait{background:var(--fill);color:var(--text-3)}
+.vd.ok{background:var(--btn-ok-bg)}.vd.run{background:var(--btn-run-bg);box-shadow:0 0 0 4px color-mix(in srgb,var(--teal) 22%,transparent)}.vd.err{background:var(--btn-danger-bg);box-shadow:0 0 0 4px color-mix(in srgb,var(--red) 20%,transparent)}.vd.wait{background:var(--fill);color:var(--text-3)}
 .vs .bd{padding-bottom:12px;flex:1;min-width:0}
 /* 列表行（设置样式） */
 .ir{display:flex;align-items:center;gap:11px;padding:0 12px;min-height:var(--m-row-h);position:relative;font-size:14.5px}
