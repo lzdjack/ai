@@ -159,136 +159,217 @@ def build_invite_expired():
 
 
 # =====================================================================
-# 3. PC-设置-项目-流程模板（T-08b + D1：React Flow 画布 + 节点级 Skills）
+# 3. PC-设置-项目-流程模板（T-08b：React Flow 式自由画布 + 节点级 Skills）
 # =====================================================================
 def build_project_workflow():
-    def rf_node(idx, x_pct, y_px, phase, name, badge_txt, skills, on=False, chk=True):
-        ptag = '<span class="tag tg-t" style="height:16px;font-size:9.5px;padding:0 5px">AI</span>' if phase == "exec" else '<span class="tag tg-b" style="height:16px;font-size:9.5px;padding:0 5px">交付</span>'
-        bd = "border-color:var(--focus-ring);box-shadow:0 0 0 3px var(--focus-halo);background:var(--glass-2)" if on else ("opacity:.68;background:var(--well)" if not chk else "background:var(--glass-2)")
-        sk_h = "".join(f'<span class="tag tg-p" style="height:16px;font-size:9.5px;padding:0 5px">{s}</span>' for s in skills[:2])
-        b_tag = f'<span class="tag tg-n" style="height:16px;font-size:9px;padding:0 5px">{badge_txt}</span>' if badge_txt else ""
-        h_dot = "position:absolute;top:50%;width:8px;height:8px;border-radius:50%;transform:translateY(-50%);background:var(--blue);border:1.5px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.22)"
-        return f'''<div class="card" style="position:absolute;left:{x_pct}%;top:{y_px}px;width:21.6%;height:76px;padding:7px 10px;gap:3px;border-radius:13px;justify-content:space-between;{bd}">
-  <span style="{h_dot};left:-4px"></span><span style="{h_dot};right:-4px"></span>
-  <div class="row g5" style="min-width:0">{ptag}<span class="f10 w7 t2">{idx}</span><span class="grow"></span>{b_tag}</div>
-  <div class="f12 w7 ell">{name}</div>
-  <div class="row g4" style="flex-wrap:nowrap;overflow:hidden">{sk_h}</div>
+    """流程模板：React Flow 式自由画布。节点是一块块独立卡片，阶段（修复 / 交付）只是节点上的属性，
+    不画区域框——以后加阶段、加节点、加分支都不用改版式。画布可拖动节点、缩放；点连线上的 ＋ 选节点类型插入新节点。
+    出厂模板执行段只有 1 个 AI 节点（06 §5「内置模板的执行段默认只有一个 AI 节点」）。"""
+    KIND = {  # 渐变, 图标, 类型名, 类型字色
+        "sys": ("#A3ACBB,#69717F", "server", "系统", "var(--text-2)"),
+        "ai": ("#C58BFF,#6A3DF0", "spark", "AI 步骤", "var(--ink-purple)"),
+        "ver": ("#4FD6E6,#16A3C0", "shield", "机器检查", "var(--ink-teal)"),
+        "rev": ("#FFC15A,#F08A00", "review", "人工确认", "var(--ink-orange)"),
+        "test": ("#5AA0FF,#1F6FFF", "git", "人工确认", "var(--ink-orange)"),
+        "rel": ("#5EDB7A,#28B04F", "rocket", "发布", "var(--ink-green)"),
+    }
+    STAGE = {"修复": "var(--purple)", "交付": "var(--blue)"}
+    NW, NH = 230, 116
+    # (序号, 类型, 阶段, 标题, 说明, 标签, x, y) —— 蛇形排布：第一行向右，第二行向左
+    NODES = [
+        (1, "sys", "修复", "准备环境", "拉代码 · 装依赖 · 打开测试环境", [("tg-n", "逐仓库")], 70, 96),
+        (2, "ai", "修复", "AI 修复", "读单 → 复现 → 定位 → 改码", [("tg-p", "3 个 Skills"), ("tg-n", "交了复现才能改码")], 350, 96),
+        (3, "ver", "修复", "修后检查", "构建 · 单测 · 回放工单步骤", [("tg-n", "后端仓库跳过回放"), ("tg-p", "1 个 Skill")], 630, 96),
+        (4, "rev", "交付", "代码审查", "按改动风险分 L0–L2", [("tg-o", "审核人逐文件看")], 630, 452),
+        (5, "test", "交付", "发测试与复测", "合入测试分支 → 发测试 → 复测", [("tg-n", "逐仓库"), ("tg-o", "提单人复测")], 350, 452),
+        (6, "rel", "交付", "合主干与发正式", "修复人合主干 · 有权限的人发正式", [("tg-r", "必须真人")], 70, 452),
+    ]
+    SEL = 2
+    P = {n[0]: (n[6], n[7]) for n in NODES}
+
+    def tg(cls, t, h=20, fs=11):
+        return f'<span class="tag {cls}" style="height:{h}px;font-size:{fs}px;padding:0 7px;white-space:nowrap">{t}</span>'
+
+    def ibox(kind, s=34, r=10, ic=16):
+        g, icn = KIND[kind][0], KIND[kind][1]
+        return f'<span class="ic-box" style="width:{s}px;height:{s}px;border-radius:{r}px;background:linear-gradient(155deg,{g});flex:none">{I(icn,ic,2.2)}</span>'
+
+    def hdl(side, off="50%"):
+        pos = {"l": f"left:-6px;top:{off};margin-top:-5px", "r": f"right:-6px;top:{off};margin-top:-5px",
+               "t": f"top:-6px;left:{off};margin-left:-5px", "b": f"bottom:-6px;left:{off};margin-left:-5px"}[side]
+        return f'<span class="fh" style="{pos}"></span>'
+
+    def node(i, kind, stage, title, sub, tags, x, y, handles):
+        _, _, tname, tcol = KIND[kind]
+        on = i == SEL
+        bar = ""
+        if on:
+            bar = (f'<div class="ftb" style="left:8px;top:-44px">'
+                   f'<span>{I("copy",14,2.2)}</span><span>{I("play",14,2.2)}</span><span style="color:var(--ink-red)">{I("x",14,2.4)}</span>'
+                   f'<i></i><span>{I("more",14,2.2)}</span></div>')
+        return f'''<div class="wnd{" on" if on else ""}" style="left:{x}px;top:{y}px;width:{NW}px;height:{NH}px">{bar}
+  <div class="row g8">{ibox(kind, 28, 8, 14)}<span class="f11 w7" style="color:{tcol}">{tname}</span><span class="grow"></span>
+    <span class="row g4 f11 t3"><i style="width:7px;height:7px;border-radius:50%;background:{STAGE[stage]}"></i>{stage}</span><span class="f11 w7 t3 mono" style="margin-left:4px">#{i}</span></div>
+  <div class="col" style="gap:2px;min-width:0"><span class="f15 w7 ell">{title}</span><span class="f12 t3 ell">{sub}</span></div>
+  <div class="row g4" style="overflow:hidden">{"".join(tg(c, t, 19, 10.5) for c, t in tags)}</div>
+  {"".join(hdl(*h) if isinstance(h, tuple) else hdl(h) for h in handles)}
 </div>'''
 
-    canvas = f'''<div style="position:relative;height:430px;flex:none;border-radius:16px;border:1px solid var(--hair);background:radial-gradient(color-mix(in srgb,var(--text) 16%,transparent) 1px, transparent 1px) 0 0 / 16px 16px, var(--well);overflow:hidden">
-  <svg viewBox="0 0 1000 430" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none">
+    HANDLES = {1: ["r"], 2: ["l", "r", "b", ("t", "82%")], 3: ["l", "b", ("t", "22%")], 4: ["t", "l", ("t", "30%")], 5: ["r", "l", "t"], 6: ["r"]}
+    nodes_html = "".join(node(*n, HANDLES[n[0]]) for n in NODES)
+
+    def cx(i, f=.5):
+        return P[i][0] + NW * f
+
+    def cy(i, f=.5):
+        return P[i][1] + NH * f
+
+    A = 'stroke="var(--edge)" stroke-width="1.8" fill="none" marker-end="url(#fa)"'
+    O = 'stroke="var(--orange)" stroke-width="1.9" stroke-dasharray="6 4" fill="none" marker-end="url(#fo)"'
+    r1, r2 = cy(1), cy(4)
+    edges = (
+        f'<path d="M{P[1][0]+NW+6} {r1} L{P[2][0]-7} {r1}" {A}/>'
+        f'<path d="M{P[2][0]+NW+6} {r1} L{P[3][0]-7} {r1}" stroke="var(--focus-ring)" stroke-width="2.4" fill="none" marker-end="url(#fb)"/>'
+        f'<path d="M{cx(3)} {P[3][1]+NH+6} L{cx(3)} {P[4][1]-8}" {A}/>'
+        f'<path d="M{P[4][0]-6} {r2} L{P[5][0]+NW+7} {r2}" {A}/>'
+        f'<path d="M{P[5][0]-6} {r2} L{P[6][0]+NW+7} {r2}" {A}/>'
+        # 没过回到 2：5 ↑ 2、4 ↖ 2、3 ⌒ 2
+        f'<path d="M{cx(5)} {P[5][1]-6} L{cx(5)} {P[2][1]+NH+9}" {O}/>'
+        f'<path d="M{cx(4,.3)} {P[4][1]-6} C {cx(4,.3)} {P[4][1]-70}, {cx(2,.78)} {P[2][1]+NH+70}, {cx(2,.78)} {P[2][1]+NH+9}" {O}/>'
+        f'<path d="M{cx(3,.22)} {P[3][1]-6} C {cx(3,.22)} {P[3][1]-58}, {cx(2,.82)} {P[2][1]-58}, {cx(2,.82)} {P[2][1]-9}" {O}/>'
+    )
+    mid23 = (P[2][0] + NW + P[3][0]) / 2
+    canvas = f'''<div class="fc">
+  <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible">
     <defs>
-      <marker id="rf-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 1L9 5L0 9z" fill="var(--teal)"/></marker>
-      <marker id="rf-del" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 1L9 5L0 9z" fill="var(--blue)"/></marker>
-      <marker id="rf-org" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 1L9 5L0 9z" fill="var(--orange)"/></marker>
-      <marker id="rf-gry" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 1L9 5L0 9z" fill="var(--text-3)"/></marker>
-    </defs>
-    <!-- Row 1 execution edges (nodes top=64 height=76 => center y=102) -->
-    <path d="M238 102 L264 102" stroke="var(--teal)" stroke-width="2" fill="none" marker-end="url(#rf-arr)"/>
-    <path d="M484 102 L510 102" stroke="var(--teal)" stroke-width="2" fill="none" marker-end="url(#rf-arr)"/>
-    <path d="M730 102 L756 102" stroke="var(--teal)" stroke-width="2" fill="none" marker-end="url(#rf-arr)"/>
-    <!-- run_when bypass above node 3 (Node 2 top 376,64 -> Node 4 top 868,60) -->
-    <path d="M376 64 C 376 14, 868 14, 868 60" stroke="var(--text-3)" stroke-width="1.6" stroke-dasharray="5 4" fill="none" marker-end="url(#rf-gry)"/>
-    <!-- Cross-phase Z connector 4 -> 5 in clean y=214 aisle -->
-    <path d="M976 102 C 994 102, 994 214, 956 214 L 44 214 C 6 214, 6 312, 18 312" stroke="var(--blue)" stroke-width="2" fill="none" marker-end="url(#rf-del)"/>
-    <!-- Row 2 delivery edges (nodes top=274 height=76 => center y=312) -->
-    <path d="M238 312 L264 312" stroke="var(--blue)" stroke-width="2" fill="none" marker-end="url(#rf-del)"/>
-    <path d="M484 312 L510 312" stroke="var(--blue)" stroke-width="2" fill="none" marker-end="url(#rf-del)"/>
-    <path d="M730 312 L756 312" stroke="var(--text-3)" stroke-width="1.6" stroke-dasharray="4 3" fill="none" marker-end="url(#rf-gry)"/>
-    <!-- Rollback default dashed curve (Node 6 top 376,274 -> Node 2 bottom 376,144) -->
-    <path d="M376 274 L376 144" stroke="var(--orange)" stroke-width="2.2" stroke-dasharray="6 4" fill="none" marker-end="url(#rf-org)"/>
+      <marker id="fa" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 1L9 5L0 9z" fill="var(--edge)"/></marker>
+      <marker id="fb" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 1L9 5L0 9z" fill="var(--focus-ring)"/></marker>
+      <marker id="fo" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 1L9 5L0 9z" fill="var(--orange)"/></marker>
+    </defs>{edges}
   </svg>
-  <span class="tag tg-n" style="position:absolute;left:62.2%;top:12px;transform:translateX(-50%);height:19px;font-size:10px;background:var(--glass-elev)">非前端仓库自动跳过第 3 步</span>
-  <span class="tag tg-o" style="position:absolute;left:37.6%;top:168px;transform:translateX(-50%);height:20px;font-size:10px;background:var(--glass-elev)">打回默认 → 2（全节点下拉可选）</span>
-  <span class="f10 w7 t3" style="position:absolute;left:22px;top:16px">阶段一 · AI 修复</span>
-  {rf_node(1,2.2,64,"exec","读单与复现","",["最小改动 v2","权限上下文"])}
-  {rf_node(2,26.8,64,"exec","改码与构建","",["禁弱化断言","Token 规范"])}
-  {rf_node(3,51.4,64,"exec","修后浏览器验证","按条件",["交互回归 v1","金额核验"],on=True)}
-  {rf_node(4,76.0,64,"exec","交付与硬门禁","逐仓库",["交付摘要 v1"])}
-  <span class="f10 w7 t3" style="position:absolute;left:22px;top:248px">阶段二 · 交付</span>
-  {rf_node(5,2.2,274,"del","代码审查","L0-L2",["高危路径清单"])}
-  {rf_node(6,26.8,274,"del","MR 合入与复测","逐仓库",["TEST 发版核验"])}
-  {rf_node(7,51.4,274,"del","主干合入与发布","PROD",["不倒退校验"])}
-  {rf_node(8,76.0,274,"del","合规会签(可选)","未启用",["会签说明"],chk=False)}
-  <div class="row g8" style="position:absolute;left:12px;bottom:10px;padding:4px 10px;border-radius:10px;background:var(--glass-elev);border:1px solid var(--stroke);font-size:10.5px;color:var(--text-2)">
-    <span class="w7" style="color:var(--ink-blue)">缩放</span><span>+  −  ⊡</span>
+  <span class="tag tg-o" style="position:absolute;right:calc(100% - {cx(5)-12}px);top:{(P[2][1]+NH+P[5][1])/2-11}px;height:22px;font-size:11px;background:var(--glass-elev);box-shadow:var(--shadow-ctl)">没过回到 2</span>
+  <span class="fplus open" style="left:{mid23-12}px;top:{r1-12}px">{I("plus",13,2.6)}</span>
+  <div class="fadd" style="left:{mid23-104}px;top:{r1+22}px">
+    <div class="f11 w6 t3" style="padding:4px 8px 6px">在 #2 和 #3 之间插入</div>
+    {"".join(f'<div class="fai{" on" if k == "ver" else ""}">{ico}<div class="col" style="min-width:0"><span class="f13 w6">{t}</span><span class="f11 t3 ell">{d}</span></div></div>' for k, ico, t, d in [
+        ("ai", ibox("ai", 26, 8, 13), "AI 步骤", "让 AI 按要求干活"),
+        ("ver", ibox("ver", 26, 8, 13), "机器检查", "跑构建、测试或脚本"),
+        ("rev", ibox("rev", 26, 8, 13), "人工确认", "停下来等人点通过"),
+        ("pkg", f'<span class="ic-box" style="width:26px;height:26px;border-radius:8px;background:var(--glass-2);border:1px solid var(--hair);flex:none;color:var(--text-2)">{I("pkg",14,2.2)}</span>', "插件步骤", "用已装插件提供的步骤"),
+    ])}
   </div>
-  <div class="row g8" style="position:absolute;right:12px;bottom:10px;padding:4px 10px;border-radius:10px;background:var(--glass-elev);border:1px solid var(--stroke);font-size:10px;color:var(--text-3)">
-    <span>实线 主流程 · 灰虚线 按条件跳过 · 橙虚线 打回后回到</span>
+  {nodes_html}
+
+  <div class="fpn" style="right:14px;top:14px;padding:6px 12px;gap:14px">
+    <span class="row g6 f11 t3"><svg width="18" height="8"><path d="M1 4H17" stroke="var(--edge)" stroke-width="1.8"/></svg>下一步</span>
+    <span class="row g6 f11 t3"><svg width="18" height="8"><path d="M1 4H17" stroke="var(--orange)" stroke-width="1.9" stroke-dasharray="4 3"/></svg>没过回到</span>
+    <span style="width:1px;height:16px;background:var(--hair)"></span>
+    <span class="row g4 f12 w6 t2">{I("layers",13,2.2)}自动排版</span>
+  </div>
+
+  <div class="fctl" style="left:14px;bottom:14px">
+    <span>{I("plus",14,2.4)}</span><span><b style="font-size:16px;line-height:1">−</b></span><span>{I("expand",13,2.2)}</span><span>{I("lock",13,2.2)}</span>
+  </div>
+  <span class="f11 t3 mono" style="position:absolute;left:58px;bottom:18px">90%</span>
+  <div class="fpn" style="right:14px;bottom:14px;width:168px;height:104px;padding:7px;display:block">
+    <div style="position:relative;width:100%;height:100%;border-radius:8px;background:var(--well)">
+      {"".join(f'<span style="position:absolute;left:{12+(x-70)*0.16:.0f}px;top:{10+(y-96)*0.15:.0f}px;width:{NW*0.16:.0f}px;height:{NH*0.15:.0f}px;border-radius:3px;background:{"var(--btn-pri-bg)" if i == SEL else "color-mix(in srgb,var(--text) 24%,transparent)"}"></span>' for i, *_r, x, y in [(n[0], n[6], n[7]) for n in NODES])}
+      <span style="position:absolute;left:4px;top:4px;right:4px;bottom:4px;border-radius:5px;border:1.5px solid var(--focus-ring);background:color-mix(in srgb,var(--blue) 6%,transparent)"></span>
+    </div>
   </div>
 </div>'''
 
     main = f'''<main class="glass pn grow" style="min-width:0">
 <header class="thead">
   <div class="row g10">
-    <div class="col grow">
-      <div class="row g10"><h1>项目 · OKR</h1><span class="cc-seg cc-seg-xs"><span>开工条件</span><span class="on">流程画布与节点 Skills</span></span></div>
-      <div class="f12 t3" style="margin-top:3px">拖动节点调整顺序，每个节点可以单独挂 Skills、限定能用的工具 · 发布新版本后从下一轮修复开始生效</div>
+    <div class="col grow" style="min-width:0">
+      <div class="row g6 f12 t3"><span class="lnk w6 row g4">{I("chevl",13,2.4)}项目 · OKR</span><span>/</span><span>流程模板</span></div>
+      <div class="row g10" style="margin-top:3px"><h1>标准前端修 Bug</h1>{tg("tg-n","v3 在用",22,11.5)}{tg("tg-o",I("edit",11,2.4)+"1 处没发布",22,11.5)}</div>
     </div>
-    <button class="cc-btn cc-btn-sm cc-btn-glass">{I("plus",13,2.4)}新增节点</button>
-    <button class="cc-btn cc-btn-sm cc-btn-pri">{I("check",13,2.6)}发布新版本 v4</button>
+    <button class="cc-btn cc-btn-sm cc-btn-glass">{I("refresh",13,2.2)}换模板</button>
+    <button class="cc-btn cc-btn-sm cc-btn-glass">{I("history",13,2.2)}历史版本</button>
+    <button class="cc-btn cc-btn-sm cc-btn-pri">{I("check",13,2.6)}发布 v4</button>
   </div>
 </header>
-<div class="col g10 grow" style="padding:12px 20px;min-height:0;overflow:hidden">
-  <div class="row g8" style="padding:8px 12px;border-radius:12px;background:var(--fill);white-space:nowrap">
-    <span class="f12 w7 t2" style="white-space:nowrap">预设模板：</span>
-    <span class="pill p-blue" style="height:26px;font-size:12px">标准前端（当前）</span>
-    <span class="pill p-gray" style="height:26px;font-size:12px">后端 / SDK 单测</span>
-    <span class="pill p-gray" style="height:26px;font-size:12px">极简单主干 MR</span>
-    <span class="pill p-gray" style="height:26px;font-size:12px">企业高合规定制</span>
-    <span class="grow"></span>
-    <span class="f11 t3">v3 在用 · 修改将生成 v4</span>
-  </div>
-  {canvas}
-  <div class="card" style="padding:10px 14px;gap:8px">
-    <div class="row g8">
-      <span class="f12 w7">默认回退起跑规则与证据继承</span>
-      <span class="f11 t3 grow">每项下拉均展示全部 8 个流程节点（仅作默认预选 · 打回或提交时仍可手动改选任意节点）</span>
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
-      <div class="col g4"><span class="f11 t3">审核 / 复测打回默认</span><div class="cc-select cc-select-xs"><span class="cc-sel-val">2 · 代码改动与构建</span><span class="cc-sel-caret">{I("chevd",11)}</span></div></div>
-      <div class="col g4"><span class="f11 t3">机审门禁失败默认</span><div class="cc-select cc-select-xs"><span class="cc-sel-val">2 · 同轮回改码节点</span><span class="cc-sel-caret">{I("chevd",11)}</span></div></div>
-      <div class="col g4"><span class="f11 t3">人工接手回交默认</span><div class="cc-select cc-select-xs"><span class="cc-sel-val">4 · 确定性硬门禁</span><span class="cc-sel-caret">{I("chevd",11)}</span></div></div>
-      <div class="col g4"><span class="f11 t3">跳过上游证据继承</span><div class="cc-select cc-select-xs is-blue"><span class="cc-sel-val">代码不变则沿用</span><span class="cc-sel-caret">{I("chevd",11)}</span></div></div>
-    </div>
-  </div>
-</div></main>'''
+<div class="col grow" style="padding:12px 16px 16px;min-height:0">{canvas}</div></main>'''
 
-    right = f'''<aside class="glass pn" style="width:316px;flex:none;padding:15px 16px;display:flex;flex-direction:column;gap:9px">
-  <div class="row g8"><span class="tag tg-t">节点配置</span><span class="f15 w7 grow">3 · 修后浏览器验证</span></div>
-  <div class="cc-field">
-    <div class="cc-field-hd"><span>上下文怎么传 &amp; 什么时候跳过</span></div>
-    <div class="cc-seg cc-seg-xs" style="width:100%;display:flex"><span class="on" style="flex:1">接着上一步继续</span><span style="flex:1">每步重新开始</span></div>
-    <div class="f11 t2" style="margin-top:5px;padding:6px 8px;border-radius:8px;background:var(--well);border:1px solid var(--hair)">前端仓库执行，其他仓库自动跳过</div>
+    def ms(n, t, last=False):
+        return (f'<span class="row g4"><span class="wfm">{n}</span><span class="f12 w6">{t}</span></span>'
+                + ("" if last else f'<span class="t3">{I("chevr",11,2.2)}</span>'))
+
+    def sk(on, name, mode, tok):
+        cb = f'<span class="cbx on">{I("check",11,3)}</span>' if on else '<span class="cbx"></span>'
+        md = f'<span class="tag {"tg-p" if mode=="替换同名" else "tg-n"}" style="height:18px;font-size:10.5px;padding:0 6px">{mode}</span>' if mode else ""
+        return f'<div class="row g8 f12{"" if on else " t3"}" style="min-height:26px">{cb}<span class="{"w6 " if on else ""}grow ell">{name}</span>{md}<span class="f11 t3 mono">{tok}</span></div>'
+
+    right = f'''<aside class="glass pn" style="width:328px;flex:none;padding:16px;display:flex;flex-direction:column;gap:14px">
+  <div class="row g10">
+    {ibox("ai", 38, 11, 18)}
+    <div class="col grow" style="min-width:0"><span class="f16 w7">#2 · AI 修复</span><span class="f12 t3">AI 步骤</span></div>
+    <span class="cc-select cc-select-xs" style="width:92px"><i style="width:7px;height:7px;border-radius:50%;background:var(--purple);flex:none"></i><span class="cc-sel-val">修复</span><span class="cc-sel-caret">{I("chevd",11)}</span></span>
   </div>
   <div class="cc-field">
-    <div class="cc-field-hd"><span>本节点专用 Skills</span><span class="lnk f11">+ 选 Skill</span></div>
-    <div class="col g6" style="padding:8px 10px;border-radius:11px;background:var(--well);border:1px solid var(--hair)">
-      <div class="row g6 f12"><span class="cbx on">{I("check",11,3)}</span><span class="w6 grow ell">页面交互回归 v1</span><span class="tag tg-p" style="height:16px;font-size:9.5px;padding:0 5px">替换同名规则</span><span class="f11 t3 mono">320t</span></div>
-      <div class="row g6 f12"><span class="cbx on">{I("check",11,3)}</span><span class="w6 grow ell">金额精度核验红线</span><span class="tag tg-n" style="height:16px;font-size:9.5px;padding:0 5px">叠加</span><span class="f11 t3 mono">210t</span></div>
-      <div class="row g6 f12 t3"><span class="cbx"></span><span class="grow ell">后端 SQL 索引审查</span><span class="f11 mono">未绑</span></div>
-    </div>
-    <div class="f10 t3" style="line-height:1.45;margin-top:2px">规则冲突时：<b>安全红线 &gt; 本轮人工要求 &gt; 本节点 &gt; 项目 &gt; 部门</b>；离开这个节点就不再加载。</div>
+    <div class="cc-field-hd"><span>进度条上显示</span><span class="cc-field-hint">只是里程碑，不拆成多步</span></div>
+    <div class="row g6" style="flex-wrap:wrap">{ms(1,"读单")}{ms(2,"复现")}{ms(3,"定位")}{ms(4,"改码", True)}</div>
+  </div>
+  <div class="row g10" style="padding:10px 12px;border-radius:12px;background:var(--well);border:1px solid var(--hair)">
+    <div class="col grow" style="min-width:0"><span class="f13 w6">交了复现证据才能改代码</span><span class="f11 t3">没复现出来时 Bot 会停下来问人</span></div>
+    <span class="cc-switch on"></span>
   </div>
   <div class="cc-field">
-    <div class="cc-field-hd"><span>给这个节点的补充要求</span></div>
-    <div style="padding:8px 10px;border-radius:10px;background:var(--well);border:1px solid var(--hair);font-size:11.5px;line-height:1.5;color:var(--text-2)">
-      必须验证切换分组后 Console 0 新增报错及导出文件名合法；无浏览器仓自动跳过。
+    <div class="cc-field-hd"><span>这一步挂的 Skills</span><span class="lnk f12 w6">+ 选 Skill</span></div>
+    <div class="col g4" style="padding:6px 10px;border-radius:12px;background:var(--well);border:1px solid var(--hair)">
+      {sk(True, "最小改动 v2", "叠加", "180t")}
+      {sk(True, "禁止弱化断言", "叠加", "90t")}
+      {sk(True, "页面交互回归 v1", "替换同名", "320t")}
+      {sk(False, "后端 SQL 索引审查", "", "未挂")}
     </div>
+    <div class="f11 t3" style="line-height:1.5">只在这一步加载，离开就卸掉。冲突时：安全红线 &gt; 本轮人工要求 &gt; 这一步 &gt; 项目 &gt; 部门</div>
   </div>
   <div class="cc-field">
-    <div class="cc-field-hd"><span>这个节点能用的工具</span></div>
-    <div class="row g6" style="flex-wrap:wrap">
-      <span class="tag tg-b">登录被测系统</span><span class="tag tg-b">浏览器操作</span><span class="tag tg-b">保存证据</span><span class="tag tg-g">提交交付</span>
-    </div>
+    <div class="cc-field-hd"><span>补充要求</span></div>
+    <div class="cc-input" style="height:auto;min-height:54px;align-items:flex-start;padding:8px 10px;font-size:12px;line-height:1.55;color:var(--text-2)">切换分组后要确认控制台没有新增报错；导出文件名要合法。</div>
+  </div>
+  <div class="cc-field">
+    <div class="cc-field-hd"><span>能用的工具</span><span class="cc-field-hint">改代码要先过上面的关卡</span></div>
+    <div class="row g6" style="flex-wrap:wrap">{tg("tg-b","读代码")}{tg("tg-b","浏览器操作")}{tg("tg-b","保存证据")}{tg("tg-b","改代码")}{tg("tg-g","提交交付")}</div>
+  </div>
+  <div class="cc-field">
+    <div class="cc-field-hd"><span>和上一步的关系</span></div>
+    <div class="cc-seg cc-seg-xs" style="width:100%;display:flex"><span class="on" style="flex:1">接着上一步继续</span><span style="flex:1">单独开始</span></div>
   </div>
   <span class="grow"></span>
-  <div class="row g8 f11 t2" style="padding:9px 10px;border-radius:10px;background:color-mix(in srgb,var(--orange) 9%,transparent);border:1px solid color-mix(in srgb,var(--orange) 28%,transparent);line-height:1.5">
-    {I("clock",13,style="color:var(--ink-orange);flex:none")}
-    <span><b>生效时机：</b>发布后从<b>下一轮修复</b>开始生效；当前运行中轮次仍锁定启动时的模板快照 v3。</span>
+  <div class="row g8 f11 t2" style="padding:9px 11px;border-radius:11px;background:var(--well);border:1px solid var(--hair);line-height:1.5;align-items:flex-start">
+    {I("clock",13,2.2,"color:var(--text-3);flex:none;margin-top:2px")}
+    <span>发布后从<b>下一轮修复</b>开始用；正在修的 2 张单继续用 v3。</span>
   </div>
 </aside>'''
-    return pc_shell("项目流程画布与节点 Skills · 云匠", "set", set_left("项目") + main + right)
+
+    css = '''<style>
+:root{--edge:color-mix(in srgb,var(--text) 38%,transparent)}
+.wfm{width:16px;height:16px;border-radius:50%;background:var(--fill);color:var(--text-2);font-size:10px;font-weight:700;display:inline-flex;align-items:center;justify-content:center}
+.fc{position:relative;flex:1;min-height:0;border-radius:16px;border:1px solid var(--hair);overflow:hidden;
+  background:radial-gradient(color-mix(in srgb,var(--text) 15%,transparent) 1.1px,transparent 1.2px) 0 0/20px 20px,var(--well)}
+.wnd{position:absolute;display:flex;flex-direction:column;justify-content:space-between;padding:11px 13px 12px;border-radius:16px;
+  background:var(--glass-2);border:1px solid var(--stroke);box-shadow:0 1px 2px rgba(15,30,70,.06),0 8px 20px -10px rgba(15,30,70,.22)}
+html.dark .wnd{box-shadow:0 10px 24px -12px rgba(0,0,0,.7)}
+.wnd.on{border-color:var(--focus-ring);box-shadow:0 0 0 3px var(--focus-halo),0 12px 26px -12px rgba(15,30,70,.3)}
+.fh{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--glass-2);border:2px solid var(--edge)}
+.wnd.on .fh{border-color:var(--focus-ring)}
+.ftb{position:absolute;display:flex;align-items:center;gap:2px;padding:4px;border-radius:11px;background:var(--glass-elev);border:1px solid var(--stroke);box-shadow:var(--shadow-ctl)}
+.ftb span{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;color:var(--text-2)}
+.ftb i{width:1px;height:16px;background:var(--hair);margin:0 2px}
+.fplus{position:absolute;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;background:var(--btn-pri-bg);box-shadow:0 0 0 3px var(--focus-halo);z-index:2}
+.fpn{position:absolute;display:flex;align-items:center;gap:6px;border-radius:13px;background:var(--glass-elev);border:1px solid var(--stroke);box-shadow:var(--shadow-ctl);z-index:3}
+.fplus.open{transform:rotate(45deg);box-shadow:0 0 0 4px var(--focus-halo)}
+.fadd{position:absolute;width:208px;padding:6px;border-radius:14px;background:var(--glass-elev);border:1px solid var(--stroke);box-shadow:var(--shadow-dialog);z-index:6;backdrop-filter:blur(24px)}
+.fai{display:flex;align-items:center;gap:10px;height:46px;padding:0 8px;border-radius:10px}
+.fai.on{background:color-mix(in srgb,var(--blue) 10%,transparent)}
+.fctl{position:absolute;display:flex;flex-direction:column;border-radius:11px;overflow:hidden;background:var(--glass-elev);border:1px solid var(--stroke);box-shadow:var(--shadow-ctl);z-index:3}
+.fctl span{width:32px;height:30px;display:flex;align-items:center;justify-content:center;color:var(--text-2)}
+.fctl span+span{border-top:1px solid var(--hair)}
+</style>'''
+    return pc_shell("项目流程模板 · 云匠", "set", css + main + right)
 
 
 # =====================================================================
