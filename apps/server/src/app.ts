@@ -1,11 +1,15 @@
 // HTTP entry of cc-app (docs/06 §1.2): request ids, the ApiError shape, a health check and the
-// RunnerTransport routes (E1). User-facing routes arrive with P2 (routes → service → repo, contracts
-// in core-protocol).
+// RunnerTransport routes (E1) and the /v1 account routes with the WebSocket (P2; routes → service →
+// repo, contracts in core-protocol).
 import crypto from 'node:crypto';
 import Fastify, { type FastifyError } from 'fastify';
 import { LeaseLostError, RunnerAuthError, type Db } from './db/client.ts';
 import { NotFoundError, RevConflictError } from './db/write.ts';
+import { accountRoutes } from './routes/account-routes.ts';
 import { runnerRoutes } from './routes/runner-routes.ts';
+import type { AccountSettings } from './service/account-service.ts';
+import { ApiFailure } from './service/errors.ts';
+import { hasText, tr } from './service/i18n.ts';
 import { OutputTooLargeError, type RunnerSettings } from './service/runner-service.ts';
 
 /** Error body for every failed request (07 §2 contract rules): code is `domain.reason`. */
@@ -15,7 +19,12 @@ export interface ApiError {
   data?: unknown;
 }
 
-export function buildApp(o: { db: Db; runner: RunnerSettings; logger?: boolean }) {
+export function buildApp(o: {
+  db: Db;
+  runner: RunnerSettings;
+  accounts: AccountSettings;
+  logger?: boolean;
+}) {
   const app = Fastify({
     logger: o.logger ?? false,
     requestIdHeader: 'x-request-id',
@@ -29,6 +38,15 @@ export function buildApp(o: { db: Db; runner: RunnerSettings; logger?: boolean }
 
   app.setErrorHandler((err: FastifyError, req, reply) => {
     const send = (status: number, body: ApiError) => reply.status(status).send(body);
+    if (err instanceof ApiFailure) {
+      if (err.retryAfter) reply.header('retry-after', String(err.retryAfter));
+      const key = `error.${err.code}`;
+      return send(err.status, {
+        code: err.code,
+        message: hasText(key) ? tr(key) : err.code,
+        ...(err.data === undefined ? {} : { data: err.data }),
+      });
+    }
     if (err instanceof NotFoundError) return send(404, { code: err.code, message: err.message });
     if (err instanceof RevConflictError)
       return send(409, { code: err.code, message: err.message, data: { rev: err.currentRev } });
@@ -45,6 +63,7 @@ export function buildApp(o: { db: Db; runner: RunnerSettings; logger?: boolean }
   });
 
   runnerRoutes(app, o.db, o.runner);
+  accountRoutes(app, o.db, o.accounts);
 
   app.get('/healthz', async () => {
     await o.db.pool.query('select 1');

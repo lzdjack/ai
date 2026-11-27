@@ -7,6 +7,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { databaseUrls, type Config } from '@cloudcraft/config';
 import {
+  accountSettings,
   buildApp,
   createDb,
   issueEnrollToken,
@@ -147,7 +148,11 @@ export async function waitFor<T>(what: string, fn: () => Promise<T | null | fals
 export async function startHarness(c: Config, o: { leaseSeconds: number }) {
   const team = await demoTeam(c);
   const db = createDb(databaseUrls(c).app, { max: 6 });
-  const app = buildApp({ db, runner: { leaseSeconds: o.leaseSeconds, pollMs: 500 } });
+  const app = buildApp({
+    db,
+    runner: { leaseSeconds: o.leaseSeconds, pollMs: 500 },
+    accounts: accountSettings(c),
+  });
   await app.listen({ host: '127.0.0.1', port: 0 });
   const addr = app.server.address();
   const server = `http://127.0.0.1:${typeof addr === 'object' && addr ? addr.port : 0}`;

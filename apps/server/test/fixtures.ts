@@ -4,6 +4,7 @@ import { pgOrchestrator } from '../src/orchestrator/flow.ts';
 import { withWorkspaceTx, type Db } from '../src/db/client.ts';
 import { projects, users } from '../src/db/schema/index.ts';
 import { createWorkspace, insertRow } from '../src/db/write.ts';
+import type { AccountSettings } from '../src/service/account-service.ts';
 
 export const PLAN: Plan = {
   plan_schema_version: PLAN_SCHEMA_VERSION,
@@ -36,4 +37,18 @@ export async function seedSpace(db: Db, slug: string): Promise<Space> {
     pgOrchestrator.startFlow(tx, ctx, { projectId, kind: 'round', plan: PLAN }),
   );
   return { userId: user!.id, workspaceId, projectId, flowId };
+}
+
+/** Account settings for tests: fixed secrets, mail kept in memory, no practical rate limit. */
+export function testAccounts(over: Partial<AccountSettings> = {}) {
+  const mails: { to: string; subject: string; text: string }[] = [];
+  const settings: AccountSettings = {
+    authSecret: 'test-auth-secret-0123456789abcdef',
+    otpPepper: 'test-otp-pepper-0123456789abcdef',
+    rateLimitPerHour: 1000,
+    mailer: { send: async (m) => void mails.push(m) },
+    publicUrl: 'http://cloudcraft.test',
+    ...over,
+  };
+  return { settings, mails };
 }
