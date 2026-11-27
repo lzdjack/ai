@@ -1096,12 +1096,13 @@ JOURNEYS = [
                         ] + _pc_set_nav_pins("proj") + _pc_dock_pins("set"),
                     ),
                     variant(
-                        "② 流程模板与节点绑定 Skills（React Flow）",
+                        "② 流程模板与节点绑定 Skills（自由画布）",
                         "reference/images/pages/PC-设置-项目-流程模板",
                         pins=[
-                            pin(34.0, 9.4, 5.5, 2.5, "g_set_proj:0", "切回「开工条件」", "info"),
-                        ] + _pc_set_nav_pins("proj") + _pc_dock_pins("set"),
-                        note="4 套预设模板 + @xyflow/react 交互画布（增删连接线 / run_when 分支 / 退回弧）+ 为单节点绑定专属 skill_ids[] 与工具范围，修改从下一轮生效。",
+                            pin(9.0, 8.6, 5.4, 2.4, "g_set_proj:0", "‹ 项目 · OKR 返回开工条件", "info"),
+                            pin(60.1, 10.1, 6.3, 3.4, "g_set_proj:2", "历史版本（操作记录）", "info"),
+                        ] + _pc_dock_pins("set"),
+                        note="全宽编辑器：一块块节点卡片自由摆放、拖动与缩放，不画阶段区域框（阶段是节点属性）；点连线上的 ＋ 选类型插入节点；右栏为选中节点挂 Skills、补充要求与工具范围，发布后下一轮生效。",
                     ),
                     variant(
                         "③ 操作记录与数据恢复（三轨分治 + state_digest）",
