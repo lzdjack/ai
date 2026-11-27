@@ -59,7 +59,7 @@ ARCH_SVG = """<figure class="diagram glass-sub">
   <!-- 中列：调度与采集 -->
   <rect x="394" y="60" width="128" height="58" rx="12" class="dg-box b-teal"/>
   <text x="458" y="85" text-anchor="middle" class="dg-t">调度与步进引擎</text>
-  <text x="458" y="103" text-anchor="middle" class="dg-s">PG 同事务 + pg-boss</text>
+  <text x="458" y="103" text-anchor="middle" class="dg-s">PG 同事务 + work_items</text>
 
   <rect x="394" y="150" width="128" height="58" rx="12" class="dg-box b-orange"/>
   <text x="458" y="175" text-anchor="middle" class="dg-t">采集服务</text>
@@ -230,7 +230,7 @@ ER_SVG = """<figure class="diagram glass-sub">
 
   <rect x="488" y="56" width="126" height="54" rx="12" class="dg-box b-teal"/>
   <text x="551" y="76" text-anchor="middle" class="dg-t">rounds</text>
-  <text x="551" y="91" text-anchor="middle" class="dg-s">round_node_runs[]</text>
+  <text x="551" y="91" text-anchor="middle" class="dg-s">node_runs[]</text>
   <text x="551" y="104" text-anchor="middle" class="dg-s">+ round_repo_slices</text>
 
   <rect x="488" y="128" width="126" height="44" rx="10" class="dg-box b-gray"/>
@@ -273,7 +273,7 @@ ER_SVG = """<figure class="diagram glass-sub">
   <rect x="670" y="56" width="124" height="58" rx="12" class="dg-box b-orange"/>
   <text x="732" y="77" text-anchor="middle" class="dg-t">release_tasks</text>
   <text x="732" y="93" text-anchor="middle" class="dg-s">bundles · items DAG</text>
-  <text x="732" y="106" text-anchor="middle" class="dg-s">ticket_node_runs[]</text>
+  <text x="732" y="106" text-anchor="middle" class="dg-s">flow_instances</text>
 
   <rect x="816" y="54" width="118" height="44" rx="10" class="dg-box b-gray"/>
   <text x="875" y="73" text-anchor="middle" class="dg-t">release_steps</text>
