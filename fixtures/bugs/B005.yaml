@@ -1,0 +1,21 @@
+id: B005
+title: 撤回的单状态显示成「已拒绝」，筛选里也没有「已撤回」
+repo: [demo-lib, demo-web]
+level: L2
+report: |
+  我撤回的审批，在列表和详情里状态标签都显示「已拒绝」，还是红色的。
+  而且列表的状态筛选下拉里没有「已撤回」这一项，想单独看撤回的单看不了。
+repro:
+  - 打开 /#/approvals，找一条已撤回的单（如 A007）
+  - 看状态标签；再打开状态筛选下拉
+inject:
+  demo-lib: B005.demo-lib.inject.patch
+  demo-web: B005.demo-web.inject.patch
+inject_message: 状态展示与筛选项调整
+fix:
+  demo-lib: B005.demo-lib.fix.patch
+  demo-web: B005.demo-web.fix.patch
+verify:
+  unit: B005.test.ts
+  run_in: demo-web
+expect_files: [demo-lib/src/status/status.ts, demo-web/src/pages/approvals/filter.ts]

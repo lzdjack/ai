@@ -1,0 +1,16 @@
+id: B002
+title: 百万以上的金额千分位显示错误
+repo: demo-lib
+level: L0
+report: |
+  一笔 1234567 元的报销，列表里金额显示成「¥1,234567.00」，少了一个逗号。
+  一万以下的金额看着是对的。
+repro:
+  - 发起一笔金额为 1234567 的审批
+  - 回到列表看金额列
+inject: B002.inject.patch
+inject_message: 简化金额千分位处理
+fix: B002.fix.patch
+verify:
+  unit: B002.test.ts
+expect_files: [src/format/amount.ts]

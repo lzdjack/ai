@@ -1,0 +1,13 @@
+diff --git b/src/status/status.ts a/src/status/status.ts
+index 393710c..270dded 100644
+--- b/src/status/status.ts
++++ a/src/status/status.ts
+@@ -8,7 +8,7 @@ const META: Record<ApprovalStatus, { tone: StatusTone; label: Record<Locale, str
+   pending: { tone: 'info', label: { 'zh-CN': '审批中', 'en-US': 'Pending' } },
+   approved: { tone: 'success', label: { 'zh-CN': '已通过', 'en-US': 'Approved' } },
+   rejected: { tone: 'danger', label: { 'zh-CN': '已拒绝', 'en-US': 'Rejected' } },
+-  withdrawn: { tone: 'danger', label: { 'zh-CN': '已拒绝', 'en-US': 'Rejected' } },
++  withdrawn: { tone: 'neutral', label: { 'zh-CN': '已撤回', 'en-US': 'Withdrawn' } },
+ };
+ 
+ export function statusMeta(status: ApprovalStatus, locale: Locale = 'zh-CN') {

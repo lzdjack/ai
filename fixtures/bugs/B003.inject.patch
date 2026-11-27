@@ -1,0 +1,26 @@
+diff --git a/src/i18n/en-US.ts b/src/i18n/en-US.ts
+index 89e7fda..c96f7b3 100644
+--- a/src/i18n/en-US.ts
++++ b/src/i18n/en-US.ts
+@@ -29,7 +29,7 @@ export const enUS: Record<MessageKey, string> = {
+   'form.title.required': 'Title is required',
+   'form.title.too_long': 'Title must be 40 characters or fewer',
+   'form.amount.required': 'Amount is required',
+-  'form.amount.positive': 'Amount must be greater than 0',
++  'form.amount.positive': '金额必须大于 0',
+   'form.reason.required': 'Reason is required',
+   'common.loading': 'Loading…',
+   'common.error': 'Something went wrong, please try again',
+diff --git a/src/pages/approvals/validate.ts b/src/pages/approvals/validate.ts
+index ce9986e..ed92dca 100644
+--- a/src/pages/approvals/validate.ts
++++ b/src/pages/approvals/validate.ts
+@@ -10,7 +10,7 @@ export function validateApproval(v: Partial<NewApproval>): FormErrors {
+   if (!title) errors.title = 'form.title.required';
+   else if (title.length > 40) errors.title = 'form.title.too_long';
+   if (typeof v.amount !== 'number' || Number.isNaN(v.amount)) errors.amount = 'form.amount.required';
+-  else if (v.amount <= 0) errors.amount = 'form.amount.positive';
++  else if (v.amount < 0) errors.amount = 'form.amount.positive';
+   if (!v.reason?.trim()) errors.reason = 'form.reason.required';
+   return errors;
+ }

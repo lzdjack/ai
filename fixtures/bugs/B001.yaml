@@ -1,0 +1,16 @@
+id: B001
+title: 审批列表按「提交时间」排序时顺序反了
+repo: demo-web
+level: L0
+report: |
+  审批中心列表默认应该最新提交的在最上面，现在最新的反而在最下面。
+  点「提交时间」表头切换排序也是反的。
+repro:
+  - 打开 /#/approvals
+  - 看默认排序，再点表头「提交时间」
+inject: B001.inject.patch
+inject_message: 列表排序改用字符串比较
+fix: B001.fix.patch
+verify:
+  unit: B001.test.ts
+expect_files: [src/pages/approvals/sort.ts]
