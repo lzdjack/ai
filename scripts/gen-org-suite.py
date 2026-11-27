@@ -670,11 +670,11 @@ html.dark .aura{opacity:.46}
   </div>
   <div class="row g8 f11 t2" style="padding:8px 11px;border-radius:11px;background:var(--well);border:1px solid var(--hair);line-height:1.5">
     {I("layers",14,style="color:var(--ink-blue);flex:none")}
-    <span>加入后你将同时拥有「星辰研发中心」与个人空间（可用空间 ≥ 2），登录后顶栏自动开启工作空间切换胶囊，单空间用户 0 打扰。</span>
+    <span>加入后你会同时有「星辰研发中心」和个人空间，点右上角头像就能切换；只有一个空间时不显示切换。</span>
   </div>
   <div class="col g8" style="margin-top:2px">
     <button class="cc-btn cc-btn-lg cc-btn-pri" data-pin="confirm-join-btn" style="width:100%">{I("check",15,2.6)}确认加入「星辰研发中心 · OKR 产研」</button>
-    <button class="cc-btn cc-btn-md cc-btn-glass" data-pin="keep-personal-btn" style="width:100%">暂不加入，仅进入我的个人空间（可稍后在空间切换中接受）</button>
+    <button class="cc-btn cc-btn-md cc-btn-glass" data-pin="keep-personal-btn" style="width:100%">暂不加入，先进入我的个人空间（之后可在头像菜单里接受）</button>
   </div>
 </div>'''
     return f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>确认加入工作空间 · PC</title>
