@@ -1,6 +1,7 @@
 // pnpm dev:up：起本地基础设施并自检（docs/07 §4.4）。可重复执行。
 import { databaseUrls } from '@cloudcraft/config';
 import { migrateDatabase } from '@cloudcraft/server';
+import { deployDemoEnv } from '../fixtures/env.ts';
 import { seedDemoRepos } from '../fixtures/seed.ts';
 import { seedPlatform } from './seed-platform.ts';
 import {
@@ -74,10 +75,18 @@ console.log(
   `✓ 模拟 GitLab：${seeded.map((r) => r.repo).join('、')}${pushed ? `（本次推送 ${pushed} 个）` : '（已存在）'}`,
 );
 
+const demoEnv = await deployDemoEnv(c).catch((e: Error) => {
+  must('demo-web 部署到测试环境', { ok: false, out: e.message });
+  return null;
+});
+if (demoEnv)
+  console.log(`✓ 测试环境：demo-web ${demoEnv.deployed === 'now' ? '已部署' : '部署过了'}`);
+
 const { app } = databaseUrls(c);
 console.log(`
 数据库    ${app.replace(/:[^:@]+@/, ':***@')}
 收件箱    http://127.0.0.1:${c.CC_MAILPIT_UI_PORT}
 SMTP      127.0.0.1:${c.CC_SMTP_PORT}
 模拟服务  pnpm dev 后 http://127.0.0.1:${c.CC_SIM_PORT}/
+测试环境  pnpm dev 后 http://127.0.0.1:${c.CC_SIM_ENV_PORT}/（demo-web）
 数据目录  ${dir}`);

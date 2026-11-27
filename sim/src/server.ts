@@ -2,6 +2,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import Fastify, { type FastifyInstance } from 'fastify';
+import { EnvSites } from './envsite/index.ts';
 import { Faults } from './faults.ts';
 import { GitlabSim } from './gitlab/index.ts';
 import { StateStore } from './state.ts';
@@ -10,6 +11,13 @@ export interface SimOptions {
   /** 运行时数据目录（~/.cloudcraft-dev）；裸仓放 git/，状态放 sim/ */
   dataDir: string;
   logger?: boolean;
+}
+
+declare module 'fastify' {
+  interface FastifyInstance {
+    /** 环境站点（envsite/）；端口由调用方 listen */
+    envSites: EnvSites;
+  }
 }
 
 export async function buildSim(opts: SimOptions): Promise<FastifyInstance> {
@@ -30,8 +38,12 @@ export async function buildSim(opts: SimOptions): Promise<FastifyInstance> {
   const gitlab = new GitlabSim(store, path.join(opts.dataDir, 'git'), faults);
   gitlab.seedUsers();
 
+  const envs = new EnvSites(path.join(opts.dataDir, 'sim', 'envs'));
+  app.decorate('envSites', envs);
+
   faults.register(app);
   gitlab.register(app);
+  envs.register(app);
 
   // 控制台（07 §5.3）：给质检看状态、开关故障
   const page = fs.readFileSync(path.join(import.meta.dirname, 'console.html'), 'utf8');
@@ -39,6 +51,7 @@ export async function buildSim(opts: SimOptions): Promise<FastifyInstance> {
   app.get('/__sim/state', async () => ({
     gitlab: { ...store.data.gitlab, deliveries: gitlab.deliveries },
     faults: faults.all(),
+    envs: envs.state(),
   }));
 
   return app;

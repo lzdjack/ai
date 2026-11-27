@@ -23,6 +23,8 @@ export const ConfigSchema = Type.Object({
   CC_MAILPIT_UI_PORT: Port(8025),
   CC_APP_PORT: Port(4100),
   CC_SIM_PORT: Port(4200),
+  /** sim 的测试环境站点（demo-web 部署在这里） */
+  CC_SIM_ENV_PORT: Port(4201),
   CC_WEB_PORT: Port(4300),
   // 模型接入（06 §11.1）：协议 + Base URL + 模型 + 密钥。密钥只有模型代理进程读取
   CC_LLM_API: Type.Optional(
