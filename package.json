@@ -16,6 +16,9 @@
     "lint": "eslint . --max-warnings 0 --cache --cache-location node_modules/.cache/eslint/",
     "format": "prettier --write .",
     "test": "vitest run",
+    "dev:up": "tsx tools/dev/up.ts",
+    "dev:down": "tsx tools/dev/down.ts",
+    "dev:reset": "tsx tools/dev/reset.ts",
     "dev": "turbo run dev"
   },
   "devDependencies": {
