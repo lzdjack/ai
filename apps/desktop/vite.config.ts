@@ -14,10 +14,17 @@ const envFile = path.join(
 );
 const fileEnv = fs.existsSync(envFile) ? parseEnv(fs.readFileSync(envFile, 'utf8')) : {};
 const port = Number(process.env.CC_WEB_PORT || fileEnv.CC_WEB_PORT || 4300);
+const appPort = Number(process.env.CC_APP_PORT || fileEnv.CC_APP_PORT || 4100);
 
 export default defineConfig({
   root: 'src/renderer',
   plugins: [react()],
-  server: { host: '127.0.0.1', port, strictPort: true },
+  // /v1 (and its WebSocket) goes to cc-app, so the page and the API share one origin in development
+  server: {
+    host: '127.0.0.1',
+    port,
+    strictPort: true,
+    proxy: { '/v1': { target: `http://127.0.0.1:${appPort}`, ws: true } },
+  },
   build: { outDir: '../../dist', emptyOutDir: true },
 });
