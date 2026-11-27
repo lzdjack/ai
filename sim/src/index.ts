@@ -1,2 +1,2 @@
-// 占位：实现见 docs/07 §9 台账对应任务。
-export {};
+// 模拟服务（07 §5）：测试和 tools/ 通过 buildSim 起一个实例。
+export { buildSim, type SimOptions } from './server.ts';

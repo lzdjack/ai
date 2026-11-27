@@ -17,7 +17,16 @@ export const ROOT = path.resolve(import.meta.dirname, '../..');
 export const COMPOSE_FILE = path.join(ROOT, 'infra', 'compose.yaml');
 
 /** 运行时数据目录下的子目录（07 §4.3）；dev:reset 会清空它们，.env 和 keys/ 保留 */
-export const DATA_SUBDIRS = ['pg', 'storage', 'git', 'pnpm-store', 'sandboxes', 'logs', 'qa'];
+export const DATA_SUBDIRS = [
+  'pg',
+  'storage',
+  'git',
+  'sim',
+  'pnpm-store',
+  'sandboxes',
+  'logs',
+  'qa',
+];
 
 export function dataDir(): string {
   return process.env.CC_DATA_DIR || defaultDataDir();
