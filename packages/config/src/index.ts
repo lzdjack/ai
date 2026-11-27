@@ -36,6 +36,9 @@ export const ConfigSchema = Type.Object({
   CC_LLM_MODEL: Type.Optional(Type.String({ minLength: 1 })),
   CC_LLM_API_KEY: Type.Optional(Type.String()),
   CC_LLM_DAILY_BUDGET_USD: Type.Number({ minimum: 0, default: 5 }),
+  // 模型代理进程（pnpm llm-proxy）：沙箱经中继来的模型请求打到这个本机端口；执行器经本机 Unix Socket
+  // （<数据目录>/run/llm-proxy.sock）登记每轮令牌
+  CC_LLM_PROXY_PORT: Port(4110),
   // 执行器租约（06 §2.12、§5.8）：租约时长、执行器多久来领一次活、后台多久回收一次过期租约
   CC_RUNNER_LEASE_SECONDS: Type.Integer({ minimum: 2, default: 60 }),
   CC_RUNNER_POLL_MS: Type.Integer({ minimum: 200, default: 5000 }),

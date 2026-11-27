@@ -261,4 +261,67 @@ describe('执行器协议（RunnerTransport）', () => {
     const flowsB = await asUser(B, (tx) => tx.select().from(flowInstances));
     expect(flowsB).toHaveLength(1);
   });
+
+  it('一段执行节点留在同一台执行器：写回时要下一步，就在同一事务里把它租给自己；排空中不给', async () => {
+    const plan: Plan = {
+      plan_schema_version: PLAN_SCHEMA_VERSION,
+      repos: PLAN.repos,
+      nodes: [
+        { key: 'prepare', kind: 'auto', node_kind: 'host_prepare' },
+        { key: 'fix', kind: 'auto', node_kind: 'ai_agent' },
+        {
+          key: 'verify',
+          kind: 'auto',
+          node_kind: 'deterministic_verify',
+          config: { action: 'replay' },
+        },
+        { key: 'review', kind: 'human' },
+      ],
+    };
+    // a space of its own: earlier tests leave sandbox work queued in A
+    const C = await seedSpace(db, 'run-c');
+    const r = await enroll(C, 'segment');
+    const other = await enroll(C, 'bystander');
+    const flowId = await asUser(C, (tx, ctx) =>
+      pgOrchestrator.startFlow(tx, ctx, { projectId: C.projectId, kind: 'round', plan }),
+    );
+    const [prep] = (await heartbeat(r, 1)).assigned;
+    expect(prep).toMatchObject({ node_key: 'prepare', flow_instance_id: flowId });
+
+    const done1 = await post(
+      RUNNER_PATHS.completeRoundStep,
+      {
+        work_item_id: prep!.work_item_id,
+        lease_token: prep!.lease_token,
+        fence: prep!.fence,
+        outcome: 'done',
+        output: {},
+        take_next: true,
+      },
+      r,
+    );
+    const fix = (done1.body as { next?: StepAssignment }).next;
+    expect(fix).toMatchObject({ node_key: 'fix', node_kind: 'ai_agent', flow_instance_id: flowId });
+    // already leased to r: nobody else gets it, and r can renew it
+    expect((await heartbeat(other, 4)).assigned).toEqual([]);
+    expect((await heartbeat(r, 0, [fix!])).lost).toEqual([]);
+
+    // a draining runner finishes its step but is handed nothing more
+    await asUser(C, (tx, ctx) => updateRow(tx, ctx, runners, r.id, { drainMode: true }));
+    const done2 = await post(
+      RUNNER_PATHS.completeRoundStep,
+      {
+        work_item_id: fix!.work_item_id,
+        lease_token: fix!.lease_token,
+        fence: fix!.fence,
+        outcome: 'done',
+        output: {},
+        take_next: true,
+      },
+      r,
+    );
+    expect(done2).toMatchObject({ status: 200, body: { accepted: true } });
+    expect((done2.body as { next?: unknown }).next).toBeUndefined();
+    expect((await heartbeat(other, 4)).assigned.map((x) => x.node_key)).toEqual(['verify']);
+  });
 });

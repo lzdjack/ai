@@ -230,11 +230,21 @@ importers:
       '@cloudcraft/core-protocol':
         specifier: workspace:*
         version: link:../../packages/core-protocol
+      '@cloudcraft/mcp-tool-host':
+        specifier: workspace:*
+        version: link:../../packages/mcp-tool-host
+      '@cloudcraft/runtime-pi':
+        specifier: workspace:*
+        version: link:../../plugins/runtime-pi
       typebox:
         specifier: 1.4.7
         version: 1.4.7
 
-  apps/llm-proxy: {}
+  apps/llm-proxy:
+    dependencies:
+      '@cloudcraft/config':
+        specifier: workspace:*
+        version: link:../../packages/config
 
   apps/server:
     dependencies:
@@ -285,7 +295,14 @@ importers:
 
   packages/llm-gateway: {}
 
-  packages/mcp-tool-host: {}
+  packages/mcp-tool-host:
+    dependencies:
+      '@cloudcraft/core-protocol':
+        specifier: workspace:*
+        version: link:../core-protocol
+      typebox:
+        specifier: 1.4.7
+        version: 1.4.7
 
   packages/ui-kit: {}
 
@@ -301,6 +318,9 @@ importers:
 
   plugins/runtime-pi:
     dependencies:
+      '@cloudcraft/core-protocol':
+        specifier: workspace:*
+        version: link:../../packages/core-protocol
       typebox:
         specifier: 1.4.7
         version: 1.4.7
@@ -329,9 +349,6 @@ importers:
       '@cloudcraft/llm-proxy':
         specifier: workspace:*
         version: link:../apps/llm-proxy
-      '@cloudcraft/runtime-pi':
-        specifier: workspace:*
-        version: link:../plugins/runtime-pi
       '@cloudcraft/server':
         specifier: workspace:*
         version: link:../apps/server

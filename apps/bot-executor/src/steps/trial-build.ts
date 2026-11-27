@@ -1,16 +1,14 @@
 // Trial build (docs/06 §5.3, 07 E1): clone the round's repos on the host, prepare dependencies
 // online, then install and build every repo in a --network=none container. The git credential stays
 // on the host (sent as a header, never written into .git/config or the container).
-import { execFile } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import { promisify } from 'node:util';
 import type { StepAssignment } from '@cloudcraft/core-protocol';
 import type { StepHandler, StepResult } from '../runner/loop.ts';
 import { installRoundDeps } from '../sandbox/deps.ts';
 import { runContainer } from '../sandbox/docker.ts';
+import { clone } from './git.ts';
 
-const exec = promisify(execFile);
 const TAIL = 2000;
 const tail = (s: string) => (s.length > TAIL ? s.slice(-TAIL) : s);
 
@@ -26,33 +24,6 @@ export interface TrialBuildOptions {
   labels?: Record<string, string>;
 }
 
-async function clone(
-  url: string,
-  ref: string,
-  dir: string,
-  token: string | undefined,
-  signal: AbortSignal,
-) {
-  const header = token
-    ? {
-        GIT_CONFIG_COUNT: '1',
-        GIT_CONFIG_KEY_0: 'http.extraHeader',
-        GIT_CONFIG_VALUE_0: `Authorization: Basic ${Buffer.from(`x:${token}`).toString('base64')}`,
-      }
-    : {};
-  await exec('git', ['-c', 'credential.helper=', 'clone', '-q', '--branch', ref, url, dir], {
-    signal,
-    env: {
-      PATH: process.env.PATH,
-      HOME: process.env.HOME,
-      GIT_CONFIG_NOSYSTEM: '1',
-      GIT_CONFIG_GLOBAL: '/dev/null',
-      GIT_TERMINAL_PROMPT: '0',
-      ...header,
-    },
-  });
-}
-
 export function trialBuild(o: TrialBuildOptions): StepHandler {
   return async (step: StepAssignment, signal: AbortSignal): Promise<StepResult> => {
     const roundDir = path.join(o.workRoot, `${step.node_run_id}-${step.fence}`);
@@ -62,7 +33,7 @@ export function trialBuild(o: TrialBuildOptions): StepHandler {
       const t0 = Date.now();
       fs.mkdirSync(workDir, { recursive: true });
       for (const r of step.repos)
-        await clone(r.clone_url, r.ref, path.join(workDir, r.name), o.gitToken, signal);
+        await clone(r.clone_url, r.ref, path.join(workDir, r.name), { token: o.gitToken, signal });
       timings.push({ label: 'clone', ms: Date.now() - t0 });
 
       const deps = await installRoundDeps({

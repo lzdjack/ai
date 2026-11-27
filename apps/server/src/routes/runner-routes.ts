@@ -43,8 +43,8 @@ export function runnerRoutes(app: FastifyInstance, db: Db, s: RunnerSettings) {
     RUNNER_PATHS.completeRoundStep,
     { ...opts, schema: { body: CompleteStepRequest, response: { 200: CompleteStepResponse } } },
     async (req) => {
-      await completeRoundStep(db, runnerAuth(req), req.body);
-      return { accepted: true };
+      const next = await completeRoundStep(db, s, runnerAuth(req), req.body);
+      return { accepted: true, ...(next ? { next } : {}) };
     },
   );
 }
