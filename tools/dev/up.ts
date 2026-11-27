@@ -14,7 +14,7 @@ import {
 const dir = dataDir();
 ensureDataDirs(dir);
 const env = ensureEnvFile(dir);
-if (env.created) console.log(`· 已生成 ${dir}/.env（OpenAI 密钥请你自己填 OPENAI_API_KEY）`);
+if (env.created) console.log(`· 已生成 ${dir}/.env（模型接入 CC_LLM_* 请你自己填）`);
 else if (env.added.length) console.log(`· .env 补上了 ${env.added.join('、')}`);
 if (ensureMasterKey(dir)) console.log('· 已生成本机凭据信封主密钥 keys/dev-master.key');
 

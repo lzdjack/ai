@@ -22,6 +22,7 @@
     "fixtures:seed": "tsx tools/fixtures/seed.ts",
     "fixtures:check": "tsx tools/fixtures/check.ts",
     "sandbox:try": "tsx tools/sandbox/try.ts",
+    "llm:check": "tsx tools/llm/check.ts",
     "dev": "turbo run dev"
   },
   "devDependencies": {

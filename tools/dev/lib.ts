@@ -37,30 +37,57 @@ export function ensureDataDirs(dir: string): void {
     fs.mkdirSync(path.join(dir, sub), { recursive: true });
 }
 
-/** .env 不存在就生成模板；已存在则只补上缺失的自动生成密钥，不动用户写的内容。 */
+/** 模型接入配置块（06 §11.1）。值由用户自己填，Claude 不经手 */
+const LLM_BLOCK = [
+  '# 模型接入，由你自己填写，Claude 不经手。填好后跑 pnpm llm:check 自检',
+  '# 协议：openai-completions | openai-responses | anthropic-messages（留空时 llm:check 会探测）',
+  'CC_LLM_API=',
+  '# 第三方 / 中转站的地址，例如 https://example.com/v1（OpenAI 兼容）或 https://example.com（Anthropic）',
+  'CC_LLM_BASE_URL=',
+  'CC_LLM_MODEL=',
+  'CC_LLM_API_KEY=',
+];
+
+/**
+ * .env 不存在就生成模板；已存在则只补缺失的项（自动生成的密钥、模型接入块），不动用户写的值。
+ * 旧模板里留空的 OPENAI_API_KEY= 行换成模型接入块。
+ */
 export function ensureEnvFile(dir: string): { created: boolean; added: string[] } {
   const file = envFilePath(dir);
   const existing = readEnvFile(file);
   const created = !fs.existsSync(file);
-  const added = GENERATED_SECRETS.filter((k) => !existing[k]);
+  const added: string[] = GENERATED_SECRETS.filter((k) => !existing[k]);
   const lines: string[] = [];
   if (created) {
     lines.push(
       '# 云匠本地配置（docs/07 §4.5）。这个文件不进仓库，只在本机。',
-      '# OpenAI 密钥由你自己填写，Claude 不经手：',
-      'OPENAI_API_KEY=',
+      ...LLM_BLOCK,
       '# 模型代理每日花费上限（美元），到上限后熔断',
       'CC_LLM_DAILY_BUDGET_USD=5',
       '',
       '# 以下由 dev:up 自动生成，数据库初始化后不要再改（改了要 dev:reset）',
     );
+  } else {
+    const text = fs.readFileSync(file, 'utf8');
+    if (!/^CC_LLM_BASE_URL=/m.test(text)) {
+      added.unshift('模型接入（CC_LLM_*）');
+      if (/^OPENAI_API_KEY=\s*$/m.test(text))
+        fs.writeFileSync(
+          file,
+          text
+            .replace(/^# OpenAI 密钥.*\n/m, '')
+            .replace(/^OPENAI_API_KEY=\s*$/m, LLM_BLOCK.join('\n')),
+        );
+      else lines.push('', ...LLM_BLOCK);
+    }
   }
-  for (const k of added) lines.push(`${k}=${crypto.randomBytes(24).toString('base64url')}`);
+  for (const k of GENERATED_SECRETS)
+    if (!existing[k]) lines.push(`${k}=${crypto.randomBytes(24).toString('base64url')}`);
   if (lines.length > 0) {
     const prefix = !created && !fs.readFileSync(file, 'utf8').endsWith('\n') ? '\n' : '';
     fs.appendFileSync(file, `${prefix}${lines.join('\n')}\n`, { mode: 0o600 });
-    fs.chmodSync(file, 0o600);
   }
+  fs.chmodSync(file, 0o600);
   return { created, added };
 }
 

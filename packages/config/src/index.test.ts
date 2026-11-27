@@ -18,12 +18,12 @@ const secrets = [
 
 describe('配置模块', () => {
   it('读 .env、补默认值、环境变量优先、数字从字符串转换', () => {
-    const dir = tempDir(`${secrets}\nCC_PG_PORT=6000\nOPENAI_API_KEY=\n`);
+    const dir = tempDir(`${secrets}\nCC_PG_PORT=6000\nCC_LLM_API_KEY=\n`);
     const c = loadConfig({ CC_DATA_DIR: dir, CC_PG_PORT: '7000' });
     expect(c.CC_PG_PORT).toBe(7000);
     expect(c.CC_SMTP_PORT).toBe(1025);
     expect(c.CC_LLM_DAILY_BUDGET_USD).toBe(5);
-    expect(c.OPENAI_API_KEY).toBeUndefined();
+    expect(c.CC_LLM_API_KEY).toBeUndefined();
     const url = new URL(databaseUrls(c).app);
     expect(url.username).toBe('cc_app');
     expect(decodeURIComponent(url.password)).toBe('cccccccccccccccccc/+@');
