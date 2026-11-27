@@ -131,6 +131,27 @@ describe('账号与空间（P2）', () => {
     expect(mails.at(-1)!.text).not.toMatch(/\d{6}/);
   });
 
+  it('注册时填了团队名称就建团队空间，不建个人空间（01 §9）', async () => {
+    expect(
+      (await call('POST', '/v1/auth/otp', { email: 'team@test.local', purpose: 'register' }))
+        .status,
+    ).toBe(202);
+    const r = await call('POST', '/v1/auth/register', {
+      email: 'team@test.local',
+      code: codeFor('team@test.local'),
+      password: 'correct horse battery',
+      display_name: 'Tess',
+      workspace_name: '星辰前端团队',
+    });
+    const me = await call(
+      'GET',
+      '/v1/me',
+      undefined,
+      (r.body.tokens as Json).access_token as string,
+    );
+    expect(me.body.workspaces).toMatchObject([{ kind: 'organization', name: '星辰前端团队' }]);
+  });
+
   it('两个账号在两个空间互相看不到：读空间、成员、通知、开 WebSocket 一律当作不存在', async () => {
     B = await signUp('b@test.local', 'Bob');
     for (const path of [
