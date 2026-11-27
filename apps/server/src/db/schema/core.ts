@@ -76,7 +76,13 @@ export const flowInstances = projectTable(
     status: text().notNull().default('running'),
   },
   () => [
-    enumCheck('flow_instances_kind_check', 'kind', ['round', 'delivery', 'bundle', 'eval']),
+    enumCheck('flow_instances_kind_check', 'kind', [
+      'round',
+      'delivery',
+      'bundle',
+      'eval',
+      'trial_build',
+    ]),
     enumCheck('flow_instances_status_check', 'status', FLOW_STATUSES),
   ],
 );

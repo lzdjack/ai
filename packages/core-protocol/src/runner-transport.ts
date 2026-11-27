@@ -16,6 +16,7 @@ export const RUNNER_PATHS = {
   registerRunner: '/v1/runner/register',
   heartbeatAndPoll: '/v1/runner/heartbeat',
   completeRoundStep: '/v1/runner/complete',
+  fetchCredential: '/v1/runner/credential',
 } as const;
 
 /** Prefix of the one-time enrollment token; the long-term secret has its own prefix. */
@@ -76,6 +77,8 @@ export const RepoSpec = Type.Object({
    * origin, e.g. /assets/ (06 §5.2 DistAssetMatcher)
    */
   asset_url_patterns: Type.Optional(Type.Array(Type.String())),
+  /** secret the executor fetches as an envelope to clone and push (06 §2.10); none: public or local */
+  credential_ref: Type.Optional(Type.String({ format: 'uuid' })),
 });
 export type RepoSpec = Static<typeof RepoSpec>;
 
@@ -135,3 +138,12 @@ export const RUNNER_ERRORS = {
   leaseLost: 'runner.lease_lost',
   outputTooLarge: 'runner.output_too_large',
 } as const;
+
+/** The credential of one repo of a step the runner holds, sealed to the runner's bot_exec key. */
+export const FetchCredentialRequest = Type.Object({
+  work_item_id: Type.String({ format: 'uuid' }),
+  lease_token: Type.String({ format: 'uuid' }),
+  fence: Type.Integer(),
+  secret_id: Type.String({ format: 'uuid' }),
+});
+export type FetchCredentialRequest = Static<typeof FetchCredentialRequest>;

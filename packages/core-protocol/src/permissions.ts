@@ -10,6 +10,7 @@ export const CORE_PERMISSIONS = [
   'core:members:invite',
   'core:members:manage',
   'core:roles:manage',
+  'core:connectors:manage',
   'core:projects:create',
   'core:projects:manage',
   /** sees every project of the workspace without a per-project binding */
@@ -44,6 +45,7 @@ export const BUILTIN_ROLES: BuiltinRole[] = [
       'core:members:invite',
       'core:members:manage',
       'core:roles:manage',
+      'core:connectors:manage',
       'core:projects:create',
       'core:projects:manage',
       'core:projects:view_all',

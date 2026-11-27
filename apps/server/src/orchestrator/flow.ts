@@ -31,7 +31,11 @@ export interface OrchestratorPort {
   startFlow(
     tx: Tx,
     ctx: ActorCtx,
-    f: { projectId: string; kind: 'round' | 'delivery' | 'bundle' | 'eval'; plan: Plan },
+    f: {
+      projectId: string;
+      kind: 'round' | 'delivery' | 'bundle' | 'eval' | 'trial_build';
+      plan: Plan;
+    },
   ): Promise<string>;
   signal(tx: Tx, ctx: ActorCtx, flowInstanceId: string, signal: Signal): Promise<Command[]>;
 }
