@@ -19,6 +19,7 @@
   },
   "include": [
     "apps/*/src",
+    "apps/*/test",
     "packages/*/src",
     "plugins/*/src",
     "sim/src",

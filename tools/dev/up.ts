@@ -1,6 +1,8 @@
 // pnpm dev:up：起本地基础设施并自检（docs/07 §4.4）。可重复执行。
 import { databaseUrls } from '@cloudcraft/config';
+import { migrateDatabase } from '@cloudcraft/server';
 import { seedDemoRepos } from '../fixtures/seed.ts';
+import { seedPlatform } from './seed-platform.ts';
 import {
   compose,
   dataDir,
@@ -51,6 +53,18 @@ const mail = await fetch(`http://127.0.0.1:${c.CC_MAILPIT_UI_PORT}/api/v1/info`)
 must('mailpit 自检', { ok: !!mail?.ok, out: `http://127.0.0.1:${c.CC_MAILPIT_UI_PORT} 无响应` });
 console.log('✓ mailpit 可用');
 
+// 迁移（迁移账号）→ 种子数据（运行账号，走产品写入函数）
+await migrateDatabase(databaseUrls(c).migrator).catch((e: Error) =>
+  must('数据库迁移', { ok: false, out: e.message }),
+);
+const platform = await seedPlatform(c).catch((e: Error) => {
+  must('种子数据', { ok: false, out: e.message });
+  return 'exists' as const;
+});
+console.log(
+  `✓ 数据库已迁移；种子数据${platform === 'seeded' ? '已写入：演示团队（张三、李四、王五，项目「审批中心」）、李四的个人空间' : '已存在'}`,
+);
+
 const seeded = await seedDemoRepos(c).catch((e: Error) => {
   must('demo 仓推进模拟 GitLab', { ok: false, out: e.message });
   return [];
@@ -66,5 +80,4 @@ console.log(`
 收件箱    http://127.0.0.1:${c.CC_MAILPIT_UI_PORT}
 SMTP      127.0.0.1:${c.CC_SMTP_PORT}
 模拟服务  pnpm dev 后 http://127.0.0.1:${c.CC_SIM_PORT}/
-数据目录  ${dir}
-- 数据库迁移与种子数据：P1 起`);
+数据目录  ${dir}`);
