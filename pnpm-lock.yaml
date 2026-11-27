@@ -225,7 +225,14 @@ importers:
         specifier: 5.1.2
         version: 5.1.2(@types/node@24.19.4)(vite@8.4.0(@types/node@24.19.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
 
-  apps/bot-executor: {}
+  apps/bot-executor:
+    dependencies:
+      '@cloudcraft/core-protocol':
+        specifier: workspace:*
+        version: link:../../packages/core-protocol
+      typebox:
+        specifier: 1.4.7
+        version: 1.4.7
 
   apps/llm-proxy: {}
 
@@ -234,6 +241,9 @@ importers:
       '@cloudcraft/config':
         specifier: workspace:*
         version: link:../../packages/config
+      '@cloudcraft/core-protocol':
+        specifier: workspace:*
+        version: link:../../packages/core-protocol
       drizzle-orm:
         specifier: 0.45.4
         version: 0.45.4(@types/pg@8.23.1)(pg@8.23.1)
@@ -267,7 +277,11 @@ importers:
         specifier: 1.4.7
         version: 1.4.7
 
-  packages/core-protocol: {}
+  packages/core-protocol:
+    dependencies:
+      typebox:
+        specifier: 1.4.7
+        version: 1.4.7
 
   packages/llm-gateway: {}
 
@@ -327,12 +341,19 @@ importers:
       drizzle-orm:
         specifier: 0.45.4
         version: 0.45.4(@types/pg@8.23.1)(pg@8.23.1)
+      pg:
+        specifier: 8.23.1
+        version: 8.23.1
       typebox:
         specifier: 1.4.7
         version: 1.4.7
       yaml:
         specifier: 2.9.1
         version: 2.9.1
+    devDependencies:
+      '@types/pg':
+        specifier: 8.23.1
+        version: 8.23.1
 
 packages:
 
