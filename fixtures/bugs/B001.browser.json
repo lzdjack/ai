@@ -1,0 +1,11 @@
+{
+  "repo": "demo-web",
+  "steps": [
+    { "goto": "/#/approvals" },
+    { "screenshot": "list" },
+    { "expect_text": "#24", "in": { "css": "tbody tr", "nth": 0 } },
+    { "click": { "text": "提交时间" } },
+    { "expect_text": "#1", "in": { "css": "tbody tr", "nth": 0 } },
+    { "expect_text": "差旅报销 #1", "in": { "css": "tbody tr td", "nth": 0 }, "mode": "equals" }
+  ]
+}

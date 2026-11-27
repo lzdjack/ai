@@ -26,6 +26,7 @@
     "runner": "node --import tsx apps/bot-executor/src/main.ts",
     "runner:try": "tsx tools/runner/try.ts",
     "runner:fix": "tsx tools/runner/fix.ts",
+    "runner:browser": "tsx tools/runner/browser.ts",
     "llm-proxy": "node --import tsx apps/llm-proxy/src/main.ts",
     "dev": "turbo run dev"
   },

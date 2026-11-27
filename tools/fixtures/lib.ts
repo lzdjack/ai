@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { promisify } from 'node:util';
 import type { Config } from '@cloudcraft/config';
+import { BrowserRepro, browserReproErrors } from '@cloudcraft/core-protocol';
 import { buildSim } from '@cloudcraft/sim';
 import { Type, type Static } from 'typebox';
 import Value from 'typebox/value';
@@ -32,12 +33,20 @@ const BugSchema = Type.Object({
   fix: PerRepo,
   verify: Type.Object({
     unit: Type.String(),
+    /** 参考浏览器复现物（JSON，BrowserRepro），Bot 看不到 */
     browser: Type.Optional(Type.String()),
     /** 改两个仓时，隐藏测试放在哪个仓里跑 */
     run_in: Type.Optional(RepoName),
   }),
   expect_files: Type.Array(Type.String()),
 });
+
+/** 题目的参考浏览器复现物（没有时 null） */
+export function browserReproOf(bug: Bug): BrowserRepro | null {
+  return bug.verify.browser
+    ? (JSON.parse(fs.readFileSync(path.join(BUGS_DIR, bug.verify.browser), 'utf8')) as BrowserRepro)
+    : null;
+}
 
 export interface Bug extends Static<typeof BugSchema> {
   repos: DemoRepo[];
@@ -72,6 +81,11 @@ export function loadBugs(): Bug[] {
     if (!repos.includes(runIn)) problems.push(`${file}：verify.run_in 不在 repo 里`);
     for (const f of [...patches('inject').values(), ...patches('fix').values(), path.join(BUGS_DIR, raw.verify.unit)])
       if (!fs.existsSync(f) || fs.statSync(f).isDirectory()) problems.push(`${file}：缺文件 ${path.relative(BUGS_DIR, f)}`);
+    if (raw.verify.browser) {
+      const b: unknown = JSON.parse(fs.readFileSync(path.join(BUGS_DIR, raw.verify.browser), 'utf8'));
+      if (!Value.Check(BrowserRepro, b)) problems.push(`${file}：verify.browser 不是合法的浏览器复现物`);
+      else problems.push(...browserReproErrors(b).map((e) => `${file}：verify.browser ${e}`));
+    }
     bugs.push(bug);
   }
   if (problems.length) throw new Error(`题库有问题：\n  ${problems.join('\n  ')}`);
@@ -147,6 +161,7 @@ export async function withSim<T>(c: Config, fn: (base: string) => Promise<T>): P
   if (alive) return fn(running);
   const app = await buildSim({ dataDir: c.CC_DATA_DIR });
   await app.listen({ host: '127.0.0.1', port: 0 });
+  await app.envSites.listen('test', 0);
   const addr = app.server.address();
   try {
     return await fn(`http://127.0.0.1:${typeof addr === 'object' && addr ? addr.port : 0}`);

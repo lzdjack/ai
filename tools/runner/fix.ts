@@ -3,7 +3,8 @@
 //   2. 起真实的执行器进程，跑一张三节点流程：准备工作区 → AI 修题 → 宿主机回放判定
 //      AI 修题：执行器按配置加载引擎插件（Pi），引擎在本轮内部网络的断网容器里跑，只能经中继连模型代理
 //      和本轮的宿主工具端；交付由宿主机逐次校验，改了哪些文件、提交号由宿主机从 git 读
-//      回放判定：Bot 写的复现测试修前必须失败、修后必须通过，所在仓类型检查和全部测试通过，通过才推 fix/ 分支
+//      回放判定：Bot 写的复现测试修前必须失败、修后必须通过，所在仓类型检查和全部测试通过，通过才推 fix/ 分支；
+//      demo-web 是浏览器验证的仓，Bot 交了浏览器复现物时还在测试环境上做产物替换回放（E2b，06 §5.2）
 //   3. 用题库的隐藏测试（Bot 看不到）在推上去的分支上复核：修前失败、修后通过
 // 真实调用模型、要花钱，不进 verify。需要 Docker 和 pnpm dev:up。
 import fs from 'node:fs';
@@ -27,8 +28,9 @@ import {
   loadBugs,
   withSim,
 } from '../fixtures/lib.ts';
+import { deployDemoEnv } from '../fixtures/env.ts';
 import { botToken, seedDemoRepos } from '../fixtures/seed.ts';
-import { fail, sec, startHarness, waitFor } from './harness.ts';
+import { demoRepoSpec, fail, printBrowserVerdict, sec, startHarness, waitFor } from './harness.ts';
 
 const argv = process.argv.slice(2);
 const flag = (name: string) => {
@@ -53,6 +55,7 @@ const short = (s: unknown, n = 160) =>
     .slice(0, n);
 
 await seedDemoRepos(c);
+const env = await deployDemoEnv(c);
 await withSim(c, async (simBase) => {
   const scratch = fs.mkdtempSync(path.join(os.tmpdir(), 'cc-runner-fix-'));
   const proxy = await startLlmProxy({
@@ -108,15 +111,7 @@ await withSim(c, async (simBase) => {
     const repro = bug.repro.map((s, i) => `${i + 1}. ${s}`).join('\n');
     const plan: Plan = {
       plan_schema_version: PLAN_SCHEMA_VERSION,
-      repos: DEMO_REPOS.map((name) => ({
-        id: name,
-        name,
-        clone_url: `${simBase}/${DEMO_NAMESPACE}/${name}.git`,
-        ref: 'main',
-        build_command: 'pnpm build',
-        test_command: 'pnpm exec vitest run',
-        typecheck_command: 'pnpm exec tsc -p .',
-      })),
+      repos: DEMO_REPOS.map((name) => demoRepoSpec(simBase, name)),
       nodes: [
         { key: 'prepare', kind: 'auto', node_kind: 'host_prepare' },
         {
@@ -135,7 +130,7 @@ await withSim(c, async (simBase) => {
           key: 'verify',
           kind: 'auto',
           node_kind: 'deterministic_verify',
-          config: { action: 'replay' },
+          config: { action: 'replay', env_url: env.url },
         },
         { key: 'review', kind: 'human' },
       ],
@@ -171,10 +166,14 @@ await withSim(c, async (simBase) => {
       console.log(
         `  引擎 ${short((fixOut.engine as Out)?.id)}，结束原因 ${short(fixOut.stop_reason)}，${fixOut.turns} 个回合，${fixOut.tool_calls} 次工具调用（${fixOut.tool_errors} 次出错）${fixOut.follow_up_used ? '，追问过一次' : ''}`,
       );
+      if (fixOut.error) console.log(`  ✗ ${short(fixOut.error, 400)}`);
       if (d) {
         console.log(`  根因：${short(d.root_cause, 240)}`);
         console.log(`  改动：${short(d.summary, 240)}`);
-        console.log(`  复现测试：${(d.repro_tests as string[]).join('、')}`);
+        if ((d.repro_tests as string[]).length)
+          console.log(`  复现测试：${(d.repro_tests as string[]).join('、')}`);
+        if (d.browser_repro)
+          console.log(`  浏览器复现物：${JSON.stringify(d.browser_repro).slice(0, 400)}`);
       }
       for (const ch of (fixOut.changes as Out[]) ?? [])
         console.log(
@@ -188,19 +187,20 @@ await withSim(c, async (simBase) => {
         );
     }
     if (verify) {
-      const v = verOut.verdict as Record<string, boolean> | undefined;
-      console.log('\n宿主机回放判定（断网容器）');
-      if (v) {
-        console.log(
-          `  ${v.repro_fails_before ? '✓' : '✗'} 复现测试修前失败${(verOut.repro_failed_on_assertion as string[])?.length ? '（断言失败）' : ''}`,
-        );
-        console.log(`  ${v.repro_passes_after ? '✓' : '✗'} 复现测试修后通过`);
-        console.log(`  ${v.typecheck ? '✓' : '✗'} 类型检查  ${v.tests ? '✓' : '✗'} 所在仓全部测试`);
-      }
+      printBrowserVerdict(verOut, path.join(c.CC_DATA_DIR, 'evidence', 'runner-fix', bug.id));
       for (const p of (verOut.pushed as Out[]) ?? []) console.log(`  · 已推 ${p.repo} ${p.branch}`);
-      if (verOut.logs) console.log(JSON.stringify(verOut.logs, null, 2));
     }
-    if (verify?.status !== 'done') stop('回放判定没有通过');
+    if (verify?.status !== 'done') {
+      // keep the engine's files (session, trajectory) for a look before the work root goes away
+      const keep = path.join(c.CC_DATA_DIR, 'evidence', 'runner-fix', bug.id, 'engine');
+      const roots = path.join(c.CC_DATA_DIR, 'sandboxes');
+      for (const r of fs.readdirSync(roots))
+        for (const f of fs.readdirSync(path.join(roots, r)).filter((x) => x.startsWith('flow-')))
+          if (fs.existsSync(path.join(roots, r, f, 'engine')))
+            fs.cpSync(path.join(roots, r, f, 'engine'), keep, { recursive: true });
+      console.log(`  引擎会话留在 ${keep}`);
+      stop('回放判定没有通过');
+    }
     ok.push(
       `✓ 三节点流程走完 ${sec(total)}：准备 → AI 修题（${short(fixOut.stop_reason)}）→ 回放判定通过并推送`,
     );
