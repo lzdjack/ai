@@ -416,7 +416,7 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
     <div class="toprow">
       <div class="brand">
         <span class="logo"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7.2L3.6 12 8 16.8"/><path d="M16 7.2l4.4 4.8-4.4 4.8" opacity=".6"/><path d="M9.6 12.3l1.8 1.8 3.2-4"/></svg></span>
-        <span><b>云匠 <span class="ben">CloudCraft</span><span class="bsep">· 一期项目总览</span></b><em>统一文档与设计集合 · 需求 → 方案与链路 → 设计主题 → PC → 移动端 → 技术设计 → 决策与后续</em></span>
+        <span><b>云匠 <span class="ben">CloudCraft</span><span class="bsep">· 一期项目总览</span></b><em>统一文档与设计集合 · 需求 → 方案与链路 → 设计主题 → PC → 移动端 → 技术设计 → 决策与后续 → 开发实施</em></span>
       </div>
       <span class="grow"></span>
       <div class="seg" role="group" aria-label="主题"><button data-theme="light">☀︎ 亮色</button><button data-theme="dark">☾ 暗色</button></div>
@@ -428,7 +428,8 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
       <button class="step" data-tab="pc"><i>4</i>PC 界面</button><span class="arrow">›</span>
       <button class="step" data-tab="mobile"><i>5</i>移动端</button><span class="arrow">›</span>
       <button class="step" data-tab="tech"><i>6</i>技术设计</button><span class="arrow">›</span>
-      <button class="step" data-tab="log"><i>7</i>决策与后续</button>
+      <button class="step" data-tab="log"><i>7</i>决策与后续</button><span class="arrow">›</span>
+      <button class="step" data-tab="impl"><i>8</i>开发实施</button>
     </nav>
   </div>
 </header>
@@ -945,7 +946,8 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
         <li class="done">移动端首页 3 屏 + 登录步骤器等 6 张 + 其余功能页面 13 张（39 屏，含插件市场、组织权限与运行态异常补齐）</li>
         <li class="done">技术设计方案第 0～14 节全锁版（含 <code>workspaces</code> 统一作用域、M1 六项零重构预留、四项 AI 飞轮守卫与二期跨项目需求变更集架构）</li>
         <li class="done">PC 选择执行环境 + 三路径接入页（本机初始化 / 连接自有服务器 / 开通云端 Pro）+ 设置→执行器（亮暗全套）</li>
-        <li class="wip">正式进入 M1 编码落地（<code>cloudcraft/</code> pnpm Monorepo 核心修单闭环）</li>
+        <li class="done">工程化与实施计划（07）：单仓结构、本地环境与模拟服务、demo 仓与 Bug 题库、测试与协作流程、任务台账</li>
+        <li class="wip">M1 编码落地：从工程底座 E0-1 开始（进度见「开发实施」标签页的任务台账）</li>
       </ul>
     </div>
   </div>
@@ -968,7 +970,27 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
       <li><b>待定</b>：用一条真实的「组件包 → 子项目 → 主站」链路评审大包清单；Tita 工单查询接口字段、Apollo 登录/开放接口与外网远程访问方案待实测确认</li>
     </ol>
   </div>
-  <div class="next"><button class="nb sec" data-go-tab="tech">← 上一步：技术设计</button><button class="nb pri" data-go-tab="req">回到第 1 步</button></div>
+  <div class="next"><button class="nb sec" data-go-tab="tech">← 上一步：技术设计</button><button class="nb pri" data-go-tab="impl">下一步：开发实施 →</button></div>
+</section>
+
+<!-- ========== 8 开发实施 ========== -->
+<section class="pane" id="p-impl" data-pane="impl">
+  <h2 class="ttl">第 8 步 · 开发实施</h2>
+  <p class="sub">来源于 <code>docs/07-工程化与实施计划.md</code>：怎么开发、按什么顺序做、怎么验收。任务台账（§9）随开发持续更新，改完文档重新运行 <code>python3 scripts/build-index.py</code> 即可同步到这里。</p>
+
+  <div class="grid g4">
+    <div class="kpi glass"><b style="font-size:19px">单仓</b><span>设计、文档与代码放在同一个仓库</span></div>
+    <div class="kpi glass"><b style="font-size:19px">全部本机运行</b><span>内网系统用模拟服务代替，回公司只换地址</span></div>
+    <div class="kpi glass"><b style="font-size:19px">demo 仓 + Bug 题库</b><span>评测、冒烟测试、质检共用一套题</span></div>
+    <div class="kpi glass"><b style="font-size:19px">pnpm verify</b><span>唯一检查入口，本地即 CI</span></div>
+  </div>
+
+  <div class="doc mt">
+    <nav class="toc glass">{{IMPL_TOC}}</nav>
+    <article class="md glass">{{IMPL_BODY}}</article>
+  </div>
+
+  <div class="next"><button class="nb sec" data-go-tab="log">← 上一步：决策与后续</button><button class="nb pri" data-go-tab="req">回到第 1 步</button></div>
 </section>
 </main>
 
@@ -987,7 +1009,7 @@ if(d==='dark'||(!d&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)'
   syncTheme();
 
   /* 顶部步骤标签 */
-  var order=['req','plan','theme','pc','mobile','tech','log'];
+  var order=['req','plan','theme','pc','mobile','tech','log','impl'];
   function go(id,noScroll){
     if(order.indexOf(id)<0)id='req';
     document.querySelectorAll('.pane').forEach(function(p){p.classList.toggle('on',p.dataset.pane===id)});
