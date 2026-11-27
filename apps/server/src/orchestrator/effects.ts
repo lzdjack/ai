@@ -4,7 +4,7 @@
 import { and, eq, sql } from 'drizzle-orm';
 import { withLeaseTx, type ActorCtx, type Db, type Lease, type Tx } from '../db/client.ts';
 import { effects, workItems } from '../db/schema/index.ts';
-import { RUN_NODE, pgOrchestrator } from './flow.ts';
+import { pgOrchestrator } from './flow.ts';
 import { completeWork, registerEffect } from './queue.ts';
 
 export interface EffectSpec {
@@ -94,14 +94,14 @@ export async function reapExpiredLeases(
     await withLeaseTx(db, lease, async (tx, ctx) => {
       const [item] = await tx.select().from(workItems).where(eq(workItems.id, lease.workItemId));
       const p = item!.payload as { flow_instance_id?: string; node_run_id?: string };
-      const inFlight =
-        item!.kind === RUN_NODE && p.node_run_id
-          ? await tx
-              .update(effects)
-              .set({ status: 'interrupted', updatedAt: sql`now()` })
-              .where(and(eq(effects.nodeRunId, p.node_run_id), eq(effects.status, 'pending')))
-              .returning({ id: effects.id })
-          : [];
+      // node work (run_node, bot_step) carries its node run; other kinds just go back to the queue
+      const inFlight = p.node_run_id
+        ? await tx
+            .update(effects)
+            .set({ status: 'interrupted', updatedAt: sql`now()` })
+            .where(and(eq(effects.nodeRunId, p.node_run_id), eq(effects.status, 'pending')))
+            .returning({ id: effects.id })
+        : [];
       if (inFlight.length > 0) {
         await completeWork(tx, lease, 'failed', 'interrupted');
         await pgOrchestrator.signal(tx, ctx, p.flow_instance_id!, {
@@ -118,7 +118,7 @@ export async function reapExpiredLeases(
           leaseToken: null,
           leaseOwner: null,
           leaseExpiresAt: null,
-          runAfter: sql`now()`,
+          // run_after stays as it was, so the item goes back to the front of the queue (06 §5.8)
           updatedAt: sql`now()`,
         })
         .where(and(eq(workItems.id, lease.workItemId), eq(workItems.leaseToken, lease.leaseToken)));

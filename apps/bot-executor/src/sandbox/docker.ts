@@ -40,6 +40,10 @@ export interface RunOptions {
   workdir?: string;
   env?: Record<string, string>;
   limits?: Partial<SandboxLimits>;
+  /** aborting kills the container (e.g. the runner lost its lease) */
+  signal?: AbortSignal;
+  /** docker labels, e.g. which executor started it, so leftovers can be found after a crash */
+  labels?: Record<string, string>;
 }
 
 export interface RunResult {
@@ -76,6 +80,7 @@ function containerArgs(opts: RunOptions, name: string, interactive: boolean): st
     `--memory-swap=${limits.memory}`,
     `--cpus=${limits.cpus}`,
     `--pids-limit=${limits.pids}`,
+    ...Object.entries(opts.labels ?? {}).map(([k, v]) => `--label=${k}=${v}`),
     ...opts.mounts.map((m) => `--volume=${m.host}:${m.container}${m.readonly ? ':ro' : ''}`),
     ...Object.entries(env).flatMap(([k, v]) => ['--env', `${k}=${v}`]),
     `--workdir=${opts.workdir ?? '/work'}`,
@@ -142,12 +147,16 @@ export function runContainer(opts: RunOptions): Promise<RunResult> {
     child.stdout.on('data', collect);
     child.stderr.on('data', collect);
     let timedOut = false;
+    const kill = () => spawnSync('docker', ['kill', name], { stdio: 'ignore' });
     const timer = setTimeout(() => {
       timedOut = true;
-      spawnSync('docker', ['kill', name], { stdio: 'ignore' });
+      kill();
     }, limits.timeoutMs);
+    if (opts.signal?.aborted) kill();
+    opts.signal?.addEventListener('abort', kill, { once: true });
     child.on('close', (code) => {
       clearTimeout(timer);
+      opts.signal?.removeEventListener('abort', kill);
       resolve({
         ok: code === 0 && !timedOut,
         exitCode: code,
@@ -180,4 +189,14 @@ export function ensureSandboxImage(contextDir: string): {
   const r = spawnSync('docker', ['build', '-q', '-t', tag, contextDir], { encoding: 'utf8' });
   if (r.status !== 0) throw new Error(`sandbox image build failed: ${r.stderr.trim()}`);
   return { tag, built: true, ms: Date.now() - started };
+}
+
+/** Kills containers left behind by a process that died (they carry its label). Returns how many. */
+export function killLabeled(label: string, value: string): number {
+  const r = spawnSync('docker', ['ps', '-q', '--filter', `label=${label}=${value}`], {
+    encoding: 'utf8',
+  });
+  const ids = r.stdout.split('\n').filter(Boolean);
+  if (ids.length) spawnSync('docker', ['kill', ...ids], { stdio: 'ignore' });
+  return ids.length;
 }

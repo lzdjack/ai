@@ -2,6 +2,7 @@ import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
 import {
   INTERRUPTED,
+  type RepoSpec,
   PLAN_SCHEMA_VERSION,
   advance,
   isActive,
@@ -11,6 +12,14 @@ import {
   type Plan,
   type Signal,
 } from './advance.ts';
+
+const repo = (id: string): RepoSpec => ({
+  id,
+  name: id,
+  clone_url: `http://git.test/${id}.git`,
+  ref: 'main',
+  build_command: 'pnpm build',
+});
 
 /** Applies commands in memory exactly as flow.ts does in the database. */
 function apply(flow: FlowView, commands: Command[], nextId: () => string): FlowView {
@@ -50,7 +59,7 @@ const planArb = fc
   })
   .map(({ nodes, repos }): Plan => ({
     plan_schema_version: PLAN_SCHEMA_VERSION,
-    repo_ids: Array.from({ length: repos }, (_, i) => `repo${i}`),
+    repos: Array.from({ length: repos }, (_, i) => repo(`repo${i}`)),
     nodes: nodes.map((n, i) => ({
       key: `n${i}`,
       kind: n.kind,
@@ -117,7 +126,7 @@ describe('advance() 推进函数', () => {
           // only one node attempt is active at a time, with one run per repo at most
           const active = flow.nodeRuns.filter(isActive);
           expect(new Set(active.map(group)).size).toBeLessThanOrEqual(1);
-          expect(active.length).toBeLessThanOrEqual(plan.repo_ids!.length);
+          expect(active.length).toBeLessThanOrEqual(plan.repos!.length);
           if (flow.status !== 'running') expect(active).toEqual([]);
           // attempts per node and repo are 1..n without gaps or duplicates
           const attempts = new Map<string, number[]>();
@@ -194,7 +203,7 @@ describe('advance() 推进函数', () => {
   it('三仓扇出一仓失败：等齐再判定，按 on_fail 回到中间节点重开，上一轮的迟到信号无效', () => {
     const plan: Plan = {
       plan_schema_version: PLAN_SCHEMA_VERSION,
-      repo_ids: ['a', 'b', 'c'],
+      repos: ['a', 'b', 'c'].map(repo),
       nodes: [
         { key: 'prepare', kind: 'auto' },
         { key: 'fix', kind: 'auto' },

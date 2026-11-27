@@ -95,3 +95,61 @@ export async function withLeaseTx<T>(
     throw e;
   }
 }
+
+/** The runner's long-term secret did not match (or the runner was revoked). */
+export class RunnerAuthError extends Error {
+  readonly code = 'runner.unauthorized';
+  constructor() {
+    super('runner not recognised');
+    this.name = 'RunnerAuthError';
+  }
+}
+
+const isAuthFailure = (e: unknown) =>
+  (e as { code?: string }).code === '28000' ||
+  (e as { cause?: { code?: string } }).cause?.code === '28000';
+
+/** Runner request: the secret decides the workspace (app_enter_runner, 06 §2.3). */
+export async function withRunnerTx<T>(
+  db: Db,
+  runner: { runnerId: string; secret: string },
+  fn: (tx: Tx, actor: ActorCtx) => Promise<T>,
+): Promise<T> {
+  try {
+    return await db.orm.transaction(async (tx) => {
+      const r = await tx.execute<{ ws: string }>(
+        sql`select app_enter_runner(${runner.runnerId}::uuid, ${runner.secret}) as ws`,
+      );
+      return fn(tx, { workspaceId: r.rows[0]!.ws, actorUserId: null, clientSource: 'system_sync' });
+    });
+  } catch (e) {
+    if (isAuthFailure(e)) throw new RunnerAuthError();
+    throw e;
+  }
+}
+
+/** Enrollment: a valid one-time token enters the runner's workspace (app_enroll_runner). */
+export async function withEnrollTx<T>(
+  db: Db,
+  enrollToken: string,
+  fn: (tx: Tx, actor: ActorCtx, runnerId: string) => Promise<T>,
+): Promise<T> {
+  try {
+    return await db.orm.transaction(async (tx) => {
+      const r = await tx.execute<{ id: string }>(
+        sql`select app_enroll_runner(${enrollToken}) as id`,
+      );
+      const ws = await tx.execute<{ ws: string }>(
+        sql`select current_setting('app.current_workspace_id') as ws`,
+      );
+      return fn(
+        tx,
+        { workspaceId: ws.rows[0]!.ws, actorUserId: null, clientSource: 'system_sync' },
+        r.rows[0]!.id,
+      );
+    });
+  } catch (e) {
+    if (isAuthFailure(e)) throw new RunnerAuthError();
+    throw e;
+  }
+}

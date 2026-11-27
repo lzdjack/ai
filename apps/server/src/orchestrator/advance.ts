@@ -7,6 +7,8 @@
 // (`on_fail`, compiled from retry_routing.on_gate_fail). People can send the flow back to any node
 // (`rework`, the "all nodes" dropdown of §5.1a). Every retry appends attempt_no + 1 rows.
 
+import type { RepoSpec } from '@cloudcraft/core-protocol';
+
 export const PLAN_SCHEMA_VERSION = 1;
 
 export type NodeKind = 'auto' | 'human';
@@ -14,7 +16,11 @@ export type NodeKind = 'auto' | 'human';
 export interface PlanNode {
   key: string;
   kind: NodeKind;
-  /** one node run per repo in `plan.repo_ids` (06 §2.4 fanout_mode = per_repo) */
+  /** workflow node kind (06 §2.4); decides who runs an auto node, see flow.ts workKindFor */
+  node_kind?: string;
+  /** node config frozen from the template version (tools, commands, gate switches) */
+  config?: Record<string, unknown>;
+  /** one node run per repo in `plan.repos` (06 §2.4 fanout_mode = per_repo) */
   per_repo?: boolean;
   /** how per-repo runs join; default all_must_succeed */
   join?: 'all_must_succeed' | 'allow_partial_continue';
@@ -22,11 +28,14 @@ export interface PlanNode {
   on_fail?: { rework_to: string; max_attempts: number };
 }
 
+/** A repo of the round as frozen into the plan: where to clone it and how to build it. No secrets. */
+export type { RepoSpec };
+
 export interface Plan {
   plan_schema_version: typeof PLAN_SCHEMA_VERSION;
   nodes: PlanNode[];
-  /** repos of the round, for per_repo nodes */
-  repo_ids?: string[];
+  /** repos of the round, in dependency order */
+  repos?: RepoSpec[];
 }
 
 export type FlowStatus = 'running' | 'done' | 'failed' | 'cancelled';
@@ -85,7 +94,8 @@ const ACTIVE = new Set(['running', 'waiting_human']);
 export const isActive = (r: { status: string }) => ACTIVE.has(r.status);
 
 function open(plan: Plan, node: PlanNode, attemptNo: number): Command[] {
-  const repos: (string | null)[] = node.per_repo && plan.repo_ids?.length ? plan.repo_ids : [null];
+  const repos: (string | null)[] =
+    node.per_repo && plan.repos?.length ? plan.repos.map((r) => r.id) : [null];
   return repos.flatMap((repoId): Command[] => [
     {
       type: 'open_node',
