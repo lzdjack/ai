@@ -6,11 +6,17 @@ import os from 'node:os';
 import path from 'node:path';
 import { Type, type Static } from 'typebox';
 import Value from 'typebox/value';
+import { proxyClient } from './agent/proxy-client.ts';
+import { loadRuntime } from './agent/registry.ts';
 import { startRunnerLoop, type StepHandler } from './runner/loop.ts';
 import { loadOrEnroll } from './runner/identity.ts';
 import { httpTransport } from './runner/transport.ts';
 import { ensureSandboxImage, killLabeled } from './sandbox/docker.ts';
+import { fixStep } from './steps/fix.ts';
+import { prepareStep } from './steps/prepare.ts';
+import { replayStep } from './steps/replay.ts';
 import { trialBuild } from './steps/trial-build.ts';
+import { Workspaces } from './steps/workspace.ts';
 
 const Env = Type.Object({
   CC_RUNNER_SERVER: Type.String({ pattern: '^https?://', default: 'http://127.0.0.1:4100' }),
@@ -20,6 +26,10 @@ const Env = Type.Object({
   CC_RUNNER_ENROLL_TOKEN: Type.Optional(Type.String()),
   CC_RUNNER_GIT_TOKEN: Type.Optional(Type.String()),
   CC_RUNNER_SLOTS: Type.Integer({ minimum: 1, maximum: 32, default: 1 }),
+  /** engine plugin to load (module name; its default export is an AgentRuntimePlugin) */
+  CC_AGENT_RUNTIME: Type.String({ default: '@cloudcraft/runtime-pi' }),
+  /** the model proxy's control socket; defaults to <data dir>/run/llm-proxy.sock */
+  CC_LLM_PROXY_SOCKET: Type.Optional(Type.String()),
 });
 type Env = Static<typeof Env>;
 
@@ -54,21 +64,57 @@ const leftovers = killLabeled(LABEL, creds.runnerId);
 fs.rmSync(workRoot, { recursive: true, force: true });
 if (leftovers) log(`killed ${leftovers} container(s) left from a previous run`);
 
-const image = ensureSandboxImage(path.resolve(import.meta.dirname, '../../../infra/sandbox'));
-const build = trialBuild({
+const sandboxDir = path.resolve(import.meta.dirname, '../../../infra/sandbox');
+const image = ensureSandboxImage(sandboxDir);
+const labels = { [LABEL]: creds.runnerId };
+const cacheRoot = path.join(env.CC_DATA_DIR, 'pnpm-store');
+const runtime = await loadRuntime(env.CC_AGENT_RUNTIME);
+const workspaces = new Workspaces({
   image: image.tag,
-  cacheRoot: path.join(env.CC_DATA_DIR, 'pnpm-store'),
-  workRoot,
+  root: workRoot,
+  cacheRoot,
   gitToken: env.CC_RUNNER_GIT_TOKEN,
-  labels: { [LABEL]: creds.runnerId },
+  labels,
 });
-const handlerFor = (step: {
-  node_kind: string;
-  config: Record<string, unknown>;
-}): StepHandler | null => (step.config.action === 'trial_build' ? build : null);
+const handlers: Record<string, StepHandler> = {
+  trial_build: trialBuild({
+    image: image.tag,
+    cacheRoot,
+    workRoot,
+    gitToken: env.CC_RUNNER_GIT_TOKEN,
+    labels,
+  }),
+  prepare: prepareStep(workspaces),
+  fix: fixStep({
+    image: image.tag,
+    sandboxDir,
+    workspaces,
+    proxy: proxyClient(
+      env.CC_LLM_PROXY_SOCKET ?? path.join(env.CC_DATA_DIR, 'run', 'llm-proxy.sock'),
+    ),
+    runtime,
+    labels,
+  }),
+  replay: replayStep({ image: image.tag, workspaces, gitToken: env.CC_RUNNER_GIT_TOKEN, labels }),
+};
+/** By node kind; a deterministic_verify node names its check in config.action. */
+const handlerFor = (step: { node_kind: string; config: Record<string, unknown> }) => {
+  if (step.node_kind === 'host_prepare') return handlers.prepare!;
+  if (step.node_kind === 'ai_agent') return handlers.fix!;
+  return handlers[String(step.config.action)] ?? null;
+};
 
-const loop = startRunnerLoop({ transport, creds, slots: env.CC_RUNNER_SLOTS, handlerFor, log });
-log(`up, ${env.CC_RUNNER_SLOTS} slot(s), sandbox image ${image.tag}`);
+const loop = startRunnerLoop({
+  transport,
+  creds,
+  slots: env.CC_RUNNER_SLOTS,
+  handlerFor,
+  onSegmentEnd: (step) => workspaces.release(step.flow_instance_id),
+  log,
+});
+log(
+  `up, ${env.CC_RUNNER_SLOTS} slot(s), sandbox image ${image.tag}, engine ${runtime.manifest.name}`,
+);
 for (const sig of ['SIGINT', 'SIGTERM'] as const)
   process.once(sig, () => {
     log('draining: finishing running steps, taking no new ones');

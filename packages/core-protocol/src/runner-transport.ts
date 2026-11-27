@@ -3,8 +3,8 @@
 // carries the lease token and fence it was handed, so a runner that lost its lease cannot write.
 //
 // Implemented now (E1): registerRunner, heartbeatAndPoll, completeRoundStep, over HTTP POST with JSON
-// bodies of at most RUNNER_FRAME_LIMIT bytes. reportRoundEvent, streamLogChunk,
-// requestPresignedUpload and fetchEncryptedBundle come with E2 / P3 / P4.
+// bodies of at most RUNNER_FRAME_LIMIT bytes. reportRoundEvent and streamLogChunk come with P4 (the
+// pages that show them), requestPresignedUpload with E2's evidence, fetchEncryptedBundle with P3.
 import { Type, type Static } from 'typebox';
 
 /** control frames stay small; logs, recordings and bundles go through presigned uploads */
@@ -59,6 +59,9 @@ export const RepoSpec = Type.Object({
   clone_url: Type.String(),
   ref: Type.String(),
   build_command: Type.String(),
+  /** runs the repo's tests; extra arguments are test files (replay, 06 §5.7) */
+  test_command: Type.Optional(Type.String()),
+  typecheck_command: Type.Optional(Type.String()),
 });
 export type RepoSpec = Static<typeof RepoSpec>;
 
@@ -97,10 +100,19 @@ export const CompleteStepRequest = Type.Object({
   /** what the step found, e.g. per-repo build results with timings and an output tail */
   output: Type.Record(Type.String(), Type.Unknown()),
   error: Type.Optional(Type.String({ maxLength: 4000 })),
+  /**
+   * The runner keeps the flow's workspace and wants the flow's next sandbox step, if the write-back
+   * opened one: a segment of execution nodes stays on one runner (06 §2.12). False while draining.
+   */
+  take_next: Type.Optional(Type.Boolean()),
 });
 export type CompleteStepRequest = Static<typeof CompleteStepRequest>;
 
-export const CompleteStepResponse = Type.Object({ accepted: Type.Boolean() });
+export const CompleteStepResponse = Type.Object({
+  accepted: Type.Boolean(),
+  /** the flow's next sandbox step, already leased to this runner (only with take_next) */
+  next: Type.Optional(StepAssignment),
+});
 export type CompleteStepResponse = Static<typeof CompleteStepResponse>;
 
 /** Error codes a runner reacts to (ApiError.code). */

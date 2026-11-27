@@ -108,21 +108,34 @@ export async function heartbeatAndPoll(
 
     const runner = await getRunner(tx, auth.runnerId);
     const assigned: StepAssignment[] = [];
-    if (!runner.drainMode) {
-      for (const role of runner.runnerRoles) {
-        const kind = KIND_FOR_ROLE[role];
-        if (!kind) continue;
-        const items = await claimForRunner(tx, {
-          runnerId: auth.runnerId,
-          kind,
-          limit: req.free_slots - assigned.length,
-          seconds: s.leaseSeconds,
-        });
-        for (const item of items) assigned.push(await assignment(tx, ctx, auth.runnerId, item));
-      }
-    }
+    if (!runner.drainMode) assigned.push(...(await claimSteps(tx, ctx, s, runner, req.free_slots)));
     return { lost, assigned, poll_ms: s.pollMs };
   });
+}
+
+/** Leases up to `limit` sandbox steps of the kinds the runner's roles take. */
+async function claimSteps(
+  tx: Tx,
+  ctx: ActorCtx,
+  s: RunnerSettings,
+  runner: Awaited<ReturnType<typeof getRunner>>,
+  limit: number,
+  flowId?: string,
+): Promise<StepAssignment[]> {
+  const out: StepAssignment[] = [];
+  for (const role of runner.runnerRoles) {
+    const kind = KIND_FOR_ROLE[role];
+    if (!kind) continue;
+    const items = await claimForRunner(tx, {
+      runnerId: runner.id,
+      kind,
+      limit: limit - out.length,
+      seconds: s.leaseSeconds,
+      flowId,
+    });
+    for (const item of items) out.push(await assignment(tx, ctx, runner.id, item));
+  }
+  return out;
 }
 
 async function assignment(
@@ -152,15 +165,20 @@ async function assignment(
   };
 }
 
-/** Write-back: refused unless this runner still holds the lease with the same fence. */
+/**
+ * Write-back: refused unless this runner still holds the lease with the same fence. With take_next,
+ * a sandbox step of the same flow that the write-back opened is leased to this runner in the same
+ * transaction, so a segment of execution nodes stays where its workspace is (06 §2.12).
+ */
 export async function completeRoundStep(
   db: Db,
+  s: RunnerSettings,
   auth: { runnerId: string; secret: string },
   req: CompleteStepRequest,
-): Promise<void> {
+): Promise<StepAssignment | null> {
   if (JSON.stringify(req.output).length > STEP_OUTPUT_LIMIT)
     throw new OutputTooLargeError('step output too large');
-  await withRunnerTx(db, auth, async (tx, ctx) => {
+  return withRunnerTx(db, auth, async (tx, ctx) => {
     const item = await lockHeldLease(tx, auth.runnerId, req);
     if (!item) throw new LeaseLostError();
     const p = item.payload as { flow_instance_id: string; node_run_id: string };
@@ -179,5 +197,10 @@ export async function completeRoundStep(
       nodeRunId: p.node_run_id,
       outcome: req.outcome,
     });
+    if (!req.take_next) return null;
+    const runner = await getRunner(tx, auth.runnerId);
+    if (runner.drainMode) return null;
+    const [next] = await claimSteps(tx, ctx, s, runner, 1, p.flow_instance_id);
+    return next ?? null;
   });
 }

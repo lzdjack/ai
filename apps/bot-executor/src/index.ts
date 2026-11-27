@@ -1,6 +1,7 @@
 // Bot executor (docs/06 §5). E0-5: sandbox container runner and two-phase dependencies.
 // S1: long-running containers driven over stdio, per-round internal network + relay.
 // E1: RunnerTransport client, enrollment, the heartbeat / step loop and the trial build step.
+// E2: engine driver and registry, workspaces, the AI node and the host replay verdict.
 export {
   DEFAULT_LIMITS,
   ensureSandboxImage,
@@ -38,3 +39,12 @@ export {
   type StepResult,
 } from './runner/loop.ts';
 export { trialBuild, type TrialBuildOptions } from './steps/trial-build.ts';
+export {
+  DEFAULT_DRIVE_LIMITS,
+  FOLLOW_UP,
+  driveAgent,
+  type DriveLimits,
+  type DriveResult,
+} from './agent/driver.ts';
+export { loadRuntime } from './agent/registry.ts';
+export { branchFor } from './steps/workspace.ts';

@@ -198,5 +198,9 @@ export function killLabeled(label: string, value: string): number {
   });
   const ids = r.stdout.split('\n').filter(Boolean);
   if (ids.length) spawnSync('docker', ['kill', ...ids], { stdio: 'ignore' });
+  // round networks (relay.ts) carry the same label
+  spawnSync('docker', ['network', 'prune', '-f', '--filter', `label=${label}=${value}`], {
+    stdio: 'ignore',
+  });
   return ids.length;
 }

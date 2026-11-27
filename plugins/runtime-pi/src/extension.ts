@@ -1,26 +1,28 @@
 // Pi extension loaded inside the sandbox container (`pi -e /opt/cc-pi/extension.ts`).
-// Registers the host-backed tools; each call is forwarded through the relay to the host tool
-// server, which validates it and decides the result. Nothing here holds a credential: the round
-// token in bridge.json is only good for this round's relay.
-// Pi resolves `typebox` to its own copy, so this file may import only typebox, node built-ins and
-// sibling files.
+// Registers the host tools listed in tools.json (written by the plugin from the node's allowed
+// tools); each call is forwarded through the relay to the host tool server, which validates it and
+// decides the result. Nothing here holds a credential: the round token in bridge.json is only good
+// for this round's relay. This file may import only node built-ins (Pi loads it on its own).
 import fs from 'node:fs';
 import path from 'node:path';
 import type { ExtensionAPI } from '@earendil-works/pi-coding-agent';
-import { SUBMIT_DELIVERY, SubmitDeliveryParams } from './delivery.ts';
 
 interface Bridge {
   url: string;
   token: string;
 }
-
-function bridge(): Bridge {
-  const dir = process.env.PI_CODING_AGENT_DIR ?? '';
-  return JSON.parse(fs.readFileSync(path.join(dir, 'bridge.json'), 'utf8')) as Bridge;
+interface ToolDecl {
+  name: string;
+  label: string;
+  description: string;
+  parameters: Record<string, unknown>;
 }
 
+const dir = process.env.PI_CODING_AGENT_DIR ?? '';
+const read = <T>(f: string) => JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8')) as T;
+
 async function callHost(tool: string, params: unknown, signal?: AbortSignal): Promise<string> {
-  const b = bridge();
+  const b = read<Bridge>('bridge.json');
   const res = await fetch(`${b.url}/tools/${tool}`, {
     method: 'POST',
     headers: { 'content-type': 'application/json', authorization: `Bearer ${b.token}` },
@@ -33,16 +35,15 @@ async function callHost(tool: string, params: unknown, signal?: AbortSignal): Pr
 }
 
 export default function ccTools(pi: ExtensionAPI): void {
-  pi.registerTool({
-    name: SUBMIT_DELIVERY,
-    label: 'Submit delivery',
-    description:
-      'Call exactly once when the fix is done and verified. The host commits your changes, ' +
-      'replays your repro tests before and after the fix, and reports the verdict.',
-    parameters: SubmitDeliveryParams,
-    async execute(_toolCallId, params, signal) {
-      const text = await callHost(SUBMIT_DELIVERY, params, signal);
-      return { content: [{ type: 'text', text }], details: {} };
-    },
-  });
+  for (const t of read<ToolDecl[]>('tools.json'))
+    pi.registerTool({
+      name: t.name,
+      label: t.label,
+      description: t.description,
+      parameters: t.parameters as never,
+      async execute(_toolCallId, params, signal) {
+        const text = await callHost(t.name, params, signal);
+        return { content: [{ type: 'text', text }], details: {} };
+      },
+    });
 }

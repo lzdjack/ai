@@ -1,6 +1,6 @@
 // Minimal client for `pi --mode rpc` over a child's stdio (JSONL; split on LF only, as the Pi
 // docs require, because U+2028/U+2029 may appear inside JSON strings).
-import type { Readable, Writable } from 'node:stream';
+import type { SandboxProcess } from '@cloudcraft/core-protocol';
 
 export interface PiEvent {
   type: string;
@@ -21,9 +21,10 @@ export class PiRpc {
   private seq = 0;
   private pending = new Map<string, (r: PiResponse) => void>();
   private listeners = new Set<(e: PiEvent) => void>();
+  private decoder = new TextDecoder();
 
-  constructor(private io: { stdin: Writable; stdout: Readable }) {
-    io.stdout.on('data', (chunk: Buffer) => this.feed(chunk.toString()));
+  constructor(private io: Pick<SandboxProcess, 'stdin' | 'stdout'>) {
+    io.stdout.on('data', (chunk) => this.feed(this.decoder.decode(chunk, { stream: true })));
   }
 
   private feed(text: string): void {

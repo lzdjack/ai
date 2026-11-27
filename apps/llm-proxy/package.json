@@ -6,5 +6,8 @@
   "description": "模型代理：只监听本机 Unix Socket，注入密钥、统计 Token 与熔断（06 §1.2）",
   "exports": {
     ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@cloudcraft/config": "workspace:*"
   }
 }

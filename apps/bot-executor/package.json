@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "@cloudcraft/core-protocol": "workspace:*",
+    "@cloudcraft/mcp-tool-host": "workspace:*",
+    "@cloudcraft/runtime-pi": "workspace:*",
     "typebox": "1.4.7"
   }
 }
