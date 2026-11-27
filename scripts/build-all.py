@@ -131,7 +131,7 @@ RENDERS = [
     ("v5/join-invite-pc.html", "", "pages/PC-邀请加入"),
     ("v5/pc-invite-expired.html", "", "pages/PC-邀请失效与切号"),
     ("v5/reset-pwd-pc.html", "", "pages/PC-重置密码"),
-    ("v5/pc-ws-switch.html", "", "pages/PC-顶栏空间切换与邀请抽屉"),
+    ("v5/pc-ws-switch.html", "", "pages/PC-头像菜单-切换空间与升级团队"),
     ("v5/onboard-pc.html", "", "pages/PC-首次使用步骤器"),
     ("v5/onboard-pc-prod.html", "", "pages/PC-首次使用步骤器-正式环境"),
     ("v5/m-skills.html", "", "pages/移动端-Skills与设置", 1440, 1000),

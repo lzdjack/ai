@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """全链路终审补齐 7 张高清设计板（T-08b / T-13 / T-14 / T-15 / 操作记录回滚）：
-1. reference/src/v5/pc-ws-switch.html        (1440×900)  → PC-顶栏空间切换与邀请抽屉
+1. reference/src/v5/pc-ws-switch.html        (1440×900)  → PC-头像菜单-切换空间与升级团队
 2. reference/src/v5/pc-invite-expired.html   (1440×900)  → PC-邀请失效与切号
 3. reference/src/v5/pc-project-workflow.html (1440×900)  → PC-设置-项目-流程模板
 4. reference/src/v5/pc-operation-log.html    (1440×900)  → PC-设置-操作记录与数据回滚
@@ -38,83 +38,75 @@ def pc_shell(title, sel, body, topbar_html=None, overlay=""):
 
 
 # =====================================================================
-# 1. PC-顶栏空间切换与邀请抽屉（T-13：多空间 >=2 时露出 + 原地升级团队）
+# 1. PC-头像菜单-切换空间与升级团队（T-13：多空间 >=2 时露出 + 原地升级团队）
 # =====================================================================
 def build_ws_switch():
-    ws_pill = f'''<span class="cc-select cc-select-sm is-open" style="margin-left:10px;width:228px;flex:none;height:32px;border-radius:10px">
-  <span class="ic-box" style="width:20px;height:20px;border-radius:6px;background:linear-gradient(155deg,#5AA0FF,#1F6FFF);font-size:10px">星</span>
-  <span class="cc-sel-val" style="font-size:12.5px">星辰研发中心</span>
-  <span class="cc-tag cc-tag-b" style="height:17px;font-size:9.5px">2 空间</span>
-  <span class="cc-sel-caret">{I("chevd",12)}</span>
-</span>'''
-    bell_btn = '''<span class="pill glass tpill" style="width:34px;height:34px;padding:0;justify-content:center;position:relative" title="站内通知中心">{I("bell",15,2.0)}<span style="position:absolute;top:5px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--red);box-shadow:0 0 0 1.5px var(--glass)"></span></span>'''
+    """空间切换收进头像菜单：顶栏不放单独的空间胶囊，头像右下角小角标表示当前空间；
+    点头像弹出菜单，「升级为团队」在菜单里就地展开。背景是正常工作台，不压暗。"""
+    from pages_pc import p_working
+    bell = f'<span class="pill glass tpill" style="width:34px;height:34px;padding:0;justify-content:center;position:relative">{I("bell",15,2.0)}<span style="position:absolute;top:6px;right:7px;width:7px;height:7px;border-radius:50%;background:var(--red);box-shadow:0 0 0 1.5px var(--glass-2)"></span></span>'
     right_tb = (
-        f'<span class="pill glass tpill">{I("bot",13)}3 个 Bot 在线</span>'
-        '<span class="pill glass tpill"><span class="dot" style="width:7px;height:7px;background:var(--green)"></span>Jira · 2 分钟前</span>'
-        '<span class="pill glass tpill" style="color:var(--ink-orange)"><span class="dot" style="width:7px;height:7px;background:var(--orange)"></span>Tita 采集失败 · 重试中</span>'
-        + bell_btn.replace('{I("bell",15,2.0)}', I("bell", 15, 2.0))
+        f'<span class="pill glass tpill">{I("bot",13)}1 个 Bot 在线</span>'
+        '<span class="pill glass tpill"><span class="dot" style="width:7px;height:7px;background:var(--green)"></span>GitLab · 正常</span>'
+        + bell
     )
-    tb = make_topbar(ws_pill=ws_pill, right_extra=right_tb)
-    _, chat_css = p_empty()
-    base_body = ticket_list("20871") + '''<main class="glass pn grow" style="min-width:0;opacity:.75">''' + ticket_head() + '''
-<div class="col g12 grow" style="padding:20px 26px"><div class="card flat" style="padding:14px 16px"><div class="f13 w7">已切换至工作空间：星辰研发中心（团队）</div><div class="f12 t2" style="margin-top:4px">当前工单、连接器、Skills 与个人账号只在你自己的空间里可用。</div></div></div></main>'''
+    tb = make_topbar(right_extra=right_tb)
+    av_old = 'color:#5A2414">林</span>'
+    assert tb.count(av_old) == 1
+    tb = tb.replace(av_old, 'color:#5A2414;position:relative;overflow:visible;box-shadow:0 0 0 2px var(--glass-2),0 0 0 5px var(--focus-ring)">林<i class="wsb">' + I("user",10,2.6) + '</i></span>')
+    body = p_working()
 
-    ws_menu = f'''<div class="cc-menu" style="position:fixed;left:188px;top:58px;width:328px;z-index:var(--z-popover);padding:8px">
-  <div class="f11 t3 w7" style="padding:4px 8px 6px">我的工作空间</div>
-  <div class="cc-menu-item is-selected" style="padding:8px 10px">
-    <span class="ic-box" style="width:28px;height:28px;border-radius:8px;background:linear-gradient(155deg,#5AA0FF,#1F6FFF)">星</span>
-    <div class="cc-mi-main"><b>星辰研发中心</b><em>团队 · 研发成员（24 人）</em></div>
-    <span class="cc-tag cc-tag-g">当前</span>
-  </div>
-  <div class="cc-menu-item" style="padding:8px 10px;margin-top:3px">
-    <span class="ic-box" style="width:28px;height:28px;border-radius:8px;background:linear-gradient(155deg,#A5B4FC,#6366F1)">个</span>
-    <div class="cc-mi-main"><b>林某的个人工作台</b><em>个人 · 本机执行器（3 个私有项目）</em></div>
-    <span class="cc-tag cc-tag-n">个人</span>
-  </div>
-  <div style="margin:6px 4px;padding-top:7px;border-top:1px solid var(--hair);display:flex;flex-direction:column;gap:4px">
-    <div class="cc-menu-item" style="padding:7px 8px;color:var(--ink-blue);font-weight:600">{I("plus",14,2.4)}<span>原地将个人空间升级为团队组织 ›</span></div>
-    <div class="cc-menu-item" style="padding:7px 8px;color:var(--ink-orange);font-weight:600">{I("link",14,2.2)}<span>输入邀请口令 #CC-…# 加入团队</span></div>
-  </div>
-</div>'''
+    def ws_item(ic, grad, name, sub, right, on=False):
+        st = "background:color-mix(in srgb,var(--blue) 12%,transparent)" if on else ""
+        return (f'<div class="row g10" style="padding:8px 10px;border-radius:12px;{st}">'
+                f'<span class="ic-box" style="width:30px;height:30px;border-radius:9px;background:linear-gradient(155deg,{grad});font-size:12px">{ic}</span>'
+                f'<div class="col grow" style="min-width:0"><span class="f13 w7 ell">{name}</span><span class="f11 t3 ell">{sub}</span></div>{right}</div>')
 
-    drawer = f'''{ws_menu}<div class="scrim"></div>
-<aside class="cc-drawer" style="top:64px;height:calc(100% - 76px);width:560px;z-index:var(--z-drawer)">
-  <div class="cc-drawer-hd">
-    <span class="ic-box" style="width:36px;height:36px;border-radius:10px;background:linear-gradient(155deg,#5AA0FF,#1F6FFF)">{I("users",18,2.2)}</span>
-    <div class="col grow">
-      <div class="f17 w7">原地升级为团队组织空间</div>
-      <div class="f12 t3" style="margin-top:2px">把个人工作台升级为多人协同空间，已有数据和进行中的工单都不受影响</div>
-    </div>
-    <span class="cc-close">{I("x",15,2.2)}</span>
+    def keep(ic, color, text):
+        return f'<div class="row g8 f12 t2" style="align-items:flex-start;line-height:1.5">{I(ic,13,2.4,f"color:{color};flex:none;margin-top:2px")}<span>{text}</span></div>'
+
+    def mi(ic, text, color="var(--text)"):
+        return f'<div class="row g10" style="padding:8px 10px;border-radius:10px;color:{color}">{I(ic,15,2.2)}<span class="f13 w6 grow">{text}</span></div>'
+
+    overlay = f'''<style>
+.wsb{{position:absolute;right:-4px;bottom:-4px;width:17px;height:17px;border-radius:5px;font-style:normal;font-size:9.5px;font-weight:700;color:#fff;
+  display:flex;align-items:center;justify-content:center;background:linear-gradient(155deg,#A5B4FC,#6366F1);box-shadow:0 0 0 2px var(--glass-2)}}
+.wspop{{position:absolute;right:22px;top:66px;width:380px;z-index:var(--z-popover);padding:8px;border-radius:18px;
+  background:var(--glass-elev);border:1px solid var(--stroke);box-shadow:0 24px 48px -16px rgba(15,30,70,.42),0 2px 6px rgba(15,30,70,.08);
+  backdrop-filter:blur(28px) saturate(1.6);-webkit-backdrop-filter:blur(28px) saturate(1.6)}}
+html.dark .wspop{{box-shadow:0 24px 48px -12px rgba(0,0,0,.7)}}
+.wsup{{margin:6px 2px 2px;padding:14px;border-radius:14px;background:var(--well);border:1px solid var(--hair);display:flex;flex-direction:column;gap:10px}}
+.wsdv{{height:1px;background:var(--hair);margin:6px 8px}}
+</style>
+<div class="wspop">
+  <div class="row g10" style="padding:8px 10px 6px">
+    <span class="av" style="width:38px;height:38px;font-size:14px;flex:none;background:linear-gradient(160deg,#FFC9A8,#F08F7A);color:#5A2414">林</span>
+    <div class="col grow" style="min-width:0"><span class="f14 w7">林某</span><span class="f12 t3 mono ell">lin@company.com</span></div>
   </div>
-  <div class="cc-drawer-bd" style="gap:12px">
+  <div class="wsdv"></div>
+  <div class="f11 t3 w7" style="padding:4px 10px 6px">工作空间</div>
+  {ws_item(I("user",15,2.4), "#A5B4FC,#6366F1", "林某的个人工作台", "个人 · 3 个项目 · 本机执行器", I("check",15,2.6,"color:var(--ink-blue)"), on=True)}
+  {ws_item("星", "#5AA0FF,#1F6FFF", "星辰研发中心", "团队 · 24 人 · 你是成员", '<span class="tag tg-o">2 张待审</span>')}
+  <div class="wsup">
+    <div class="row g8">{I("users",15,2.2,"color:var(--ink-blue)")}<span class="f13 w7 grow">把个人工作台升级为团队</span><span class="cc-close" style="width:24px;height:24px">{I("x",12,2.4)}</span></div>
     <div class="cc-field">
-      <div class="cc-field-hd"><span>团队 / 组织显示名称</span><span class="cc-field-hint">仅内部成员可见</span></div>
-      <div class="cc-input cc-input-md is-focus"><span class="grow w6">云匠开源协同组</span></div>
+      <div class="cc-field-hd"><span>团队名称</span><span class="cc-field-hint">之后可以改</span></div>
+      <div class="cc-input cc-input-sm is-focus" style="background:var(--glass-2)"><span class="grow w6">云匠开源协同组</span></div>
     </div>
-    <div class="card" style="padding:12px 14px;gap:8px;background:color-mix(in srgb,var(--green) 7%,var(--glass-2));border-color:color-mix(in srgb,var(--green) 24%,transparent)">
-      <div class="row g8">{I("shield",15,2.2,"color:var(--ink-green)")}<span class="f13 w7" style="color:var(--ink-green)">这些内容原样保留</span></div>
-      <div class="f12 t2" style="line-height:1.65">
-        • 已配置 3 个项目仓、工作流模板与 4 条 Skills <b>100% 保留</b>；<br>
-        • 已授权连接器沿用原密文，可选择是否共享给新邀请团队成员；<br>
-        • <b style="color:var(--ink-red)">你的个人账号和令牌只有你能用</b>，新加入的成员不会继承。
-      </div>
+    <div class="col g6">
+      {keep("check", "var(--ink-green)", "3 个项目、流程模板和 4 条 Skills 原样保留，进行中的工单不受影响")}
+      {keep("check", "var(--ink-green)", "已接入的连接器可以选择是否给成员共用")}
+      {keep("lock", "var(--text-3)", "你的个人账号和令牌仍然只有你能用，成员不会继承")}
     </div>
-    <div class="card" style="padding:11px 14px;gap:8px">
-      <div class="row g8"><span class="f13 w7 grow">顺便生成第一条成员邀请（不用发邮件）</span><span class="tag tg-b">24 小时有效 · 12 位口令</span></div>
-      <div class="row g8" style="padding:8px 10px;border-radius:10px;background:var(--well);border:1px solid var(--hair)">
-        <span class="mono f12 t2 grow ell">https://cc.intra/join/9f2a4c8d · #CC-8K4P-9M2X-Q7R5#</span>
-        <span class="cc-btn cc-btn-xs cc-btn-glass">复制文案</span>
-      </div>
-    </div>
+    <label class="row g8 f12 t2"><span class="cc-checkbox is-checked">{I("check",11,3)}</span>升级后生成一条邀请链接（24 小时有效，不用发邮件）</label>
+    <div class="row g8" style="margin-top:2px"><span class="grow"></span><button class="cc-btn cc-btn-sm cc-btn-sec">取消</button><button class="cc-btn cc-btn-sm cc-btn-pri">{I("check",13,2.6)}升级为团队</button></div>
   </div>
-  <div class="cc-drawer-ft">
-    <button class="cc-btn cc-btn-md cc-btn-sec">取消</button>
-    <span class="grow"></span>
-    <button class="cc-btn cc-btn-md cc-btn-pri">{I("check",14,2.6)}确认原地升级为团队空间</button>
-  </div>
-</aside>'''
-    return pc_shell("顶栏空间切换与原地升级 · 云匠", "chat", base_body, tb, drawer)
+  {mi("link", "输入邀请口令加入别的团队", "var(--ink-blue)")}
+  <div class="wsdv"></div>
+  {mi("user", "我的账号")}
+  {mi("ext", "退出登录", "var(--text-2)")}
+</div>'''
+    return pc_shell("头像菜单 · 切换空间与升级团队 · 云匠", "chat", body, tb, overlay)
 
 
 # =====================================================================

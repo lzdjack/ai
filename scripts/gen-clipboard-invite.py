@@ -98,7 +98,7 @@ PC_MODAL_HTML = f'''{PC_MODAL_CSS}
 
   <div class="row g8 f11 t2" style="padding:8px 11px;border-radius:11px;background:var(--well);border:1px solid var(--hair);line-height:1.5">
     {I("layers",14,st="color:var(--ink-blue);flex:none")}
-    <span>当前已登录 <b style="color:var(--text)">alex@company.com</b>，确认即入驻并自动激活顶栏空间切换胶囊；若未登录则直达「设密并加入」页。</span>
+    <span>当前已登录 <b style="color:var(--text)">alex@company.com</b>，确认即入驻，之后点头像切换空间；若未登录则直达「设密并加入」页。</span>
   </div>
 
   <div class="col g8" style="margin-top:2px">
