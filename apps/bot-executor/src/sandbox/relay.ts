@@ -34,11 +34,14 @@ export async function openRoundNetwork(opts: {
   /** directory holding relay.mjs (infra/sandbox) */
   contextDir: string;
   routes: Record<string, number>;
+  /** the round token, when the caller already handed it to the host services; random otherwise */
+  token?: string;
+  labels?: Record<string, string>;
 }): Promise<RoundNetwork> {
   const id = crypto.randomBytes(6).toString('hex');
   const network = `cc-round-${id}`;
   const relay = `cc-relay-${id}`;
-  const token = crypto.randomBytes(32).toString('hex');
+  const token = opts.token ?? crypto.randomBytes(32).toString('hex');
   const routes = Object.entries(opts.routes)
     .map(([prefix, port]) => `${prefix}=http://host.docker.internal:${port}`)
     .join(',');
@@ -48,7 +51,13 @@ export async function openRoundNetwork(opts: {
     spawnSync('docker', ['network', 'rm', network], { stdio: 'ignore' });
   };
   try {
-    docker(['network', 'create', '--internal', network]);
+    docker([
+      'network',
+      'create',
+      '--internal',
+      ...Object.entries(opts.labels ?? {}).map(([k, v]) => `--label=${k}=${v}`),
+      network,
+    ]);
     docker([
       'run',
       '-d',
@@ -63,6 +72,7 @@ export async function openRoundNetwork(opts: {
       '--read-only',
       '--memory=128m',
       '--pids-limit=64',
+      ...Object.entries(opts.labels ?? {}).map(([k, v]) => `--label=${k}=${v}`),
       `--volume=${path.join(opts.contextDir, 'relay.mjs')}:/relay.mjs:ro`,
       '--env',
       `RELAY_TOKEN=${token}`,
