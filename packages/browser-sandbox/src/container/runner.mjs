@@ -28,6 +28,9 @@ const ctx = await browser.newContext({
   locale: init.locale ?? 'zh-CN',
 });
 if (init.initScript) await ctx.addInitScript(init.initScript);
+/** where the page is being redirected to (see the route below), and the last document's status */
+let redirecting = null;
+let docStatus = 0;
 await ctx.routeWebSocket(/.*/, (ws) => ws.close());
 await ctx.route('**/*', async (route) => {
   const req = route.request();
@@ -40,6 +43,23 @@ await ctx.route('**/*', async (route) => {
     nav: req.isNavigationRequest(),
   });
   if (r.abort) return route.abort('blockedbyclient').catch(() => {});
+  const location = r.headers?.location;
+  if (req.isNavigationRequest() && r.status >= 300 && r.status < 400 && location) {
+    // Chromium does not route the request that follows a fulfilled redirect (with no network it
+    // would fail), so the page redirects itself; Set-Cookie still comes with this response.
+    const target = new URL(location, req.url()).href;
+    redirecting = target;
+    const headers = { ...r.headers, 'content-type': 'text/html; charset=utf-8' };
+    delete headers.location;
+    return route
+      .fulfill({
+        status: 200,
+        headers,
+        body: `<!doctype html><meta charset="utf-8"><script>location.replace(${JSON.stringify(target)})</script>`,
+      })
+      .catch(() => {});
+  }
+  if (req.isNavigationRequest()) docStatus = r.status;
   return route
     .fulfill({ status: r.status, headers: r.headers, body: Buffer.from(r.body ?? '', 'base64') })
     .catch(() => {});
@@ -103,6 +123,14 @@ const IDENTITY = [
 
 async function settle() {
   await page.waitForLoadState('load', { timeout: 15000 }).catch(() => {});
+  // follow redirects the page does for us, up to a few hops
+  for (let i = 0; i < 10 && redirecting; i++) {
+    const target = redirecting;
+    redirecting = null;
+    await page
+      .waitForURL((u) => u.href === target, { waitUntil: 'load', timeout: 15000 })
+      .catch(() => {});
+  }
   await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
 }
 
@@ -150,8 +178,10 @@ async function probe() {
 async function run(c) {
   switch (c.op) {
     case 'goto': {
+      docStatus = 0;
       const r = await page.goto(c.url, { waitUntil: 'load', timeout: 15000 });
-      return { status: r?.status() ?? 0 };
+      if (redirecting) await settle();
+      return { status: docStatus || (r?.status() ?? 0) };
     }
     case 'add_cookies':
       await ctx.addCookies(c.cookies);
