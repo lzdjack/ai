@@ -44,7 +44,7 @@ import {
 } from './release-step-service.ts';
 import { insertRow, updateRow } from '../db/write.ts';
 import type { Plan } from '../orchestrator/advance.ts';
-import { BOT_STEP, RELEASE_STEP, pgOrchestrator } from '../orchestrator/flow.ts';
+import { BOT_STEP, RELEASE_STEP, pgOrchestrator, publishNodeRun } from '../orchestrator/flow.ts';
 import { completeWork } from '../orchestrator/queue.ts';
 import {
   claimForRunner,
@@ -184,7 +184,9 @@ async function assignment(
     if (!extra) return null;
     config = { ...config, ...extra };
   }
-  await updateRow(tx, ctx, nodeRuns, run.id, { executorId: runnerId });
+  const taken = await updateRow(tx, ctx, nodeRuns, run.id, { executorId: runnerId });
+  // handing a delivery step out also starts its release record
+  await publishNodeRun(tx, ctx, flow.ticketId, taken);
   return {
     work_item_id: item.id,
     lease_token: item.leaseToken!,

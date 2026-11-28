@@ -664,6 +664,17 @@ describe('交付段（P6）：合入测试分支 → 发测试 → 复测 → �
       ]),
     );
 
+    // every step that moved said so on the change stream, so an open screen knows to read again
+    const silent = await su.query(
+      `select n.node_key, n.status from node_runs n
+        where n.flow_instance_id = $1 and not exists (
+          select 1 from change_stream c
+           where c.entity = 'node_run' and c.entity_id = n.id
+             and c.row->>'status' = n.status and c.row->>'ticket_id' = $2)`,
+      [flowId, id],
+    );
+    expect(silent.rows).toEqual([]);
+
     // the view is one moment in time: a release that commits while it is being read shows up in all
     // of it or in none of it. Holding release_configs parks the read between the live versions and
     // the release list, which both come from release_tasks.
