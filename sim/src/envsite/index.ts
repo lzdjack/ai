@@ -8,6 +8,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import Fastify, { type FastifyInstance } from 'fastify';
 import { Type } from 'typebox';
+import { EnvLogin } from './login.ts';
 
 const MIME: Record<string, string> = {
   '.html': 'text/html; charset=utf-8',
@@ -48,6 +49,7 @@ export class EnvSites {
   private versions = new Map<string, { deployed_at: string; files: number }>();
   private urls = new Map<string, string>();
   private sites: FastifyInstance[] = [];
+  readonly login = new EnvLogin();
 
   constructor(
     private readonly root: string,
@@ -74,6 +76,7 @@ export class EnvSites {
           deployed: fs.existsSync(path.join(this.dist(n), 'index.html')) || !!this.live(n),
           last_deploy: this.versions.get(n) ?? null,
           live: this.liveInfo(n),
+          ...this.login.state(n),
         },
       ]),
     );
@@ -97,6 +100,7 @@ export class EnvSites {
   /** 主端口上的部署接口和环境列表 */
   register(app: FastifyInstance) {
     app.get('/__sim/envs', async () => this.state());
+    this.login.register(app, ENV_NAMES);
     app.addHook('onClose', async () => {
       await Promise.all(this.sites.map((s) => s.close()));
     });
@@ -141,6 +145,7 @@ export class EnvSites {
   /** 环境站点本身（单独端口）：静态产物 + 接口 */
   site(name: string): FastifyInstance {
     const app = Fastify({ logger: false });
+    this.login.guard(app, name);
     const list = () => this.approvals.get(name) ?? [];
     app.get('/api/approvals', async () => list());
     app.get('/api/approvals/:id', async (req, reply) => {
@@ -196,7 +201,7 @@ export class EnvSites {
             'cache-control',
             file.endsWith('.html') ? 'no-cache' : 'public, max-age=31536000, immutable',
           )
-          .send(data);
+          .send(file.endsWith('.html') ? this.login.mark(name, req, data) : data);
       const live = this.live(name);
       if (live) {
         const data = live.read(rel) ?? (path.extname(rel) ? null : live.read('index.html'));

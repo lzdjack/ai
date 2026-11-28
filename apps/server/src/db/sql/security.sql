@@ -53,6 +53,16 @@ drop policy if exists cc_definer on effects;
 drop trigger if exists cc_append_only on effects;
 drop trigger if exists cc_audit_probe on effects;
 
+-- env_accounts (project, audit)
+alter table env_accounts enable row level security;
+alter table env_accounts force row level security;
+drop policy if exists cc_tenant on env_accounts;
+create policy cc_tenant on env_accounts using (workspace_id = nullif(current_setting('app.current_workspace_id', true), '')::uuid and project_id = any(coalesce(nullif(current_setting('app.visible_project_ids', true), '')::uuid[], '{}'))) with check (workspace_id = nullif(current_setting('app.current_workspace_id', true), '')::uuid and project_id = any(coalesce(nullif(current_setting('app.visible_project_ids', true), '')::uuid[], '{}')));
+drop policy if exists cc_definer on env_accounts;
+drop trigger if exists cc_append_only on env_accounts;
+drop trigger if exists cc_audit_probe on env_accounts;
+create trigger cc_audit_probe after insert or update or delete on env_accounts for each row execute function cc_audit_probe('workspace_id');
+
 -- environments (project, audit)
 alter table environments enable row level security;
 alter table environments force row level security;

@@ -8,13 +8,20 @@ import {
   integer,
   jsonb,
   text,
+  timestamp,
   unique,
   uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
 import { enumCheck, projectTable, users } from './tenant.ts';
-import { repos } from './sources.ts';
-import { TICKET_STATUSES, ROUND_STATUSES } from '@cloudcraft/core-protocol';
+import { repos, secretItems } from './sources.ts';
+import {
+  DATA_PERMISSIONS,
+  ENV_CREDENTIAL_TYPES,
+  ENV_LOGIN_STATES,
+  ROUND_STATUSES,
+  TICKET_STATUSES,
+} from '@cloudcraft/core-protocol';
 
 export const environments = projectTable(
   'environments',
@@ -30,6 +37,46 @@ export const environments = projectTable(
       .on(t.projectId, t.envCode)
       .where(sql`deleted_at is null`),
     enumCheck('environments_tier_check', 'env_tier', ['dev', 'test_gate', 'production']),
+  ],
+);
+
+/**
+ * Who the Bot signs in as on an environment (06 §2.4, 01 §11 step 3): a password or a browser cookie
+ * sealed in secret_items (bot_exec domain, 06 §2.10), and the data permission people granted it. The
+ * last sign-in the Bot tried is written back here when its env_login step ends.
+ */
+export const envAccounts = projectTable(
+  'env_accounts',
+  {
+    environmentId: uuid().notNull(),
+    roleName: text().notNull(),
+    /** null for a cookie until the Bot recognises who it is */
+    accountName: text(),
+    credentialType: text().notNull(),
+    secretId: uuid().notNull(),
+    dataPermission: text().notNull().default('read_only'),
+    loginState: text().notNull().default('unchecked'),
+    loginAt: timestamp({ withTimezone: true }),
+    loginError: text(),
+    identity: text(),
+    expiresAt: timestamp({ withTimezone: true }),
+    sortOrder: integer().notNull().default(0),
+  },
+  (t) => [
+    foreignKey({
+      name: 'env_accounts_env_fk',
+      columns: [t.workspaceId, t.environmentId],
+      foreignColumns: [environments.workspaceId, environments.id],
+    }),
+    foreignKey({
+      name: 'env_accounts_secret_fk',
+      columns: [t.workspaceId, t.secretId],
+      foreignColumns: [secretItems.workspaceId, secretItems.id],
+    }),
+    index('env_accounts_env_idx').on(t.environmentId),
+    enumCheck('env_accounts_type_check', 'credential_type', [...ENV_CREDENTIAL_TYPES]),
+    enumCheck('env_accounts_permission_check', 'data_permission', [...DATA_PERMISSIONS]),
+    enumCheck('env_accounts_login_check', 'login_state', [...ENV_LOGIN_STATES]),
   ],
 );
 

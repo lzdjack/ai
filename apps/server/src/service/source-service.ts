@@ -39,7 +39,7 @@ export interface SourceSettings {
 const CACHE_MS = 5 * 60_000;
 const cache = new Map<string, { at: number; value: unknown }>();
 
-async function need(tx: Tx, userId: string, key: string) {
+export async function need(tx: Tx, userId: string, key: string) {
   if (!grants(await permissionsOf(tx, userId), key))
     throw new ApiFailure(403, 'auth.forbidden', { permission: key });
 }
@@ -238,7 +238,7 @@ function effective(t: typeof repoTargets.$inferSelect | undefined): RepoSettings
   return { ...detectedOf(t.autoDetectedMeta), ...(t.manualOverrides as Partial<RepoSettings>) };
 }
 
-async function repoRows(tx: Tx, ids?: string[]): Promise<RepoRow[]> {
+export async function repoRows(tx: Tx, ids?: string[]): Promise<RepoRow[]> {
   const rs = await tx
     .select()
     .from(repos)

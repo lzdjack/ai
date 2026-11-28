@@ -3,10 +3,12 @@
 import fs from 'node:fs';
 import {
   AttachReposRequest,
+  CreateEnvAccountRequest,
   CreateEnvironmentRequest,
   CreateTicketRequest,
   CreateConnectorRequest,
   ReviewRequest,
+  UpdateEnvAccountRequest,
   UpdateRepoRequest,
   VerifyConnectorRequest,
 } from '@cloudcraft/core-protocol';
@@ -17,6 +19,7 @@ import type { AccountSettings } from '../service/account-service.ts';
 import { verifyAccessToken } from '../service/auth-crypto.ts';
 import { ApiFailure } from '../service/errors.ts';
 import { evidenceFile } from '../service/evidence-service.ts';
+import * as acc from '../service/env-account-service.ts';
 import * as src from '../service/source-service.ts';
 import * as tk from '../service/ticket-service.ts';
 
@@ -25,6 +28,20 @@ const Item = Type.Object({
   ws: Type.String({ format: 'uuid' }),
   id: Type.String({ format: 'uuid' }),
 });
+const EnvItem = Type.Object({
+  ws: Type.String({ format: 'uuid' }),
+  id: Type.String({ format: 'uuid' }),
+  env: Type.String({ format: 'uuid' }),
+});
+const AccountItem = Type.Object({
+  ws: Type.String({ format: 'uuid' }),
+  id: Type.String({ format: 'uuid' }),
+  account: Type.String({ format: 'uuid' }),
+});
+const CheckAccountsRequest = Type.Object(
+  { ids: Type.Optional(Type.Array(Type.String({ format: 'uuid' }), { maxItems: 200 })) },
+  { additionalProperties: false },
+);
 const RemoteQuery = Type.Object({
   q: Type.Optional(Type.String({ maxLength: 100 })),
   page: Type.Optional(Type.Integer({ minimum: 1, default: 1 })),
@@ -164,6 +181,66 @@ export function sourceRoutes(
           ),
         );
     },
+  );
+  // environment accounts (06 §2.4; 01 §11 step 3): saving or changing a secret lets the Bot try it
+  app.get(
+    '/v1/workspaces/:ws/projects/:id/env-accounts',
+    { schema: { params: Item } },
+    async (req) => {
+      const { ws, id } = p<Static<typeof Item>>(req);
+      return acc.listEnvAccounts(db, user(req), ws, id);
+    },
+  );
+  app.post(
+    '/v1/workspaces/:ws/projects/:id/environments/:env/accounts',
+    { schema: { params: EnvItem, body: CreateEnvAccountRequest } },
+    async (req, reply) => {
+      const { ws, id, env } = p<Static<typeof EnvItem>>(req);
+      const body = req.body as Static<typeof CreateEnvAccountRequest>;
+      return reply.code(201).send(await acc.createEnvAccount(db, s, user(req), ws, id, env, body));
+    },
+  );
+  app.post(
+    '/v1/workspaces/:ws/projects/:id/environments/:env/accounts/try',
+    { schema: { params: EnvItem, body: CreateEnvAccountRequest } },
+    async (req, reply) => {
+      const { ws, id, env } = p<Static<typeof EnvItem>>(req);
+      const body = req.body as Static<typeof CreateEnvAccountRequest>;
+      return reply.code(202).send(await acc.tryEnvAccount(db, s, user(req), ws, id, env, body));
+    },
+  );
+  app.patch(
+    '/v1/workspaces/:ws/projects/:id/env-accounts/:account',
+    { schema: { params: AccountItem, body: UpdateEnvAccountRequest } },
+    async (req) => {
+      const { ws, id, account } = p<Static<typeof AccountItem>>(req);
+      const body = req.body as Static<typeof UpdateEnvAccountRequest>;
+      return acc.updateEnvAccount(db, s, user(req), ws, id, account, body);
+    },
+  );
+  app.delete(
+    '/v1/workspaces/:ws/projects/:id/env-accounts/:account',
+    { schema: { params: AccountItem } },
+    async (req) => {
+      const { ws, id, account } = p<Static<typeof AccountItem>>(req);
+      return acc.deleteEnvAccount(db, user(req), ws, id, account);
+    },
+  );
+  app.post(
+    '/v1/workspaces/:ws/projects/:id/env-accounts/check',
+    { schema: { params: Item, body: CheckAccountsRequest } },
+    async (req, reply) => {
+      const { ws, id } = p<Static<typeof Item>>(req);
+      const { ids } = req.body as Static<typeof CheckAccountsRequest>;
+      return reply.code(202).send(await acc.checkEnvAccounts(db, user(req), ws, id, ids));
+    },
+  );
+  // 「AI 体检」(01 §11 step 4; 06 §10.3 POST /v1/onboarding/health-check, under the workspace)
+  app.post(
+    '/v1/workspaces/:ws/onboarding/health-check',
+    { schema: { params: Ws } },
+    async (req, reply) =>
+      reply.code(202).send(await acc.healthCheck(db, user(req), p<Static<typeof Ws>>(req).ws)),
   );
   app.post(
     '/v1/workspaces/:ws/projects/:id/tickets',

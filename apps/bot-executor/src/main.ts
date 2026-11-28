@@ -13,6 +13,7 @@ import { gitAuthSource } from './runner/credentials.ts';
 import { loadOrEnroll } from './runner/identity.ts';
 import { httpTransport } from './runner/transport.ts';
 import { ensureSandboxImage, killLabeled } from './sandbox/docker.ts';
+import { envLogin } from './steps/env-login.ts';
 import { fixStep } from './steps/fix.ts';
 import { prepareStep } from './steps/prepare.ts';
 import { releaseBuild } from './steps/release-build.ts';
@@ -88,6 +89,8 @@ const handlers: Record<string, StepHandler> = {
     gitAuth,
     labels,
   }),
+  // the Bot signs in to an environment with an account people registered (01 §11 step 3)
+  env_login: envLogin({ transport, creds, keyFile: path.join(dir, 'bot_exec.key'), labels }),
   prepare: prepareStep(workspaces),
   // craft build of a release (build sandbox: no credentials in the container, no network)
   release_build: releaseBuild({
