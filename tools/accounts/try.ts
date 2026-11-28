@@ -7,7 +7,13 @@
 import crypto from 'node:crypto';
 import type { AddressInfo } from 'node:net';
 import { databaseUrls, loadConfig } from '@cloudcraft/config';
-import { accountSettings, buildApp, createDb, startSysLoop } from '@cloudcraft/server';
+import {
+  accountSettings,
+  buildApp,
+  createDb,
+  sourceSettings,
+  startSysLoop,
+} from '@cloudcraft/server';
 
 const c = loadConfig();
 const run = crypto.randomBytes(3).toString('hex');
@@ -18,6 +24,7 @@ const app = buildApp({
   db,
   runner: { leaseSeconds: 60, pollMs: 5000 },
   accounts: accountSettings(c, { rateLimitPerHour: 200 }),
+  sources: await sourceSettings(c),
 });
 await app.listen({ host: '127.0.0.1', port: 0 });
 const base = `http://127.0.0.1:${(app.server.address() as AddressInfo).port}`;

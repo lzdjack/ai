@@ -29,7 +29,7 @@ import {
   renewLease,
 } from '../src/orchestrator/queue.ts';
 import { createTestDb, type TestDb } from './db.ts';
-import { seedSpace, testAccounts, type Space } from './fixtures.ts';
+import { seedSpace, testAccounts, testSources, type Space } from './fixtures.ts';
 
 let t: TestDb;
 let db: Db;
@@ -257,6 +257,7 @@ describe('平台骨架', () => {
       db,
       runner: { leaseSeconds: 60, pollMs: 5000 },
       accounts: testAccounts().settings,
+      sources: testSources(),
     });
     const res = await app.inject({ url: '/healthz', headers: { 'x-request-id': 'req-123' } });
     expect([res.statusCode, res.json(), res.headers['x-request-id']]).toEqual([

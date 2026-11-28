@@ -9,6 +9,7 @@ import Value from 'typebox/value';
 import { proxyClient } from './agent/proxy-client.ts';
 import { loadRuntime } from './agent/registry.ts';
 import { startRunnerLoop, type StepHandler } from './runner/loop.ts';
+import { gitAuthSource } from './runner/credentials.ts';
 import { loadOrEnroll } from './runner/identity.ts';
 import { httpTransport } from './runner/transport.ts';
 import { ensureSandboxImage, killLabeled } from './sandbox/docker.ts';
@@ -69,19 +70,21 @@ const image = ensureSandboxImage(sandboxDir);
 const labels = { [LABEL]: creds.runnerId };
 const cacheRoot = path.join(env.CC_DATA_DIR, 'pnpm-store');
 const runtime = await loadRuntime(env.CC_AGENT_RUNTIME);
-const workspaces = new Workspaces({
-  image: image.tag,
-  root: workRoot,
-  cacheRoot,
-  gitToken: env.CC_RUNNER_GIT_TOKEN,
-  labels,
+// clone / push credentials: envelopes from the server; the executor's own token only for repos
+// without a credential reference (local drills)
+const gitAuth = gitAuthSource({
+  transport,
+  creds,
+  keyFile: path.join(dir, 'bot_exec.key'),
+  fallbackToken: env.CC_RUNNER_GIT_TOKEN,
 });
+const workspaces = new Workspaces({ image: image.tag, root: workRoot, cacheRoot, gitAuth, labels });
 const handlers: Record<string, StepHandler> = {
   trial_build: trialBuild({
     image: image.tag,
     cacheRoot,
     workRoot,
-    gitToken: env.CC_RUNNER_GIT_TOKEN,
+    gitAuth,
     labels,
   }),
   prepare: prepareStep(workspaces),
@@ -95,7 +98,7 @@ const handlers: Record<string, StepHandler> = {
     runtime,
     labels,
   }),
-  replay: replayStep({ image: image.tag, workspaces, gitToken: env.CC_RUNNER_GIT_TOKEN, labels }),
+  replay: replayStep({ image: image.tag, workspaces, gitAuth, labels }),
 };
 /** By node kind; a deterministic_verify node names its check in config.action. */
 const handlerFor = (step: { node_kind: string; config: Record<string, unknown> }) => {

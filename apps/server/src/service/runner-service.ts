@@ -6,13 +6,15 @@ import {
   ENROLL_TOKEN_PREFIX,
   STEP_OUTPUT_LIMIT,
   type CompleteStepRequest,
+  type CredentialEnvelope,
+  type FetchCredentialRequest,
   type HeartbeatRequest,
   type HeartbeatResponse,
   type RegisterRunnerRequest,
   type RegisterRunnerResponse,
   type StepAssignment,
 } from '@cloudcraft/core-protocol';
-import { sql } from 'drizzle-orm';
+import { and, eq, sql } from 'drizzle-orm';
 import {
   LeaseLostError,
   withEnrollTx,
@@ -21,7 +23,18 @@ import {
   type Db,
   type Tx,
 } from '../db/client.ts';
-import { nodeRuns, runnerKeys, runners } from '../db/schema/index.ts';
+import {
+  connectors,
+  nodeRuns,
+  runnerKeys,
+  runners,
+  secretDeliveries,
+  secretItems,
+} from '../db/schema/index.ts';
+import { ApiFailure } from './errors.ts';
+import { connectorOf } from './plugins.ts';
+import { openSecret, sealToRunner } from './secrets.ts';
+import type { SourceSettings } from './source-service.ts';
 import { insertRow, updateRow } from '../db/write.ts';
 import type { Plan } from '../orchestrator/advance.ts';
 import { BOT_STEP, pgOrchestrator } from '../orchestrator/flow.ts';
@@ -202,5 +215,75 @@ export async function completeRoundStep(
     if (runner.drainMode) return null;
     const [next] = await claimSteps(tx, ctx, s, runner, 1, p.flow_instance_id);
     return next ?? null;
+  });
+}
+
+/**
+ * The credential of a repo in the step this runner holds, sealed to its bot_exec key (06 §2.10). Only
+ * secrets the step's plan references, never personal_exec, and every delivery is recorded so a stolen
+ * executor's secrets can be re-issued.
+ */
+export async function fetchCredential(
+  db: Db,
+  sources: SourceSettings,
+  auth: { runnerId: string; secret: string },
+  req: FetchCredentialRequest,
+): Promise<CredentialEnvelope> {
+  return withRunnerTx(db, auth, async (tx) => {
+    const item = await lockHeldLease(tx, auth.runnerId, req);
+    if (!item) throw new LeaseLostError();
+    const { flow } = await getNodeRunWithFlow(
+      tx,
+      (item.payload as { node_run_id: string }).node_run_id,
+    );
+    const refs = ((flow.plan as Plan).repos ?? []).map((r) => r.credential_ref);
+    if (!refs.includes(req.secret_id)) throw new ApiFailure(403, 'runner.credential_not_in_step');
+    const [row] = await tx
+      .select({ secret: secretItems, connector: connectors })
+      .from(secretItems)
+      .innerJoin(connectors, eq(connectors.secretId, secretItems.id))
+      .where(eq(secretItems.id, req.secret_id));
+    if (!row?.secret.ciphertext || !row.secret.wrappedDek)
+      throw new ApiFailure(404, 'runner.credential_gone');
+    if (row.secret.credentialClass === 'personal_exec')
+      throw new ApiFailure(403, 'runner.credential_not_for_bot');
+    const [key] = await tx
+      .select()
+      .from(runnerKeys)
+      .where(
+        and(
+          eq(runnerKeys.runnerId, auth.runnerId),
+          eq(runnerKeys.keyRole, 'bot_exec'),
+          eq(runnerKeys.status, 'active'),
+        ),
+      );
+    if (!key) throw new ApiFailure(409, 'runner.no_key');
+    const plugin = connectorOf(sources.connectors, row.connector.pluginId);
+    const h = plugin.gitAuth(
+      openSecret(sources.masterKey, {
+        ciphertext: row.secret.ciphertext,
+        wrappedDek: row.secret.wrappedDek,
+      }),
+    );
+    const env = sealToRunner(key.publicKey, key.keyFingerprint, req.secret_id, {
+      git_http_header: `${h.header}: ${h.value}`,
+    });
+    await tx
+      .insert(secretDeliveries)
+      .values({
+        workspaceId: item.workspaceId,
+        secretId: req.secret_id,
+        runnerId: auth.runnerId,
+        keyEpoch: row.secret.keyEpoch,
+      })
+      .onConflictDoUpdate({
+        target: [
+          secretDeliveries.workspaceId,
+          secretDeliveries.secretId,
+          secretDeliveries.runnerId,
+        ],
+        set: { lastDeliveredAt: sql`now()`, keyEpoch: row.secret.keyEpoch },
+      });
+    return env;
   });
 }

@@ -17,13 +17,14 @@ import {
 } from '@cloudcraft/core-protocol';
 import type { StepHandler, StepResult } from '../runner/loop.ts';
 import { ensureImage, runContainer, startContainer } from '../sandbox/docker.ts';
+import type { GitAuth } from '../runner/credentials.ts';
 import { git } from './git.ts';
 import { isTestConfig, type Workspaces } from './workspace.ts';
 
 export interface ReplayOptions {
   image: string;
   workspaces: Workspaces;
-  gitToken?: string;
+  gitAuth: GitAuth;
   labels?: Record<string, string>;
 }
 
@@ -265,7 +266,7 @@ export function replayStep(o: ReplayOptions): StepHandler {
     for (const c of changes) {
       const dir = path.join(ws.workDir, c.repo);
       await git(dir, ['push', '-q', 'origin', `${c.head_sha}:refs/heads/${ws.state.branch}`], {
-        token: o.gitToken,
+        ...(await o.gitAuth(step, spec.get(c.repo)!)),
         signal,
       });
       pushed.push({ repo: c.repo, branch: ws.state.branch, head_sha: c.head_sha });

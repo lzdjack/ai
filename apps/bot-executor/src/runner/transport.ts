@@ -3,6 +3,8 @@ import {
   RUNNER_PATHS,
   type CompleteStepRequest,
   type CompleteStepResponse,
+  type CredentialEnvelope,
+  type FetchCredentialRequest,
   type HeartbeatRequest,
   type HeartbeatResponse,
   type RegisterRunnerRequest,
@@ -49,6 +51,8 @@ export function httpTransport(server: string) {
       call<HeartbeatResponse>(RUNNER_PATHS.heartbeatAndPoll, req, creds),
     completeRoundStep: (creds: RunnerCredentials, req: CompleteStepRequest) =>
       call<CompleteStepResponse>(RUNNER_PATHS.completeRoundStep, req, creds),
+    fetchCredential: (creds: RunnerCredentials, req: FetchCredentialRequest) =>
+      call<CredentialEnvelope>(RUNNER_PATHS.fetchCredential, req, creds),
   };
 }
 

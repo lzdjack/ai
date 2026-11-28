@@ -9,6 +9,7 @@ import { databaseUrls, type Config } from '@cloudcraft/config';
 import {
   accountSettings,
   buildApp,
+  sourceSettings,
   createDb,
   issueEnrollToken,
   pgOrchestrator,
@@ -152,6 +153,7 @@ export async function startHarness(c: Config, o: { leaseSeconds: number }) {
     db,
     runner: { leaseSeconds: o.leaseSeconds, pollMs: 500 },
     accounts: accountSettings(c),
+    sources: await sourceSettings(c),
   });
   await app.listen({ host: '127.0.0.1', port: 0 });
   const addr = app.server.address();
@@ -196,6 +198,9 @@ export async function startHarness(c: Config, o: { leaseSeconds: number }) {
 
   return {
     db,
+    /** the demo team (张三 is its owner) and the in-process cc-app's address */
+    team,
+    server,
     asOwner,
     startExecutor,
     killExecutor,

@@ -4,7 +4,9 @@ import { pgOrchestrator } from '../src/orchestrator/flow.ts';
 import { withWorkspaceTx, type Db } from '../src/db/client.ts';
 import { projects, users } from '../src/db/schema/index.ts';
 import { createWorkspace, insertRow } from '../src/db/write.ts';
+import crypto from 'node:crypto';
 import type { AccountSettings } from '../src/service/account-service.ts';
+import type { SourceSettings } from '../src/service/source-service.ts';
 
 export const PLAN: Plan = {
   plan_schema_version: PLAN_SCHEMA_VERSION,
@@ -51,4 +53,9 @@ export function testAccounts(over: Partial<AccountSettings> = {}) {
     ...over,
   };
   return { settings, mails };
+}
+
+/** Credential store and connector plugins for tests: a throwaway master key; plugins on request. */
+export function testSources(connectors: SourceSettings['connectors'] = new Map()): SourceSettings {
+  return { masterKey: crypto.randomBytes(32), connectors };
 }

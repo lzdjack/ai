@@ -7,6 +7,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import type { RepoSpec, StepAssignment } from '@cloudcraft/core-protocol';
 import type { SubmitDelivery } from '@cloudcraft/mcp-tool-host';
+import type { GitAuth } from '../runner/credentials.ts';
 import { installRoundDeps } from '../sandbox/deps.ts';
 import type { Mount } from '../sandbox/docker.ts';
 import { BOT_AUTHOR, clone, git } from './git.ts';
@@ -40,7 +41,7 @@ export interface WorkspaceOptions {
   image: string;
   root: string;
   cacheRoot: string;
-  gitToken?: string;
+  gitAuth: GitAuth;
   labels?: Record<string, string>;
 }
 
@@ -86,10 +87,10 @@ export class Workspaces {
     const workDir = path.join(dir, 'work');
     fs.mkdirSync(workDir, { recursive: true });
     const branch = branchFor(step.flow_instance_id);
-    const auth = { token: this.o.gitToken, signal };
     const timings: { label: string; ms: number }[] = [];
     const t0 = Date.now();
     for (const r of step.repos) {
+      const auth = { ...(await this.o.gitAuth(step, r)), signal };
       const repoDir = path.join(workDir, r.name);
       await clone(r.clone_url, r.ref, repoDir, auth);
       const pushed = (await git(repoDir, ['ls-remote', '--heads', 'origin', branch], auth)).trim();

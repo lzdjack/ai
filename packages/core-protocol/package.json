@@ -5,7 +5,8 @@
   "type": "module",
   "description": "唯一契约：TypeBox 定义、UI Block、RunnerTransport、AgentRuntimePlugin",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./envelope": "./src/envelope.ts"
   },
   "dependencies": {
     "typebox": "1.4.7"

@@ -6,5 +6,9 @@
   "description": "GitLab 连接器",
   "exports": {
     ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@cloudcraft/core-protocol": "workspace:*",
+    "typebox": "1.4.7"
   }
 }

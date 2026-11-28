@@ -7,6 +7,8 @@ import { LeaseLostError, RunnerAuthError, type Db } from './db/client.ts';
 import { NotFoundError, RevConflictError } from './db/write.ts';
 import { accountRoutes } from './routes/account-routes.ts';
 import { runnerRoutes } from './routes/runner-routes.ts';
+import { sourceRoutes } from './routes/source-routes.ts';
+import type { SourceSettings } from './service/source-service.ts';
 import type { AccountSettings } from './service/account-service.ts';
 import { ApiFailure } from './service/errors.ts';
 import { hasText, tr } from './service/i18n.ts';
@@ -23,6 +25,7 @@ export function buildApp(o: {
   db: Db;
   runner: RunnerSettings;
   accounts: AccountSettings;
+  sources: SourceSettings;
   logger?: boolean;
 }) {
   const app = Fastify({
@@ -62,8 +65,9 @@ export function buildApp(o: {
     return send(500, { code: 'common.internal', message: 'internal error' });
   });
 
-  runnerRoutes(app, o.db, o.runner);
+  runnerRoutes(app, o.db, o.runner, o.sources);
   accountRoutes(app, o.db, o.accounts);
+  sourceRoutes(app, o.db, o.accounts, o.sources);
 
   app.get('/healthz', async () => {
     await o.db.pool.query('select 1');
