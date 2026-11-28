@@ -92,6 +92,8 @@
   "error.connector.not_found": "没有找到这个连接器",
   "error.connector.verify_failed": "连接器鉴权没通过，请检查地址和令牌",
   "error.connector.plugin_not_installed": "这个连接器插件还没安装",
+  "error.connector.in_use": "还有仓库或发布设置在用这个连接器，先移出后再停用或删除",
+  "error.connector.disabled": "这个连接器已停用，启用后才能使用",
   "error.flow.not_found": "没有找到这次运行",
   "error.environment.not_found": "没有找到这个环境",
   "error.env_account.not_found": "没有找到这个环境账号",

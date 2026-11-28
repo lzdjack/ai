@@ -3,7 +3,9 @@
 // carry a hint. New repositories are read-only until someone makes them writable, which puts them in a
 // project (1:1 by default) and probes them.
 import {
+  type ConnectorUsage,
   type CreateConnectorRequest,
+  type UpdateConnectorRequest,
   type RepoRow,
   type RepoSettings,
   type RepoSpec,
@@ -17,6 +19,7 @@ import {
   flowInstances,
   nodeRuns,
   projects,
+  releaseConfigs,
   repoTargets,
   repos,
   secretItems,
@@ -131,6 +134,135 @@ export function listConnectors(db: Db, userId: string, ws: string) {
   });
 }
 
+async function sharedConnector(tx: Tx, id: string) {
+  const [c] = await tx
+    .select()
+    .from(connectors)
+    .where(
+      and(eq(connectors.id, id), eq(connectors.scope, 'workspace'), isNull(connectors.deletedAt)),
+    );
+  if (!c) throw new ApiFailure(404, 'connector.not_found');
+  return c;
+}
+
+/** What still uses a shared connector: attached repositories and release settings (06 §10.3 item 1). */
+async function usageOf(tx: Tx, id: string): Promise<ConnectorUsage | null> {
+  const rs = await tx
+    .select({ path: repos.path })
+    .from(repos)
+    .where(and(eq(repos.connectorId, id), isNull(repos.deletedAt)))
+    .orderBy(asc(repos.path));
+  const [{ n }] = (await tx
+    .select({ n: sql<number>`count(*)::int` })
+    .from(releaseConfigs)
+    .where(and(eq(releaseConfigs.providerConnectorId, id), isNull(releaseConfigs.deletedAt)))) as [
+    { n: number },
+  ];
+  return rs.length || n ? { repos: rs.map((r) => r.path), release_configs: n } : null;
+}
+
+const forgetRemote = (ws: string, connectorId: string) => {
+  for (const k of cache.keys()) if (k.startsWith(`${ws}:${connectorId}:`)) cache.delete(k);
+};
+
+/**
+ * 编辑连接器: settings or credential changes are verified first with what will be stored (a field left
+ * out keeps the stored value) and a new credential replaces the old ciphertext in place. Disabling
+ * refuses with connector.in_use while repositories or release settings use it.
+ */
+export async function updateConnector(
+  db: Db,
+  s: SourceSettings,
+  userId: string,
+  ws: string,
+  id: string,
+  req: UpdateConnectorRequest,
+) {
+  const reverify = req.config !== undefined || req.credential !== undefined;
+  // read what is stored, verify outside any transaction (network), then write
+  const merged = reverify
+    ? await inWorkspace(db, userId, ws, async (tx) => {
+        await need(tx, userId, 'core:connectors:manage');
+        await sharedConnector(tx, id);
+        const o = await openConnector(tx, s, id);
+        const fresh = Object.fromEntries(
+          Object.entries(req.credential ?? {}).filter(([, v]) => v !== '' && v != null),
+        );
+        return {
+          plugin: o.connector.pluginId,
+          config: { ...o.config, ...(req.config ?? {}) },
+          credential: { ...o.credential, ...fresh },
+          rotated: Object.keys(fresh).length > 0,
+        };
+      })
+    : null;
+  const check = merged
+    ? await connectorOf(s.connectors, merged.plugin).verify(merged.config, merged.credential)
+    : null;
+  if (check && !check.ok)
+    throw new ApiFailure(400, 'connector.verify_failed', { error_raw: check.error_raw });
+  const out = await inWorkspace(db, userId, ws, async (tx, ctx) => {
+    await need(tx, userId, 'core:connectors:manage');
+    const c = await sharedConnector(tx, id);
+    if (req.status === 'disabled' && c.status !== 'disabled') {
+      const usage = await usageOf(tx, id);
+      if (usage) throw new ApiFailure(409, 'connector.in_use', usage);
+    }
+    if (merged?.rotated && c.secretId) {
+      const sealed = sealSecret(s.masterKey, merged.credential);
+      const [sec] = await tx.select().from(secretItems).where(eq(secretItems.id, c.secretId));
+      await updateRow(tx, ctx, secretItems, c.secretId, {
+        ciphertext: sealed.ciphertext,
+        wrappedDek: sealed.wrappedDek,
+        hint: sealed.hint,
+        keyEpoch: (sec?.keyEpoch ?? 0) + 1,
+      } as never);
+    }
+    const row = await updateRow(
+      tx,
+      ctx,
+      connectors,
+      id,
+      {
+        ...(req.name ? { name: req.name.trim() } : {}),
+        ...(merged && req.config ? { config: merged.config } : {}),
+        ...(req.status ? { status: req.status } : {}),
+      } as never,
+      { expectedRev: req.rev },
+    );
+    const [sec] = row.secretId
+      ? await tx
+          .select({ hint: secretItems.hint })
+          .from(secretItems)
+          .where(eq(secretItems.id, row.secretId))
+      : [];
+    return { ...connectorRow(row, sec?.hint ?? ''), ...(check ? { verify: check } : {}) };
+  });
+  forgetRemote(ws, id);
+  return out;
+}
+
+/**
+ * Soft delete (06 §2.11), refused with connector.in_use like disabling; people's own accounts kept
+ * under it go with it.
+ */
+export function deleteConnector(db: Db, userId: string, ws: string, id: string) {
+  return inWorkspace(db, userId, ws, async (tx, ctx) => {
+    await need(tx, userId, 'core:connectors:manage');
+    await sharedConnector(tx, id);
+    const usage = await usageOf(tx, id);
+    if (usage) throw new ApiFailure(409, 'connector.in_use', usage);
+    for (const p of await tx
+      .select({ id: connectors.id })
+      .from(connectors)
+      .where(and(eq(connectors.parentConnectorId, id), isNull(connectors.deletedAt))))
+      await updateRow(tx, ctx, connectors, p.id, { deletedAt: sql`now()` } as never);
+    await updateRow(tx, ctx, connectors, id, { deletedAt: sql`now()` } as never);
+    forgetRemote(ws, id);
+    return { ok: true };
+  });
+}
+
 /** A shared connector with its credential opened, whatever kind of plugin it is. */
 export async function openConnector(tx: Tx, s: SourceSettings, connectorId: string) {
   const [row] = await tx
@@ -153,6 +285,7 @@ export async function openConnector(tx: Tx, s: SourceSettings, connectorId: stri
 /** The code-source connector with its credential opened, for one call in this request. */
 export async function opened(tx: Tx, s: SourceSettings, connectorId: string) {
   const o = await openConnector(tx, s, connectorId);
+  if (o.connector.status === 'disabled') throw new ApiFailure(409, 'connector.disabled');
   return { ...o, plugin: codeSourceOf(s.connectors, o.connector.pluginId) };
 }
 
@@ -182,6 +315,33 @@ export function remoteRepos(
     };
     cache.set(key, { at: Date.now(), value });
     return value;
+  });
+}
+
+/** 微调抽屉的主干 / 测试分支下拉 (06 §10.3 item 4): the repository's remote branches, by name. */
+export function repoBranches(
+  db: Db,
+  s: SourceSettings,
+  userId: string,
+  ws: string,
+  repoId: string,
+  search?: string,
+) {
+  return inWorkspace(db, userId, ws, async (tx) => {
+    await need(tx, userId, 'core:projects:manage');
+    const [repo] = await tx
+      .select()
+      .from(repos)
+      .where(and(eq(repos.id, repoId), isNull(repos.deletedAt)));
+    if (!repo) throw new ApiFailure(404, 'repo.not_found');
+    if (!repo.connectorId || !repo.remoteRepoId)
+      return { items: [], next_cursor: null, has_more: false };
+    const o = await opened(tx, s, repo.connectorId);
+    const items = await o.plugin.listBranches(o.config, o.credential, repo.remoteRepoId, {
+      search,
+      perPage: 50,
+    });
+    return { items, next_cursor: null, has_more: false };
   });
 }
 

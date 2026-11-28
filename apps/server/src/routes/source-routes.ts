@@ -8,6 +8,7 @@ import {
   CreateTicketRequest,
   CreateConnectorRequest,
   ReviewRequest,
+  UpdateConnectorRequest,
   UpdateEnvAccountRequest,
   UpdateRepoRequest,
   VerifyConnectorRequest,
@@ -47,6 +48,7 @@ const RemoteQuery = Type.Object({
   page: Type.Optional(Type.Integer({ minimum: 1, default: 1 })),
   refresh: Type.Optional(Type.Integer({ minimum: 0, maximum: 1 })),
 });
+const BranchQuery = Type.Object({ q: Type.Optional(Type.String({ maxLength: 100 })) });
 const PluginQuery = Type.Object({ category: Type.Optional(Type.String()) });
 
 export function sourceRoutes(
@@ -101,6 +103,20 @@ export function sourceRoutes(
     next_cursor: null,
     has_more: false,
   }));
+  // 编辑 / 停用 / 删除连接器 (06 §10.3 item 1, edit mode)
+  app.patch(
+    '/v1/workspaces/:ws/connectors/:id',
+    { schema: { params: Item, body: UpdateConnectorRequest } },
+    async (req) => {
+      const { ws, id } = p<Static<typeof Item>>(req);
+      const body = req.body as Static<typeof UpdateConnectorRequest>;
+      return src.updateConnector(db, s, user(req), ws, id, body);
+    },
+  );
+  app.delete('/v1/workspaces/:ws/connectors/:id', { schema: { params: Item } }, async (req) => {
+    const { ws, id } = p<Static<typeof Item>>(req);
+    return src.deleteConnector(db, user(req), ws, id);
+  });
   app.get(
     '/v1/workspaces/:ws/connectors/:id/remote-repos',
     { schema: { params: Item, querystring: RemoteQuery } },
@@ -139,6 +155,15 @@ export function sourceRoutes(
     async (req) => {
       const { ws, id } = p<Static<typeof Item>>(req);
       return src.updateRepo(db, s, user(req), ws, id, req.body as Static<typeof UpdateRepoRequest>);
+    },
+  );
+  app.get(
+    '/v1/workspaces/:ws/repos/:id/branches',
+    { schema: { params: Item, querystring: BranchQuery } },
+    async (req) => {
+      const { ws, id } = p<Static<typeof Item>>(req);
+      const { q } = req.query as Static<typeof BranchQuery>;
+      return src.repoBranches(db, s, user(req), ws, id, q);
     },
   );
   app.post('/v1/workspaces/:ws/repos/:id/probe', { schema: { params: Item } }, async (req) => {

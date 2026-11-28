@@ -74,6 +74,14 @@ const fake: CodeSourceConnector = {
     if (cred.token !== TOKEN) throw new Error('401');
     return FILES[id]?.[p] ?? null;
   },
+  listBranches: async (_c, cred, _id, q) => {
+    if (cred.token !== TOKEN) throw new Error('401');
+    return [
+      { name: 'main', commit: 'a'.repeat(40), default: true, protected: true },
+      { name: 'test', commit: 'b'.repeat(40), default: false, protected: false },
+      { name: 'fix/M-1', commit: 'c'.repeat(40), default: false, protected: false },
+    ].filter((b) => !q.search || b.name.includes(q.search));
+  },
   branchHead: async () => null,
   gitAuth: (cred) => ({ header: 'Authorization', value: `Bearer ${String(cred.token)}` }),
   // merges and MRs belong to the delivery segment (delivery.int.test.ts)
@@ -267,6 +275,80 @@ describe('连接器、仓库与凭据信封（P3）', () => {
     expect(
       (await call('PATCH', `${ws()}/repos/${web}`, member, { access_mode: 'read_only' })).status,
     ).toBe(403);
+  });
+
+  it('编辑连接器：令牌留空沿用原密文、填新值验证通过才覆盖；还有仓库在用时不能停用或删除；远端分支下拉', async () => {
+    const epoch = async () =>
+      (
+        await su.query(
+          'select s.key_epoch from secret_items s join connectors c on c.secret_id = s.id where c.id = $1',
+          [connectorId],
+        )
+      ).rows[0].key_epoch as number;
+    const before = await epoch();
+    const bad = await call('PATCH', `${ws()}/connectors/${connectorId}`, owner, {
+      credential: { token: 'wrong' },
+    });
+    expect([bad.status, bad.body.code]).toEqual([400, 'connector.verify_failed']);
+    const blank = await call('PATCH', `${ws()}/connectors/${connectorId}`, owner, {
+      name: '公司 GitLab',
+      config: { base_url: 'http://git2.test' },
+      credential: { token: '' },
+    });
+    expect(blank.body).toMatchObject({
+      name: '公司 GitLab',
+      config: { base_url: 'http://git2.test' },
+      credential_hint: '•••• 91d0',
+      verify: { ok: true },
+    });
+    expect(await epoch()).toBe(before);
+    await call('PATCH', `${ws()}/connectors/${connectorId}`, owner, {
+      credential: { token: TOKEN },
+    });
+    expect(await epoch()).toBe(before + 1);
+    expect(
+      (await call('PATCH', `${ws()}/connectors/${connectorId}`, member, { name: 'x' })).status,
+    ).toBe(403);
+
+    const off = await call('PATCH', `${ws()}/connectors/${connectorId}`, owner, {
+      status: 'disabled',
+    });
+    expect([off.status, off.body.code]).toEqual([409, 'connector.in_use']);
+    expect((off.body.data as { repos: string[] }).repos).toEqual([
+      'demo/demo-lib',
+      'demo/demo-web',
+    ]);
+    const del = await call('DELETE', `${ws()}/connectors/${connectorId}`, owner);
+    expect([del.status, del.body.code]).toEqual([409, 'connector.in_use']);
+
+    // an unused connector can be disabled (and then not browsed) and deleted
+    const spare = await call('POST', `${ws()}/connectors`, owner, {
+      plugin_id: 'connector-fake',
+      name: '备用',
+      config: {},
+      credential: { token: TOKEN },
+    });
+    const spareId = spare.body.id as string;
+    expect(
+      (await call('PATCH', `${ws()}/connectors/${spareId}`, owner, { status: 'disabled' })).body
+        .status,
+    ).toBe('disabled');
+    const browse = await call('GET', `${ws()}/connectors/${spareId}/remote-repos`, owner);
+    expect([browse.status, browse.body.code]).toEqual([409, 'connector.disabled']);
+    expect((await call('DELETE', `${ws()}/connectors/${spareId}`, owner)).status).toBe(200);
+    const names = (
+      (await call('GET', `${ws()}/connectors`, owner)).body.items as { id: string }[]
+    ).map((c) => c.id);
+    expect(names).toEqual([connectorId]);
+
+    const all = await call('GET', `${ws()}/repos/${web}/branches`, owner);
+    expect((all.body.items as { name: string; default: boolean }[]).map((b) => b.name)).toEqual([
+      'main',
+      'test',
+      'fix/M-1',
+    ]);
+    const some = await call('GET', `${ws()}/repos/${web}/branches?q=te`, owner);
+    expect((some.body.items as { name: string }[]).map((b) => b.name)).toEqual(['test']);
   });
 
   it('试构建：按依赖顺序把项目的仓排进执行计划，只带凭据引用不带凭据', async () => {

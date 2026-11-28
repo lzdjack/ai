@@ -68,6 +68,13 @@ export interface CodeSourceConnector {
     path: string,
     ref: string,
   ): Promise<string | null>;
+  /** remote branches for the 主干 / 测试分支 dropdowns (06 §10.3 item 4), filtered by name */
+  listBranches(
+    config: Record<string, unknown>,
+    credential: Record<string, unknown>,
+    remoteId: string,
+    q: { search?: string; perPage: number },
+  ): Promise<RemoteBranch[]>;
   /** head commit of a branch, or null when the branch does not exist (fact check, 06 §5.7) */
   branchHead(
     config: Record<string, unknown>,
@@ -112,6 +119,14 @@ export interface CodeSourceConnector {
     ancestor: string,
     descendant: string,
   ): Promise<boolean>;
+}
+
+export interface RemoteBranch {
+  name: string;
+  commit: string;
+  /** the platform's default branch */
+  default: boolean;
+  protected: boolean;
 }
 
 export interface MergeRequestInfo {
@@ -224,6 +239,29 @@ export const CreateConnectorRequest = Type.Object({
   credential: Json,
 });
 export type CreateConnectorRequest = Static<typeof CreateConnectorRequest>;
+
+/**
+ * 编辑连接器 (06 §10.3 item 1, edit mode): the plugin is fixed. A credential field left out keeps the
+ * stored one (the secret never comes back to fill the form); any new value replaces it after the
+ * connector verifies again. Disabling refuses while repositories or release settings still use it.
+ */
+export const UpdateConnectorRequest = Type.Object(
+  {
+    name: Type.Optional(Type.String({ minLength: 1, maxLength: 60 })),
+    config: Type.Optional(Json),
+    credential: Type.Optional(Json),
+    status: Type.Optional(Type.Union([Type.Literal('enabled'), Type.Literal('disabled')])),
+    rev: Type.Optional(Type.Integer()),
+  },
+  { additionalProperties: false },
+);
+export type UpdateConnectorRequest = Static<typeof UpdateConnectorRequest>;
+
+/** 409 connector.in_use: what still uses the connector (data of the error). */
+export interface ConnectorUsage {
+  repos: string[];
+  release_configs: number;
+}
 
 export const ConnectorRow = Type.Object({
   id: Type.String(),
