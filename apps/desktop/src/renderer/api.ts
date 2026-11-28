@@ -7,6 +7,7 @@ import type {
   HealthCheckResponse,
   RemoteBranch,
   DeliveryView,
+  ReleaseList,
   MergeReviewRequest,
   PersonalAccountRow,
   RetestRequest,
@@ -234,7 +235,11 @@ export function deliveryCalls(ws: string) {
   const w = `/v1/workspaces/${ws}`;
   const d = (id: string) => `${w}/tickets/${id}/delivery`;
   return {
-    view: (id: string) => call<DeliveryView>('GET', d(id)),
+    /** a round's delivery; without a round, the one under way */
+    view: (id: string, roundNo?: number) =>
+      call<DeliveryView>('GET', roundNo ? `${d(id)}?round_no=${roundNo}` : d(id)),
+    /** every ticket's releases the caller can see, for the Dock (docs/02 Dock「发布」定案) */
+    releases: () => call<ReleaseList>('GET', `${w}/releases`),
     startTest: (id: string, body: StartTestReleaseRequest) =>
       call<unknown>('POST', `${d(id)}/test`, body),
     reviewMerge: (id: string, body: MergeReviewRequest) =>

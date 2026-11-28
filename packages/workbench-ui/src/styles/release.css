@@ -324,3 +324,56 @@
   box-sizing: border-box;
   height: 40px;
 }
+
+/* Dock「发布」(PC-发布, PC-空状态 ③) */
+.wb-rel-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+}
+.wb-rel-ticket {
+  margin-top: 12px;
+  padding: 8px 10px 8px 12px;
+  border-radius: 12px;
+  background: var(--fill);
+}
+.wb-rel-ph {
+  padding: 4px 4px 0;
+}
+.wb-rel-ph span {
+  display: block;
+  border: 1.5px dashed var(--hair);
+  border-radius: 12px;
+  height: 46px;
+}
+.wb-rel-ph span.is-short {
+  height: 34px;
+  opacity: 0.6;
+}
+.wb-rel-empty {
+  justify-content: center;
+  padding: 0 26px;
+}
+.wb-rel-empty-ic {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: linear-gradient(160deg, #6cc4ff, #1673ff);
+}
+.wb-rel-empty-h {
+  font-size: 19px;
+  font-weight: 800;
+  margin-top: 12px;
+}
+.wb-rel-chip {
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 10px;
+  border-radius: 8px;
+  background: var(--fill);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-2);
+  white-space: nowrap;
+}

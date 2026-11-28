@@ -11,6 +11,7 @@ import {
   type DeliveryView,
   type HeartbeatResponse,
   type MergeRequestInfo,
+  type ReleaseList,
   type ReleaseProviderConnector,
   type StepAssignment,
   type StepSecrets,
@@ -303,16 +304,10 @@ async function waitNode(ticketId: string, key: string, status: string) {
   throw new Error(`${key} never ${status}: ${JSON.stringify((await view(ticketId)).nodes)}`);
 }
 
-/** A ticket whose round 1 is approved: fix/ head on the platform is the delivered commit. */
-async function approvedTicket(title: string) {
-  const created = await call('POST', `${ws()}/projects/${A.projectId}/tickets`, {
-    title,
-    body: 'x',
-  });
-  const id = created.body.id as string;
-  const branch = `fix/main/${created.body.no as string}`;
+/** Plays the Bot executor through a round from this step: the delivered commit lands on fix/. */
+async function finishRound(first: StepAssignment, branch: string) {
   const head = sha();
-  let step: StepAssignment | undefined = await take(botAuth, created.body.flow_id as string);
+  let step: StepAssignment | undefined = first;
   while (step) {
     const output =
       step.node_key === 'fix'
@@ -345,22 +340,68 @@ async function approvedTicket(title: string) {
     );
     step = r.body.next as StepAssignment | undefined;
   }
+  return head;
+}
+
+/** The assignee approves the delivered round once it is up for review. */
+async function approve(ticketId: string, roundNo: number) {
   for (let i = 0; i < 100; i++) {
-    const d = await call('GET', `${ws()}/tickets/${id}`);
+    const d = await call('GET', `${ws()}/tickets/${ticketId}`);
     if (d.body.status === 'in_review') {
-      const r = (d.body.rounds as { delivery: { delivery_digest: string } }[])[0]!;
-      const ok = await call('POST', `${ws()}/tickets/${id}/review`, {
+      const r = (d.body.rounds as { delivery: { delivery_digest: string } }[])[roundNo - 1]!;
+      const ok = await call('POST', `${ws()}/tickets/${ticketId}/review`, {
         decision: 'approve',
-        round_no: 1,
+        round_no: roundNo,
         delivery_digest: r.delivery.delivery_digest,
         review_rev: 0,
       });
       expect(ok.status).toBe(200);
-      return { id, branch, head };
+      return;
     }
     await new Promise((r) => setTimeout(r, 50));
   }
   throw new Error('never in review');
+}
+
+/** A ticket whose round 1 is approved: fix/ head on the platform is the delivered commit. */
+async function approvedTicket(title: string) {
+  const created = await call('POST', `${ws()}/projects/${A.projectId}/tickets`, {
+    title,
+    body: 'x',
+  });
+  const id = created.body.id as string;
+  const branch = `fix/main/${created.body.no as string}`;
+  const head = await finishRound(await take(botAuth, created.body.flow_id as string), branch);
+  await approve(id, 1);
+  return { id, branch, head };
+}
+
+/** A second person in workspace A with the plain member role, signed in. */
+async function invitedMember(slug: string, projectIds: string[] = []) {
+  const person = await seedSpace(db, slug);
+  const auth = `Bearer ${signAccessToken(settings, person.userId)}`;
+  const inv = await call('POST', `${ws()}/invitations`, {
+    role_key: 'member',
+    project_ids: projectIds,
+  });
+  expect(inv.status).toBe(201);
+  const ok = await call('POST', '/v1/invitations/accept', { invitation: inv.body.token }, auth);
+  expect(ok.status).toBe(200);
+  return auth;
+}
+
+/** The Dock「发布」rows of one ticket, as one signed-in person sees them. */
+async function releaseList(ticketId: string, auth?: string) {
+  const r = await call('GET', `${ws()}/releases`, undefined, auth);
+  expect(r.status).toBe(200);
+  return (r.body as unknown as ReleaseList).items.filter((x) => x.ticket_id === ticketId);
+}
+
+/** The same, as [stage, state, group, mine] with the test stage first. */
+async function releaseRows(ticketId: string, auth?: string) {
+  return (await releaseList(ticketId, auth))
+    .map((x) => [x.stage, x.state, x.group, x.mine] as const)
+    .sort((a, b) => b[0].localeCompare(a[0]));
 }
 
 /** The release executor merges: it opens the step's accounts with its release_exec key. */
@@ -457,6 +498,8 @@ describe('交付段（P6）：合入测试分支 → 发测试 → 复测 → �
     // personal accounts are listed under 我的账号, never with the shared connectors
     const listed = (await call('GET', `${ws()}/connectors`)).body.items as { id: string }[];
     expect(listed.map((c) => c.id).sort()).toEqual([codeConn, relConn].sort());
+    // approved and not released yet: already a release, waiting for its starter
+    expect(await releaseRows(id)).toEqual([['test', 'before', 'waiting', true]]);
     r = await start();
     expect(r.status).toBe(200);
     const flowId = r.body.flow_id as string;
@@ -480,6 +523,7 @@ describe('交付段（P6）：合入测试分支 → 发测试 → 复测 → �
       waiting_on_me: string | null;
     }[];
     expect(listed1.find((x) => x.id === id)?.waiting_on_me).toBe('merge_review');
+    expect(await releaseRows(id)).toEqual([['test', 'merge_review', 'waiting', true]]);
     const review = (body: Record<string, unknown>) =>
       call('POST', `${ws()}/tickets/${id}/delivery/merge-review`, body);
     expect((await review({ decision: 'approve', expected_head_sha: sha() })).body.code).toBe(
@@ -509,6 +553,12 @@ describe('交付段（P6）：合入测试分支 → 发测试 → 复测 → �
     });
     // the serial lock: this task runs, nobody else may release demo-web to test meanwhile
     expect((await view(id)).release_tasks[0]!.status).toBe('running');
+    expect(await releaseRows(id)).toEqual([['test', 'releasing', 'running', true]]);
+    // another member of the project sees the same release, under 全部 only and waiting on someone else
+    const other = await invitedMember('dl-viewer', [A.projectId]);
+    expect(await releaseRows(id, other)).toEqual([['test', 'releasing', 'running', false]]);
+    // without access to the project there is nothing to list
+    expect(await releaseRows(id, await invitedMember('dl-outsider'))).toEqual([]);
     await complete(relAuth, p.rel, {
       revision: '11',
       command: 'tita release --app demo-web --env TEST',
@@ -551,6 +601,8 @@ describe('交付段（P6）：合入测试分支 → 发测试 → 复测 → �
       waiting_on_me: string | null;
     }[];
     expect(listed2.find((x) => x.id === id)?.waiting_on_me).toBe('retest');
+    expect(await releaseRows(id)).toEqual([['test', 'pending_retest', 'waiting', true]]);
+    expect(await releaseRows(id, other)).toEqual([['test', 'pending_retest', 'running', false]]);
     expect(v.prod_gates).toEqual({ code_review: true, retest: false, main_merged: false });
     expect((await call('POST', `${ws()}/tickets/${id}/delivery/production`)).body.code).toBe(
       'delivery.prod_gates_open',
@@ -566,6 +618,11 @@ describe('交付段（P6）：合入测试分支 → 发测试 → 复测 → �
 
     // 10 the assignee asks to merge back; MR → main, reviewed, merged by the release executor
     await waitNode(id, 'main_request', 'waiting_human');
+    // the test release is finished; the production one appears, waiting to be merged back
+    expect(await releaseRows(id)).toEqual([
+      ['test', 'retest_passed', 'done', true],
+      ['production', 'main_request', 'waiting', true],
+    ]);
     expect((await call('POST', `${ws()}/tickets/${id}/delivery/main`)).status).toBe(200);
     v = await waitNode(id, 'main_mr_review', 'waiting_human');
     expect(v.merge_requests[1]).toMatchObject({
@@ -602,6 +659,8 @@ describe('交付段（P6）：合入测试分支 → 发测试 → 复测 → �
       error: 'interrupted',
     });
     expect(v.can.retry).toBe('prod_release');
+    // a failed release is still in progress: it waits for a retry
+    expect((await releaseRows(id))[1]).toEqual(['production', 'failed', 'running', true]);
     const prodTask = v.release_tasks.find((x) => x.environment.tier === 'production')!;
     expect(prodTask.status).toBe('failed');
     expect(prodTask.steps.find((s) => s.slot === 'release')).toMatchObject({
@@ -639,6 +698,10 @@ describe('交付段（P6）：合入测试分支 → 发测试 → 复测 → �
       await new Promise((res) => setTimeout(res, 50));
     v = await view(id);
     expect(v.flow?.status).toBe('done');
+    expect(await releaseRows(id)).toEqual([
+      ['test', 'retest_passed', 'done', true],
+      ['production', 'effective', 'done', true],
+    ]);
     expect(v.release_tasks.map((x) => [x.environment.tier, x.status, x.version])).toEqual([
       ['test_gate', 'effective', expect.stringMatching(/^1\.0\.0-/)],
       ['production', 'effective', p.version],
@@ -740,5 +803,23 @@ describe('交付段（P6）：合入测试分支 → 发测试 → 复测 → �
       category: 'mr_rejected',
       location: null,
     });
+    expect(await releaseRows(id)).toEqual([['test', 'review_rejected', 'done', true]]);
+
+    // round 2 approved: the release now shown is the new round's, not started yet; round 1 stays
+    // readable as it ended, and offers nothing to do
+    await finishRound(next, branch);
+    await approve(id, 2);
+    const now = await view(id);
+    expect([now.flow, now.can.start_test]).toEqual([null, true]);
+    // what the earlier round released is still this ticket's history
+    expect(now.release_tasks.map((x) => x.status)).toEqual(['cancelled']);
+    const first = (await call('GET', `${ws()}/tickets/${id}/delivery?round_no=1`))
+      .body as unknown as DeliveryView;
+    expect(first.flow).toMatchObject({ round_no: 1, status: 'cancelled' });
+    expect(first.can).toMatchObject({ start_test: false, review_mr: false, retry: null });
+    expect((await releaseList(id)).map((x) => [x.round_no, x.state]).sort()).toEqual([
+      [1, 'review_rejected'],
+      [2, 'before'],
+    ]);
   });
 });

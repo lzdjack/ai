@@ -25,6 +25,30 @@ export type ReleaseSlot = (typeof RELEASE_SLOTS)[number];
 export const MR_STATES = ['open', 'merged', 'rejected', 'superseded', 'closed'] as const;
 export type MrState = (typeof MR_STATES)[number];
 
+export type ReleaseStage = 'test' | 'production';
+
+/**
+ * The five steps a release shows for each environment (01 §12.2), as the delivery node keys behind
+ * each one: merge (to the test branch / back to main) → build and upload → release → verify →
+ * notify.
+ */
+export const DELIVERY_STEPS: Record<ReleaseStage, readonly (readonly string[])[]> = {
+  test: [
+    ['test_mr_open', 'test_mr_review', 'test_mr_merge'],
+    ['test_build', 'test_publish'],
+    ['test_release'],
+    ['test_verify'],
+    ['test_notify'],
+  ],
+  production: [
+    ['main_mr_open', 'main_mr_review', 'main_mr_merge'],
+    ['prod_build', 'prod_publish'],
+    ['prod_release'],
+    ['prod_verify'],
+    ['prod_notify'],
+  ],
+};
+
 /** 「发布到测试环境」(05 step 5): the latest approved round of the ticket goes to the test environment. */
 export const StartTestReleaseRequest = Type.Object({
   round_no: Type.Integer({ minimum: 1 }),
@@ -153,7 +177,13 @@ export interface TestRecordView {
   at: string;
 }
 
-/** GET /v1/workspaces/:ws/tickets/:id/delivery */
+/** GET /v1/workspaces/:ws/tickets/:id/delivery?round_no= */
+export const DeliveryQuery = Type.Object({
+  /** the release of this round; default the latest one */
+  round_no: Type.Optional(Type.Integer({ minimum: 1 })),
+});
+export type DeliveryQuery = Static<typeof DeliveryQuery>;
+
 export interface DeliveryView {
   ticket_id: string;
   /** null until someone releases the approved round to test */
@@ -204,5 +234,69 @@ export interface DeliveryView {
   /** who retests: the flow's tester, or before it starts the default (the reporter) */
   tester_id: string | null;
   /** display names of everyone the view refers to */
+  people: Record<string, string>;
+}
+
+/**
+ * Where one release stands: a ticket's approved round going to one environment. Computed on every
+ * read from the delivery flow's node runs, MRs, release tasks and test records.
+ */
+export type ReleaseRowState =
+  /** approved, nobody has released it to test yet */
+  | 'before'
+  | 'merge_review'
+  | 'releasing'
+  | 'failed'
+  | 'pending_retest'
+  | 'retest_passed'
+  /** retest passed, waiting for someone to ask for the merge back to main */
+  | 'main_request'
+  /** merged back to main, waiting for the production click */
+  | 'release_ready'
+  | 'effective'
+  /** sent back by the merge reviewer or the tester: the next round started */
+  | 'review_rejected'
+  | 'retest_rejected'
+  | 'cancelled';
+
+export interface ReleaseRow {
+  /** stable while the release moves on: ticket, round and stage */
+  key: string;
+  ticket_id: string;
+  ticket_no: string;
+  ticket_title: string;
+  round_no: number;
+  stage: ReleaseStage;
+  /** null before the project has such an environment */
+  environment_name: string | null;
+  repo: string | null;
+  version: string | null;
+  /** the list's groups (docs/02): in progress, waiting for the caller, finished */
+  group: 'running' | 'waiting' | 'done';
+  state: ReleaseRowState;
+  /** index into DELIVERY_STEPS[stage] for merge_review / releasing / failed */
+  step: number | null;
+  /** steps of this stage already done, of five */
+  steps_done: number;
+  /** the caller's own releases: theirs to fix, started, retest or act on */
+  mine: boolean;
+  /** whose avatar the row shows */
+  person_id: string | null;
+  /** the ticket's (first) assignee, shown as 修复人 in the release detail */
+  assignee_id: string | null;
+  /** merge_review: who may review */
+  reviewers: ActorPolicyView | null;
+  /** pending_retest / retest_passed / retest_rejected: the tester */
+  tester_id: string | null;
+  /** when it started (running) or last moved (finished) */
+  at: string;
+}
+
+/** GET /v1/workspaces/:ws/releases */
+export interface ReleaseList {
+  items: ReleaseRow[];
+  next_cursor: string | null;
+  has_more: boolean;
+  /** display names of everyone the rows refer to */
   people: Record<string, string>;
 }

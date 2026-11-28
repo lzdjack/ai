@@ -286,27 +286,38 @@ function PkgCard({ vm }: { vm: ReleaseVM }) {
   );
 }
 
-export function ReleasePanel({ vm, a }: { vm: ReleaseVM; a: ReleaseActions }) {
+export function ReleasePanel({
+  vm,
+  a,
+  bare,
+}: {
+  vm: ReleaseVM;
+  a: ReleaseActions;
+  /** the Dock's detail names the round, environment and state in its own header */
+  bare?: boolean;
+}) {
   const t = useT();
   return (
     <ScrollArea className="grow wb-rel-scroll" style={{ minHeight: 0 }}>
       <div className="col g12 wb-rel">
-        <div className="row g10">
-          <span className="f16 w7" style={{ flex: 'none' }}>
-            {vm.title}
-          </span>
-          <span className="f12 t3 grow ell">{vm.meta}</span>
-          {vm.history ? (
-            <span className="f12 t3" style={{ flex: 'none' }}>
-              {t('rel.history', { n: vm.history })}
+        {bare ? null : (
+          <div className="row g10">
+            <span className="f16 w7" style={{ flex: 'none' }}>
+              {vm.title}
             </span>
-          ) : null}
-          <span
-            className={`pill p-${vm.pill.tone}${vm.pill.tone === 'teal' ? ' wb-rel-pill is-teal' : ''}`}
-          >
-            {vm.pill.text}
-          </span>
-        </div>
+            <span className="f12 t3 grow ell">{vm.meta}</span>
+            {vm.history ? (
+              <span className="f12 t3" style={{ flex: 'none' }}>
+                {t('rel.history', { n: vm.history })}
+              </span>
+            ) : null}
+            <span
+              className={`pill p-${vm.pill.tone}${vm.pill.tone === 'teal' ? ' wb-rel-pill is-teal' : ''}`}
+            >
+              {vm.pill.text}
+            </span>
+          </div>
+        )}
         {a.error ? (
           <div className="wb-err" style={{ marginTop: -4 }}>
             {a.error}

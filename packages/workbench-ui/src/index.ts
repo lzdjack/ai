@@ -10,3 +10,4 @@ export * from './review-dialogs.tsx';
 export * from './ticket-map.ts';
 export * from './release-map.ts';
 export * from './release-view.tsx';
+export * from './release-list.tsx';

@@ -1,6 +1,7 @@
 // /v1 routes of the delivery segment (docs/06 §3.3; 05 steps 5–12), personal accounts (设置 → 我的账号)
 // and a project's release settings (06 §2.4 release_configs).
 import {
+  DeliveryQuery,
   MergeReviewRequest,
   RetestRequest,
   RetryDeliveryRequest,
@@ -15,6 +16,7 @@ import { verifyAccessToken } from '../service/auth-crypto.ts';
 import * as dl from '../service/delivery-service.ts';
 import { ApiFailure } from '../service/errors.ts';
 import { listPersonalAccounts, savePersonalAccount } from '../service/personal-accounts.ts';
+import { releaseList } from '../service/release-list-service.ts';
 import type { SourceSettings } from '../service/source-service.ts';
 
 const Ws = Type.Object({ ws: Type.String({ format: 'uuid' }) });
@@ -44,9 +46,13 @@ export function deliveryRoutes(
   const item = (req: FastifyRequest) => req.params as Static<typeof Item>;
   const T = '/v1/workspaces/:ws/tickets/:id/delivery';
 
-  app.get(T, { schema: { params: Item } }, async (req) => {
+  app.get('/v1/workspaces/:ws/releases', { schema: { params: Ws } }, async (req) =>
+    releaseList(db, user(req), (req.params as Static<typeof Ws>).ws),
+  );
+  app.get(T, { schema: { params: Item, querystring: DeliveryQuery } }, async (req) => {
     const { ws, id } = item(req);
-    return dl.deliveryView(db, user(req), ws, id);
+    const { round_no } = req.query as Static<typeof DeliveryQuery>;
+    return dl.deliveryView(db, user(req), ws, id, round_no);
   });
   app.post(
     `${T}/test`,
