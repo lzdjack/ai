@@ -27,6 +27,7 @@ import {
 } from '@cloudcraft/workbench-ui';
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { onboardingCalls, ticketCalls } from './api.ts';
+import { useReleaseTab } from './release-tab.tsx';
 import after from './demo/evidence-after.png';
 import before from './demo/evidence-before.png';
 import demo from './demo/workbench.json';
@@ -226,8 +227,21 @@ function LiveApp({ forcedTheme, me }: { forcedTheme: boolean; me: Me }) {
     void loadList();
   };
   const waiting = items.filter(
-    (x) => x.is_assignee && (x.status === 'in_review' || x.status === 'needs_help'),
+    (x) =>
+      (x.is_assignee && (x.status === 'in_review' || x.status === 'needs_help')) ||
+      !!x.waiting_on_me,
   ).length;
+  const release = useReleaseTab({
+    ws,
+    me,
+    detail,
+    active: tab === 'release',
+    onChanged: () => {
+      void loadList();
+      if (selected) void loadDetail(selected);
+    },
+  });
+  const onRelease = tab === 'release' && !!release.panel;
 
   return (
     <Shell me={me} forcedTheme={forcedTheme} status={[]} chatBadge={waiting || undefined}>
@@ -256,8 +270,9 @@ function LiveApp({ forcedTheme, me }: { forcedTheme: boolean; me: Me }) {
               }
             }}
             onReject={() => setDialog('reject')}
+            release={release.panel}
           />
-          <TicketRail rail={vm.rail} />
+          {onRelease ? release.rail : <TicketRail rail={vm.rail} />}
         </>
       ) : (
         <main className="glass panel col grow wb-main wb-empty">
@@ -283,6 +298,7 @@ function LiveApp({ forcedTheme, me }: { forcedTheme: boolean; me: Me }) {
           }}
         />
       ) : null}
+      {release.dialogs}
       {dialog === 'new' ? (
         <NewTicketDialog
           projects={projects}
