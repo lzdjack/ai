@@ -65,6 +65,8 @@ export function TicketRail({ rail }: { rail: TicketDetailVM['rail'] }) {
             <Pill tone="blue" style={{ height: 22 }}>
               {t('wb.rail.waiting_you')}
             </Pill>
+          ) : rail.progress.codeReview ? (
+            <span className="f12 t3">{rail.progress.codeReview}</span>
           ) : null}
         </div>
         <div className="wb-kv">
@@ -75,14 +77,16 @@ export function TicketRail({ rail }: { rail: TicketDetailVM['rail'] }) {
           <span className="t2">{t('wb.rail.platform')}</span>
           <span className="f12 t3">{rail.progress.platform}</span>
         </div>
-        <div className="row g8" style={{ padding: '8px 0 4px' }}>
-          <Button size="sm" className="grow" style={{ justifyContent: 'center' }}>
-            {t('wb.rail.confirmed_on_source')}
-          </Button>
-          <Button size="sm" style={{ padding: '0 10px' }} aria-label={t('wb.rail.open_source')}>
-            <ExternalIcon />
-          </Button>
-        </div>
+        {rail.progress.noSource ? null : (
+          <div className="row g8" style={{ padding: '8px 0 4px' }}>
+            <Button size="sm" className="grow" style={{ justifyContent: 'center' }}>
+              {t('wb.rail.confirmed_on_source')}
+            </Button>
+            <Button size="sm" style={{ padding: '0 10px' }} aria-label={t('wb.rail.open_source')}>
+              <ExternalIcon />
+            </Button>
+          </div>
+        )}
       </Card>
     </aside>
   );

@@ -90,6 +90,14 @@ export interface TicketDetailVM {
   rail: {
     timeline: { tone: StatusTone; title: string; sub: string; current?: boolean }[];
     env: { test: string; testNote?: string; prod: string; tester: string };
-    progress: { codeReviewWaiting: boolean; release: string; platform: string };
+    progress: {
+      codeReviewWaiting: boolean;
+      /** when not waiting: e.g. 已通过 */
+      codeReview?: string;
+      release: string;
+      platform: string;
+      /** manual tickets have no source ticket to confirm on (01 §3.4) */
+      noSource?: boolean;
+    };
   };
 }
