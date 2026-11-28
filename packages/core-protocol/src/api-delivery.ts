@@ -129,6 +129,8 @@ export interface ReleaseStepView {
 export interface ReleaseTaskView {
   id: string;
   no: string;
+  /** the delivery flow it belongs to (a ticket has one per approved round) */
+  flow_id: string | null;
   environment: { id: string; env_code: string; name: string; tier: string };
   repo: string;
   status: ReleaseStatus;
@@ -184,6 +186,8 @@ export interface DeliveryView {
     tier: string;
     entry_url: string;
     live_version: string | null;
+    /** the version live before that one */
+    previous_version: string | null;
   }[];
   /** the release settings of the ticket's target; null when the project has none yet */
   config: {

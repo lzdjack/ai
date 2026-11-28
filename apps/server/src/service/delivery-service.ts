@@ -1142,6 +1142,7 @@ export function deliveryView(
       release_tasks: tasks.map(({ rt, env, path }) => ({
         id: rt.id,
         no: releaseNo(rt.seqNo),
+        flow_id: rt.flowInstanceId,
         environment: { id: env.id, env_code: env.envCode, name: env.name, tier: env.envTier },
         repo: path,
         status: rt.status as DeliveryView['release_tasks'][number]['status'],
@@ -1244,6 +1245,7 @@ async function viewFacts(tx: Tx, t: typeof tickets.$inferSelect) {
         tier: e.envTier,
         entry_url: e.entryUrl,
         live_version: live.find((x) => x.env === e.id)?.version ?? null,
+        previous_version: live.filter((x) => x.env === e.id)[1]?.version ?? null,
       })),
     config:
       rc && policies
