@@ -557,6 +557,25 @@ export class GitlabSim {
       return this.mrDto(m, base(req));
     });
 
+    // 依据：Protected branches API「Protect repository branches」——只做按名字保护
+    api('POST', '/projects/:id/protected_branches', (req, reply) => {
+      const user = this.auth(req);
+      if (user.role !== 'maintainer') throw forbidden();
+      const p = this.project(req.params.id);
+      const { name } = { ...req.query, ...req.body } as { name?: string };
+      if (!name) throw missing('name');
+      if (p.protected_branches.includes(name))
+        throw new HttpError(409, { message: 'Protected branch already exists' });
+      p.protected_branches.push(name);
+      this.store.save();
+      reply.code(201);
+      return {
+        name,
+        push_access_levels: [{ access_level: 40 }],
+        merge_access_levels: [{ access_level: 40 }],
+      };
+    });
+
     // 依据：Project webhooks API
     api('GET', '/projects/:id/hooks', (req) => {
       this.auth(req);

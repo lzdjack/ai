@@ -27,6 +27,7 @@ export async function seedDemoRepos(c: Config): Promise<Array<{ repo: string; re
       const existing = await fetch(api, { headers });
       // 项目在、主分支也在才算已完成；上次建了项目但推送失败的，这次补推
       if (existing.ok && (await fetch(`${api}/repository/branches/main`, { headers })).ok) {
+        await ensureTestBranch(api, headers);
         results.push({ repo: full, result: 'exists' });
         continue;
       }
@@ -47,10 +48,31 @@ export async function seedDemoRepos(c: Config): Promise<Array<{ repo: string; re
       } finally {
         fs.rmSync(dir, { recursive: true, force: true });
       }
+      await ensureTestBranch(api, headers);
       results.push({ repo: full, result: 'pushed' });
     }
     return results;
   });
+}
+
+/** demo 仓的测试分支（P6 合入测试分支、发测试用）：从主分支切出，受保护 */
+export const DEMO_TEST_BRANCH = 'test';
+
+async function ensureTestBranch(api: string, headers: Record<string, string>) {
+  if ((await fetch(`${api}/repository/branches/${DEMO_TEST_BRANCH}`, { headers })).ok) return;
+  const json = { ...headers, 'Content-Type': 'application/json' };
+  const made = await fetch(`${api}/repository/branches`, {
+    method: 'POST',
+    headers: json,
+    body: JSON.stringify({ branch: DEMO_TEST_BRANCH, ref: 'main' }),
+  });
+  if (!made.ok) throw new Error(`建测试分支失败：${made.status} ${await made.text()}`);
+  const prot = await fetch(`${api}/protected_branches`, {
+    method: 'POST',
+    headers: json,
+    body: JSON.stringify({ name: DEMO_TEST_BRANCH }),
+  });
+  if (!prot.ok && prot.status !== 409) throw new Error(`保护测试分支失败：${prot.status}`);
 }
 
 /** 模拟 GitLab 里的 Bot 令牌（只在宿主机用：克隆、推送 fix/ 分支） */

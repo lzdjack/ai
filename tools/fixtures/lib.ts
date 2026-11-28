@@ -162,6 +162,7 @@ export async function withSim<T>(c: Config, fn: (base: string) => Promise<T>): P
   const app = await buildSim({ dataDir: c.CC_DATA_DIR });
   await app.listen({ host: '127.0.0.1', port: 0 });
   await app.envSites.listen('test', 0);
+  await app.envSites.listen('prod', 0);
   const addr = app.server.address();
   try {
     return await fn(`http://127.0.0.1:${typeof addr === 'object' && addr ? addr.port : 0}`);

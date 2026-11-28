@@ -10,6 +10,7 @@ const envFile = path.join(dataDir, '.env');
 const fileEnv = fs.existsSync(envFile) ? parseEnv(fs.readFileSync(envFile, 'utf8')) : {};
 const port = Number(process.env.CC_SIM_PORT || fileEnv.CC_SIM_PORT || 4200);
 const envPort = Number(process.env.CC_SIM_ENV_PORT || fileEnv.CC_SIM_ENV_PORT || 4201);
+const prodPort = Number(process.env.CC_SIM_PROD_PORT || fileEnv.CC_SIM_PROD_PORT || 4202);
 
 const app = await buildSim({ dataDir, logger: true });
 await app.listen({ host: '127.0.0.1', port });
@@ -17,4 +18,6 @@ const envUrl = await app.envSites.listen('test', envPort);
 console.log(
   `模拟服务  http://127.0.0.1:${port}/   （控制台；GitLab 接口 /api/v4，git 克隆 /<组>/<项目>.git）`,
 );
+const prodUrl = await app.envSites.listen('prod', prodPort);
 console.log(`测试环境  ${envUrl}   （demo-web 部署在这里）`);
+console.log(`正式环境  ${prodUrl}`);

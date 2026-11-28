@@ -1,7 +1,9 @@
 // 环境站点（07 §5；06 §5.2）：demo-web 的「测试环境」，单独一个端口，页面和接口同源。
 // 部署走 PUT /__sim/envs/:name（主端口）：带上构建产物和接口种子数据，覆盖上一版。
 // 接口是 demo 审批中心的后端（和 demo-web 的开发期模拟接口同一套规则），数据只在内存里，每次部署重置。
-// 一期只有一个环境 test；P6 的发布流程也部署到这里。
+// 两个环境：test（测试）、prod（正式）。P6 起页面按模拟 Apollo 当前生效的发布来出：发布里写着版本、
+// 提交号和产物在模拟 OSS 里的位置，环境站点就从那里取文件；还没有发布过时用 PUT 部署的基线版本。
+// GET /__version 返回当前生效的版本和提交号（质检和发布流程核对用）。
 import fs from 'node:fs';
 import path from 'node:path';
 import Fastify, { type FastifyInstance } from 'fastify';
@@ -32,7 +34,14 @@ interface Approval {
 /** 迷你版不做登录，当前用户固定为张三（和 demo-web 一致） */
 const CURRENT_USER = { id: 'u1', name: '张三' };
 
-export const ENV_NAMES = ['test'] as const;
+export const ENV_NAMES = ['test', 'prod'] as const;
+
+/** 当前生效的发布：版本、提交号，以及按相对路径读产物 */
+export interface LiveRelease {
+  version: string;
+  commit: string;
+  read(rel: string): Buffer | null;
+}
 
 export class EnvSites {
   private approvals = new Map<string, Approval[]>();
@@ -40,7 +49,11 @@ export class EnvSites {
   private urls = new Map<string, string>();
   private sites: FastifyInstance[] = [];
 
-  constructor(private readonly root: string) {
+  constructor(
+    private readonly root: string,
+    /** 按环境名查当前生效的发布（模拟 Apollo + OSS）；没有就用基线 */
+    private readonly live: (name: string) => LiveRelease | null = () => null,
+  ) {
     for (const name of ENV_NAMES) {
       const seed = path.join(root, name, 'api-seed.json');
       if (fs.existsSync(seed))
@@ -58,11 +71,17 @@ export class EnvSites {
         n,
         {
           url: this.urls.get(n) ?? null,
-          deployed: fs.existsSync(path.join(this.dist(n), 'index.html')),
+          deployed: fs.existsSync(path.join(this.dist(n), 'index.html')) || !!this.live(n),
           last_deploy: this.versions.get(n) ?? null,
+          live: this.liveInfo(n),
         },
       ]),
     );
+  }
+
+  private liveInfo(name: string) {
+    const l = this.live(name);
+    return l ? { version: l.version, commit: l.commit } : null;
   }
 
   /** 起环境站点（单独端口，0 = 随机）；随主服务关闭 */
@@ -166,10 +185,24 @@ export class EnvSites {
       a.status = 'withdrawn';
       return a;
     });
+    app.get('/__version', async () => this.liveInfo(name) ?? { version: 'baseline', commit: null });
     app.get('/*', async (req, reply) => {
-      const dist = this.dist(name);
       const rel =
         decodeURIComponent((req.url.split('?')[0] ?? '/').replace(/^\/+/, '')) || 'index.html';
+      const send = (file: string, data: Buffer) =>
+        reply
+          .type(MIME[path.extname(file)] ?? 'application/octet-stream')
+          .header(
+            'cache-control',
+            file.endsWith('.html') ? 'no-cache' : 'public, max-age=31536000, immutable',
+          )
+          .send(data);
+      const live = this.live(name);
+      if (live) {
+        const data = live.read(rel) ?? (path.extname(rel) ? null : live.read('index.html'));
+        return data ? send(path.extname(rel) ? rel : 'index.html', data) : reply.code(404).send();
+      }
+      const dist = this.dist(name);
       let file = path.resolve(dist, rel);
       if (!file.startsWith(dist + path.sep)) return reply.code(404).send();
       if (!fs.existsSync(file) || !fs.statSync(file).isFile()) {
@@ -178,13 +211,7 @@ export class EnvSites {
         file = path.join(dist, 'index.html');
         if (!fs.existsSync(file)) return reply.code(503).type('text/plain').send('not deployed');
       }
-      return reply
-        .type(MIME[path.extname(file)] ?? 'application/octet-stream')
-        .header(
-          'cache-control',
-          file.endsWith('.html') ? 'no-cache' : 'public, max-age=31536000, immutable',
-        )
-        .send(fs.readFileSync(file));
+      return send(file, fs.readFileSync(file));
     });
     return app;
   }
