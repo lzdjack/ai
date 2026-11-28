@@ -145,6 +145,24 @@ async function nextReleaseNo(tx: Tx, workspaceId: string): Promise<number> {
   return r.rows[0]!.n;
 }
 
+/** The delivery flow of one round of the ticket; null when that round was never released. */
+async function flowOfRound(tx: Tx, ticketId: string, roundNo: number) {
+  const [x] = await tx
+    .select({ f: flowInstances })
+    .from(flowInstances)
+    .innerJoin(rounds, eq(rounds.id, flowInstances.roundId))
+    .where(
+      and(
+        eq(flowInstances.ticketId, ticketId),
+        eq(flowInstances.kind, 'delivery'),
+        eq(rounds.roundNo, roundNo),
+      ),
+    )
+    .orderBy(desc(flowInstances.createdAt))
+    .limit(1);
+  return x?.f ?? null;
+}
+
 /** The ticket's latest delivery flow (one per approved round; a send-back cancels it). */
 async function latestFlow(tx: Tx, ticketId: string) {
   const [f] = await tx
@@ -179,7 +197,7 @@ async function waitingNode(tx: Tx, flowId: string, key: (k: string) => boolean) 
  * The unified actor policy (06 §2.4) through ActionGate: assignee, anyone holding `permission`,
  * named people, or the reporter. Never by role name.
  */
-async function allowed(
+export async function allowed(
   tx: Tx,
   userId: string,
   policy: ActorPolicy,
@@ -965,11 +983,77 @@ const STEP_OF = (n: PlanNode) => {
   return c.slot ?? c.step ?? (n.node_kind === 'human_gate' ? 'retest' : '');
 };
 
+/** Every release task and test record of the ticket, whichever round they came from. */
+async function releaseHistory(tx: Tx, ticketId: string) {
+  const tasks = await tx
+    .select({ rt: releaseTasks, env: environments, path: repos.path })
+    .from(releaseTasks)
+    .innerJoin(environments, eq(environments.id, releaseTasks.environmentId))
+    .innerJoin(repos, eq(repos.id, releaseTasks.repoId))
+    .where(eq(releaseTasks.ticketId, ticketId))
+    .orderBy(asc(releaseTasks.createdAt));
+  const taskIds = tasks.map((x) => x.rt.id);
+  const steps = taskIds.length
+    ? await tx
+        .select()
+        .from(releaseSteps)
+        .where(inArray(releaseSteps.releaseTaskId, taskIds))
+        .orderBy(asc(releaseSteps.startedAt))
+    : [];
+  const recs = taskIds.length
+    ? await tx
+        .select()
+        .from(testRecords)
+        .where(inArray(testRecords.releaseTaskId, taskIds))
+        .orderBy(desc(testRecords.createdAt))
+    : [];
+  return {
+    userIds: [...tasks.map(({ rt }) => rt.triggeredBy), ...recs.map((r) => r.testerId)],
+    tasks: tasks.map(({ rt, env, path }): DeliveryView['release_tasks'][number] => ({
+      id: rt.id,
+      no: releaseNo(rt.seqNo),
+      flow_id: rt.flowInstanceId,
+      environment: { id: env.id, env_code: env.envCode, name: env.name, tier: env.envTier },
+      repo: path,
+      status: rt.status as DeliveryView['release_tasks'][number]['status'],
+      source_branch: rt.sourceBranch,
+      build_commit: rt.buildCommit,
+      version: rt.version,
+      verified_revision: rt.verifiedRevision,
+      triggered_by: rt.triggeredBy,
+      created_at: rt.createdAt.toISOString(),
+      steps: steps
+        .filter((s) => s.releaseTaskId === rt.id)
+        .map((s) => ({
+          slot: s.slot as DeliveryView['release_tasks'][number]['steps'][number]['slot'],
+          status: s.status as DeliveryView['release_tasks'][number]['steps'][number]['status'],
+          command: s.command,
+          exit_code: s.exitCode,
+          error: s.errorSummary,
+          attempt: s.attempt,
+          log_tail: s.logTail,
+          started_at: s.startedAt.toISOString(),
+          finished_at: s.finishedAt?.toISOString() ?? null,
+        })),
+    })),
+    records: recs.map((r): DeliveryView['test_records'][number] => ({
+      id: r.id,
+      release_task_id: r.releaseTaskId,
+      version: r.version,
+      tester_id: r.testerId,
+      result: r.result as 'pending' | 'passed' | 'rejected',
+      comment: r.comment,
+      at: (r.decidedAt ?? r.createdAt).toISOString(),
+    })),
+  };
+}
+
 export function deliveryView(
   db: Db,
   userId: string,
   ws: string,
   ticketId: string,
+  roundNo?: number,
 ): Promise<DeliveryView> {
   return inWorkspace(
     db,
@@ -981,15 +1065,25 @@ export function deliveryView(
         .from(tickets)
         .where(and(eq(tickets.id, ticketId), isNull(tickets.deletedAt)));
       if (!t) throw new ApiFailure(404, 'ticket.not_found');
-      const flow = await latestFlow(tx, t.id);
+      const latestOne = await latestFlow(tx, t.id);
+      // a round asked for shows its own release; otherwise the latest one — except that once a later
+      // round is approved, what is shown is that round's, which has not been released yet
+      const current = await flowOfRound(tx, t.id, t.currentRound);
+      const flow =
+        roundNo !== undefined
+          ? await flowOfRound(tx, t.id, roundNo)
+          : t.status === 'approved'
+            ? current
+            : latestOne;
       const facts = await viewFacts(tx, t);
+      const history = await releaseHistory(tx, t.id);
       const empty: DeliveryView = {
         ticket_id: t.id,
         flow: null,
         nodes: [],
         merge_requests: [],
-        release_tasks: [],
-        test_records: [],
+        release_tasks: history.tasks,
+        test_records: history.records,
         prod_gates: { code_review: false, retest: false, main_merged: false },
         can: {
           start_test: false,
@@ -1007,7 +1101,10 @@ export function deliveryView(
       };
       // what 「发布到测试环境」 would need (computed, 06 §3.3 「发布前」 is not stored)
       const missing: string[] = [];
-      const startable = t.status === 'approved' && (!flow || flow.status !== 'running');
+      const startable =
+        t.status === 'approved' &&
+        (roundNo === undefined || roundNo === t.currentRound) &&
+        latestOne?.status !== 'running';
       if (startable && facts.rc) {
         if (!(await personalAccountOf(tx, facts.rc.providerConnectorId, userId)))
           missing.push(facts.rc.providerConnectorId);
@@ -1023,7 +1120,7 @@ export function deliveryView(
         return {
           ...empty,
           missing_accounts: missing,
-          people: await peopleOf(tx, [...facts.userIds, t.createdBy]),
+          people: await peopleOf(tx, [...facts.userIds, ...history.userIds, t.createdBy]),
         };
       const plan = flow.plan as Plan;
       const [round] = await tx.select().from(rounds).where(eq(rounds.id, flow.roundId!));
@@ -1054,28 +1151,6 @@ export function deliveryView(
         .innerJoin(repos, eq(repos.id, mergeRequests.repoId))
         .where(eq(mergeRequests.flowInstanceId, flow.id))
         .orderBy(asc(mergeRequests.createdAt));
-      const tasks = await tx
-        .select({ rt: releaseTasks, env: environments, path: repos.path })
-        .from(releaseTasks)
-        .innerJoin(environments, eq(environments.id, releaseTasks.environmentId))
-        .innerJoin(repos, eq(repos.id, releaseTasks.repoId))
-        .where(eq(releaseTasks.ticketId, t.id))
-        .orderBy(asc(releaseTasks.createdAt));
-      const taskIds = tasks.map((x) => x.rt.id);
-      const steps = taskIds.length
-        ? await tx
-            .select()
-            .from(releaseSteps)
-            .where(inArray(releaseSteps.releaseTaskId, taskIds))
-            .orderBy(asc(releaseSteps.startedAt))
-        : [];
-      const recs = taskIds.length
-        ? await tx
-            .select()
-            .from(testRecords)
-            .where(inArray(testRecords.releaseTaskId, taskIds))
-            .orderBy(desc(testRecords.createdAt))
-        : [];
       const running = flow.status === 'running';
       const waiting = (k: (key: string) => boolean) =>
         running && runs.some((r) => k(r.nodeKey) && r.status === 'waiting_human');
@@ -1086,11 +1161,12 @@ export function deliveryView(
       const reviewing = nodes.find(
         (n) => n.status === 'waiting_human' && n.key.endsWith('_mr_review'),
       );
-      const pendingRec = recs.find((x) => x.result === 'pending');
+      const pendingRec = history.records.find((x) => x.result === 'pending');
       const testerId = cfgOf(plan.nodes.find((n) => n.key === 'retest')).tester_id ?? t.createdBy;
       const can = {
         start_test: false,
         review_mr:
+          running &&
           !!reviewing &&
           !!rc &&
           (await allowed(
@@ -1100,7 +1176,7 @@ export function deliveryView(
             t,
             'core:tickets:review',
           )),
-        retest: waiting((k) => k === 'retest') && pendingRec?.testerId === userId,
+        retest: waiting((k) => k === 'retest') && pendingRec?.tester_id === userId,
         request_main:
           waiting((k) => k === 'main_request') &&
           (await allowed(tx, userId, { type: 'assignee' }, t, 'core:tickets:review')),
@@ -1150,42 +1226,8 @@ export function deliveryView(
           comment: m.comment,
           created_at: m.createdAt.toISOString(),
         })),
-        release_tasks: tasks.map(({ rt, env, path }) => ({
-          id: rt.id,
-          no: releaseNo(rt.seqNo),
-          flow_id: rt.flowInstanceId,
-          environment: { id: env.id, env_code: env.envCode, name: env.name, tier: env.envTier },
-          repo: path,
-          status: rt.status as DeliveryView['release_tasks'][number]['status'],
-          source_branch: rt.sourceBranch,
-          build_commit: rt.buildCommit,
-          version: rt.version,
-          verified_revision: rt.verifiedRevision,
-          triggered_by: rt.triggeredBy,
-          created_at: rt.createdAt.toISOString(),
-          steps: steps
-            .filter((s) => s.releaseTaskId === rt.id)
-            .map((s) => ({
-              slot: s.slot as DeliveryView['release_tasks'][number]['steps'][number]['slot'],
-              status: s.status as DeliveryView['release_tasks'][number]['steps'][number]['status'],
-              command: s.command,
-              exit_code: s.exitCode,
-              error: s.errorSummary,
-              attempt: s.attempt,
-              log_tail: s.logTail,
-              started_at: s.startedAt.toISOString(),
-              finished_at: s.finishedAt?.toISOString() ?? null,
-            })),
-        })),
-        test_records: recs.map((r) => ({
-          id: r.id,
-          release_task_id: r.releaseTaskId,
-          version: r.version,
-          tester_id: r.testerId,
-          result: r.result as 'pending' | 'passed' | 'rejected',
-          comment: r.comment,
-          at: (r.decidedAt ?? r.createdAt).toISOString(),
-        })),
+        release_tasks: history.tasks,
+        test_records: history.records,
         prod_gates: gates,
         can: { ...can, start_test: empty.can.start_test },
         missing_accounts: [...new Set(missing)],
@@ -1197,8 +1239,7 @@ export function deliveryView(
           testerId,
           t.createdBy,
           ...mrs.flatMap(({ m }) => [m.reviewerId, m.mergedBy]),
-          ...tasks.map(({ rt }) => rt.triggeredBy),
-          ...recs.map((r) => r.testerId),
+          ...history.userIds,
         ]),
       };
     },
