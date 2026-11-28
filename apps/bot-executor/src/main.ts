@@ -15,6 +15,7 @@ import { httpTransport } from './runner/transport.ts';
 import { ensureSandboxImage, killLabeled } from './sandbox/docker.ts';
 import { fixStep } from './steps/fix.ts';
 import { prepareStep } from './steps/prepare.ts';
+import { releaseBuild } from './steps/release-build.ts';
 import { replayStep } from './steps/replay.ts';
 import { trialBuild } from './steps/trial-build.ts';
 import { Workspaces } from './steps/workspace.ts';
@@ -88,6 +89,21 @@ const handlers: Record<string, StepHandler> = {
     labels,
   }),
   prepare: prepareStep(workspaces),
+  // craft build of a release (build sandbox: no credentials in the container, no network)
+  release_build: releaseBuild({
+    image: image.tag,
+    cacheRoot,
+    workRoot,
+    gitAuth,
+    labels,
+    upload: (step, a) =>
+      transport.uploadArtifact(creds, {
+        work_item_id: step.work_item_id,
+        lease_token: step.lease_token,
+        fence: step.fence,
+        ...a,
+      }),
+  }),
   fix: fixStep({
     image: image.tag,
     sandboxDir,
@@ -120,6 +136,7 @@ const handlers: Record<string, StepHandler> = {
 const handlerFor = (step: { node_kind: string; config: Record<string, unknown> }) => {
   if (step.node_kind === 'host_prepare') return handlers.prepare!;
   if (step.node_kind === 'ai_agent') return handlers.fix!;
+  if (step.node_kind === 'release_deploy') return handlers.release_build!;
   return handlers[String(step.config.action)] ?? null;
 };
 
