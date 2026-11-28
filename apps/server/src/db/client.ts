@@ -4,6 +4,7 @@
 //   withLeaseTx:     a system task holding a committed lease (workspace taken from the work item)
 import { sql } from 'drizzle-orm';
 import { drizzle, type NodePgDatabase } from 'drizzle-orm/node-postgres';
+import type { PgTransactionConfig } from 'drizzle-orm/pg-core';
 import pg from 'pg';
 import type { ClientSource } from './events.ts';
 import * as schema from './schema/index.ts';
@@ -40,10 +41,20 @@ export interface ActorCtx {
   requestId?: string;
 }
 
+/**
+ * For a read that takes several queries and has to agree with itself: every query sees the database
+ * as of the first one (the default, read committed, takes a new look for each query).
+ */
+export const SNAPSHOT_READ: PgTransactionConfig = {
+  isolationLevel: 'repeatable read',
+  accessMode: 'read only',
+};
+
 export async function withWorkspaceTx<T>(
   db: Db,
   ctx: { userId: string; workspaceId: string; clientSource?: ClientSource; requestId?: string },
   fn: (tx: Tx, actor: ActorCtx) => Promise<T>,
+  config?: PgTransactionConfig,
 ): Promise<T> {
   return db.orm.transaction(async (tx) => {
     await tx.execute(sql`select app_enter(${ctx.userId}::uuid, ${ctx.workspaceId}::uuid)`);
@@ -53,7 +64,7 @@ export async function withWorkspaceTx<T>(
       clientSource: ctx.clientSource ?? 'api',
       requestId: ctx.requestId,
     });
-  });
+  }, config);
 }
 
 export interface Lease {

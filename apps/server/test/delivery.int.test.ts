@@ -663,7 +663,36 @@ describe('交付段（P6）：合入测试分支 → 发测试 → 复测 → �
         'delivery_failed',
       ]),
     );
-  });
+
+    // the view is one moment in time: a release that commits while it is being read shows up in all
+    // of it or in none of it. Holding release_configs parks the read between the live versions and
+    // the release list, which both come from release_tasks.
+    const prodVersion = p.version;
+    await su.query('begin');
+    await su.query('lock table release_configs in access exclusive mode');
+    const reading = view(id);
+    let parked = false;
+    for (let i = 0; i < 100 && !parked; i++) {
+      await new Promise((res) => setTimeout(res, 20));
+      const w = await su.query(
+        `select 1 from pg_locks where relation = 'release_configs'::regclass and not granted`,
+      );
+      parked = !!w.rowCount;
+    }
+    expect(parked).toBe(true);
+    await su.query(`update release_tasks set status = 'superseded' where version = $1`, [
+      prodVersion,
+    ]);
+    await su.query('commit');
+    v = await reading;
+    const seen = () => ({
+      live: v.environments.find((e) => e.tier === 'production')?.live_version,
+      task: v.release_tasks.find((x) => x.environment.tier === 'production')?.status,
+    });
+    expect(seen()).toEqual({ live: prodVersion, task: 'effective' });
+    v = await view(id);
+    expect(seen()).toEqual({ live: null, task: 'superseded' });
+  }, 60_000);
 
   it('MR 被打回：发布流程结束，本单回「打回重修」开第 2 轮，在同一分支上带着意见修', async () => {
     const { id, branch, head } = await approvedTicket('导出没反应');
