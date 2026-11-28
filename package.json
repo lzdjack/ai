@@ -20,6 +20,7 @@
     "dev:down": "tsx tools/dev/down.ts",
     "dev:reset": "tsx tools/dev/reset.ts",
     "dev:executor": "tsx tools/dev/executor.ts",
+    "dev:release": "tsx tools/dev/release.ts",
     "fixtures:seed": "tsx tools/fixtures/seed.ts",
     "fixtures:check": "tsx tools/fixtures/check.ts",
     "sandbox:try": "tsx tools/sandbox/try.ts",
