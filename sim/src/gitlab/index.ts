@@ -398,6 +398,21 @@ export class GitlabSim {
       };
     });
 
+    // 依据：Repositories API「Merge Base」——GET .../repository/merge_base?refs[]=a&refs[]=b
+    api('GET', '/projects/:id/repository/merge_base', (req) => {
+      this.auth(req);
+      const p = this.project(req.params.id);
+      const repo = this.repo(p);
+      const raw = (req.query as Record<string, string | string[] | undefined>)['refs[]'];
+      const refs = (Array.isArray(raw) ? raw : raw ? [raw] : []).map((r) => repo.resolve(r));
+      if (refs.length !== 2 || refs.some((r) => !r))
+        throw new HttpError(400, { message: 'Provide exactly two refs' });
+      const sha = repo.mergeBase(refs[0]!, refs[1]!);
+      const c = sha ? repo.commit(sha) : null;
+      if (!c) throw notFound('Merge Base');
+      return this.commitDto(c, p, base(req));
+    });
+
     // 依据：Repository files API「Get raw file」
     api('GET', '/projects/:id/repository/files/:file/raw', (req, reply) => {
       this.auth(req);

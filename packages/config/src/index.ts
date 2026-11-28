@@ -54,7 +54,9 @@ export const ConfigSchema = Type.Object({
   CC_AUTH_RATE_LIMIT_PER_HOUR: Type.Integer({ minimum: 1, default: 10 }),
   CC_PUBLIC_URL: Type.Optional(Type.String({ pattern: '^https?://' })),
   // 连接器插件（06 §12）：按模块名加载，逗号分隔；一期内置 GitLab
-  CC_CONNECTOR_PLUGINS: Type.String({ default: '@cloudcraft/connector-gitlab' }),
+  CC_CONNECTOR_PLUGINS: Type.String({
+    default: '@cloudcraft/connector-gitlab,@cloudcraft/connector-tita-apollo',
+  }),
 });
 
 export type Config = Static<typeof ConfigSchema>;

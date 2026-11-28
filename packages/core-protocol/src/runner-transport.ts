@@ -18,7 +18,14 @@ export const RUNNER_PATHS = {
   completeRoundStep: '/v1/runner/complete',
   fetchCredential: '/v1/runner/credential',
   uploadEvidence: '/v1/runner/evidence',
+  uploadArtifact: '/v1/runner/artifact',
+  fetchArtifact: '/v1/runner/artifact/fetch',
+  fetchStepSecrets: '/v1/runner/step-secrets',
+  checkAncestry: '/v1/runner/ancestry',
 } as const;
+
+/** A built target's files in one upload (M1: the server keeps them on disk, 06 §7.1 craft build). */
+export const ARTIFACT_LIMIT = 16 * 1024 * 1024;
 
 /** One evidence file (a screenshot) per upload; M1 keeps them on the server's disk (06 §6.2). */
 export const EVIDENCE_LIMIT = 4 * 1024 * 1024;
@@ -30,7 +37,12 @@ export const RUNNER_SECRET_PREFIX = 'cc_run_key_';
 export const RegisterRunnerRequest = Type.Object({
   enroll_token: Type.String({ minLength: 20, maxLength: 200 }),
   /** X25519 public key (base64 SPKI DER) of the bot_exec key pair; the private key stays on the host */
-  bot_exec_public_key: Type.String({ minLength: 40, maxLength: 200 }),
+  bot_exec_public_key: Type.Optional(Type.String({ minLength: 40, maxLength: 200 })),
+  /**
+   * The release executor's key instead (06 §2.10 release_exec domain): personal accounts are sealed
+   * only to it. A runner registers exactly one of the two.
+   */
+  release_exec_public_key: Type.Optional(Type.String({ minLength: 40, maxLength: 200 })),
   /** sha256 of the long-term secret the runner generated; the secret itself is never sent */
   secret_sha256: Type.String({ pattern: '^[0-9a-f]{64}$' }),
 });
@@ -167,3 +179,53 @@ export type UploadEvidenceRequest = Static<typeof UploadEvidenceRequest>;
 /** Name of a replay screenshot as uploaded and as the delivery card lists it (base / head side). */
 export const evidenceName = (side: 'base' | 'head', name: string) =>
   `${side}-${name}`.replace(/[^A-Za-z0-9._-]/g, '_').slice(0, 120);
+
+/** Lease of the step a call is about; every runner call below is refused without it. */
+export const HeldLease = Type.Object({
+  work_item_id: Type.String({ format: 'uuid' }),
+  lease_token: Type.String({ format: 'uuid' }),
+  fence: Type.Integer(),
+});
+export type HeldLease = Static<typeof HeldLease>;
+
+/** craft build output of a release step (build sandbox): the files, base64, with their sha256. */
+export const UploadArtifactRequest = Type.Object({
+  ...HeldLease.properties,
+  version: Type.String({ minLength: 1, maxLength: 100 }),
+  commit: Type.String({ pattern: '^[0-9a-f]{40}$' }),
+  files: Type.Array(
+    Type.Object({
+      path: Type.String({ minLength: 1, maxLength: 300 }),
+      sha256: Type.String({ pattern: '^[0-9a-f]{64}$' }),
+      data_base64: Type.String(),
+    }),
+    { minItems: 1, maxItems: 2000 },
+  ),
+});
+export type UploadArtifactRequest = Static<typeof UploadArtifactRequest>;
+
+export const FetchArtifactRequest = Type.Object({
+  ...HeldLease.properties,
+  sha256: Type.String({ pattern: '^[0-9a-f]{64}$' }),
+});
+export type FetchArtifactRequest = Static<typeof FetchArtifactRequest>;
+
+/**
+ * What a release step needs from connectors, sealed to the release executor's key: the shared
+ * connector (settings + credential) and the acting person's own account. The server decides whose
+ * account from the step (who reviewed the MR, who clicked release or retry); the executor cannot ask.
+ */
+export interface StepSecrets {
+  plugin_id: string;
+  config: Record<string, unknown>;
+  credential: Record<string, unknown>;
+  personal: Record<string, unknown>;
+}
+
+export const CheckAncestryRequest = Type.Object({
+  ...HeldLease.properties,
+  repo_id: Type.String({ format: 'uuid' }),
+  ancestor: Type.String({ pattern: '^[0-9a-f]{40}$' }),
+  descendant: Type.String({ pattern: '^[0-9a-f]{40}$' }),
+});
+export type CheckAncestryRequest = Static<typeof CheckAncestryRequest>;

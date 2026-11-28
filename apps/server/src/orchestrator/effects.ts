@@ -76,7 +76,13 @@ export async function runEffect<R extends Record<string, unknown>, T>(
  */
 export async function reapExpiredLeases(
   db: Db,
-  o: { owner: string; limit?: number; leaseSeconds?: number },
+  o: {
+    owner: string;
+    limit?: number;
+    leaseSeconds?: number;
+    /** the domain records of an interrupted node run (e.g. a release step) follow, same transaction */
+    onInterrupted?: (tx: Tx, ctx: ActorCtx, flowId: string, nodeRunId: string) => Promise<void>;
+  },
 ): Promise<number> {
   const r = await db.pool.query<{
     workspace_id: string;
@@ -109,6 +115,7 @@ export async function reapExpiredLeases(
           nodeRunId: p.node_run_id!,
           outcome: 'interrupted',
         });
+        await o.onInterrupted?.(tx, ctx, p.flow_instance_id!, p.node_run_id!);
         return;
       }
       await tx

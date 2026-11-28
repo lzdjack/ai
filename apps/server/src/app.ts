@@ -8,6 +8,7 @@ import Fastify, { type FastifyError } from 'fastify';
 import { LeaseLostError, RunnerAuthError, type Db } from './db/client.ts';
 import { NotFoundError, RevConflictError } from './db/write.ts';
 import { accountRoutes } from './routes/account-routes.ts';
+import { deliveryRoutes } from './routes/delivery-routes.ts';
 import { runnerRoutes } from './routes/runner-routes.ts';
 import { sourceRoutes } from './routes/source-routes.ts';
 import type { SourceSettings } from './service/source-service.ts';
@@ -30,9 +31,12 @@ export function buildApp(o: {
   sources: SourceSettings;
   /** where evidence files are kept (main: <CC_DATA_DIR>/evidence) */
   evidenceDir?: string;
+  /** where craft build artifacts are kept (main: <CC_DATA_DIR>/artifacts) */
+  artifactDir?: string;
   logger?: boolean;
 }) {
   const evidenceDir = o.evidenceDir ?? path.join(os.tmpdir(), 'cc-evidence');
+  const artifactDir = o.artifactDir ?? path.join(os.tmpdir(), 'cc-artifacts');
   const app = Fastify({
     logger: o.logger ?? false,
     requestIdHeader: 'x-request-id',
@@ -70,9 +74,10 @@ export function buildApp(o: {
     return send(500, { code: 'common.internal', message: 'internal error' });
   });
 
-  runnerRoutes(app, o.db, o.runner, o.sources, evidenceDir);
+  runnerRoutes(app, o.db, o.runner, o.sources, evidenceDir, artifactDir);
   accountRoutes(app, o.db, o.accounts);
   sourceRoutes(app, o.db, o.accounts, o.sources, evidenceDir);
+  deliveryRoutes(app, o.db, o.accounts, o.sources);
 
   app.get('/healthz', async () => {
     await o.db.pool.query('select 1');

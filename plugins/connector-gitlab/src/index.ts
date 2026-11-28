@@ -1,6 +1,12 @@
 // GitLab code-source connector (docs/06 §6.1, §10.3): GitLab REST v4 with a personal / project access
 // token. Only the base URL tells a real GitLab from the simulator (07 §5.2).
-import type { CodeSourceConnector, RemoteRepo, VerifyResult } from '@cloudcraft/core-protocol';
+import {
+  MergeRefused,
+  type CodeSourceConnector,
+  type MergeRequestInfo,
+  type RemoteRepo,
+  type VerifyResult,
+} from '@cloudcraft/core-protocol';
 import fs from 'node:fs';
 import { Type } from 'typebox';
 
@@ -26,6 +32,24 @@ interface GlProject {
 }
 
 const MAINTAINER = 40;
+
+interface GlMr {
+  iid: number;
+  state: 'opened' | 'merged' | 'closed' | 'locked';
+  sha: string | null;
+  merge_commit_sha: string | null;
+  web_url?: string;
+}
+
+const toMr = (m: GlMr): MergeRequestInfo => ({
+  iid: String(m.iid),
+  state: m.state === 'merged' ? 'merged' : m.state === 'closed' ? 'closed' : 'open',
+  head_sha: m.state === 'opened' ? m.sha : null,
+  merge_sha: m.merge_commit_sha,
+  web_url: m.web_url ?? null,
+});
+
+const project = (remoteId: string) => `/projects/${encodeURIComponent(remoteId)}`;
 
 function api(config: Record<string, unknown>, credential: Record<string, unknown>) {
   const base = String((config as unknown as Config).base_url).replace(/\/$/, '');
@@ -58,6 +82,8 @@ const connector: CodeSourceConnector = {
     icon: fs.readFileSync(new URL('./icon.svg', import.meta.url), 'utf8'),
     configSchema: Type.Object({ base_url: Type.String({ pattern: '^https?://' }) }),
     authSchema: Type.Object({ token: Type.String({ minLength: 8 }) }),
+    // 合 MR 用本人的个人访问令牌（06 §6.1），和共享连接器同一种格式
+    personalAuthSchema: Type.Object({ token: Type.String({ minLength: 8 }) }),
   },
 
   async verify(config, credential): Promise<VerifyResult> {
@@ -157,6 +183,72 @@ const connector: CodeSourceConnector = {
     if (res.status === 404) return null;
     if (!res.ok) throw new Error(`GitLab ${res.status}`);
     return ((await res.json()) as { commit: { id: string } }).commit.id;
+  },
+
+  // 依据：Merge requests API —— List / Create / Get single MR
+  async openMergeRequest(config, credential, remoteId, mr) {
+    const call = api(config, credential);
+    const q = new URLSearchParams({
+      state: 'opened',
+      source_branch: mr.source,
+      target_branch: mr.target,
+    });
+    const list = await call(`${project(remoteId)}/merge_requests?${q}`);
+    if (!list.ok) throw new Error(`GitLab ${list.status}`);
+    const [open] = (await list.json()) as GlMr[];
+    if (open) return toMr(open);
+    const res = await call(`${project(remoteId)}/merge_requests`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        source_branch: mr.source,
+        target_branch: mr.target,
+        title: mr.title,
+        description: mr.description,
+      }),
+    });
+    if (!res.ok) throw new Error(`GitLab ${res.status} ${(await res.text()).slice(0, 300)}`);
+    return toMr((await res.json()) as GlMr);
+  },
+
+  async getMergeRequest(config, credential, remoteId, iid) {
+    const res = await api(config, credential)(`${project(remoteId)}/merge_requests/${iid}`);
+    if (!res.ok) throw new Error(`GitLab ${res.status}`);
+    return toMr((await res.json()) as GlMr);
+  },
+
+  // 依据：「Merge a merge request」—— 401 无权限、405 不能合、406 有冲突、409 sha 不符
+  async mergeMergeRequest(config, credential, remoteId, iid, o) {
+    const res = await api(config, credential)(`${project(remoteId)}/merge_requests/${iid}/merge`, {
+      method: 'PUT',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ sha: o.expected_sha, merge_commit_message: o.message, squash: false }),
+    });
+    if (res.ok) return toMr((await res.json()) as GlMr);
+    const text = (await res.text()).slice(0, 300);
+    const reason =
+      res.status === 406
+        ? 'conflict'
+        : res.status === 409
+          ? 'head_changed'
+          : res.status === 401 || res.status === 403
+            ? 'forbidden'
+            : res.status === 405
+              ? 'not_open'
+              : 'other';
+    throw new MergeRefused(reason, `GitLab ${res.status} ${text}`);
+  },
+
+  // 依据：Repositories API「Merge Base」：a 是 b 的祖先 ⇔ merge_base(a, b) = a
+  async isAncestor(config, credential, remoteId, ancestor, descendant) {
+    if (ancestor === descendant) return true;
+    const q = new URLSearchParams();
+    q.append('refs[]', ancestor);
+    q.append('refs[]', descendant);
+    const res = await api(config, credential)(`${project(remoteId)}/repository/merge_base?${q}`);
+    if (res.status === 404) return false;
+    if (!res.ok) throw new Error(`GitLab ${res.status}`);
+    return ((await res.json()) as { id: string }).id === ancestor;
   },
 
   gitAuth(credential) {

@@ -61,6 +61,11 @@ const fake: CodeSourceConnector = {
     })[p] ?? null,
   branchHead: async (_c, _k, id, branch) => heads.get(`${id}:${branch}`) ?? null,
   gitAuth: () => ({ header: 'Authorization', value: 'Bearer x' }),
+  // merges and MRs belong to the delivery segment (delivery.int.test.ts)
+  openMergeRequest: () => Promise.reject(new Error('not used here')),
+  getMergeRequest: () => Promise.reject(new Error('not used here')),
+  mergeMergeRequest: () => Promise.reject(new Error('not used here')),
+  isAncestor: () => Promise.resolve(false),
 };
 
 let t: TestDb;

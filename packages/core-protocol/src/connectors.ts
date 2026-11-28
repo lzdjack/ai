@@ -15,6 +15,12 @@ export interface ConnectorManifest {
   configSchema: TSchema;
   /** JSON Schema of the credential (never echoed back) */
   authSchema: TSchema;
+  /**
+   * JSON Schema of a person's own account on this system (06 §2.3 Plane B, personal_exec): merging
+   * with your own GitLab token, releasing with your own Apollo account. Absent: no personal accounts.
+   * Stored under the shared connector, usable only by that person, never inherited.
+   */
+  personalAuthSchema?: TSchema;
 }
 
 export interface VerifyResult {
@@ -71,7 +77,134 @@ export interface CodeSourceConnector {
   ): Promise<string | null>;
   /** how the executor authenticates git over HTTP with this credential */
   gitAuth(credential: Record<string, unknown>): { header: string; value: string };
+  /**
+   * Opens a change request source → target, or returns the open one for the same pair (one active
+   * MR per ticket, repo and direction; a rework round pushes onto it, 06 §6.3).
+   */
+  openMergeRequest(
+    config: Record<string, unknown>,
+    credential: Record<string, unknown>,
+    remoteId: string,
+    mr: { source: string; target: string; title: string; description: string },
+  ): Promise<MergeRequestInfo>;
+  getMergeRequest(
+    config: Record<string, unknown>,
+    credential: Record<string, unknown>,
+    remoteId: string,
+    iid: string,
+  ): Promise<MergeRequestInfo>;
+  /**
+   * Merges with a merge commit (no squash, 06 §6.3), only if the source head is still expected_sha.
+   * Fails with a MergeRefused whose reason the core reacts to.
+   */
+  mergeMergeRequest(
+    config: Record<string, unknown>,
+    credential: Record<string, unknown>,
+    remoteId: string,
+    iid: string,
+    o: { expected_sha: string; message: string },
+  ): Promise<MergeRequestInfo>;
+  /** git merge-base --is-ancestor (06 §3.3 superseded check) */
+  isAncestor(
+    config: Record<string, unknown>,
+    credential: Record<string, unknown>,
+    remoteId: string,
+    ancestor: string,
+    descendant: string,
+  ): Promise<boolean>;
 }
+
+export interface MergeRequestInfo {
+  /** the platform's number of the change request (GitLab iid) */
+  iid: string;
+  state: 'open' | 'merged' | 'closed';
+  /** current head of the source branch while open */
+  head_sha: string | null;
+  merge_sha: string | null;
+  web_url: string | null;
+}
+
+/** Why a merge was refused (06 §6.5): the step fails with this reason and a person decides. */
+export type MergeRefusal = 'conflict' | 'head_changed' | 'forbidden' | 'not_open' | 'other';
+export class MergeRefused extends Error {
+  constructor(
+    readonly reason: MergeRefusal,
+    message: string,
+  ) {
+    super(message);
+  }
+}
+
+// ---------- release providers (06 §7.1, §7.4) ----------
+
+/** Everything a release slot gets: the shared connector, the acting person's account, the target. */
+export interface ReleaseContext {
+  config: Record<string, unknown>;
+  /** the shared connector's credential (e.g. the upload key) */
+  credential: Record<string, unknown>;
+  /** the account of whoever clicked release / retry (personal_exec, 06 §7.4 item 1) */
+  personal: Record<string, unknown>;
+  /** release_configs.target_ref: which app / config the target is on the provider */
+  target: Record<string, unknown>;
+}
+
+/** Built artifact of one target: files with their sha256 (06 §7.1 craft build output). */
+export interface ArtifactFile {
+  path: string;
+  sha256: string;
+  data: Buffer;
+}
+
+/** What an environment runs now, as the provider reads it back (craft verify). */
+export interface LiveVersion {
+  version: string;
+  commit: string;
+  /** provider's own id of what is live (Apollo release id), stored as verified_revision */
+  revision: string;
+}
+
+/**
+ * A release provider plugin (06 §7.1 slots publish / release / verify). It runs only in the release
+ * executor, with the acting person's account; it never runs repository code.
+ */
+export interface ReleaseProviderConnector {
+  manifest: ConnectorManifest;
+  /** the shared connector's settings and credential */
+  verify(
+    config: Record<string, unknown>,
+    credential: Record<string, unknown>,
+  ): Promise<VerifyResult>;
+  /** a person's own account (manifest.personalAuthSchema) */
+  verifyPersonal(
+    config: Record<string, unknown>,
+    personal: Record<string, unknown>,
+  ): Promise<VerifyResult>;
+  /** craft publish: upload by sha256, files already there are skipped; returns where they are */
+  publish(
+    ctx: ReleaseContext,
+    a: { version: string; commit: string; files: ArtifactFile[] },
+  ): Promise<{ location: Record<string, unknown>; uploaded: number; skipped: number }>;
+  /** craft release --env: switch the environment to this version (env is the provider's code) */
+  release(
+    ctx: ReleaseContext,
+    r: {
+      env: string;
+      version: string;
+      commit: string;
+      location: Record<string, unknown>;
+      title: string;
+    },
+  ): Promise<{ revision: string; command: string }>;
+  /** craft verify --env: what the environment runs now; null when nothing was released yet */
+  current(ctx: ReleaseContext, env: string): Promise<LiveVersion | null>;
+}
+
+/** Any installed connector plugin, told apart by manifest.category. */
+export type ConnectorPlugin = CodeSourceConnector | ReleaseProviderConnector;
+export const isCodeSource = (p: ConnectorPlugin): p is CodeSourceConnector =>
+  p.manifest.category === 'code_source';
+export const isReleaseProvider = (p: ConnectorPlugin): p is ReleaseProviderConnector =>
+  p.manifest.category === 'release';
 
 // ---------- API ----------
 
@@ -168,6 +301,7 @@ export interface PluginInfo {
   icon: string | null;
   config_schema: TSchema;
   auth_schema: TSchema;
+  personal_auth_schema: TSchema | null;
 }
 
 export interface ProjectRow {
