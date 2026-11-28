@@ -6,6 +6,7 @@ import type {
   ConnectorRow,
   PluginInfo,
   ProjectRow,
+  RemoteBranch,
   RemoteRepo,
   RepoRow,
   RepoSettings,
@@ -51,7 +52,7 @@ const fieldsOf = (schema: unknown) =>
     >,
   );
 
-function Drawer(p: {
+export function Drawer(p: {
   icon: ReactNode;
   title: ReactNode;
   sub: ReactNode;
@@ -95,24 +96,37 @@ function Drawer(p: {
   );
 }
 
-// ---------- new connector ----------
+// ---------- new / edit connector ----------
 
+/** In edit mode (connector given) the plugin is fixed and the secret is never filled back. */
 export function ConnectorDrawer(p: {
   calls: OnboardingCalls;
   plugins: PluginInfo[];
   initialPlugin?: string;
+  connector?: ConnectorRow;
   z?: number;
   onClose: () => void;
   onSaved: (c: ConnectorRow) => void;
+  onDeleted?: (id: string) => void;
 }) {
   const t = useT();
-  const [pluginId, setPluginId] = useState(p.initialPlugin ?? p.plugins[0]?.id ?? '');
+  const edit = p.connector;
+  const [pluginId, setPluginId] = useState(
+    edit?.plugin_id ?? p.initialPlugin ?? p.plugins[0]?.id ?? '',
+  );
   const plugin = p.plugins.find((x) => x.id === pluginId);
-  const [name, setName] = useState('');
-  const [config, setConfig] = useState<Record<string, string>>({});
+  const [name, setName] = useState(edit?.name ?? '');
+  const [config, setConfig] = useState<Record<string, string>>(() =>
+    Object.fromEntries(
+      Object.entries(edit?.config ?? {}).filter(([, v]) => typeof v === 'string') as [
+        string,
+        string,
+      ][],
+    ),
+  );
   const [cred, setCred] = useState<Record<string, string>>({});
   const [check, setCheck] = useState<VerifyResult | null>(null);
-  const [busy, setBusy] = useState<'verify' | 'save' | null>(null);
+  const [busy, setBusy] = useState<'verify' | 'save' | 'status' | 'delete' | null>(null);
   const [error, setError] = useState<string | null>(null);
   const kind = plugin?.category === 'ticket_source' ? 'ticket' : 'code';
   const label = (key: string, f: FieldSchema) => {
@@ -127,13 +141,16 @@ export function ConnectorDrawer(p: {
   };
   const filled = (schema: unknown, vals: Record<string, string>) =>
     fieldsOf(schema).every(([k, f]) => (vals[k] ?? '').trim().length >= (f.minLength ?? 1));
+  const credFilled = !!plugin && filled(plugin.auth_schema, cred);
+  const credTouched = Object.values(cred).some((v) => v.trim());
+  // editing: a credential left empty keeps the stored one, so only a typed one can be verified here
   const ready =
-    !!plugin && filled(plugin.config_schema, config) && filled(plugin.auth_schema, cred);
-  const body = () => ({
-    plugin_id: pluginId,
-    config: Object.fromEntries(Object.entries(config).map(([k, v]) => [k, v.trim()])),
-    credential: Object.fromEntries(Object.entries(cred).map(([k, v]) => [k, v.trim()])),
-  });
+    !!plugin &&
+    filled(plugin.config_schema, config) &&
+    (edit ? !credTouched || credFilled : credFilled);
+  const trimmed = (vals: Record<string, string>) =>
+    Object.fromEntries(Object.entries(vals).map(([k, v]) => [k, v.trim()]));
+  const body = () => ({ plugin_id: pluginId, config: trimmed(config), credential: trimmed(cred) });
   const verify = async () => {
     setBusy('verify');
     setError(null);
@@ -149,9 +166,44 @@ export function ConnectorDrawer(p: {
     setBusy('save');
     setError(null);
     try {
-      p.onSaved(await p.calls.createConnector({ ...body(), name: name.trim() || plugin!.name }));
+      if (edit) {
+        const credential = Object.fromEntries(
+          Object.entries(trimmed(cred)).filter(([, v]) => v !== ''),
+        );
+        const row = await p.calls.updateConnector(edit.id, {
+          name: name.trim() || edit.name,
+          config: trimmed(config),
+          ...(Object.keys(credential).length ? { credential } : {}),
+          rev: edit.rev,
+        });
+        p.onSaved(row);
+      } else
+        p.onSaved(await p.calls.createConnector({ ...body(), name: name.trim() || plugin!.name }));
     } catch (e) {
       setError(errText(e));
+      setBusy(null);
+    }
+  };
+  const setStatus = async (status: 'enabled' | 'disabled') => {
+    if (!edit) return;
+    setBusy('status');
+    setError(null);
+    try {
+      p.onSaved(await p.calls.updateConnector(edit.id, { status, rev: edit.rev }));
+    } catch (e) {
+      setError(inUseText(t, e));
+      setBusy(null);
+    }
+  };
+  const remove = async () => {
+    if (!edit) return;
+    setBusy('delete');
+    setError(null);
+    try {
+      await p.calls.deleteConnector(edit.id);
+      p.onDeleted?.(edit.id);
+    } catch (e) {
+      setError(inUseText(t, e));
       setBusy(null);
     }
   };
@@ -183,14 +235,20 @@ export function ConnectorDrawer(p: {
               set({ ...vals, [key]: e.target.value });
               setCheck(null);
             }}
-            placeholder={f.pattern?.startsWith('^https?') ? 'https://' : undefined}
+            placeholder={
+              secret && edit
+                ? t('ob.cd.keep', { hint: edit.credential_hint })
+                : f.pattern?.startsWith('^https?')
+                  ? 'https://'
+                  : undefined
+            }
           />
         </label>
         {secret ? (
           <button
             type="button"
             className="cc-btn cc-btn-lg cc-btn-glass"
-            disabled={!ready || !!busy}
+            disabled={!ready || !credFilled || !!busy}
             onClick={verify}
           >
             <BoltIcon />
@@ -204,38 +262,74 @@ export function ConnectorDrawer(p: {
     <Drawer
       z={p.z}
       icon={<Mark plugin={plugin} name={plugin?.name ?? '?'} size={40} className="ob-ic3" />}
-      title={<div style={{ fontSize: 18, fontWeight: 800 }}>{t(`ob.cd.title.${kind}`)}</div>}
-      sub={t('ob.cd.sub')}
+      title={
+        <div style={{ fontSize: 18, fontWeight: 800 }}>
+          {edit ? t('ob.cd.title.edit') : t(`ob.cd.title.${kind}`)}
+        </div>
+      }
+      sub={edit ? t('ob.cd.sub.edit') : t('ob.cd.sub')}
       onClose={p.onClose}
       footer={
-        <>
-          <button type="button" className="cc-btn cc-btn-lg cc-btn-sec" onClick={p.onClose}>
-            {t('ob.cancel')}
-          </button>
-          <span className="grow" />
-          <span className="f12 t3">{t('ob.cd.share_note')}</span>
-          <button
-            type="button"
-            className="cc-btn cc-btn-lg cc-btn-pri"
-            disabled={!ready || !!busy || check?.ok === false}
-            onClick={save}
-          >
-            {busy === 'save' ? t('ob.cd.saving') : t(`ob.cd.save.${kind}`)}
-          </button>
-        </>
+        edit ? (
+          <>
+            <button
+              type="button"
+              className="cc-btn cc-btn-lg cc-btn-sec"
+              disabled={!!busy}
+              onClick={() => setStatus(edit.status === 'disabled' ? 'enabled' : 'disabled')}
+            >
+              {edit.status === 'disabled' ? t('ob.cd.enable') : t('ob.cd.disable')}
+            </button>
+            <button
+              type="button"
+              className="cc-btn cc-btn-lg cc-btn-sec"
+              style={{ color: 'var(--ink-red)' }}
+              disabled={!!busy}
+              onClick={remove}
+            >
+              {t('ob.cd.delete')}
+            </button>
+            <span className="grow" />
+            <button
+              type="button"
+              className="cc-btn cc-btn-lg cc-btn-pri"
+              disabled={!ready || !!busy || check?.ok === false}
+              onClick={save}
+            >
+              {busy === 'save' ? t('ob.cd.saving') : t('ob.cd.save.edit')}
+            </button>
+          </>
+        ) : (
+          <>
+            <button type="button" className="cc-btn cc-btn-lg cc-btn-sec" onClick={p.onClose}>
+              {t('ob.cancel')}
+            </button>
+            <span className="grow" />
+            <span className="f12 t3">{t('ob.cd.share_note')}</span>
+            <button
+              type="button"
+              className="cc-btn cc-btn-lg cc-btn-pri"
+              disabled={!ready || !!busy || check?.ok === false}
+              onClick={save}
+            >
+              {busy === 'save' ? t('ob.cd.saving') : t(`ob.cd.save.${kind}`)}
+            </button>
+          </>
+        )
       }
     >
       <div>
         <div className="ob-flab">
           {t('ob.cd.plugin')}
-          <span>{t('ob.cd.plugin.hint')}</span>
+          <span>{edit ? t('ob.cd.plugin.locked') : t('ob.cd.plugin.hint')}</span>
         </div>
         <div className="ob-pgrid">
-          {p.plugins.map((x) => (
+          {(edit ? p.plugins.filter((x) => x.id === pluginId) : p.plugins).map((x) => (
             <button
               key={x.id}
               type="button"
               className={`ob-pitem${x.id === pluginId ? ' is-on' : ''}`}
+              disabled={!!edit}
               onClick={() => {
                 setPluginId(x.id);
                 setConfig({});
@@ -266,10 +360,21 @@ export function ConnectorDrawer(p: {
           {fieldsOf(plugin.auth_schema).map(([k, f]) => input(k, f, true, cred, setCred))}
         </>
       ) : null}
+      {edit?.status === 'disabled' ? (
+        <div className="ob-vbox is-bad f12 t2">{t('ob.cd.disabled_note')}</div>
+      ) : null}
       {check ? <VerifyBox r={check} /> : null}
       {error ? <div className="ob-err">{error}</div> : null}
     </Drawer>
   );
+}
+
+/** 409 connector.in_use: the message plus the repositories still using it. */
+function inUseText(t: ReturnType<typeof useT>, e: unknown) {
+  const repos = (e as { data?: { repos?: string[] } }).data?.repos;
+  return repos?.length
+    ? `${errText(e)}\n${t('ob.cd.in_use', { repos: repos.join(t('ob.list_sep')) })}`
+    : errText(e);
 }
 
 function VerifyBox({ r }: { r: VerifyResult }) {
@@ -589,6 +694,29 @@ export function RepoTuneDrawer(p: {
   }));
   const [busy, setBusy] = useState<'save' | 'build' | 'mode' | null>(null);
   const [error, setError] = useState<string | null>(null);
+  // remote branches for the 主干分支 dropdown, loaded when the drawer opens (06 §10.3 item 4)
+  const [branches, setBranches] = useState<RemoteBranch[] | null>(null);
+  const { calls } = p;
+  useEffect(() => {
+    let live = true;
+    calls.branches(r.id).then(
+      // the default branch first, then protected ones, then the rest by name
+      (b) =>
+        live &&
+        setBranches(
+          [...b].sort(
+            (x, y) =>
+              Number(y.default) - Number(x.default) ||
+              Number(y.protected) - Number(x.protected) ||
+              x.name.localeCompare(y.name),
+          ),
+        ),
+      () => live && setBranches([]),
+    );
+    return () => {
+      live = false;
+    };
+  }, [calls, r.id]);
   const tile = repoTile(r.path);
   const overridden = (k: string) => r.manual_overrides.includes(k);
   const changed = EDITABLE.filter((k) => (eff?.[k] ?? '') !== v[k]);
@@ -815,7 +943,39 @@ export function RepoTuneDrawer(p: {
           ) : null}
         </div>
         <div className="row g10">
-          {field('default_branch', t('ob.tn.default_branch.guess'))}
+          <div className="grow">
+            <div className="ob-flab">
+              {t('ob.tn.default_branch')}
+              {badge('default_branch', t('ob.tn.default_branch.guess'))}
+            </div>
+            <label
+              className={`ob-dinp is-md ob-dsel${overridden('default_branch') || changed.includes('default_branch') ? ' is-ov' : ''}`}
+            >
+              <select
+                className="mono"
+                value={v.default_branch}
+                onChange={(e) => setV({ ...v, default_branch: e.target.value })}
+              >
+                {branches === null ? (
+                  <option value={v.default_branch}>
+                    {v.default_branch || t('ob.tn.branches.loading')}
+                  </option>
+                ) : (
+                  [
+                    ...(branches.some((b) => b.name === v.default_branch) || !v.default_branch
+                      ? []
+                      : [{ name: v.default_branch, default: false }]),
+                    ...branches,
+                  ].map((b) => (
+                    <option key={b.name} value={b.name}>
+                      {b.default ? t('ob.tn.branch.default', { b: b.name }) : b.name}
+                    </option>
+                  ))
+                )}
+              </select>
+              <ChevronDownIcon />
+            </label>
+          </div>
           {field('test_command', t('ob.tn.ai_guess'))}
         </div>
         <div className="row g10">

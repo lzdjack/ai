@@ -3,6 +3,9 @@
 // U2 moves them to Electron safeStorage through HostPlatformAdapter.secureStorage.
 import type {
   ConnectorRow,
+  EnvAccountRow,
+  HealthCheckResponse,
+  RemoteBranch,
   DeliveryView,
   MergeReviewRequest,
   PersonalAccountRow,
@@ -156,6 +159,8 @@ export function onboardingCalls(ws: string): OnboardingCalls {
     connectors: () => call<Page<ConnectorRow>>('GET', `${w}/connectors`).then((r) => r.items),
     verify: (v) => call<VerifyResult>('POST', `${w}/connectors/verify`, v),
     createConnector: (v) => call<ConnectorRow>('POST', `${w}/connectors`, v),
+    updateConnector: (id, body) => call<ConnectorRow>('PATCH', `${w}/connectors/${id}`, body),
+    deleteConnector: (id) => call<unknown>('DELETE', `${w}/connectors/${id}`),
     remoteRepos: (id, q) =>
       call<Page<RemoteRepo>>(
         'GET',
@@ -167,11 +172,27 @@ export function onboardingCalls(ws: string): OnboardingCalls {
       ),
     repos: () => call<Page<RepoRow>>('GET', `${w}/repos`).then((r) => r.items),
     updateRepo: (id, body) => call<RepoRow>('PATCH', `${w}/repos/${id}`, body),
+    branches: (id, q) =>
+      call<Page<RemoteBranch>>(
+        'GET',
+        `${w}/repos/${id}/branches${q ? `?q=${encodeURIComponent(q)}` : ''}`,
+      ).then((r) => r.items),
     projects: () => call<Page<ProjectRow>>('GET', `${w}/projects`).then((r) => r.items),
     environments: (id) =>
       call<Page<EnvironmentRow>>('GET', `${w}/projects/${id}/environments`).then((r) => r.items),
     createEnvironment: (id, v) =>
       call<EnvironmentRow>('POST', `${w}/projects/${id}/environments`, v),
+    envAccounts: (id) =>
+      call<Page<EnvAccountRow>>('GET', `${w}/projects/${id}/env-accounts`).then((r) => r.items),
+    createEnvAccount: (id, env, body) =>
+      call('POST', `${w}/projects/${id}/environments/${env}/accounts`, body),
+    tryEnvAccount: (id, env, body) =>
+      call('POST', `${w}/projects/${id}/environments/${env}/accounts/try`, body),
+    updateEnvAccount: (id, account, body) =>
+      call('PATCH', `${w}/projects/${id}/env-accounts/${account}`, body),
+    deleteEnvAccount: (id, account) =>
+      call<unknown>('DELETE', `${w}/projects/${id}/env-accounts/${account}`),
+    healthCheck: () => call<HealthCheckResponse>('POST', `${w}/onboarding/health-check`),
     trialBuild: (id) => call<{ flow_id: string }>('POST', `${w}/projects/${id}/trial-build`),
     flow: (id) => call<FlowStatus>('GET', `${w}/flows/${id}`),
   };

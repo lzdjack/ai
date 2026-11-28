@@ -785,6 +785,171 @@
   cursor: pointer;
   min-height: 92px;
 }
+.ob-env.is-on {
+  background: var(--glass-2);
+  border-color: var(--btn-pri-bg);
+}
+button.ob-env:not(.is-add) {
+  cursor: pointer;
+}
+.ob-envok {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-green);
+  white-space: nowrap;
+}
+/* 角色输入带候选（datalist），不显示浏览器自带的下拉小箭头 */
+.ob-dinp input[list]::-webkit-calendar-picker-indicator {
+  display: none !important;
+}
+/* 账号表：角色 · 账号 · 密码 / Cookie · 数据权限 · Bot 实测 */
+.ob-acch,
+.ob-accr {
+  display: grid;
+  grid-template-columns: 1fr 1.75fr 1.15fr 0.95fr 0.85fr;
+  gap: 8px;
+  align-items: center;
+}
+.ob-acch {
+  font-size: 12px;
+  color: var(--text-3);
+  padding: 0 2px 6px;
+}
+.ob-accr + .ob-accr {
+  margin-top: 6px;
+}
+.ob-role input {
+  font-weight: 600;
+}
+.ob-acell {
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+  color: var(--text);
+}
+.ob-acell svg {
+  color: var(--text-3);
+  flex: none;
+}
+.ob-acell.is-bot {
+  border-style: dashed;
+}
+.ob-acell.is-secret {
+  color: var(--text-2);
+  letter-spacing: 0.04em;
+}
+.ob-acell.is-warn {
+  border-color: color-mix(in srgb, var(--orange) 55%, transparent);
+}
+.ob-perm-sel select {
+  font-weight: 600;
+}
+.ob-perm-sel.is-read_write,
+.ob-perm-sel.is-read_write svg {
+  color: var(--ink-green);
+}
+.ob-perm-sel.is-read_only,
+.ob-perm-sel.is-read_only svg {
+  color: var(--ink-blue);
+}
+.ob-login {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-3);
+  white-space: nowrap;
+  min-width: 0;
+}
+.ob-login.is-ok {
+  color: var(--ink-green);
+}
+.ob-login.is-run {
+  color: var(--ink-blue);
+}
+.ob-login.is-bad {
+  color: var(--ink-red);
+}
+.ob-login.is-warn {
+  color: var(--ink-orange);
+}
+.ob-legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--text-3);
+}
+.ob-legend b {
+  color: var(--text-2);
+}
+.ob-legend svg {
+  color: var(--ink-blue);
+}
+.ob-legend + .ob-legend svg {
+  color: var(--ink-green);
+}
+/* 添加账号抽屉 */
+.ob-acic {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: var(--btn-pri-bg);
+  flex: none;
+}
+.ob-cookie {
+  width: 100%;
+  min-height: 72px;
+  resize: vertical;
+  font-size: 12.5px;
+}
+.ob-aitip {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  font-size: 12.5px;
+  color: var(--text-2);
+  line-height: 1.55;
+  padding: 9px 12px;
+  border-radius: 12px;
+  background: var(--glass-2);
+}
+.ob-aitip svg {
+  color: var(--purple);
+  flex: none;
+  margin-top: 2px;
+}
+.ob-permc {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+  font: inherit;
+  color: var(--text);
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--glass-2);
+  border: 1.5px solid var(--hair);
+  cursor: pointer;
+}
+.ob-permc svg {
+  color: var(--text-2);
+}
+.ob-permc.is-on {
+  border-color: var(--btn-pri-bg);
+  background: color-mix(in srgb, var(--blue) 7%, var(--glass-2));
+}
+.ob-permc.is-on b,
+.ob-permc.is-on svg {
+  color: var(--ink-blue);
+}
 .ob-envform {
   display: grid;
   grid-template-columns: 1fr 1.6fr 150px auto;
@@ -1120,6 +1285,11 @@
   background: color-mix(in srgb, var(--blue) 9%, transparent);
   color: var(--ink-blue);
 }
+.ob-result.is-warn {
+  background: color-mix(in srgb, var(--orange) 10%, transparent);
+  color: var(--ink-orange);
+  white-space: pre-wrap;
+}
 .ob-result.is-bad {
   background: color-mix(in srgb, var(--red) 9%, transparent);
   color: var(--ink-red);
@@ -1131,6 +1301,7 @@
   font-size: 12px;
   color: var(--ink-red);
   margin-top: 6px;
+  white-space: pre-line;
 }
 .ob-dinp input.mono {
   font-family: var(--font-mono);

@@ -3,9 +3,7 @@
 // screenshots, the replacement invariants and the page's own errors (redacted).
 import crypto from 'node:crypto';
 import fs from 'node:fs';
-import { createRequire } from 'node:module';
 import path from 'node:path';
-import readline from 'node:readline';
 import type {
   AgentSandbox,
   BrowserLocator,
@@ -16,26 +14,7 @@ import type {
 import { locatorError } from '@cloudcraft/core-protocol';
 import { INTEGRITY_GUARD, rewriteEntry } from './entry.ts';
 import { DistAssetMatcher } from './matcher.ts';
-
-const require = createRequire(import.meta.url);
-const PW_DIR = path.dirname(require.resolve('playwright-core/package.json'));
-const PW_VERSION = (
-  JSON.parse(fs.readFileSync(path.join(PW_DIR, 'package.json'), 'utf8')) as {
-    version: string;
-  }
-).version;
-/** Playwright's own image, same version as the driver mounted into it (browsers and CJK fonts). */
-export const BROWSER_IMAGE = `mcr.microsoft.com/playwright:v${PW_VERSION}-noble`;
-const RUNNER = path.join(import.meta.dirname, 'container', 'runner.mjs');
-
-/** Mounts and command for the browser container; the caller adds network none, limits, labels. */
-export const browserContainer = {
-  mounts: [
-    { host: PW_DIR, container: '/opt/pw/node_modules/playwright-core', readonly: true },
-    { host: RUNNER, container: '/opt/pw/runner.mjs', readonly: true },
-  ],
-  command: 'node /opt/pw/runner.mjs',
-};
+import { fetchUpstream, openBrowser, type Msg } from './session.ts';
 
 export interface BrowserRunOptions {
   /** starts the browser container: BROWSER_IMAGE, --network=none, workdir /tmp */
@@ -110,8 +89,6 @@ const MIME: Record<string, string> = {
   '.map': 'application/json',
 };
 
-type Msg = Record<string, unknown> & { t: string };
-
 export async function runBrowserRepro(o: BrowserRunOptions): Promise<BrowserRunResult> {
   const started = Date.now();
   const m = new DistAssetMatcher({
@@ -141,41 +118,24 @@ export async function runBrowserRepro(o: BrowserRunOptions): Promise<BrowserRunR
   };
   fs.mkdirSync(o.outDir, { recursive: true });
 
-  const proc = o.sandbox.start({
-    command: browserContainer.command,
-    mounts: browserContainer.mounts,
-    env: { HOME: '/home/node', CC_BROWSER_INIT: JSON.stringify({ initScript: INTEGRITY_GUARD }) },
-  });
-  const send = (msg: unknown) => proc.stdin.write(`${JSON.stringify(msg)}\n`);
-  const waiting = new Map<number, (m: Msg) => void>();
-  let ready: () => void;
-  const isReady = new Promise<void>((r) => (ready = r));
-  let gone = false;
-  const exited = proc.exited.then(() => {
-    gone = true;
-    for (const w of waiting.values())
-      w({ t: 'done', ok: false, error: 'browser container exited' });
-  });
-
-  const answer = async (req: Msg) => {
+  const answer = async (req: Msg): Promise<Record<string, unknown>> => {
     const url = String(req.url);
     const d = m.decide(url, req.nav === true);
-    const reply = (r: Record<string, unknown>) => send({ t: 'res', id: req.id, ...r });
     if (d.kind === 'denied') {
       res.denied.push(redactUrl(url));
-      return reply({ abort: true });
+      return { abort: true };
     }
     if (d.kind === 'stale') {
       res.invariants.stale_prod_chunk_blocked++;
       res.stale.push(redactUrl(url));
-      return reply({ abort: true });
+      return { abort: true };
     }
     if (d.kind === 'local') {
       res.invariants.dist_asset_hits++;
       served.add(d.key);
       if (entryFiles.has(d.key)) res.invariants.entry_js_replaced = true;
       const origin = (req.headers as Record<string, string>).origin;
-      return reply({
+      return {
         status: 200,
         headers: {
           'content-type': MIME[path.extname(d.file)] ?? 'application/octet-stream',
@@ -183,62 +143,36 @@ export async function runBrowserRepro(o: BrowserRunOptions): Promise<BrowserRunR
           ...(origin ? { 'access-control-allow-origin': origin, vary: 'Origin' } : {}),
         },
         body: fs.readFileSync(d.file).toString('base64'),
-      });
+      };
     }
     try {
-      const headers = { ...(req.headers as Record<string, string>) };
-      delete headers.host;
-      const up = await fetch(url, {
-        method: String(req.method),
-        headers,
-        body: req.body ? Buffer.from(String(req.body), 'base64') : undefined,
-        redirect: 'manual',
-        signal: AbortSignal.timeout(15_000),
-      });
-      let body = Buffer.from(await up.arrayBuffer());
-      const out: Record<string, string> = {};
-      up.headers.forEach((v, k) => {
-        if (!['content-encoding', 'content-length', 'transfer-encoding'].includes(k)) out[k] = v;
-      });
+      const up = await fetchUpstream(req);
+      let body = up.body;
+      const out = up.headers;
       if (up.status >= 400) res.network_errors.push({ url: redactUrl(url), status: up.status });
       if (d.kind === 'entry' && (out['content-type'] ?? '').includes('text/html')) {
         const rw = rewriteEntry(body.toString('utf8'), url, m);
         body = Buffer.from(rw.html);
         out['cache-control'] = 'no-store';
       }
-      return reply({ status: up.status, headers: out, body: body.toString('base64') });
+      return { status: up.status, headers: out, body: body.toString('base64') };
     } catch {
       res.network_errors.push({ url: redactUrl(url), status: 0 });
-      return reply({ abort: true });
+      return { abort: true };
     }
   };
 
-  readline.createInterface({ input: proc.stdout as never }).on('line', (line) => {
-    let msg: Msg;
-    try {
-      msg = JSON.parse(line) as Msg;
-    } catch {
-      return;
-    }
-    if (msg.t === 'ready') ready();
-    else if (msg.t === 'req') void answer(msg);
-    else if (msg.t === 'done') {
-      waiting.get(msg.cid as number)?.(msg);
-      waiting.delete(msg.cid as number);
-    } else if (msg.t === 'console' || msg.t === 'pageerror')
-      res.console_errors.push(redactText(String(msg.text)));
-    else if (msg.t === 'crash') res.invariants.page_crash = true;
+  const session = openBrowser({
+    sandbox: o.sandbox,
+    answer,
+    init: { initScript: INTEGRITY_GUARD },
+    onEvent: (msg) => {
+      if (msg.t === 'console' || msg.t === 'pageerror')
+        res.console_errors.push(redactText(String(msg.text)));
+      else if (msg.t === 'crash') res.invariants.page_crash = true;
+    },
   });
-
-  let cid = 0;
-  const cmd = (c: Record<string, unknown>): Promise<Msg> =>
-    gone
-      ? Promise.resolve({ t: 'done', ok: false, error: 'browser container exited' })
-      : new Promise((r) => {
-          const id = ++cid;
-          waiting.set(id, r);
-          send({ t: 'cmd', cid: id, ...c });
-        });
+  const cmd = session.cmd;
   const shot = async (name: string) => {
     const r = await cmd({ op: 'screenshot' });
     if (!r.ok || typeof r.data !== 'string') return;
@@ -252,16 +186,11 @@ export async function runBrowserRepro(o: BrowserRunOptions): Promise<BrowserRunR
     });
   };
 
-  const timer = setTimeout(() => proc.kill(), o.timeoutMs ?? 3 * 60_000);
-  const onAbort = () => proc.kill();
+  const timer = setTimeout(() => session.kill(), o.timeoutMs ?? 3 * 60_000);
+  const onAbort = () => session.kill();
   o.signal?.addEventListener('abort', onAbort, { once: true });
   try {
-    await Promise.race([
-      isReady,
-      exited.then(() => {
-        throw new Error('browser container exited before it was ready');
-      }),
-    ]);
+    await session.ready;
     const steps: BrowserStep[] = o.repro.steps;
     for (let i = 0; i < steps.length; i++) {
       const s = steps[i]! as Record<string, unknown>;
@@ -308,10 +237,7 @@ export async function runBrowserRepro(o: BrowserRunOptions): Promise<BrowserRunR
   } finally {
     clearTimeout(timer);
     o.signal?.removeEventListener('abort', onAbort);
-    await cmd({ op: 'close' });
-    proc.stdin.end();
-    await Promise.race([exited, new Promise((r) => setTimeout(r, 5000))]);
-    if (!gone) proc.kill();
+    await session.close();
   }
   res.ms = Date.now() - started;
   return res;

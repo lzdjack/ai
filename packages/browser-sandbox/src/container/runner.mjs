@@ -1,3 +1,4 @@
+/* global document, Node -- used only inside page.evaluate callbacks, which run in the page */
 // Runs inside the browser container (docs/06 §5.2): headless Chromium with no network at all. Every
 // request the page makes is sent to the host over stdout and answered over stdin; the host decides
 // (local build / environment / refused). The host also sends the commands, one at a time.
@@ -27,6 +28,9 @@ const ctx = await browser.newContext({
   locale: init.locale ?? 'zh-CN',
 });
 if (init.initScript) await ctx.addInitScript(init.initScript);
+/** where the page is being redirected to (see the route below), and the last document's status */
+let redirecting = null;
+let docStatus = 0;
 await ctx.routeWebSocket(/.*/, (ws) => ws.close());
 await ctx.route('**/*', async (route) => {
   const req = route.request();
@@ -39,6 +43,23 @@ await ctx.route('**/*', async (route) => {
     nav: req.isNavigationRequest(),
   });
   if (r.abort) return route.abort('blockedbyclient').catch(() => {});
+  const location = r.headers?.location;
+  if (req.isNavigationRequest() && r.status >= 300 && r.status < 400 && location) {
+    // Chromium does not route the request that follows a fulfilled redirect (with no network it
+    // would fail), so the page redirects itself; Set-Cookie still comes with this response.
+    const target = new URL(location, req.url()).href;
+    redirecting = target;
+    const headers = { ...r.headers, 'content-type': 'text/html; charset=utf-8' };
+    delete headers.location;
+    return route
+      .fulfill({
+        status: 200,
+        headers,
+        body: `<!doctype html><meta charset="utf-8"><script>location.replace(${JSON.stringify(target)})</script>`,
+      })
+      .catch(() => {});
+  }
+  if (req.isNavigationRequest()) docStatus = r.status;
   return route
     .fulfill({ status: r.status, headers: r.headers, body: Buffer.from(r.body ?? '', 'base64') })
     .catch(() => {});
@@ -87,11 +108,88 @@ async function expectText(c) {
   }
 }
 
+// ---- environment sign-in (06 §2.4 env_accounts): a generic login form, no site-specific script ----
+
+const PASSWORD = 'input[type=password]:visible';
+/** where a signed-in page usually shows who you are */
+const IDENTITY = [
+  '[data-user-name]',
+  '[data-testid="user-name"]',
+  '.user-name',
+  '.username',
+  '.user-info .name',
+  '#username',
+];
+
+async function settle() {
+  await page.waitForLoadState('load', { timeout: 15000 }).catch(() => {});
+  // follow redirects the page does for us, up to a few hops
+  for (let i = 0; i < 10 && redirecting; i++) {
+    const target = redirecting;
+    redirecting = null;
+    await page
+      .waitForURL((u) => u.href === target, { waitUntil: 'load', timeout: 15000 })
+      .catch(() => {});
+  }
+  await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+}
+
+/** Fills the visible password field and the text field right before it, then submits with Enter. */
+async function login(c) {
+  await settle();
+  const pw = page.locator(PASSWORD).first();
+  if (!(await pw.count())) return { form: false };
+  if (c.user) {
+    const marked = await pw.evaluate((el) => {
+      const fields = [...document.querySelectorAll('input')].filter((x) => {
+        const t = (x.getAttribute('type') || 'text').toLowerCase();
+        return ['text', 'email', 'tel', ''].includes(t) && x.offsetParent !== null;
+      });
+      const before = fields.filter(
+        (x) => x.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING,
+      );
+      const f = before[before.length - 1] ?? fields[0];
+      if (!f) return false;
+      f.setAttribute('data-cc-login-user', '');
+      return true;
+    });
+    if (marked) await page.locator('[data-cc-login-user]').first().fill(c.user);
+  }
+  await pw.fill(c.pass);
+  await pw.press('Enter');
+  await settle();
+  return { form: true };
+}
+
+async function probe() {
+  await settle();
+  const form = (await page.locator(PASSWORD).count()) > 0;
+  const identity = await page.evaluate((sels) => {
+    for (const s of sels) {
+      const el = document.querySelector(s);
+      const t = (el?.getAttribute('data-user-name') || el?.textContent || '').trim();
+      if (t) return t.slice(0, 120);
+    }
+    return null;
+  }, IDENTITY);
+  return { login_form: form, identity };
+}
+
 async function run(c) {
   switch (c.op) {
-    case 'goto':
-      await page.goto(c.url, { waitUntil: 'load', timeout: 15000 });
+    case 'goto': {
+      docStatus = 0;
+      const r = await page.goto(c.url, { waitUntil: 'load', timeout: 15000 });
+      if (redirecting) await settle();
+      return { status: docStatus || (r?.status() ?? 0) };
+    }
+    case 'add_cookies':
+      await ctx.addCookies(c.cookies);
       return null;
+    case 'login':
+      return login(c);
+    case 'probe':
+      return probe();
     case 'click':
       await locate(c.loc).click();
       return null;

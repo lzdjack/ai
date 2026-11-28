@@ -3,6 +3,7 @@
 export * from './agent-runtime.ts';
 export * from './api-accounts.ts';
 export * from './api-delivery.ts';
+export * from './api-env-accounts.ts';
 export * from './api-tickets.ts';
 export * from './permissions.ts';
 export * from './browser-repro.ts';

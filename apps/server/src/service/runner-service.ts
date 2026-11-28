@@ -32,6 +32,7 @@ import {
   secretItems,
 } from '../db/schema/index.ts';
 import { ApiFailure } from './errors.ts';
+import { ENV_LOGIN, envLoginRefs, loginFinished } from './env-account-service.ts';
 import { codeSourceOf } from './plugins.ts';
 import { openSecret, sealToRunner } from './secrets.ts';
 import type { SourceSettings } from './source-service.ts';
@@ -232,6 +233,10 @@ export async function completeRoundStep(
       nodeRunId: p.node_run_id,
       outcome: req.outcome,
     });
+    // an environment sign-in writes its results onto the accounts it tried
+    const [ran] = await tx.select().from(nodeRuns).where(eq(nodeRuns.id, p.node_run_id));
+    if (ran?.nodeKey === ENV_LOGIN)
+      await loginFinished(tx, ctx, p.flow_instance_id, ran.nodeKey, req.output);
     // a round's ticket follows its flow (06 §3.1, §3.2); a delivery step records what it did
     await roundStepFinished(tx, ctx, p.flow_instance_id, p.node_run_id, req.outcome);
     await deliveryStepFinished(
@@ -269,8 +274,46 @@ export async function fetchCredential(
       tx,
       (item.payload as { node_run_id: string }).node_run_id,
     );
-    const refs = ((flow.plan as Plan).repos ?? []).map((r) => r.credential_ref);
-    if (!refs.includes(req.secret_id)) throw new ApiFailure(403, 'runner.credential_not_in_step');
+    const plan = flow.plan as Plan;
+    const envRef = envLoginRefs(plan).includes(req.secret_id);
+    const refs = (plan.repos ?? []).map((r) => r.credential_ref);
+    if (!envRef && !refs.includes(req.secret_id))
+      throw new ApiFailure(403, 'runner.credential_not_in_step');
+    const key = await botKeyOf(tx, auth.runnerId);
+    const record = (keyEpoch: number) =>
+      tx
+        .insert(secretDeliveries)
+        .values({
+          workspaceId: item.workspaceId,
+          secretId: req.secret_id,
+          runnerId: auth.runnerId,
+          keyEpoch,
+        })
+        .onConflictDoUpdate({
+          target: [
+            secretDeliveries.workspaceId,
+            secretDeliveries.secretId,
+            secretDeliveries.runnerId,
+          ],
+          set: { lastDeliveredAt: sql`now()`, keyEpoch },
+        });
+    if (envRef) {
+      // an environment account (06 §2.4): the secret as it was typed, for the browser sign-in
+      const [secret] = await tx.select().from(secretItems).where(eq(secretItems.id, req.secret_id));
+      if (!secret?.ciphertext || !secret.wrappedDek)
+        throw new ApiFailure(404, 'runner.credential_gone');
+      if (secret.credentialClass !== 'workspace_secret')
+        throw new ApiFailure(403, 'runner.credential_not_for_bot');
+      const value = openSecret(sources.masterKey, {
+        ciphertext: secret.ciphertext,
+        wrappedDek: secret.wrappedDek,
+      });
+      const env = sealToRunner(key.publicKey, key.keyFingerprint, req.secret_id, {
+        secret: String(value.secret ?? ''),
+      });
+      await record(secret.keyEpoch);
+      return env;
+    }
     const [row] = await tx
       .select({ secret: secretItems, connector: connectors })
       .from(secretItems)
@@ -280,17 +323,6 @@ export async function fetchCredential(
       throw new ApiFailure(404, 'runner.credential_gone');
     if (row.secret.credentialClass === 'personal_exec')
       throw new ApiFailure(403, 'runner.credential_not_for_bot');
-    const [key] = await tx
-      .select()
-      .from(runnerKeys)
-      .where(
-        and(
-          eq(runnerKeys.runnerId, auth.runnerId),
-          eq(runnerKeys.keyRole, 'bot_exec'),
-          eq(runnerKeys.status, 'active'),
-        ),
-      );
-    if (!key) throw new ApiFailure(409, 'runner.no_key');
     const plugin = codeSourceOf(sources.connectors, row.connector.pluginId);
     const h = plugin.gitAuth(
       openSecret(sources.masterKey, {
@@ -301,22 +333,22 @@ export async function fetchCredential(
     const env = sealToRunner(key.publicKey, key.keyFingerprint, req.secret_id, {
       git_http_header: `${h.header}: ${h.value}`,
     });
-    await tx
-      .insert(secretDeliveries)
-      .values({
-        workspaceId: item.workspaceId,
-        secretId: req.secret_id,
-        runnerId: auth.runnerId,
-        keyEpoch: row.secret.keyEpoch,
-      })
-      .onConflictDoUpdate({
-        target: [
-          secretDeliveries.workspaceId,
-          secretDeliveries.secretId,
-          secretDeliveries.runnerId,
-        ],
-        set: { lastDeliveredAt: sql`now()`, keyEpoch: row.secret.keyEpoch },
-      });
+    await record(row.secret.keyEpoch);
     return env;
   });
+}
+
+async function botKeyOf(tx: Tx, runnerId: string) {
+  const [key] = await tx
+    .select()
+    .from(runnerKeys)
+    .where(
+      and(
+        eq(runnerKeys.runnerId, runnerId),
+        eq(runnerKeys.keyRole, 'bot_exec'),
+        eq(runnerKeys.status, 'active'),
+      ),
+    );
+  if (!key) throw new ApiFailure(409, 'runner.no_key');
+  return key;
 }

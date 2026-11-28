@@ -173,6 +173,28 @@ const connector: CodeSourceConnector = {
     return res.text();
   },
 
+  // 依据：Branches API —— List repository branches（search 按名称子串）
+  async listBranches(config, credential, remoteId, q) {
+    const params = new URLSearchParams({
+      per_page: String(q.perPage),
+      ...(q.search ? { search: q.search } : {}),
+    });
+    const res = await api(config, credential)(`${project(remoteId)}/repository/branches?${params}`);
+    if (!res.ok) throw new Error(`GitLab ${res.status}`);
+    const list = (await res.json()) as {
+      name: string;
+      commit: { id: string } | null;
+      default?: boolean;
+      protected?: boolean;
+    }[];
+    return list.map((b) => ({
+      name: b.name,
+      commit: b.commit?.id ?? '',
+      default: !!b.default,
+      protected: !!b.protected,
+    }));
+  },
+
   async branchHead(config, credential, remoteId, branch) {
     const res = await api(
       config,

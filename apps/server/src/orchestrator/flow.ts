@@ -49,7 +49,7 @@ export interface OrchestratorPort {
     ctx: ActorCtx,
     f: {
       projectId: string;
-      kind: 'round' | 'delivery' | 'bundle' | 'eval' | 'trial_build';
+      kind: 'round' | 'delivery' | 'bundle' | 'eval' | 'trial_build' | 'health_check';
       plan: Plan;
     },
   ): Promise<string>;

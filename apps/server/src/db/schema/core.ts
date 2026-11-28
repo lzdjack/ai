@@ -82,6 +82,7 @@ export const flowInstances = projectTable(
       'bundle',
       'eval',
       'trial_build',
+      'health_check',
     ]),
     enumCheck('flow_instances_status_check', 'status', FLOW_STATUSES),
   ],

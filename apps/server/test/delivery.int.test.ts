@@ -74,6 +74,7 @@ const code: CodeSourceConnector = {
       'tsconfig.json': '{}',
       'index.html': '<div id="root"></div>',
     })[p] ?? null,
+  listBranches: async () => [],
   branchHead: async (_c, _k, id, branch) => heads.get(`${id}:${branch}`) ?? null,
   gitAuth: () => ({ header: 'Authorization', value: 'Bearer x' }),
   openMergeRequest: async (_c, _k, id, mr) => {

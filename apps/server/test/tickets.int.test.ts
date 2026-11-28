@@ -59,6 +59,7 @@ const fake: CodeSourceConnector = {
       'tsconfig.json': '{}',
       'index.html': '<div id="root"></div>',
     })[p] ?? null,
+  listBranches: async () => [],
   branchHead: async (_c, _k, id, branch) => heads.get(`${id}:${branch}`) ?? null,
   gitAuth: () => ({ header: 'Authorization', value: 'Bearer x' }),
   // merges and MRs belong to the delivery segment (delivery.int.test.ts)

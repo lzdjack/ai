@@ -5,6 +5,7 @@ import {
   RUNNER_PATHS,
   type CodeSourceConnector,
   type CredentialEnvelope,
+  type HealthCheckResponse,
   type HeartbeatResponse,
   type StepAssignment,
 } from '@cloudcraft/core-protocol';
@@ -72,6 +73,14 @@ const fake: CodeSourceConnector = {
   async readFile(_c, cred, id, p) {
     if (cred.token !== TOKEN) throw new Error('401');
     return FILES[id]?.[p] ?? null;
+  },
+  listBranches: async (_c, cred, _id, q) => {
+    if (cred.token !== TOKEN) throw new Error('401');
+    return [
+      { name: 'main', commit: 'a'.repeat(40), default: true, protected: true },
+      { name: 'test', commit: 'b'.repeat(40), default: false, protected: false },
+      { name: 'fix/M-1', commit: 'c'.repeat(40), default: false, protected: false },
+    ].filter((b) => !q.search || b.name.includes(q.search));
   },
   branchHead: async () => null,
   gitAuth: (cred) => ({ header: 'Authorization', value: `Bearer ${String(cred.token)}` }),
@@ -148,6 +157,27 @@ async function call(method: string, url: string, token?: string, payload?: unkno
   return { status: res.statusCode, body: res.json() as Record<string, unknown> };
 }
 const ws = () => `/v1/workspaces/${A.workspaceId}`;
+
+/** Enrolls an executor with a real X25519 key pair: its auth header and private key. */
+async function enrollRunner(name: string) {
+  const keys = crypto.generateKeyPairSync('x25519');
+  const { token } = await withWorkspaceTx(
+    db,
+    { userId: A.userId, workspaceId: A.workspaceId },
+    (tx, ctx) => issueEnrollToken(tx, ctx, { name }),
+  );
+  const secret = `cc_run_key_${crypto.randomBytes(16).toString('hex')}`;
+  const reg = await call('POST', RUNNER_PATHS.registerRunner, undefined, {
+    enroll_token: token,
+    bot_exec_public_key: keys.publicKey.export({ type: 'spki', format: 'der' }).toString('base64'),
+    secret_sha256: crypto.createHash('sha256').update(secret).digest('hex'),
+  });
+  return {
+    id: reg.body.runner_id as string,
+    auth: `Runner ${reg.body.runner_id}:${secret}`,
+    pem: keys.privateKey.export({ type: 'pkcs8', format: 'pem' }) as string,
+  };
+}
 
 describe('连接器、仓库与凭据信封（P3）', () => {
   let connectorId = '';
@@ -247,6 +277,80 @@ describe('连接器、仓库与凭据信封（P3）', () => {
     ).toBe(403);
   });
 
+  it('编辑连接器：令牌留空沿用原密文、填新值验证通过才覆盖；还有仓库在用时不能停用或删除；远端分支下拉', async () => {
+    const epoch = async () =>
+      (
+        await su.query(
+          'select s.key_epoch from secret_items s join connectors c on c.secret_id = s.id where c.id = $1',
+          [connectorId],
+        )
+      ).rows[0].key_epoch as number;
+    const before = await epoch();
+    const bad = await call('PATCH', `${ws()}/connectors/${connectorId}`, owner, {
+      credential: { token: 'wrong' },
+    });
+    expect([bad.status, bad.body.code]).toEqual([400, 'connector.verify_failed']);
+    const blank = await call('PATCH', `${ws()}/connectors/${connectorId}`, owner, {
+      name: '公司 GitLab',
+      config: { base_url: 'http://git2.test' },
+      credential: { token: '' },
+    });
+    expect(blank.body).toMatchObject({
+      name: '公司 GitLab',
+      config: { base_url: 'http://git2.test' },
+      credential_hint: '•••• 91d0',
+      verify: { ok: true },
+    });
+    expect(await epoch()).toBe(before);
+    await call('PATCH', `${ws()}/connectors/${connectorId}`, owner, {
+      credential: { token: TOKEN },
+    });
+    expect(await epoch()).toBe(before + 1);
+    expect(
+      (await call('PATCH', `${ws()}/connectors/${connectorId}`, member, { name: 'x' })).status,
+    ).toBe(403);
+
+    const off = await call('PATCH', `${ws()}/connectors/${connectorId}`, owner, {
+      status: 'disabled',
+    });
+    expect([off.status, off.body.code]).toEqual([409, 'connector.in_use']);
+    expect((off.body.data as { repos: string[] }).repos).toEqual([
+      'demo/demo-lib',
+      'demo/demo-web',
+    ]);
+    const del = await call('DELETE', `${ws()}/connectors/${connectorId}`, owner);
+    expect([del.status, del.body.code]).toEqual([409, 'connector.in_use']);
+
+    // an unused connector can be disabled (and then not browsed) and deleted
+    const spare = await call('POST', `${ws()}/connectors`, owner, {
+      plugin_id: 'connector-fake',
+      name: '备用',
+      config: {},
+      credential: { token: TOKEN },
+    });
+    const spareId = spare.body.id as string;
+    expect(
+      (await call('PATCH', `${ws()}/connectors/${spareId}`, owner, { status: 'disabled' })).body
+        .status,
+    ).toBe('disabled');
+    const browse = await call('GET', `${ws()}/connectors/${spareId}/remote-repos`, owner);
+    expect([browse.status, browse.body.code]).toEqual([409, 'connector.disabled']);
+    expect((await call('DELETE', `${ws()}/connectors/${spareId}`, owner)).status).toBe(200);
+    const names = (
+      (await call('GET', `${ws()}/connectors`, owner)).body.items as { id: string }[]
+    ).map((c) => c.id);
+    expect(names).toEqual([connectorId]);
+
+    const all = await call('GET', `${ws()}/repos/${web}/branches`, owner);
+    expect((all.body.items as { name: string; default: boolean }[]).map((b) => b.name)).toEqual([
+      'main',
+      'test',
+      'fix/M-1',
+    ]);
+    const some = await call('GET', `${ws()}/repos/${web}/branches?q=te`, owner);
+    expect((some.body.items as { name: string }[]).map((b) => b.name)).toEqual(['test']);
+  });
+
   it('试构建：按依赖顺序把项目的仓排进执行计划，只带凭据引用不带凭据', async () => {
     const r = await call('POST', `${ws()}/projects/${project}/trial-build`, owner);
     expect(r.status).toBe(202);
@@ -311,5 +415,217 @@ describe('连接器、仓库与凭据信封（P3）', () => {
     expect(wrongLease.status).toBe(409);
     const deliveries = await su.query('select runner_id from secret_deliveries');
     expect(deliveries.rows).toEqual([{ runner_id: reg.body.runner_id }]);
+  });
+  describe('环境账号与体检（P3b-3）', () => {
+    const PASSWORD = 'env-pass-7c1e9a';
+    let env = '';
+    let account = '';
+    let runner: Awaited<ReturnType<typeof enrollRunner>>;
+    /** the env_login step of a flow, leased to the test executor */
+    const stepOf = async (flowId: string) => {
+      const hb = (
+        await call('POST', RUNNER_PATHS.heartbeatAndPoll, runner.auth, {
+          free_slots: 8,
+          leases: [],
+        })
+      ).body as unknown as HeartbeatResponse;
+      return hb.assigned.find((x) => x.flow_instance_id === flowId) as StepAssignment;
+    };
+    const secretOf = async (step: StepAssignment, ref: string) => {
+      const got = await call('POST', RUNNER_PATHS.fetchCredential, runner.auth, {
+        work_item_id: step.work_item_id,
+        lease_token: step.lease_token,
+        fence: step.fence,
+        secret_id: ref,
+      });
+      expect(got.status).toBe(200);
+      return openFromServer(runner.pem, got.body as unknown as CredentialEnvelope).secret;
+    };
+    const finish = (step: StepAssignment, output: Record<string, unknown>) =>
+      call('POST', RUNNER_PATHS.completeRoundStep, runner.auth, {
+        work_item_id: step.work_item_id,
+        lease_token: step.lease_token,
+        fence: step.fence,
+        outcome: 'done',
+        output,
+      });
+
+    it('登记账号：密码要账号名；保存后库里只有密文、接口不回任何密码；成员不能登记', async () => {
+      runner = await enrollRunner('r-env');
+      const e = await call('POST', `${ws()}/projects/${project}/environments`, owner, {
+        env_code: 'test',
+        name: '测试环境',
+        env_tier: 'test_gate',
+        entry_url: 'http://env.test/',
+      });
+      env = e.body.id as string;
+      const url = `${ws()}/projects/${project}/environments/${env}/accounts`;
+      const body = {
+        role_name: '普通员工',
+        credential_type: 'password',
+        account_name: 'emp_test01',
+        secret: PASSWORD,
+        data_permission: 'read_write',
+      };
+      const noName = await call('POST', url, owner, { ...body, account_name: undefined });
+      expect([noName.status, noName.body.code]).toEqual([400, 'env_account.name_required']);
+      expect((await call('POST', url, member, body)).status).toBe(403);
+      const ok = await call('POST', url, owner, body);
+      expect(ok.status).toBe(201);
+      account = (ok.body.account as { id: string }).id;
+      expect(ok.body.account).toMatchObject({
+        account_name: 'emp_test01',
+        hint: '',
+        login: { state: 'unchecked' },
+      });
+      expect(JSON.stringify(ok.body)).not.toContain(PASSWORD);
+      const stored = await su.query(
+        'select s.ciphertext, s.credential_class from secret_items s join env_accounts a on a.secret_id = s.id',
+      );
+      expect(stored.rows[0].credential_class).toBe('workspace_secret');
+      expect(JSON.stringify(stored.rows)).not.toContain(PASSWORD);
+      const plan = (
+        await su.query('select plan from flow_instances where id = $1', [ok.body.flow_id])
+      ).rows[0].plan;
+      expect(JSON.stringify(plan)).not.toContain(PASSWORD);
+      expect(
+        JSON.stringify((await call('GET', `${ws()}/projects/${project}/env-accounts`, owner)).body),
+      ).not.toContain(PASSWORD);
+
+      // the Bot signs in: only the executor holding the step opens the password; the result lands on the account
+      const step = await stepOf(ok.body.flow_id as string);
+      const target = (step.config.targets as { credential_ref: string; account_id: string }[])[0]!;
+      expect(target.account_id).toBe(account);
+      expect(await secretOf(step, target.credential_ref)).toBe(PASSWORD);
+      const done = await finish(step, {
+        results: [
+          {
+            credential_ref: target.credential_ref,
+            account_id: crypto.randomUUID(),
+            state: 'ok',
+            opened: true,
+            identity: '张三 · 研发部',
+            ms: 900,
+          },
+        ],
+      });
+      expect(done.status).toBe(200);
+      const list = await call('GET', `${ws()}/projects/${project}/env-accounts`, owner);
+      expect((list.body.items as unknown[])[0]).toMatchObject({
+        id: account,
+        login: { state: 'ok', identity: '张三 · 研发部' },
+      });
+    });
+
+    it('Cookie 账号：不用填账号名，过期时间从 Cookie 里读；Bot 认出的人当账号名；读不出 Cookie 的不收', async () => {
+      const url = `${ws()}/projects/${project}/environments/${env}/accounts`;
+      const bad = await call('POST', url, owner, {
+        role_name: '部门负责人',
+        credential_type: 'cookie',
+        secret: 'not a cookie',
+        data_permission: 'read_only',
+      });
+      expect([bad.status, bad.body.code]).toEqual([400, 'env_account.cookie_unreadable']);
+      const ok = await call('POST', url, owner, {
+        role_name: '部门负责人',
+        credential_type: 'cookie',
+        secret: 'SESSION=6f2c9a81b; tita_uid=882041; Path=/; Expires=Sun, 27 Dec 2026 00:00:00 GMT',
+        data_permission: 'read_only',
+      });
+      expect(ok.body.account).toMatchObject({
+        account_name: null,
+        login: { state: 'unchecked', expires_at: '2026-12-27T00:00:00.000Z' },
+      });
+      const step = await stepOf(ok.body.flow_id as string);
+      const ref = (step.config.targets as { credential_ref: string }[])[0]!.credential_ref;
+      expect(await secretOf(step, ref)).toContain('SESSION=6f2c9a81b');
+      await finish(step, {
+        results: [
+          { credential_ref: ref, state: 'ok', opened: true, identity: '李娜 · 研发部', ms: 400 },
+        ],
+      });
+      const row = (
+        (await call('GET', `${ws()}/projects/${project}/env-accounts`, owner)).body.items as {
+          id: string;
+          account_name: string;
+        }[]
+      ).find((x) => x.id === (ok.body.account as { id: string }).id);
+      expect(row?.account_name).toBe('李娜 · 研发部');
+    });
+
+    it('保存前试登录：不留账号，试完密文就销毁；换密码当场覆盖旧密文并重新试', async () => {
+      const before = await su.query('select count(*)::int as n from env_accounts');
+      const r = await call(
+        'POST',
+        `${ws()}/projects/${project}/environments/${env}/accounts/try`,
+        owner,
+        {
+          role_name: '普通员工',
+          credential_type: 'password',
+          account_name: 'emp_test02',
+          secret: 'try-only-pass-1',
+          data_permission: 'read_only',
+        },
+      );
+      expect(r.status).toBe(202);
+      const step = await stepOf(r.body.flow_id as string);
+      const ref = (step.config.targets as { credential_ref: string; account_id?: string }[])[0]!;
+      expect(ref.account_id).toBeUndefined();
+      expect(await secretOf(step, ref.credential_ref)).toBe('try-only-pass-1');
+      await finish(step, {
+        results: [
+          {
+            credential_ref: ref.credential_ref,
+            state: 'failed',
+            opened: true,
+            error: 'the password was not accepted',
+            ms: 700,
+          },
+        ],
+      });
+      const sec = await su.query(
+        'select ciphertext, rotation_state from secret_items where id = $1',
+        [ref.credential_ref],
+      );
+      expect(sec.rows[0]).toEqual({ ciphertext: null, rotation_state: 'revoked_purged' });
+      expect((await su.query('select count(*)::int as n from env_accounts')).rows[0].n).toBe(
+        before.rows[0].n,
+      );
+
+      const [{ secret_id: secretId, ciphertext: oldCipher }] = (
+        await su.query(
+          'select a.secret_id, s.ciphertext from env_accounts a join secret_items s on s.id = a.secret_id where a.id = $1',
+          [account],
+        )
+      ).rows;
+      const up = await call('PATCH', `${ws()}/projects/${project}/env-accounts/${account}`, owner, {
+        secret: 'env-pass-rotated-2',
+      });
+      expect(up.body).toMatchObject({ account: { login: { state: 'unchecked' } } });
+      expect(up.body.flow_id).toBeTruthy();
+      const now = (await su.query('select ciphertext from secret_items where id = $1', [secretId]))
+        .rows[0].ciphertext;
+      expect(now).not.toBe(oldCipher);
+    });
+
+    it('体检：每个项目一次运行，先试登录全部账号再试构建；没探测的仓不排试构建', async () => {
+      const r = await call('POST', `${ws()}/onboarding/health-check`, owner, {});
+      expect(r.status).toBe(202);
+      const body = r.body as unknown as HealthCheckResponse;
+      expect(body.facts.environments).toEqual([
+        expect.objectContaining({ id: env, name: '测试环境', accounts: 2 }),
+      ]);
+      expect(body.facts.repos).toMatchObject({ read_write: 2, read_only: 0 });
+      const mine = body.flows.find((f) => f.project_id === project)!;
+      const plan = (
+        await su.query('select plan, kind from flow_instances where id = $1', [mine.flow_id])
+      ).rows[0];
+      expect(plan.kind).toBe('health_check');
+      expect(plan.plan.nodes.map((n: { key: string }) => n.key)).toEqual([
+        'env_login',
+        'trial_build',
+      ]);
+      expect(plan.plan.nodes[0].config.targets).toHaveLength(2);
+    });
   });
 });
