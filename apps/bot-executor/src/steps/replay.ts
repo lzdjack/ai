@@ -10,10 +10,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { BROWSER_IMAGE, runBrowserRepro, type BrowserRunResult } from '@cloudcraft/browser-sandbox';
 import {
+  evidenceName,
   invariantsHold,
   type AgentSandbox,
   type BrowserRepro,
   type RepoSpec,
+  type StepAssignment,
 } from '@cloudcraft/core-protocol';
 import type { StepHandler, StepResult } from '../runner/loop.ts';
 import { ensureImage, runContainer, startContainer } from '../sandbox/docker.ts';
@@ -26,6 +28,13 @@ export interface ReplayOptions {
   workspaces: Workspaces;
   gitAuth: GitAuth;
   labels?: Record<string, string>;
+  /** sends a screenshot to the server under the step's lease (06 §6.2); a failure only loses the image */
+  uploadEvidence?: (
+    step: StepAssignment,
+    name: string,
+    file: string,
+    sha256: string,
+  ) => Promise<void>;
 }
 
 const sh = (s: string) => `'${s.replace(/'/g, `'\\''`)}'`;
@@ -200,6 +209,11 @@ export function replayStep(o: ReplayOptions): StepHandler {
           signal,
         });
       runs = { base: await runOn('base'), head: await runOn('head') };
+      for (const side of ['base', 'head'] as const)
+        for (const shot of runs[side].screenshots)
+          await o
+            .uploadEvidence?.(step, evidenceName(side, shot.name), shot.file, shot.sha256)
+            .catch(() => {});
     }
 
     const verdict = {

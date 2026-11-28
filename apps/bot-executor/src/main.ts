@@ -98,7 +98,23 @@ const handlers: Record<string, StepHandler> = {
     runtime,
     labels,
   }),
-  replay: replayStep({ image: image.tag, workspaces, gitAuth, labels }),
+  replay: replayStep({
+    image: image.tag,
+    workspaces,
+    gitAuth,
+    labels,
+    uploadEvidence: async (step, name, file, sha256) => {
+      await transport.uploadEvidence(creds, {
+        work_item_id: step.work_item_id,
+        lease_token: step.lease_token,
+        fence: step.fence,
+        name,
+        sha256,
+        content_type: 'image/png',
+        data_base64: fs.readFileSync(file).toString('base64'),
+      });
+    },
+  }),
 };
 /** By node kind; a deterministic_verify node names its check in config.action. */
 const handlerFor = (step: { node_kind: string; config: Record<string, unknown> }) => {

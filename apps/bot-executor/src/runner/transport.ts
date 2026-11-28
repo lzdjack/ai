@@ -9,6 +9,7 @@ import {
   type HeartbeatResponse,
   type RegisterRunnerRequest,
   type RegisterRunnerResponse,
+  type UploadEvidenceRequest,
 } from '@cloudcraft/core-protocol';
 
 /** A refused call; `code` is the server's ApiError code (e.g. runner.lease_lost). */
@@ -53,6 +54,8 @@ export function httpTransport(server: string) {
       call<CompleteStepResponse>(RUNNER_PATHS.completeRoundStep, req, creds),
     fetchCredential: (creds: RunnerCredentials, req: FetchCredentialRequest) =>
       call<CredentialEnvelope>(RUNNER_PATHS.fetchCredential, req, creds),
+    uploadEvidence: (creds: RunnerCredentials, req: UploadEvidenceRequest) =>
+      call<{ id: string }>(RUNNER_PATHS.uploadEvidence, req, creds),
   };
 }
 
