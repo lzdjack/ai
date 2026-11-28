@@ -172,3 +172,59 @@ export const verifyRuns = projectTable(
     }),
   ],
 );
+
+/**
+ * The review of a round (06 §2.5): one per round — PC and phone, or two assignees, at the same time:
+ * whoever writes first wins. The text shown to the reviewer is kept as it was (06 §13.6 item 1).
+ */
+export const reviews = projectTable(
+  'reviews',
+  {
+    roundId: uuid().notNull(),
+    deliveryDigest: text().notNull(),
+    reviewRev: integer().notNull(),
+    result: text().notNull(),
+    reviewerId: uuid()
+      .notNull()
+      .references(() => users.id),
+    selfDelivery: boolean().notNull().default(false),
+    comment: text(),
+    rejectCategory: text(),
+    riskLevel: text(),
+    location: jsonb(),
+    textSnapshot: text(),
+  },
+  (t) => [
+    foreignKey({
+      name: 'reviews_round_fk',
+      columns: [t.workspaceId, t.roundId],
+      foreignColumns: [rounds.workspaceId, rounds.id],
+    }),
+    unique('reviews_round_key').on(t.roundId),
+    enumCheck('reviews_result_check', 'result', ['approved', 'rejected']),
+  ],
+);
+
+/**
+ * Evidence files of a node run (06 §2.5, §6.2): screenshots of the host replay so far. M1 keeps the
+ * file on the server's disk under the workspace; the row says where and whether it is still there.
+ */
+export const evidences = projectTable(
+  'evidences',
+  {
+    roundId: uuid(),
+    nodeRunId: uuid().notNull(),
+    kind: text().notNull().default('screenshot'),
+    name: text().notNull(),
+    sha256: text().notNull(),
+    contentType: text().notNull(),
+    sizeBytes: integer().notNull(),
+    storageState: text().notNull().default('active'),
+    visibilityScope: text().notNull().default('project_only'),
+  },
+  (t) => [
+    unique('evidences_run_name_key').on(t.nodeRunId, t.name),
+    index('evidences_round_idx').on(t.roundId),
+    enumCheck('evidences_storage_check', 'storage_state', ['active', 'purged_by_ttl']),
+  ],
+);

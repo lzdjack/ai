@@ -1,10 +1,12 @@
 // /v1 routes of connectors, repositories, the probe, the trial build (docs/06 §10.3) and, from P4,
 // environments and tickets (06 §2.5).
+import fs from 'node:fs';
 import {
   AttachReposRequest,
   CreateEnvironmentRequest,
   CreateTicketRequest,
   CreateConnectorRequest,
+  ReviewRequest,
   UpdateRepoRequest,
   VerifyConnectorRequest,
 } from '@cloudcraft/core-protocol';
@@ -14,6 +16,7 @@ import type { Db } from '../db/client.ts';
 import type { AccountSettings } from '../service/account-service.ts';
 import { verifyAccessToken } from '../service/auth-crypto.ts';
 import { ApiFailure } from '../service/errors.ts';
+import { evidenceFile } from '../service/evidence-service.ts';
 import * as src from '../service/source-service.ts';
 import * as tk from '../service/ticket-service.ts';
 
@@ -34,6 +37,7 @@ export function sourceRoutes(
   db: Db,
   a: AccountSettings,
   s: src.SourceSettings,
+  evidenceDir: string,
 ) {
   const user = (req: FastifyRequest): string => {
     const m = /^Bearer (.+)$/.exec(req.headers.authorization ?? '');
@@ -185,6 +189,24 @@ export function sourceRoutes(
   app.get('/v1/workspaces/:ws/tickets/:id', { schema: { params: Item } }, async (req) => {
     const { ws, id } = p<Static<typeof Item>>(req);
     return tk.ticketDetail(db, user(req), ws, id);
+  });
+  app.post(
+    '/v1/workspaces/:ws/tickets/:id/review',
+    { schema: { params: Item, body: ReviewRequest } },
+    async (req) => {
+      const { ws, id } = p<Static<typeof Item>>(req);
+      return tk.reviewTicket(db, user(req), ws, id, req.body as Static<typeof ReviewRequest>);
+    },
+  );
+  // evidence files are images: the page loads them with the session's token (fetch → blob URL)
+  app.get('/v1/workspaces/:ws/evidence/:id', { schema: { params: Item } }, async (req, reply) => {
+    const { ws, id } = p<Static<typeof Item>>(req);
+    const f = await evidenceFile(db, evidenceDir, user(req), ws, id);
+    return reply
+      .header('content-type', f.contentType)
+      .header('cache-control', 'private, max-age=86400, immutable')
+      .header('etag', `"${f.sha256}"`)
+      .send(fs.createReadStream(f.file));
   });
   app.get('/v1/workspaces/:ws/flows/:id', { schema: { params: Item } }, async (req) => {
     const { ws, id } = p<Static<typeof Item>>(req);

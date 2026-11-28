@@ -20,7 +20,12 @@ const fs = require("fs"), cp = require("child_process");
 const patches = JSON.parse(Buffer.from(process.env.CC_PATCHES, "base64").toString());
 for (const [repo, p] of Object.entries(patches)) {
   fs.writeFileSync("/tmp/fix.patch", p);
-  cp.execFileSync("git", ["-c", "safe.directory=*", "apply", "/tmp/fix.patch"], { cwd: "/work/" + repo, stdio: "inherit" });
+  const git = (args, stdio) => cp.execFileSync("git", ["-c", "safe.directory=*", ...args], { cwd: "/work/" + repo, stdio });
+  // a later round starts from the pushed fix branch: a patch that is already in is skipped
+  let applied = false;
+  try { git(["apply", "--reverse", "--check", "/tmp/fix.patch"], "ignore"); applied = true; } catch {}
+  if (applied) console.log("already applied: " + repo);
+  else git(["apply", "/tmp/fix.patch"], "inherit");
 }
 fetch(process.env.CC_RELAY + "/tools/submit_delivery", {
   method: "POST",

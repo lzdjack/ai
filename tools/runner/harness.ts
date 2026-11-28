@@ -155,6 +155,7 @@ export async function startHarness(c: Config, o: { leaseSeconds: number }) {
     runner: { leaseSeconds: o.leaseSeconds, pollMs: 500 },
     accounts: accountSettings(c),
     sources,
+    evidenceDir: path.join(c.CC_DATA_DIR, 'evidence'),
   });
   await app.listen({ host: '127.0.0.1', port: 0 });
   const addr = app.server.address();

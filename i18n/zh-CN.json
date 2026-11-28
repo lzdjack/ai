@@ -329,5 +329,13 @@
   "plugin.connector-gitlab.base_url": "服务地址",
   "plugin.connector-gitlab.base_url.hint": "企业私有部署填内网域名",
   "plugin.connector-gitlab.token": "访问令牌（Token）",
-  "plugin.connector-gitlab.token.hint": "推荐给 Bot 专号签发，不给合入主干权限；加密保存，仅执行器可解"
+  "plugin.connector-gitlab.token.hint": "推荐给 Bot 专号签发，不给合入主干权限；加密保存，仅执行器可解",
+  "error.review.not_assignee": "只有这张单的修复人能审核",
+  "error.review.not_in_review": "这张单现在不在待审核状态",
+  "error.review.stale": "这一轮的交付已经更新，请刷新后再审",
+  "error.review.comment_required": "打回要写明原因，会原样交给 Bot",
+  "error.review.already_reviewed": "这一轮已经有人审核过了",
+  "error.evidence.not_found": "证据文件不存在或已过期清理",
+  "error.runner.evidence_too_large": "证据文件太大",
+  "error.runner.evidence_sha_mismatch": "证据文件校验不一致"
 }

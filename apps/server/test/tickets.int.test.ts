@@ -153,7 +153,7 @@ async function playRound(
   flowId: string,
   outputs: {
     fix: Record<string, unknown> | 'fail';
-    verify: (s: StepAssignment) => Record<string, unknown>;
+    verify: (s: StepAssignment) => Record<string, unknown> | Promise<Record<string, unknown>>;
   },
 ) {
   const hb = (
@@ -170,7 +170,7 @@ async function playRound(
           ? {}
           : (outputs.fix as Record<string, unknown>)
         : step.node_key === 'verify'
-          ? outputs.verify(step)
+          ? await outputs.verify(step)
           : {};
     const r = await call(
       'POST',
@@ -358,5 +358,173 @@ describe('手动建单与第一轮交付（P4 端到端冒烟）', () => {
     });
     const d2 = await waitStatus(touched.body.id as string, 'needs_help');
     expect((d2.rounds as { reason: string }[])[0]!.reason).toBe('gate.touched_existing_tests');
+  });
+});
+
+describe('审核（P5）：通过 / 打回开下一轮、证据、项目风险规则', () => {
+  it('打回 → 第 2 轮带着意见在同一分支上修 → 再交付 → 通过；只有修复人能审，交付变了旧卡审不了，一轮只审一次', async () => {
+    // a second member of A who is not on the ticket
+    const other = (
+      await su.query<{ id: string }>(
+        `insert into users (email, display_name) values ('tk-other@test.local', 'other') returning id`,
+      )
+    ).rows[0]!.id;
+    await su.query(`insert into workspace_members (workspace_id, user_id) values ($1, $2)`, [
+      A.workspaceId,
+      other,
+    ]);
+    await su.query(
+      `insert into role_bindings (workspace_id, user_id, role_id)
+       select $1, $2, id from roles where workspace_id = $1 and is_owner`,
+      [A.workspaceId, other],
+    );
+    const otherAuth = `Bearer ${signAccessToken(settings, other)}`;
+
+    const created = await call('POST', `${ws()}/projects/${A.projectId}/tickets`, {
+      title: '导出按钮没反应',
+      body: '点了没下载',
+    });
+    const id = created.body.id as string;
+    const branch = `fix/main/${created.body.no as string}`;
+    const png = Buffer.from('89504e470d0a1a0a-not-really-a-png');
+    const pngSha = crypto.createHash('sha256').update(png).digest('hex');
+    const round = (head: string) => ({
+      fix: {
+        model: 'gpt-x',
+        delivery: { root_cause: 'handler not bound', summary: 's', verification: 'v' },
+        changes: [
+          {
+            repo: 'demo-web',
+            base_sha: 'b'.repeat(40),
+            head_sha: head,
+            files: ['M src/export.ts', 'A src/export.test.ts'],
+            added: 8,
+            deleted: 2,
+          },
+        ],
+        touched_tests: [],
+      },
+      verify: async (s: StepAssignment) => {
+        heads.set(`21:${branch}`, head);
+        // the executor uploads the screenshot under the step's lease before it writes back
+        const up = await call(
+          'POST',
+          RUNNER_PATHS.uploadEvidence,
+          {
+            work_item_id: s.work_item_id,
+            lease_token: s.lease_token,
+            fence: s.fence,
+            name: 'head-after',
+            sha256: pngSha,
+            content_type: 'image/png',
+            data_base64: png.toString('base64'),
+          },
+          runnerAuth,
+        );
+        expect(up.status).toBe(200);
+        return {
+          verdict: {
+            repro_fails_before: true,
+            repro_passes_after: true,
+            typecheck: true,
+            tests: true,
+          },
+          pushed: [{ repo: 'demo-web', branch, head_sha: head }],
+          browser: { head: { screenshots: [{ name: 'after', sha256: pngSha }] } },
+          digests: {},
+        };
+      },
+    });
+    await playRound(created.body.flow_id as string, round(sha()));
+    let d = await waitStatus(id, 'in_review');
+    type Round = {
+      round_no: number;
+      cause: string;
+      review_rev: number;
+      delivery: DeliveryCard;
+      review: { result: string; comment: string } | null;
+    };
+    const card1 = (d.rounds as Round[])[0]!.delivery;
+    expect(d.is_assignee).toBe(true);
+
+    // the evidence: readable in the workspace, invisible elsewhere
+    const shot = card1.screenshots.find((x) => x.name === 'head-after');
+    expect(shot?.evidence_id).toBeTruthy();
+    const img = await server.inject({
+      method: 'GET',
+      url: `${ws()}/evidence/${shot!.evidence_id}`,
+      headers: { authorization: `Bearer ${owner}` },
+    });
+    expect(img.statusCode).toBe(200);
+    expect(img.rawPayload.equals(png)).toBe(true);
+    const B = await seedSpace(db, 'tk-b');
+    const fromB = await server.inject({
+      method: 'GET',
+      url: `/v1/workspaces/${B.workspaceId}/evidence/${shot!.evidence_id}`,
+      headers: { authorization: `Bearer ${signAccessToken(settings, B.userId)}` },
+    });
+    expect(fromB.statusCode).toBe(404);
+
+    const review = (body: Record<string, unknown>, auth?: string) =>
+      call('POST', `${ws()}/tickets/${id}/review`, body, auth);
+    const base = { round_no: 1, delivery_digest: card1.delivery_digest, review_rev: 0 };
+    expect((await review({ ...base, decision: 'approve' }, otherAuth)).status).toBe(403);
+    expect(
+      (await review({ ...base, delivery_digest: 'stale', decision: 'approve' })).body.code,
+    ).toBe('review.stale');
+    expect((await review({ ...base, decision: 'reject' })).body.code).toBe(
+      'review.comment_required',
+    );
+
+    // a stricter project rule: 10 changed lines are no longer L0 for round 2
+    await su.query(`update projects set risk_rules = '{"l0_max_lines": 5}' where id = $1`, [
+      A.projectId,
+    ]);
+    const rejected = await review({
+      ...base,
+      decision: 'reject',
+      comment: '管理员账号点了还是没反应',
+      reject_category: 'still_broken',
+      location: { repo: 'demo-web', path: 'src/export.ts', line: 12 },
+    });
+    expect(rejected.status).toBe(200);
+    expect(rejected.body).toMatchObject({ status: 'fixing', current_round: 2 });
+    const rs = rejected.body.rounds as Round[];
+    expect(rs[0]!.review).toMatchObject({
+      result: 'rejected',
+      comment: '管理员账号点了还是没反应',
+    });
+    expect(rs[1]).toMatchObject({ round_no: 2, cause: 'code_rejected', status: 'fixing' });
+    // one review per round
+    expect((await review({ ...base, decision: 'approve' })).status).toBe(409);
+
+    const flow2 = rs[1] as unknown as { flow_id: string };
+    const seen = await playRound(flow2.flow_id, round(sha()));
+    expect(seen[0]!.config.branch).toBe(branch);
+    expect((seen[1]!.config.material as { review: unknown }).review).toEqual({
+      round_no: 1,
+      comment: '管理员账号点了还是没反应',
+      category: 'still_broken',
+      location: { repo: 'demo-web', path: 'src/export.ts', line: 12 },
+    });
+    d = await waitStatus(id, 'in_review');
+    const card2 = (d.rounds as Round[])[1]!.delivery;
+    expect(card2.risk_level).toBe('L1');
+
+    const ok = await review({
+      decision: 'approve',
+      round_no: 2,
+      delivery_digest: card2.delivery_digest,
+      review_rev: 0,
+    });
+    expect(ok.status).toBe(200);
+    expect(ok.body.status).toBe('approved');
+    const flows = await su.query(
+      `select f.status from flow_instances f join rounds r on r.flow_instance_id = f.id
+        where r.ticket_id = $1 order by r.round_no`,
+      [id],
+    );
+    expect(flows.rows.map((x) => x.status)).toEqual(['done', 'done']);
+    expect((await su.query('select count(*)::int as n from reviews')).rows[0].n).toBe(2);
   });
 });

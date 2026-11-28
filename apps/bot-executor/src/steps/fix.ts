@@ -32,7 +32,17 @@ export interface FixOptions {
 
 /** What the plan's ai_agent node carries (E2; P4 takes the ticket from the round instead). */
 interface FixConfig {
-  material?: { title?: string; body?: string };
+  /** the report; from round 2 on also the review of the previous round (P5) */
+  material?: {
+    title?: string;
+    body?: string;
+    review?: {
+      round_no: number;
+      comment: string;
+      category: string | null;
+      location: { repo: string; path: string; line?: number; text?: string } | null;
+    };
+  };
   /** extra instructions of this node (node_instructions) */
   instructions?: string;
   allowed_tools?: string[];
@@ -79,16 +89,37 @@ ${repos}
   }`;
 }
 
+const CATEGORY: Record<string, string> = {
+  still_broken: 'the bug is still there',
+  regression: 'the change broke something else',
+  insufficient_verification: 'the verification is not convincing',
+  approach_rejected: 'the reviewer does not accept the approach',
+};
+
 function task(cfg: FixConfig): string {
   const m = cfg.material ?? {};
   const strip = (s: string) => s.replace(/<\/?material[^>]*>/gi, '');
-  return `<material source="ticket">
+  const report = `<material source="ticket">
 ${strip(m.title ?? '')}
 
 ${strip(m.body ?? '')}
+</material>`;
+  const r = m.review;
+  if (!r) return `${report}\n\nFix this bug.`;
+  const where = r.location
+    ? `\nCode position: ${strip(`${r.location.repo}/${r.location.path}${r.location.line ? `:${r.location.line}` : ''}`)}${
+        r.location.text ? ` (${strip(r.location.text)})` : ''
+      }`
+    : '';
+  return `${report}
+
+Round ${r.round_no} was sent back by the reviewer${r.category && CATEGORY[r.category] ? ` (${CATEGORY[r.category]})` : ''}.
+The checkout already contains what you delivered in that round (it is on the fix branch).
+<material source="review">
+${strip(r.comment)}${where}
 </material>
 
-Fix this bug.`;
+Address every point of the review, keep what was right, and deliver again.`;
 }
 
 export function fixStep(o: FixOptions): StepHandler {
