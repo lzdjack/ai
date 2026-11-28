@@ -75,6 +75,11 @@ const fake: CodeSourceConnector = {
   },
   branchHead: async () => null,
   gitAuth: (cred) => ({ header: 'Authorization', value: `Bearer ${String(cred.token)}` }),
+  // merges and MRs belong to the delivery segment (delivery.int.test.ts)
+  openMergeRequest: () => Promise.reject(new Error('not used here')),
+  getMergeRequest: () => Promise.reject(new Error('not used here')),
+  mergeMergeRequest: () => Promise.reject(new Error('not used here')),
+  isAncestor: () => Promise.resolve(false),
   toRepo(id: string) {
     return {
       remote_id: id,

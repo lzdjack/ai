@@ -2,6 +2,7 @@
 // 故障注入不进这里（重启即清空）。
 import fs from 'node:fs';
 import path from 'node:path';
+import type { ApolloState } from './apollo/index.ts';
 
 export type GitlabRole = 'maintainer' | 'developer';
 
@@ -61,6 +62,8 @@ export interface SimState {
     merge_requests: GitlabMr[];
     hooks: GitlabHook[];
   };
+  /** 旧状态文件没有这一项，第一次用到时补上 */
+  apollo?: ApolloState;
 }
 
 const empty = (): SimState => ({

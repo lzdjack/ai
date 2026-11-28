@@ -156,6 +156,7 @@ export async function startHarness(c: Config, o: { leaseSeconds: number }) {
     accounts: accountSettings(c),
     sources,
     evidenceDir: path.join(c.CC_DATA_DIR, 'evidence'),
+    artifactDir: path.join(c.CC_DATA_DIR, 'artifacts'),
   });
   await app.listen({ host: '127.0.0.1', port: 0 });
   const addr = app.server.address();
@@ -165,9 +166,18 @@ export async function startHarness(c: Config, o: { leaseSeconds: number }) {
     withWorkspaceTx(db, { userId: team.user, workspaceId: team.ws }, fn);
   const runnerDir = fs.mkdtempSync(path.join(os.tmpdir(), 'cc-runner-'));
 
-  let executor: ChildProcess | null = null;
-  const startExecutor = (env: Record<string, string | undefined>) => {
-    const p = spawn(process.execPath, ['--import', 'tsx', 'apps/bot-executor/src/main.ts'], {
+  const releaseDir = fs.mkdtempSync(path.join(os.tmpdir(), 'cc-release-runner-'));
+  const procs: { bot: ChildProcess | null; release: ChildProcess | null } = {
+    bot: null,
+    release: null,
+  };
+  const spawnRunner = (
+    which: 'bot' | 'release',
+    env: Record<string, string | undefined>,
+  ): ChildProcess => {
+    const entry =
+      which === 'bot' ? 'apps/bot-executor/src/main.ts' : 'apps/bot-executor/src/release/main.ts';
+    const p = spawn(process.execPath, ['--import', 'tsx', entry], {
       cwd: ROOT,
       stdio: ['ignore', 'pipe', 'pipe'],
       env: {
@@ -175,7 +185,7 @@ export async function startHarness(c: Config, o: { leaseSeconds: number }) {
         HOME: process.env.HOME,
         CC_RUNNER_SERVER: server,
         CC_DATA_DIR: c.CC_DATA_DIR,
-        CC_RUNNER_DIR: runnerDir,
+        CC_RUNNER_DIR: which === 'bot' ? runnerDir : releaseDir,
         ...env,
       },
     });
@@ -187,16 +197,18 @@ export async function startHarness(c: Config, o: { leaseSeconds: number }) {
         .forEach((l) => console.log(`    ${l}`));
     p.stdout!.on('data', out);
     p.stderr!.on('data', out);
-    executor = p;
+    procs[which] = p;
     return p;
   };
-  const killExecutor = async (signal: NodeJS.Signals) => {
-    const p = executor;
+  const kill = async (which: 'bot' | 'release', signal: NodeJS.Signals) => {
+    const p = procs[which];
     if (!p || p.exitCode !== null || p.signalCode !== null) return;
     const exited = new Promise((r) => p.once('exit', r));
     p.kill(signal);
     await exited;
   };
+  const startExecutor = (env: Record<string, string | undefined>) => spawnRunner('bot', env);
+  const killExecutor = (signal: NodeJS.Signals) => kill('bot', signal);
 
   return {
     db,
@@ -206,8 +218,13 @@ export async function startHarness(c: Config, o: { leaseSeconds: number }) {
     asOwner,
     startExecutor,
     killExecutor,
-    enrollToken: async (name: string) =>
-      (await asOwner((tx, ctx) => issueEnrollToken(tx, ctx, { name }))).token,
+    /** the release executor (06 §1.2): its own process, identity and release_exec key; restartable */
+    startReleaseExecutor: (env: Record<string, string | undefined> = {}) =>
+      spawnRunner('release', env),
+    killReleaseExecutor: (signal: NodeJS.Signals) => kill('release', signal),
+    enrollToken: async (name: string, roles?: string[]) =>
+      (await asOwner((tx, ctx) => issueEnrollToken(tx, ctx, { name, ...(roles ? { roles } : {}) })))
+        .token,
     startFlow: (plan: Plan) =>
       asOwner((tx, ctx) =>
         pgOrchestrator.startFlow(tx, ctx, { projectId: team.project, kind: 'round', plan }),
@@ -222,6 +239,8 @@ export async function startHarness(c: Config, o: { leaseSeconds: number }) {
       ),
     async close() {
       await killExecutor('SIGTERM');
+      await kill('release', 'SIGTERM');
+      fs.rmSync(releaseDir, { recursive: true, force: true });
       await sys.stop();
       await app.close();
       await db.close();

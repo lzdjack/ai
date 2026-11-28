@@ -15,15 +15,9 @@ import { loadConfig } from '@cloudcraft/config';
 import { startLlmProxy } from '@cloudcraft/llm-proxy';
 import { accountSettings, signAccessToken } from '@cloudcraft/server';
 import { deployDemoEnv } from '../fixtures/env.ts';
-import {
-  DEMO_NAMESPACE,
-  DEMO_REPOS,
-  ROOT,
-  browserReproOf,
-  loadBugs,
-  withSim,
-} from '../fixtures/lib.ts';
+import { DEMO_NAMESPACE, ROOT, browserReproOf, loadBugs, withSim } from '../fixtures/lib.ts';
 import { botToken, seedDemoRepos } from '../fixtures/seed.ts';
+import { setupDemoProject } from './demo-project.ts';
 import { fail, sec, startHarness, waitFor } from './harness.ts';
 
 const argv = process.argv.slice(2);
@@ -76,43 +70,13 @@ await withSim(c, async (simBase) => {
     const bot = await botToken(simBase);
 
     // 1. connector, repos, environment (reused when they exist)
-    const conns = (await call('GET', `${ws}/connectors`)).items as Json[];
-    const conn =
-      conns.find(
-        (x) => x.plugin_id === 'connector-gitlab' && (x.config as Json).base_url === simBase,
-      ) ??
-      (await call('POST', `${ws}/connectors`, {
-        plugin_id: 'connector-gitlab',
-        name: '模拟 GitLab',
-        config: { base_url: simBase },
-        credential: { token: bot },
-      }));
-    const remote = (
-      (await call('GET', `${ws}/connectors/${conn.id}/remote-repos?q=demo`)).items as Json[]
-    ).filter((r) => DEMO_REPOS.some((n) => r.path === `${DEMO_NAMESPACE}/${n}`));
-    const attached = (
-      (await call('POST', `${ws}/repos/batch-attach`, {
-        connector_id: conn.id,
-        remote_ids: remote.map((r) => r.remote_id),
-      })) as { items: Json[] }
-    ).items;
-    const web = attached.find((r) => String(r.path).endsWith('demo-web'))!;
-    const lib = attached.find((r) => String(r.path).endsWith('demo-lib'))!;
-    const webRw = web.project_id
-      ? web
-      : await call('PATCH', `${ws}/repos/${web.id}`, { access_mode: 'read_write' });
-    const project = webRw.project_id as string;
-    if (!lib.project_id)
-      await call('PATCH', `${ws}/repos/${lib.id}`, {
-        access_mode: 'read_write',
-        project_id: project,
-      });
-    await call('POST', `${ws}/projects/${project}/environments`, {
-      env_code: 'test',
-      name: '测试环境',
-      env_tier: 'test_gate',
-      entry_url: env.url,
-    }).catch(() => null);
+    const { project } = await setupDemoProject({
+      call,
+      ws,
+      simBase,
+      botToken: bot,
+      testEnvUrl: env.url,
+    });
     console.log(`· 项目已就绪：两仓可修改，测试环境 ${env.url}`);
 
     // 2. the executor, with the drill engine or Pi

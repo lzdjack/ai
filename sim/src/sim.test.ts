@@ -257,3 +257,127 @@ describe('模拟 GitLab', { timeout: 30_000 }, () => {
     expect((await api('GET', '/__sim/faults', null)).body).toEqual([]);
   });
 });
+
+describe('模拟 Apollo、OSS 与环境站点（P6）', () => {
+  it('本人登录、改配置并发布，环境站点按生效的发布出页面；发布中断、回读不一致可注入', async () => {
+    const site = await app.envSites.listen('test', 0);
+    // 没登录不能读；密码错拿不到会话
+    expect((await fetch(`${base}/user`)).status).toBe(401);
+    const bad = await fetch(`${base}/signin`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      body: 'username=qa-releaser&password=nope',
+      redirect: 'manual',
+    });
+    expect(bad.status).toBe(401);
+    const login = await fetch(`${base}/signin`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      body: 'username=qa-releaser&password=sim-apollo-pass',
+      redirect: 'manual',
+    });
+    expect(login.status).toBe(302);
+    const cookie = login.headers.get('set-cookie')!.split(';')[0]!;
+    const me = await (await fetch(`${base}/user`, { headers: { cookie } })).json();
+    expect(me.userId).toBe('qa-releaser');
+
+    // 产物传到 OSS：要访问密钥；同名对象不覆盖
+    const put = (key: string, body: string, ak = 'sim-oss-access-key') =>
+      fetch(`${base}/oss/ux/${key}`, {
+        method: 'PUT',
+        headers: { 'content-type': 'application/octet-stream', 'x-oss-access-key': ak },
+        body,
+      });
+    expect((await put('demo-web/release/1.0.0/index.html', '<h1>v1</h1>', 'wrong')).status).toBe(
+      403,
+    );
+    expect((await put('demo-web/release/1.0.0/index.html', '<h1>v1</h1>')).status).toBe(200);
+    expect((await put('demo-web/release/1.0.0/index.html', '<h1>x</h1>')).status).toBe(409);
+
+    const commit = 'a'.repeat(40);
+    const ns = `${base}/apps/demo-web/envs/TEST/clusters/default/namespaces/application`;
+    const json = { cookie, 'content-type': 'application/json' };
+    const value = JSON.stringify({
+      Version: '1.0.0',
+      CommitId: commit,
+      Bucket: 'ux',
+      Prefix: 'demo-web/release/1.0.0/',
+    });
+    expect(
+      (
+        await fetch(`${ns}/item`, {
+          method: 'PUT',
+          headers: json,
+          body: JSON.stringify({ key: 'demo-web', value }),
+        })
+      ).status,
+    ).toBe(200);
+    const rel = await fetch(`${ns}/releases`, {
+      method: 'POST',
+      headers: json,
+      body: JSON.stringify({ releaseTitle: '1.0.0' }),
+    });
+    expect(rel.status).toBe(200);
+    expect(await (await fetch(site)).text()).toBe('<h1>v1</h1>');
+    expect(await (await fetch(`${site}__version`)).json()).toEqual({ version: '1.0.0', commit });
+
+    const active = `${base}/envs/TEST/apps/demo-web/clusters/default/namespaces/application/releases/active`;
+    // 回读不一致：这一次读到的提交号被改掉，下一次恢复
+    await api('POST', '/__sim/faults', null, {
+      module: 'apollo',
+      kind: 'readback_mismatch',
+      times: 1,
+    });
+    const read = async () =>
+      JSON.parse(
+        (
+          (await (await fetch(active, { headers: { cookie } })).json()) as {
+            configurations: string;
+          }[]
+        )[0]!.configurations,
+      )['demo-web'] as string;
+    expect(await read()).not.toContain(commit);
+    expect(await read()).toContain(commit);
+
+    // 发布做到一半中断：调用方拿不到结果，但发布已经生效（重试前要先回读）
+    await api('POST', '/__sim/faults', null, {
+      module: 'apollo',
+      kind: 'publish_interrupt',
+      times: 1,
+    });
+    const cut = await fetch(`${ns}/releases`, {
+      method: 'POST',
+      headers: json,
+      body: JSON.stringify({ releaseTitle: '1.0.0 again' }),
+    }).catch((e: Error) => e);
+    expect(cut).toBeInstanceOf(Error);
+    const state = (await api('GET', '/__sim/apollo', null)).body as {
+      releases: { name: string }[];
+    };
+    expect(state.releases.at(-1)!.name).toBe('1.0.0 again');
+
+    // 没有这个环境权限的账号不能发布
+    await api('POST', '/__sim/apollo/users', null, {
+      username: 'only-test',
+      password: 'pass-123456',
+      grants: ['demo-web:TEST'],
+    });
+    const l2 = await fetch(`${base}/signin`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      body: 'username=only-test&password=pass-123456',
+      redirect: 'manual',
+    });
+    const c2 = l2.headers.get('set-cookie')!.split(';')[0]!;
+    const pro = `${base}/apps/demo-web/envs/PRO/clusters/default/namespaces/application/releases`;
+    expect(
+      (
+        await fetch(pro, {
+          method: 'POST',
+          headers: { cookie: c2, 'content-type': 'application/json' },
+          body: '{}',
+        })
+      ).status,
+    ).toBe(403);
+  });
+});

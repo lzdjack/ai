@@ -30,6 +30,8 @@ export type Fault = Static<typeof FaultInput> & { id: number; hits: number };
 function moduleOf(url: string): SimModule | null {
   if (url.startsWith('/__sim') || url === '/' || url.startsWith('/console')) return null;
   if (url.startsWith('/api/v4/') || /^\/[^/]+\/.+\.git\//.test(url)) return 'gitlab';
+  if (/^\/(signin|user|apps\/|envs\/)/.test(url)) return 'apollo';
+  if (url.startsWith('/oss/')) return 'craft';
   return null;
 }
 

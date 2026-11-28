@@ -110,6 +110,11 @@ export class Repo {
     return parseLog(this.git(['log', `--format=${LOG_FORMAT}`, `${from}..${to}`]) ?? '');
   }
 
+  /** 两个提交的合并基点；没有共同祖先时 null */
+  mergeBase(a: string, b: string): string | null {
+    return this.git(['merge-base', a, b], { allowFail: true })?.trim() || null;
+  }
+
   isAncestor(a: string, b: string): boolean {
     return this.git(['merge-base', '--is-ancestor', a, b], { allowFail: true }) !== null;
   }

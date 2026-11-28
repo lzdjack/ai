@@ -5,7 +5,8 @@
 // Plan v1: a linear list of auto / human nodes. A node may fan out per repo (06 §5.1a: all must
 // succeed by default, or allow partial continue) and may route its failure back to an earlier node
 // (`on_fail`, compiled from retry_routing.on_gate_fail). People can send the flow back to any node
-// (`rework`, the "all nodes" dropdown of §5.1a). Every retry appends attempt_no + 1 rows.
+// (`rework`, the "all nodes" dropdown of §5.1a). A hold_on_fail node that failed waits for a person
+// like an interruption does. Every retry appends attempt_no + 1 rows.
 
 import type { RepoSpec } from '@cloudcraft/core-protocol';
 
@@ -26,6 +27,12 @@ export interface PlanNode {
   join?: 'all_must_succeed' | 'allow_partial_continue';
   /** on failure go back to `rework_to` automatically while this node has fewer than `max_attempts` */
   on_fail?: { rework_to: string; max_attempts: number };
+  /**
+   * on failure (once on_fail no longer applies) the flow stays open and waits for a person to retry
+   * this node or send it back, instead of failing the flow: steps with outside effects (merge,
+   * publish, release) are retried by people, never automatically (06 §3.3).
+   */
+  hold_on_fail?: boolean;
 }
 
 /** A repo of the round as frozen into the plan: where to clone it and how to build it. No secrets. */
@@ -155,6 +162,7 @@ function nodeFinished(flow: FlowView, s: Extract<Signal, { type: 'node_finished'
 
   const back = node.on_fail && flow.plan.nodes.find((n) => n.key === node.on_fail!.rework_to);
   if (back && run.attemptNo < node.on_fail!.max_attempts) return rework(flow, back, cmds);
+  if (node.hold_on_fail) return cmds;
   return [...cmds, { type: 'finish_flow', status: 'failed' }];
 }
 

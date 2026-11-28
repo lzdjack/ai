@@ -26,7 +26,7 @@ import { PLAN_SCHEMA_VERSION, type Plan } from '../orchestrator/advance.ts';
 import { pgOrchestrator } from '../orchestrator/flow.ts';
 import { ApiFailure, pgCode } from './errors.ts';
 import { inWorkspace, permissionsOf } from './iam-service.ts';
-import { connectorOf, type ConnectorRegistry } from './plugins.ts';
+import { codeSourceOf, connectorOf, type ConnectorRegistry } from './plugins.ts';
 import { probeRepo } from './probe.ts';
 import { openSecret, sealSecret } from './secrets.ts';
 import { grants } from '@cloudcraft/core-protocol';
@@ -55,6 +55,7 @@ export function listPlugins(s: SourceSettings, category?: string) {
       icon: m.icon ?? null,
       config_schema: m.configSchema,
       auth_schema: m.authSchema,
+      personal_auth_schema: m.personalAuthSchema ?? null,
     }));
 }
 
@@ -97,7 +98,9 @@ export async function createConnector(
   return inWorkspace(db, userId, ws, async (tx, ctx) => {
     const sealed = sealSecret(s.masterKey, req.credential);
     const secret = await insertRow(tx, ctx, secretItems, {
-      credentialClass: 'shared_readonly',
+      // a release provider's credential (upload key) is a workspace secret, never a bot's
+      credentialClass:
+        plugin.manifest.category === 'release' ? 'workspace_secret' : 'shared_readonly',
       ciphertext: sealed.ciphertext,
       wrappedDek: sealed.wrappedDek,
       hint: sealed.hint,
@@ -107,6 +110,8 @@ export async function createConnector(
       pluginId: plugin.manifest.id,
       category: plugin.manifest.category,
       config: req.config,
+      credentialClass:
+        plugin.manifest.category === 'release' ? 'workspace_secret' : 'shared_readonly',
       secretId: secret.id,
     });
     return { ...connectorRow(c, sealed.hint), verify: check };
@@ -119,14 +124,15 @@ export function listConnectors(db: Db, userId: string, ws: string) {
       .select({ c: connectors, hint: secretItems.hint })
       .from(connectors)
       .leftJoin(secretItems, eq(secretItems.id, connectors.secretId))
-      .where(isNull(connectors.deletedAt))
+      // personal accounts (scope 'user') are listed under 我的账号, never here
+      .where(and(isNull(connectors.deletedAt), eq(connectors.scope, 'workspace')))
       .orderBy(asc(connectors.createdAt));
     return rows.map((r) => connectorRow(r.c, r.hint ?? ''));
   });
 }
 
-/** The connector with its credential opened, for one call in this request. */
-export async function opened(tx: Tx, s: SourceSettings, connectorId: string) {
+/** A shared connector with its credential opened, whatever kind of plugin it is. */
+export async function openConnector(tx: Tx, s: SourceSettings, connectorId: string) {
   const [row] = await tx
     .select({ c: connectors, secret: secretItems })
     .from(connectors)
@@ -136,13 +142,18 @@ export async function opened(tx: Tx, s: SourceSettings, connectorId: string) {
     throw new ApiFailure(404, 'connector.not_found');
   return {
     connector: row.c,
-    plugin: connectorOf(s.connectors, row.c.pluginId),
     config: row.c.config as Record<string, unknown>,
     credential: openSecret(s.masterKey, {
       ciphertext: row.secret.ciphertext,
       wrappedDek: row.secret.wrappedDek,
     }),
   };
+}
+
+/** The code-source connector with its credential opened, for one call in this request. */
+export async function opened(tx: Tx, s: SourceSettings, connectorId: string) {
+  const o = await openConnector(tx, s, connectorId);
+  return { ...o, plugin: codeSourceOf(s.connectors, o.connector.pluginId) };
 }
 
 export function remoteRepos(

@@ -99,8 +99,8 @@ function compilePlan(o: {
   };
 }
 
-const ticketNo = (seq: number | null) => (seq === null ? '' : `M-${seq}`);
-const summary = (t: typeof tickets.$inferSelect) => ({
+export const ticketNo = (seq: number | null) => (seq === null ? '' : `M-${seq}`);
+export const ticketSummary = (t: typeof tickets.$inferSelect) => ({
   id: t.id,
   no: ticketNo(t.seqNo),
   title: t.title,
@@ -128,7 +128,7 @@ async function startRound(
     project: typeof projects.$inferSelect;
     repoSpecs: Plan['repos'];
     roundNo: number;
-    cause: 'new' | 'code_rejected';
+    cause: 'new' | 'code_rejected' | 'mr_rejected' | 'test_rejected';
     review?: Material['review'];
     /** later rounds: the branch the earlier one pushed (it may carry a -2 suffix) */
     branch?: string;
@@ -219,9 +219,9 @@ export function createTicket(
       op: 'upsert',
       rev: ticket.rev,
       projectId,
-      row: summary(ticket),
+      row: ticketSummary(ticket),
     });
-    return { ...summary(ticket), flow_id: flowId };
+    return { ...ticketSummary(ticket), flow_id: flowId };
   });
 }
 
@@ -296,7 +296,7 @@ export function listTickets(db: Db, userId: string, ws: string) {
     );
     return {
       items: rows.map((r) => ({
-        ...summary(r.t),
+        ...ticketSummary(r.t),
         reporter_name: r.reporter ?? null,
         help_reason: r.t.status === 'needs_help' ? (r.reason ?? null) : null,
         is_assignee: mine.has(r.t.id),
@@ -451,41 +451,76 @@ export function reviewTicket(
           outcome: 'done',
         });
     }
-    let fresh: typeof tickets.$inferSelect;
-    if (approve) fresh = await updateRow(tx, ctx, tickets, t.id, { status: 'approved' } as never);
-    else {
-      const [project] = await tx.select().from(projects).where(eq(projects.id, t.projectId));
-      const repoSpecs = await projectRepoSpecs(tx, t.projectId);
-      if (!repoSpecs.length) throw new ApiFailure(409, 'project.no_repos');
-      fresh = await updateRow(tx, ctx, tickets, t.id, {
-        status: 'fixing',
-        currentRound: t.currentRound + 1,
-      } as never);
-      await startRound(tx, ctx, {
-        ticket: fresh,
-        project: project!,
-        repoSpecs,
-        roundNo: t.currentRound + 1,
+    if (!approve) {
+      await restartRound(tx, ctx, t, {
         cause: 'code_rejected',
-        branch: (round.deliveryPayload as DeliveryCard | null)?.repos[0]?.branch || undefined,
-        review: {
-          round_no: round.roundNo,
-          comment,
-          category: req.reject_category ?? null,
-          location: req.location ?? null,
-        },
+        comment,
+        roundId: round.id,
+        category: req.reject_category ?? null,
+        location: req.location ?? null,
       });
+      return null;
     }
+    const fresh = await updateRow(tx, ctx, tickets, t.id, { status: 'approved' } as never);
     await publish(tx, ctx, {
       entity: 'ticket',
       entityId: fresh.id,
       op: 'upsert',
       rev: fresh.rev,
       projectId: fresh.projectId,
-      row: summary(fresh),
+      row: ticketSummary(fresh),
     });
     return null;
   }).then(() => ticketDetail(db, userId, ws, id));
+}
+
+/**
+ * 打回重修 (06 §3.1): the next round starts at once on the branch the sent-back round delivered, with
+ * the comment handed to the bot — after a code review, an MR review or a retest. Publishes the ticket.
+ */
+export async function restartRound(
+  tx: Tx,
+  ctx: ActorCtx,
+  t: typeof tickets.$inferSelect,
+  o: {
+    cause: 'code_rejected' | 'mr_rejected' | 'test_rejected';
+    comment: string;
+    roundId: string;
+    category?: string | null;
+    location?: ReviewRequest['location'] | null;
+  },
+) {
+  const [round] = await tx.select().from(rounds).where(eq(rounds.id, o.roundId));
+  const [project] = await tx.select().from(projects).where(eq(projects.id, t.projectId));
+  const repoSpecs = await projectRepoSpecs(tx, t.projectId);
+  if (!repoSpecs.length) throw new ApiFailure(409, 'project.no_repos');
+  const fresh = await updateRow(tx, ctx, tickets, t.id, {
+    status: 'fixing',
+    currentRound: t.currentRound + 1,
+  } as never);
+  await startRound(tx, ctx, {
+    ticket: fresh,
+    project: project!,
+    repoSpecs,
+    roundNo: t.currentRound + 1,
+    cause: o.cause,
+    branch: (round?.deliveryPayload as DeliveryCard | null)?.repos[0]?.branch || undefined,
+    review: {
+      round_no: round?.roundNo ?? t.currentRound,
+      comment: o.comment,
+      category: o.category ?? (o.cause === 'code_rejected' ? null : o.cause),
+      location: o.location ?? null,
+    },
+  });
+  await publish(tx, ctx, {
+    entity: 'ticket',
+    entityId: fresh.id,
+    op: 'upsert',
+    rev: fresh.rev,
+    projectId: fresh.projectId,
+    row: ticketSummary(fresh),
+  });
+  return fresh;
 }
 
 // ---------- after the executor wrote back ----------
@@ -525,7 +560,7 @@ async function needsHelp(tx: Tx, ctx: ActorCtx, round: typeof rounds.$inferSelec
     op: 'upsert',
     rev: t.rev,
     projectId: t.projectId,
-    row: summary(t),
+    row: ticketSummary(t),
   });
   for (const a of await tx.select().from(ticketAssignees).where(eq(ticketAssignees.ticketId, t.id)))
     await notify(tx, ctx, a.userId, {
@@ -791,7 +826,7 @@ async function recordDelivery(
     op: 'upsert',
     rev: t.rev,
     projectId: t.projectId,
-    row: summary(t),
+    row: ticketSummary(t),
   });
   for (const a of await tx.select().from(ticketAssignees).where(eq(ticketAssignees.ticketId, t.id)))
     await notify(tx, ctx, a.userId, {

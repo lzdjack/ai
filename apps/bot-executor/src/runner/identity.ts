@@ -1,5 +1,5 @@
 // The executor's identity on this host (docs/06 §2.3, §2.10): a long-term secret it signs in with
-// and the bot_exec X25519 key pair. Both are generated here; the server only ever gets the secret's
+// and its X25519 key pair (bot_exec, or release_exec for the release executor). Both are generated here; the server only ever gets the secret's
 // hash at enrollment and the public key. Files are readable by this system user only.
 import crypto from 'node:crypto';
 import fs from 'node:fs';
@@ -17,7 +17,10 @@ export async function loadOrEnroll(o: {
   server: string;
   transport: RunnerTransport;
   enrollToken?: string;
+  /** which key domain this process holds (06 §2.10): the Bot executor or the release executor */
+  keyRole?: 'bot_exec' | 'release_exec';
 }): Promise<RunnerCredentials & { enrolled: boolean }> {
+  const role = o.keyRole ?? 'bot_exec';
   const credFile = path.join(o.dir, 'credentials.json');
   if (fs.existsSync(credFile)) {
     const c = JSON.parse(fs.readFileSync(credFile, 'utf8')) as Stored;
@@ -27,13 +30,13 @@ export async function loadOrEnroll(o: {
 
   fs.mkdirSync(o.dir, { recursive: true, mode: 0o700 });
   const { publicKey, privateKey } = crypto.generateKeyPairSync('x25519');
-  const keyFile = path.join(o.dir, 'bot_exec.key');
+  const keyFile = path.join(o.dir, `${role}.key`);
   fs.rmSync(keyFile, { force: true });
   fs.writeFileSync(keyFile, privateKey.export({ type: 'pkcs8', format: 'pem' }), { mode: 0o400 });
   const secret = RUNNER_SECRET_PREFIX + crypto.randomBytes(32).toString('base64url');
   const r = await o.transport.registerRunner({
     enroll_token: o.enrollToken,
-    bot_exec_public_key: publicKey.export({ type: 'spki', format: 'der' }).toString('base64'),
+    [`${role}_public_key`]: publicKey.export({ type: 'spki', format: 'der' }).toString('base64'),
     secret_sha256: crypto.createHash('sha256').update(secret).digest('hex'),
   });
   const stored: Stored = {

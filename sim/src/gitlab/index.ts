@@ -398,6 +398,21 @@ export class GitlabSim {
       };
     });
 
+    // 依据：Repositories API「Merge Base」——GET .../repository/merge_base?refs[]=a&refs[]=b
+    api('GET', '/projects/:id/repository/merge_base', (req) => {
+      this.auth(req);
+      const p = this.project(req.params.id);
+      const repo = this.repo(p);
+      const raw = (req.query as Record<string, string | string[] | undefined>)['refs[]'];
+      const refs = (Array.isArray(raw) ? raw : raw ? [raw] : []).map((r) => repo.resolve(r));
+      if (refs.length !== 2 || refs.some((r) => !r))
+        throw new HttpError(400, { message: 'Provide exactly two refs' });
+      const sha = repo.mergeBase(refs[0]!, refs[1]!);
+      const c = sha ? repo.commit(sha) : null;
+      if (!c) throw notFound('Merge Base');
+      return this.commitDto(c, p, base(req));
+    });
+
     // 依据：Repository files API「Get raw file」
     api('GET', '/projects/:id/repository/files/:file/raw', (req, reply) => {
       this.auth(req);
@@ -555,6 +570,25 @@ export class GitlabSim {
       this.mrEvent(m, 'merge', user, base(req));
       this.pushEvent(p, m.target_branch, tgt, sha, user, base(req));
       return this.mrDto(m, base(req));
+    });
+
+    // 依据：Protected branches API「Protect repository branches」——只做按名字保护
+    api('POST', '/projects/:id/protected_branches', (req, reply) => {
+      const user = this.auth(req);
+      if (user.role !== 'maintainer') throw forbidden();
+      const p = this.project(req.params.id);
+      const { name } = { ...req.query, ...req.body } as { name?: string };
+      if (!name) throw missing('name');
+      if (p.protected_branches.includes(name))
+        throw new HttpError(409, { message: 'Protected branch already exists' });
+      p.protected_branches.push(name);
+      this.store.save();
+      reply.code(201);
+      return {
+        name,
+        push_access_levels: [{ access_level: 40 }],
+        merge_access_levels: [{ access_level: 40 }],
+      };
     });
 
     // 依据：Project webhooks API

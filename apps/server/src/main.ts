@@ -21,6 +21,7 @@ if (role === 'app' || role === 'all') {
     accounts: accountSettings(c),
     sources,
     evidenceDir: path.join(c.CC_DATA_DIR, 'evidence'),
+    artifactDir: path.join(c.CC_DATA_DIR, 'artifacts'),
   });
   await app.listen({ host: '127.0.0.1', port: c.CC_APP_PORT });
 }

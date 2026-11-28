@@ -113,8 +113,21 @@ export const connectors = workspaceTable(
     status: text().notNull().default('enabled'),
     healthState: text().notNull().default('ok'),
     secretId: uuid(),
+    /**
+     * A person's own account (scope 'user', personal_exec) hangs under the shared connector it is an
+     * account on: merging with your GitLab token, releasing with your Apollo account (06 §2.3 Plane B).
+     */
+    parentConnectorId: uuid(),
   },
   (t) => [
+    foreignKey({
+      name: 'connectors_parent_fk',
+      columns: [t.workspaceId, t.parentConnectorId],
+      foreignColumns: [t.workspaceId, t.id],
+    }),
+    uniqueIndex('connectors_personal_key')
+      .on(t.parentConnectorId, t.ownerUserId)
+      .where(sql`parent_connector_id is not null and deleted_at is null`),
     foreignKey({
       name: 'connectors_secret_fk',
       columns: [t.workspaceId, t.secretId],
@@ -166,6 +179,8 @@ export const repoTargets = projectTable(
   {
     repoId: uuid().notNull(),
     packageDir: text().notNull().default('.'),
+    /** the environment branch merged into before releasing to test (06 §2.4); null: single trunk */
+    testBranch: text(),
     autoDetectedMeta: jsonb(),
     manualOverrides: jsonb().notNull().default({}),
     probeState: text().notNull().default('pending'),

@@ -94,6 +94,16 @@ drop trigger if exists cc_append_only on flow_instances;
 drop trigger if exists cc_audit_probe on flow_instances;
 create trigger cc_audit_probe after insert or update or delete on flow_instances for each row execute function cc_audit_probe('workspace_id');
 
+-- merge_requests (project, audit)
+alter table merge_requests enable row level security;
+alter table merge_requests force row level security;
+drop policy if exists cc_tenant on merge_requests;
+create policy cc_tenant on merge_requests using (workspace_id = nullif(current_setting('app.current_workspace_id', true), '')::uuid and project_id = any(coalesce(nullif(current_setting('app.visible_project_ids', true), '')::uuid[], '{}'))) with check (workspace_id = nullif(current_setting('app.current_workspace_id', true), '')::uuid and project_id = any(coalesce(nullif(current_setting('app.visible_project_ids', true), '')::uuid[], '{}')));
+drop policy if exists cc_definer on merge_requests;
+drop trigger if exists cc_append_only on merge_requests;
+drop trigger if exists cc_audit_probe on merge_requests;
+create trigger cc_audit_probe after insert or update or delete on merge_requests for each row execute function cc_audit_probe('workspace_id');
+
 -- node_runs (project, audit)
 alter table node_runs enable row level security;
 alter table node_runs force row level security;
@@ -134,6 +144,36 @@ create policy cc_definer on projects to cc_migrator using (true) with check (tru
 drop trigger if exists cc_append_only on projects;
 drop trigger if exists cc_audit_probe on projects;
 create trigger cc_audit_probe after insert or update or delete on projects for each row execute function cc_audit_probe('workspace_id');
+
+-- release_configs (project, audit)
+alter table release_configs enable row level security;
+alter table release_configs force row level security;
+drop policy if exists cc_tenant on release_configs;
+create policy cc_tenant on release_configs using (workspace_id = nullif(current_setting('app.current_workspace_id', true), '')::uuid and project_id = any(coalesce(nullif(current_setting('app.visible_project_ids', true), '')::uuid[], '{}'))) with check (workspace_id = nullif(current_setting('app.current_workspace_id', true), '')::uuid and project_id = any(coalesce(nullif(current_setting('app.visible_project_ids', true), '')::uuid[], '{}')));
+drop policy if exists cc_definer on release_configs;
+drop trigger if exists cc_append_only on release_configs;
+drop trigger if exists cc_audit_probe on release_configs;
+create trigger cc_audit_probe after insert or update or delete on release_configs for each row execute function cc_audit_probe('workspace_id');
+
+-- release_steps (project, audit)
+alter table release_steps enable row level security;
+alter table release_steps force row level security;
+drop policy if exists cc_tenant on release_steps;
+create policy cc_tenant on release_steps using (workspace_id = nullif(current_setting('app.current_workspace_id', true), '')::uuid and project_id = any(coalesce(nullif(current_setting('app.visible_project_ids', true), '')::uuid[], '{}'))) with check (workspace_id = nullif(current_setting('app.current_workspace_id', true), '')::uuid and project_id = any(coalesce(nullif(current_setting('app.visible_project_ids', true), '')::uuid[], '{}')));
+drop policy if exists cc_definer on release_steps;
+drop trigger if exists cc_append_only on release_steps;
+drop trigger if exists cc_audit_probe on release_steps;
+create trigger cc_audit_probe after insert or update or delete on release_steps for each row execute function cc_audit_probe('workspace_id');
+
+-- release_tasks (project, audit)
+alter table release_tasks enable row level security;
+alter table release_tasks force row level security;
+drop policy if exists cc_tenant on release_tasks;
+create policy cc_tenant on release_tasks using (workspace_id = nullif(current_setting('app.current_workspace_id', true), '')::uuid and project_id = any(coalesce(nullif(current_setting('app.visible_project_ids', true), '')::uuid[], '{}'))) with check (workspace_id = nullif(current_setting('app.current_workspace_id', true), '')::uuid and project_id = any(coalesce(nullif(current_setting('app.visible_project_ids', true), '')::uuid[], '{}')));
+drop policy if exists cc_definer on release_tasks;
+drop trigger if exists cc_append_only on release_tasks;
+drop trigger if exists cc_audit_probe on release_tasks;
+create trigger cc_audit_probe after insert or update or delete on release_tasks for each row execute function cc_audit_probe('workspace_id');
 
 -- repo_targets (project, audit)
 alter table repo_targets enable row level security;
@@ -246,6 +286,16 @@ drop policy if exists cc_definer on secret_items;
 drop trigger if exists cc_append_only on secret_items;
 drop trigger if exists cc_audit_probe on secret_items;
 create trigger cc_audit_probe after insert or update or delete on secret_items for each row execute function cc_audit_probe('workspace_id');
+
+-- test_records (project, audit)
+alter table test_records enable row level security;
+alter table test_records force row level security;
+drop policy if exists cc_tenant on test_records;
+create policy cc_tenant on test_records using (workspace_id = nullif(current_setting('app.current_workspace_id', true), '')::uuid and project_id = any(coalesce(nullif(current_setting('app.visible_project_ids', true), '')::uuid[], '{}'))) with check (workspace_id = nullif(current_setting('app.current_workspace_id', true), '')::uuid and project_id = any(coalesce(nullif(current_setting('app.visible_project_ids', true), '')::uuid[], '{}')));
+drop policy if exists cc_definer on test_records;
+drop trigger if exists cc_append_only on test_records;
+drop trigger if exists cc_audit_probe on test_records;
+create trigger cc_audit_probe after insert or update or delete on test_records for each row execute function cc_audit_probe('workspace_id');
 
 -- ticket_assignees (project, audit)
 alter table ticket_assignees enable row level security;

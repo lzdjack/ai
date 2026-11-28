@@ -10,6 +10,10 @@ import {
   type RegisterRunnerRequest,
   type RegisterRunnerResponse,
   type UploadEvidenceRequest,
+  type UploadArtifactRequest,
+  type FetchArtifactRequest,
+  type HeldLease,
+  type CheckAncestryRequest,
 } from '@cloudcraft/core-protocol';
 
 /** A refused call; `code` is the server's ApiError code (e.g. runner.lease_lost). */
@@ -38,7 +42,7 @@ export function httpTransport(server: string) {
         ...(creds ? { authorization: `Runner ${creds.runnerId}:${creds.secret}` } : {}),
       },
       body: JSON.stringify(body),
-      signal: AbortSignal.timeout(30_000),
+      signal: AbortSignal.timeout(60_000),
     });
     const json = (await r.json().catch(() => ({}))) as { code?: string; message?: string };
     if (!r.ok)
@@ -56,6 +60,14 @@ export function httpTransport(server: string) {
       call<CredentialEnvelope>(RUNNER_PATHS.fetchCredential, req, creds),
     uploadEvidence: (creds: RunnerCredentials, req: UploadEvidenceRequest) =>
       call<{ id: string }>(RUNNER_PATHS.uploadEvidence, req, creds),
+    uploadArtifact: (creds: RunnerCredentials, req: UploadArtifactRequest) =>
+      call<{ files: number }>(RUNNER_PATHS.uploadArtifact, req, creds),
+    fetchArtifact: (creds: RunnerCredentials, req: FetchArtifactRequest) =>
+      call<{ data_base64: string }>(RUNNER_PATHS.fetchArtifact, req, creds),
+    fetchStepSecrets: (creds: RunnerCredentials, req: HeldLease) =>
+      call<CredentialEnvelope>(RUNNER_PATHS.fetchStepSecrets, req, creds),
+    checkAncestry: (creds: RunnerCredentials, req: CheckAncestryRequest) =>
+      call<{ is_ancestor: boolean }>(RUNNER_PATHS.checkAncestry, req, creds),
   };
 }
 

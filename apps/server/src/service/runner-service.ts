@@ -32,13 +32,18 @@ import {
   secretItems,
 } from '../db/schema/index.ts';
 import { ApiFailure } from './errors.ts';
-import { connectorOf } from './plugins.ts';
+import { codeSourceOf } from './plugins.ts';
 import { openSecret, sealToRunner } from './secrets.ts';
 import type { SourceSettings } from './source-service.ts';
 import { roundStepFinished } from './ticket-service.ts';
+import {
+  deliveryStepFinished,
+  isExecutorDeliveryStep,
+  prepareDeliveryStep,
+} from './release-step-service.ts';
 import { insertRow, updateRow } from '../db/write.ts';
 import type { Plan } from '../orchestrator/advance.ts';
-import { BOT_STEP, pgOrchestrator } from '../orchestrator/flow.ts';
+import { BOT_STEP, RELEASE_STEP, pgOrchestrator } from '../orchestrator/flow.ts';
 import { completeWork } from '../orchestrator/queue.ts';
 import {
   claimForRunner,
@@ -84,6 +89,12 @@ export async function registerRunner(
   req: RegisterRunnerRequest,
 ): Promise<RegisterRunnerResponse> {
   return withEnrollTx(db, req.enroll_token, async (tx, ctx, runnerId) => {
+    // a runner holds exactly one key domain (06 §2.10): bot_exec, or release_exec for the release role
+    const runner = await getRunner(tx, runnerId);
+    const releaseRole = runner.runnerRoles.includes('release');
+    const publicKey = releaseRole ? req.release_exec_public_key : req.bot_exec_public_key;
+    if (!publicKey || (req.bot_exec_public_key && req.release_exec_public_key))
+      throw new ApiFailure(400, 'runner.key_role_mismatch');
     await updateRow(tx, ctx, runners, runnerId, {
       status: 'online',
       enrollTokenHash: null,
@@ -93,9 +104,9 @@ export async function registerRunner(
     });
     await insertRow(tx, ctx, runnerKeys, {
       runnerId,
-      keyRole: 'bot_exec',
-      publicKey: req.bot_exec_public_key,
-      keyFingerprint: sha256hex(Buffer.from(req.bot_exec_public_key, 'base64')),
+      keyRole: releaseRole ? 'release_exec' : 'bot_exec',
+      publicKey,
+      keyFingerprint: sha256hex(Buffer.from(publicKey, 'base64')),
     });
     return {
       runner_id: runnerId,
@@ -106,8 +117,8 @@ export async function registerRunner(
   });
 }
 
-/** Work kinds a runner role takes. Release executor work comes with P6. */
-const KIND_FOR_ROLE: Record<string, string> = { bot: BOT_STEP };
+/** Work kinds a runner role takes: sandbox steps (incl. craft build) for bots, release steps for releasers. */
+const KIND_FOR_ROLE: Record<string, string> = { bot: BOT_STEP, release: RELEASE_STEP };
 
 export async function heartbeatAndPoll(
   db: Db,
@@ -147,7 +158,10 @@ async function claimSteps(
       seconds: s.leaseSeconds,
       flowId,
     });
-    for (const item of items) out.push(await assignment(tx, ctx, runner.id, item));
+    for (const item of items) {
+      const a = await assignment(tx, ctx, runner.id, item);
+      if (a) out.push(a);
+    }
   }
   return out;
 }
@@ -157,11 +171,18 @@ async function assignment(
   ctx: ActorCtx,
   runnerId: string,
   item: Awaited<ReturnType<typeof claimForRunner>>[number],
-): Promise<StepAssignment> {
+): Promise<StepAssignment | null> {
   const p = item.payload as { node_run_id: string };
   const { run, flow } = await getNodeRunWithFlow(tx, p.node_run_id);
   const plan = flow.plan as Plan;
   const node = plan.nodes.find((n) => n.key === run.nodeKey)!;
+  // delivery steps get what they need decided here (and may wait for the serial lock)
+  let config = node.config ?? {};
+  if (flow.kind === 'delivery' && isExecutorDeliveryStep(node)) {
+    const extra = await prepareDeliveryStep(tx, ctx, item.id, run, flow, node);
+    if (!extra) return null;
+    config = { ...config, ...extra };
+  }
   await updateRow(tx, ctx, nodeRuns, run.id, { executorId: runnerId });
   return {
     work_item_id: item.id,
@@ -174,7 +195,7 @@ async function assignment(
     node_kind: node.node_kind ?? run.nodeKind,
     attempt_no: run.attemptNo,
     repo_id: run.repoId,
-    config: node.config ?? {},
+    config,
     repos: plan.repos ?? [],
   };
 }
@@ -211,8 +232,17 @@ export async function completeRoundStep(
       nodeRunId: p.node_run_id,
       outcome: req.outcome,
     });
-    // a round's ticket follows its flow (06 §3.1, §3.2)
+    // a round's ticket follows its flow (06 §3.1, §3.2); a delivery step records what it did
     await roundStepFinished(tx, ctx, p.flow_instance_id, p.node_run_id, req.outcome);
+    await deliveryStepFinished(
+      tx,
+      ctx,
+      p.flow_instance_id,
+      p.node_run_id,
+      req.outcome,
+      req.output,
+      req.error,
+    );
     if (!req.take_next) return null;
     const runner = await getRunner(tx, auth.runnerId);
     if (runner.drainMode) return null;
@@ -261,7 +291,7 @@ export async function fetchCredential(
         ),
       );
     if (!key) throw new ApiFailure(409, 'runner.no_key');
-    const plugin = connectorOf(sources.connectors, row.connector.pluginId);
+    const plugin = codeSourceOf(sources.connectors, row.connector.pluginId);
     const h = plugin.gitAuth(
       openSecret(sources.masterKey, {
         ciphertext: row.secret.ciphertext,

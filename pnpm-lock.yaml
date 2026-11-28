@@ -230,6 +230,12 @@ importers:
       '@cloudcraft/browser-sandbox':
         specifier: workspace:*
         version: link:../../packages/browser-sandbox
+      '@cloudcraft/connector-gitlab':
+        specifier: workspace:*
+        version: link:../../plugins/connector-gitlab
+      '@cloudcraft/connector-tita-apollo':
+        specifier: workspace:*
+        version: link:../../plugins/connector-tita-apollo
       '@cloudcraft/core-protocol':
         specifier: workspace:*
         version: link:../../packages/core-protocol
@@ -288,6 +294,9 @@ importers:
       '@cloudcraft/connector-gitlab':
         specifier: workspace:*
         version: link:../../plugins/connector-gitlab
+      '@cloudcraft/connector-tita-apollo':
+        specifier: workspace:*
+        version: link:../../plugins/connector-tita-apollo
       '@cloudcraft/core-protocol':
         specifier: workspace:*
         version: link:../../packages/core-protocol
@@ -414,7 +423,14 @@ importers:
 
   plugins/connector-tita: {}
 
-  plugins/connector-tita-apollo: {}
+  plugins/connector-tita-apollo:
+    dependencies:
+      '@cloudcraft/core-protocol':
+        specifier: workspace:*
+        version: link:../../packages/core-protocol
+      typebox:
+        specifier: 1.4.7
+        version: 1.4.7
 
   plugins/runtime-pi:
     dependencies:

@@ -19,12 +19,28 @@ export const RUN_NODE = 'run_node';
 /** work for the Bot executor, handed out over RunnerTransport (06 §2.12, §5.3a) */
 export const BOT_STEP = 'bot_step';
 
+/** work for the release executor: merges and craft publish / release / verify (06 §1.2, §7.1) */
+export const RELEASE_STEP = 'release_step';
+
 /** Node kinds that run in the code sandbox of a Bot executor (06 §5.1). */
 const BOT_NODE_KINDS = new Set(['host_prepare', 'ai_agent', 'deterministic_verify']);
+/** craft slots the release executor runs; build runs in a build sandbox, notify in cc-sys */
+const RELEASE_SLOTS = new Set(['publish', 'release', 'verify']);
 
-/** Who runs an auto node: the Bot executor for sandbox nodes, cc-sys workers for the rest. */
-export const workKindFor = (node: PlanNode | undefined) =>
-  node?.node_kind && BOT_NODE_KINDS.has(node.node_kind) ? BOT_STEP : RUN_NODE;
+/**
+ * Who runs an auto node: the Bot executor for sandbox nodes and craft build (no credentials, no
+ * network), the release executor for merges and the publish / release / verify slots (credentials,
+ * never repository code), cc-sys workers for the rest (opening MRs, notifications).
+ */
+export function workKindFor(node: PlanNode | undefined) {
+  const kind = node?.node_kind;
+  const c = node?.config ?? {};
+  if (kind && BOT_NODE_KINDS.has(kind)) return BOT_STEP;
+  if (kind === 'release_deploy' && c.slot === 'build') return BOT_STEP;
+  if (kind === 'release_deploy' && RELEASE_SLOTS.has(String(c.slot))) return RELEASE_STEP;
+  if (kind === 'cr_merge' && c.step === 'merge') return RELEASE_STEP;
+  return RUN_NODE;
+}
 
 /** The swappable seam in front of the orchestration engine (06 §3.6 item 8). */
 export interface OrchestratorPort {

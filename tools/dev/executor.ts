@@ -1,4 +1,5 @@
-// pnpm dev:executor <邮箱> —— 给本机正在跑的 cc-app 起一个执行器，登记在这个账号的第一个空间里。
+// pnpm dev:executor <邮箱> —— 给本机正在跑的 cc-app 起执行器，登记在这个账号的第一个空间里：
+// Bot 执行器（修题、试构建、发布打包）和发布执行器（合 MR、上传、发布、核对，用操作人自己的账号）两个进程。
 // 页面上走开工向导时，第 4 步「体检并开工」的试构建要有在线执行器才会被领走；执行器只连 cc-app，
 // 克隆凭据走信封（06 §2.10）。Ctrl+C 停止。
 // 「设置 → 执行器」页面做出来之前，登记令牌由这个脚本直接签发（和 runner 演练同一个函数）。
@@ -41,13 +42,29 @@ if (!row) {
 }
 
 const db = createDb(databaseUrls(c).app, { max: 1 });
-const { token } = await withWorkspaceTx(db, { userId: row.user, workspaceId: row.ws }, (tx, ctx) =>
-  issueEnrollToken(tx, ctx, { name: `dev:executor ${os.hostname()}` }),
-);
+const enroll = (name: string, roles?: string[]) =>
+  withWorkspaceTx(db, { userId: row.user, workspaceId: row.ws }, (tx, ctx) =>
+    issueEnrollToken(tx, ctx, { name, ...(roles ? { roles } : {}) }),
+  );
+const { token } = await enroll(`dev:executor ${os.hostname()}`);
+const { token: releaseToken } = await enroll(`dev:release ${os.hostname()}`, ['release']);
 await db.close();
 
 const runnerDir = fs.mkdtempSync(path.join(os.tmpdir(), 'cc-runner-'));
+const releaseDir = fs.mkdtempSync(path.join(os.tmpdir(), 'cc-release-runner-'));
 console.log(`· 执行器登记在「${row.name}」，工作目录 ${runnerDir}`);
+const rel = spawn(process.execPath, ['--import', 'tsx', 'apps/bot-executor/src/release/main.ts'], {
+  cwd: ROOT,
+  stdio: 'inherit',
+  env: {
+    PATH: process.env.PATH,
+    HOME: process.env.HOME,
+    CC_RUNNER_SERVER: `http://127.0.0.1:${c.CC_APP_PORT}`,
+    CC_DATA_DIR: c.CC_DATA_DIR,
+    CC_RUNNER_DIR: releaseDir,
+    CC_RUNNER_ENROLL_TOKEN: releaseToken,
+  },
+});
 const p = spawn(process.execPath, ['--import', 'tsx', 'apps/bot-executor/src/main.ts'], {
   cwd: ROOT,
   stdio: 'inherit',
@@ -65,10 +82,15 @@ const p = spawn(process.execPath, ['--import', 'tsx', 'apps/bot-executor/src/mai
     ),
   },
 });
-const stop = () => p.kill('SIGTERM');
+const stop = () => {
+  p.kill('SIGTERM');
+  rel.kill('SIGTERM');
+};
 process.on('SIGINT', stop);
 process.on('SIGTERM', stop);
 p.on('exit', (code) => {
+  rel.kill('SIGTERM');
   fs.rmSync(runnerDir, { recursive: true, force: true });
+  fs.rmSync(releaseDir, { recursive: true, force: true });
   process.exit(code ?? 0);
 });

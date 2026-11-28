@@ -33,11 +33,13 @@ export interface DemoEnv {
 /** 返回测试环境地址；没部署过（或 force）才构建部署 */
 export async function deployDemoEnv(c: Config, opts: { force?: boolean } = {}): Promise<DemoEnv> {
   return withSim(c, async (base) => {
-    const state = (await (await fetch(`${base}/__sim/envs`)).json()) as {
-      test: { url: string | null; deployed: boolean };
-    };
+    const state = (await (await fetch(`${base}/__sim/envs`)).json()) as Record<
+      'test' | 'prod',
+      { url: string | null; deployed: boolean }
+    >;
     if (!state.test.url) throw new Error('模拟服务没有起测试环境站点');
-    if (state.test.deployed && !opts.force) return { url: state.test.url, deployed: 'already' };
+    if (state.test.deployed && state.prod.deployed && !opts.force)
+      return { url: state.test.url, deployed: 'already' };
 
     const work = fs.mkdtempSync(path.join(os.tmpdir(), 'cc-env-'));
     try {
@@ -63,12 +65,15 @@ export async function deployDemoEnv(c: Config, opts: { force?: boolean } = {}): 
         '-e',
         "import { seedApprovals } from './mock/data.ts'; process.stdout.write(JSON.stringify(seedApprovals()))",
       ]);
-      const res = await fetch(`${base}/__sim/envs/test`, {
-        method: 'PUT',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ files: filesOf(path.join(web, 'dist')), api_seed: JSON.parse(seed.stdout) }),
-      });
-      if (!res.ok) throw new Error(`部署失败：${res.status} ${await res.text()}`);
+      // 测试和正式两个环境先放同一个基线版本；P6 的发布流程之后按模拟 Apollo 的发布覆盖
+      for (const name of ['test', 'prod']) {
+        const res = await fetch(`${base}/__sim/envs/${name}`, {
+          method: 'PUT',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ files: filesOf(path.join(web, 'dist')), api_seed: JSON.parse(seed.stdout) }),
+        });
+        if (!res.ok) throw new Error(`部署失败：${res.status} ${await res.text()}`);
+      }
       return { url: state.test.url, deployed: 'now' };
     } finally {
       fs.rmSync(work, { recursive: true, force: true });

@@ -89,4 +89,5 @@ console.log(`
 SMTP      127.0.0.1:${c.CC_SMTP_PORT}
 模拟服务  pnpm dev 后 http://127.0.0.1:${c.CC_SIM_PORT}/
 测试环境  pnpm dev 后 http://127.0.0.1:${c.CC_SIM_ENV_PORT}/（demo-web）
+正式环境  pnpm dev 后 http://127.0.0.1:${c.CC_SIM_PROD_PORT}/
 数据目录  ${dir}`);
