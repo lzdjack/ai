@@ -294,18 +294,61 @@ export function listTickets(db: Db, userId: string, ws: string) {
           .where(eq(ticketAssignees.userId, userId))
       ).map((x) => x.id),
     );
+    const waiting = await waitingOnMe(tx, userId, mine);
     return {
       items: rows.map((r) => ({
         ...ticketSummary(r.t),
         reporter_name: r.reporter ?? null,
         help_reason: r.t.status === 'needs_help' ? (r.reason ?? null) : null,
         is_assignee: mine.has(r.t.id),
+        waiting_on_me: waiting.get(r.t.id) ?? null,
         updated_at: r.t.updatedAt.toISOString(),
       })),
       next_cursor: null,
       has_more: false,
     };
   });
+}
+
+/**
+ * Delivery steps waiting on the caller (05 steps 6, 9, 10): a version to retest, or an open MR whose
+ * review is due and whose reviewer policy names them (06 §2.4; "anyone" is not listed for everyone).
+ */
+async function waitingOnMe(tx: Tx, userId: string, mine: Set<string>) {
+  const out = new Map<string, 'retest' | 'merge_review'>();
+  const mrs = await tx.execute<{
+    ticket_id: string;
+    created_by: string | null;
+    policy: { type: string; users?: string[] };
+  }>(sql`
+    select m.ticket_id, t.created_by,
+           case when m.direction = 'to_main' then rc.main_branch_reviewers
+                else rc.test_branch_reviewers end as policy
+      from merge_requests m
+      join tickets t on t.id = m.ticket_id
+      join node_runs nr on nr.flow_instance_id = m.flow_instance_id
+       and nr.status = 'waiting_human' and nr.node_key like '%\_mr\_review'
+      join repo_targets rt on rt.repo_id = m.repo_id and rt.project_id = m.project_id
+       and rt.deleted_at is null
+      join release_configs rc on rc.repo_target_id = rt.id and rc.deleted_at is null
+     where m.state = 'open' and m.deleted_at is null`);
+  for (const r of mrs.rows) {
+    const p = r.policy;
+    if (
+      (p.type === 'users' && (p.users ?? []).includes(userId)) ||
+      (p.type === 'assignee' && mine.has(r.ticket_id)) ||
+      (p.type === 'reporter' && r.created_by === userId)
+    )
+      out.set(r.ticket_id, 'merge_review');
+  }
+  const tests = await tx.execute<{ ticket_id: string }>(sql`
+    select rt.ticket_id
+      from test_records tr
+      join release_tasks rt on rt.id = tr.release_task_id
+     where tr.tester_id = ${userId}::uuid and tr.result = 'pending'
+       and rt.status = 'effective_pending_retest' and tr.deleted_at is null`);
+  for (const r of tests.rows) out.set(r.ticket_id, 'retest');
+  return out;
 }
 
 export function ticketDetail(

@@ -64,6 +64,12 @@ export const SavePersonalAccountRequest = Type.Object({
 });
 export type SavePersonalAccountRequest = Static<typeof SavePersonalAccountRequest>;
 
+/** Who may do a delivery action (06 §2.4 unified policy); names of `users` are in DeliveryView.people. */
+export interface ActorPolicyView {
+  type: 'assignee' | 'anyone' | 'users' | 'reporter';
+  users?: string[];
+}
+
 export interface PersonalAccountRow {
   connector_id: string;
   connector_name: string;
@@ -102,7 +108,9 @@ export interface MergeRequestView {
   merge_sha: string | null;
   state: MrState;
   reviewer_id: string | null;
+  merged_by: string | null;
   comment: string | null;
+  created_at: string;
 }
 
 export interface ReleaseStepView {
@@ -112,6 +120,8 @@ export interface ReleaseStepView {
   exit_code: number | null;
   error: string | null;
   attempt: number;
+  /** the step's last log lines, credentials replaced */
+  log_tail: string | null;
   started_at: string;
   finished_at: string | null;
 }
@@ -163,4 +173,32 @@ export interface DeliveryView {
   };
   /** personal accounts the next action needs but the caller has not set up (connector ids) */
   missing_accounts: string[];
+  /**
+   * The project's environments with the version last made live there by a release of this
+   * workspace (computed from release_tasks; null when nothing was released yet).
+   */
+  environments: {
+    id: string;
+    env_code: string;
+    name: string;
+    tier: string;
+    entry_url: string;
+    live_version: string | null;
+  }[];
+  /** the release settings of the ticket's target; null when the project has none yet */
+  config: {
+    provider_connector_id: string;
+    /** the code source the MRs go through (the reviewer's own account merges) */
+    code_connector_id: string | null;
+    test_branch: string | null;
+    main_branch: string;
+    test_reviewers: ActorPolicyView;
+    main_reviewers: ActorPolicyView;
+    test_deployers: ActorPolicyView;
+    prod_deployers: ActorPolicyView;
+  } | null;
+  /** who retests: the flow's tester, or before it starts the default (the reporter) */
+  tester_id: string | null;
+  /** display names of everyone the view refers to */
+  people: Record<string, string>;
 }
