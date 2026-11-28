@@ -10,11 +10,13 @@ import {
   PaperclipIcon,
   Pill,
   PlayIcon,
+  ScrollArea,
   SparkleOutlineIcon,
   Tabs,
   UndoIcon,
   useT,
 } from '@cloudcraft/ui-kit';
+import { useEffect, useRef } from 'react';
 import type { DeliveryVM, EvidenceShotVM, FlowItemVM, TicketDetailVM } from './types.ts';
 
 function Shot(p: { shot: EvidenceShotVM; after: boolean }) {
@@ -22,13 +24,19 @@ function Shot(p: { shot: EvidenceShotVM; after: boolean }) {
   return (
     <div className="col g6 wb-shot-col">
       <div className={`shot wb-shot${p.after ? ' is-after' : ''}`}>
-        <img src={p.shot.image} alt="" />
+        {p.shot.image ? <img src={p.shot.image} alt="" /> : null}
         <span className={`wb-shot-tag${p.after ? ' is-ok' : ''}`}>
-          {t(p.after ? 'wb.delivery.after_tag' : 'wb.delivery.before_tag', { d: p.shot.duration })}
+          {p.shot.duration
+            ? t(p.after ? 'wb.delivery.after_tag' : 'wb.delivery.before_tag', {
+                d: p.shot.duration,
+              })
+            : t(p.after ? 'wb.delivery.after_still' : 'wb.delivery.before_still')}
         </span>
-        <span className="wb-shot-play">
-          <PlayIcon />
-        </span>
+        {p.shot.duration ? (
+          <span className="wb-shot-play">
+            <PlayIcon />
+          </span>
+        ) : null}
       </div>
       <span className="f11 t3">
         {t(p.after ? 'wb.delivery.after_caption' : 'wb.delivery.before_caption')} ·{' '}
@@ -97,7 +105,13 @@ function Delivery({ d }: { d: DeliveryVM }) {
   );
 }
 
-function Flow({ item }: { item: FlowItemVM }) {
+interface ReviewActions {
+  onApprove?: () => void;
+  onReject?: () => void;
+  busy?: boolean;
+}
+
+function Flow({ item, actions }: { item: FlowItemVM; actions: ReviewActions }) {
   const t = useT();
   if (item.kind === 'divider') return <div className="wb-divider">{item.text}</div>;
   if (item.kind === 'user')
@@ -135,11 +149,16 @@ function Flow({ item }: { item: FlowItemVM }) {
               </span>
             </span>
             <span className="grow" />
-            <Button variant="red">
+            <Button variant="red" onClick={actions.onReject} disabled={actions.busy}>
               <UndoIcon />
               {t('wb.review.reject')}
             </Button>
-            <Button variant="pri" style={{ padding: '0 20px' }}>
+            <Button
+              variant="pri"
+              style={{ padding: '0 20px' }}
+              onClick={actions.onApprove}
+              disabled={actions.busy}
+            >
               <CheckBoldIcon />
               {t('wb.review.approve', { sha: item.review.sha })}
             </Button>
@@ -152,13 +171,21 @@ function Flow({ item }: { item: FlowItemVM }) {
 
 export type TicketTab = 'chat' | 'code' | 'evidence' | 'log' | (string & {});
 
-export function TicketView(p: {
-  ticket: TicketDetailVM;
-  tab: TicketTab;
-  onTab: (t: TicketTab) => void;
-}) {
+export function TicketView(
+  p: {
+    ticket: TicketDetailVM;
+    tab: TicketTab;
+    onTab: (t: TicketTab) => void;
+  } & ReviewActions,
+) {
   const t = useT();
   const k = p.ticket;
+  // the newest round is at the bottom: open each ticket there
+  const end = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    // braces: scrollIntoView returns a promise in newer browsers, never hand it to React
+    void end.current?.scrollIntoView({ block: 'end' });
+  }, [k.id, k.flow.length]);
   return (
     <main className="glass panel col grow wb-main">
       <header className="wb-head">
@@ -190,11 +217,18 @@ export function TicketView(p: {
           ) : null}
         </div>
       </header>
-      <div className="col g10 grow wb-flow" style={{ minHeight: 0, overflow: 'hidden' }}>
-        {k.flow.map((f, i) => (
-          <Flow key={i} item={f} />
-        ))}
-      </div>
+      <ScrollArea className="grow wb-flow-scroll" style={{ minHeight: 0 }}>
+        <div className="col g10 wb-flow" style={{ minHeight: '100%' }}>
+          {k.flow.map((f, i) => (
+            <Flow
+              key={i}
+              item={f}
+              actions={{ onApprove: p.onApprove, onReject: p.onReject, busy: p.busy }}
+            />
+          ))}
+          <div ref={end} />
+        </div>
+      </ScrollArea>
       <div className="wb-composer">
         <div className="row g10 wb-composer-box">
           <span className="row g6 wb-composer-tag">

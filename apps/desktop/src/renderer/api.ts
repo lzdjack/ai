@@ -10,6 +10,9 @@ import type {
   ProjectRow,
   RemoteRepo,
   RepoRow,
+  ReviewRequest,
+  TicketDetail,
+  TicketSummary,
   TokenPair,
   VerifyResult,
 } from '@cloudcraft/core-protocol';
@@ -166,3 +169,25 @@ export function onboardingCalls(ws: string): OnboardingCalls {
     flow: (id) => call<FlowStatus>('GET', `${w}/flows/${id}`),
   };
 }
+
+/** The workbench's ticket calls in one workspace (06 §2.5; 05 steps 3–4). */
+export function ticketCalls(ws: string) {
+  const w = `/v1/workspaces/${ws}`;
+  return {
+    list: () => call<Page<TicketSummary>>('GET', `${w}/tickets`).then((r) => r.items),
+    detail: (id: string) => call<TicketDetail>('GET', `${w}/tickets/${id}`),
+    review: (id: string, body: ReviewRequest) =>
+      call<TicketDetail>('POST', `${w}/tickets/${id}/review`, body),
+    create: (projectId: string, body: { title: string; body: string; priority: string }) =>
+      call<TicketSummary>('POST', `${w}/projects/${projectId}/tickets`, body),
+    /** an evidence image as an object URL (the request carries the session's token) */
+    async evidence(id: string): Promise<string> {
+      let r = await raw('GET', `${w}/evidence/${id}`);
+      if (r.status === 401 && session && (await refresh()))
+        r = await raw('GET', `${w}/evidence/${id}`);
+      if (!r.ok) throw new ApiError(r.status, 'evidence.not_found', r.statusText);
+      return URL.createObjectURL(await r.blob());
+    },
+  };
+}
+export type TicketCalls = ReturnType<typeof ticketCalls>;

@@ -252,6 +252,8 @@ describe('手动建单与第一轮交付（P4 端到端冒烟）', () => {
     });
     expect(seen.map((s) => s.node_key)).toEqual(['prepare', 'fix', 'verify']);
     expect(seen[0]!.config.branch).toBe('fix/main/M-1');
+    // a first round starts a new branch, never continues one already on the platform
+    expect(seen[0]!.config.fresh).toBe(true);
     expect(seen[2]!.config.env_url).toBe('http://env.test/');
     expect((seen[1]!.config.material as { body: string }).body).toContain('打开 /#/approvals');
 
@@ -500,7 +502,9 @@ describe('审核（P5）：通过 / 打回开下一轮、证据、项目风险�
 
     const flow2 = rs[1] as unknown as { flow_id: string };
     const seen = await playRound(flow2.flow_id, round(sha()));
+    // round 2 continues on the branch round 1 pushed
     expect(seen[0]!.config.branch).toBe(branch);
+    expect(seen[0]!.config.fresh).toBeUndefined();
     expect((seen[1]!.config.material as { review: unknown }).review).toEqual({
       round_no: 1,
       comment: '管理员账号点了还是没反应',

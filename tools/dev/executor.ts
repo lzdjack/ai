@@ -2,6 +2,8 @@
 // 页面上走开工向导时，第 4 步「体检并开工」的试构建要有在线执行器才会被领走；执行器只连 cc-app，
 // 克隆凭据走信封（06 §2.10）。Ctrl+C 停止。
 // 「设置 → 执行器」页面做出来之前，登记令牌由这个脚本直接签发（和 runner 演练同一个函数）。
+// 修题引擎默认是 Pi（要先 pnpm llm-proxy）；设了 CC_AGENT_RUNTIME / CC_PATCH_ENGINE_FILE 就原样传给执行器，
+// 比如用演练引擎打参考修复、不调模型（见 tools/runner/patch-engine.ts）。
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
@@ -56,6 +58,11 @@ const p = spawn(process.execPath, ['--import', 'tsx', 'apps/bot-executor/src/mai
     CC_DATA_DIR: c.CC_DATA_DIR,
     CC_RUNNER_DIR: runnerDir,
     CC_RUNNER_ENROLL_TOKEN: token,
+    ...Object.fromEntries(
+      ['CC_AGENT_RUNTIME', 'CC_PATCH_ENGINE_FILE', 'CC_LLM_PROXY_SOCKET']
+        .filter((k) => process.env[k])
+        .map((k) => [k, process.env[k]]),
+    ),
   },
 });
 const stop = () => p.kill('SIGTERM');

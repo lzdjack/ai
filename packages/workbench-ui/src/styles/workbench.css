@@ -446,3 +446,157 @@
 .wb-kv + .wb-kv {
   border-top: 1px solid var(--hair);
 }
+
+/* —— 打回原因 / 手动新建工单（定稿图 PC-打回原因、PC-手动新建工单；同 .dlg 语言） —— */
+.wb-dlg {
+  padding: 20px 22px;
+  border-radius: 24px;
+  border: 1px solid var(--stroke);
+  max-height: none;
+  overflow: visible;
+}
+.wb-icbox {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  color: #fff;
+}
+.wb-icbox.is-red {
+  background: linear-gradient(160deg, #ff8a7a, #e0281e);
+}
+.wb-icbox.is-blue {
+  background: linear-gradient(155deg, #5aa0ff, #1f6fff);
+}
+.wb-flabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-2);
+  margin-bottom: 6px;
+}
+.wb-field {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 74px;
+  resize: vertical;
+  border-radius: var(--r-md);
+  background: var(--glass-2);
+  border: 1px solid var(--focus-ring);
+  box-shadow: 0 0 0 3px var(--focus-halo);
+  padding: 9px 12px;
+  font: inherit;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--text);
+  outline: none;
+}
+.wb-field.is-well {
+  background: var(--well);
+  border-color: var(--hair);
+  box-shadow: none;
+  font-size: 13px;
+  line-height: 1.65;
+}
+.wb-field.is-well:focus {
+  background: var(--glass-2);
+  border-color: var(--focus-ring);
+  box-shadow: 0 0 0 3px var(--focus-halo);
+}
+.wb-field::placeholder,
+.wb-input::placeholder {
+  color: var(--text-3);
+}
+.wb-input {
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 10px;
+  background: var(--glass-2);
+  border: 1px solid var(--border-ctl);
+  box-shadow: var(--shadow-ctl);
+  font: inherit;
+  font-size: 13.5px;
+  color: var(--text);
+  outline: none;
+}
+.wb-input:focus {
+  border-color: var(--focus-ring);
+  box-shadow: 0 0 0 3px var(--focus-halo);
+}
+.wb-sel {
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 10px;
+  background: var(--glass-2);
+  border: 1px solid var(--border-ctl);
+  box-shadow: var(--shadow-ctl);
+  min-width: 0;
+}
+.wb-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: var(--ctl-xs);
+  padding: 0 12px;
+  border-radius: 14px;
+  background: var(--fill);
+  font-size: 12.5px;
+  color: var(--text-2);
+  white-space: nowrap;
+  border: 0;
+  font-family: inherit;
+  cursor: pointer;
+}
+.wb-chip.is-on {
+  background: color-mix(in srgb, var(--blue) 14%, transparent);
+  color: var(--ink-blue);
+  font-weight: 600;
+}
+.wb-pillbtn {
+  height: 30px;
+  padding: 0 12px;
+  border: 1px solid transparent;
+  font-family: inherit;
+  cursor: pointer;
+}
+.wb-pillbtn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.wb-pill-on {
+  border-color: color-mix(in srgb, var(--blue) 45%, transparent);
+}
+.wb-pill-on.is-red {
+  border-color: color-mix(in srgb, var(--red) 45%, transparent);
+}
+.wb-dlg-ft {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--hair);
+}
+.wb-err {
+  font-size: 12px;
+  color: var(--ink-red);
+  margin-top: 8px;
+}
+.wb-flow-scroll {
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 56px);
+  mask-image: linear-gradient(180deg, transparent 0, #000 56px);
+}
+.wb-flow-scroll .wb-flow {
+  -webkit-mask-image: none;
+  mask-image: none;
+  box-sizing: border-box;
+}
+.wb-empty {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+/* a long reason (an engine's error line) must not widen the list */
+.wb-row-note {
+  min-width: 0;
+}
