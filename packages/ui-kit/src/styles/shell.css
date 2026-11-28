@@ -289,6 +289,11 @@ html.dark .cc-dock-ic.is-chat {
   width: 100%;
   height: 100%;
 }
+/* vertical only: Radix lays the content out as a table, so one long unbroken line (an error text, a
+   path) would widen the whole area instead of being cut by its own ellipsis */
+.cc-scroll > .scroll-viewport > div {
+  display: block !important;
+}
 .cc-scrollbar {
   display: flex;
   touch-action: none;
