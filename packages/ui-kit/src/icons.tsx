@@ -1,6 +1,6 @@
 // Icons of the PC shell, from the approved design (reference/src/v4/apple-chat.html). Single colour, so
 // they follow currentColor; multi-colour Dock icons are files in assets/.
-import type { SVGProps } from 'react';
+import type { ReactNode, SVGProps } from 'react';
 
 type P = SVGProps<SVGSVGElement>;
 
@@ -443,3 +443,110 @@ export const PlugIcon = (p: P) => (
     <path d="M18 8v5a6 6 0 0 1-12 0V8z" />
   </svg>
 );
+
+// Line icons of the first-run wizard (reference/src/v5/onboard-pc-*.html): 24-unit strokes in currentColor.
+const line = (size: number, width: number, body: ReactNode) => (p: P) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={width}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+    {...p}
+  >
+    {body}
+  </svg>
+);
+
+export const KeyIcon = line(
+  13,
+  1.8,
+  <>
+    <circle cx="7.5" cy="15.5" r="4.5" />
+    <path d="M10.7 12.3L21 2M16 7l3 3M18 5l2 2" />
+  </>,
+);
+export const ShieldIcon = line(13, 1.8, <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />);
+export const FolderIcon = line(
+  17,
+  2,
+  <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z" />,
+);
+export const ForkIcon = line(
+  13,
+  1.8,
+  <>
+    <circle cx="6" cy="5" r="2.2" />
+    <circle cx="6" cy="19" r="2.2" />
+    <circle cx="18" cy="7" r="2.2" />
+    <path d="M6 7.2v9.6M18 9.2c0 5-6 4-12 7.6" />
+  </>,
+);
+export const BoxIcon = line(
+  10,
+  2.4,
+  <>
+    <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" />
+    <path d="M3.3 7L12 12l8.7-5M12 22V12" />
+  </>,
+);
+export const InboxIcon = line(
+  13,
+  1.8,
+  <>
+    <path d="M22 12h-6l-2 3h-4l-2-3H2" />
+    <path d="M5.45 5.11L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.45-6.89A2 2 0 0016.76 4H7.24a2 2 0 00-1.79 1.11z" />
+  </>,
+);
+export const GlobeIcon = line(
+  15,
+  1.8,
+  <>
+    <circle cx="12" cy="12" r="10" />
+    <path d="M2 12h20M12 2a15 15 0 010 20 15 15 0 010-20z" />
+  </>,
+);
+export const BoltIcon = line(14, 1.8, <path d="M13 2L3 14h9l-1 8 10-12h-9z" />);
+export const PencilIcon = line(
+  12,
+  1.8,
+  <>
+    <path d="M12 20h9" />
+    <path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z" />
+  </>,
+);
+export const ChevronRightIcon = line(16, 2.4, <path d="M9 18l6-6-6-6" />);
+export const ChevronLeftIcon = line(16, 2.4, <path d="M15 18l-6-6 6-6" />);
+export const ChevronDownIcon = line(13, 1.8, <path d="M6 9l6 6 6-6" />);
+export const CloseIcon = line(16, 2.2, <path d="M18 6L6 18M6 6l12 12" />);
+export const FileIcon = line(
+  14,
+  1.8,
+  <>
+    <path d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5z" />
+    <path d="M14 2v6h6" />
+  </>,
+);
+export const MergeIcon = line(
+  15,
+  1.8,
+  <>
+    <circle cx="18" cy="18" r="3" />
+    <circle cx="6" cy="6" r="3" />
+    <path d="M6 21V9a9 9 0 009 9" />
+  </>,
+);
+export const HelpChatIcon = line(
+  15,
+  1.8,
+  <>
+    <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+    <path d="M12 13h.01M10.3 7.8a1.8 1.8 0 113.2 1.2c-.6.5-1.5.9-1.5 1.8" />
+  </>,
+);
+export const AlertIcon = line(12, 3, <path d="M12 7v6M12 17h.01" />);
+export const MinusIcon = line(12, 3, <path d="M6 12h12" />);
