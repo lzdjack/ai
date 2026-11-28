@@ -387,6 +387,9 @@ importers:
 
   packages/workbench-ui:
     dependencies:
+      '@cloudcraft/core-protocol':
+        specifier: workspace:*
+        version: link:../core-protocol
       '@cloudcraft/ui-kit':
         specifier: workspace:*
         version: link:../ui-kit

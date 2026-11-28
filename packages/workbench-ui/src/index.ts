@@ -5,3 +5,4 @@ export * from './ticket-list.tsx';
 export * from './ticket-rail.tsx';
 export * from './ticket-view.tsx';
 export * from './types.ts';
+export * from './onboarding.tsx';
