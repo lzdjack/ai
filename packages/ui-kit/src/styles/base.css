@@ -1,0 +1,167 @@
+/* 全局底座与工具类（取自设计稿公共样式 reference/src/v3/base.css；颜色、字体只用 tokens/theme.css 的变量） */
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+}
+body {
+  -webkit-font-smoothing: antialiased;
+  font-size: 14px;
+  line-height: 1.55;
+}
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+button,
+input {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+.row {
+  display: flex;
+  align-items: center;
+}
+.col {
+  display: flex;
+  flex-direction: column;
+}
+.grow {
+  flex: 1;
+  min-width: 0;
+}
+.wrap {
+  flex-wrap: wrap;
+}
+.g2 {
+  gap: 2px;
+}
+.g4 {
+  gap: 4px;
+}
+.g6 {
+  gap: 6px;
+}
+.g8 {
+  gap: 8px;
+}
+.g10 {
+  gap: 10px;
+}
+.g12 {
+  gap: 12px;
+}
+.g14 {
+  gap: 14px;
+}
+.g16 {
+  gap: 16px;
+}
+.g20 {
+  gap: 20px;
+}
+.g24 {
+  gap: 24px;
+}
+.t2 {
+  color: var(--text-2);
+}
+.t3 {
+  color: var(--text-3);
+}
+.f11 {
+  font-size: 11px;
+}
+.f12 {
+  font-size: 12px;
+}
+.f13 {
+  font-size: 13px;
+}
+.f14 {
+  font-size: 14px;
+}
+.f15 {
+  font-size: 15px;
+}
+.f16 {
+  font-size: 16px;
+}
+.f18 {
+  font-size: 18px;
+}
+.f20 {
+  font-size: 20px;
+}
+.w5 {
+  font-weight: 500;
+}
+.w6 {
+  font-weight: 600;
+}
+.w7 {
+  font-weight: 700;
+}
+.ell {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.av {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  flex: none;
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex: none;
+  background: currentColor;
+}
+.kbd {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--hair);
+  color: var(--text-3);
+}
+
+/* 头像底色：按名字取 8 色之一（设计稿的柔和渐变） */
+.cc-av-0 {
+  background: linear-gradient(150deg, #7fb2ff, #4c7df0);
+}
+.cc-av-1 {
+  background: linear-gradient(150deg, #ffc38a, #f08a5d);
+}
+.cc-av-2 {
+  background: linear-gradient(150deg, #f5a3c7, #d96ba0);
+}
+.cc-av-3 {
+  background: linear-gradient(150deg, #8fd8c9, #3fae9a);
+}
+.cc-av-4 {
+  background: linear-gradient(150deg, #c3a8ff, #8e6bea);
+}
+.cc-av-5 {
+  background: linear-gradient(150deg, #9edb9a, #4fb06a);
+}
+.cc-av-6 {
+  background: linear-gradient(160deg, #ffc9a8, #f08f7a);
+  color: #5a2414;
+}
+.cc-av-sys {
+  background: linear-gradient(150deg, #c7cbd4, #9298a6);
+}
