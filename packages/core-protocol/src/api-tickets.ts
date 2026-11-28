@@ -149,6 +149,8 @@ export interface TicketSummary {
   help_reason: string | null;
   /** the caller is one of its assignees ("我的") */
   is_assignee: boolean;
+  /** a delivery step waits on the caller as tester or MR reviewer (also "我的", 05 steps 6, 9, 10) */
+  waiting_on_me: 'retest' | 'merge_review' | null;
   updated_at: string;
 }
 

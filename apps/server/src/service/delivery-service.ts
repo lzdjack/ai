@@ -43,6 +43,7 @@ import {
   testRecords,
   ticketAssignees,
   tickets,
+  users,
   type ActorPolicy,
 } from '../db/schema/index.ts';
 import { insertRow, updateRow } from '../db/write.ts';
@@ -970,6 +971,7 @@ export function deliveryView(
       .where(and(eq(tickets.id, ticketId), isNull(tickets.deletedAt)));
     if (!t) throw new ApiFailure(404, 'ticket.not_found');
     const flow = await latestFlow(tx, t.id);
+    const facts = await viewFacts(tx, t);
     const empty: DeliveryView = {
       ticket_id: t.id,
       flow: null,
@@ -987,29 +989,31 @@ export function deliveryView(
         retry: null,
       },
       missing_accounts: [],
+      environments: facts.environments,
+      config: facts.config,
+      tester_id: t.createdBy,
+      people: {},
     };
     // what 「发布到测试环境」 would need (computed, 06 §3.3 「发布前」 is not stored)
     const missing: string[] = [];
     const startable = t.status === 'approved' && (!flow || flow.status !== 'running');
-    if (startable) {
-      const [rc] = await tx
-        .select({ rc: releaseConfigs })
-        .from(releaseConfigs)
-        .where(and(eq(releaseConfigs.projectId, t.projectId), isNull(releaseConfigs.deletedAt)));
-      if (rc && !(await personalAccountOf(tx, rc.rc.providerConnectorId, userId)))
-        missing.push(rc.rc.providerConnectorId);
-      const ok =
-        !!rc &&
-        (await allowed(
-          tx,
-          userId,
-          rc.rc.envDeployerRules.test_gate ?? { type: 'assignee' },
-          t,
-          'core:releases:run',
-        ));
-      empty.can.start_test = ok;
+    if (startable && facts.rc) {
+      if (!(await personalAccountOf(tx, facts.rc.providerConnectorId, userId)))
+        missing.push(facts.rc.providerConnectorId);
+      empty.can.start_test = await allowed(
+        tx,
+        userId,
+        facts.rc.envDeployerRules.test_gate ?? { type: 'assignee' },
+        t,
+        'core:releases:run',
+      );
     }
-    if (!flow) return { ...empty, missing_accounts: missing };
+    if (!flow)
+      return {
+        ...empty,
+        missing_accounts: missing,
+        people: await peopleOf(tx, [...facts.userIds, t.createdBy]),
+      };
     const plan = flow.plan as Plan;
     const [round] = await tx.select().from(rounds).where(eq(rounds.id, flow.roundId!));
     const runs = await tx
@@ -1072,6 +1076,7 @@ export function deliveryView(
       (n) => n.status === 'waiting_human' && n.key.endsWith('_mr_review'),
     );
     const pendingRec = recs.find((x) => x.result === 'pending');
+    const testerId = cfgOf(plan.nodes.find((n) => n.key === 'retest')).tester_id ?? t.createdBy;
     const can = {
       start_test: false,
       review_mr:
@@ -1130,11 +1135,14 @@ export function deliveryView(
         merge_sha: m.mergeSha,
         state: m.state as DeliveryView['merge_requests'][number]['state'],
         reviewer_id: m.reviewerId,
+        merged_by: m.mergedBy,
         comment: m.comment,
+        created_at: m.createdAt.toISOString(),
       })),
       release_tasks: tasks.map(({ rt, env, path }) => ({
         id: rt.id,
         no: releaseNo(rt.seqNo),
+        flow_id: rt.flowInstanceId,
         environment: { id: env.id, env_code: env.envCode, name: env.name, tier: env.envTier },
         repo: path,
         status: rt.status as DeliveryView['release_tasks'][number]['status'],
@@ -1153,6 +1161,7 @@ export function deliveryView(
             exit_code: s.exitCode,
             error: s.errorSummary,
             attempt: s.attempt,
+            log_tail: s.logTail,
             started_at: s.startedAt.toISOString(),
             finished_at: s.finishedAt?.toISOString() ?? null,
           })),
@@ -1169,8 +1178,100 @@ export function deliveryView(
       prod_gates: gates,
       can: { ...can, start_test: empty.can.start_test },
       missing_accounts: [...new Set(missing)],
+      environments: facts.environments,
+      config: facts.config,
+      tester_id: testerId,
+      people: await peopleOf(tx, [
+        ...facts.userIds,
+        testerId,
+        t.createdBy,
+        ...mrs.flatMap(({ m }) => [m.reviewerId, m.mergedBy]),
+        ...tasks.map(({ rt }) => rt.triggeredBy),
+        ...recs.map((r) => r.testerId),
+      ]),
     };
   });
+}
+
+/**
+ * What the release tab shows before and during a delivery: the project's environments with the
+ * version last made live there (from release_tasks, never stored twice) and the target's release
+ * settings with the people they name.
+ */
+async function viewFacts(tx: Tx, t: typeof tickets.$inferSelect) {
+  const envs = await tx
+    .select()
+    .from(environments)
+    .where(and(eq(environments.projectId, t.projectId), isNull(environments.deletedAt)))
+    .orderBy(asc(environments.sortOrder), asc(environments.createdAt));
+  const live = envs.length
+    ? await tx
+        .select({ env: releaseTasks.environmentId, version: releaseTasks.version })
+        .from(releaseTasks)
+        .where(
+          and(
+            inArray(
+              releaseTasks.environmentId,
+              envs.map((e) => e.id),
+            ),
+            inArray(releaseTasks.status, ['effective', 'effective_pending_retest']),
+          ),
+        )
+        .orderBy(desc(releaseTasks.updatedAt))
+    : [];
+  const [rc] = await tx
+    .select({ rc: releaseConfigs, target: repoTargets, repo: repos })
+    .from(releaseConfigs)
+    .innerJoin(repoTargets, eq(repoTargets.id, releaseConfigs.repoTargetId))
+    .innerJoin(repos, eq(repos.id, repoTargets.repoId))
+    .where(and(eq(releaseConfigs.projectId, t.projectId), isNull(releaseConfigs.deletedAt)))
+    .limit(1);
+  const policies = rc
+    ? {
+        test_reviewers: rc.rc.testBranchReviewers,
+        main_reviewers: rc.rc.mainBranchReviewers,
+        test_deployers: rc.rc.envDeployerRules.test_gate ?? { type: 'assignee' as const },
+        prod_deployers: rc.rc.envDeployerRules.production ?? { type: 'anyone' as const },
+      }
+    : null;
+  return {
+    rc: rc?.rc ?? null,
+    environments: envs
+      .filter((e) => e.envTier === 'test_gate' || e.envTier === 'production')
+      .map((e) => ({
+        id: e.id,
+        env_code: e.envCode,
+        name: e.name,
+        tier: e.envTier,
+        entry_url: e.entryUrl,
+        live_version: live.find((x) => x.env === e.id)?.version ?? null,
+        previous_version: live.filter((x) => x.env === e.id)[1]?.version ?? null,
+      })),
+    config:
+      rc && policies
+        ? {
+            provider_connector_id: rc.rc.providerConnectorId,
+            code_connector_id: rc.repo.connectorId,
+            test_branch: rc.target.testBranch,
+            main_branch: rc.repo.defaultBranch,
+            ...policies,
+          }
+        : null,
+    userIds: [
+      ...(await assigneesOf(tx, t.id)),
+      ...Object.values(policies ?? {}).flatMap((p) => p.users ?? []),
+    ],
+  };
+}
+
+async function peopleOf(tx: Tx, ids: (string | null | undefined)[]) {
+  const want = [...new Set(ids.filter((x): x is string => !!x))];
+  if (!want.length) return {};
+  const rows = await tx
+    .select({ id: users.id, name: users.displayName })
+    .from(users)
+    .where(inArray(users.id, want));
+  return Object.fromEntries(rows.map((r) => [r.id, r.name]));
 }
 
 /** Release settings of a project's targets (set up by people with core:projects:manage). */

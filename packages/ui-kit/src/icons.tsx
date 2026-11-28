@@ -550,3 +550,42 @@ export const HelpChatIcon = line(
 );
 export const AlertIcon = line(12, 3, <path d="M12 7v6M12 17h.01" />);
 export const MinusIcon = line(12, 3, <path d="M6 12h12" />);
+
+// The release tab (designs PC-工单-发布 … PC-发布-失败): environment, stage and action icons.
+export const ServerIcon = line(
+  12,
+  2,
+  <>
+    <rect x="2" y="3" width="20" height="8" rx="2" />
+    <rect x="2" y="13" width="20" height="8" rx="2" />
+    <path d="M6 7h.01M6 17h.01" />
+  </>,
+);
+export const ArrowRightIcon = line(14, 2, <path d="M5 12h14M13 6l6 6-6 6" />);
+export const LoaderIcon = line(14, 2.6, <path d="M21 12a9 9 0 11-6.22-8.56" />);
+export const RocketIcon = line(
+  14,
+  2,
+  <>
+    <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 00-2.91-.09z" />
+    <path d="M12 15l-3-3a22 22 0 012-3.95A12.88 12.88 0 0122 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 01-4 2z" />
+    <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
+  </>,
+);
+export const CopyIcon = line(
+  14,
+  2,
+  <>
+    <rect x="9" y="9" width="13" height="13" rx="2" />
+    <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+  </>,
+);
+export const RefreshIcon = line(
+  15,
+  2.2,
+  <>
+    <path d="M21 12a9 9 0 01-15.5 6.2L3 16" />
+    <path d="M3 12a9 9 0 0115.5-6.2L21 8" />
+    <path d="M21 3v5h-5M3 21v-5h5" />
+  </>,
+);

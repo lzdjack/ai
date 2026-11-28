@@ -473,6 +473,12 @@ describe('交付段（P6）：合入测试分支 → 发测试 → 复测 → �
     });
     expect(v.can.review_mr).toBe(true);
     expect(v.missing_accounts).toEqual([codeConn]);
+    // the assignee reviews the test MR: it is "mine" in the list with what waits on them
+    const listed1 = (await call('GET', `${ws()}/tickets`)).body.items as {
+      id: string;
+      waiting_on_me: string | null;
+    }[];
+    expect(listed1.find((x) => x.id === id)?.waiting_on_me).toBe('merge_review');
     const review = (body: Record<string, unknown>) =>
       call('POST', `${ws()}/tickets/${id}/delivery/merge-review`, body);
     expect((await review({ decision: 'approve', expected_head_sha: sha() })).body.code).toBe(
@@ -534,6 +540,16 @@ describe('交付段（P6）：合入测试分支 → 发测试 → 复测 → �
       version: p.version,
       tester_id: A.userId,
     });
+    // the release tab's facts: the test environment now runs this version, names resolved
+    expect(v.environments.find((e) => e.tier === 'test_gate')?.live_version).toBe(p.version);
+    expect(v.tester_id).toBe(A.userId);
+    expect(v.people[A.userId]).toBeTruthy();
+    expect(v.config).toMatchObject({ provider_connector_id: relConn, test_branch: 'test' });
+    const listed2 = (await call('GET', `${ws()}/tickets`)).body.items as {
+      id: string;
+      waiting_on_me: string | null;
+    }[];
+    expect(listed2.find((x) => x.id === id)?.waiting_on_me).toBe('retest');
     expect(v.prod_gates).toEqual({ code_review: true, retest: false, main_merged: false });
     expect((await call('POST', `${ws()}/tickets/${id}/delivery/production`)).body.code).toBe(
       'delivery.prod_gates_open',

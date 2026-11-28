@@ -1,0 +1,326 @@
+/* 工单「发布」标签（01 §12.2、§12.3、§12.5；定稿图 PC-工单-发布、PC-发测试-发布前、PC-发布-等复测、
+   PC-发布-复测通过、PC-合回主分支-MR审核、PC-发正式、PC-发布-失败、PC-第一次发布-配账号）。
+   数值取自 reference/src/v5/pc.css 的 .pipe / .pst / .pdot / .tag / .tbl / .log。 */
+
+.wb-rel-scroll {
+  -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 40px), transparent);
+  mask-image: linear-gradient(180deg, #000 calc(100% - 40px), transparent);
+}
+.wb-rel {
+  padding: 14px 22px 22px;
+  box-sizing: border-box;
+}
+.wb-sec {
+  font-size: 15px;
+  font-weight: 700;
+}
+.wb-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 20px;
+  padding: 0 7px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  flex: none;
+}
+.wb-tag.is-blue {
+  color: var(--ink-blue);
+  background: color-mix(in srgb, var(--blue) 13%, transparent);
+}
+.wb-tag.is-green {
+  color: var(--ink-green);
+  background: color-mix(in srgb, var(--green) 15%, transparent);
+}
+.wb-tag.is-orange {
+  color: var(--ink-orange);
+  background: color-mix(in srgb, var(--orange) 15%, transparent);
+}
+.wb-tag.is-red {
+  color: var(--ink-red);
+  background: color-mix(in srgb, var(--red) 13%, transparent);
+}
+.wb-tag.is-teal {
+  color: var(--ink-teal);
+  background: color-mix(in srgb, var(--teal) 15%, transparent);
+}
+.wb-tag.is-gray {
+  color: var(--text-2);
+  background: var(--fill);
+}
+.wb-rel-pill.is-teal {
+  color: var(--ink-teal);
+  background: color-mix(in srgb, var(--teal) 15%, transparent);
+}
+
+/* 环境条 */
+.wb-env {
+  padding: 12px 16px;
+  align-items: stretch;
+}
+.wb-env-sep {
+  width: 1px;
+  background: var(--hair);
+}
+.wb-env-ic {
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  color: #fff;
+  background: linear-gradient(160deg, #4fd6e6, #16a3c0);
+}
+.wb-env-ic.is-off {
+  background: linear-gradient(160deg, #a9aeb8, #6e737d);
+}
+.wb-env-new {
+  color: var(--ink-blue);
+}
+.wb-env-old {
+  text-decoration: line-through;
+  color: var(--text-3);
+}
+
+/* 阶段条 */
+.wb-pipe {
+  display: flex;
+  align-items: flex-start;
+  padding: 16px 10px 12px;
+}
+.wb-pst {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+  text-align: center;
+  min-width: 0;
+  padding: 0 6px;
+}
+.wb-pst + .wb-pst::before {
+  content: '';
+  position: absolute;
+  top: 15px;
+  right: calc(50% + 20px);
+  left: calc(-50% + 20px);
+  height: 2px;
+  background: var(--hair);
+}
+.wb-pst.is-done + .wb-pst::before {
+  background: var(--green);
+}
+.wb-pst > span:last-child {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.wb-pdot {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  position: relative;
+  z-index: 1;
+}
+.wb-pdot.is-ok {
+  background: var(--btn-ok-bg);
+}
+.wb-pdot.is-run {
+  background: var(--btn-run-bg);
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--teal) 22%, transparent);
+}
+.wb-pdot.is-run svg {
+  animation: cc-spin 0.9s linear infinite;
+}
+.wb-pdot.is-err {
+  background: var(--btn-danger-bg);
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--red) 20%, transparent);
+}
+.wb-pdot.is-wait {
+  background: var(--fill);
+  color: var(--text-3);
+}
+.wb-pdot.is-you {
+  background: var(--btn-warn-bg);
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--orange) 22%, transparent);
+}
+.wb-pst-name.is-you {
+  color: var(--ink-orange);
+}
+.wb-pst-name.is-err {
+  color: var(--ink-red);
+}
+
+/* 两张中卡 */
+.wb-ck {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  flex: none;
+  font-size: 12px;
+  font-weight: 800;
+}
+.wb-ck.is-ok {
+  background: var(--btn-ok-bg);
+}
+.wb-ck.is-blue {
+  background: var(--btn-pri-bg);
+}
+.wb-ck.is-warn {
+  background: var(--btn-warn-bg);
+}
+.wb-ck.is-off {
+  background: var(--fill);
+}
+.wb-pkg-row {
+  padding: 10px 0;
+  border-top: 1px solid var(--hair);
+}
+.wb-side-card {
+  width: 300px;
+  flex: none;
+  padding: 14px 16px;
+}
+.wb-side-card.is-you {
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--orange) 55%, transparent);
+}
+.wb-rail-card.is-you {
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--blue) 45%, transparent);
+}
+.wb-person {
+  margin-top: 10px;
+  padding: 8px 10px;
+  border-radius: var(--r-md);
+  background: var(--fill);
+}
+.wb-person.is-pick {
+  background: var(--glass-2);
+  border: 1px solid var(--border-ctl);
+  box-shadow: var(--shadow-ctl);
+  position: relative;
+}
+.wb-person.is-pick.is-focus {
+  border-color: var(--focus-ring);
+  box-shadow: 0 0 0 3px var(--focus-halo);
+}
+.wb-person select {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  font: inherit;
+}
+.wb-term {
+  margin-top: 10px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #16171c;
+  color: #e9e9ee;
+  font-family: 'SF Mono', ui-monospace, Menlo, monospace;
+  font-size: 12px;
+  line-height: 20px;
+  white-space: pre-wrap;
+  word-break: break-all;
+  max-height: 168px;
+  overflow: hidden;
+}
+.wb-term .is-err {
+  color: #ff8a80;
+}
+
+/* 阶段明细 */
+.wb-tbl {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  table-layout: fixed;
+}
+.wb-tbl th {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-3);
+  text-align: left;
+  padding: 0 10px 8px;
+  white-space: nowrap;
+}
+.wb-tbl td {
+  padding: 7px 10px;
+  border-top: 1px solid var(--hair);
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.wb-tbl td:last-child {
+  overflow: visible;
+}
+.wb-tbl td.is-err {
+  color: var(--ink-red);
+}
+
+/* 右栏 */
+.wb-log {
+  font-family: 'SF Mono', ui-monospace, Menlo, monospace;
+  font-size: 11.5px;
+  line-height: 20px;
+}
+.wb-log .ln {
+  display: flex;
+  gap: 10px;
+  white-space: pre;
+}
+.wb-log .ln .ts {
+  color: var(--text-3);
+  flex: none;
+}
+.wb-log .ln > span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+.wb-gate {
+  padding: 5px 0;
+  font-size: 13px;
+}
+.wb-gate-sub {
+  padding: 0 0 4px 28px;
+}
+.wb-acct {
+  margin-top: 8px;
+}
+.wb-acct svg {
+  color: var(--text-3);
+  flex: none;
+}
+
+/* 配账号弹窗 */
+.wb-icbox.is-orange {
+  background: linear-gradient(160deg, #ffc54d, #ff7a00);
+}
+.wb-ok-bar {
+  margin-top: 14px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--green) 12%, transparent);
+}
+.wb-acct-input {
+  width: 100%;
+  box-sizing: border-box;
+  height: 40px;
+}

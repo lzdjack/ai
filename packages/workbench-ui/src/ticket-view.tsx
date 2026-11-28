@@ -16,7 +16,7 @@ import {
   UndoIcon,
   useT,
 } from '@cloudcraft/ui-kit';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, type ReactNode } from 'react';
 import type { DeliveryVM, EvidenceShotVM, FlowItemVM, TicketDetailVM } from './types.ts';
 
 function Shot(p: { shot: EvidenceShotVM; after: boolean }) {
@@ -176,6 +176,8 @@ export function TicketView(
     ticket: TicketDetailVM;
     tab: TicketTab;
     onTab: (t: TicketTab) => void;
+    /** the release tab's content (release-view.tsx), shown in place of the conversation */
+    release?: ReactNode;
   } & ReviewActions,
 ) {
   const t = useT();
@@ -217,34 +219,40 @@ export function TicketView(
           ) : null}
         </div>
       </header>
-      <ScrollArea className="grow wb-flow-scroll" style={{ minHeight: 0 }}>
-        <div className="col g10 wb-flow" style={{ minHeight: '100%' }}>
-          {k.flow.map((f, i) => (
-            <Flow
-              key={i}
-              item={f}
-              actions={{ onApprove: p.onApprove, onReject: p.onReject, busy: p.busy }}
-            />
-          ))}
-          <div ref={end} />
-        </div>
-      </ScrollArea>
-      <div className="wb-composer">
-        <div className="row g10 wb-composer-box">
-          <span className="row g6 wb-composer-tag">
-            <span>
-              <SparkleOutlineIcon />
-            </span>
-            <span className="f13 w7">{t('wb.ai.label')}</span>
-            <span className="f12 t3 mono">{k.id}</span>
-          </span>
-          <span className="f14 t3 grow ell">{t('wb.ai.placeholder')}</span>
-          <PaperclipIcon style={{ color: 'var(--text-3)' }} />
-          <button type="button" className="wb-send" aria-label={t('wb.ai.send')}>
-            <ArrowUpIcon />
-          </button>
-        </div>
-      </div>
+      {p.tab === 'release' && p.release ? (
+        p.release
+      ) : (
+        <>
+          <ScrollArea className="grow wb-flow-scroll" style={{ minHeight: 0 }}>
+            <div className="col g10 wb-flow" style={{ minHeight: '100%' }}>
+              {k.flow.map((f, i) => (
+                <Flow
+                  key={i}
+                  item={f}
+                  actions={{ onApprove: p.onApprove, onReject: p.onReject, busy: p.busy }}
+                />
+              ))}
+              <div ref={end} />
+            </div>
+          </ScrollArea>
+          <div className="wb-composer">
+            <div className="row g10 wb-composer-box">
+              <span className="row g6 wb-composer-tag">
+                <span>
+                  <SparkleOutlineIcon />
+                </span>
+                <span className="f13 w7">{t('wb.ai.label')}</span>
+                <span className="f12 t3 mono">{k.id}</span>
+              </span>
+              <span className="f14 t3 grow ell">{t('wb.ai.placeholder')}</span>
+              <PaperclipIcon style={{ color: 'var(--text-3)' }} />
+              <button type="button" className="wb-send" aria-label={t('wb.ai.send')}>
+                <ArrowUpIcon />
+              </button>
+            </div>
+          </div>
+        </>
+      )}
     </main>
   );
 }

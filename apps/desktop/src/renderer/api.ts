@@ -3,6 +3,11 @@
 // U2 moves them to Electron safeStorage through HostPlatformAdapter.secureStorage.
 import type {
   ConnectorRow,
+  DeliveryView,
+  MergeReviewRequest,
+  PersonalAccountRow,
+  RetestRequest,
+  StartTestReleaseRequest,
   EnvironmentRow,
   FlowStatus,
   Me,
@@ -25,6 +30,7 @@ export class ApiError extends Error {
     readonly status: number,
     readonly code: string,
     message: string,
+    readonly data?: Record<string, unknown>,
   ) {
     super(message);
   }
@@ -92,6 +98,7 @@ export async function call<T>(method: string, path: string, body?: unknown): Pro
       r.status,
       String(json.code ?? 'common.internal'),
       String(json.message ?? r.statusText),
+      (json.data as Record<string, unknown> | undefined) ?? undefined,
     );
   return json as T;
 }
@@ -191,3 +198,29 @@ export function ticketCalls(ws: string) {
   };
 }
 export type TicketCalls = ReturnType<typeof ticketCalls>;
+
+/** A ticket's release tab (06 §3.3; 05 steps 5–12) and the caller's own accounts (设置 → 我的账号). */
+export function deliveryCalls(ws: string) {
+  const w = `/v1/workspaces/${ws}`;
+  const d = (id: string) => `${w}/tickets/${id}/delivery`;
+  return {
+    view: (id: string) => call<DeliveryView>('GET', d(id)),
+    startTest: (id: string, body: StartTestReleaseRequest) =>
+      call<unknown>('POST', `${d(id)}/test`, body),
+    reviewMerge: (id: string, body: MergeReviewRequest) =>
+      call<unknown>('POST', `${d(id)}/merge-review`, body),
+    retest: (id: string, body: RetestRequest) => call<unknown>('POST', `${d(id)}/retest`, body),
+    requestMain: (id: string) => call<unknown>('POST', `${d(id)}/main`),
+    releaseProd: (id: string) => call<unknown>('POST', `${d(id)}/production`),
+    retry: (id: string, node_key: string) => call<unknown>('POST', `${d(id)}/retry`, { node_key }),
+    accounts: () => call<Page<PersonalAccountRow>>('GET', `${w}/me/accounts`).then((r) => r.items),
+    saveAccount: (connectorId: string, credential: Record<string, string>) =>
+      call<unknown>('PUT', `${w}/me/accounts/${connectorId}`, { credential }),
+    /** people who can retest; empty when the caller may not list members */
+    members: () =>
+      call<Page<{ user_id: string; display_name: string }>>('GET', `${w}/members`).then(
+        (r) => r.items.map((m) => ({ id: m.user_id, name: m.display_name })),
+        () => [] as { id: string; name: string }[],
+      ),
+  };
+}
