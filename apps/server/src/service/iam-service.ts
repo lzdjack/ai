@@ -11,6 +11,7 @@ import {
 } from '@cloudcraft/core-protocol';
 import crypto from 'node:crypto';
 import { and, desc, eq, gt, isNull, sql } from 'drizzle-orm';
+import type { PgTransactionConfig } from 'drizzle-orm/pg-core';
 import { withWorkspaceTx, type ActorCtx, type Db, type Tx } from '../db/client.ts';
 import {
   notifications,
@@ -38,9 +39,10 @@ export async function inWorkspace<T>(
   userId: string,
   workspaceId: string,
   fn: (tx: Tx, ctx: ActorCtx) => Promise<T>,
+  config?: PgTransactionConfig,
 ): Promise<T> {
   try {
-    return await withWorkspaceTx(db, { userId, workspaceId, clientSource: 'pc_ui' }, fn);
+    return await withWorkspaceTx(db, { userId, workspaceId, clientSource: 'pc_ui' }, fn, config);
   } catch (e) {
     if (pgCode(e) === '42501' || pgCode(e) === '22P02')
       throw new ApiFailure(404, 'workspace.not_found');

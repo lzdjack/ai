@@ -25,7 +25,14 @@ import {
   type StartTestReleaseRequest,
 } from '@cloudcraft/core-protocol';
 import { and, asc, desc, eq, inArray, isNull, sql } from 'drizzle-orm';
-import { withLeaseTx, type ActorCtx, type Db, type Lease, type Tx } from '../db/client.ts';
+import {
+  SNAPSHOT_READ,
+  withLeaseTx,
+  type ActorCtx,
+  type Db,
+  type Lease,
+  type Tx,
+} from '../db/client.ts';
 import {
   environments,
   flowInstances,
@@ -964,233 +971,239 @@ export function deliveryView(
   ws: string,
   ticketId: string,
 ): Promise<DeliveryView> {
-  return inWorkspace(db, userId, ws, async (tx) => {
-    const [t] = await tx
-      .select()
-      .from(tickets)
-      .where(and(eq(tickets.id, ticketId), isNull(tickets.deletedAt)));
-    if (!t) throw new ApiFailure(404, 'ticket.not_found');
-    const flow = await latestFlow(tx, t.id);
-    const facts = await viewFacts(tx, t);
-    const empty: DeliveryView = {
-      ticket_id: t.id,
-      flow: null,
-      nodes: [],
-      merge_requests: [],
-      release_tasks: [],
-      test_records: [],
-      prod_gates: { code_review: false, retest: false, main_merged: false },
-      can: {
-        start_test: false,
-        review_mr: false,
-        retest: false,
-        request_main: false,
-        release_prod: false,
-        retry: null,
-      },
-      missing_accounts: [],
-      environments: facts.environments,
-      config: facts.config,
-      tester_id: t.createdBy,
-      people: {},
-    };
-    // what 「发布到测试环境」 would need (computed, 06 §3.3 「发布前」 is not stored)
-    const missing: string[] = [];
-    const startable = t.status === 'approved' && (!flow || flow.status !== 'running');
-    if (startable && facts.rc) {
-      if (!(await personalAccountOf(tx, facts.rc.providerConnectorId, userId)))
-        missing.push(facts.rc.providerConnectorId);
-      empty.can.start_test = await allowed(
-        tx,
-        userId,
-        facts.rc.envDeployerRules.test_gate ?? { type: 'assignee' },
-        t,
-        'core:releases:run',
-      );
-    }
-    if (!flow)
-      return {
-        ...empty,
-        missing_accounts: missing,
-        people: await peopleOf(tx, [...facts.userIds, t.createdBy]),
+  return inWorkspace(
+    db,
+    userId,
+    ws,
+    async (tx) => {
+      const [t] = await tx
+        .select()
+        .from(tickets)
+        .where(and(eq(tickets.id, ticketId), isNull(tickets.deletedAt)));
+      if (!t) throw new ApiFailure(404, 'ticket.not_found');
+      const flow = await latestFlow(tx, t.id);
+      const facts = await viewFacts(tx, t);
+      const empty: DeliveryView = {
+        ticket_id: t.id,
+        flow: null,
+        nodes: [],
+        merge_requests: [],
+        release_tasks: [],
+        test_records: [],
+        prod_gates: { code_review: false, retest: false, main_merged: false },
+        can: {
+          start_test: false,
+          review_mr: false,
+          retest: false,
+          request_main: false,
+          release_prod: false,
+          retry: null,
+        },
+        missing_accounts: [],
+        environments: facts.environments,
+        config: facts.config,
+        tester_id: t.createdBy,
+        people: {},
       };
-    const plan = flow.plan as Plan;
-    const [round] = await tx.select().from(rounds).where(eq(rounds.id, flow.roundId!));
-    const runs = await tx
-      .select()
-      .from(nodeRuns)
-      .where(eq(nodeRuns.flowInstanceId, flow.id))
-      .orderBy(asc(nodeRuns.createdAt));
-    const latest = (key: string) =>
-      runs.filter((r) => r.nodeKey === key).sort((a, b) => b.attemptNo - a.attemptNo)[0];
-    const nodes: DeliveryNodeView[] = plan.nodes.map((n) => {
-      const r = latest(n.key);
-      return {
-        key: n.key,
-        node_kind: n.node_kind ?? '',
-        step: STEP_OF(n),
-        stage: cfgOf(n).stage,
-        status: (r?.status ?? 'pending') as DeliveryNodeView['status'],
-        attempt_no: r?.attemptNo ?? 0,
-        started_at: r?.startedAt?.toISOString() ?? null,
-        finished_at: r?.finishedAt?.toISOString() ?? null,
-        error: r?.status === 'failed' ? (r.errorRaw ?? null) : null,
-      };
-    });
-    const mrs = await tx
-      .select({ m: mergeRequests, path: repos.path })
-      .from(mergeRequests)
-      .innerJoin(repos, eq(repos.id, mergeRequests.repoId))
-      .where(eq(mergeRequests.flowInstanceId, flow.id))
-      .orderBy(asc(mergeRequests.createdAt));
-    const tasks = await tx
-      .select({ rt: releaseTasks, env: environments, path: repos.path })
-      .from(releaseTasks)
-      .innerJoin(environments, eq(environments.id, releaseTasks.environmentId))
-      .innerJoin(repos, eq(repos.id, releaseTasks.repoId))
-      .where(eq(releaseTasks.ticketId, t.id))
-      .orderBy(asc(releaseTasks.createdAt));
-    const taskIds = tasks.map((x) => x.rt.id);
-    const steps = taskIds.length
-      ? await tx
-          .select()
-          .from(releaseSteps)
-          .where(inArray(releaseSteps.releaseTaskId, taskIds))
-          .orderBy(asc(releaseSteps.startedAt))
-      : [];
-    const recs = taskIds.length
-      ? await tx
-          .select()
-          .from(testRecords)
-          .where(inArray(testRecords.releaseTaskId, taskIds))
-          .orderBy(desc(testRecords.createdAt))
-      : [];
-    const running = flow.status === 'running';
-    const waiting = (k: (key: string) => boolean) =>
-      running && runs.some((r) => k(r.nodeKey) && r.status === 'waiting_human');
-    const c0 = cfgOf(plan.nodes[0]);
-    const rc = c0.release_config_id ? await releaseConfig(tx, c0.release_config_id) : null;
-    const gates = await prodGates(tx, flow);
-    const failed = running ? nodes.find((n) => n.status === 'failed') : undefined;
-    const reviewing = nodes.find(
-      (n) => n.status === 'waiting_human' && n.key.endsWith('_mr_review'),
-    );
-    const pendingRec = recs.find((x) => x.result === 'pending');
-    const testerId = cfgOf(plan.nodes.find((n) => n.key === 'retest')).tester_id ?? t.createdBy;
-    const can = {
-      start_test: false,
-      review_mr:
-        !!reviewing &&
-        !!rc &&
-        (await allowed(
+      // what 「发布到测试环境」 would need (computed, 06 §3.3 「发布前」 is not stored)
+      const missing: string[] = [];
+      const startable = t.status === 'approved' && (!flow || flow.status !== 'running');
+      if (startable && facts.rc) {
+        if (!(await personalAccountOf(tx, facts.rc.providerConnectorId, userId)))
+          missing.push(facts.rc.providerConnectorId);
+        empty.can.start_test = await allowed(
           tx,
           userId,
-          reviewing.key.startsWith('main') ? rc.mainBranchReviewers : rc.testBranchReviewers,
-          t,
-          'core:tickets:review',
-        )),
-      retest: waiting((k) => k === 'retest') && pendingRec?.testerId === userId,
-      request_main:
-        waiting((k) => k === 'main_request') &&
-        (await allowed(tx, userId, { type: 'assignee' }, t, 'core:tickets:review')),
-      release_prod:
-        waiting((k) => k === 'prod_request') &&
-        gates.code_review &&
-        gates.retest &&
-        gates.main_merged &&
-        !!rc &&
-        (await allowed(
-          tx,
-          userId,
-          rc.envDeployerRules.production ?? { type: 'anyone' },
+          facts.rc.envDeployerRules.test_gate ?? { type: 'assignee' },
           t,
           'core:releases:run',
-        )),
-      retry: failed?.key ?? null,
-    };
-    if (
-      rc &&
-      (can.release_prod || failed) &&
-      !(await personalAccountOf(tx, rc.providerConnectorId, userId))
-    )
-      missing.push(rc.providerConnectorId);
-    if (can.review_mr) {
-      const [repo] = await tx.select().from(repos).where(eq(repos.id, c0.repo_id));
-      if (repo?.connectorId && !(await personalAccountOf(tx, repo.connectorId, userId)))
-        missing.push(repo.connectorId);
-    }
-    return {
-      ticket_id: t.id,
-      flow: { id: flow.id, round_no: round?.roundNo ?? 0, status: flow.status },
-      nodes,
-      merge_requests: mrs.map(({ m, path }) => ({
-        id: m.id,
-        direction: m.direction as 'to_env' | 'to_main',
-        repo: path,
-        external_iid: m.externalIid,
-        web_url: m.webUrl,
-        source_branch: m.sourceBranch,
-        target_branch: m.targetBranch,
-        head_sha: m.headSha,
-        merge_sha: m.mergeSha,
-        state: m.state as DeliveryView['merge_requests'][number]['state'],
-        reviewer_id: m.reviewerId,
-        merged_by: m.mergedBy,
-        comment: m.comment,
-        created_at: m.createdAt.toISOString(),
-      })),
-      release_tasks: tasks.map(({ rt, env, path }) => ({
-        id: rt.id,
-        no: releaseNo(rt.seqNo),
-        flow_id: rt.flowInstanceId,
-        environment: { id: env.id, env_code: env.envCode, name: env.name, tier: env.envTier },
-        repo: path,
-        status: rt.status as DeliveryView['release_tasks'][number]['status'],
-        source_branch: rt.sourceBranch,
-        build_commit: rt.buildCommit,
-        version: rt.version,
-        verified_revision: rt.verifiedRevision,
-        triggered_by: rt.triggeredBy,
-        created_at: rt.createdAt.toISOString(),
-        steps: steps
-          .filter((s) => s.releaseTaskId === rt.id)
-          .map((s) => ({
-            slot: s.slot as DeliveryView['release_tasks'][number]['steps'][number]['slot'],
-            status: s.status as DeliveryView['release_tasks'][number]['steps'][number]['status'],
-            command: s.command,
-            exit_code: s.exitCode,
-            error: s.errorSummary,
-            attempt: s.attempt,
-            log_tail: s.logTail,
-            started_at: s.startedAt.toISOString(),
-            finished_at: s.finishedAt?.toISOString() ?? null,
-          })),
-      })),
-      test_records: recs.map((r) => ({
-        id: r.id,
-        release_task_id: r.releaseTaskId,
-        version: r.version,
-        tester_id: r.testerId,
-        result: r.result as 'pending' | 'passed' | 'rejected',
-        comment: r.comment,
-        at: (r.decidedAt ?? r.createdAt).toISOString(),
-      })),
-      prod_gates: gates,
-      can: { ...can, start_test: empty.can.start_test },
-      missing_accounts: [...new Set(missing)],
-      environments: facts.environments,
-      config: facts.config,
-      tester_id: testerId,
-      people: await peopleOf(tx, [
-        ...facts.userIds,
-        testerId,
-        t.createdBy,
-        ...mrs.flatMap(({ m }) => [m.reviewerId, m.mergedBy]),
-        ...tasks.map(({ rt }) => rt.triggeredBy),
-        ...recs.map((r) => r.testerId),
-      ]),
-    };
-  });
+        );
+      }
+      if (!flow)
+        return {
+          ...empty,
+          missing_accounts: missing,
+          people: await peopleOf(tx, [...facts.userIds, t.createdBy]),
+        };
+      const plan = flow.plan as Plan;
+      const [round] = await tx.select().from(rounds).where(eq(rounds.id, flow.roundId!));
+      const runs = await tx
+        .select()
+        .from(nodeRuns)
+        .where(eq(nodeRuns.flowInstanceId, flow.id))
+        .orderBy(asc(nodeRuns.createdAt));
+      const latest = (key: string) =>
+        runs.filter((r) => r.nodeKey === key).sort((a, b) => b.attemptNo - a.attemptNo)[0];
+      const nodes: DeliveryNodeView[] = plan.nodes.map((n) => {
+        const r = latest(n.key);
+        return {
+          key: n.key,
+          node_kind: n.node_kind ?? '',
+          step: STEP_OF(n),
+          stage: cfgOf(n).stage,
+          status: (r?.status ?? 'pending') as DeliveryNodeView['status'],
+          attempt_no: r?.attemptNo ?? 0,
+          started_at: r?.startedAt?.toISOString() ?? null,
+          finished_at: r?.finishedAt?.toISOString() ?? null,
+          error: r?.status === 'failed' ? (r.errorRaw ?? null) : null,
+        };
+      });
+      const mrs = await tx
+        .select({ m: mergeRequests, path: repos.path })
+        .from(mergeRequests)
+        .innerJoin(repos, eq(repos.id, mergeRequests.repoId))
+        .where(eq(mergeRequests.flowInstanceId, flow.id))
+        .orderBy(asc(mergeRequests.createdAt));
+      const tasks = await tx
+        .select({ rt: releaseTasks, env: environments, path: repos.path })
+        .from(releaseTasks)
+        .innerJoin(environments, eq(environments.id, releaseTasks.environmentId))
+        .innerJoin(repos, eq(repos.id, releaseTasks.repoId))
+        .where(eq(releaseTasks.ticketId, t.id))
+        .orderBy(asc(releaseTasks.createdAt));
+      const taskIds = tasks.map((x) => x.rt.id);
+      const steps = taskIds.length
+        ? await tx
+            .select()
+            .from(releaseSteps)
+            .where(inArray(releaseSteps.releaseTaskId, taskIds))
+            .orderBy(asc(releaseSteps.startedAt))
+        : [];
+      const recs = taskIds.length
+        ? await tx
+            .select()
+            .from(testRecords)
+            .where(inArray(testRecords.releaseTaskId, taskIds))
+            .orderBy(desc(testRecords.createdAt))
+        : [];
+      const running = flow.status === 'running';
+      const waiting = (k: (key: string) => boolean) =>
+        running && runs.some((r) => k(r.nodeKey) && r.status === 'waiting_human');
+      const c0 = cfgOf(plan.nodes[0]);
+      const rc = c0.release_config_id ? await releaseConfig(tx, c0.release_config_id) : null;
+      const gates = await prodGates(tx, flow);
+      const failed = running ? nodes.find((n) => n.status === 'failed') : undefined;
+      const reviewing = nodes.find(
+        (n) => n.status === 'waiting_human' && n.key.endsWith('_mr_review'),
+      );
+      const pendingRec = recs.find((x) => x.result === 'pending');
+      const testerId = cfgOf(plan.nodes.find((n) => n.key === 'retest')).tester_id ?? t.createdBy;
+      const can = {
+        start_test: false,
+        review_mr:
+          !!reviewing &&
+          !!rc &&
+          (await allowed(
+            tx,
+            userId,
+            reviewing.key.startsWith('main') ? rc.mainBranchReviewers : rc.testBranchReviewers,
+            t,
+            'core:tickets:review',
+          )),
+        retest: waiting((k) => k === 'retest') && pendingRec?.testerId === userId,
+        request_main:
+          waiting((k) => k === 'main_request') &&
+          (await allowed(tx, userId, { type: 'assignee' }, t, 'core:tickets:review')),
+        release_prod:
+          waiting((k) => k === 'prod_request') &&
+          gates.code_review &&
+          gates.retest &&
+          gates.main_merged &&
+          !!rc &&
+          (await allowed(
+            tx,
+            userId,
+            rc.envDeployerRules.production ?? { type: 'anyone' },
+            t,
+            'core:releases:run',
+          )),
+        retry: failed?.key ?? null,
+      };
+      if (
+        rc &&
+        (can.release_prod || failed) &&
+        !(await personalAccountOf(tx, rc.providerConnectorId, userId))
+      )
+        missing.push(rc.providerConnectorId);
+      if (can.review_mr) {
+        const [repo] = await tx.select().from(repos).where(eq(repos.id, c0.repo_id));
+        if (repo?.connectorId && !(await personalAccountOf(tx, repo.connectorId, userId)))
+          missing.push(repo.connectorId);
+      }
+      return {
+        ticket_id: t.id,
+        flow: { id: flow.id, round_no: round?.roundNo ?? 0, status: flow.status },
+        nodes,
+        merge_requests: mrs.map(({ m, path }) => ({
+          id: m.id,
+          direction: m.direction as 'to_env' | 'to_main',
+          repo: path,
+          external_iid: m.externalIid,
+          web_url: m.webUrl,
+          source_branch: m.sourceBranch,
+          target_branch: m.targetBranch,
+          head_sha: m.headSha,
+          merge_sha: m.mergeSha,
+          state: m.state as DeliveryView['merge_requests'][number]['state'],
+          reviewer_id: m.reviewerId,
+          merged_by: m.mergedBy,
+          comment: m.comment,
+          created_at: m.createdAt.toISOString(),
+        })),
+        release_tasks: tasks.map(({ rt, env, path }) => ({
+          id: rt.id,
+          no: releaseNo(rt.seqNo),
+          flow_id: rt.flowInstanceId,
+          environment: { id: env.id, env_code: env.envCode, name: env.name, tier: env.envTier },
+          repo: path,
+          status: rt.status as DeliveryView['release_tasks'][number]['status'],
+          source_branch: rt.sourceBranch,
+          build_commit: rt.buildCommit,
+          version: rt.version,
+          verified_revision: rt.verifiedRevision,
+          triggered_by: rt.triggeredBy,
+          created_at: rt.createdAt.toISOString(),
+          steps: steps
+            .filter((s) => s.releaseTaskId === rt.id)
+            .map((s) => ({
+              slot: s.slot as DeliveryView['release_tasks'][number]['steps'][number]['slot'],
+              status: s.status as DeliveryView['release_tasks'][number]['steps'][number]['status'],
+              command: s.command,
+              exit_code: s.exitCode,
+              error: s.errorSummary,
+              attempt: s.attempt,
+              log_tail: s.logTail,
+              started_at: s.startedAt.toISOString(),
+              finished_at: s.finishedAt?.toISOString() ?? null,
+            })),
+        })),
+        test_records: recs.map((r) => ({
+          id: r.id,
+          release_task_id: r.releaseTaskId,
+          version: r.version,
+          tester_id: r.testerId,
+          result: r.result as 'pending' | 'passed' | 'rejected',
+          comment: r.comment,
+          at: (r.decidedAt ?? r.createdAt).toISOString(),
+        })),
+        prod_gates: gates,
+        can: { ...can, start_test: empty.can.start_test },
+        missing_accounts: [...new Set(missing)],
+        environments: facts.environments,
+        config: facts.config,
+        tester_id: testerId,
+        people: await peopleOf(tx, [
+          ...facts.userIds,
+          testerId,
+          t.createdBy,
+          ...mrs.flatMap(({ m }) => [m.reviewerId, m.mergedBy]),
+          ...tasks.map(({ rt }) => rt.triggeredBy),
+          ...recs.map((r) => r.testerId),
+        ]),
+      };
+    },
+    SNAPSHOT_READ,
+  );
 }
 
 /**
