@@ -52,6 +52,7 @@ const planArb = fc
         perRepo: fc.boolean(),
         partial: fc.boolean(),
         onFail: fc.option(fc.record({ back: fc.nat(5), max: fc.integer({ min: 1, max: 3 }) })),
+        hold: fc.boolean(),
       }),
       { minLength: 1, maxLength: 5 },
     ),
@@ -65,6 +66,7 @@ const planArb = fc
       kind: n.kind,
       ...(n.perRepo ? { per_repo: true } : {}),
       ...(n.partial ? { join: 'allow_partial_continue' as const } : {}),
+      ...(n.hold ? { hold_on_fail: true } : {}),
       // on_fail may only point back (or to itself): only rework edges form cycles
       ...(n.onFail
         ? { on_fail: { rework_to: `n${n.onFail.back % (i + 1)}`, max_attempts: n.onFail.max } }
@@ -159,9 +161,21 @@ describe('advance() 推进函数', () => {
             )
               expect(run!.attemptNo).toBeLessThan(onFail.max_attempts);
           }
-          // never stuck: a running, started flow has an active run or waits on an interruption
+          // never stuck: a running, started flow has an active run, or waits for a person after an
+          // interruption or a failed hold_on_fail node
+          const held = (r: NodeRunView) =>
+            r.status === 'failed' && !!plan.nodes.find((x) => x.key === r.nodeKey)?.hold_on_fail;
           if (flow.status === 'running' && flow.nodeRuns.length > 0 && active.length === 0)
-            expect(flow.nodeRuns.some((r) => r.error === INTERRUPTED)).toBe(true);
+            expect(flow.nodeRuns.some((r) => r.error === INTERRUPTED || held(r))).toBe(true);
+          // a failed hold_on_fail node never ends the flow
+          if (
+            signal.type === 'node_finished' &&
+            signal.outcome === 'failed' &&
+            commands.some((c) => c.type === 'finish_flow' && c.status === 'failed')
+          ) {
+            const run = flow.nodeRuns.find((r) => r.id === signal.nodeRunId)!;
+            expect(plan.nodes.find((x) => x.key === run.nodeKey)?.hold_on_fail).toBeFalsy();
+          }
           // done means the last node's latest attempt joined successfully
           if (flow.status === 'done') {
             const last = plan.nodes.at(-1)!;
