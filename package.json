@@ -29,6 +29,7 @@
     "runner:browser": "tsx tools/runner/browser.ts",
     "accounts:try": "tsx tools/accounts/try.ts",
     "repos:try": "tsx tools/runner/repos.ts",
+    "tickets:try": "tsx tools/runner/tickets.ts",
     "llm-proxy": "node --import tsx apps/llm-proxy/src/main.ts",
     "dev": "turbo run dev"
   },

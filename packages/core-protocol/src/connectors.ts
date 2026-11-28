@@ -60,6 +60,13 @@ export interface CodeSourceConnector {
     path: string,
     ref: string,
   ): Promise<string | null>;
+  /** head commit of a branch, or null when the branch does not exist (fact check, 06 §5.7) */
+  branchHead(
+    config: Record<string, unknown>,
+    credential: Record<string, unknown>,
+    remoteId: string,
+    branch: string,
+  ): Promise<string | null>;
   /** how the executor authenticates git over HTTP with this credential */
   gitAuth(credential: Record<string, unknown>): { header: string; value: string };
 }

@@ -98,7 +98,8 @@ async function signal(
       case 'close_node':
         await updateRow(tx, ctx, nodeRuns, c.nodeRunId, {
           status: c.status,
-          errorRaw: c.error ?? null,
+          // keep what the executor wrote back unless the orchestrator has its own reason
+          ...(c.error !== undefined ? { errorRaw: c.error } : {}),
           finishedAt: sql`now()`,
         });
         break;

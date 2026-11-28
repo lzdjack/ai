@@ -149,16 +149,17 @@ export async function waitFor<T>(what: string, fn: () => Promise<T | null | fals
 export async function startHarness(c: Config, o: { leaseSeconds: number }) {
   const team = await demoTeam(c);
   const db = createDb(databaseUrls(c).app, { max: 6 });
+  const sources = await sourceSettings(c);
   const app = buildApp({
     db,
     runner: { leaseSeconds: o.leaseSeconds, pollMs: 500 },
     accounts: accountSettings(c),
-    sources: await sourceSettings(c),
+    sources,
   });
   await app.listen({ host: '127.0.0.1', port: 0 });
   const addr = app.server.address();
   const server = `http://127.0.0.1:${typeof addr === 'object' && addr ? addr.port : 0}`;
-  const sys = startSysLoop(db, { reapIntervalMs: 1000, onError: (e) => console.error(e) });
+  const sys = startSysLoop(db, { reapIntervalMs: 1000, sources, onError: (e) => console.error(e) });
   const asOwner = <T>(fn: Parameters<typeof withWorkspaceTx<T>>[2]) =>
     withWorkspaceTx(db, { userId: team.user, workspaceId: team.ws }, fn);
   const runnerDir = fs.mkdtempSync(path.join(os.tmpdir(), 'cc-runner-'));

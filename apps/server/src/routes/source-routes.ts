@@ -1,6 +1,9 @@
-// /v1 routes of connectors, repositories, the probe and the trial build (docs/06 §10.3).
+// /v1 routes of connectors, repositories, the probe, the trial build (docs/06 §10.3) and, from P4,
+// environments and tickets (06 §2.5).
 import {
   AttachReposRequest,
+  CreateEnvironmentRequest,
+  CreateTicketRequest,
   CreateConnectorRequest,
   UpdateRepoRequest,
   VerifyConnectorRequest,
@@ -12,6 +15,7 @@ import type { AccountSettings } from '../service/account-service.ts';
 import { verifyAccessToken } from '../service/auth-crypto.ts';
 import { ApiFailure } from '../service/errors.ts';
 import * as src from '../service/source-service.ts';
+import * as tk from '../service/ticket-service.ts';
 
 const Ws = Type.Object({ ws: Type.String({ format: 'uuid' }) });
 const Item = Type.Object({
@@ -128,6 +132,49 @@ export function sourceRoutes(
       return reply.code(202).send(await src.trialBuild(db, user(req), ws, id));
     },
   );
+  app.post(
+    '/v1/workspaces/:ws/projects/:id/environments',
+    { schema: { params: Item, body: CreateEnvironmentRequest } },
+    async (req, reply) => {
+      const { ws, id } = p<Static<typeof Item>>(req);
+      return reply
+        .code(201)
+        .send(
+          await tk.createEnvironment(
+            db,
+            user(req),
+            ws,
+            id,
+            req.body as Static<typeof CreateEnvironmentRequest>,
+          ),
+        );
+    },
+  );
+  app.post(
+    '/v1/workspaces/:ws/projects/:id/tickets',
+    { schema: { params: Item, body: CreateTicketRequest } },
+    async (req, reply) => {
+      const { ws, id } = p<Static<typeof Item>>(req);
+      return reply
+        .code(201)
+        .send(
+          await tk.createTicket(
+            db,
+            user(req),
+            ws,
+            id,
+            req.body as Static<typeof CreateTicketRequest>,
+          ),
+        );
+    },
+  );
+  app.get('/v1/workspaces/:ws/tickets', { schema: { params: Ws } }, async (req) =>
+    tk.listTickets(db, user(req), p<Static<typeof Ws>>(req).ws),
+  );
+  app.get('/v1/workspaces/:ws/tickets/:id', { schema: { params: Item } }, async (req) => {
+    const { ws, id } = p<Static<typeof Item>>(req);
+    return tk.ticketDetail(db, user(req), ws, id);
+  });
   app.get('/v1/workspaces/:ws/flows/:id', { schema: { params: Item } }, async (req) => {
     const { ws, id } = p<Static<typeof Item>>(req);
     return src.flowStatus(db, user(req), ws, id);

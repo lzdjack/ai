@@ -35,6 +35,7 @@ import { ApiFailure } from './errors.ts';
 import { connectorOf } from './plugins.ts';
 import { openSecret, sealToRunner } from './secrets.ts';
 import type { SourceSettings } from './source-service.ts';
+import { roundStepFinished } from './ticket-service.ts';
 import { insertRow, updateRow } from '../db/write.ts';
 import type { Plan } from '../orchestrator/advance.ts';
 import { BOT_STEP, pgOrchestrator } from '../orchestrator/flow.ts';
@@ -210,6 +211,8 @@ export async function completeRoundStep(
       nodeRunId: p.node_run_id,
       outcome: req.outcome,
     });
+    // a round's ticket follows its flow (06 §3.1, §3.2)
+    await roundStepFinished(tx, ctx, p.flow_instance_id, p.node_run_id, req.outcome);
     if (!req.take_next) return null;
     const runner = await getRunner(tx, auth.runnerId);
     if (runner.drainMode) return null;

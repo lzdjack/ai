@@ -80,5 +80,17 @@
   "error.invitation.role_unknown": "没有这个角色",
   "error.invitation.role_too_high": "不能邀请比你自己权限更高的角色",
   "error.invitation.project_not_visible": "只能邀请到你能看到的项目",
-  "error.notification.not_found": "没有找到这条通知"
+  "error.notification.not_found": "没有找到这条通知",
+  "ticket.repro_steps": "复现步骤：",
+  "notify.round_delivered.title": "{no} 第 {round} 轮已交付，等你审核",
+  "notify.round_needs_help.title": "{no} 需要协助：{title}",
+  "error.ticket.not_found": "没有找到这张工单",
+  "error.project.not_found": "没有找到这个项目",
+  "error.project.no_repos": "这个项目还没有可修改的代码仓",
+  "error.repo.not_found": "没有找到这个代码仓",
+  "error.repo.not_probed": "代码仓还没探测出构建命令，请先探测或手动填写",
+  "error.connector.not_found": "没有找到这个连接器",
+  "error.connector.verify_failed": "连接器鉴权没通过，请检查地址和令牌",
+  "error.connector.plugin_not_installed": "这个连接器插件还没安装",
+  "error.flow.not_found": "没有找到这次运行"
 }

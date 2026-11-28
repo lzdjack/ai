@@ -145,6 +145,18 @@ const connector: CodeSourceConnector = {
     return res.text();
   },
 
+  async branchHead(config, credential, remoteId, branch) {
+    const res = await api(
+      config,
+      credential,
+    )(
+      `/projects/${encodeURIComponent(remoteId)}/repository/branches/${encodeURIComponent(branch)}`,
+    );
+    if (res.status === 404) return null;
+    if (!res.ok) throw new Error(`GitLab ${res.status}`);
+    return ((await res.json()) as { commit: { id: string } }).commit.id;
+  },
+
   gitAuth(credential) {
     // GitLab accepts a token as HTTP basic password with any user name
     const token = String((credential as unknown as Cred).token);

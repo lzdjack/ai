@@ -73,6 +73,7 @@ const fake: CodeSourceConnector = {
     if (cred.token !== TOKEN) throw new Error('401');
     return FILES[id]?.[p] ?? null;
   },
+  branchHead: async () => null,
   gitAuth: (cred) => ({ header: 'Authorization', value: `Bearer ${String(cred.token)}` }),
   toRepo(id: string) {
     return {

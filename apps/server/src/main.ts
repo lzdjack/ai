@@ -11,18 +11,20 @@ const role = process.argv[2] ?? 'all';
 const c = loadConfig();
 const db = createDb(databaseUrls(c).app);
 
+const sources = await sourceSettings(c);
 if (role === 'app' || role === 'all') {
   const app = buildApp({
     db,
     logger: true,
     runner: { leaseSeconds: c.CC_RUNNER_LEASE_SECONDS, pollMs: c.CC_RUNNER_POLL_MS },
     accounts: accountSettings(c),
-    sources: await sourceSettings(c),
+    sources,
   });
   await app.listen({ host: '127.0.0.1', port: c.CC_APP_PORT });
 }
 if (role === 'sys' || role === 'all')
   startSysLoop(db, {
     reapIntervalMs: c.CC_SYS_REAP_INTERVAL_MS,
+    sources,
     onError: (e) => console.error('cc-sys', e),
   });
