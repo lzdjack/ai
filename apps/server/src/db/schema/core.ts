@@ -193,12 +193,23 @@ export const changeStream = workspaceTable(
     entityRev: integer().notNull(),
     row: jsonb(),
     authzEpoch: integer().notNull().default(0),
+    /** set for rows only one user may see (their notifications); RLS filters on it */
+    recipientUserId: uuid(),
   },
   (t) => [
     unique('change_stream_seq_key').on(t.workspaceId, t.streamSeq),
+    index('change_stream_pending_idx')
+      .on(t.createdAt)
+      .where(sql`stream_seq is null`),
     enumCheck('change_stream_op_check', 'op', ['upsert', 'tombstone']),
   ],
-  { audit: false, mixedProject: true },
+  {
+    audit: false,
+    mixedProject: true,
+    definerAccess: true,
+    ownerColumn: 'recipient_user_id',
+    ownerNullable: true,
+  },
 );
 
 /** Written by a trigger on every audited table; each probe must have a matching event (06 §2.8). */

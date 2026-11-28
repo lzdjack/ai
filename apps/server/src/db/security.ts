@@ -21,11 +21,24 @@ export const MIGRATOR_ROLE = 'cc_migrator';
 const WS = `nullif(current_setting('app.current_workspace_id', true), '')::uuid`;
 const VISIBLE = `coalesce(nullif(current_setting('app.visible_project_ids', true), '')::uuid[], '{}')`;
 
-function predicate(t: TenantTableMeta): string {
+const USER = `nullif(current_setting('app.current_user_id', true), '')::uuid`;
+
+/**
+ * USING (what can be read) adds the owner condition; WITH CHECK (what can be written) does not, so a
+ * member can notify another member of the same workspace without being able to read their rows.
+ */
+function predicate(t: TenantTableMeta, forRead = true): string {
   const ws = `${t.workspaceColumn} = ${WS}`;
-  if (t.scope === 'project') return `${ws} and project_id = any(${VISIBLE})`;
-  if (t.scope === 'mixed') return `${ws} and (project_id is null or project_id = any(${VISIBLE}))`;
-  return ws;
+  const own =
+    t.ownerColumn && forRead
+      ? t.ownerNullable
+        ? ` and (${t.ownerColumn} is null or ${t.ownerColumn} = ${USER})`
+        : ` and ${t.ownerColumn} = ${USER}`
+      : '';
+  if (t.scope === 'project') return `${ws} and project_id = any(${VISIBLE})${own}`;
+  if (t.scope === 'mixed')
+    return `${ws} and (project_id is null or project_id = any(${VISIBLE}))${own}`;
+  return `${ws}${own}`;
 }
 
 export function securitySql(): string {
@@ -38,13 +51,14 @@ export function securitySql(): string {
   const tables = [...TENANT_TABLES].sort((a, b) => a.name.localeCompare(b.name));
   for (const t of tables) {
     const p = predicate(t);
+    const check = predicate(t, false);
     out.push(
       '',
       `-- ${t.name} (${[t.scope, t.audit && 'audit', t.appendOnly && 'append-only', t.definerAccess && 'definer'].filter(Boolean).join(', ')})`,
       `alter table ${t.name} enable row level security;`,
       `alter table ${t.name} force row level security;`,
       `drop policy if exists cc_tenant on ${t.name};`,
-      `create policy cc_tenant on ${t.name} using (${p}) with check (${p});`,
+      `create policy cc_tenant on ${t.name} using (${p}) with check (${check});`,
       `drop policy if exists cc_definer on ${t.name};`,
     );
     if (t.definerAccess)

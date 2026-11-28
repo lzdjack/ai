@@ -14,6 +14,8 @@ const secrets = [
   'CC_PG_SUPERUSER_PASSWORD=aaaaaaaaaaaaaaaaaaaa',
   'CC_PG_MIGRATOR_PASSWORD=bbbbbbbbbbbbbbbbbbbb',
   'CC_PG_APP_PASSWORD=cccccccccccccccccc/+@',
+  'CC_AUTH_SECRET=dddddddddddddddddddd',
+  'CC_OTP_PEPPER=eeeeeeeeeeeeeeeeeeee',
 ].join('\n');
 
 describe('配置模块', () => {

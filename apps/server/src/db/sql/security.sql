@@ -15,12 +15,13 @@ revoke update, delete, truncate on audit_probe from cc_app;
 create trigger cc_append_only before update or delete on audit_probe for each row execute function cc_reject_change();
 drop trigger if exists cc_audit_probe on audit_probe;
 
--- change_stream (mixed)
+-- change_stream (mixed, definer)
 alter table change_stream enable row level security;
 alter table change_stream force row level security;
 drop policy if exists cc_tenant on change_stream;
-create policy cc_tenant on change_stream using (workspace_id = nullif(current_setting('app.current_workspace_id', true), '')::uuid and (project_id is null or project_id = any(coalesce(nullif(current_setting('app.visible_project_ids', true), '')::uuid[], '{}')))) with check (workspace_id = nullif(current_setting('app.current_workspace_id', true), '')::uuid and (project_id is null or project_id = any(coalesce(nullif(current_setting('app.visible_project_ids', true), '')::uuid[], '{}'))));
+create policy cc_tenant on change_stream using (workspace_id = nullif(current_setting('app.current_workspace_id', true), '')::uuid and (project_id is null or project_id = any(coalesce(nullif(current_setting('app.visible_project_ids', true), '')::uuid[], '{}'))) and (recipient_user_id is null or recipient_user_id = nullif(current_setting('app.current_user_id', true), '')::uuid)) with check (workspace_id = nullif(current_setting('app.current_workspace_id', true), '')::uuid and (project_id is null or project_id = any(coalesce(nullif(current_setting('app.visible_project_ids', true), '')::uuid[], '{}'))));
 drop policy if exists cc_definer on change_stream;
+create policy cc_definer on change_stream to cc_migrator using (true) with check (true);
 drop trigger if exists cc_append_only on change_stream;
 drop trigger if exists cc_audit_probe on change_stream;
 
@@ -64,6 +65,17 @@ drop trigger if exists cc_append_only on node_runs;
 drop trigger if exists cc_audit_probe on node_runs;
 create trigger cc_audit_probe after insert or update or delete on node_runs for each row execute function cc_audit_probe('workspace_id');
 
+-- notifications (workspace, audit, definer)
+alter table notifications enable row level security;
+alter table notifications force row level security;
+drop policy if exists cc_tenant on notifications;
+create policy cc_tenant on notifications using (workspace_id = nullif(current_setting('app.current_workspace_id', true), '')::uuid and user_id = nullif(current_setting('app.current_user_id', true), '')::uuid) with check (workspace_id = nullif(current_setting('app.current_workspace_id', true), '')::uuid);
+drop policy if exists cc_definer on notifications;
+create policy cc_definer on notifications to cc_migrator using (true) with check (true);
+drop trigger if exists cc_append_only on notifications;
+drop trigger if exists cc_audit_probe on notifications;
+create trigger cc_audit_probe after insert or update or delete on notifications for each row execute function cc_audit_probe('workspace_id');
+
 -- outbox (workspace)
 alter table outbox enable row level security;
 alter table outbox force row level security;
@@ -83,6 +95,28 @@ create policy cc_definer on projects to cc_migrator using (true) with check (tru
 drop trigger if exists cc_append_only on projects;
 drop trigger if exists cc_audit_probe on projects;
 create trigger cc_audit_probe after insert or update or delete on projects for each row execute function cc_audit_probe('workspace_id');
+
+-- role_bindings (workspace, audit, definer)
+alter table role_bindings enable row level security;
+alter table role_bindings force row level security;
+drop policy if exists cc_tenant on role_bindings;
+create policy cc_tenant on role_bindings using (workspace_id = nullif(current_setting('app.current_workspace_id', true), '')::uuid) with check (workspace_id = nullif(current_setting('app.current_workspace_id', true), '')::uuid);
+drop policy if exists cc_definer on role_bindings;
+create policy cc_definer on role_bindings to cc_migrator using (true) with check (true);
+drop trigger if exists cc_append_only on role_bindings;
+drop trigger if exists cc_audit_probe on role_bindings;
+create trigger cc_audit_probe after insert or update or delete on role_bindings for each row execute function cc_audit_probe('workspace_id');
+
+-- roles (workspace, audit, definer)
+alter table roles enable row level security;
+alter table roles force row level security;
+drop policy if exists cc_tenant on roles;
+create policy cc_tenant on roles using (workspace_id = nullif(current_setting('app.current_workspace_id', true), '')::uuid) with check (workspace_id = nullif(current_setting('app.current_workspace_id', true), '')::uuid);
+drop policy if exists cc_definer on roles;
+create policy cc_definer on roles to cc_migrator using (true) with check (true);
+drop trigger if exists cc_append_only on roles;
+drop trigger if exists cc_audit_probe on roles;
+create trigger cc_audit_probe after insert or update or delete on roles for each row execute function cc_audit_probe('workspace_id');
 
 -- runner_keys (workspace, audit, definer)
 alter table runner_keys enable row level security;
@@ -123,6 +157,17 @@ create policy cc_tenant on workspace_counters using (workspace_id = nullif(curre
 drop policy if exists cc_definer on workspace_counters;
 drop trigger if exists cc_append_only on workspace_counters;
 drop trigger if exists cc_audit_probe on workspace_counters;
+
+-- workspace_invitations (workspace, audit, definer)
+alter table workspace_invitations enable row level security;
+alter table workspace_invitations force row level security;
+drop policy if exists cc_tenant on workspace_invitations;
+create policy cc_tenant on workspace_invitations using (workspace_id = nullif(current_setting('app.current_workspace_id', true), '')::uuid) with check (workspace_id = nullif(current_setting('app.current_workspace_id', true), '')::uuid);
+drop policy if exists cc_definer on workspace_invitations;
+create policy cc_definer on workspace_invitations to cc_migrator using (true) with check (true);
+drop trigger if exists cc_append_only on workspace_invitations;
+drop trigger if exists cc_audit_probe on workspace_invitations;
+create trigger cc_audit_probe after insert or update or delete on workspace_invitations for each row execute function cc_audit_probe('workspace_id');
 
 -- workspace_members (workspace, audit, definer)
 alter table workspace_members enable row level security;

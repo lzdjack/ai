@@ -41,17 +41,31 @@ export interface TenantTableMeta {
   definerAccess: boolean;
   /** append-only for the runtime account */
   appendOnly: boolean;
+  /**
+   * rows belong to one user as well (e.g. notifications): visible only to that user. With
+   * ownerNullable a null owner means "everyone allowed in the workspace / project".
+   */
+  ownerColumn?: string;
+  ownerNullable?: boolean;
 }
 
 export const TENANT_TABLES: TenantTableMeta[] = [];
 
 /** Tables without workspace_id, checked by the tenancy test so nothing slips through unlisted. */
-export const GLOBAL_TABLES = ['users'] as const;
+export const GLOBAL_TABLES = [
+  'users',
+  'user_auth_tokens',
+  'refresh_tokens',
+  'ws_tickets',
+  'auth_rate_limits',
+] as const;
 
 export interface TenantOptions {
   audit?: boolean;
   definerAccess?: boolean;
   appendOnly?: boolean;
+  ownerColumn?: string;
+  ownerNullable?: boolean;
 }
 
 const ts = () => timestamp({ withTimezone: true });
@@ -72,6 +86,8 @@ export function registerTenantTable(
     audit: o.audit ?? true,
     definerAccess: o.definerAccess ?? false,
     appendOnly: o.appendOnly ?? false,
+    ownerColumn: o.ownerColumn,
+    ownerNullable: o.ownerNullable,
   });
 }
 
@@ -84,7 +100,7 @@ const audited = () => ({
 
 // ---------- global and root tables ----------
 
-/** A global account (class A in 06 §2.3): no workspace, authorised by user id. P2 adds auth fields. */
+/** A global account (class A in 06 §2.3): no workspace, authorised by user id. */
 export const users = pgTable(
   'users',
   {
@@ -95,6 +111,9 @@ export const users = pgTable(
     locale: varchar({ length: 16 }).notNull().default('zh-CN'),
     timezone: text().notNull().default('Asia/Shanghai'),
     isInstanceAdmin: boolean().notNull().default(false),
+    /** Argon2id (06 §10.1); null for accounts that have not set one (seeded demo users) */
+    passwordHash: text(),
+    emailVerifiedAt: ts(),
     ...audited(),
   },
   (t) => [

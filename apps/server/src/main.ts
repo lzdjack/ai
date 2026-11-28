@@ -4,6 +4,7 @@
 import { databaseUrls, loadConfig } from '@cloudcraft/config';
 import { buildApp } from './app.ts';
 import { createDb } from './db/client.ts';
+import { accountSettings } from './service/settings.ts';
 import { startSysLoop } from './sys.ts';
 
 const role = process.argv[2] ?? 'all';
@@ -15,6 +16,7 @@ if (role === 'app' || role === 'all') {
     db,
     logger: true,
     runner: { leaseSeconds: c.CC_RUNNER_LEASE_SECONDS, pollMs: c.CC_RUNNER_POLL_MS },
+    accounts: accountSettings(c),
   });
   await app.listen({ host: '127.0.0.1', port: c.CC_APP_PORT });
 }
