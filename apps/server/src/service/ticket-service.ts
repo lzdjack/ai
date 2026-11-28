@@ -5,22 +5,30 @@
 //           transaction (each fix/ branch head on the platform must be the commit the host made), then
 //           records the delivery card, risk level and digest, moves the ticket to review and notifies
 //   a failed node: the round needs help, with the reason
+//   review (P5): an assignee approves the latest delivery, or sends it back — which records the
+//           review and starts the next round on the same fix/ branch, the comment handed to the bot
 import crypto from 'node:crypto';
-import type {
-  CreateTicketRequest,
-  DeliveryCard,
-  DeliveryRepoFacts,
-  RiskLevel,
-  TicketDetail,
+import {
+  DEFAULT_RISK_RULES,
+  evidenceName,
+  type CreateTicketRequest,
+  type DeliveryCard,
+  type DeliveryRepoFacts,
+  type ReviewRequest,
+  type RiskLevel,
+  type RiskRules,
+  type TicketDetail,
 } from '@cloudcraft/core-protocol';
 import { and, asc, desc, eq, isNull, sql } from 'drizzle-orm';
 import { withLeaseTx, type ActorCtx, type Db, type Lease, type Tx } from '../db/client.ts';
 import {
   environments,
+  evidences,
   flowInstances,
   nodeRuns,
   projects,
   repos,
+  reviews,
   roundRepoSlices,
   rounds,
   ticketAssignees,
@@ -33,7 +41,7 @@ import { pgOrchestrator } from '../orchestrator/flow.ts';
 import { claimWork, completeWork, enqueueWork } from '../orchestrator/queue.ts';
 import { nextTicketNo } from '../repo/ticket-repo.ts';
 import { publish } from './changes.ts';
-import { ApiFailure } from './errors.ts';
+import { ApiFailure, pgCode } from './errors.ts';
 import { tr } from './i18n.ts';
 import { inWorkspace, notify, permissionsOf } from './iam-service.ts';
 import { opened, projectRepoSpecs, type SourceSettings } from './source-service.ts';
@@ -42,11 +50,23 @@ import { grants } from '@cloudcraft/core-protocol';
 export const ROUND_DELIVER = 'round_deliver';
 export const STANDARD_FRONTEND_BUGFIX = 'standard_frontend_bugfix';
 
+/** What the AI node reads: the report, and from round 2 on the review it answers (untrusted text). */
+interface Material {
+  title: string;
+  body: string;
+  review?: {
+    round_no: number;
+    comment: string;
+    category: string | null;
+    location: ReviewRequest['location'] | null;
+  };
+}
+
 /** The built-in template (06 §5.1 presets), compiled into the round's frozen plan. */
 function compilePlan(o: {
   repos: Plan['repos'];
   branch: string;
-  material: { title: string; body: string };
+  material: Material;
   envUrl: string | null;
 }): Plan {
   return {
@@ -81,6 +101,70 @@ const summary = (t: typeof tickets.$inferSelect) => ({
   current_round: t.currentRound,
 });
 
+/** The report as the AI node reads it: body, then the repro steps the person listed. */
+function reportOf(t: typeof tickets.$inferSelect) {
+  const steps = t.reproSteps.map((x, i) => `${i + 1}. ${x}`).join('\n');
+  return steps ? `${t.body}\n\n${tr('ticket.repro_steps')}\n${steps}` : t.body;
+}
+
+/**
+ * Round <roundNo> of a ticket, dispatched at once: its plan compiled from the built-in template with
+ * the project's repos and test environment of this moment (06 §3.1: a new round binds the newest
+ * template), on the ticket's fix/ branch — round 2 on continues from what round 1 pushed.
+ */
+async function startRound(
+  tx: Tx,
+  ctx: ActorCtx,
+  o: {
+    ticket: typeof tickets.$inferSelect;
+    project: typeof projects.$inferSelect;
+    repoSpecs: Plan['repos'];
+    roundNo: number;
+    cause: 'new' | 'code_rejected';
+    review?: Material['review'];
+  },
+) {
+  const [env] = await tx
+    .select()
+    .from(environments)
+    .where(
+      and(
+        eq(environments.projectId, o.project.id),
+        eq(environments.envTier, 'test_gate'),
+        isNull(environments.deletedAt),
+      ),
+    )
+    .orderBy(asc(environments.sortOrder));
+  const round = await insertRow(tx, ctx, rounds, {
+    projectId: o.project.id,
+    ticketId: o.ticket.id,
+    roundNo: o.roundNo,
+    cause: o.cause,
+    status: 'fixing',
+  });
+  const plan = compilePlan({
+    repos: o.repoSpecs,
+    branch: `fix/${o.project.slug}/${ticketNo(o.ticket.seqNo)}`,
+    material: {
+      title: o.ticket.title,
+      body: reportOf(o.ticket),
+      ...(o.review ? { review: o.review } : {}),
+    },
+    envUrl: env?.entryUrl ?? null,
+  });
+  const flowId = await pgOrchestrator.startFlow(tx, ctx, {
+    projectId: o.project.id,
+    kind: 'round',
+    plan,
+  });
+  await updateRow(tx, ctx, flowInstances, flowId, {
+    ticketId: o.ticket.id,
+    roundId: round.id,
+  } as never);
+  await updateRow(tx, ctx, rounds, round.id, { flowInstanceId: flowId } as never);
+  return flowId;
+}
+
 export function createTicket(
   db: Db,
   userId: string,
@@ -99,17 +183,6 @@ export function createTicket(
     const repoSpecs = await projectRepoSpecs(tx, projectId);
     if (!repoSpecs.length) throw new ApiFailure(409, 'project.no_repos');
     const seq = await nextTicketNo(tx, ws);
-    const [env] = await tx
-      .select()
-      .from(environments)
-      .where(
-        and(
-          eq(environments.projectId, projectId),
-          eq(environments.envTier, 'test_gate'),
-          isNull(environments.deletedAt),
-        ),
-      )
-      .orderBy(asc(environments.sortOrder));
     const ticket = await insertRow(tx, ctx, tickets, {
       projectId,
       seqNo: seq,
@@ -122,28 +195,13 @@ export function createTicket(
       createdBy: userId,
     });
     await insertRow(tx, ctx, ticketAssignees, { projectId, ticketId: ticket.id, userId });
-    const round = await insertRow(tx, ctx, rounds, {
-      projectId,
-      ticketId: ticket.id,
+    const flowId = await startRound(tx, ctx, {
+      ticket,
+      project,
+      repoSpecs,
       roundNo: 1,
-      status: 'fixing',
+      cause: 'new',
     });
-    const steps = (req.repro_steps ?? []).map((s, i) => `${i + 1}. ${s}`).join('\n');
-    const plan = compilePlan({
-      repos: repoSpecs,
-      branch: `fix/${project.slug}/${ticketNo(seq)}`,
-      material: {
-        title: req.title,
-        body: steps ? `${req.body}\n\n${tr('ticket.repro_steps')}\n${steps}` : req.body,
-      },
-      envUrl: env?.entryUrl ?? null,
-    });
-    const flowId = await pgOrchestrator.startFlow(tx, ctx, { projectId, kind: 'round', plan });
-    await updateRow(tx, ctx, flowInstances, flowId, {
-      ticketId: ticket.id,
-      roundId: round.id,
-    } as never);
-    await updateRow(tx, ctx, rounds, round.id, { flowInstanceId: flowId } as never);
     await publish(tx, ctx, {
       entity: 'ticket',
       entityId: ticket.id,
@@ -233,6 +291,17 @@ export function ticketDetail(
       .from(rounds)
       .where(eq(rounds.ticketId, id))
       .orderBy(asc(rounds.roundNo));
+    const rvs = (
+      await tx
+        .select({ rv: reviews })
+        .from(reviews)
+        .innerJoin(rounds, eq(rounds.id, reviews.roundId))
+        .where(eq(rounds.ticketId, id))
+    ).map((x) => x.rv);
+    const [mine] = await tx
+      .select({ id: ticketAssignees.id })
+      .from(ticketAssignees)
+      .where(and(eq(ticketAssignees.ticketId, id), eq(ticketAssignees.userId, userId)));
     return {
       id: t.id,
       no: ticketNo(t.seqNo),
@@ -243,15 +312,144 @@ export function ticketDetail(
       project_id: t.projectId,
       current_round: t.currentRound,
       rev: t.rev,
-      rounds: rs.map((r) => ({
-        round_no: r.roundNo,
-        status: r.status as TicketDetail['rounds'][number]['status'],
-        reason: r.helpReason,
-        flow_id: r.flowInstanceId,
-        delivery: (r.deliveryPayload as DeliveryCard | null) ?? null,
-      })),
+      is_assignee: !!mine,
+      rounds: rs.map((r) => {
+        const rv = rvs.find((x) => x.roundId === r.id);
+        return {
+          round_no: r.roundNo,
+          cause: r.cause,
+          status: r.status as TicketDetail['rounds'][number]['status'],
+          reason: r.helpReason,
+          flow_id: r.flowInstanceId,
+          review_rev: r.reviewRev,
+          delivery: (r.deliveryPayload as DeliveryCard | null) ?? null,
+          review: rv
+            ? {
+                result: rv.result as 'approved' | 'rejected',
+                reviewer_id: rv.reviewerId,
+                comment: rv.comment,
+                reject_category: rv.rejectCategory,
+                location: (rv.location as ReviewRequest['location'] | null) ?? null,
+                at: rv.createdAt.toISOString(),
+              }
+            : null,
+        };
+      }),
     };
   });
+}
+
+/**
+ * 待我审核 → 审核通过 / 打回重修 (06 §3.1, 05 step 4). Only an assignee, only the latest round with
+ * the digest and review_rev the reviewer saw; one review per round (whoever writes first). Sending
+ * back starts the next round at once with the comment; the reviewed flow's review step closes either
+ * way (the decision is the review row).
+ */
+export function reviewTicket(
+  db: Db,
+  userId: string,
+  ws: string,
+  id: string,
+  req: ReviewRequest,
+): Promise<TicketDetail> {
+  return inWorkspace(db, userId, ws, async (tx, ctx) => {
+    const [t] = await tx
+      .select()
+      .from(tickets)
+      .where(and(eq(tickets.id, id), isNull(tickets.deletedAt)))
+      .for('update');
+    if (!t) throw new ApiFailure(404, 'ticket.not_found');
+    const [mine] = await tx
+      .select({ id: ticketAssignees.id })
+      .from(ticketAssignees)
+      .where(and(eq(ticketAssignees.ticketId, id), eq(ticketAssignees.userId, userId)));
+    if (!mine) throw new ApiFailure(403, 'review.not_assignee');
+    if (t.status !== 'in_review') throw new ApiFailure(409, 'review.not_in_review');
+    const [round] = await tx
+      .select()
+      .from(rounds)
+      .where(and(eq(rounds.ticketId, id), eq(rounds.roundNo, t.currentRound)));
+    if (
+      !round ||
+      round.status !== 'delivered' ||
+      round.roundNo !== req.round_no ||
+      round.deliveryDigest !== req.delivery_digest ||
+      round.reviewRev !== req.review_rev
+    )
+      throw new ApiFailure(409, 'review.stale');
+    const comment = req.comment?.trim() ?? '';
+    if (req.decision === 'reject' && !comment) throw new ApiFailure(400, 'review.comment_required');
+    const approve = req.decision === 'approve';
+    try {
+      await insertRow(tx, ctx, reviews, {
+        projectId: t.projectId,
+        roundId: round.id,
+        deliveryDigest: round.deliveryDigest!,
+        reviewRev: round.reviewRev,
+        result: approve ? 'approved' : 'rejected',
+        reviewerId: userId,
+        comment: comment || null,
+        rejectCategory: approve ? null : (req.reject_category ?? null),
+        riskLevel: round.riskLevel,
+        location: approve ? null : (req.location ?? null),
+        textSnapshot: comment || null,
+      });
+    } catch (e) {
+      if (pgCode(e) === '23505') throw new ApiFailure(409, 'review.already_reviewed');
+      throw e;
+    }
+    // the reviewed flow's human step is over
+    if (round.flowInstanceId) {
+      const [gate] = await tx
+        .select()
+        .from(nodeRuns)
+        .where(
+          and(
+            eq(nodeRuns.flowInstanceId, round.flowInstanceId),
+            eq(nodeRuns.status, 'waiting_human'),
+          ),
+        );
+      if (gate)
+        await pgOrchestrator.signal(tx, ctx, round.flowInstanceId, {
+          type: 'node_finished',
+          nodeRunId: gate.id,
+          outcome: 'done',
+        });
+    }
+    let fresh: typeof tickets.$inferSelect;
+    if (approve) fresh = await updateRow(tx, ctx, tickets, t.id, { status: 'approved' } as never);
+    else {
+      const [project] = await tx.select().from(projects).where(eq(projects.id, t.projectId));
+      const repoSpecs = await projectRepoSpecs(tx, t.projectId);
+      if (!repoSpecs.length) throw new ApiFailure(409, 'project.no_repos');
+      fresh = await updateRow(tx, ctx, tickets, t.id, {
+        status: 'fixing',
+        currentRound: t.currentRound + 1,
+      } as never);
+      await startRound(tx, ctx, {
+        ticket: fresh,
+        project: project!,
+        repoSpecs,
+        roundNo: t.currentRound + 1,
+        cause: 'code_rejected',
+        review: {
+          round_no: round.roundNo,
+          comment,
+          category: req.reject_category ?? null,
+          location: req.location ?? null,
+        },
+      });
+    }
+    await publish(tx, ctx, {
+      entity: 'ticket',
+      entityId: fresh.id,
+      op: 'upsert',
+      rev: fresh.rev,
+      projectId: fresh.projectId,
+      row: summary(fresh),
+    });
+    return null;
+  }).then(() => ticketDetail(db, userId, ws, id));
 }
 
 // ---------- after the executor wrote back ----------
@@ -304,24 +502,32 @@ async function needsHelp(tx: Tx, ctx: ActorCtx, round: typeof rounds.$inferSelec
     });
 }
 
-const HIGH_RISK = /(^|\/)(auth|rbac|pay|salary|migrations?)(\/|\.|$)|(^|\/)Dockerfile$/i;
 const DEPS = /(^|\/)(package\.json|pnpm-lock\.yaml|yarn\.lock|package-lock\.json)$/;
 
-/** Default thresholds of 06 §13.6 (≤30 lines / ≤3 files, ≤300 / ≤15); project rules override later. */
+/** L0–L2 by the project's rules (06 §5.7 item 2), defaults of 06 §13.6 for what they leave out. */
 export function riskOf(
   repos: DeliveryRepoFacts[],
   touchedTests: string[],
+  rules: RiskRules = {},
 ): { level: RiskLevel; reasons: string[] } {
-  const files = repos.flatMap((r) => r.files.map((f) => f.slice(2)));
-  const lines = repos.reduce((n, r) => n + r.added + r.deleted, 0);
+  const r = { ...DEFAULT_RISK_RULES, ...rules };
+  const words = r.high_risk_paths.map((w) => w.toLowerCase());
+  const highRisk = (f: string) =>
+    f
+      .toLowerCase()
+      .split('/')
+      .some((seg) => words.some((w) => seg === w || seg.startsWith(`${w}.`)));
+  const files = repos.flatMap((x) => x.files.map((f) => f.slice(2)));
+  const lines = repos.reduce((n, x) => n + x.added + x.deleted, 0);
   const reasons: string[] = [];
   if (repos.length > 1) reasons.push('multi_repo');
   if (touchedTests.length) reasons.push('touched_existing_tests');
-  if (files.some((f) => HIGH_RISK.test(f))) reasons.push('high_risk_path');
+  if (files.some(highRisk)) reasons.push('high_risk_path');
   if (files.some((f) => DEPS.test(f))) reasons.push('dependency_change');
-  if (lines > 300 || files.length > 15) reasons.push('large_change');
+  if (lines > r.l1_max_lines || files.length > r.l1_max_files) reasons.push('large_change');
   if (reasons.length) return { level: 'L2', reasons };
-  if (lines > 30 || files.length > 3) return { level: 'L1', reasons: ['medium_change'] };
+  if (lines > r.l0_max_lines || files.length > r.l0_max_files)
+    return { level: 'L1', reasons: ['medium_change'] };
   return { level: 'L0', reasons: [] };
 }
 
@@ -350,6 +556,7 @@ interface Pending {
   verdict: Record<string, unknown>;
   digests: Record<string, unknown>;
   verifyNodeRunId: string;
+  rules: RiskRules;
 }
 
 async function deliverOne(db: Db, sources: SourceSettings, lease: Lease) {
@@ -409,6 +616,23 @@ async function deliverOne(db: Db, sources: SourceSettings, lease: Lease) {
       });
     }
     const verdict = (vo.verdict ?? {}) as Record<string, boolean>;
+    const [project] = await tx
+      .select({ rules: projects.riskRules })
+      .from(projects)
+      .where(eq(projects.id, round.projectId));
+    // screenshots the executor uploaded during the replay
+    const files = await tx
+      .select({ id: evidences.id, name: evidences.name })
+      .from(evidences)
+      .where(eq(evidences.nodeRunId, verify.id));
+    const shot = (side: 'base' | 'head') => (x: { name: string; sha256: string }) => {
+      const name = evidenceName(side, x.name);
+      return {
+        name,
+        sha256: x.sha256,
+        evidence_id: files.find((f) => f.name === name)?.id ?? null,
+      };
+    };
     const browser = vo.browser as
       | {
           base?: { screenshots?: { name: string; sha256: string }[] };
@@ -418,6 +642,7 @@ async function deliverOne(db: Db, sources: SourceSettings, lease: Lease) {
     return {
       round,
       verifyNodeRunId: verify.id,
+      rules: (project?.rules ?? {}) as RiskRules,
       verdict,
       digests: (vo.digests ?? {}) as Record<string, unknown>,
       checks,
@@ -430,14 +655,8 @@ async function deliverOne(db: Db, sources: SourceSettings, lease: Lease) {
         checks: Object.entries(verdict).map(([key, ok]) => ({ key, ok: !!ok })),
         repro: { tests: (d.repro_tests as string[]) ?? [], browser: !!d.browser_repro },
         screenshots: [
-          ...(browser?.base?.screenshots ?? []).map((s) => ({
-            name: `base-${s.name}`,
-            sha256: s.sha256,
-          })),
-          ...(browser?.head?.screenshots ?? []).map((s) => ({
-            name: `head-${s.name}`,
-            sha256: s.sha256,
-          })),
+          ...(browser?.base?.screenshots ?? []).map(shot('base')),
+          ...(browser?.head?.screenshots ?? []).map(shot('head')),
         ],
         touched_tests: (fo.touched_tests as string[]) ?? [],
         model: typeof fo.model === 'string' ? fo.model : null,
@@ -485,7 +704,7 @@ async function recordDelivery(
   round: typeof rounds.$inferSelect,
   p: Pending,
 ) {
-  const risk = riskOf(p.card.repos, p.card.touched_tests);
+  const risk = riskOf(p.card.repos, p.card.touched_tests, p.rules);
   const digest = crypto
     .createHash('sha256')
     .update(

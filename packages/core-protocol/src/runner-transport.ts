@@ -17,7 +17,11 @@ export const RUNNER_PATHS = {
   heartbeatAndPoll: '/v1/runner/heartbeat',
   completeRoundStep: '/v1/runner/complete',
   fetchCredential: '/v1/runner/credential',
+  uploadEvidence: '/v1/runner/evidence',
 } as const;
+
+/** One evidence file (a screenshot) per upload; M1 keeps them on the server's disk (06 §6.2). */
+export const EVIDENCE_LIMIT = 4 * 1024 * 1024;
 
 /** Prefix of the one-time enrollment token; the long-term secret has its own prefix. */
 export const ENROLL_TOKEN_PREFIX = 'cc_run_live_';
@@ -147,3 +151,19 @@ export const FetchCredentialRequest = Type.Object({
   secret_id: Type.String({ format: 'uuid' }),
 });
 export type FetchCredentialRequest = Static<typeof FetchCredentialRequest>;
+
+/** An evidence file of the step this runner holds; the server checks the lease and the sha256. */
+export const UploadEvidenceRequest = Type.Object({
+  work_item_id: Type.String({ format: 'uuid' }),
+  lease_token: Type.String({ format: 'uuid' }),
+  fence: Type.Integer(),
+  name: Type.String({ pattern: '^[A-Za-z0-9._-]{1,120}$' }),
+  sha256: Type.String({ pattern: '^[0-9a-f]{64}$' }),
+  content_type: Type.Literal('image/png'),
+  data_base64: Type.String({ maxLength: Math.ceil((EVIDENCE_LIMIT * 4) / 3) + 4 }),
+});
+export type UploadEvidenceRequest = Static<typeof UploadEvidenceRequest>;
+
+/** Name of a replay screenshot as uploaded and as the delivery card lists it (base / head side). */
+export const evidenceName = (side: 'base' | 'head', name: string) =>
+  `${side}-${name}`.replace(/[^A-Za-z0-9._-]/g, '_').slice(0, 120);

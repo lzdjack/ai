@@ -2,6 +2,8 @@
 // RunnerTransport routes (E1) and the /v1 account routes with the WebSocket (P2; routes → service →
 // repo, contracts in core-protocol).
 import crypto from 'node:crypto';
+import os from 'node:os';
+import path from 'node:path';
 import Fastify, { type FastifyError } from 'fastify';
 import { LeaseLostError, RunnerAuthError, type Db } from './db/client.ts';
 import { NotFoundError, RevConflictError } from './db/write.ts';
@@ -26,8 +28,11 @@ export function buildApp(o: {
   runner: RunnerSettings;
   accounts: AccountSettings;
   sources: SourceSettings;
+  /** where evidence files are kept (main: <CC_DATA_DIR>/evidence) */
+  evidenceDir?: string;
   logger?: boolean;
 }) {
+  const evidenceDir = o.evidenceDir ?? path.join(os.tmpdir(), 'cc-evidence');
   const app = Fastify({
     logger: o.logger ?? false,
     requestIdHeader: 'x-request-id',
@@ -65,9 +70,9 @@ export function buildApp(o: {
     return send(500, { code: 'common.internal', message: 'internal error' });
   });
 
-  runnerRoutes(app, o.db, o.runner, o.sources);
+  runnerRoutes(app, o.db, o.runner, o.sources, evidenceDir);
   accountRoutes(app, o.db, o.accounts);
-  sourceRoutes(app, o.db, o.accounts, o.sources);
+  sourceRoutes(app, o.db, o.accounts, o.sources, evidenceDir);
 
   app.get('/healthz', async () => {
     await o.db.pool.query('select 1');

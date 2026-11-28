@@ -4,6 +4,7 @@ import {
   CompleteStepRequest,
   CompleteStepResponse,
   CredentialEnvelope,
+  EVIDENCE_LIMIT,
   FetchCredentialRequest,
   HeartbeatRequest,
   HeartbeatResponse,
@@ -11,6 +12,7 @@ import {
   RUNNER_PATHS,
   RegisterRunnerRequest,
   RegisterRunnerResponse,
+  UploadEvidenceRequest,
 } from '@cloudcraft/core-protocol';
 import type { FastifyInstance, FastifyRequest } from 'fastify';
 import { RunnerAuthError, type Db } from '../db/client.ts';
@@ -21,6 +23,7 @@ import {
   type RunnerSettings,
   fetchCredential,
 } from '../service/runner-service.ts';
+import { uploadEvidence } from '../service/evidence-service.ts';
 import type { SourceSettings } from '../service/source-service.ts';
 
 const AUTH = /^Runner ([0-9a-f-]{36}):(\S+)$/;
@@ -36,6 +39,7 @@ export function runnerRoutes(
   db: Db,
   s: RunnerSettings,
   sources: SourceSettings,
+  evidenceDir: string,
 ) {
   const opts = { bodyLimit: RUNNER_FRAME_LIMIT };
   app.post<{ Body: RegisterRunnerRequest }>(
@@ -60,5 +64,14 @@ export function runnerRoutes(
     RUNNER_PATHS.fetchCredential,
     { ...opts, schema: { body: FetchCredentialRequest, response: { 200: CredentialEnvelope } } },
     (req) => fetchCredential(db, sources, runnerAuth(req), req.body),
+  );
+  // screenshots are bigger than a control frame: one file per call, base64 in JSON
+  app.post<{ Body: UploadEvidenceRequest }>(
+    RUNNER_PATHS.uploadEvidence,
+    {
+      bodyLimit: Math.ceil((EVIDENCE_LIMIT * 4) / 3) + RUNNER_FRAME_LIMIT,
+      schema: { body: UploadEvidenceRequest },
+    },
+    (req) => uploadEvidence(db, evidenceDir, runnerAuth(req), req.body),
   );
 }
