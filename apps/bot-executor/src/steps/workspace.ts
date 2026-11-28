@@ -90,19 +90,44 @@ export class Workspaces {
     const workDir = path.join(dir, 'work');
     fs.mkdirSync(workDir, { recursive: true });
     // P4: the round's branch comes with the plan (fix/<project>/<ticket no>); drills fall back
-    const branch =
+    const wanted =
       typeof step.config.branch === 'string'
         ? step.config.branch
         : branchFor(step.flow_instance_id);
     const timings: { label: string; ms: number }[] = [];
     const t0 = Date.now();
+    const auths = new Map<string, Awaited<ReturnType<GitAuth>> & { signal?: AbortSignal }>();
     for (const r of step.repos) {
       const auth = { ...(await this.o.gitAuth(step, r)), signal };
+      auths.set(r.name, auth);
+      await clone(r.clone_url, r.ref, path.join(workDir, r.name), auth);
+    }
+    const onRemote = async (name: string) => {
+      const hits: string[] = [];
+      for (const r of step.repos)
+        if (
+          (
+            await git(
+              path.join(workDir, r.name),
+              ['ls-remote', '--heads', 'origin', name],
+              auths.get(r.name)!,
+            )
+          ).trim()
+        )
+          hits.push(r.name);
+      return hits;
+    };
+    // a first round never builds on a branch that is already there (another space or project may
+    // use the same repo and ticket number): it takes the first free name, fix/…/M-5-2, -3 …;
+    // later rounds continue on the branch the first one pushed
+    let branch = wanted;
+    if (step.config.fresh === true)
+      for (let n = 2; (await onRemote(branch)).length; n++) branch = `${wanted}-${n}`;
+    const pushed = await onRemote(branch);
+    for (const r of step.repos) {
       const repoDir = path.join(workDir, r.name);
-      await clone(r.clone_url, r.ref, repoDir, auth);
-      const pushed = (await git(repoDir, ['ls-remote', '--heads', 'origin', branch], auth)).trim();
-      if (pushed) {
-        await git(repoDir, ['fetch', '-q', 'origin', branch], auth);
+      if (pushed.includes(r.name)) {
+        await git(repoDir, ['fetch', '-q', 'origin', branch], auths.get(r.name)!);
         await git(repoDir, ['checkout', '-qb', branch, 'FETCH_HEAD']);
       } else await git(repoDir, ['checkout', '-qb', branch]);
     }
