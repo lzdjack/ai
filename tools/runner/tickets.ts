@@ -4,7 +4,9 @@
 //   3. 真实执行器跑内置「标准前端修 Bug」：准备 → AI 修题 → 宿主机回放判定（含浏览器复现）→ 等人审核
 //      AI 修题默认用演练引擎（打参考修复、交参考浏览器复现物，不调模型）；--model 换成真实模型（Pi）
 //   4. 后台核对事实后进「待我审核」：交付卡上的提交号和模拟 GitLab 上 fix/ 分支的头一致
+//   5. P5 审核：修前修后截图能从接口取回；打回（带意见）→ 第 2 轮在同一分支上带着意见修 → 再交付 → 通过
 // 需要 Docker 和 pnpm dev:up；--model 还要 ~/.cloudcraft-dev/.env 里的模型接入。
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -183,6 +185,63 @@ await withSim(c, async (simBase) => {
     }
     ok.push(`✓ 手建 ${ticket.no} → Bot 交付第 1 轮 → 待我审核（${sec(Date.now() - t0)}）`);
     ok.push('✓ 交付卡上的提交号与模拟 GitLab 上 fix/ 分支的头一致');
+
+    // 5. evidence and review
+    const shots = card.screenshots.filter((x) => x.evidence_id);
+    for (const x of shots) {
+      const res = await fetch(`${h.server}${ws}/evidence/${x.evidence_id}`, {
+        headers: { authorization: `Bearer ${token}` },
+      });
+      const got = Buffer.from(await res.arrayBuffer());
+      const same = crypto.createHash('sha256').update(got).digest('hex') === x.sha256;
+      console.log(
+        `  ${same ? '✓' : '✗'} 证据 ${x.name}（${got.length} 字节，sha256 ${same ? '一致' : '不一致'}）`,
+      );
+      if (!same) fail('取回的截图和交付卡上的指纹对不上');
+    }
+    if (card.screenshots.length && shots.length !== card.screenshots.length)
+      fail('有截图没传到服务端');
+    if (shots.length) ok.push(`✓ 修前修后截图 ${shots.length} 张都能从接口取回，指纹一致`);
+
+    const comment = '排序对了，但请在修复的地方加一行注释说明为什么要先比较时间再看方向';
+    const back = await call('POST', `${ws}/tickets/${ticket.id}/review`, {
+      decision: 'reject',
+      round_no: 1,
+      delivery_digest: card.delivery_digest,
+      review_rev: (detail.rounds as Json[])[0]!.review_rev,
+      comment,
+      reject_category: 'approach_rejected',
+    });
+    console.log(`\n▶ 打回第 1 轮：「${comment}」→ ${back.status}，第 ${back.current_round} 轮`);
+    const t1 = Date.now();
+    const detail2 = await waitFor(
+      '第 2 轮进入待我审核或需要协助',
+      async () => {
+        const d = await call('GET', `${ws}/tickets/${ticket.id}`);
+        return d.current_round === 2 && (d.status === 'in_review' || d.status === 'needs_help')
+          ? d
+          : null;
+      },
+      40 * 60_000,
+    );
+    const round2 = (detail2.rounds as Json[])[1]!;
+    if (detail2.status !== 'in_review') fail(`第 2 轮需要协助：${round2.reason}`);
+    const card2 = round2.delivery as DeliveryCard;
+    console.log(`  ${sec(Date.now() - t1)} 后第 2 轮交付，根因：${card2.root_cause}`);
+    for (const r of card2.repos)
+      console.log(
+        `  ${r.repo} ${r.branch} ${r.head_sha.slice(0, 8)}（相对基线 +${r.added} −${r.deleted}）`,
+      );
+    if (card2.repos.some((r) => !card.repos.some((c) => c.branch === r.branch)))
+      fail('第 2 轮换了分支');
+    const passed = await call('POST', `${ws}/tickets/${ticket.id}/review`, {
+      decision: 'approve',
+      round_no: 2,
+      delivery_digest: card2.delivery_digest,
+      review_rev: round2.review_rev,
+    });
+    if (passed.status !== 'approved') fail(`审核通过后状态是 ${passed.status}`);
+    ok.push(`✓ 打回 → 第 2 轮在同一 fix/ 分支上带着意见修完 → 审核通过（${sec(Date.now() - t1)}）`);
     console.log(`\n${ok.join('\n')}`);
   } catch (e) {
     console.error(`\n✗ ${(e as Error).message}`);
