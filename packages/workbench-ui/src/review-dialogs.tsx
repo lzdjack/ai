@@ -47,6 +47,8 @@ export const REJECT_CHIPS = [
 ] as const;
 
 export function RejectDialog(p: {
+  /** default 打回第 N 轮; an MR or a retest sent back says so */
+  title?: string;
   ticketNo: string;
   round: number;
   sha: string;
@@ -73,7 +75,7 @@ export function RejectDialog(p: {
       width={600}
       icon={<UndoIcon width={16} height={16} />}
       iconClass="is-red"
-      title={t('wb.reject.title', { round: p.round })}
+      title={p.title ?? t('wb.reject.title', { round: p.round })}
       sub={
         <>
           {p.ticketNo} · {t('wb.review.target')} <span className="mono">{p.sha}</span> ·{' '}

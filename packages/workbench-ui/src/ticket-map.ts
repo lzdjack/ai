@@ -71,19 +71,23 @@ export function groupTickets(
   scope: 'mine' | 'all',
   t: Translate,
 ): { groups: TicketGroupVM[]; total: number } {
+  // "我的": assigned to me, or a delivery step waits on me as tester or MR reviewer
   const shown = items.filter(
-    (x) => (scope === 'all' || x.is_assignee) && (scope === 'all' || x.status !== 'done'),
+    (x) =>
+      (scope === 'all' || x.is_assignee || !!x.waiting_on_me) &&
+      (scope === 'all' || x.status !== 'done'),
   );
   const by = new Map<TicketGroupKey, TicketRowVM[]>();
   for (const x of shown) {
-    const key = GROUP[x.status] ?? 'queued';
+    const key = x.waiting_on_me ? 'waiting_you' : (GROUP[x.status] ?? 'queued');
     const row: TicketRowVM = {
       id: x.id,
       title: x.title,
       reporter: { name: x.reporter_name ?? x.no, label: (x.reporter_name ?? x.no).slice(0, 2) },
-      status: TONE[x.status] ?? 'gray',
-      note:
-        x.status === 'needs_help' && x.help_reason
+      status: x.waiting_on_me ? 'orange' : (TONE[x.status] ?? 'gray'),
+      note: x.waiting_on_me
+        ? `${x.no} · ${t(`wb.waiting.${x.waiting_on_me}`)}`
+        : x.status === 'needs_help' && x.help_reason
           ? `${x.no} · ${firstLine(x.help_reason)}`
           : `${x.no} · ${t(`wb.status.${x.status}`, { round: x.current_round })}`,
       ...(x.status === 'needs_help' ? { noteTone: 'red' as const } : {}),
@@ -227,7 +231,7 @@ export function ticketVM(
       code: card ? card.repos.reduce((n, r) => n + r.files.length, 0) : 0,
       evidence: card?.screenshots.length ?? 0,
     },
-    extraTabs: [],
+    extraTabs: [{ key: 'release', label: t('wb.tab.release') }],
     flow,
     rail: {
       timeline,

@@ -1,5 +1,6 @@
 @import './auth.css';
 @import './onboarding.css';
+@import './release.css';
 /* 工作台三栏的内容（01 §3.3～§3.5，定稿图 PC-主界面）；数值取自 reference/src/v4/apple-chat.html（v=10、sel=5、ic=3） */
 
 /* —— 工单列表 —— */
