@@ -4,6 +4,7 @@ import { asc, eq, sql } from 'drizzle-orm';
 import type { ActorCtx, Tx } from '../db/client.ts';
 import { flowInstances, nodeRuns } from '../db/schema/index.ts';
 import { NotFoundError, insertRow, updateRow } from '../db/write.ts';
+import { publish } from '../service/changes.ts';
 import {
   PLAN_SCHEMA_VERSION,
   advance,
@@ -40,6 +41,27 @@ export function workKindFor(node: PlanNode | undefined) {
   if (kind === 'release_deploy' && RELEASE_SLOTS.has(String(c.slot))) return RELEASE_STEP;
   if (kind === 'cr_merge' && c.step === 'merge') return RELEASE_STEP;
   return RUN_NODE;
+}
+
+/**
+ * A step of a ticket's flow moved: tells the screens showing that ticket (06 §3.7). What they show
+ * under a ticket changes together with one of these or with the ticket's own row.
+ */
+export async function publishNodeRun(
+  tx: Tx,
+  ctx: ActorCtx,
+  ticketId: string | null,
+  run: typeof nodeRuns.$inferSelect,
+) {
+  if (!ticketId) return;
+  await publish(tx, ctx, {
+    entity: 'node_run',
+    entityId: run.id,
+    op: 'upsert',
+    rev: run.rev,
+    projectId: run.projectId,
+    row: { ticket_id: ticketId, node_key: run.nodeKey, status: run.status },
+  });
 }
 
 /** The swappable seam in front of the orchestration engine (06 §3.6 item 8). */
@@ -100,6 +122,7 @@ async function signal(
           startedAt: sql`now()`,
         });
         opened.set(runKey(c), run.id);
+        await publishNodeRun(tx, ctx, flow.ticketId, run);
         break;
       }
       case 'enqueue_work': {
@@ -111,14 +134,16 @@ async function signal(
         });
         break;
       }
-      case 'close_node':
-        await updateRow(tx, ctx, nodeRuns, c.nodeRunId, {
+      case 'close_node': {
+        const run = await updateRow(tx, ctx, nodeRuns, c.nodeRunId, {
           status: c.status,
           // keep what the executor wrote back unless the orchestrator has its own reason
           ...(c.error !== undefined ? { errorRaw: c.error } : {}),
           finishedAt: sql`now()`,
         });
+        await publishNodeRun(tx, ctx, flow.ticketId, run);
         break;
+      }
       case 'finish_flow':
         await updateRow(tx, ctx, flowInstances, flowInstanceId, { status: c.status });
         break;

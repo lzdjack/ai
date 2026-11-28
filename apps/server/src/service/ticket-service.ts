@@ -20,7 +20,14 @@ import {
   type TicketDetail,
 } from '@cloudcraft/core-protocol';
 import { and, asc, desc, eq, isNull, sql } from 'drizzle-orm';
-import { withLeaseTx, type ActorCtx, type Db, type Lease, type Tx } from '../db/client.ts';
+import {
+  SNAPSHOT_READ,
+  withLeaseTx,
+  type ActorCtx,
+  type Db,
+  type Lease,
+  type Tx,
+} from '../db/client.ts';
 import {
   environments,
   evidences,
@@ -274,40 +281,46 @@ export function listEnvironments(db: Db, userId: string, ws: string, projectId: 
 }
 
 export function listTickets(db: Db, userId: string, ws: string) {
-  return inWorkspace(db, userId, ws, async (tx) => {
-    const rows = await tx
-      .select({ t: tickets, reporter: users.displayName, reason: rounds.helpReason })
-      .from(tickets)
-      .leftJoin(users, eq(users.id, tickets.createdBy))
-      .leftJoin(
-        rounds,
-        and(eq(rounds.ticketId, tickets.id), eq(rounds.roundNo, tickets.currentRound)),
-      )
-      .where(isNull(tickets.deletedAt))
-      .orderBy(desc(tickets.updatedAt))
-      .limit(200);
-    const mine = new Set(
-      (
-        await tx
-          .select({ id: ticketAssignees.ticketId })
-          .from(ticketAssignees)
-          .where(eq(ticketAssignees.userId, userId))
-      ).map((x) => x.id),
-    );
-    const waiting = await waitingOnMe(tx, userId, mine);
-    return {
-      items: rows.map((r) => ({
-        ...ticketSummary(r.t),
-        reporter_name: r.reporter ?? null,
-        help_reason: r.t.status === 'needs_help' ? (r.reason ?? null) : null,
-        is_assignee: mine.has(r.t.id),
-        waiting_on_me: waiting.get(r.t.id) ?? null,
-        updated_at: r.t.updatedAt.toISOString(),
-      })),
-      next_cursor: null,
-      has_more: false,
-    };
-  });
+  return inWorkspace(
+    db,
+    userId,
+    ws,
+    async (tx) => {
+      const rows = await tx
+        .select({ t: tickets, reporter: users.displayName, reason: rounds.helpReason })
+        .from(tickets)
+        .leftJoin(users, eq(users.id, tickets.createdBy))
+        .leftJoin(
+          rounds,
+          and(eq(rounds.ticketId, tickets.id), eq(rounds.roundNo, tickets.currentRound)),
+        )
+        .where(isNull(tickets.deletedAt))
+        .orderBy(desc(tickets.updatedAt))
+        .limit(200);
+      const mine = new Set(
+        (
+          await tx
+            .select({ id: ticketAssignees.ticketId })
+            .from(ticketAssignees)
+            .where(eq(ticketAssignees.userId, userId))
+        ).map((x) => x.id),
+      );
+      const waiting = await waitingOnMe(tx, userId, mine);
+      return {
+        items: rows.map((r) => ({
+          ...ticketSummary(r.t),
+          reporter_name: r.reporter ?? null,
+          help_reason: r.t.status === 'needs_help' ? (r.reason ?? null) : null,
+          is_assignee: mine.has(r.t.id),
+          waiting_on_me: waiting.get(r.t.id) ?? null,
+          updated_at: r.t.updatedAt.toISOString(),
+        })),
+        next_cursor: null,
+        has_more: false,
+      };
+    },
+    SNAPSHOT_READ,
+  );
 }
 
 /**
@@ -357,64 +370,70 @@ export function ticketDetail(
   ws: string,
   id: string,
 ): Promise<TicketDetail> {
-  return inWorkspace(db, userId, ws, async (tx) => {
-    const [t] = await tx
-      .select()
-      .from(tickets)
-      .where(and(eq(tickets.id, id), isNull(tickets.deletedAt)));
-    if (!t) throw new ApiFailure(404, 'ticket.not_found');
-    const rs = await tx
-      .select()
-      .from(rounds)
-      .where(eq(rounds.ticketId, id))
-      .orderBy(asc(rounds.roundNo));
-    const rvs = (
-      await tx
-        .select({ rv: reviews })
-        .from(reviews)
-        .innerJoin(rounds, eq(rounds.id, reviews.roundId))
+  return inWorkspace(
+    db,
+    userId,
+    ws,
+    async (tx) => {
+      const [t] = await tx
+        .select()
+        .from(tickets)
+        .where(and(eq(tickets.id, id), isNull(tickets.deletedAt)));
+      if (!t) throw new ApiFailure(404, 'ticket.not_found');
+      const rs = await tx
+        .select()
+        .from(rounds)
         .where(eq(rounds.ticketId, id))
-    ).map((x) => x.rv);
-    const [mine] = await tx
-      .select({ id: ticketAssignees.id })
-      .from(ticketAssignees)
-      .where(and(eq(ticketAssignees.ticketId, id), eq(ticketAssignees.userId, userId)));
-    return {
-      id: t.id,
-      no: ticketNo(t.seqNo),
-      title: t.title,
-      body: t.body,
-      priority: t.priority,
-      status: t.status as TicketDetail['status'],
-      project_id: t.projectId,
-      current_round: t.currentRound,
-      rev: t.rev,
-      is_assignee: !!mine,
-      rounds: rs.map((r) => {
-        const rv = rvs.find((x) => x.roundId === r.id);
-        return {
-          round_no: r.roundNo,
-          started_at: r.createdAt.toISOString(),
-          cause: r.cause,
-          status: r.status as TicketDetail['rounds'][number]['status'],
-          reason: r.helpReason,
-          flow_id: r.flowInstanceId,
-          review_rev: r.reviewRev,
-          delivery: (r.deliveryPayload as DeliveryCard | null) ?? null,
-          review: rv
-            ? {
-                result: rv.result as 'approved' | 'rejected',
-                reviewer_id: rv.reviewerId,
-                comment: rv.comment,
-                reject_category: rv.rejectCategory,
-                location: (rv.location as ReviewRequest['location'] | null) ?? null,
-                at: rv.createdAt.toISOString(),
-              }
-            : null,
-        };
-      }),
-    };
-  });
+        .orderBy(asc(rounds.roundNo));
+      const rvs = (
+        await tx
+          .select({ rv: reviews })
+          .from(reviews)
+          .innerJoin(rounds, eq(rounds.id, reviews.roundId))
+          .where(eq(rounds.ticketId, id))
+      ).map((x) => x.rv);
+      const [mine] = await tx
+        .select({ id: ticketAssignees.id })
+        .from(ticketAssignees)
+        .where(and(eq(ticketAssignees.ticketId, id), eq(ticketAssignees.userId, userId)));
+      return {
+        id: t.id,
+        no: ticketNo(t.seqNo),
+        title: t.title,
+        body: t.body,
+        priority: t.priority,
+        status: t.status as TicketDetail['status'],
+        project_id: t.projectId,
+        current_round: t.currentRound,
+        rev: t.rev,
+        is_assignee: !!mine,
+        rounds: rs.map((r) => {
+          const rv = rvs.find((x) => x.roundId === r.id);
+          return {
+            round_no: r.roundNo,
+            started_at: r.createdAt.toISOString(),
+            cause: r.cause,
+            status: r.status as TicketDetail['rounds'][number]['status'],
+            reason: r.helpReason,
+            flow_id: r.flowInstanceId,
+            review_rev: r.reviewRev,
+            delivery: (r.deliveryPayload as DeliveryCard | null) ?? null,
+            review: rv
+              ? {
+                  result: rv.result as 'approved' | 'rejected',
+                  reviewer_id: rv.reviewerId,
+                  comment: rv.comment,
+                  reject_category: rv.rejectCategory,
+                  location: (rv.location as ReviewRequest['location'] | null) ?? null,
+                  at: rv.createdAt.toISOString(),
+                }
+              : null,
+          };
+        }),
+      };
+    },
+    SNAPSHOT_READ,
+  );
 }
 
 /**

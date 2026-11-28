@@ -12,16 +12,16 @@ import {
   releaseVM,
   type ReleaseActions,
 } from '@cloudcraft/workbench-ui';
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { ApiError, deliveryCalls } from './api.ts';
-
-const POLL_MS = 3000;
+import { aboutTicket, type Live } from './live.ts';
 
 type Pending = { connectorId: string; action: string; run: () => Promise<unknown> } | null;
 
 export function useReleaseTab(o: {
   ws: string;
   me: Me;
+  live: Live;
   detail: TicketDetail | null;
   active: boolean;
   /** the ticket changed (a send-back starts the next round): reload the list and the conversation */
@@ -42,22 +42,24 @@ export function useReleaseTab(o: {
     null,
   );
 
+  // an answer for a ticket that is no longer open is dropped
+  const openId = useRef(ticketId);
+  openId.current = ticketId;
   const load = useCallback(async () => {
     if (!ticketId) return;
     const v = await calls.view(ticketId);
-    setView((cur) => (v.ticket_id === ticketId ? v : cur));
+    if (v.ticket_id === openId.current) setView(v);
   }, [calls, ticketId]);
   useEffect(() => {
     setView(null);
     setTester(null);
     setError(null);
   }, [ticketId]);
+  const { live } = o;
   useEffect(() => {
     if (!o.active || !ticketId) return;
-    void load();
-    const id = setInterval(() => void load().catch(() => {}), POLL_MS);
-    return () => clearInterval(id);
-  }, [o.active, ticketId, load]);
+    return live.follow(load, aboutTicket(ticketId));
+  }, [o.active, ticketId, load, live]);
   const loadAccounts = useCallback(() => calls.accounts().then(setAccounts), [calls]);
   useEffect(() => {
     if (!o.active) return;
@@ -168,6 +170,7 @@ export function useReleaseTab(o: {
           onSave={async (credential) => {
             await calls.saveAccount(edit, credential);
             await loadAccounts();
+            await load();
             setEdit(null);
           }}
         />

@@ -106,6 +106,15 @@ export async function call<T>(method: string, path: string, body?: unknown): Pro
   return json as T;
 }
 
+/** The change stream of a workspace (06 §3.7), opened with a one-time ticket good for 15 seconds. */
+export async function streamUrl(workspaceId: string): Promise<string> {
+  const { ticket } = await call<{ ticket: string }>('POST', '/v1/ws-ticket', {
+    workspace_id: workspaceId,
+  });
+  const scheme = location.protocol === 'https:' ? 'wss' : 'ws';
+  return `${scheme}://${location.host}/v1/ws?ticket=${encodeURIComponent(ticket)}`;
+}
+
 export const api = {
   hasSession: () => !!session,
   async login(email: string, password: string, remember: boolean) {

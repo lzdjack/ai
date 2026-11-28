@@ -25,8 +25,9 @@ import {
   type TicketGroupVM,
   type TicketTab,
 } from '@cloudcraft/workbench-ui';
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { onboardingCalls, ticketCalls } from './api.ts';
+import { aboutTicket, aboutTickets, useLive } from './live.ts';
 import { useReleaseTab } from './release-tab.tsx';
 import after from './demo/evidence-after.png';
 import before from './demo/evidence-before.png';
@@ -36,7 +37,6 @@ const IMAGES: Record<string, string> = {
   'evidence-before.png': before,
   'evidence-after.png': after,
 };
-const POLL_MS = 4000;
 
 function demoTicket(): TicketDetailVM {
   const t = structuredClone(demo.ticket) as unknown as TicketDetailVM;
@@ -149,23 +149,22 @@ function LiveApp({ forcedTheme, me }: { forcedTheme: boolean; me: Me }) {
   const [dialog, setDialog] = useState<'reject' | 'new' | null>(null);
   const [busy, setBusy] = useState(false);
 
+  const live = useLive(ws);
+  // an answer for a ticket that is no longer open is dropped
+  const openId = useRef(selected);
+  openId.current = selected;
   const loadList = useCallback(() => calls.list().then(setItems), [calls]);
   const loadDetail = useCallback(
-    (id: string) => calls.detail(id).then((d) => (d.id === id ? setDetail(d) : undefined)),
+    (id: string) =>
+      calls.detail(id).then((d) => (d.id === openId.current ? setDetail(d) : undefined)),
     [calls],
   );
-  // the list and the open ticket follow the server (polling; the change stream joins later)
-  useEffect(() => {
-    void loadList();
-    const id = setInterval(() => void loadList(), POLL_MS);
-    return () => clearInterval(id);
-  }, [loadList]);
+  // the list and the open ticket follow the server (the change stream, 06 §3.7)
+  useEffect(() => live.follow(loadList, aboutTickets), [live, loadList]);
   useEffect(() => {
     if (!selected) return setDetail(null);
-    void loadDetail(selected);
-    const id = setInterval(() => void loadDetail(selected), POLL_MS);
-    return () => clearInterval(id);
-  }, [selected, loadDetail]);
+    return live.follow(() => loadDetail(selected), aboutTicket(selected));
+  }, [live, selected, loadDetail]);
   const { groups, total } = useMemo(() => groupTickets(items, scope, t), [items, scope, t]);
   // open the first ticket of the list
   useEffect(() => {
@@ -234,6 +233,7 @@ function LiveApp({ forcedTheme, me }: { forcedTheme: boolean; me: Me }) {
   const release = useReleaseTab({
     ws,
     me,
+    live,
     detail,
     active: tab === 'release',
     onChanged: () => {
