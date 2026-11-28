@@ -17,6 +17,8 @@ export const RegisterRequest = Type.Object({
   code: Type.String({ pattern: '^[0-9]{6}$' }),
   password: Type.String({ minLength: 8, maxLength: 200 }),
   display_name: Type.String({ minLength: 1, maxLength: 40 }),
+  /** optional team name: creates a team workspace instead of the personal one (01 §9) */
+  workspace_name: Type.Optional(Type.String({ maxLength: 60 })),
   /** an invitation link token or short code to join right after registering (06 §10.1) */
   invitation: Type.Optional(Type.String({ maxLength: 200 })),
 });

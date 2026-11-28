@@ -4,7 +4,7 @@ import { I18nProvider, applyTheme, type ThemePref } from '@cloudcraft/ui-kit';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import messages from '../../../../i18n/zh-CN.json';
-import { App } from './app.tsx';
+import { Root } from './root.tsx';
 
 // ?mode=light|dark forces a theme (side-by-side checks against the design renders); otherwise the
 // user's choice or the system's
@@ -14,7 +14,7 @@ if (mode === 'light' || mode === 'dark') applyTheme(mode as ThemePref);
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <I18nProvider messages={messages} locale="zh-CN">
-      <App forcedTheme={mode === 'light' || mode === 'dark'} />
+      <Root forcedTheme={mode === 'light' || mode === 'dark'} />
     </I18nProvider>
   </StrictMode>,
 );

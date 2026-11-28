@@ -1,0 +1,262 @@
+/* 登录与注册（01 §9，定稿图 PC-登录 / PC-注册）；数值取自 reference/src/v5/login-pc.html、register-pc.html */
+.au-root {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: var(--wall);
+  font-family: var(--font);
+  color: var(--text);
+}
+.au-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--text) 7%, transparent);
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.au-aura {
+  position: absolute;
+  border-radius: 50%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: conic-gradient(from 210deg, #4f8bff, #9b5cff, #ff5fa8, #ffb14a, #4fd1ff, #4f8bff);
+  filter: blur(70px);
+  opacity: 0.36;
+}
+html.dark .au-aura {
+  opacity: 0.46;
+}
+.au-ver {
+  position: absolute;
+  right: 30px;
+  top: 26px;
+  font-size: 12px;
+  color: var(--text-3);
+}
+.au-card {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: var(--r-panel);
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+  width: 430px;
+  padding: 34px 38px 28px;
+}
+.au-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.au-nm {
+  font-family: 'Hiragino Sans GB', 'PingFang SC', sans-serif;
+  font-weight: 600;
+  letter-spacing: 2.8px;
+  color: var(--text);
+}
+.au-sub {
+  font-family: Optima, 'Avenir Next', sans-serif;
+  letter-spacing: 3.2px;
+  text-transform: uppercase;
+  font-weight: 700;
+  background: linear-gradient(90deg, #3b6fe8, #7c4ddb);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  opacity: 0.88;
+}
+html.dark .au-sub {
+  background: var(--brand-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  opacity: 0.92;
+}
+.au-seg {
+  width: 100%;
+  display: flex;
+}
+.au-seg > span {
+  flex: 1;
+  cursor: pointer;
+}
+.au-bd {
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+.au-bd.is-in {
+  background: linear-gradient(155deg, #3b8bff, #1d6fe0);
+}
+.au-bd.is-up {
+  background: linear-gradient(155deg, #a86bff, #6d3df0);
+}
+.au-lab {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-2);
+  margin: 0 0 6px 2px;
+  display: flex;
+  align-items: center;
+}
+.au-lab em {
+  font-style: normal;
+  margin-left: auto;
+  font-weight: 400;
+  font-size: 11px;
+  color: var(--text-3);
+}
+.au-inp {
+  height: var(--ctl-lg);
+  border-radius: var(--r-lg);
+  background: var(--well);
+  border: 1px solid var(--hair);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px;
+  font-size: 14px;
+  color: var(--text);
+}
+.au-inp > svg {
+  color: var(--text-3);
+  flex: none;
+}
+.au-inp:focus-within {
+  background: var(--glass-2);
+  border-color: var(--focus-ring);
+  box-shadow: 0 0 0 3px var(--focus-halo);
+}
+.au-inp.is-error {
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px var(--error-halo);
+}
+.au-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  gap: 10px;
+}
+.au-grid > div {
+  min-width: 0;
+}
+.au-inp input {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font-size: 14px;
+  color: var(--text);
+  padding: 0;
+}
+.au-inp input::placeholder {
+  color: var(--text-3);
+  font-size: 13px;
+}
+.au-inp input.is-code {
+  letter-spacing: 2px;
+  font-weight: 600;
+  font-family: var(--font-mono);
+}
+.au-err {
+  font-size: 12px;
+  color: var(--ink-red);
+  margin: 6px 0 0 2px;
+}
+.au-eye {
+  border: 0;
+  background: none;
+  padding: 0;
+  color: var(--text-3);
+  display: inline-flex;
+  cursor: pointer;
+}
+.au-ck {
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  border: 1px solid var(--border-ctl);
+  background: var(--glass-2);
+  color: #fff;
+  cursor: pointer;
+  padding: 0;
+}
+.au-ck.is-on {
+  background: var(--btn-pri-bg);
+  border-color: transparent;
+}
+.au-lnk {
+  color: var(--ink-blue);
+  font-weight: 600;
+  border: 0;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: 13px;
+}
+.au-btn {
+  height: 44px;
+  border-radius: var(--r-lg);
+  border: 0;
+  font-size: 15px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: 100%;
+  background: var(--btn-pri-bg);
+  color: #fff;
+  box-shadow: 0 12px 26px -10px color-mix(in srgb, var(--btn-pri-bg) 85%, transparent);
+  cursor: pointer;
+}
+.au-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.au-cbtn {
+  height: 28px;
+  padding: 0 10px;
+  border-radius: var(--r-sm);
+  background: var(--glass-2);
+  border: 1px solid var(--border-ctl);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-blue);
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.au-cbtn:disabled {
+  color: var(--text-3);
+  cursor: default;
+}
+.au-ft {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 34px;
+  display: flex;
+  justify-content: center;
+}
+.au-ft .pill {
+  gap: 7px;
+  padding: 0 12px;
+  border-radius: var(--r-full);
+  color: var(--text-2);
+  box-shadow: none;
+}

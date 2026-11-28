@@ -154,16 +154,25 @@ export async function register(
     .onConflictDoNothing()
     .returning();
   if (!user) throw new ApiFailure(409, 'auth.account_exists');
+  const team = req.workspace_name?.trim();
   const workspaceId = req.invitation
     ? await join(user.id, req.invitation)
     : await db.orm.transaction(async (tx) => {
-        const ctx = await createWorkspace(tx, user.id, {
-          kind: 'personal',
-          slug: `u-${randomToken(6)
+        const slug = (p: string) =>
+          `${p}-${randomToken(6)
             .toLowerCase()
-            .replace(/[^a-z0-9]/g, '0')}`,
-          name: tr('workspace.personal_name', { name: user.displayName }),
-        });
+            .replace(/[^a-z0-9]/g, '0')}`;
+        const ctx = await createWorkspace(
+          tx,
+          user.id,
+          team
+            ? { kind: 'organization', slug: slug('t'), name: team }
+            : {
+                kind: 'personal',
+                slug: slug('u'),
+                name: tr('workspace.personal_name', { name: user.displayName }),
+              },
+        );
         return ctx.workspaceId;
       });
   return { tokens: await issueTokens(db, s, user.id), user_id: user.id, workspace_id: workspaceId };

@@ -17,6 +17,7 @@ import {
   type TicketGroupVM,
   type TicketTab,
 } from '@cloudcraft/workbench-ui';
+import type { Me } from '@cloudcraft/core-protocol';
 import { useState } from 'react';
 import after from './demo/evidence-after.png';
 import before from './demo/evidence-before.png';
@@ -42,7 +43,7 @@ function ThemeFollower() {
   return null;
 }
 
-export function App({ forcedTheme }: { forcedTheme: boolean }) {
+export function App({ forcedTheme, me }: { forcedTheme: boolean; me: Me }) {
   const t = useT();
   const [active, setActive] = useState<DockKind>('chat');
   const [scope, setScope] = useState<'mine' | 'all'>('mine');
@@ -55,7 +56,12 @@ export function App({ forcedTheme }: { forcedTheme: boolean }) {
   ];
   return (
     <AppShell
-      topBar={<TopBar status={status} user={demo.user} />}
+      topBar={
+        <TopBar
+          status={status}
+          user={{ name: me.display_name, initial: me.display_name.slice(0, 1) }}
+        />
+      }
       dock={
         <Dock
           active={active}

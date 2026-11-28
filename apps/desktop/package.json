@@ -9,6 +9,7 @@
     "build": "vite build"
   },
   "dependencies": {
+    "@cloudcraft/core-protocol": "workspace:*",
     "@cloudcraft/ui-kit": "workspace:*",
     "@cloudcraft/workbench-ui": "workspace:*",
     "react": "19.3.1",
