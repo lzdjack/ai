@@ -136,6 +136,22 @@ export interface DeliveryCard {
   model: string | null;
 }
 
+/** GET /v1/workspaces/:ws/tickets item (newest change first). */
+export interface TicketSummary {
+  id: string;
+  no: string;
+  title: string;
+  status: TicketStatus;
+  priority: string;
+  current_round: number;
+  reporter_name: string | null;
+  /** why the current round needs help */
+  help_reason: string | null;
+  /** the caller is one of its assignees ("我的") */
+  is_assignee: boolean;
+  updated_at: string;
+}
+
 export interface TicketDetail {
   id: string;
   no: string;
@@ -150,6 +166,7 @@ export interface TicketDetail {
   is_assignee: boolean;
   rounds: {
     round_no: number;
+    started_at: string;
     /** new, code_rejected … (06 §2.5 rounds.cause) */
     cause: string;
     status: RoundStatus;

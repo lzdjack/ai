@@ -33,6 +33,7 @@ import {
   rounds,
   ticketAssignees,
   tickets,
+  users,
   verifyRuns,
 } from '../db/schema/index.ts';
 import { insertRow, updateRow } from '../db/write.ts';
@@ -68,12 +69,19 @@ function compilePlan(o: {
   branch: string;
   material: Material;
   envUrl: string | null;
+  /** first round: start a new branch (a free name if this one is taken), never continue one */
+  fresh: boolean;
 }): Plan {
   return {
     plan_schema_version: PLAN_SCHEMA_VERSION,
     repos: o.repos,
     nodes: [
-      { key: 'prepare', kind: 'auto', node_kind: 'host_prepare', config: { branch: o.branch } },
+      {
+        key: 'prepare',
+        kind: 'auto',
+        node_kind: 'host_prepare',
+        config: { branch: o.branch, ...(o.fresh ? { fresh: true } : {}) },
+      },
       {
         key: 'fix',
         kind: 'auto',
@@ -122,6 +130,8 @@ async function startRound(
     roundNo: number;
     cause: 'new' | 'code_rejected';
     review?: Material['review'];
+    /** later rounds: the branch the earlier one pushed (it may carry a -2 suffix) */
+    branch?: string;
   },
 ) {
   const [env] = await tx
@@ -144,7 +154,8 @@ async function startRound(
   });
   const plan = compilePlan({
     repos: o.repoSpecs,
-    branch: `fix/${o.project.slug}/${ticketNo(o.ticket.seqNo)}`,
+    branch: o.branch ?? `fix/${o.project.slug}/${ticketNo(o.ticket.seqNo)}`,
+    fresh: o.cause === 'new',
     material: {
       title: o.ticket.title,
       body: reportOf(o.ticket),
@@ -265,12 +276,35 @@ export function listEnvironments(db: Db, userId: string, ws: string, projectId: 
 export function listTickets(db: Db, userId: string, ws: string) {
   return inWorkspace(db, userId, ws, async (tx) => {
     const rows = await tx
-      .select()
+      .select({ t: tickets, reporter: users.displayName, reason: rounds.helpReason })
       .from(tickets)
+      .leftJoin(users, eq(users.id, tickets.createdBy))
+      .leftJoin(
+        rounds,
+        and(eq(rounds.ticketId, tickets.id), eq(rounds.roundNo, tickets.currentRound)),
+      )
       .where(isNull(tickets.deletedAt))
       .orderBy(desc(tickets.updatedAt))
       .limit(200);
-    return { items: rows.map(summary), next_cursor: null, has_more: false };
+    const mine = new Set(
+      (
+        await tx
+          .select({ id: ticketAssignees.ticketId })
+          .from(ticketAssignees)
+          .where(eq(ticketAssignees.userId, userId))
+      ).map((x) => x.id),
+    );
+    return {
+      items: rows.map((r) => ({
+        ...summary(r.t),
+        reporter_name: r.reporter ?? null,
+        help_reason: r.t.status === 'needs_help' ? (r.reason ?? null) : null,
+        is_assignee: mine.has(r.t.id),
+        updated_at: r.t.updatedAt.toISOString(),
+      })),
+      next_cursor: null,
+      has_more: false,
+    };
   });
 }
 
@@ -317,6 +351,7 @@ export function ticketDetail(
         const rv = rvs.find((x) => x.roundId === r.id);
         return {
           round_no: r.roundNo,
+          started_at: r.createdAt.toISOString(),
           cause: r.cause,
           status: r.status as TicketDetail['rounds'][number]['status'],
           reason: r.helpReason,
@@ -432,6 +467,7 @@ export function reviewTicket(
         repoSpecs,
         roundNo: t.currentRound + 1,
         cause: 'code_rejected',
+        branch: (round.deliveryPayload as DeliveryCard | null)?.repos[0]?.branch || undefined,
         review: {
           round_no: round.roundNo,
           comment,
