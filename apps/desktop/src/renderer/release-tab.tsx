@@ -2,7 +2,13 @@
 // while the tab is open, every action goes through the server's ActionGate, and an action that needs
 // the caller's own account (409 delivery.account_missing) asks for it right there and then continues
 // (design PC-第一次发布-配账号).
-import type { DeliveryView, Me, PersonalAccountRow, TicketDetail } from '@cloudcraft/core-protocol';
+import type {
+  DeliveryView,
+  Me,
+  PersonalAccountRow,
+  ReleaseStage,
+  TicketDetail,
+} from '@cloudcraft/core-protocol';
 import { useT } from '@cloudcraft/ui-kit';
 import {
   AccountDialog,
@@ -11,6 +17,7 @@ import {
   ReleaseRail,
   releaseVM,
   type ReleaseActions,
+  type ReleaseVM,
 } from '@cloudcraft/workbench-ui';
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { ApiError, deliveryCalls } from './api.ts';
@@ -26,7 +33,12 @@ export function useReleaseTab(o: {
   active: boolean;
   /** the ticket changed (a send-back starts the next round): reload the list and the conversation */
   onChanged: () => void;
-}): { panel: ReactNode; rail: ReactNode; dialogs: ReactNode } {
+  /** the Dock opens one round and one environment of it; the ticket tab shows the one under way */
+  roundNo?: number;
+  stage?: ReleaseStage;
+  /** the Dock draws the round, environment and state in its own header */
+  bare?: boolean;
+}): { panel: ReactNode; rail: ReactNode; dialogs: ReactNode; vm: ReleaseVM | null } {
   const t = useT();
   const calls = useMemo(() => deliveryCalls(o.ws), [o.ws]);
   const ticketId = o.detail?.id ?? null;
@@ -42,19 +54,22 @@ export function useReleaseTab(o: {
     null,
   );
 
-  // an answer for a ticket that is no longer open is dropped
-  const openId = useRef(ticketId);
-  openId.current = ticketId;
+  // an answer for a ticket (or round) that is no longer open is dropped
+  const { roundNo } = o;
+  const key = ticketId ? `${ticketId}:${roundNo ?? ''}` : null;
+  const openKey = useRef(key);
+  openKey.current = key;
   const load = useCallback(async () => {
     if (!ticketId) return;
-    const v = await calls.view(ticketId);
-    if (v.ticket_id === openId.current) setView(v);
-  }, [calls, ticketId]);
+    const asked = `${ticketId}:${roundNo ?? ''}`;
+    const v = await calls.view(ticketId, roundNo);
+    if (asked === openKey.current) setView(v);
+  }, [calls, ticketId, roundNo]);
   useEffect(() => {
     setView(null);
     setTester(null);
     setError(null);
-  }, [ticketId]);
+  }, [key]);
   const { live } = o;
   useEffect(() => {
     if (!o.active || !ticketId) return;
@@ -89,7 +104,8 @@ export function useReleaseTab(o: {
     }
   };
 
-  if (!o.detail || !view) return { panel: null, rail: null, dialogs: null };
+  if (!o.detail || !view || view.ticket_id !== o.detail.id)
+    return { panel: null, rail: null, dialogs: null, vm: null };
   const id = o.detail.id;
   const vm = releaseVM(view, {
     ticket: o.detail,
@@ -98,6 +114,7 @@ export function useReleaseTab(o: {
     members,
     tester,
     t,
+    ...(o.stage ? { stage: o.stage } : {}),
   });
   const round = view.flow?.round_no ?? o.detail.current_round;
   const startLabel =
@@ -211,8 +228,9 @@ export function useReleaseTab(o: {
     </>
   );
   return {
-    panel: <ReleasePanel vm={vm} a={a} />,
+    panel: <ReleasePanel vm={vm} a={a} bare={o.bare} />,
     rail: <ReleaseRail vm={vm} a={a} />,
     dialogs,
+    vm,
   };
 }

@@ -1,14 +1,16 @@
 // From the delivery read model (core-protocol DeliveryView) to the release tab's view model (01 §12.2,
 // §12.3, §12.5). Pure: what is shown is computed from the flow's node runs, MRs, release tasks and test
 // records on every read; nothing here decides what the caller may do — `can` does.
-import type {
-  ActorPolicyView,
-  DeliveryNodeView,
-  DeliveryView,
-  PersonalAccountRow,
-  ReleaseStepView,
-  ReleaseTaskView,
-  TicketDetail,
+import {
+  DELIVERY_STEPS,
+  type ActorPolicyView,
+  type DeliveryNodeView,
+  type DeliveryView,
+  type PersonalAccountRow,
+  type ReleaseStage,
+  type ReleaseStepView,
+  type ReleaseTaskView,
+  type TicketDetail,
 } from '@cloudcraft/core-protocol';
 import type { Translate } from '@cloudcraft/ui-kit';
 import { shortTime } from './ticket-map.ts';
@@ -89,21 +91,6 @@ export interface ReleaseVM {
   reviewHead: string | null;
 }
 
-const TEST_GROUPS = [
-  ['test_mr_open', 'test_mr_review', 'test_mr_merge'],
-  ['test_build', 'test_publish'],
-  ['test_release'],
-  ['test_verify'],
-  ['test_notify'],
-];
-const PROD_GROUPS = [
-  ['main_mr_open', 'main_mr_review', 'main_mr_merge'],
-  ['prod_build', 'prod_publish'],
-  ['prod_release'],
-  ['prod_verify'],
-  ['prod_notify'],
-];
-
 const hm = (iso: string | null) => {
   if (!iso) return '';
   const d = new Date(iso);
@@ -159,6 +146,8 @@ export function releaseVM(
     accounts: PersonalAccountRow[];
     members: { id: string; name: string }[];
     tester: string | null;
+    /** the stage to show (the Dock list opens one environment); otherwise the one under way */
+    stage?: ReleaseStage;
     t: Translate;
   },
 ): ReleaseVM {
@@ -197,13 +186,19 @@ export function releaseVM(
   const toMainMr = d.merge_requests.filter((m) => m.direction === 'to_main').at(-1);
 
   const mainStarted = node('main_request')?.status === 'done';
-  const stage: ReleaseVM['stage'] = mainStarted ? 'production' : 'test';
-  const groups = stage === 'test' ? TEST_GROUPS : PROD_GROUPS;
+  const stage: ReleaseVM['stage'] = o.stage ?? (mainStarted ? 'production' : 'test');
+  const groups = DELIVERY_STEPS[stage].map((g) => [...g]);
+  // retest passed and the merge back not asked for yet: the production release waits on that
+  const awaitingMain = stage === 'production' && d.flow?.status === 'running' && !mainStarted;
+  const cancelled = d.flow?.status === 'cancelled';
   const task = stage === 'test' ? testTask : prodTask;
   const mr = stage === 'test' ? toEnvMr : toMainMr;
   const env = stage === 'test' ? testEnv : prodEnv;
   const other = stage === 'test' ? prodEnv : testEnv;
-  const failed = d.nodes.find((n) => n.status === 'failed' && d.flow?.status === 'running');
+  // only this stage's failure: the other environment's card is not where it is retried
+  const failed = d.nodes.find(
+    (n) => n.status === 'failed' && d.flow?.status === 'running' && groups.flat().includes(n.key),
+  );
   const stepOf = (slot: ReleaseStepView['slot']) =>
     task?.steps.filter((s) => s.slot === slot).at(-1) ?? null;
   const retest = node('retest');
@@ -286,6 +281,20 @@ export function releaseVM(
             ? t('rel.sub.not_sent')
             : t('rel.sub.notify');
     if (!err && failed && tone === 'wait' && i !== 4) sub = t('rel.sub.not_run');
+    if (cancelled && tone !== 'ok') {
+      // a flow sent back: the MR step shows who sent it back, the rest never ran
+      if (i === 0 && mr?.state === 'rejected')
+        return {
+          name: t(stepNames[i]!),
+          tone: 'err' as StepTone,
+          sub: t('rel.sub.mr_rejected', { who: plain(mr.reviewer_id) }),
+        };
+      return {
+        name: t(stepNames[i]!),
+        tone: 'wait' as StepTone,
+        sub: t(i === 4 ? 'rel.sub.not_sent' : 'rel.sub.not_run'),
+      };
+    }
     return { name: t(stepNames[i]!), tone, sub };
   });
 
@@ -294,13 +303,22 @@ export function releaseVM(
   const done = steps.filter((s) => s.tone === 'ok').length;
   const failedStep = steps.find((s) => s.tone === 'err');
   let pill: ReleaseVM['pill'];
-  if (!d.flow || d.flow.status === 'cancelled') pill = { tone: 'gray', text: t('rel.pill.before') };
+  const rejectedTest =
+    testTask?.status === 'retest_rejected' ||
+    d.test_records.some((r) => r.result === 'rejected' && r.release_task_id === testTask?.id);
+  if (!d.flow) pill = { tone: 'gray', text: t('rel.pill.before') };
+  else if (stage === 'test' && retest?.status === 'done')
+    pill = { tone: 'green', text: t('rel.pill.retest_passed') };
+  else if (cancelled)
+    pill =
+      mr?.state === 'rejected' || (stage === 'test' && rejectedTest)
+        ? { tone: 'red', text: t('rel.pill.rejected') }
+        : { tone: 'gray', text: t('rel.pill.cancelled') };
+  else if (awaitingMain) pill = { tone: 'orange', text: t('rel.pill.main_request') };
   else if (failedStep)
     pill = { tone: 'red', text: t('rel.pill.failed', { step: failedStep.name }) };
   else if (stage === 'test' && retest?.status === 'waiting_human')
     pill = { tone: 'green', text: t('rel.pill.pending_retest') };
-  else if (stage === 'test' && retest?.status === 'done')
-    pill = { tone: 'green', text: t('rel.pill.retest_passed') };
   else if (steps[0]!.tone === 'you')
     pill = {
       tone: 'orange',
@@ -316,19 +334,24 @@ export function releaseVM(
 
   const approved = rd?.review;
   const title = t('rel.title', { round, env: envName });
-  const meta = task
-    ? t('rel.meta.task', {
-        no: task.no,
-        who: name(task.triggered_by),
-        at: hm(task.created_at),
+  const meta = awaitingMain
+    ? t('rel.meta.main_request', {
+        who: plain(passedRec?.tester_id) || t('rel.someone'),
+        at: passedRec ? hm(passedRec.at) : '',
       })
-    : approved?.result === 'approved'
-      ? t('rel.meta.before', {
-          who: name(approved.reviewer_id),
-          at: hm(approved.at),
-          sha: sha7(fix?.head_sha),
+    : task
+      ? t('rel.meta.task', {
+          no: task.no,
+          who: name(task.triggered_by),
+          at: hm(task.created_at),
         })
-      : t('rel.meta.not_approved');
+      : approved?.result === 'approved'
+        ? t('rel.meta.before', {
+            who: name(approved.reviewer_id),
+            at: hm(approved.at),
+            sha: sha7(fix?.head_sha),
+          })
+        : t('rel.meta.not_approved');
 
   // —— environment cards ——
   const liveOf = (e: typeof env) => e?.live_version ?? t('rel.env.none');
@@ -337,6 +360,14 @@ export function releaseVM(
     const tk = e === testEnv ? testTask : prodTask;
     if (!primary) {
       // the other environment: what has to happen before it moves
+      if (e === prodEnv && prodTask?.status === 'effective')
+        return {
+          name: nm,
+          on: true,
+          tag: { tone: 'green', text: t('rel.env.tag.effective') },
+          from: prodTask.version ?? liveOf(e),
+          note: shortTime(prodTask.created_at, t),
+        };
       if (e === prodEnv)
         return {
           name: nm,
@@ -360,8 +391,16 @@ export function releaseVM(
         name: nm,
         on: true,
         tag: {
-          tone: 'orange',
-          text: t(stage === 'production' ? 'rel.env.tag.wait_release' : 'rel.env.tag.wait_start'),
+          tone: cancelled ? 'gray' : 'orange',
+          text: t(
+            cancelled
+              ? 'rel.env.tag.unchanged'
+              : awaitingMain
+                ? 'rel.env.tag.wait_merge'
+                : stage === 'production'
+                  ? 'rel.env.tag.wait_release'
+                  : 'rel.env.tag.wait_start',
+          ),
         },
         from: liveOf(e),
         to: { text: t('rel.env.after_build'), mono: false },
@@ -550,7 +589,8 @@ export function releaseVM(
       note: t('rel.notify.note', { env: envName }),
     };
   } else {
-    const before = !d.flow || d.flow.status === 'cancelled';
+    // a release that ended is shown as it ended: nothing to pick or start there
+    const before = !d.flow;
     const notified = steps[4]!.tone === 'ok';
     side = {
       kind: 'tester',
@@ -563,7 +603,9 @@ export function releaseVM(
             ? retest?.status === 'done'
               ? t('rel.tester.passed', { at: passedRec ? hm(passedRec.at) : '' })
               : t('rel.tester.notified', { at: hm(node('test_notify')?.finished_at ?? null) })
-            : t('rel.tester.keep'),
+            : cancelled
+              ? t('rel.tester.not_notified')
+              : t('rel.tester.keep'),
       },
       ...(before
         ? {
@@ -584,7 +626,9 @@ export function releaseVM(
           }
         : notified && testEnv
           ? { entry: { url: testEnv.entry_url } }
-          : { note: t('rel.tester.note', { who: testerName }) }),
+          : cancelled
+            ? {}
+            : { note: t('rel.tester.note', { who: testerName }) }),
     };
   }
 
@@ -775,7 +819,7 @@ export function releaseVM(
     side,
     table,
     rail,
-    retryKey: d.can.retry,
+    retryKey: failed ? d.can.retry : null,
     reviewHead: d.can.review_mr ? (mr?.head_sha ?? null) : null,
   };
 }

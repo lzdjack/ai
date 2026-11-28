@@ -2,7 +2,13 @@
 // (P5b): the list groups by what waits on whom, the conversation shows each round's delivery card
 // with the before / after screenshots, and the assignee approves or sends back from the review row.
 // ?demo=1 keeps U1's sample data of the approved design for side-by-side checks.
-import type { EnvironmentRow, Me, TicketDetail, TicketSummary } from '@cloudcraft/core-protocol';
+import type {
+  EnvironmentRow,
+  Me,
+  ReleaseList,
+  TicketDetail,
+  TicketSummary,
+} from '@cloudcraft/core-protocol';
 import {
   AppShell,
   Dock,
@@ -26,8 +32,9 @@ import {
   type TicketTab,
 } from '@cloudcraft/workbench-ui';
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { onboardingCalls, ticketCalls } from './api.ts';
+import { deliveryCalls, onboardingCalls, ticketCalls } from './api.ts';
 import { aboutTicket, aboutTickets, useLive } from './live.ts';
+import { ReleasePage } from './release-page.tsx';
 import { useReleaseTab } from './release-tab.tsx';
 import after from './demo/evidence-after.png';
 import before from './demo/evidence-before.png';
@@ -59,10 +66,11 @@ function Shell(p: {
   status: StatusPillProps[];
   chatBadge?: number;
   releaseBadge?: number;
+  active: DockKind;
+  onDock: (k: DockKind) => void;
   children: ReactNode;
 }) {
   const t = useT();
-  const [active, setActive] = useState<DockKind>('chat');
   return (
     <AppShell
       topBar={
@@ -73,8 +81,8 @@ function Shell(p: {
       }
       dock={
         <Dock
-          active={active}
-          onSelect={setActive}
+          active={p.active}
+          onSelect={p.onDock}
           top={[{ kind: 'ai', label: t('shell.dock.ai') }]}
           modules={[
             { kind: 'chat', label: t('shell.dock.chat'), badge: p.chatBadge },
@@ -101,10 +109,13 @@ function DemoApp({ forcedTheme, me }: { forcedTheme: boolean; me: Me }) {
   const [selected, setSelected] = useState('TK-20871');
   const [tab, setTab] = useState<TicketTab>('chat');
   const [ticket] = useState(demoTicket);
+  const [dock, setDock] = useState<DockKind>('chat');
   return (
     <Shell
       me={me}
       forcedTheme={forcedTheme}
+      active={dock}
+      onDock={setDock}
       status={[
         { text: t('shell.status.bots_online', { count: demo.bots_online }), bot: true },
         ...demo.sources,
@@ -148,6 +159,9 @@ function LiveApp({ forcedTheme, me }: { forcedTheme: boolean; me: Me }) {
   const [tab, setTab] = useState<TicketTab>('chat');
   const [dialog, setDialog] = useState<'reject' | 'new' | null>(null);
   const [busy, setBusy] = useState(false);
+  const [dock, setDock] = useState<DockKind>('chat');
+  const [releases, setReleases] = useState<ReleaseList | null>(null);
+  const delivery = useMemo(() => deliveryCalls(ws), [ws]);
 
   const live = useLive(ws);
   // an answer for a ticket that is no longer open is dropped
@@ -161,6 +175,9 @@ function LiveApp({ forcedTheme, me }: { forcedTheme: boolean; me: Me }) {
   );
   // the list and the open ticket follow the server (the change stream, 06 §3.7)
   useEffect(() => live.follow(loadList, aboutTickets), [live, loadList]);
+  // the Dock's release list, read all along: its badge counts what waits on the caller
+  const loadReleases = useCallback(() => delivery.releases().then(setReleases), [delivery]);
+  useEffect(() => live.follow(loadReleases, aboutTickets), [live, loadReleases]);
   useEffect(() => {
     if (!selected) return setDetail(null);
     return live.follow(() => loadDetail(selected), aboutTicket(selected));
@@ -235,16 +252,49 @@ function LiveApp({ forcedTheme, me }: { forcedTheme: boolean; me: Me }) {
     me,
     live,
     detail,
-    active: tab === 'release',
+    active: tab === 'release' && dock === 'chat',
     onChanged: () => {
       void loadList();
+      void loadReleases();
       if (selected) void loadDetail(selected);
     },
   });
   const onRelease = tab === 'release' && !!release.panel;
+  const releaseWaiting = releases?.items.filter((x) => x.group === 'waiting').length ?? 0;
+  const shell = {
+    me,
+    forcedTheme,
+    status: [],
+    chatBadge: waiting || undefined,
+    releaseBadge: releaseWaiting || undefined,
+    active: dock,
+    onDock: setDock,
+  };
+
+  if (dock === 'release')
+    return (
+      <Shell {...shell}>
+        <ReleasePage
+          ws={ws}
+          me={me}
+          live={live}
+          list={releases}
+          onChanged={() => {
+            void loadReleases();
+            void loadList();
+          }}
+          onOpenTicket={(id) => {
+            if (!groups.some((g) => g.items.some((x) => x.id === id))) setScope('all');
+            setSelected(id);
+            setTab('release');
+            setDock('chat');
+          }}
+        />
+      </Shell>
+    );
 
   return (
-    <Shell me={me} forcedTheme={forcedTheme} status={[]} chatBadge={waiting || undefined}>
+    <Shell {...shell}>
       <TicketList
         groups={groups}
         total={total}
