@@ -3,7 +3,9 @@
 // view: the app passes the API calls.
 import type {
   ConnectorRow,
-  EnvironmentRow,
+  EnvAccountRow,
+  FlowStatus,
+  HealthCheckResponse,
   PluginInfo,
   ProjectRow,
   RepoRow,
@@ -11,15 +13,12 @@ import type {
 import {
   AlertIcon,
   CheckIcon,
-  ChevronLeftIcon,
   ChevronRightIcon,
   EyeIcon,
   ForkIcon,
-  HelpChatIcon,
   InboxIcon,
   KeyIcon,
   LockIcon,
-  MergeIcon,
   MinusIcon,
   PencilIcon,
   PlusIcon,
@@ -30,11 +29,17 @@ import {
   useT,
 } from '@cloudcraft/ui-kit';
 import logo from '@cloudcraft/ui-kit/assets/app-logo.svg';
-import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ConnectorDrawer, RepoPickerDrawer, RepoTuneDrawer } from './onboarding-drawers.tsx';
+import { StepEnvironments } from './onboarding-env.tsx';
 import {
+  BackButton,
+  Footer,
+  Head,
   Mark,
+  STEPS,
   errText,
+  waitFlow,
   repoName,
   repoTile,
   type BuildState,
@@ -42,8 +47,6 @@ import {
 } from './onboarding-parts.tsx';
 
 export type { BuildState, OnboardingCalls } from './onboarding-parts.tsx';
-
-const STEPS = ['s1', 's2', 's3', 's4'] as const;
 
 export function OnboardingScreen(p: { calls: OnboardingCalls; onDone: () => void }) {
   const t = useT();
@@ -54,11 +57,19 @@ export function OnboardingScreen(p: { calls: OnboardingCalls; onDone: () => void
   const [repos, setRepos] = useState<RepoRow[]>([]);
   const [projects, setProjects] = useState<ProjectRow[]>([]);
   const [envCount, setEnvCount] = useState(0);
+  const [accountCount, setAccountCount] = useState(0);
+  const onEnvCount = useCallback((e: number, a: number) => {
+    setEnvCount(e);
+    setAccountCount(a);
+  }, []);
   const [builds, setBuilds] = useState<Record<string, BuildState>>({});
   const [connectorDrawer, setConnectorDrawer] = useState<{
     category: string;
     pluginId?: string;
+    /** edit mode */
+    connectorId?: string;
   } | null>(null);
+  const editing = connectors.find((c) => c.id === connectorDrawer?.connectorId);
   const [picker, setPicker] = useState<string | null>(null);
   const [tune, setTune] = useState<string | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -133,7 +144,7 @@ export function OnboardingScreen(p: { calls: OnboardingCalls; onDone: () => void
   const summary = [
     codeConnectors.map((c) => c.name).join(' · '),
     t('ob.s2.summary', { rw: rw.length, ro: ro.length }),
-    t('ob.s3.summary', { n: envCount }),
+    t('ob.s3.summary', { n: envCount, a: accountCount }),
     '',
   ];
 
@@ -213,10 +224,7 @@ export function OnboardingScreen(p: { calls: OnboardingCalls; onDone: () => void
               tickets={ticketConnectors}
               repos={repos}
               onAdd={(category, pluginId) => setConnectorDrawer({ category, pluginId })}
-              onPick={(id) => {
-                setStep(1);
-                setPicker(id);
-              }}
+              onEdit={(id) => setConnectorDrawer({ category: '', connectorId: id })}
               onNext={() => setStep(1)}
             />
           ) : step === 1 ? (
@@ -239,18 +247,16 @@ export function OnboardingScreen(p: { calls: OnboardingCalls; onDone: () => void
             <StepEnvironments
               calls={calls}
               projects={projects.filter((x) => rw.some((r) => r.project_id === x.id))}
-              onCount={setEnvCount}
+              onCount={onEnvCount}
               onBack={() => setStep(1)}
               onNext={() => setStep(3)}
             />
           ) : (
             <StepHealth
+              calls={calls}
               connectors={connectors}
               repos={repos}
               projects={projects}
-              envCount={envCount}
-              builds={builds}
-              startBuild={startBuild}
               onBack={() => setStep(2)}
               onDone={p.onDone}
             />
@@ -260,12 +266,21 @@ export function OnboardingScreen(p: { calls: OnboardingCalls; onDone: () => void
       {connectorDrawer ? (
         <ConnectorDrawer
           calls={calls}
-          plugins={plugins.filter((x) => x.category === connectorDrawer.category)}
+          plugins={
+            editing ? plugins : plugins.filter((x) => x.category === connectorDrawer.category)
+          }
           initialPlugin={connectorDrawer.pluginId}
+          connector={editing}
           onClose={() => setConnectorDrawer(null)}
           onSaved={(c) => {
             setConnectorDrawer(null);
-            setConnectors((xs) => [...xs, c]);
+            setConnectors((xs) =>
+              xs.some((x) => x.id === c.id) ? xs.map((x) => (x.id === c.id ? c : x)) : [...xs, c],
+            );
+          }}
+          onDeleted={(id) => {
+            setConnectorDrawer(null);
+            setConnectors((xs) => xs.filter((x) => x.id !== id));
           }}
         />
       ) : null}
@@ -300,37 +315,6 @@ export function OnboardingScreen(p: { calls: OnboardingCalls; onDone: () => void
   );
 }
 
-function Head(p: { step: number; ask: string }) {
-  const t = useT();
-  const s = STEPS[p.step];
-  return (
-    <div className="row g10">
-      <div className="grow">
-        <div className="ob-eyebrow">{t(`ob.${s}.eyebrow`)}</div>
-        <div className="ob-h1">{t(`ob.${s}.h1`)}</div>
-        <div className="f13 t2" style={{ marginTop: 5 }}>
-          {t(`ob.${s}.lead`)}
-        </div>
-      </div>
-      <span className="ob-chip" title={t('ob.ask_ai.soon')}>
-        <SparkleOutlineIcon />
-        {p.ask}
-      </span>
-    </div>
-  );
-}
-
-function Footer(p: { children: ReactNode }) {
-  return <div className="ob-ff">{p.children}</div>;
-}
-
-const BackButton = (p: { onClick: () => void }) => (
-  <button type="button" className="ob-bigb ob-sec" onClick={p.onClick}>
-    <ChevronLeftIcon />
-    {useT()('ob.back')}
-  </button>
-);
-
 // ---------- step 1: connectors ----------
 
 function StepConnectors(p: {
@@ -339,7 +323,7 @@ function StepConnectors(p: {
   tickets: ConnectorRow[];
   repos: RepoRow[];
   onAdd: (category: string, pluginId?: string) => void;
-  onPick: (connectorId: string) => void;
+  onEdit: (connectorId: string) => void;
   onNext: () => void;
 }) {
   const t = useT();
@@ -371,7 +355,7 @@ function StepConnectors(p: {
               {t('ob.s1.verified')}
             </span>
           ) : (
-            <span className="ob-badpill">{t('ob.s1.needs_auth')}</span>
+            <span className="ob-badpill">{t('ob.s1.disabled')}</span>
           )}
         </div>
         <div className="ob-cmeta">
@@ -380,11 +364,9 @@ function StepConnectors(p: {
         </div>
         <div className="ob-cfoot">
           <span>{ticket ? '' : t('ob.s1.picked', { n: picked })}</span>
-          {ticket ? null : (
-            <button type="button" className="ob-act" onClick={() => p.onPick(c.id)}>
-              {t('ob.s1.pick')}
-            </button>
-          )}
+          <button type="button" className="ob-act" onClick={() => p.onEdit(c.id)}>
+            {ticket ? t('ob.s1.edit.ticket') : t('ob.s1.edit')}
+          </button>
         </div>
       </div>
     );
@@ -773,205 +755,10 @@ function RepoLine(p: {
   );
 }
 
-// ---------- step 3: environments ----------
-
-const TIERS = ['test_gate', 'dev', 'production'] as const;
-
-function StepEnvironments(p: {
-  calls: OnboardingCalls;
-  projects: ProjectRow[];
-  onCount: (n: number) => void;
-  onBack: () => void;
-  onNext: () => void;
-}) {
-  const t = useT();
-  const [project, setProject] = useState(p.projects[0]?.id ?? '');
-  const [envs, setEnvs] = useState<Record<string, EnvironmentRow[]>>({});
-  const [adding, setAdding] = useState(false);
-  const [form, setForm] = useState({ name: '', entry_url: '', env_tier: 'test_gate' });
-  const [error, setError] = useState<string | null>(null);
-  const { calls, onCount } = p;
-  const ids = p.projects.map((x) => x.id).join(',');
-  useEffect(() => {
-    let live = true;
-    void Promise.all(
-      ids
-        .split(',')
-        .filter(Boolean)
-        .map(async (id) => [id, await calls.environments(id)] as const),
-    ).then((rows) => {
-      if (!live) return;
-      setEnvs(Object.fromEntries(rows));
-      onCount(rows.reduce((s, [, e]) => s + e.length, 0));
-    });
-    return () => {
-      live = false;
-    };
-  }, [ids, calls, onCount]);
-  const list = envs[project] ?? [];
-  const add = async () => {
-    setError(null);
-    try {
-      const code =
-        `${form.env_tier === 'test_gate' ? 'test' : form.env_tier === 'production' ? 'prod' : 'dev'}` +
-        (list.some((e) => e.env_tier === form.env_tier) ? `-${list.length + 1}` : '');
-      const e = await calls.createEnvironment(project, { ...form, env_code: code });
-      const next = { ...envs, [project]: [...list, e] };
-      setEnvs(next);
-      onCount(Object.values(next).reduce((s, x) => s + x.length, 0));
-      setAdding(false);
-      setForm({ name: '', entry_url: '', env_tier: 'test_gate' });
-    } catch (x) {
-      setError(errText(x));
-    }
-  };
-  return (
-    <>
-      <div className="ob-fb">
-        <Head step={2} ask={t('ob.s3.ask')} />
-        <div style={{ marginTop: 18 }}>
-          <div className="ob-lab">
-            {t('ob.s3.envs')}
-            <span>{t('ob.s3.envs.sub')}</span>
-            {p.projects.length > 1 ? (
-              <>
-                <span className="grow" />
-                <div className="cc-seg">
-                  {p.projects.map((x) => (
-                    <span
-                      key={x.id}
-                      className={x.id === project ? 'on' : undefined}
-                      onClick={() => setProject(x.id)}
-                    >
-                      {x.name}
-                    </span>
-                  ))}
-                </div>
-              </>
-            ) : null}
-          </div>
-          {!p.projects.length ? (
-            <div className="ob-empty">{t('ob.s3.no_project')}</div>
-          ) : (
-            <div className="ob-envs">
-              {list.map((e) => (
-                <div key={e.id} className="ob-env">
-                  <div className="row g6">
-                    <b>{e.name}</b>
-                    <span
-                      className={`cc-tag ${e.env_tier === 'production' ? 'cc-tag-o' : 'cc-tag-b'}`}
-                    >
-                      {t(`ob.tier.${e.env_tier}`)}
-                    </span>
-                  </div>
-                  <div className="mono f12 t2 ell" style={{ marginTop: 6 }}>
-                    {e.entry_url.replace(/^https?:\/\//, '')}
-                  </div>
-                  <div className="f12 t3" style={{ marginTop: 3 }}>
-                    {e.env_code}
-                  </div>
-                </div>
-              ))}
-              <button type="button" className="ob-env is-add" onClick={() => setAdding(true)}>
-                <PlusIcon width={16} height={16} />
-                {t('ob.s3.add')}
-              </button>
-            </div>
-          )}
-          {adding ? (
-            <div className="ob-envform">
-              <div>
-                <div className="ob-flab">{t('ob.s3.f.name')}</div>
-                <label className="ob-dinp is-md">
-                  <input
-                    value={form.name}
-                    maxLength={40}
-                    onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    placeholder={t('ob.s3.f.name.placeholder')}
-                  />
-                </label>
-              </div>
-              <div>
-                <div className="ob-flab">{t('ob.s3.f.url')}</div>
-                <label className="ob-dinp is-md">
-                  <input
-                    className="mono"
-                    value={form.entry_url}
-                    onChange={(e) => setForm({ ...form, entry_url: e.target.value })}
-                    placeholder="https://"
-                  />
-                </label>
-              </div>
-              <div>
-                <div className="ob-flab">{t('ob.s3.f.tier')}</div>
-                <label className="ob-dinp is-md ob-dsel">
-                  <select
-                    value={form.env_tier}
-                    onChange={(e) => setForm({ ...form, env_tier: e.target.value })}
-                  >
-                    {TIERS.map((x) => (
-                      <option key={x} value={x}>
-                        {t(`ob.tier.${x}`)}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              </div>
-              <div className="row g8">
-                <button
-                  type="button"
-                  className="cc-btn cc-btn-md cc-btn-pri"
-                  disabled={!form.name.trim() || !/^https?:\/\//.test(form.entry_url)}
-                  onClick={add}
-                >
-                  {t('ob.s3.f.save')}
-                </button>
-                <button
-                  type="button"
-                  className="cc-btn cc-btn-md cc-btn-sec"
-                  onClick={() => setAdding(false)}
-                >
-                  {t('ob.cancel')}
-                </button>
-              </div>
-            </div>
-          ) : null}
-          {error ? <div className="ob-err">{error}</div> : null}
-          <div className="ob-note" style={{ marginTop: 10, padding: '8px 12px' }}>
-            <MergeIcon />
-            <span>
-              <b>{t('ob.s3.rule.title')}</b>
-              {t('ob.s3.rule.body')}
-            </span>
-          </div>
-        </div>
-        <div
-          className="ob-note"
-          style={{ marginTop: 'auto', marginBottom: 14, background: 'var(--fill)' }}
-        >
-          <HelpChatIcon />
-          <span>
-            <b>{t('ob.s3.data.title')}</b>
-            {t('ob.s3.data.body')}
-          </span>
-        </div>
-      </div>
-      <Footer>
-        <BackButton onClick={p.onBack} />
-        <span className="grow" />
-        <span className="f13 t3" style={{ marginRight: 6 }}>
-          {t('ob.s3.skip')}
-        </span>
-        <button type="button" className="ob-bigb ob-pri" onClick={p.onNext}>
-          {t('ob.s3.next')}
-          <ChevronRightIcon />
-        </button>
-      </Footer>
-    </>
-  );
-}
-
 // ---------- step 4: health check ----------
+
+/** the page answered for at least one account: the environment opens */
+const OPENED = new Set(['ok', 'expired', 'no_login']);
 
 const secs = (ms: number) => {
   const s = Math.round(ms / 1000);
@@ -979,78 +766,153 @@ const secs = (ms: number) => {
 };
 
 function StepHealth(p: {
+  calls: OnboardingCalls;
   connectors: ConnectorRow[];
   repos: RepoRow[];
   projects: ProjectRow[];
-  envCount: number;
-  builds: Record<string, BuildState>;
-  startBuild: (projectId: string) => Promise<void>;
   onBack: () => void;
   onDone: () => void;
 }) {
   const t = useT();
-  const rw = p.repos.filter((r) => r.access_mode === 'read_write');
-  const ro = p.repos.filter((r) => r.access_mode === 'read_only');
-  const targets = useMemo(
-    () => [...new Set(rw.map((r) => r.project_id).filter((x): x is string => !!x))],
-    [rw],
-  );
+  const { calls } = p;
+  const [res, setRes] = useState<HealthCheckResponse | null>(null);
+  const [flows, setFlows] = useState<Record<string, FlowStatus>>({});
+  const [accounts, setAccounts] = useState<EnvAccountRow[] | null>(null);
   const [startError, setStartError] = useState<string | null>(null);
+  const [elapsed, setElapsed] = useState(0);
   const started = useRef(false);
-  const { startBuild, builds } = p;
   useEffect(() => {
     if (started.current) return;
     started.current = true;
-    for (const id of targets)
-      if (!builds[id] || builds[id].status === 'failed')
-        startBuild(id).catch((e) => setStartError(errText(e)));
-  }, [targets, builds, startBuild]);
-  const bs = targets.map((id) => builds[id]).filter((b): b is BuildState => !!b);
-  const running =
-    !startError && (bs.length < targets.length || bs.some((b) => b.status === 'running'));
-  const failed = bs.find((b) => b.status === 'failed');
-  const probeBad = rw.filter((r) => r.probe.state !== 'done' || !r.settings?.build_command);
-  const connOk = p.connectors.every((c) => c.status === 'enabled');
-  const total = bs.reduce((s, b) => s + (b.ms ?? 0), 0);
-  const state = startError || failed ? 'bad' : running ? 'run' : 'ok';
-  const rows: { mark: 'ok' | 'warn' | 'off' | 'run'; text: string; side: string }[] = [
+    const c = new AbortController();
+    const t0 = Date.now();
+    void (async () => {
+      try {
+        const r = await calls.healthCheck();
+        setRes(r);
+        await Promise.all(
+          r.flows.map(async (f) => {
+            const done = await waitFlow(calls, f.flow_id, c.signal);
+            if (done) setFlows((x) => ({ ...x, [f.flow_id]: done }));
+          }),
+        );
+        setElapsed(Date.now() - t0);
+        // sign-in results were written onto the accounts
+        const lists = await Promise.all(
+          r.flows.map((f) => calls.envAccounts(f.project_id).catch(() => [])),
+        );
+        setAccounts(lists.flat());
+      } catch (e) {
+        setStartError(errText(e));
+      }
+    })();
+  }, [calls]);
+  const facts = res?.facts;
+  const running = !startError && (!res || res.flows.some((f) => !flows[f.flow_id]));
+  const nodeOf = (key: string) =>
+    Object.values(flows).flatMap((f) => f.nodes.filter((n) => n.key === key));
+  const builds = nodeOf('trial_build');
+  const buildFailed = builds.find((n) => n.status === 'failed');
+  const loginFailed = nodeOf('env_login').find((n) => n.status === 'failed');
+  const flowFailed = Object.values(flows).find((f) => f.status === 'failed');
+  const failure =
+    startError ??
+    buildFailed?.error ??
+    loginFailed?.error ??
+    (flowFailed ? (flowFailed.nodes.find((n) => n.error)?.error ?? t('ob.s4.big.bad')) : null);
+  const total = builds.reduce(
+    (s, n) =>
+      s +
+      ((n.output as { builds?: { ms: number }[] } | null)?.builds ?? []).reduce(
+        (x, y) => x + y.ms,
+        0,
+      ),
+    0,
+  );
+  const state = failure ? 'bad' : running ? 'run' : 'ok';
+  const rwCount =
+    facts?.repos.read_write ?? p.repos.filter((r) => r.access_mode === 'read_write').length;
+  const roCount =
+    facts?.repos.read_only ?? p.repos.filter((r) => r.access_mode === 'read_only').length;
+  const conns =
+    facts?.connectors ??
+    p.connectors.map((c) => ({ name: c.name, enabled: c.status === 'enabled' }));
+  const connOk = conns.every((c) => c.enabled);
+  const notProbed = facts?.repos.not_probed ?? [];
+  const envs = facts?.environments ?? [];
+  const accountTotal = envs.reduce((s, e) => s + e.accounts, 0);
+  const envName = (id: string) => envs.find((e) => e.id === id)?.name ?? '';
+  const loggedIn = (accounts ?? []).filter(
+    (a) => a.login.state === 'ok' || a.login.state === 'no_login',
+  );
+  const opened = envs.filter((e) =>
+    (accounts ?? []).some((a) => a.environment_id === e.id && OPENED.has(a.login.state)),
+  ).length;
+  const troubles = (accounts ?? []).filter(
+    (a) => a.login.state === 'failed' || a.login.state === 'expired',
+  );
+  type Row = { mark: 'ok' | 'warn' | 'off' | 'run'; text: string; side: string; key?: string };
+  const rows: Row[] = [
     {
       mark: connOk ? 'ok' : 'warn',
-      text: t('ob.s4.c.connectors', {
-        names: p.connectors.map((c) => c.name).join(t('ob.list_sep')),
-      }),
+      text: t('ob.s4.c.connectors', { names: conns.map((c) => c.name).join(t('ob.list_sep')) }),
       side: connOk ? t('ob.s4.c.connectors.ok') : t('ob.s4.c.connectors.bad'),
     },
     {
-      mark: !rw.length ? 'off' : failed || startError ? 'warn' : running ? 'run' : 'ok',
-      text: t('ob.s4.c.rw', { n: rw.length }),
-      side: !rw.length
+      mark: !rwCount ? 'off' : buildFailed ? 'warn' : running ? 'run' : 'ok',
+      text: t('ob.s4.c.rw', { n: rwCount }),
+      side: !rwCount
         ? t('ob.s4.c.rw.none')
-        : failed || startError
+        : buildFailed
           ? t('ob.s4.c.rw.failed')
           : running
             ? t('ob.s4.c.rw.running')
             : t('ob.time', secs(total)),
     },
     {
-      mark: ro.length ? 'ok' : 'off',
-      text: t('ob.s4.c.ro', { n: ro.length }),
+      mark: roCount ? 'ok' : 'off',
+      text: t('ob.s4.c.ro', { n: roCount }),
       side: t('ob.s4.c.ro.side'),
     },
     {
-      mark: probeBad.length ? 'warn' : 'ok',
+      mark: notProbed.length ? 'warn' : 'ok',
       text: t('ob.s4.c.probe'),
-      side: probeBad.length
-        ? t('ob.s4.c.probe.bad', { n: probeBad.length })
+      side: notProbed.length
+        ? t('ob.s4.c.probe.bad', { n: notProbed.length })
         : t('ob.s4.c.probe.ok'),
     },
-    {
-      mark: p.envCount ? 'ok' : 'off',
-      text: t('ob.s4.c.envs', { n: p.envCount }),
-      side: p.envCount ? t('ob.s4.c.envs.ok') : t('ob.s4.c.envs.none'),
-    },
+    !envs.length
+      ? { mark: 'off', text: t('ob.s4.c.envs.none_text'), side: t('ob.s4.c.envs.none') }
+      : !accountTotal
+        ? {
+            mark: 'off',
+            text: t('ob.s4.c.envs.no_accounts', { n: envs.length }),
+            side: t('ob.s4.c.envs.none'),
+          }
+        : running || !accounts
+          ? {
+              mark: 'run',
+              text: t('ob.s4.c.envs.trying', { e: envs.length, a: accountTotal }),
+              side: t('ob.s4.c.rw.running'),
+            }
+          : {
+              mark: loginFailed ? 'warn' : loggedIn.length ? 'ok' : 'warn',
+              text: t('ob.s4.c.envs.done', { e: opened, a: loggedIn.length }),
+              side: [...new Set(envs.map((e) => t(`ob.tier.${e.tier}`)))].join(' / '),
+            },
+    ...troubles.map((a): Row => ({
+      key: a.id,
+      mark: 'warn',
+      text: t(`ob.s4.c.account.${a.login.state}`, {
+        env: envName(a.environment_id),
+        role: a.role_name,
+        type: a.credential_type === 'cookie' ? t('ob.cred.cookie') : t('ob.cred.password'),
+      }),
+      side: t('ob.s4.c.account.side'),
+    })),
     { mark: 'off', text: t('ob.s4.c.plugins'), side: t('ob.s4.c.plugins.side') },
   ];
+  const targets = res?.flows.map((f) => f.project_id) ?? [];
   return (
     <>
       <div className="ob-fb">
@@ -1086,18 +948,17 @@ function StepHealth(p: {
               className="f13 t2"
               style={{ marginTop: 3, whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}
             >
-              {startError ??
-                failed?.error ??
+              {failure ??
                 (state === 'ok'
-                  ? t('ob.s4.big.ok.sub', secs(total))
-                  : t('ob.s4.big.run.sub', { n: targets.length }))}
+                  ? t('ob.s4.big.ok.sub', secs(elapsed))
+                  : t('ob.s4.big.run.sub', { n: targets.length || p.projects.length }))}
             </div>
           </div>
         </div>
         <div className="row g12" style={{ marginTop: 14, alignItems: 'flex-start' }}>
           <div className="ob-obx grow" style={{ padding: '6px 16px' }}>
             {rows.map((r) => (
-              <div key={r.text} className="ob-chk">
+              <div key={r.key ?? r.text} className="ob-chk">
                 <span className={`ob-ck is-${r.mark}`}>
                   {r.mark === 'ok' ? (
                     <CheckIcon width={12} height={12} />
