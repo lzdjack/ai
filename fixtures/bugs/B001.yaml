@@ -13,4 +13,6 @@ inject_message: 列表排序改用字符串比较
 fix: B001.fix.patch
 verify:
   unit: B001.test.ts
+  # 参考浏览器复现物（声明式，06 §5.7）：pnpm runner:browser 用它走产物替换回放
+  browser: B001.browser.json
 expect_files: [src/pages/approvals/sort.ts]

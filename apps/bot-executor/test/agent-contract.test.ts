@@ -8,7 +8,12 @@ import type { AddressInfo } from 'node:net';
 import os from 'node:os';
 import path from 'node:path';
 import type { AgentRuntimePlugin, AgentSandbox } from '@cloudcraft/core-protocol';
-import { FINISHING_TOOLS, SUBMIT_DELIVERY, createToolHost } from '@cloudcraft/mcp-tool-host';
+import {
+  FINISHING_TOOLS,
+  HOST_TOOLS,
+  SUBMIT_DELIVERY,
+  createToolHost,
+} from '@cloudcraft/mcp-tool-host';
 import { afterAll, describe, expect, it } from 'vitest';
 import { driveAgent, type DriveLimits } from '../src/agent/driver.ts';
 import { loadRuntime } from '../src/agent/registry.ts';
@@ -186,5 +191,30 @@ describe('宿主工具端', () => {
     expect(await post('ask_user', 'a'.repeat(64))).toBe(404);
     expect(host.results.size).toBe(0);
     host.server.close();
+  });
+
+  it('浏览器复现物（06 §5.7）：只收浏览器验证的仓；定位器只能用一种；空串当没给；复现测试和复现物至少一样', () => {
+    const submit = (params: object, r: typeof round & { browserRepos?: string[] }) =>
+      HOST_TOOLS[SUBMIT_DELIVERY]!.handle(params as never, r);
+    const browserRound = { ...round, browserRepos: ['demo-web'] };
+    // what strict-mode models send: every optional selector filled with ""
+    const loose = { css: 'tbody tr', text: '', role: '', name: '', label: '', nth: 0 };
+    const repro = (inLoc: object) => ({
+      repo: 'demo-web',
+      steps: [{ goto: '/#/approvals' }, { expect_text: '#24', in: inLoc }],
+    });
+    expect(submit({ ...DELIVERY, browser_repro: repro(loose) }, round)).toMatchObject({
+      ok: false,
+      text: expect.stringContaining('not browser-verified'),
+    });
+    expect(
+      submit({ ...DELIVERY, browser_repro: repro({ css: 'tr', text: '#24' }) }, browserRound),
+    ).toMatchObject({ ok: false, text: expect.stringContaining('exactly one of') });
+    expect(submit({ ...DELIVERY, repro_tests: [] }, browserRound)).toMatchObject({ ok: false });
+    const ok = submit({ ...DELIVERY, repro_tests: [], browser_repro: repro(loose) }, browserRound);
+    expect(ok).toMatchObject({ ok: true });
+    expect((ok as { record: { browser_repro: unknown } }).record.browser_repro).toEqual(
+      repro({ css: 'tbody tr', nth: 0 }),
+    );
   });
 });

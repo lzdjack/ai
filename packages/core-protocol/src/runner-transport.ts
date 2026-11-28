@@ -62,6 +62,20 @@ export const RepoSpec = Type.Object({
   /** runs the repo's tests; extra arguments are test files (replay, 06 §5.7) */
   test_command: Type.Optional(Type.String()),
   typecheck_command: Type.Optional(Type.String()),
+  /**
+   * How a fix of this repo is checked (06 §5.7): 'browser_dist_replace' also replays a browser repro
+   * on the test environment with the repo's build output swapped in; default 'test_suite'.
+   */
+  verify_strategy: Type.Optional(
+    Type.Union([Type.Literal('test_suite'), Type.Literal('browser_dist_replace')]),
+  ),
+  /** build output directory, relative to the repo (browser_dist_replace) */
+  dist_dir: Type.Optional(Type.String()),
+  /**
+   * URL prefixes of this app's assets on the environment page, absolute or a path on the page's
+   * origin, e.g. /assets/ (06 §5.2 DistAssetMatcher)
+   */
+  asset_url_patterns: Type.Optional(Type.Array(Type.String())),
 });
 export type RepoSpec = Static<typeof RepoSpec>;
 

@@ -8,6 +8,7 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
+    "@cloudcraft/browser-sandbox": "workspace:*",
     "@cloudcraft/core-protocol": "workspace:*",
     "@cloudcraft/mcp-tool-host": "workspace:*",
     "@cloudcraft/runtime-pi": "workspace:*",

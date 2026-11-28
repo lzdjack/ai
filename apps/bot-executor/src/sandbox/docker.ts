@@ -191,6 +191,13 @@ export function ensureSandboxImage(contextDir: string): {
   return { tag, built: true, ms: Date.now() - started };
 }
 
+/** Pulls a public image once (e.g. the browser image); later calls find it locally. */
+export function ensureImage(tag: string): void {
+  if (spawnSync('docker', ['image', 'inspect', tag], { stdio: 'ignore' }).status === 0) return;
+  const r = spawnSync('docker', ['pull', '-q', tag], { encoding: 'utf8' });
+  if (r.status !== 0) throw new Error(`docker pull ${tag} failed: ${r.stderr.trim()}`);
+}
+
 /** Kills containers left behind by a process that died (they carry its label). Returns how many. */
 export function killLabeled(label: string, value: string): number {
   const r = spawnSync('docker', ['ps', '-q', '--filter', `label=${label}=${value}`], {

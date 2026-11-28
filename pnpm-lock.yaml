@@ -227,6 +227,9 @@ importers:
 
   apps/bot-executor:
     dependencies:
+      '@cloudcraft/browser-sandbox':
+        specifier: workspace:*
+        version: link:../../packages/browser-sandbox
       '@cloudcraft/core-protocol':
         specifier: workspace:*
         version: link:../../packages/core-protocol
@@ -279,7 +282,20 @@ importers:
 
   packages/admin-ui: {}
 
-  packages/browser-sandbox: {}
+  packages/browser-sandbox:
+    dependencies:
+      '@cloudcraft/core-protocol':
+        specifier: workspace:*
+        version: link:../core-protocol
+      parse5:
+        specifier: 8.1.0
+        version: 8.1.0
+      playwright-core:
+        specifier: 1.65.0
+        version: 1.65.0
+      typebox:
+        specifier: 1.4.7
+        version: 1.4.7
 
   packages/config:
     dependencies:
@@ -343,9 +359,15 @@ importers:
       '@cloudcraft/bot-executor':
         specifier: workspace:*
         version: link:../apps/bot-executor
+      '@cloudcraft/browser-sandbox':
+        specifier: workspace:*
+        version: link:../packages/browser-sandbox
       '@cloudcraft/config':
         specifier: workspace:*
         version: link:../packages/config
+      '@cloudcraft/core-protocol':
+        specifier: workspace:*
+        version: link:../packages/core-protocol
       '@cloudcraft/llm-proxy':
         specifier: workspace:*
         version: link:../apps/llm-proxy
@@ -1660,6 +1682,10 @@ packages:
     resolution: {integrity: sha512-UgGlf8IW75je7HZjNDpJdCv4cGJWIi6yumFdZ0R7A8/CIhQiWUjyGLCxdHpd8bmyD1gnkfUNK0oeOXqUS2cpfQ==}
     engines: {ecmascript: '>= es5', node: '>=4'}
 
+  entities@9.0.0:
+    resolution: {integrity: sha512-oJFNDJg3kTPwAD1cNn2+WmUq4wFoo09npc3Ydf1D7ED4smRiWrsKnaLxykrTWgyGEcusc87P5dxlAleol9kpkg==}
+    engines: {node: '>=20.19.0'}
+
   es-module-lexer@2.3.2:
     resolution: {integrity: sha512-poHGpORABojJJucnV9KbOavETW8lBVnphkW77ER5/BQ5Fz7oXSoCNek7IH3vR5nRjdsEz926ibFYX8KtLQmdyw==}
 
@@ -2200,6 +2226,9 @@ packages:
     resolution: {integrity: sha512-312Id396EbJdvRONlngUx0NydfrIQ5lsYu0znKVUzVvArzEIt08V1qhtyESbGVd1FGX7UKtiFp5uwKZdM8wIuQ==}
     engines: {node: '>=8'}
 
+  parse5@8.1.0:
+    resolution: {integrity: sha512-sq3qBFpee5jeocbFbO48VHlGr8sT7mbXS0vxlKN6sottBtJzrOG3998sr0llSZcQAGgfpdmEYAIZE0P9z0dE8w==}
+
   partial-json@0.1.7:
     resolution: {integrity: sha512-Njv/59hHaokb/hRUjce3Hdv12wd60MtM9Z5Olmn+nehe0QDAsRtRbJPvJ0Z91TusF0SuZRIvnM+S4l6EIP8leA==}
 
@@ -2260,6 +2289,11 @@ packages:
 
   pino@10.4.0:
     resolution: {integrity: sha512-bk1ZMTwG/Vymx+zPoa28MhNzucFvXJWp3csrSuxuHPSMeUettaCoQ5Jvg07mtC4JGNpcfTwz41oVCnNgBK9+vA==}
+    hasBin: true
+
+  playwright-core@1.65.0:
+    resolution: {integrity: sha512-vNSKgH6YqtN7cdT/L334zo0a+YwkrpicyrHJlWWPIm/Q+Nn2SWInil01oT0mbu96U4GgoRtCYQD9CzJQgju+lA==}
+    engines: {node: '>=20'}
     hasBin: true
 
   postcss@8.5.33:
@@ -3747,6 +3781,8 @@ snapshots:
     dependencies:
       version-range: 4.15.0
 
+  entities@9.0.0: {}
+
   es-module-lexer@2.3.2: {}
 
   esbuild@0.18.20:
@@ -4336,6 +4372,10 @@ snapshots:
       '@types/retry': 0.12.0
       retry: 0.13.1
 
+  parse5@8.1.0:
+    dependencies:
+      entities: 9.0.0
+
   partial-json@0.1.7: {}
 
   path-exists@4.0.0: {}
@@ -4400,6 +4440,8 @@ snapshots:
       safe-stable-stringify: 2.5.0
       sonic-boom: 4.2.1
       thread-stream: 4.2.1
+
+  playwright-core@1.65.0: {}
 
   postcss@8.5.33:
     dependencies:
