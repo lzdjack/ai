@@ -74,6 +74,16 @@ revoke update, delete, truncate on events from cc_app;
 create trigger cc_append_only before update or delete on events for each row execute function cc_reject_change();
 drop trigger if exists cc_audit_probe on events;
 
+-- evidences (project, audit)
+alter table evidences enable row level security;
+alter table evidences force row level security;
+drop policy if exists cc_tenant on evidences;
+create policy cc_tenant on evidences using (workspace_id = nullif(current_setting('app.current_workspace_id', true), '')::uuid and project_id = any(coalesce(nullif(current_setting('app.visible_project_ids', true), '')::uuid[], '{}'))) with check (workspace_id = nullif(current_setting('app.current_workspace_id', true), '')::uuid and project_id = any(coalesce(nullif(current_setting('app.visible_project_ids', true), '')::uuid[], '{}')));
+drop policy if exists cc_definer on evidences;
+drop trigger if exists cc_append_only on evidences;
+drop trigger if exists cc_audit_probe on evidences;
+create trigger cc_audit_probe after insert or update or delete on evidences for each row execute function cc_audit_probe('workspace_id');
+
 -- flow_instances (project, audit)
 alter table flow_instances enable row level security;
 alter table flow_instances force row level security;
@@ -144,6 +154,16 @@ drop policy if exists cc_definer on repos;
 drop trigger if exists cc_append_only on repos;
 drop trigger if exists cc_audit_probe on repos;
 create trigger cc_audit_probe after insert or update or delete on repos for each row execute function cc_audit_probe('workspace_id');
+
+-- reviews (project, audit)
+alter table reviews enable row level security;
+alter table reviews force row level security;
+drop policy if exists cc_tenant on reviews;
+create policy cc_tenant on reviews using (workspace_id = nullif(current_setting('app.current_workspace_id', true), '')::uuid and project_id = any(coalesce(nullif(current_setting('app.visible_project_ids', true), '')::uuid[], '{}'))) with check (workspace_id = nullif(current_setting('app.current_workspace_id', true), '')::uuid and project_id = any(coalesce(nullif(current_setting('app.visible_project_ids', true), '')::uuid[], '{}')));
+drop policy if exists cc_definer on reviews;
+drop trigger if exists cc_append_only on reviews;
+drop trigger if exists cc_audit_probe on reviews;
+create trigger cc_audit_probe after insert or update or delete on reviews for each row execute function cc_audit_probe('workspace_id');
 
 -- role_bindings (workspace, audit, definer)
 alter table role_bindings enable row level security;
