@@ -183,6 +183,27 @@ export function createEnvironment(
   });
 }
 
+export function listEnvironments(db: Db, userId: string, ws: string, projectId: string) {
+  return inWorkspace(db, userId, ws, async (tx) => {
+    const rows = await tx
+      .select()
+      .from(environments)
+      .where(and(eq(environments.projectId, projectId), isNull(environments.deletedAt)))
+      .orderBy(asc(environments.sortOrder), asc(environments.createdAt));
+    return {
+      items: rows.map((e) => ({
+        id: e.id,
+        env_code: e.envCode,
+        env_tier: e.envTier,
+        name: e.name,
+        entry_url: e.entryUrl,
+      })),
+      next_cursor: null,
+      has_more: false,
+    };
+  });
+}
+
 export function listTickets(db: Db, userId: string, ws: string) {
   return inWorkspace(db, userId, ws, async (tx) => {
     const rows = await tx

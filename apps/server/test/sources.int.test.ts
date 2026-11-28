@@ -180,7 +180,7 @@ describe('连接器、仓库与凭据信封（P3）', () => {
     expect(JSON.stringify(list.body)).not.toContain(TOKEN);
   });
 
-  it('仓库：挑进来默认仅查看；改成可修改后自动建项目并探测；人工覆盖不被重新探测冲掉，可还原', async () => {
+  it('仓库：挑进来默认仅查看；改成可修改后自动建项目并探测，可并入别的项目；人工覆盖不被重新探测冲掉，可还原', async () => {
     const attached = await call('POST', `${ws()}/repos/batch-attach`, owner, {
       connector_id: connectorId,
       remote_ids: ['11', '12'],
@@ -207,10 +207,12 @@ describe('连接器、仓库与凭据信封（P3）', () => {
       },
     });
     project = rw.body.project_id as string;
-    const libRw = await call('PATCH', `${ws()}/repos/${lib}`, owner, {
+    // made writable on its own it gets its own project, then joins demo-web's
+    const libOwn = await call('PATCH', `${ws()}/repos/${lib}`, owner, {
       access_mode: 'read_write',
-      project_id: project,
     });
+    expect(libOwn.body.project_id).not.toBe(project);
+    const libRw = await call('PATCH', `${ws()}/repos/${lib}`, owner, { project_id: project });
     expect(libRw.body).toMatchObject({
       project_id: project,
       settings: { verify_strategy: 'test_suite', build_command: 'pnpm build' },

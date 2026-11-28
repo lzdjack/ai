@@ -132,6 +132,17 @@ export function sourceRoutes(
       return reply.code(202).send(await src.trialBuild(db, user(req), ws, id));
     },
   );
+  app.get('/v1/workspaces/:ws/projects', { schema: { params: Ws } }, async (req) =>
+    src.listProjects(db, user(req), p<Static<typeof Ws>>(req).ws),
+  );
+  app.get(
+    '/v1/workspaces/:ws/projects/:id/environments',
+    { schema: { params: Item } },
+    async (req) => {
+      const { ws, id } = p<Static<typeof Item>>(req);
+      return tk.listEnvironments(db, user(req), ws, id);
+    },
+  );
   app.post(
     '/v1/workspaces/:ws/projects/:id/environments',
     { schema: { params: Item, body: CreateEnvironmentRequest } },

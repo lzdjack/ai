@@ -1,7 +1,19 @@
 // Talks to cc-app (docs/06 §1.3, §10.1): Bearer access token, refreshed once on 401 with the stored
 // refresh token. In the browser the tokens live in localStorage ("remember me") or sessionStorage;
 // U2 moves them to Electron safeStorage through HostPlatformAdapter.secureStorage.
-import type { Me, TokenPair } from '@cloudcraft/core-protocol';
+import type {
+  ConnectorRow,
+  EnvironmentRow,
+  FlowStatus,
+  Me,
+  PluginInfo,
+  ProjectRow,
+  RemoteRepo,
+  RepoRow,
+  TokenPair,
+  VerifyResult,
+} from '@cloudcraft/core-protocol';
+import type { OnboardingCalls } from '@cloudcraft/workbench-ui';
 
 const KEY = 'cc.session';
 
@@ -120,3 +132,37 @@ export const api = {
     save((session = null));
   },
 };
+
+interface Page<T> {
+  items: T[];
+  has_more: boolean;
+}
+
+/** The first-run wizard's calls in one workspace (06 §10.3; all paths under /v1/workspaces/:ws). */
+export function onboardingCalls(ws: string): OnboardingCalls {
+  const w = `/v1/workspaces/${ws}`;
+  return {
+    plugins: () => call<Page<PluginInfo>>('GET', '/v1/plugins').then((r) => r.items),
+    connectors: () => call<Page<ConnectorRow>>('GET', `${w}/connectors`).then((r) => r.items),
+    verify: (v) => call<VerifyResult>('POST', `${w}/connectors/verify`, v),
+    createConnector: (v) => call<ConnectorRow>('POST', `${w}/connectors`, v),
+    remoteRepos: (id, q) =>
+      call<Page<RemoteRepo>>(
+        'GET',
+        `${w}/connectors/${id}/remote-repos${q ? `?q=${encodeURIComponent(q)}` : ''}`,
+      ),
+    attach: (connector_id, remote_ids) =>
+      call<Page<RepoRow>>('POST', `${w}/repos/batch-attach`, { connector_id, remote_ids }).then(
+        (r) => r.items,
+      ),
+    repos: () => call<Page<RepoRow>>('GET', `${w}/repos`).then((r) => r.items),
+    updateRepo: (id, body) => call<RepoRow>('PATCH', `${w}/repos/${id}`, body),
+    projects: () => call<Page<ProjectRow>>('GET', `${w}/projects`).then((r) => r.items),
+    environments: (id) =>
+      call<Page<EnvironmentRow>>('GET', `${w}/projects/${id}/environments`).then((r) => r.items),
+    createEnvironment: (id, v) =>
+      call<EnvironmentRow>('POST', `${w}/projects/${id}/environments`, v),
+    trialBuild: (id) => call<{ flow_id: string }>('POST', `${w}/projects/${id}/trial-build`),
+    flow: (id) => call<FlowStatus>('GET', `${w}/flows/${id}`),
+  };
+}

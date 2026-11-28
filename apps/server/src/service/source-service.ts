@@ -52,6 +52,7 @@ export function listPlugins(s: SourceSettings, category?: string) {
       id: m.id,
       name: m.name,
       category: m.category,
+      icon: m.icon ?? null,
       config_schema: m.configSchema,
       auth_schema: m.authSchema,
     }));
@@ -323,7 +324,8 @@ const slugify = (s: string) =>
     .slice(0, 30) || 'project';
 
 /**
- * Writable: joins a project (the given one, or a new one named after the repo) and gets probed.
+ * Writable: joins a project (the given one, or a new one named after the repo) and gets probed; a
+ * writable repo can move to another project later.
  * Settings change only what the person typed (manual_overrides); reset_overrides gives fields back
  * to the probe.
  */
@@ -371,6 +373,11 @@ export function updateRepo(
       target = await insertRow(tx, ctx, repoTargets, { projectId, repoId: id });
       await runProbe(tx, ctx, s, current, target);
     }
+    // joining another project of the workspace (1 project, several repos: 06 §10.3 item 4)
+    if (target && req.project_id && req.project_id !== target.projectId)
+      target = await updateRow(tx, ctx, repoTargets, target.id, {
+        projectId: req.project_id,
+      } as never);
     if (target && (req.settings || req.reset_overrides)) {
       const [fresh] = await tx.select().from(repoTargets).where(eq(repoTargets.id, target.id));
       const overrides: Record<string, unknown> = {
@@ -443,6 +450,18 @@ export async function projectRepoSpecs(tx: Tx, projectId: string): Promise<RepoS
     ordered.push(left.splice(i < 0 ? 0 : i, 1)[0]!.spec);
   }
   return ordered;
+}
+
+/** Projects the user can see (role_bindings decide, 06 §2.3), for the wizard and the tune drawer. */
+export function listProjects(db: Db, userId: string, ws: string) {
+  return inWorkspace(db, userId, ws, async (tx) => {
+    const rows = await tx
+      .select({ id: projects.id, name: projects.name, slug: projects.slug })
+      .from(projects)
+      .where(isNull(projects.deletedAt))
+      .orderBy(asc(projects.createdAt));
+    return { items: rows, next_cursor: null, has_more: false };
+  });
 }
 
 export function trialBuild(db: Db, userId: string, ws: string, projectId: string) {

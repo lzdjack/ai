@@ -1,0 +1,1137 @@
+/* 第一次使用的步骤器（01 §11，定稿图 PC-步骤器-1/2/4、PC-首次使用步骤器）；数值取自 reference/src/v5/onboard-pc-*.html */
+.ob-root {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: var(--wall);
+  font-family: var(--font);
+  color: var(--text);
+}
+.ob-top {
+  position: absolute;
+  left: 32px;
+  right: 32px;
+  top: 22px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.ob-tt {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+.ob-tt b {
+  font-family: 'Hiragino Sans GB', 'PingFang SC', sans-serif;
+  font-size: 17.5px;
+  font-weight: 600;
+  letter-spacing: 1.4px;
+}
+.ob-tt em {
+  font-style: normal;
+  font-family: 'Optima', 'Avenir Next', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  margin-top: 2px;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  background: var(--brand-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.ob-later {
+  font-size: 13px;
+  color: var(--text-2);
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+}
+.ob-wz {
+  position: absolute;
+  inset: 80px 120px 36px;
+  border-radius: var(--r-panel);
+  display: flex;
+  overflow: hidden;
+}
+
+/* —— 左栏步骤 —— */
+.ob-sl {
+  width: 300px;
+  flex: 0 0 auto;
+  padding: 26px 24px 22px;
+  border-right: 1px solid var(--hair);
+  background: color-mix(in srgb, var(--text) 2.5%, transparent);
+  display: flex;
+  flex-direction: column;
+}
+.ob-st {
+  display: flex;
+  gap: 13px;
+  position: relative;
+  padding-bottom: 20px;
+}
+.ob-st:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 12.5px;
+  top: 28px;
+  bottom: 3px;
+  width: 1.5px;
+  background: var(--hair);
+}
+.ob-st.is-done::after {
+  background: color-mix(in srgb, var(--green) 55%, transparent);
+}
+.ob-sc {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12.5px;
+  font-weight: 800;
+}
+.ob-st.is-cur .ob-sc {
+  background: var(--btn-pri-bg);
+  color: #fff;
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--blue) 20%, transparent);
+}
+.ob-st.is-todo .ob-sc {
+  border: 1.5px solid color-mix(in srgb, var(--text) 22%, transparent);
+  color: var(--text-3);
+}
+.ob-st.is-done .ob-sc {
+  background: var(--green);
+  color: #fff;
+}
+.ob-st b {
+  display: block;
+  font-size: 14.5px;
+  font-weight: 600;
+  line-height: 26px;
+}
+.ob-st.is-todo b {
+  color: var(--text-2);
+  font-weight: 500;
+}
+.ob-st.is-cur b {
+  color: var(--ink-blue);
+  font-weight: 700;
+}
+.ob-st em {
+  display: block;
+  font-style: normal;
+  font-size: 12px;
+  color: var(--text-3);
+  margin-top: 1px;
+  line-height: 1.45;
+}
+.ob-st.is-done em {
+  color: var(--text-2);
+}
+.ob-why {
+  border-radius: 14px;
+  padding: 12px 13px;
+  background: color-mix(in srgb, var(--purple) 7%, var(--fill));
+  border: 1px solid color-mix(in srgb, var(--purple) 18%, transparent);
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--text-2);
+  margin-bottom: 18px;
+}
+.ob-why .ob-wh {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 5px;
+  font-size: 12.5px;
+}
+.ob-pbar {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--well);
+  overflow: hidden;
+}
+.ob-pbar i {
+  display: block;
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--blue), var(--purple));
+}
+
+/* —— 右侧表单区 —— */
+.ob-fm {
+  flex: 1 1 0%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.ob-fb {
+  flex: 1 1 0%;
+  padding: 26px 36px 0;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.ob-ff {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 36px;
+  border-top: 1px solid var(--hair);
+}
+.ob-eyebrow {
+  font-size: 12px;
+  color: var(--ink-blue);
+  font-weight: 700;
+}
+.ob-h1 {
+  font-size: 24px;
+  font-weight: 800;
+  margin-top: 5px;
+}
+.ob-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: var(--ctl-xs);
+  padding: 0 12px;
+  border-radius: 14px;
+  background: var(--fill);
+  font-size: 12.5px;
+  color: var(--text-2);
+  white-space: nowrap;
+  align-self: flex-start;
+}
+.ob-chip svg {
+  color: var(--purple);
+}
+.ob-bigb {
+  height: var(--ctl-lg);
+  border-radius: var(--r-lg);
+  border: 0;
+  font-size: 14px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 20px;
+  white-space: nowrap;
+  cursor: pointer;
+  font-family: inherit;
+}
+.ob-bigb:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.ob-pri {
+  background: var(--btn-pri-bg);
+  color: #fff;
+  box-shadow: 0 10px 22px -10px color-mix(in srgb, var(--btn-pri-bg) 85%, transparent);
+}
+.ob-sec {
+  background: var(--fill);
+  color: var(--text);
+}
+.ob-note {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 12.5px;
+  color: var(--text-2);
+  line-height: 1.5;
+  padding: 9px 13px;
+  border-radius: 13px;
+  background: color-mix(in srgb, var(--blue) 7%, transparent);
+}
+.ob-note > svg {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  color: var(--ink-blue);
+}
+.ob-note b {
+  color: var(--text);
+}
+.ob-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: var(--ctl-xs);
+  padding: 0 10px;
+  border-radius: var(--r-sm);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.ob-stat.is-g {
+  background: color-mix(in srgb, var(--green) 13%, transparent);
+  color: var(--ink-green);
+}
+.ob-stat.is-b {
+  background: color-mix(in srgb, var(--blue) 13%, transparent);
+  color: var(--ink-blue);
+}
+.ob-lnk {
+  color: var(--ink-blue);
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+/* 连接器 / 插件的图标：插件自带 SVG；没带时用首字母 */
+.ob-mark {
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 800;
+  flex: 0 0 auto;
+  overflow: hidden;
+  background: linear-gradient(155deg, #5aa0ff, #2b6bff);
+}
+.ob-mark img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* —— 第 1 步：连接器卡片 —— */
+.ob-sech {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  margin-bottom: 9px;
+}
+.ob-sech b {
+  font-size: 13.5px;
+  font-weight: 700;
+}
+.ob-sech .ob-sub {
+  font-size: 12px;
+  color: var(--text-3);
+}
+.ob-cgrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 11px;
+}
+.ob-ccard {
+  border-radius: 16px;
+  padding: 13px 15px;
+  background: var(--glass-2);
+  border: 1.5px solid color-mix(in srgb, var(--green) 36%, transparent);
+  box-shadow: 0 6px 18px -12px color-mix(in srgb, var(--green) 45%, transparent);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.ob-ccard.is-add {
+  background: transparent;
+  border: 1.5px dashed color-mix(in srgb, var(--text) 18%, transparent);
+  box-shadow: none;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 6px;
+}
+.ob-okpill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink-green);
+  white-space: nowrap;
+}
+.ob-badpill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink-orange);
+  white-space: nowrap;
+}
+.ob-cmeta {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  color: var(--text-2);
+  min-width: 0;
+}
+.ob-cmeta > svg {
+  flex: 0 0 auto;
+}
+.ob-cfoot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--hair);
+  font-size: 12px;
+  color: var(--text-3);
+}
+.ob-cfoot .ob-act {
+  margin-left: auto;
+  color: var(--ink-blue);
+  font-weight: 600;
+  white-space: nowrap;
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.ob-qadd {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: nowrap;
+}
+.ob-qbtn {
+  height: var(--ctl-sm);
+  padding: 0 11px;
+  border-radius: var(--r-sm);
+  background: var(--fill);
+  border: 1px solid var(--hair);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-2);
+  white-space: nowrap;
+  cursor: pointer;
+  font-family: inherit;
+}
+.ob-qbtn .ob-mark {
+  width: 17px;
+  height: 17px;
+  border-radius: 5px;
+  font-size: 10px;
+}
+
+/* —— 第 2 步：已选仓库 —— */
+.ob-ptbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+.ob-pickbtn {
+  height: var(--ctl-md);
+  padding: 0 13px;
+  border-radius: var(--r-md);
+  background: var(--btn-pri-bg);
+  color: #fff;
+  font-size: 12.5px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  flex: 0 0 auto;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  box-shadow: 0 6px 16px -8px color-mix(in srgb, var(--btn-pri-bg) 85%, transparent);
+}
+.ob-srch {
+  height: var(--ctl-md);
+  flex: 1 1 0%;
+  min-width: 140px;
+  border-radius: var(--r-md);
+  background: var(--well);
+  padding: 0 11px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12.5px;
+  color: var(--text-3);
+  border: 1px solid var(--hair);
+}
+.ob-srch input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: none;
+  outline: none;
+  font: inherit;
+  color: var(--text);
+}
+.ob-srch input::placeholder {
+  color: var(--text-3);
+}
+.ob-fchip {
+  height: var(--ctl-sm);
+  padding: 0 10px;
+  border-radius: var(--r-sm);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-2);
+  background: var(--fill);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+  flex: 0 0 auto;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+}
+.ob-fchip em {
+  font-style: normal;
+  opacity: 0.72;
+  font-size: 11px;
+  font-weight: 500;
+}
+.ob-fchip.is-on {
+  background: var(--btn-pri-bg);
+  color: #fff;
+}
+.ob-plist {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ob-sgrp {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.ob-sgh {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 3px;
+  font-size: 12px;
+}
+.ob-sgh .ob-mark {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  font-size: 10px;
+}
+.ob-sgh b {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--text);
+}
+.ob-sgh .ob-surl {
+  font-size: 11.5px;
+  color: var(--text-3);
+}
+.ob-sgh .ob-scnt {
+  height: 18px;
+  padding: 0 6px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--text) 7%, transparent);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-2);
+  display: inline-flex;
+  align-items: center;
+}
+.ob-sgh .ob-sadd {
+  margin-left: auto;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink-blue);
+  white-space: nowrap;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+}
+.ob-prow {
+  border-radius: 14px;
+  padding: 9px 13px;
+  background: var(--fill);
+  border: 1.5px solid transparent;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.ob-prow.is-rw {
+  background: var(--glass-2);
+  border-color: color-mix(in srgb, var(--green) 42%, transparent);
+  box-shadow: 0 6px 18px -12px color-mix(in srgb, var(--green) 55%, transparent);
+}
+.ob-prow.is-ro {
+  background: var(--glass-2);
+  border-color: color-mix(in srgb, var(--blue) 38%, transparent);
+  box-shadow: 0 6px 18px -12px color-mix(in srgb, var(--blue) 45%, transparent);
+}
+.ob-pic {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  flex: 0 0 auto;
+  font-size: 12.5px;
+  font-weight: 800;
+}
+.ob-tone-0 {
+  background: linear-gradient(155deg, #5aa0ff, #1f6fff);
+}
+.ob-tone-1 {
+  background: linear-gradient(155deg, #4fd6e6, #0e8fb3);
+}
+.ob-tone-2 {
+  background: linear-gradient(155deg, #5edb7a, #22a748);
+}
+.ob-tone-3 {
+  background: linear-gradient(155deg, #b78bff, #7b42f6);
+}
+.ob-pinfo {
+  flex: 1 1 0%;
+  min-width: 0;
+}
+.ob-ptop {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+.ob-ptop b {
+  font-size: 14.5px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.ob-src-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  color: var(--text-2);
+  background: color-mix(in srgb, var(--text) 6%, transparent);
+  padding: 2px 7px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+.ob-okchip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--ink-green);
+  font-size: 11.5px;
+  font-weight: 600;
+  flex: 0 0 auto;
+}
+.ob-warnchip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--ink-orange);
+  font-size: 11.5px;
+  font-weight: 600;
+  flex: 0 0 auto;
+}
+.ob-pmeta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--text-2);
+  min-width: 0;
+  white-space: nowrap;
+}
+.ob-ai-bdg,
+.ob-ro-bdg {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  flex: 0 0 auto;
+}
+.ob-ai-bdg {
+  color: var(--ink-purple);
+  background: color-mix(in srgb, var(--purple) 12%, transparent);
+}
+.ob-ro-bdg {
+  color: var(--ink-blue);
+  background: color-mix(in srgb, var(--blue) 12%, transparent);
+}
+.ob-tune {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-blue);
+  margin-left: auto;
+  padding-left: 6px;
+  flex: 0 0 auto;
+  white-space: nowrap;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+}
+.ob-pseg {
+  display: inline-flex;
+  height: var(--ctl-md);
+  align-items: center;
+  padding: 3px;
+  border-radius: var(--r-md);
+  background: var(--well);
+  border: 1px solid var(--hair);
+  flex: 0 0 auto;
+  gap: 2px;
+}
+.ob-pseg button {
+  height: 100%;
+  padding: 0 11px;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-2);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+.ob-pseg button:disabled {
+  cursor: default;
+}
+.ob-pseg button.is-ro {
+  background: var(--btn-pri-bg);
+  color: #fff;
+  box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--btn-pri-bg) 85%, transparent);
+}
+.ob-pseg button.is-rw {
+  background: var(--btn-ok-bg);
+  color: #fff;
+  box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--btn-ok-bg) 85%, transparent);
+}
+.ob-empty {
+  border-radius: 14px;
+  padding: 22px;
+  background: var(--fill);
+  font-size: 12.5px;
+  color: var(--text-3);
+  text-align: center;
+}
+
+/* —— 第 3 步：环境 —— */
+.ob-lab {
+  font-size: 13.5px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ob-lab span {
+  font-weight: 400;
+  font-size: 12px;
+  color: var(--text-3);
+}
+.ob-envs {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 120px;
+  gap: 10px;
+}
+.ob-env {
+  border-radius: 14px;
+  padding: 11px 13px;
+  background: var(--fill);
+  border: 1.5px solid transparent;
+  min-width: 0;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+}
+.ob-env b {
+  font-size: 14px;
+}
+.ob-env.is-add {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-3);
+  background: transparent;
+  border: 1.5px dashed color-mix(in srgb, var(--text) 18%, transparent);
+  cursor: pointer;
+  min-height: 92px;
+}
+.ob-envform {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr 150px auto;
+  gap: 10px;
+  align-items: end;
+  margin-top: 10px;
+}
+
+/* —— 第 4 步：体检 —— */
+.ob-big {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 18px;
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--green) 10%, var(--glass-2));
+  border: 1px solid color-mix(in srgb, var(--green) 30%, transparent);
+}
+.ob-big.is-run {
+  background: color-mix(in srgb, var(--blue) 8%, var(--glass-2));
+  border-color: color-mix(in srgb, var(--blue) 26%, transparent);
+}
+.ob-big.is-bad {
+  background: color-mix(in srgb, var(--orange) 9%, var(--glass-2));
+  border-color: color-mix(in srgb, var(--orange) 30%, transparent);
+}
+.ob-obx {
+  border-radius: 16px;
+  padding: 14px 16px;
+  background: var(--fill);
+}
+.ob-chk {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-top: 1px solid var(--hair);
+  font-size: 13.5px;
+}
+.ob-chk:first-child {
+  border-top: 0;
+}
+.ob-ck {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  flex: 0 0 auto;
+}
+.ob-ck.is-ok {
+  background: var(--btn-ok-bg);
+}
+.ob-ck.is-warn {
+  background: var(--btn-warn-bg);
+}
+.ob-ck.is-off {
+  background: color-mix(in srgb, var(--text) 25%, transparent);
+}
+.ob-ck.is-run {
+  background: none;
+  color: var(--ink-blue);
+}
+.ob-tk {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  padding: 0 10px;
+  border-radius: 10px;
+  font-size: 12.5px;
+  color: var(--text-2);
+  background: var(--glass-2);
+}
+
+/* —— 抽屉 —— */
+.ob-ic3 {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  font-size: 15px;
+}
+.ob-ic3.is-search {
+  background: linear-gradient(155deg, #5aa0ff, #1f6fff);
+}
+.ob-flab {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--text-2);
+  margin-bottom: 7px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.ob-flab > span {
+  font-weight: 400;
+  color: var(--text-3);
+  font-size: 11.5px;
+}
+.ob-flab .ob-rst {
+  margin-left: auto;
+  font-weight: 600;
+  color: var(--ink-blue);
+  font-size: 11.5px;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+}
+.ob-pgrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+.ob-pitem {
+  height: 40px;
+  border-radius: 11px;
+  background: var(--fill);
+  border: 1.5px solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-2);
+  cursor: pointer;
+  font-family: inherit;
+}
+.ob-pitem .ob-mark {
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  font-size: 10px;
+}
+.ob-pitem.is-on {
+  background: var(--glass-2);
+  border-color: var(--blue);
+  color: var(--text);
+  box-shadow: 0 6px 16px -10px color-mix(in srgb, var(--blue) 65%, transparent);
+}
+.ob-dinp {
+  height: var(--ctl-lg);
+  border-radius: var(--r-lg);
+  background: var(--well);
+  border: 1px solid var(--hair);
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 13px;
+  font-size: 13.5px;
+  color: var(--text);
+  min-width: 0;
+}
+.ob-dinp:focus-within {
+  background: var(--glass-2);
+  border-color: var(--focus-ring);
+  box-shadow: 0 0 0 3px var(--focus-halo);
+}
+.ob-dinp.is-md {
+  height: var(--ctl-md);
+  border-radius: var(--r-md);
+  padding: 0 12px;
+  font-size: 13px;
+  gap: 8px;
+}
+.ob-dinp.is-ov {
+  background: var(--glass-2);
+  border-color: var(--focus-ring);
+  box-shadow: 0 0 0 3px var(--focus-halo);
+}
+.ob-dinp input,
+.ob-dinp select {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: none;
+  outline: none;
+  font: inherit;
+  color: var(--text);
+  height: 100%;
+}
+.ob-dinp select {
+  appearance: none;
+  cursor: pointer;
+}
+.ob-dsel {
+  background: var(--glass-2);
+  border: 1px solid var(--border-ctl);
+  box-shadow: var(--shadow-ctl);
+  font-weight: 600;
+}
+.ob-dsel.is-rw {
+  color: var(--ink-green);
+  border-color: color-mix(in srgb, var(--green) 42%, transparent);
+  background: color-mix(in srgb, var(--green) 10%, var(--glass-2));
+}
+.ob-dsel.is-rw select {
+  color: var(--ink-green);
+}
+.ob-vbox {
+  border-radius: 16px;
+  padding: 13px 16px;
+  background: color-mix(in srgb, var(--green) 8%, var(--fill));
+  border: 1px solid color-mix(in srgb, var(--green) 28%, transparent);
+}
+.ob-vbox.is-bad {
+  background: color-mix(in srgb, var(--red) 7%, var(--fill));
+  border-color: color-mix(in srgb, var(--red) 26%, transparent);
+}
+.ob-vrow {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 12.5px;
+  padding: 4px 0;
+  color: var(--text);
+}
+.ob-vck {
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: var(--btn-ok-bg);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+.ob-vck.is-warn {
+  background: var(--btn-warn-bg);
+}
+.ob-pkg {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--text-3);
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.ob-pklist {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.ob-pkr {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 10px 12px;
+  border-radius: 13px;
+  background: var(--fill);
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  width: 100%;
+}
+.ob-pkr.is-on {
+  background: var(--glass-2);
+  border-color: color-mix(in srgb, var(--blue) 45%, transparent);
+}
+.ob-pkr:disabled {
+  cursor: default;
+}
+.ob-pkc {
+  width: 18px;
+  height: 18px;
+  border-radius: 6px;
+  border: 1.5px solid var(--border-ctl-hover);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+.ob-pkc.is-on {
+  border: 0;
+  background: var(--btn-pri-bg);
+  color: #fff;
+}
+.ob-tsec {
+  border-radius: 15px;
+  padding: 12px 14px;
+  background: var(--fill);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ob-tsec-h {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--text);
+}
+.ob-aid,
+.ob-ov {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: 5px;
+  font-size: 10.5px;
+  font-weight: 600;
+}
+.ob-aid {
+  color: var(--ink-purple);
+  background: color-mix(in srgb, var(--purple) 13%, transparent);
+}
+.ob-ov {
+  color: var(--ink-blue);
+  background: color-mix(in srgb, var(--blue) 13%, transparent);
+}
+.ob-result {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  padding: 9px 12px;
+  border-radius: 12px;
+  font-weight: 600;
+  background: color-mix(in srgb, var(--green) 10%, transparent);
+  color: var(--ink-green);
+}
+.ob-result.is-run {
+  background: color-mix(in srgb, var(--blue) 9%, transparent);
+  color: var(--ink-blue);
+}
+.ob-result.is-bad {
+  background: color-mix(in srgb, var(--red) 9%, transparent);
+  color: var(--ink-red);
+  align-items: flex-start;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+.ob-err {
+  font-size: 12px;
+  color: var(--ink-red);
+  margin-top: 6px;
+}
+.ob-dinp input.mono {
+  font-family: var(--font-mono);
+}

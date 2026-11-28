@@ -9,6 +9,7 @@
     "./styles.css": "./src/styles/workbench.css"
   },
   "dependencies": {
+    "@cloudcraft/core-protocol": "workspace:*",
     "@cloudcraft/ui-kit": "workspace:*",
     "react": "19.3.1"
   },
