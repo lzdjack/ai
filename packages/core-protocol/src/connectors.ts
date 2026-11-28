@@ -9,6 +9,8 @@ export interface ConnectorManifest {
   id: string;
   name: string;
   category: ConnectorCategory;
+  /** square SVG mark shown on cards and tabs (06 §12: the manifest carries its icon) */
+  icon?: string;
   /** JSON Schema of the non-secret settings (e.g. base URL); the drawer renders it */
   configSchema: TSchema;
   /** JSON Schema of the credential (never echoed back) */
@@ -156,6 +158,36 @@ export interface RepoRow {
   manual_overrides: string[];
   probe: { state: 'pending' | 'done' | 'failed'; at: string | null; notes: string[] };
   rev: number;
+}
+
+/** GET /v1/plugins item: an installed connector plugin and the schemas its drawer renders. */
+export interface PluginInfo {
+  id: string;
+  name: string;
+  category: ConnectorCategory;
+  icon: string | null;
+  config_schema: TSchema;
+  auth_schema: TSchema;
+}
+
+export interface ProjectRow {
+  id: string;
+  name: string;
+  slug: string;
+}
+
+/** GET /v1/workspaces/:ws/flows/:id: a flow and its node runs (trial build, ticket rounds). */
+export interface FlowStatus {
+  id: string;
+  kind: string;
+  status: string;
+  nodes: {
+    key: string;
+    status: string;
+    attempt_no: number;
+    output: unknown;
+    error: string | null;
+  }[];
 }
 
 // ---------- credential envelopes for executors (06 §2.10) ----------

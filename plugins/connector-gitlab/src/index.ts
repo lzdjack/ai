@@ -1,6 +1,7 @@
 // GitLab code-source connector (docs/06 §6.1, §10.3): GitLab REST v4 with a personal / project access
 // token. Only the base URL tells a real GitLab from the simulator (07 §5.2).
 import type { CodeSourceConnector, RemoteRepo, VerifyResult } from '@cloudcraft/core-protocol';
+import fs from 'node:fs';
 import { Type } from 'typebox';
 
 interface Config {
@@ -54,6 +55,7 @@ const connector: CodeSourceConnector = {
     id: 'connector-gitlab',
     name: 'GitLab',
     category: 'code_source',
+    icon: fs.readFileSync(new URL('./icon.svg', import.meta.url), 'utf8'),
     configSchema: Type.Object({ base_url: Type.String({ pattern: '^https?://' }) }),
     authSchema: Type.Object({ token: Type.String({ minLength: 8 }) }),
   },

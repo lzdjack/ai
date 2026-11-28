@@ -37,6 +37,14 @@ export const CreateEnvironmentRequest = Type.Object({
 });
 
 /** One repo's facts of a delivery: read by the host from git and checked against the remote branch. */
+export interface EnvironmentRow {
+  id: string;
+  env_code: string;
+  env_tier: string;
+  name: string;
+  entry_url: string;
+}
+
 export interface DeliveryRepoFacts {
   repo: string;
   branch: string;
